@@ -1,0 +1,16 @@
+# Local runtime cache (see sync/README.md)
+sync/*
+!sync/README.md
+
+# Per-project phase handovers (generated at runtime)
+handover/*
+!handover/README.md
+!handover/.gitkeep
+
+# Machine-specific overrides (copy from config.example.json)
+system/config.json
+
+# OS / editor
+.DS_Store
+*.swp
+*.swo

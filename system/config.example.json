@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0",
+  "project": "my-app",
+  "environment": {
+    "development": {
+      "port": 3000
+    }
+  },
+  "agentConfig": {
+    "modelPreference": "default",
+    "temperature": 0.2,
+    "maxTokens": 8192,
+    "exclusions": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.git/**"
+    ],
+    "telemetryEnabled": true
+  }
+}
