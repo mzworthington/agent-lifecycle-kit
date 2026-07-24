@@ -47,18 +47,18 @@ Each phase must produce a structured markdown artifact under `~/.agents/handover
 
 Required fields:
 
-1. **Phase** — current active phase
-2. **Status** — `COMPLETE` or `BLOCKED`
-3. **Output** — main deliverables (interfaces, tests, audit reports)
-4. **Next agent** — recommended role skill (`agent-*`)
+1. **Phase** - current active phase
+2. **Status** - `COMPLETE` or `BLOCKED`
+3. **Output** - main deliverables (interfaces, tests, audit reports)
+4. **Next agent** - recommended role skill (`agent-*`)
 
 Do not write handovers into the project repo. Use the project directory name, or `system/config.json` → `project` when available.
 
 ## Orchestration flow
 
-1. **Intake** — Read the user request. Route to `agent-spec` first.
-2. **Design** — Route to `agent-tdd` for tests and port interfaces from specs.
-3. **Execution** — Route to `agent-adapter` for implementation.
-4. **Audit** — Run `agent-security` and `agent-arch-drift`. On failure, return to `agent-adapter` with findings.
-5. **Telemetry** — Route to `agent-telemetry` for instrumentation.
-6. **Release** — Report completion status to the user.
+1. **Intake** - Read the user request. Route to `agent-spec` first.
+2. **Design** - Route to `agent-tdd` for tests and port interfaces from specs.
+3. **Execution** - Route to `agent-adapter` for implementation.
+4. **Audit** - Run `agent-security` and `agent-arch-drift`. On failure, return to `agent-adapter` with findings.
+5. **Telemetry** - Route to `agent-telemetry` for instrumentation.
+6. **Release** - Report completion status to the user.

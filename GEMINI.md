@@ -12,7 +12,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 
 | Category | Path | Purpose |
 |----------|------|---------|
-| Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, TDD/BDD, security |
+| Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
 | Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, adapter, security, arch-drift, telemetry |
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, .NET |
@@ -23,7 +23,7 @@ See [skills/README.md](./skills/README.md) for the full taxonomy.
 
 ## 2. Bootstrapping instruction
 
-1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal patterns and quality guardrails.
+1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code.
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
 3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → Implementation → Audit → Telemetry.
 

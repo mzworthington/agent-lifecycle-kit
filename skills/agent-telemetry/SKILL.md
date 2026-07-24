@@ -34,7 +34,7 @@ You ensure the system is observable, traceable, and debuggable under load.
 
 ## Rules
 
-- **Log sanitation** — No PII, passwords, tokens, or secrets in logs.
-- **Correlation IDs** — Propagate incoming HTTP/message correlation IDs through async work.
+- **Log sanitation** - No PII, passwords, tokens, or secrets in logs.
+- **Correlation IDs** - Propagate incoming HTTP/message correlation IDs through async work.
 
 Write handover to `~/.agents/handover/<project>/handover_telemetry.md` when complete.

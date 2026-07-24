@@ -2,6 +2,8 @@
 
 All invocable instructions live here as [Cursor Agent Skills](https://cursor.com/docs/agent/skills) (`<name>/SKILL.md` with YAML frontmatter).
 
+The kit enforces **hexagonal architecture**, **domain-driven design**, **vertical slices**, and **clean code** - see [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md).
+
 We use **one `skills/` tree** rather than separate `agents/` and `skills/` folders, because Cursor discovers skills from this path. Taxonomy is expressed via frontmatter (`kind`, `phase`, `triggers`) and naming prefixes.
 
 ## Naming convention
@@ -32,7 +34,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 |----------|------------|
 | [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md) |
 | [lang-java](./lang-java/SKILL.md) | [framework-springboot](./framework-springboot/SKILL.md), [framework-quarkus](./framework-quarkus/SKILL.md) |
-| [lang-dotnet](./lang-dotnet/SKILL.md) | — |
+| [lang-dotnet](./lang-dotnet/SKILL.md) | - |
 
 ## Frontmatter fields
 

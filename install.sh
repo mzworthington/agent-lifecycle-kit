@@ -31,4 +31,4 @@ fi
 
 echo ""
 echo "Optional: add to a project repo (AGENTS.md):"
-echo '  Lifecycle agents live in ~/.agents — see https://github.com/mzworthington/agent-lifecycle-kit'
+echo '  Lifecycle agents live in ~/.agents - see https://github.com/mzworthington/agent-lifecycle-kit'

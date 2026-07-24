@@ -1,9 +1,10 @@
 ---
 name: framework-springboot
 description: >-
-  Applies Spring Boot hexagonal layering, constructor injection, JPA adapter
-  separation, DTO validation, and Problem Details errors. Use in Spring Boot,
-  Spring MVC, Spring Data JPA, or @RestController codebases.
+  Applies Spring Boot hexagonal layering, vertical-slice controllers and
+  handlers, constructor injection, JPA adapter separation, and Problem Details
+  errors. Use in Spring Boot, Spring MVC, Spring Data JPA, or @RestController
+  codebases.
 kind: profile
 phase: stack
 triggers:
@@ -23,11 +24,11 @@ disable-model-invocation: false
 
 Apply these rules strictly when writing Spring Boot application code:
 
-## 1. Hexagonal layers
+## 1. Hexagonal layers & vertical slices
 
-- **Controllers** — Validate DTOs, delegate to application services, map responses.
-- **Repositories** — JPA/DB strictly in adapters. Domain uses port interfaces only.
-- **Services** — Business orchestration; depend on ports, not concrete infrastructure.
+- **Controllers** - One endpoint per slice; validate DTOs, delegate to a single handler, map responses. No business logic in controllers.
+- **Handlers** - `@Service` or command handlers per feature (`SubmitOrderHandler`), not god-class `*Service` facades.
+- **Repositories** - JPA/DB strictly in adapters. Domain uses port interfaces only.
 
 ## 2. Dependency injection
 
@@ -47,5 +48,5 @@ Apply these rules strictly when writing Spring Boot application code:
 ## 5. Testing
 
 - `@WebMvcTest` for controllers; mock services with `@MockBean`.
-- JUnit/Mockito for domain — no `@SpringBootTest` for pure logic.
+- JUnit/Mockito for domain - no `@SpringBootTest` for pure logic.
 - `@DataJpaTest` + Testcontainers/H2 for repository adapters only.

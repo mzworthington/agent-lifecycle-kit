@@ -1,6 +1,6 @@
-# Hexagonal Agent Lifecycle Kit
+# Agent Lifecycle Kit
 
-Opinionated, hexagonal-architecture-first agent configuration for Cursor and Gemini-style IDEs. Ships lifecycle **roles** (spec → TDD → adapter → audit → telemetry), **language profiles**, **framework profiles**, SOPs, and maintenance tasks.
+Opinionated agent configuration for Cursor and Gemini-style IDEs. Enforces **hexagonal architecture**, **domain-driven design**, **vertical slices**, and **clean code** - plus lifecycle roles (spec → TDD → adapter → audit → telemetry), language/framework profiles, SOPs, and maintenance tasks.
 
 ## Should this be the git repo, or live in `dev` with a symlink?
 
@@ -37,7 +37,7 @@ Point project repos at the kit via a thin `AGENTS.md` that links to `~/.agents` 
 .agents/
 ├── AGENTS.md              # Handshake for agents entering a consumer project
 ├── GEMINI.md              # Bootstrap / stack detection / lifecycle routing
-├── CODING_PHILOSOPHY.md   # Hexagonal + TDD + security guardrails
+├── CODING_PHILOSOPHY.md   # Hexagonal + DDD + vertical slices + clean code
 ├── install.sh             # Creates ~/.agents symlink + local config
 ├── skills/                # All Cursor-discoverable skills (roles + profiles)
 │   ├── agent-*            # Lifecycle role personas
@@ -51,7 +51,7 @@ Point project repos at the kit via a thin `AGENTS.md` that links to `~/.agents` 
 └── handover/              # Per-project phase artifacts (gitignored)
 ```
 
-## Agents vs skills — naming and balance
+## Agents vs skills - naming and balance
 
 Cursor has one discovery mechanism: **`skills/<name>/SKILL.md`**. Splitting `agents/` and `skills/` at the top level would duplicate concepts and break auto-discovery unless you add symlinks.
 
@@ -61,16 +61,16 @@ Cursor has one discovery mechanism: **`skills/<name>/SKILL.md`**. Splitting `age
 - **`lang-*` / `framework-*` skills** = stack **profiles**
 - **`SOPs/` and `tasks/`** = procedural docs (not skills unless you promote them)
 
-Balance today: **7 roles + 7 profiles** — appropriate. Roles stay thin (behavior + output schema); stack detail lives in profiles. Add new frameworks/languages as profiles, not roles.
+Balance today: **7 roles + 7 profiles** - appropriate. Roles stay thin (behavior + output schema); stack detail lives in profiles. Add new frameworks/languages as profiles, not roles.
 
 See [skills/README.md](./skills/README.md) for the full taxonomy.
 
 ## What not to commit
 
-- `handover/<project>/` — local phase artifacts
-- `sync/*` — IDE session cache
-- `system/config.json` — machine/project overrides (use `config.example.json`)
+- `handover/<project>/` - local phase artifacts
+- `sync/*` - IDE session cache
+- `system/config.json` - machine/project overrides (use `config.example.json`)
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE).

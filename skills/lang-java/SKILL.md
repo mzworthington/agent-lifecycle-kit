@@ -1,9 +1,9 @@
 ---
 name: lang-java
 description: >-
-  Enforces Java 21+ patterns, record-based value objects, POJO domain purity,
-  and constructor injection. Use when writing or reviewing Java code, Maven/Gradle
-  projects, JUnit tests, or Spring/Quarkus backends.
+  Enforces Java 21+ patterns, DDD-friendly records and POJOs, vertical-slice
+  feature packages, and constructor injection. Use when writing or reviewing
+  Java code, Maven/Gradle projects, JUnit tests, or Spring/Quarkus backends.
 kind: profile
 phase: stack
 triggers:
@@ -23,7 +23,8 @@ disable-model-invocation: false
 
 Apply these rules strictly when writing Java code:
 
-- **Modern standards** — Java 21+ (pattern matching, records, virtual threads where appropriate).
-- **Domain purity** — Domain entities are pure POJOs. No Spring, Jakarta, JPA, or Jackson annotations in core. Map persistence entities in infrastructure.
-- **Immutability** — Use `record` for value objects, DTOs, and domain events.
-- **Dependency injection** — Constructor injection only. No `@Autowired` on fields.
+- **Modern standards** - Java 21+ (pattern matching, records, virtual threads where appropriate).
+- **Domain purity (DDD)** - Domain entities are pure POJOs with behavior on aggregates. No Spring, Jakarta, JPA, or Jackson annotations in core.
+- **Value objects** - Use `record` for value objects, DTOs at boundaries, and domain events.
+- **Vertical slices** - Package by feature (`orders.submit`, `import.diagram`) not only by layer (`service`, `repository`).
+- **Dependency injection** - Constructor injection only. No `@Autowired` on fields.

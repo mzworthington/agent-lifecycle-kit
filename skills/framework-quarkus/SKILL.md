@@ -1,9 +1,9 @@
 ---
 name: framework-quarkus
 description: >-
-  Applies Quarkus RESTEasy Reactive, Panache repository pattern, CDI injection,
-  GraalVM reflection registration, and boundary exception mappers. Use in Quarkus,
-  RESTEasy Reactive, or native-image projects.
+  Applies Quarkus RESTEasy Reactive, vertical-slice resources and handlers,
+  Panache repository pattern, CDI injection, and GraalVM reflection registration.
+  Use in Quarkus, RESTEasy Reactive, or native-image projects.
 kind: profile
 phase: stack
 triggers:
@@ -24,11 +24,11 @@ disable-model-invocation: false
 
 Apply these rules strictly when writing Quarkus application code:
 
-## 1. Hexagonal layers
+## 1. Hexagonal layers & vertical slices
 
-- **REST endpoints** — RESTEasy Reactive; thin resources calling application ports.
-- **Panache** — Prefer `PanacheRepository<T>` over active record. Repositories only in infrastructure.
-- **Domain** — No `@ConfigProperty`, Panache, or Quarkus types in core business logic.
+- **REST endpoints** - One resource method per slice; validate, call handler, map DTOs.
+- **Handlers** - Application-layer handlers per feature, co-located in feature packages.
+- **Panache** - `PanacheRepository<T>` in infrastructure only. No Quarkus types in domain core.
 
 ## 2. CDI
 

@@ -1,8 +1,8 @@
 ---
 name: framework-nuxt
 description: >-
-  Applies Nuxt 3 patterns: SSR-safe data fetching, thin server routes,
-  Nitro API boundaries, and limited Pinia. Use when working in Nuxt projects,
+  Applies Nuxt 3 vertical-slice feature folders, SSR-safe data fetching, thin
+  Nitro server routes, and limited Pinia. Use when working in Nuxt projects,
   useFetch, useAsyncData, or /server/api routes.
 kind: profile
 phase: stack
@@ -22,7 +22,8 @@ disable-model-invocation: false
 
 Apply these rules strictly when writing Nuxt.js code:
 
-- **Architecture** — `/pages` and `/server` are delivery adapters. Extract business rules from composables and components.
-- **Data fetching** — `useFetch` / `useAsyncData` with explicit keys for SSR hydration. No naked client `fetch` in `onMounted`.
-- **Nitro** — Keep `/server/api` routes thin: validate (H3/Zod), call service layer, map outputs.
-- **State** — `useState` for simple SSR-safe shared state; Pinia only for complex client-driven features.
+- **Vertical slices** - Co-locate page, composable, and server handler per feature under `features/<name>/`; keep `/pages` and `/server` as thin adapters.
+- **Architecture** - `/pages` and `/server` are delivery adapters. Business rules live in feature handlers and domain code.
+- **Data fetching** - `useFetch` / `useAsyncData` with explicit keys for SSR hydration. No naked client `fetch` in `onMounted`.
+- **Nitro** - Keep `/server/api` routes thin: validate (H3/Zod), call service layer, map outputs.
+- **State** - `useState` for simple SSR-safe shared state; Pinia only for complex client-driven features.
