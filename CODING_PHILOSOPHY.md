@@ -123,8 +123,29 @@ Do not write implementation code before establishing behavioral or technical con
 
 ## 8. Interaction Mandate
 
+### How to communicate
+
+- **Lead with the point.** State the answer or decision first, then context.
+- **Business before mechanics.** Explain why something matters before how it works.
+- **Plain language.** Prefer simple, accessible wording. Use technical terms only when they add precision.
+- **Match depth to the question.** Short questions get short answers. Save tables and comparisons for real trade-offs.
+- **Complete sentences.** Write like a clear technical blog post, not a chatbot or slide deck.
+- **Plain prose:** Do not use em dashes. Use a comma, colon, period, or hyphen with spaces (` - `) instead.
+- **Restrained formatting.** Use bold and backticks sparingly.
+- **No filler closings.** Do not end every response with offers to do more work the user did not ask for.
+
+### How to collaborate
+
+- **Plan before you build.** For non-trivial work, outline the approach, scope, and trade-offs before writing code or making broad changes. Confirm the plan when requirements, architecture, or impact are unclear.
+- **Ask when unsure.** If a requirement is ambiguous, multiple valid approaches exist, or you lack context to choose confidently, ask a focused question instead of guessing. Do not proceed on silent assumptions.
 - **No silent assumptions:** If a task conflicts with hexagonal boundaries, DDD aggregate rules, vertical slice cohesion, or clean-code smells, halt and ask for guidance.
 - **Explain the why:** Cite the pattern or principle behind every structural recommendation (e.g. "extract value object to enforce invariant", "new slice folder to avoid cross-feature coupling").
+
+### How the kit improves
+
+- **Capture corrections.** When the user fixes your approach, a rule was missing, or the same friction appears twice, append a lesson under `lessons/<project>/` using [templates/lesson.md](./templates/lesson.md). See [lessons/README.md](./lessons/README.md).
+- **Propose, do not silently edit the kit.** Suggest which shared file a lesson should promote to. Do not commit kit changes unless the user asks.
+- **Review on a schedule.** Pending lessons are triaged via [tasks/kit-review.md](./tasks/kit-review.md).
 
 ---
 

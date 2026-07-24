@@ -7,6 +7,11 @@ handover/*
 !handover/README.md
 !handover/.gitkeep
 
+# Per-project kit lessons (captured at runtime; promoted via tasks/kit-review.md)
+lessons/*
+!lessons/README.md
+!lessons/.gitkeep
+
 # Machine-specific overrides (copy from config.example.json)
 system/config.json
 

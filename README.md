@@ -1,76 +1,48 @@
 # Agent Lifecycle Kit
 
-Opinionated agent configuration for Cursor and Gemini-style IDEs. Enforces **hexagonal architecture**, **domain-driven design**, **vertical slices**, and **clean code** - plus lifecycle roles (spec → TDD → adapter → audit → telemetry), language/framework profiles, SOPs, and maintenance tasks.
+**Consistent, high-quality AI-assisted development across every project.**
 
-## Should this be the git repo, or live in `dev` with a symlink?
+AI coding assistants are powerful, but without shared standards they drift: inconsistent architecture, skipped tests, and rework. This kit gives your team one place to define how agents should work: how to spec features, write tests, structure code, and hand off work.
 
-**Make this directory the git repository.** Keep the symlink pattern for local consumption.
+## What you get
 
-```text
-~/Documents/dev/agent-lifecycle-kit/   ← git clone (public repo)
-~/.agents                              ← symlink → clone (IDE entry point)
-```
+- **Shared engineering standards** - hexagonal architecture, domain-driven design, vertical slices, and clean code
+- **Lifecycle roles** - spec → TDD → implementation → audit → telemetry, so agents follow a repeatable process
+- **Stack profiles** - TypeScript, Java, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more
+- **Operational playbooks** - SOPs, checklists, and handover templates
+- **Self-improving kit** - local lesson capture and weekly review to promote learnings into shared standards
 
-### Why not symlink the repo root?
+Works with Cursor and Gemini-style IDEs. Install once on your machine; point any project at it.
 
-| Approach | Pros | Cons |
-|----------|------|------|
-| **Repo = `.agents` content** (recommended) | Clone path matches mental model; `install.sh` is one command; consumers symlink `~/.agents` | Repo name is unconventional (fine: `agent-lifecycle-kit` with contents at root) |
-| **Repo wraps `.agents` subfolder** | Familiar monorepo layout | Extra nesting; symlink must target subpath; harder to document |
-| **No symlink; copy on install** | Works on Windows without symlinks | Drift between clone and active config; harder to dogfood |
+## Quick setup
 
-Your current setup (`Documents/dev/agent-lifecycle-kit` + `~/.agents` symlink) is the right pattern for open source.
-
-### Consumer install
+**1. Clone and link**
 
 ```bash
-git clone https://github.com/mzworthington/agent-lifecycle-kit.git ~/.agents
-# or clone elsewhere and run:
+git clone https://github.com/mzworthington/agent-lifecycle-kit.git ~/Documents/dev/agent-lifecycle-kit
+cd ~/Documents/dev/agent-lifecycle-kit
 ./install.sh
 ```
 
-Point project repos at the kit via a thin `AGENTS.md` that links to `~/.agents` (copy from this repo's [AGENTS.md](./AGENTS.md) as a starting point).
+This creates `~/.agents` as a symlink to the clone and copies a local config file.
 
-## Directory layout
+**2. Add to a project**
 
-```text
-.agents/
-├── AGENTS.md              # Handshake for agents entering a consumer project
-├── GEMINI.md              # Bootstrap / stack detection / lifecycle routing
-├── CODING_PHILOSOPHY.md   # Hexagonal + DDD + vertical slices + clean code
-├── install.sh             # Creates ~/.agents symlink + local config
-├── skills/                # All Cursor-discoverable skills (roles + profiles)
-│   ├── agent-*            # Lifecycle role personas
-│   ├── lang-*             # Language profiles
-│   └── framework-*        # Framework profiles
-├── SOPs/                  # Standard operating procedures
-├── tasks/                 # Maintenance checklists
-├── templates/             # Handover and other templates
-├── system/                # Local config (config.json gitignored)
-├── sync/                  # Runtime cache (gitignored)
-└── handover/              # Per-project phase artifacts (gitignored)
-```
+Copy [AGENTS.md](./AGENTS.md) into your project root (or add a short handshake that links to `~/.agents`). Agents will pick up the kit automatically.
 
-## Agents vs skills - naming and balance
+**3. Start working**
 
-Cursor has one discovery mechanism: **`skills/<name>/SKILL.md`**. Splitting `agents/` and `skills/` at the top level would duplicate concepts and break auto-discovery unless you add symlinks.
+Open the project in your IDE. The agent reads [GEMINI.md](./GEMINI.md) for bootstrap instructions and activates the right skills for your stack and task.
 
-**Recommended model (implemented here):**
+## Learn more
 
-- **`agent-*` skills** = lifecycle **roles** (orchestrator, spec, TDD, …)
-- **`lang-*` / `framework-*` skills** = stack **profiles**
-- **`SOPs/` and `tasks/`** = procedural docs (not skills unless you promote them)
-
-Balance today: **7 roles + 7 profiles** - appropriate. Roles stay thin (behavior + output schema); stack detail lives in profiles. Add new frameworks/languages as profiles, not roles.
-
-See [skills/README.md](./skills/README.md) for the full taxonomy.
-
-## What not to commit
-
-- `handover/<project>/` - local phase artifacts
-- `sync/*` - IDE session cache
-- `system/config.json` - machine/project overrides (use `config.example.json`)
+| Topic | Where |
+|-------|-------|
+| Coding standards | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
+| Skills and roles | [skills/README.md](./skills/README.md) |
+| Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md) |
+| Local config | `system/config.json` (created from `config.example.json`) |
 
 ## License
 
-MIT - see [LICENSE](./LICENSE).
+[Unlicense](./LICENSE) (public domain).

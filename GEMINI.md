@@ -18,6 +18,8 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, .NET |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus |
 | Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists |
+| Templates | [templates/](./templates/) | Handover and lesson entry formats |
+| Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
 
 See [skills/README.md](./skills/README.md) for the full taxonomy.
 

@@ -62,3 +62,4 @@ Do not write handovers into the project repo. Use the project directory name, or
 4. **Audit** - Run `agent-security` and `agent-arch-drift`. On failure, return to `agent-adapter` with findings.
 5. **Telemetry** - Route to `agent-telemetry` for instrumentation.
 6. **Release** - Report completion status to the user.
+7. **Retro** (optional) - If the user corrected the approach, a rule was missing, or a pattern should be reused, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Skip when nothing worth capturing.
