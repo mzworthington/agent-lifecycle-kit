@@ -78,7 +78,7 @@ Depending on the active technology stack, load the appropriate skill:
 
 - [TypeScript / Node.js](./skills/lang-typescript/SKILL.md)
 - [Java](./skills/lang-java/SKILL.md)
-- [C# / .NET](./skills/lang-dotnet/SKILL.md)
+- [C#](./skills/lang-csharp/SKILL.md)
 
 ---
 
@@ -90,6 +90,7 @@ Depending on the framework used, load the appropriate skill:
 - [Nuxt.js](./skills/framework-nuxt/SKILL.md)
 - [Spring Boot](./skills/framework-springboot/SKILL.md)
 - [Quarkus](./skills/framework-quarkus/SKILL.md)
+- [.NET (ASP.NET Core)](./skills/framework-dotnet/SKILL.md)
 
 ---
 

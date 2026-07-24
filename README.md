@@ -8,7 +8,7 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 
 - **Shared engineering standards** - hexagonal architecture, domain-driven design, vertical slices, and clean code
 - **Lifecycle roles** - spec → TDD → implementation → audit → telemetry, so agents follow a repeatable process
-- **Stack profiles** - TypeScript, Java, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more
+- **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more
 - **Operational playbooks** - SOPs, checklists, and handover templates
 - **Self-improving kit** - local lesson capture and weekly review to promote learnings into shared standards
 

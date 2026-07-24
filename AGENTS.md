@@ -17,8 +17,8 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
 | Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, adapter, security, arch-drift, telemetry |
-| Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, .NET |
-| Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus |
+| Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C# |
+| Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET |
 | Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists |
 | Templates | [templates/](./templates/) | Handover, lesson, and project handshake formats |
 | Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
