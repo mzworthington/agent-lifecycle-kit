@@ -30,5 +30,5 @@ if [[ ! -f "${REPO_DIR}/system/config.json" ]]; then
 fi
 
 echo ""
-echo "Optional: add to a project repo (AGENTS.md):"
-echo '  Lifecycle agents live in ~/.agents - see https://github.com/mzworthington/agent-lifecycle-kit'
+echo "Optional: add to a project repo (copy templates/project-AGENTS.md as AGENTS.md):"
+echo '  Standards and lifecycle agents live in ~/.agents - read ~/.agents/AGENTS.md before starting work'

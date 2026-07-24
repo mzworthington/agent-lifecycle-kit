@@ -42,7 +42,7 @@ For each entry, decide:
 
 - [ ] Run [agent-arch-drift](../skills/agent-arch-drift/SKILL.md) against the kit repo: duplicate rules, contradictions, skills that grew too long
 - [ ] Check [skills/README.md](../skills/README.md) taxonomy still matches actual skills
-- [ ] Confirm [GEMINI.md](../GEMINI.md) and [AGENTS.md](../AGENTS.md) links are current
+- [ ] Confirm [AGENTS.md](../AGENTS.md) is canonical and [GEMINI.md](../GEMINI.md) still points to it
 
 ## 4. Commit promoted changes
 

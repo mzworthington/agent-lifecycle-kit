@@ -28,11 +28,11 @@ This creates `~/.agents` as a symlink to the clone and copies a local config fil
 
 **2. Add to a project**
 
-Copy [AGENTS.md](./AGENTS.md) into your project root (or add a short handshake that links to `~/.agents`). Agents will pick up the kit automatically.
+Copy [templates/project-AGENTS.md](./templates/project-AGENTS.md) into your project root as `AGENTS.md` (or add a short handshake that links to `~/.agents`). Agents will pick up the kit automatically.
 
 **3. Start working**
 
-Open the project in your IDE. The agent reads [GEMINI.md](./GEMINI.md) for bootstrap instructions and activates the right skills for your stack and task.
+Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.agents`) for bootstrap instructions and activates the right skills for your stack and task.
 
 ## Learn more
 
