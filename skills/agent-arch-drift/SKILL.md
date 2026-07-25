@@ -2,9 +2,10 @@
 name: agent-arch-drift
 description: >-
   Detects hexagonal boundary violations, DDD modeling issues (anemic domain,
-  aggregate leaks), vertical-slice coupling, SOLID violations, and dead code.
-  Use when reviewing architecture, refactoring modules, or auditing imports
-  between domain, application, and infrastructure layers.
+  aggregate leaks), vertical-slice coupling, SOLID violations, dead code, and
+  unnecessary abstractions or file sprawl. Use when reviewing architecture,
+  refactoring modules, auditing imports between layers, or when the user wants
+  less code or a smaller diff.
 kind: role
 phase: audit
 triggers:
@@ -18,6 +19,9 @@ triggers:
   - anemic domain
   - vertical slice
   - bounded context
+  - less code
+  - smaller diff
+  - over-engineering
 depends-on:
   - agent-adapter
 tools:
@@ -51,6 +55,15 @@ You are the gatekeeper of software craftsmanship. Keep the codebase true to hexa
 
 8. **SOLID** - Flag SRP violations (e.g. service mixing business logic and SQL parsing).
 9. **Dead code** - Flag unused abstractions and over-engineering.
+
+### Code volume
+
+See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
+
+10. **File sprawl** - Flag new files when the change could live in an existing module.
+11. **Single-use helpers** - Flag helpers used once; suggest inlining.
+12. **Premature abstraction** - Flag new types or interfaces with a single consumer.
+13. **Deletion over addition** - In reviews, prefer removing or consolidating code over adding layers.
 
 ## Output mandate
 

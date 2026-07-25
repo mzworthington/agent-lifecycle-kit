@@ -72,6 +72,30 @@ Apply Robert C. Martin's craft principles inside every layer and slice.
 - **Error handling:** Use domain-specific failures at the core; map to HTTP/CLI errors only in adapters. Fail fast with clear messages.
 - **Self-documenting code:** No inline comments except non-obvious workarounds. Public ports, endpoints, and boundaries require docstrings (JSDoc, Javadoc, XML docs) for API documentation generation.
 
+### Minimal change (default)
+
+Prefer the smallest change that satisfies the requirement. Architecture (hexagonal, DDD, vertical slices) describes *where* code belongs when you must add it - not a license to add layers.
+
+**Before writing new code, ask:**
+
+1. Can an existing function, type, or module be extended?
+2. Can this be one function instead of a new file, port, or helper?
+3. Is this abstraction used by more than one call site? If not, inline it.
+4. Does this test cover real behavior, or only restate the implementation?
+
+**Default behaviors:**
+
+- Edit existing files before creating new ones.
+- Add types only when they clarify invariants or shared contracts - not for one-off plumbing.
+- Skip the full lifecycle (spec / TDD / adapter / audit) for bug fixes, refactors, and small UI tweaks unless the user asks for it.
+- When TDD applies, **green means minimal** - no "while I'm here" refactors or speculative APIs.
+
+**Reject:**
+
+- New abstractions with a single call site.
+- Parallel code paths when a branch in existing logic suffices.
+- Tests that would fail only if you deleted the line they assert.
+
 ### Language-specific profiles
 
 Depending on the active technology stack, load the appropriate skill:

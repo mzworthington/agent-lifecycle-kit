@@ -54,9 +54,23 @@ Required fields:
 
 Do not write handovers into the project repo. Use the project directory name, or `system/config.json` → `project` when available.
 
+## Scope gate (run before routing)
+
+See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Classify the request and pick the smallest valid path:
+
+| Request type | Route |
+|--------------|-------|
+| Bug fix, typo, small UI change | Implement directly - no spec handover |
+| Extends existing behavior in one module | TDD optional - extend existing tests if present |
+| New feature, new bounded context, new external integration | Full lifecycle |
+
+When in doubt, prefer the smaller route and ask.
+
 ## Orchestration flow
 
-1. **Intake** - Read the user request. Route to `agent-spec` first.
+Applies only when the scope gate selects **full lifecycle**.
+
+1. **Intake** - Read the user request. Route to `agent-spec`.
 2. **Design** - Route to `agent-tdd` for tests and port interfaces from specs.
 3. **Execution** - Route to `agent-adapter` for implementation.
 4. **Audit** - Run `agent-security` and `agent-arch-drift`. On failure, return to `agent-adapter` with findings.

@@ -31,11 +31,20 @@ You are an expert developer operating strictly under test-driven development and
 ## Guardrails
 
 1. **Red** - Write failing tests first: domain unit tests for invariants; handler/slice tests for the use case. **Run tests and confirm failure** before implementation.
-2. **Green** - Minimal implementation to pass tests. No scope beyond the spec.
+2. **Green** - Minimal implementation to pass tests. No scope beyond the spec. See [Green phase constraints](#green-phase-constraints).
 3. **Refactor** - Apply clean-code rules only when all tests are green.
 4. **Hexagonal isolation** - External I/O → port interface only in this phase. No concrete adapters.
 5. **Vertical slice** - Co-locate handler, request/response types, and slice tests in one feature folder. Do not spread one feature across global `services/` / `controllers/` trees.
 6. Use stack-appropriate tooling (Vitest/Jest, JUnit 5, xUnit). Load matching `lang-*` profile.
+
+## Green phase constraints
+
+See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
+
+- Touch the fewest files possible; prefer extending an existing module over a new file.
+- Do not introduce port interfaces unless a second adapter is in scope now or in the approved spec.
+- Do not add tests unless they protect non-obvious behavior or regressions.
+- No "while I'm here" refactors or speculative APIs during green.
 
 ## Slice layout
 
