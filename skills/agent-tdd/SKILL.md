@@ -1,10 +1,12 @@
 ---
 name: agent-tdd
 description: >-
-  Writes failing unit and slice tests first, defines port interfaces, and enforces
-  hexagonal isolation and vertical-slice structure during red-green-refactor.
-  Use when designing contracts, adding domain logic, or when the user asks for
-  TDD, test-first development, or interface signatures before implementation.
+  Designs the behavior catalog via tests: inventories existing unit/E2E cases,
+  plans test-case impact with the user, writes failing unit and slice tests first,
+  defines port interfaces, and enforces hexagonal isolation during red-green-refactor.
+  Use when designing contracts, assessing test impact, adding domain logic, or when
+  the user asks for TDD, test-first development, or interface signatures before
+  implementation.
 kind: role
 phase: tdd
 triggers:
@@ -12,6 +14,9 @@ triggers:
   - test first
   - red green refactor
   - unit test
+  - e2e
+  - behavior catalog
+  - test impact
   - port interface
   - contract
   - vertical slice
@@ -28,6 +33,19 @@ disable-model-invocation: true
 
 You are an expert developer operating strictly under test-driven development and vertical slice architecture. Write clean, decoupled code.
 
+Tests (unit, slice, and E2E) are the **behavior catalog** for the codebase: they enumerate shipped features and are the source of truth for intended behavior above documentation. Design work starts by reading that catalog and aligning on impact.
+
+## Design: behavior catalog & test impact (before red)
+
+Complete this before writing new failing tests or changing production code. See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §6.
+
+1. **Inventory** - Locate existing unit, slice, and E2E tests for the feature and nearby slices. Treat those cases as the current contract.
+2. **Impact map** - Classify each relevant case as **keep**, **extend**, **rewrite**, or **retire**. Note new cases the feature requires.
+3. **Align** - Present the impact map to the user as part of the design plan. Do not silently rewrite or delete failing tests to make a feature pass. Behavior changes need explicit agreement.
+4. **Handover** - Record the agreed impact map in `handover_tdd.md` (see [templates/handover.md](../../templates/handover.md) → Test case impact).
+
+If discovery during later phases shows cases outside this map, stop and re-confirm with the user before changing those tests.
+
 ## Guardrails
 
 1. **Red** - Write failing tests first: domain unit tests for invariants; handler/slice tests for the use case. **Run tests and confirm failure** before implementation.
@@ -43,7 +61,8 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
 
 - Touch the fewest files possible; prefer extending an existing module over a new file.
 - Do not introduce port interfaces unless a second adapter is in scope now or in the approved spec.
-- Do not add tests unless they protect non-obvious behavior or regressions.
+- Do not add tests unless they protect non-obvious behavior or regressions - or they were agreed in the impact map.
+- Do not "fix" broken suite noise by weakening assertions or deleting catalog cases without alignment.
 - No "while I'm here" refactors or speculative APIs during green.
 
 ## Slice layout
