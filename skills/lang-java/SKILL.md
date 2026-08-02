@@ -28,3 +28,15 @@ Apply these rules strictly when writing Java code:
 - **Value objects** - Use `record` for value objects, DTOs at boundaries, and domain events.
 - **Vertical slices** - Package by feature (`orders.submit`, `import.diagram`) not only by layer (`service`, `repository`).
 - **Dependency injection** - Constructor injection only. No `@Autowired` on fields.
+
+## Testing defaults
+
+Prefer project-existing tools; otherwise these defaults for [agent-tdd](../agent-tdd/SKILL.md) / [agent-xfn](../agent-xfn/SKILL.md):
+
+| Layer | Default |
+|-------|---------|
+| Unit / slice | JUnit 5 + Mockito |
+| API / browser E2E | REST Assured for APIs; Playwright when a UI exists |
+| Accessibility | axe on UI surfaces when present; otherwise skip with rationale |
+| Security regression | JUnit authz/abuse cases; OWASP ZAP only if CI already has it |
+| Load / performance | Gatling (or k6 if already standardized) |

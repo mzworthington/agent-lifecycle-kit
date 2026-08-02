@@ -21,6 +21,9 @@ Append an entry when any of these happen:
 - A rule was missing, outdated, or contradictory
 - A pattern worked well and should be reused
 - The same mistake or friction appears more than once
+- Test-case impact was skipped, or catalog cases were rewritten without alignment
+- An XFN matrix was omitted, or qualities were skipped without rationale
+- Load SLOs existed in XFN but never reached telemetry
 
 Skip logging for routine, one-off typos with no broader lesson.
 

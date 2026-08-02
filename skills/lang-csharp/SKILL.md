@@ -28,3 +28,15 @@ Apply these rules strictly when writing C# code:
 - **Vertical slices** - Package by feature (`Orders.Submit`, `Import.Diagram`) not only by layer (`Services`, `Repositories`).
 - **Dependency injection** - Constructor injection only. No service locator or field injection.
 - **Null safety** - `#nullable enable` globally; treat nullability warnings as errors.
+
+## Testing defaults
+
+Prefer project-existing tools; otherwise these defaults for [agent-tdd](../agent-tdd/SKILL.md) / [agent-xfn](../agent-xfn/SKILL.md):
+
+| Layer | Default |
+|-------|---------|
+| Unit / slice | xUnit |
+| API / browser E2E | `WebApplicationFactory<T>` for HTTP; Playwright when a UI exists |
+| Accessibility | axe on UI surfaces when present; otherwise skip with rationale |
+| Security regression | xUnit authz/abuse cases; OWASP ZAP only if CI already has it |
+| Load / performance | NBomber (or k6 if already standardized) |

@@ -22,12 +22,14 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 |-------|-------|------------|
 | [agent-orchestrator](./agent-orchestrator/SKILL.md) | orchestration | Multi-phase feature work, handovers |
 | [agent-spec](./agent-spec/SKILL.md) | spec | Requirements, Gherkin, XFN criteria, ambiguity removal |
-| [agent-tdd](./agent-tdd/SKILL.md) | tdd | Functional catalog, test-impact plan, red-green-refactor, port interfaces |
-| [agent-xfn](./agent-xfn/SKILL.md) | xfn | Browser E2E, a11y, security tests, load/performance matrix and suites |
-| [agent-adapter](./agent-adapter/SKILL.md) | impl | Infrastructure, DB, external APIs; re-confirm test impact |
+| [agent-tdd](./agent-tdd/SKILL.md) | tdd | Functional catalog, test-impact plan, red-green-refactor, port interfaces → always hands off to XFN |
+| [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
+| [agent-adapter](./agent-adapter/SKILL.md) | impl | Infrastructure, DB, external APIs; re-confirm impact; XFN fixtures |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets; verify XFN security suites |
-| [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID |
-| [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics |
+| [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID, catalog/XFN completeness |
+| [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
+
+Related SOP: [SOPs/behavior-catalog-and-xfn.md](../SOPs/behavior-catalog-and-xfn.md).
 
 ## Stack profiles
 
