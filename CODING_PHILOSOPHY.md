@@ -122,12 +122,13 @@ Depending on the framework used, load the appropriate skill:
 
 Do not write implementation code before establishing behavioral or technical contracts.
 
-- **Tests are the behavior catalog:** Unit and E2E tests are the living inventory of features and the **source of truth for intended behavior**, above documentation, READMEs, and comments. When docs and tests disagree, trust the tests until stakeholders explicitly change the contract.
-- **Plan test impact before coding:** During design (TDD phase), inventory which existing cases the change will add, modify, or invalidate. Align with the user on that impact before implementation. Re-confirm during implementation whenever the work starts to affect cases not covered in the plan.
+- **Tests are the behavior catalog:** Unit, slice, and cross-functional suites (browser E2E, accessibility, security regression, load/performance) are the living inventory of features and the **source of truth for intended behavior**, above documentation, READMEs, and comments. When docs and tests disagree, trust the tests until stakeholders explicitly change the contract.
+- **Plan test impact before coding:** During design (TDD + XFN), inventory which existing cases the change will add, modify, or invalidate. Align with the user on that impact before implementation. Re-confirm during implementation whenever the work starts to affect cases not covered in the plan.
+- **Cross-functional requirements are tested, not assumed:** Spec captures measurable quality criteria; Design selects an XFN matrix (browser E2E, a11y, security tests, load) with apply/skip rationale; suites join the catalog. See [agent-xfn](./skills/agent-xfn/SKILL.md).
 - **TDD / red-green-refactor:** Propose failing tests first. **Never skip the red phase** - run tests and confirm failure before implementation.
 - **BDD / Gherkin:** For rich domain behavior, write `Given-When-Then` scenarios before code. Scenarios must use ubiquitous language from the domain glossary.
-- **Test variety:** Unit tests for domain logic; slice/handler tests for use cases; integration tests for adapters; E2E for critical paths only.
-- **Test isolation:** Mock outbound ports in domain and slice tests. Do not boot full framework contexts for pure logic.
+- **Test variety:** Unit tests for domain logic; slice/handler tests for use cases; integration tests for adapters; browser E2E for critical journeys; accessibility, security, and load suites when the XFN matrix applies.
+- **Test isolation:** Mock outbound ports in domain and slice tests. Do not boot full framework contexts for pure logic. Keep destructive load and E2E fixtures off shared production.
 - **Secure coding:** Treat all input as untrusted. Parameterize queries; manage secrets via environment variables (`.env.example`).
 
 ### Import / format-conversion features (e.g. Mermaid → Schema)

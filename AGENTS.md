@@ -16,7 +16,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 |----------|------|---------|
 | Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
-| Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, adapter, security, arch-drift, telemetry |
+| Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, telemetry |
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C# |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET |
 | Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists |
@@ -29,7 +29,7 @@ See [skills/README.md](./skills/README.md) for the full taxonomy.
 
 1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code.
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
-3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → Implementation → Audit → Telemetry.
+3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN quality → Implementation → Audit → Telemetry.
 
 ## 3. Dynamic specialist activation
 
@@ -37,10 +37,11 @@ When executing a lifecycle phase, assume the matching role skill:
 
 | Phase | Skill |
 |-------|-------|
-| Requirements / specs | [agent-spec](./skills/agent-spec/SKILL.md) |
-| Design / tests & contracts | [agent-tdd](./skills/agent-tdd/SKILL.md) - inventory the behavior catalog; align on test-case impact before red-green-refactor |
-| Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) - re-confirm if implementation impacts tests outside the Design map |
-| Security audit | [agent-security](./skills/agent-security/SKILL.md) |
+| Requirements / specs | [agent-spec](./skills/agent-spec/SKILL.md) - include cross-functional acceptance criteria |
+| Design / functional tests | [agent-tdd](./skills/agent-tdd/SKILL.md) - inventory the functional catalog; align on test-case impact before red-green-refactor |
+| Design / cross-functional quality | [agent-xfn](./skills/agent-xfn/SKILL.md) - browser E2E, a11y, security tests, load; apply/skip matrix + suites |
+| Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) - re-confirm if implementation impacts tests outside the Design maps |
+| Security audit | [agent-security](./skills/agent-security/SKILL.md) - code review plus verify agreed security suites exist |
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) |
 

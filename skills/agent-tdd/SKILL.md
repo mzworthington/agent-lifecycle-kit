@@ -1,12 +1,13 @@
 ---
 name: agent-tdd
 description: >-
-  Designs the behavior catalog via tests: inventories existing unit/E2E cases,
-  plans test-case impact with the user, writes failing unit and slice tests first,
-  defines port interfaces, and enforces hexagonal isolation during red-green-refactor.
-  Use when designing contracts, assessing test impact, adding domain logic, or when
-  the user asks for TDD, test-first development, or interface signatures before
-  implementation.
+  Designs the functional behavior catalog via tests: inventories existing unit
+  and slice cases, plans test-case impact with the user, writes failing unit and
+  slice tests first, defines port interfaces, and enforces hexagonal isolation
+  during red-green-refactor. Hands off cross-functional suites (browser E2E,
+  a11y, security, load) to agent-xfn. Use when designing contracts, assessing
+  test impact, adding domain logic, or when the user asks for TDD or test-first
+  development.
 kind: role
 phase: tdd
 triggers:
@@ -33,16 +34,16 @@ disable-model-invocation: true
 
 You are an expert developer operating strictly under test-driven development and vertical slice architecture. Write clean, decoupled code.
 
-Tests (unit, slice, and E2E) are the **behavior catalog** for the codebase: they enumerate shipped features and are the source of truth for intended behavior above documentation. Design work starts by reading that catalog and aligning on impact.
+Unit and slice tests are the **functional** half of the **behavior catalog**. Cross-functional suites (browser E2E, accessibility, security, load) are planned and authored by [agent-xfn](../agent-xfn/SKILL.md) after this phase. Design work starts by reading the catalog and aligning on impact.
 
 ## Design: behavior catalog & test impact (before red)
 
 Complete this before writing new failing tests or changing production code. See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §6.
 
-1. **Inventory** - Locate existing unit, slice, and E2E tests for the feature and nearby slices. Treat those cases as the current contract.
-2. **Impact map** - Classify each relevant case as **keep**, **extend**, **rewrite**, or **retire**. Note new cases the feature requires.
+1. **Inventory** - Locate existing unit and slice tests for the feature and nearby slices. Note related XFN suites for the next agent; do not own rewriting them here.
+2. **Impact map** - Classify each relevant functional case as **keep**, **extend**, **rewrite**, or **retire**. Note new cases the feature requires.
 3. **Align** - Present the impact map to the user as part of the design plan. Do not silently rewrite or delete failing tests to make a feature pass. Behavior changes need explicit agreement.
-4. **Handover** - Record the agreed impact map in `handover_tdd.md` (see [templates/handover.md](../../templates/handover.md) → Test case impact).
+4. **Handover** - Record the agreed impact map in `handover_tdd.md` (see [templates/handover.md](../../templates/handover.md) → Test case impact). Point **Next agent** at `agent-xfn` when UI, auth/trust boundaries, or performance criteria appear in the spec.
 
 If discovery during later phases shows cases outside this map, stop and re-confirm with the user before changing those tests.
 
