@@ -19,7 +19,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, telemetry |
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C# |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET |
-| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists |
+| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md)) |
 | Templates | [templates/](./templates/) | Handover, lesson, and project handshake formats |
 | Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
 
@@ -29,7 +29,8 @@ See [skills/README.md](./skills/README.md) for the full taxonomy.
 
 1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code.
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
-3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN quality → Implementation → Audit → Telemetry.
+3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN plan → Implementation → XFN green → Audit → Telemetry.
+4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
 
 ## 3. Dynamic specialist activation
 
@@ -39,13 +40,13 @@ When executing a lifecycle phase, assume the matching role skill:
 |-------|-------|
 | Requirements / specs | [agent-spec](./skills/agent-spec/SKILL.md) - include cross-functional acceptance criteria |
 | Design / functional tests | [agent-tdd](./skills/agent-tdd/SKILL.md) - inventory the functional catalog; align on test-case impact before red-green-refactor |
-| Design / cross-functional quality | [agent-xfn](./skills/agent-xfn/SKILL.md) - browser E2E, a11y, security tests, load; apply/skip matrix + suites |
-| Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) - re-confirm if implementation impacts tests outside the Design maps |
-| Security audit | [agent-security](./skills/agent-security/SKILL.md) - code review plus verify agreed security suites exist |
-| Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) |
-| Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) |
+| Design / cross-functional quality | [agent-xfn](./skills/agent-xfn/SKILL.md) - matrix + stubs in plan; green apply suites after wiring |
+| Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) - re-confirm impact; prepare XFN fixtures |
+| Security audit | [agent-security](./skills/agent-security/SKILL.md) - OWASP review + security suite presence |
+| Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) - boundaries plus catalog/XFN completeness |
+| Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) - map XFN load SLOs to metrics/alerts |
 
-Phase handovers are written locally under `~/.agents/handover/<project>/` (not into the project repo). See [templates/handover.md](./templates/handover.md).
+Phase handovers are written locally under `~/.agents/handover/<project>/` (not into the project repo). See [templates/handover.md](./templates/handover.md) (per-phase Definition of Done).
 
 ## 4. Further reading
 

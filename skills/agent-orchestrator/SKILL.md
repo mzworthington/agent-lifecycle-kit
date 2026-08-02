@@ -4,8 +4,9 @@ description: >-
   Coordinates multi-phase feature development across specification, TDD design
   (behavior catalog and test-case impact), cross-functional quality suites,
   implementation with impact re-confirmation, security/architecture audit, and
-  telemetry. Use when starting a new feature, running the full lifecycle,
-  routing between specialist roles, or producing phase handover artifacts.
+  telemetry fed by XFN SLOs. Use when starting a new feature, running the full
+  lifecycle, routing between specialist roles, or producing phase handover
+  artifacts.
 kind: role
 phase: orchestration
 triggers:
@@ -32,6 +33,8 @@ disable-model-invocation: false
 
 You are the master coordinator responsible for guiding feature development through the multi-agent software engineering lifecycle.
 
+Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
+
 ## Specialist roles
 
 | Phase | Skill |
@@ -51,7 +54,7 @@ Each phase must produce a structured markdown artifact under `~/.agents/handover
 Required fields:
 
 1. **Phase** - current active phase
-2. **Status** - `COMPLETE` or `BLOCKED`
+2. **Status** - `COMPLETE` or `BLOCKED` (only COMPLETE when that phase's Definition of Done is met)
 3. **Output** - main deliverables (interfaces, tests, audit reports)
 4. **Next agent** - recommended role skill (`agent-*`)
 
@@ -63,25 +66,37 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 
 | Request type | Route |
 |--------------|-------|
-| Bug fix, typo, small UI change | Implement directly - no spec handover. Still note if existing tests will change; run a light XFN check when UI or auth is touched. |
-| Extends existing behavior in one module | Design light: inventory related tests, align on impact, extend cases; light XFN matrix if UI / trust boundary / SLO applies |
+| Bug fix, typo, small UI change | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
+| Extends existing behavior in one module | Design light: functional impact align → light or full XFN matrix → implement |
 | New feature, new bounded context, new external integration | Full lifecycle |
 
 When in doubt, prefer the smaller route and ask.
 
+### Light XFN floor (non-optional when condition matches)
+
+| Touch | Minimum |
+|-------|---------|
+| UI surface | Accessibility apply on touched surface |
+| Auth / trust boundary | At least one security denial/abuse case |
+| Latency-sensitive or SLO path | Load apply, or skip with explicit not-in-scope reason |
+| None of the above | Matrix with skip + rationale for every quality |
+
 ## Behavior catalog (all routes)
 
-Tests are the source of truth for intended behavior above documentation. Before coding non-trivial work, ensure Design discusses **which functional and cross-functional cases** will be kept, extended, rewritten, retired, or added. Re-confirm during execution if implementation starts to impact cases outside that plan. See [agent-tdd](../agent-tdd/SKILL.md), [agent-xfn](../agent-xfn/SKILL.md), and [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §6.
+Tests are the source of truth for intended behavior above documentation. Before coding non-trivial work, Design must discuss **which functional and cross-functional cases** will be kept, extended, rewritten, retired, or added. Re-confirm during execution if implementation impacts cases outside that plan. See [agent-tdd](../agent-tdd/SKILL.md), [agent-xfn](../agent-xfn/SKILL.md).
+
+Browser E2E and other XFN suites are **never** owned by `agent-tdd` - route them to `agent-xfn`.
 
 ## Orchestration flow
 
-Applies only when the scope gate selects **full lifecycle**.
+Applies when the scope gate selects **full lifecycle** (adapt with light XFN on smaller routes).
 
 1. **Intake** - Read the user request. Route to `agent-spec` (include cross-functional acceptance criteria).
-2. **Design (functional)** - Route to `agent-tdd`: inventory the functional catalog, align on test-case impact, then produce failing unit/slice tests and port interfaces. Do not leave this step until functional impact is recorded.
-3. **Design (cross-functional)** - Route to `agent-xfn`: build the XFN matrix (browser E2E, a11y, security tests, load), align apply/skip and impact, author agreed suites. Skip only when the matrix documents skip for every quality.
-4. **Execution** - Route to `agent-adapter` for implementation. If adapters or wiring invalidate, rewrite, or require new tests (functional or XFN) beyond the Design impact maps, **pause and re-confirm** with the user before changing those cases; update the handover.
-5. **Audit** - Run `agent-security` and `agent-arch-drift`. Security audit verifies agreed security regression cases exist and code meets OWASP expectations. On failure, return to `agent-adapter` (or `agent-xfn` if suites are missing) with findings.
-6. **Telemetry** - Route to `agent-telemetry` for instrumentation.
-7. **Release** - Report completion status to the user, including which catalog cases (functional + XFN) changed.
-8. **Retro** (optional) - If the user corrected the approach, a rule was missing, or a pattern should be reused, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Skip when nothing worth capturing.
+2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact, failing unit/slice tests and ports. Next agent is always `agent-xfn`.
+3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
+4. **Execution** - Route to `agent-adapter`. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need.
+5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
+6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness (security suites; a11y/E2E/load paths; no silent rewrites). On failure, return to `agent-adapter` or `agent-xfn`.
+7. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. Instrument metrics/alerts that match those thresholds.
+8. **Release** - Report completion, including catalog cases changed and XFN matrix summary.
+9. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md).

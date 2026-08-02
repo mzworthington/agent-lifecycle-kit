@@ -30,3 +30,15 @@ Apply these rules strictly when writing TypeScript or Node.js code:
 - **Domain purity (DDD)** - Aggregates and value objects in `domain/` with no TypeORM, Prisma, or class-validator decorators.
 - **Vertical slices** - Co-locate `*Handler`, request/response types, and slice tests under `features/<capability>/`.
 - **Validation** - Zero-trust parsing at infrastructure boundaries with `Zod` or `ArkType` before data reaches handlers.
+
+## Testing defaults
+
+Prefer project-existing tools; otherwise these defaults for [agent-tdd](../agent-tdd/SKILL.md) / [agent-xfn](../agent-xfn/SKILL.md):
+
+| Layer | Default |
+|-------|---------|
+| Unit / slice | Vitest (or Jest if already in repo) |
+| Browser E2E | Playwright |
+| Accessibility | `@axe-core/playwright`; `eslint-plugin-jsx-a11y` for static UI |
+| Security regression | Vitest/Playwright abuse and authz cases; OWASP ZAP only if CI already has it |
+| Load / performance | k6 |

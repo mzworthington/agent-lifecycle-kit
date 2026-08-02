@@ -7,9 +7,10 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 ## What you get
 
 - **Shared engineering standards** - hexagonal architecture, domain-driven design, vertical slices, and clean code
-- **Lifecycle roles** - spec → TDD → XFN quality → implementation → audit → telemetry, so agents follow a repeatable process
-- **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more
-- **Operational playbooks** - SOPs, checklists, and handover templates
+- **Lifecycle roles** - spec → TDD → XFN plan → implementation → XFN green → audit → telemetry
+- **Behavior catalog & XFN** - tests as source of truth; apply/skip matrix for browser E2E, a11y, security, load ([SOP](./SOPs/behavior-catalog-and-xfn.md))
+- **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more (with XFN tooling defaults)
+- **Operational playbooks** - SOPs, checklists, and handover templates with per-phase Definition of Done
 - **Self-improving kit** - local lesson capture and weekly review to promote learnings into shared standards
 
 Works with Cursor and Gemini-style IDEs. Install once on your machine; point any project at it.

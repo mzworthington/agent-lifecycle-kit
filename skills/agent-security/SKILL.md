@@ -34,7 +34,7 @@ You **audit** code and confirm security **tests** from Design. Authoring those s
 - OWASP Top 10 (injection, broken auth, data exposure, SSRF).
 - Input parsing at system boundaries (Zod, Jackson, EF, Jakarta Validation).
 - Cryptographic weaknesses and hardcoded configuration.
-- **Catalog check** - Security cases marked apply in `handover_xfn.md` exist and cover the stated abuse/authz scenarios. Missing agreed tests → **REJECT** (route back to `agent-xfn`).
+- **Catalog check (security rows only)** - Security cases marked apply in `handover_xfn.md` exist, are green (or BLOCKED with owner), and cover the stated abuse/authz scenarios. Missing agreed tests → **REJECT** (route back to `agent-xfn`). Broader catalog/XFN completeness (a11y, E2E, load, silent rewrites) is owned by [agent-arch-drift](../agent-arch-drift/SKILL.md).
 
 ## Enforcement
 

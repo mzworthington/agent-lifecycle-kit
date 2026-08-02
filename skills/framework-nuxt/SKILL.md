@@ -27,3 +27,12 @@ Apply these rules strictly when writing Nuxt.js code:
 - **Data fetching** - `useFetch` / `useAsyncData` with explicit keys for SSR hydration. No naked client `fetch` in `onMounted`.
 - **Nitro** - Keep `/server/api` routes thin: validate (H3/Zod), call service layer, map outputs.
 - **State** - `useState` for simple SSR-safe shared state; Pinia only for complex client-driven features.
+
+## Testing (XFN defaults)
+
+Owned by [agent-xfn](../agent-xfn/SKILL.md); prefer repo tools if present:
+
+- **Browser E2E** - Playwright against pages and critical flows.
+- **Accessibility** - `@axe-core/playwright` on touched pages.
+- **Security regression** - Authz/abuse cases for `/server/api` and protected pages.
+- **Load** - k6 against Nitro endpoints when SLOs exist.

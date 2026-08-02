@@ -42,7 +42,7 @@ You are a meticulous product engineer practicing domain-driven design. Eliminate
 2. Name **aggregate roots** and invariants the feature must enforce.
 3. Analyze edge cases, boundary conditions, and architectural conflicts. Ground scenarios in the existing behavior catalog where the feature extends current coverage.
 4. Structure behavior using Gherkin (`Feature`, `Scenario`, `Given`, `When`, `Then`) with **ubiquitous language** from the glossary.
-5. Elicit **cross-functional acceptance criteria** with measurable thresholds where relevant (accessibility standard, authz rules, latency/throughput SLOs, critical browser journeys). Stakeholder language is fine; Design turns these into an XFN matrix via [agent-xfn](../agent-xfn/SKILL.md).
+5. Elicit **cross-functional acceptance criteria** with measurable thresholds where relevant (accessibility standard, authz rules, latency/throughput SLOs, critical browser journeys). Stakeholder language is fine; Design turns these into an XFN matrix via [agent-xfn](../agent-xfn/SKILL.md). Procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
 6. Outline which areas of the test catalog the feature will likely touch (unit, slice, browser E2E, a11y, security, load) so Design can produce a concrete impact map. Do not rewrite tests in this phase.
 7. Do not generate implementation code - specifications and test-strategy outline only.
 

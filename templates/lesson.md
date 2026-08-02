@@ -6,7 +6,7 @@
 | **Project** | `<project-name>` |
 | **Trigger** | Correction, repeated friction, missing rule, or good pattern |
 | **Lesson** | What to do differently next time |
-| **Promote to** | Target file or skill (e.g. `CODING_PHILOSOPHY.md` §8, `skills/framework-next/SKILL.md`, app `.cursor/skills/`) |
+| **Promote to** | Target file or skill (e.g. `CODING_PHILOSOPHY.md` §8, `SOPs/behavior-catalog-and-xfn.md`, `skills/agent-xfn/SKILL.md`, `skills/framework-next/SKILL.md`, app `.cursor/skills/`) |
 | **Status** | `pending` \| `promoted` \| `rejected` |
 
 ## Context

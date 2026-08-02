@@ -29,3 +29,12 @@ Apply these rules strictly when writing Next.js (App Router) code:
 - **Server components by default** - RSC for data fetching. `'use client'` only at leaf nodes.
 - **Data & mutations** - Fetch in RSCs with cache tags. Mutations via server actions through domain validation.
 - **Client state** - Avoid global stores unless necessary. Prefer URL state and server-driven layouts.
+
+## Testing (XFN defaults)
+
+Owned by [agent-xfn](../agent-xfn/SKILL.md); prefer repo tools if present:
+
+- **Browser E2E** - Playwright against App Router routes; prefer `getByRole` / labels over brittle selectors.
+- **Accessibility** - `@axe-core/playwright` on touched pages; keep `eslint-plugin-jsx-a11y` in lint.
+- **Security regression** - Authz and abuse cases around server actions and route handlers.
+- **Load** - k6 against critical server actions or Route Handlers when SLOs exist.

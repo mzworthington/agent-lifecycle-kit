@@ -54,3 +54,12 @@ Apply these rules strictly when writing .NET application code:
 
 - xUnit for domain and handler tests; no `WebApplicationFactory` for pure logic.
 - `WebApplicationFactory<T>` or integration test projects for HTTP and adapter boundaries only.
+
+### XFN defaults
+
+Owned by [agent-xfn](../agent-xfn/SKILL.md); prefer repo tools if present:
+
+- **API / browser E2E** - `WebApplicationFactory<T>` for HTTP; Playwright when a UI is served.
+- **Accessibility** - axe on UI surfaces when present; otherwise skip with rationale.
+- **Security regression** - Authz denial and abuse cases around endpoints/handlers.
+- **Load** - NBomber (or k6) against critical endpoints when SLOs exist.

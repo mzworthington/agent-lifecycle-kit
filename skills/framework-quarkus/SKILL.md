@@ -49,3 +49,12 @@ Apply these rules strictly when writing Quarkus application code:
 - JUnit 5 + Mockito for domain (no `@QuarkusTest` for pure logic).
 - `@QuarkusTest` + `@InjectMock` for REST and DB integration.
 - `@QuarkusIntegrationTest` for native binary verification.
+
+### XFN defaults
+
+Owned by [agent-xfn](../agent-xfn/SKILL.md); prefer repo tools if present:
+
+- **API / browser E2E** - REST Assured / `@QuarkusTest` HTTP; Playwright when a UI is served.
+- **Accessibility** - axe on UI surfaces when present; otherwise skip with rationale.
+- **Security regression** - Quarkus security authz denial and abuse cases.
+- **Load** - Gatling (or k6) against critical endpoints when SLOs exist.

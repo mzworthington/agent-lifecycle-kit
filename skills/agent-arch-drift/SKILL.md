@@ -2,8 +2,9 @@
 name: agent-arch-drift
 description: >-
   Detects hexagonal boundary violations, DDD modeling issues (anemic domain,
-  aggregate leaks), vertical-slice coupling, SOLID violations, dead code, and
-  unnecessary abstractions or file sprawl. Use when reviewing architecture,
+  aggregate leaks), vertical-slice coupling, SOLID violations, dead code,
+  unnecessary abstractions, and behavior-catalog / XFN completeness gaps
+  (missing apply suites, silent test rewrites). Use when reviewing architecture,
   refactoring modules, auditing imports between layers, or when the user wants
   less code or a smaller diff.
 kind: role
@@ -22,8 +23,11 @@ triggers:
   - less code
   - smaller diff
   - over-engineering
+  - behavior catalog
+  - test impact
 depends-on:
   - agent-adapter
+  - agent-xfn
 tools:
   - read
   - grep
@@ -65,11 +69,20 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
 12. **Premature abstraction** - Flag new types or interfaces with a single consumer.
 13. **Deletion over addition** - In reviews, prefer removing or consolidating code over adding layers.
 
+### Behavior catalog & XFN completeness
+
+See [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Security-suite presence is also checked by [agent-security](../agent-security/SKILL.md); you own the broader catalog gate.
+
+14. **XFN matrix present** - `handover_xfn.md` has apply/skip + rationale for every quality. Missing matrix → **REJECT**.
+15. **Apply suites exist** - Browser E2E, a11y, and load rows marked apply have suite paths on disk (not only planned stubs left red without BLOCKED). Missing → **REJECT** (route to `agent-xfn`).
+16. **No silent catalog rewrites** - Diff must not weaken assertions or delete catalog cases unless the impact map shows rewrite/retire with Aligned = yes. Unaligned changes → **REJECT**.
+17. **Functional impact aligned** - `handover_tdd.md` impact rows are Aligned = yes for touched slices.
+
 ## Output mandate
 
 When drift is detected, report:
 
 - **Violation** - What principle was broken and where (file/line or module).
-- **Remediation** - Concrete refactor (e.g. "Extract `Money` value object", "Move handler into `features/submit-order/` slice").
+- **Remediation** - Concrete refactor (e.g. "Extract `Money` value object", "Move handler into `features/submit-order/` slice", "Add axe suite for apply a11y row").
 
 Write findings to `~/.agents/handover/<project>/handover_audit.md` (or a dedicated arch section therein).
