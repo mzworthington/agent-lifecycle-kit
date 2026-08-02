@@ -122,6 +122,8 @@ Depending on the framework used, load the appropriate skill:
 
 Do not write implementation code before establishing behavioral or technical contracts.
 
+- **Tests are the behavior catalog:** Unit and E2E tests are the living inventory of features and the **source of truth for intended behavior**, above documentation, READMEs, and comments. When docs and tests disagree, trust the tests until stakeholders explicitly change the contract.
+- **Plan test impact before coding:** During design (TDD phase), inventory which existing cases the change will add, modify, or invalidate. Align with the user on that impact before implementation. Re-confirm during implementation whenever the work starts to affect cases not covered in the plan.
 - **TDD / red-green-refactor:** Propose failing tests first. **Never skip the red phase** - run tests and confirm failure before implementation.
 - **BDD / Gherkin:** For rich domain behavior, write `Given-When-Then` scenarios before code. Scenarios must use ubiquitous language from the domain glossary.
 - **Test variety:** Unit tests for domain logic; slice/handler tests for use cases; integration tests for adapters; E2E for critical paths only.
@@ -161,7 +163,7 @@ Do not write implementation code before establishing behavioral or technical con
 
 ### How to collaborate
 
-- **Plan before you build.** For non-trivial work, outline the approach, scope, and trade-offs before writing code or making broad changes. Confirm the plan when requirements, architecture, or impact are unclear.
+- **Plan before you build.** For non-trivial work, outline the approach, scope, trade-offs, and **test-case impact** (which catalog cases keep / extend / rewrite / retire / add) before writing code or making broad changes. Confirm the plan when requirements, architecture, or impact are unclear.
 - **Ask when unsure.** If a requirement is ambiguous, multiple valid approaches exist, or you lack context to choose confidently, ask a focused question instead of guessing. Do not proceed on silent assumptions.
 - **No silent assumptions:** If a task conflicts with hexagonal boundaries, DDD aggregate rules, vertical slice cohesion, or clean-code smells, halt and ask for guidance.
 - **Explain the why:** Cite the pattern or principle behind every structural recommendation (e.g. "extract value object to enforce invariant", "new slice folder to avoid cross-feature coupling").

@@ -22,8 +22,8 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 |-------|-------|------------|
 | [agent-orchestrator](./agent-orchestrator/SKILL.md) | orchestration | Multi-phase feature work, handovers |
 | [agent-spec](./agent-spec/SKILL.md) | spec | Requirements, Gherkin, ambiguity removal |
-| [agent-tdd](./agent-tdd/SKILL.md) | tdd | Red-green-refactor, port interfaces |
-| [agent-adapter](./agent-adapter/SKILL.md) | impl | Infrastructure, DB, external APIs |
+| [agent-tdd](./agent-tdd/SKILL.md) | tdd | Behavior catalog, test-impact plan, red-green-refactor, port interfaces |
+| [agent-adapter](./agent-adapter/SKILL.md) | impl | Infrastructure, DB, external APIs; re-confirm test impact |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets |
 | [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID |
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics |

@@ -38,8 +38,8 @@ When executing a lifecycle phase, assume the matching role skill:
 | Phase | Skill |
 |-------|-------|
 | Requirements / specs | [agent-spec](./skills/agent-spec/SKILL.md) |
-| Tests & contracts | [agent-tdd](./skills/agent-tdd/SKILL.md) |
-| Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) |
+| Design / tests & contracts | [agent-tdd](./skills/agent-tdd/SKILL.md) - inventory the behavior catalog; align on test-case impact before red-green-refactor |
+| Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) - re-confirm if implementation impacts tests outside the Design map |
 | Security audit | [agent-security](./skills/agent-security/SKILL.md) |
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) |

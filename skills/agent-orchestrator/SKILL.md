@@ -1,8 +1,9 @@
 ---
 name: agent-orchestrator
 description: >-
-  Coordinates multi-phase feature development across specification, TDD design,
-  implementation, security/architecture audit, and telemetry. Use when starting
+  Coordinates multi-phase feature development across specification, TDD design
+  (behavior catalog and test-case impact), implementation with impact
+  re-confirmation, security/architecture audit, and telemetry. Use when starting
   a new feature, running the full lifecycle, routing between specialist roles,
   or producing phase handover artifacts.
 kind: role
@@ -60,20 +61,24 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 
 | Request type | Route |
 |--------------|-------|
-| Bug fix, typo, small UI change | Implement directly - no spec handover |
-| Extends existing behavior in one module | TDD optional - extend existing tests if present |
+| Bug fix, typo, small UI change | Implement directly - no spec handover. Still note if existing tests will change. |
+| Extends existing behavior in one module | Design light: inventory related tests, align on impact, then extend those cases |
 | New feature, new bounded context, new external integration | Full lifecycle |
 
 When in doubt, prefer the smaller route and ask.
+
+## Behavior catalog (all routes)
+
+Tests are the source of truth for intended behavior above documentation. Before coding non-trivial work, ensure the design phase (or a light design step on smaller routes) discusses **which unit and E2E cases** will be kept, extended, rewritten, retired, or added. Re-confirm during execution if implementation starts to impact cases outside that plan. See [agent-tdd](../agent-tdd/SKILL.md) and [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §6.
 
 ## Orchestration flow
 
 Applies only when the scope gate selects **full lifecycle**.
 
 1. **Intake** - Read the user request. Route to `agent-spec`.
-2. **Design** - Route to `agent-tdd` for tests and port interfaces from specs.
-3. **Execution** - Route to `agent-adapter` for implementation.
+2. **Design** - Route to `agent-tdd`: inventory the behavior catalog, align on test-case impact, then produce failing tests and port interfaces from specs. Do not leave Design until impact is recorded in the handover.
+3. **Execution** - Route to `agent-adapter` for implementation. If adapters or wiring invalidate, rewrite, or require new tests beyond the Design impact map, **pause and re-confirm** with the user before changing those cases; update the handover.
 4. **Audit** - Run `agent-security` and `agent-arch-drift`. On failure, return to `agent-adapter` with findings.
 5. **Telemetry** - Route to `agent-telemetry` for instrumentation.
-6. **Release** - Report completion status to the user.
+6. **Release** - Report completion status to the user, including which catalog cases changed.
 7. **Retro** (optional) - If the user corrected the approach, a rule was missing, or a pattern should be reused, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Skip when nothing worth capturing.
