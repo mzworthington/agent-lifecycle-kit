@@ -60,4 +60,5 @@ tools: []                     # optional CLI/tool hints for the agent
 - Add project-specific rules in **your app repo** (`.cursor/skills/` or a local overlay), not here.
 - Add new languages/frameworks by copying a profile skill and adjusting frontmatter.
 - Keep role skills focused on behavior and output schema; keep stack detail in profiles.
+- Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).

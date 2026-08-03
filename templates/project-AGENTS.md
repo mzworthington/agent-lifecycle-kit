@@ -7,6 +7,7 @@ Before starting work, read:
 - `~/.agents/AGENTS.md` - bootstrap and lifecycle routing
 - `~/.agents/CODING_PHILOSOPHY.md` - hexagonal architecture, DDD, vertical slices, clean code
 - `~/.agents/SOPs/behavior-catalog-and-xfn.md` - tests as behavior catalog; XFN matrix
+- `~/.agents/mcps/README.md` - shared MCP catalog and profiles (optional project `.cursor/mcp.json`)
 
 For non-trivial work, before coding:
 

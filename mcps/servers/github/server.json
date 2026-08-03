@@ -1,0 +1,19 @@
+{
+  "id": "github",
+  "name": "GitHub",
+  "summary": "Issues, PRs, and repository metadata via the official GitHub MCP server.",
+  "homepage": "https://github.com/github/github-mcp-server",
+  "transport": "stdio",
+  "phases": ["spec", "impl", "audit"],
+  "triggers": ["GitHub issue", "pull request", "repo metadata"],
+  "requiredEnv": ["GITHUB_PERSONAL_ACCESS_TOKEN"],
+  "mcp": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "description": "Registry of MCP servers managed by the agent lifecycle kit.",
+  "servers": [
+    {
+      "id": "context7",
+      "name": "Context7",
+      "summary": "Up-to-date library docs and code examples for frameworks and packages.",
+      "transport": "stdio",
+      "phases": ["impl", "tdd", "xfn"],
+      "triggers": ["docs", "library API", "framework reference", "SDK"],
+      "requiredEnv": [],
+      "enabledByDefault": true
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "summary": "Issues, PRs, and repository metadata via the GitHub MCP server.",
+      "transport": "stdio",
+      "phases": ["spec", "impl", "audit"],
+      "triggers": ["GitHub issue", "pull request", "repo metadata"],
+      "requiredEnv": ["GITHUB_PERSONAL_ACCESS_TOKEN"],
+      "enabledByDefault": true
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright",
+      "summary": "Browser automation for XFN browser E2E and exploratory UI checks.",
+      "transport": "stdio",
+      "phases": ["xfn", "impl"],
+      "triggers": ["browser E2E", "Playwright", "UI verification", "screenshot"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    }
+  ]
+}

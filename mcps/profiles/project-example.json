@@ -1,0 +1,9 @@
+{
+  "name": "project-example",
+  "description": "Example project profile for an app repo .cursor/mcp.json. Adds Playwright for XFN browser work.",
+  "servers": [
+    "context7",
+    "github",
+    "playwright"
+  ]
+}

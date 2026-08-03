@@ -11,6 +11,7 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 - **Behavior catalog & XFN** - tests as source of truth; apply/skip matrix for browser E2E, a11y, security, load ([SOP](./SOPs/behavior-catalog-and-xfn.md))
 - **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more (with XFN tooling defaults)
 - **Operational playbooks** - SOPs, checklists, and handover templates with per-phase Definition of Done
+- **MCP library** - versioned server catalog and profiles composed into Cursor `mcp.json` ([mcps/](./mcps/))
 - **Self-improving kit** - local lesson capture and weekly review to promote learnings into shared standards
 
 Works with Cursor and Gemini-style IDEs. Install once on your machine; point any project at it.
@@ -25,15 +26,22 @@ cd ~/Documents/dev/agent-lifecycle-kit
 ./install.sh
 ```
 
-This creates `~/.agents` as a symlink to the clone and copies a local config file.
+This creates `~/.agents` as a symlink to the clone, copies a local config file, and installs the default MCP profile to `~/.cursor/mcp.json` (skip with `INSTALL_MCP=0 ./install.sh`).
 
 **2. Add to a project**
 
 Copy [templates/project-AGENTS.md](./templates/project-AGENTS.md) into your project root as `AGENTS.md` (or add a short handshake that links to `~/.agents`). Agents will pick up the kit automatically.
 
+For project-scoped MCP tools, copy [templates/project-mcp.json](./templates/project-mcp.json) to `.cursor/mcp.json`, or compose a profile:
+
+```bash
+mkdir -p .cursor
+~/.agents/scripts/compose-mcp.sh project-example -o .cursor/mcp.json
+```
+
 **3. Start working**
 
-Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.agents`) for bootstrap instructions and activates the right skills for your stack and task.
+Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.agents`) for bootstrap instructions and activates the right skills for your stack and task. Restart Cursor after MCP changes and confirm servers are healthy under **Customize → MCP**.
 
 ## Learn more
 
@@ -41,6 +49,7 @@ Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.
 |-------|-------|
 | Coding standards | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
 | Skills and roles | [skills/README.md](./skills/README.md) |
+| MCP library | [mcps/README.md](./mcps/README.md), [SOPs/mcp-library.md](./SOPs/mcp-library.md) |
 | Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md) |
 | Local config | `system/config.json` (created from `config.example.json`) |
 
