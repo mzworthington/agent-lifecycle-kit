@@ -12,7 +12,7 @@ mcps/
 │   ├── collab.json           # Linear + Notion + Slack on top of default
 │   ├── devtools.json         # Chrome DevTools + Next.js DevTools + Playwright
 │   ├── cloud.json            # Cloudflare API (+ Context7)
-│   ├── personal.json         # Bitwarden + LinkedIn + Polyglot (machine-local)
+│   ├── personal.json         # Bitwarden + LinkedIn + Polyglot + Obsidian (machine-local)
 │   └── project-example.json  # App-repo example
 ├── servers/<id>/
 │   ├── server.json           # Metadata + Cursor mcpServers fragment
@@ -28,7 +28,7 @@ mcps/
 | `collab` | default + linear, notion, slack | Global/project when the team uses those tools |
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
 | `cloud` | context7, cloudflare | Workers / DNS / R2 work |
-| `personal` | bitwarden, linkedin, polyglot | **Your machine only** (secrets) |
+| `personal` | bitwarden, linkedin, polyglot, obsidian | **Your machine only** (secrets / vault) |
 | `project-example` | context7, github, next-devtools, chrome-devtools, playwright, postgres | App `.cursor/mcp.json` |
 
 Prefer composing **one** profile that matches the work. Extra MCP tools compete for attention and slow agents.
@@ -69,6 +69,7 @@ Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/C
 | linkedin | stdio | `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` |
 | bitwarden | stdio | `BW_SESSION` (from `bw unlock --raw`) |
 | polyglot | stdio | `POLYGLOT_TOKEN` (+ project `.polyglot-mcp.json`) |
+| obsidian | stdio | `OBSIDIAN_API_KEY` (Local REST API plugin; Obsidian running) |
 
 ## Adding a server
 

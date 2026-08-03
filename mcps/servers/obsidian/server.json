@@ -1,0 +1,20 @@
+{
+  "id": "obsidian",
+  "name": "Obsidian",
+  "summary": "Read, search, and edit Obsidian vault notes via the Local REST API plugin.",
+  "homepage": "https://github.com/cyanheads/obsidian-mcp-server",
+  "transport": "stdio",
+  "phases": ["spec", "impl", "telemetry"],
+  "triggers": ["Obsidian", "vault", "second brain", "notes", "daily note"],
+  "requiredEnv": ["OBSIDIAN_API_KEY"],
+  "mcp": {
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "obsidian-mcp-server"],
+      "env": {
+        "MCP_TRANSPORT_TYPE": "stdio",
+        "OBSIDIAN_API_KEY": "${env:OBSIDIAN_API_KEY}"
+      }
+    }
+  }
+}

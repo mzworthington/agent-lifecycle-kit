@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -140,6 +140,16 @@
       "phases": ["impl", "tdd"],
       "triggers": ["Polyglot", "i18n", "translations", "locale", "l10n"],
       "requiredEnv": ["POLYGLOT_TOKEN"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "obsidian",
+      "name": "Obsidian",
+      "summary": "Read, search, and edit Obsidian vault notes via the Local REST API plugin.",
+      "transport": "stdio",
+      "phases": ["spec", "impl", "telemetry"],
+      "triggers": ["Obsidian", "vault", "second brain", "notes", "daily note"],
+      "requiredEnv": ["OBSIDIAN_API_KEY"],
       "enabledByDefault": false
     }
   ]

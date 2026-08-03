@@ -21,7 +21,7 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Linear / Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
 | Cloudflare Workers / DNS / R2 | `mcps/profiles/cloud.json` |
-| Bitwarden / LinkedIn / Polyglot | `mcps/profiles/personal.json` (**machine-local only**) |
+| Bitwarden / LinkedIn / Polyglot / Obsidian | `mcps/profiles/personal.json` (**machine-local only**) |
 | App-specific DB + frontend stack | `project-example` or a custom project `.cursor/mcp.json` |
 | Personal-only experiment | Local `~/.cursor/mcp.json` override (do not commit secrets) |
 
