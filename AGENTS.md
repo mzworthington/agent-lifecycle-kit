@@ -52,3 +52,11 @@ Phase handovers are written locally under `~/.agents/handover/<project>/` (not i
 
 - [README.md](./README.md) - directory layout and installation
 - [lessons/README.md](./lessons/README.md) - capture session learnings; promote via [tasks/kit-review.md](./tasks/kit-review.md)
+
+## Cursor Cloud specific instructions
+
+This repository is a documentation/standards kit, not a runnable application. It contains only Markdown plus one bash script ([install.sh](./install.sh)); there is no `package.json`, lockfile, build system, dependency manager, or test framework, so there is nothing to install and no service or dev server to start.
+
+- Core functionality ("run the app"): `./install.sh`. It symlinks `~/.agents` to the repo root and, on first run, copies `system/config.example.json` to `system/config.json`. It is idempotent (re-running prints `OK: ... already points to this repo`). This is what the update script runs on VM startup, so the symlink already exists in fresh sessions.
+- `system/config.json` is git-ignored (machine-local); do not commit it.
+- Validate changes without a test suite: `bash -n install.sh` (script syntax), `python3 -c "import json; json.load(open('system/config.example.json'))"` (config is valid JSON), and a relative-link check across `*.md` to confirm internal doc links resolve (the kit's content is its product).
