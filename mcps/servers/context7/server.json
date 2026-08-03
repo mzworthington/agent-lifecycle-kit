@@ -1,0 +1,16 @@
+{
+  "id": "context7",
+  "name": "Context7",
+  "summary": "Up-to-date library docs and code examples for frameworks and packages.",
+  "homepage": "https://github.com/upstash/context7",
+  "transport": "stdio",
+  "phases": ["impl", "tdd", "xfn"],
+  "triggers": ["docs", "library API", "framework reference", "SDK"],
+  "requiredEnv": [],
+  "mcp": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}

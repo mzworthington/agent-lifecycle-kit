@@ -1,0 +1,16 @@
+{
+  "id": "playwright",
+  "name": "Playwright",
+  "summary": "Browser automation for XFN browser E2E and exploratory UI checks.",
+  "homepage": "https://github.com/microsoft/playwright-mcp",
+  "transport": "stdio",
+  "phases": ["xfn", "impl"],
+  "triggers": ["browser E2E", "Playwright", "UI verification", "screenshot"],
+  "requiredEnv": [],
+  "mcp": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    }
+  }
+}

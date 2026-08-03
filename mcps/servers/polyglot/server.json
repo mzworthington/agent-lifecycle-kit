@@ -1,0 +1,20 @@
+{
+  "id": "polyglot",
+  "name": "Polyglot",
+  "summary": "Infinum Polyglot MCP for fetching and creating i18n translation keys across locales.",
+  "homepage": "https://www.npmjs.com/package/@infinum/polyglot-mcp",
+  "transport": "stdio",
+  "phases": ["impl", "tdd"],
+  "triggers": ["Polyglot", "i18n", "translations", "locale", "l10n"],
+  "requiredEnv": ["POLYGLOT_TOKEN"],
+  "mcp": {
+    "polyglot": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@infinum/polyglot-mcp",
+        "--polyglot-token=${env:POLYGLOT_TOKEN}"
+      ]
+    }
+  }
+}

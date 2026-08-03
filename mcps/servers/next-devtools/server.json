@@ -1,0 +1,16 @@
+{
+  "id": "next-devtools",
+  "name": "Next.js DevTools",
+  "summary": "Connects agents to a running Next.js 16+ dev server for routes, errors, and runtime tools.",
+  "homepage": "https://github.com/vercel/next-devtools-mcp",
+  "transport": "stdio",
+  "phases": ["impl", "tdd", "xfn"],
+  "triggers": ["Next.js", "next-devtools", "App Router", "dev server errors", "routes"],
+  "requiredEnv": [],
+  "mcp": {
+    "next-devtools": {
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"]
+    }
+  }
+}

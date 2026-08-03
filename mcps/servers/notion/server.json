@@ -1,0 +1,15 @@
+{
+  "id": "notion",
+  "name": "Notion",
+  "summary": "Official Notion remote MCP for specs, PRDs, and workspace docs (OAuth).",
+  "homepage": "https://developers.notion.com/docs/get-started-with-mcp",
+  "transport": "http",
+  "phases": ["spec", "impl", "telemetry"],
+  "triggers": ["Notion", "PRD", "spec doc", "runbook", "wiki"],
+  "requiredEnv": [],
+  "mcp": {
+    "notion": {
+      "url": "https://mcp.notion.com/mcp"
+    }
+  }
+}

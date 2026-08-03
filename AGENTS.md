@@ -19,11 +19,12 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, telemetry |
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C# |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET |
+| MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
 | Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md)) |
-| Templates | [templates/](./templates/) | Handover, lesson, and project handshake formats |
+| Templates | [templates/](./templates/) | Handover, lesson, project handshake, and project MCP formats |
 | Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
 
-See [skills/README.md](./skills/README.md) for the full taxonomy.
+See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/README.md](./mcps/README.md) for MCP profiles.
 
 ## 2. Bootstrapping instruction
 
@@ -31,6 +32,7 @@ See [skills/README.md](./skills/README.md) for the full taxonomy.
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
 3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN plan → Implementation → XFN green → Audit → Telemetry.
 4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
+5. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) when a task matches their phases/triggers. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
 
 ## 3. Dynamic specialist activation
 
@@ -51,4 +53,5 @@ Phase handovers are written locally under `~/.agents/handover/<project>/` (not i
 ## 4. Further reading
 
 - [README.md](./README.md) - directory layout and installation
+- [mcps/README.md](./mcps/README.md) - MCP catalog, profiles, and compose/install
 - [lessons/README.md](./lessons/README.md) - capture session learnings; promote via [tasks/kit-review.md](./tasks/kit-review.md)

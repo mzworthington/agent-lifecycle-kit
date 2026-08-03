@@ -1,0 +1,12 @@
+{
+  "name": "project-example",
+  "description": "Example app-repo .cursor/mcp.json for a Next.js + Postgres app with browser/XFN tooling.",
+  "servers": [
+    "context7",
+    "github",
+    "next-devtools",
+    "chrome-devtools",
+    "playwright",
+    "postgres"
+  ]
+}

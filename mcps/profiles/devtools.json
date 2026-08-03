@@ -1,0 +1,9 @@
+{
+  "name": "devtools",
+  "description": "Browser + Next.js runtime tooling for frontend/XFN work. Compose into a project .cursor/mcp.json.",
+  "servers": [
+    "chrome-devtools",
+    "next-devtools",
+    "playwright"
+  ]
+}

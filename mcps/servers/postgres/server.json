@@ -1,0 +1,20 @@
+{
+  "id": "postgres",
+  "name": "PostgreSQL",
+  "summary": "Read-only PostgreSQL schema inspection and SQL queries for adapter/data work.",
+  "homepage": "https://www.npmjs.com/package/@modelcontextprotocol/server-postgres",
+  "transport": "stdio",
+  "phases": ["impl", "tdd", "audit"],
+  "triggers": ["Postgres", "SQL", "schema", "database", "migration verify"],
+  "requiredEnv": ["DATABASE_URL"],
+  "mcp": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "${env:DATABASE_URL}"
+      ]
+    }
+  }
+}

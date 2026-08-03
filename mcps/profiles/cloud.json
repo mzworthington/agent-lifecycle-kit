@@ -1,0 +1,8 @@
+{
+  "name": "cloud",
+  "description": "Cloudflare account APIs (OAuth) plus docs helpers for Workers/DNS/R2 work.",
+  "servers": [
+    "context7",
+    "cloudflare"
+  ]
+}
