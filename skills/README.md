@@ -62,3 +62,14 @@ tools: []                     # optional CLI/tool hints for the agent
 - Keep role skills focused on behavior and output schema; keep stack detail in profiles.
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).
+
+## External (official) skills
+
+Do **not** vendor Cloudflare / Vercel / other upstream skills into this tree. Declare them in [external.lock.json](./external.lock.json) and sync with `gh skill`:
+
+```bash
+./scripts/sync-external-skills.sh --install   # → ~/.cursor/skills (user scope)
+./scripts/sync-external-skills.sh --update    # pull upstream changes
+```
+
+Defaults include Cloudflare platform skills (`cloudflare/skills`) and Vercel `react-best-practices` (`vercel-labs/agent-skills`). Full procedure: [SOPs/external-skills.md](../SOPs/external-skills.md).

@@ -5,6 +5,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET="${HOME}/.agents"
 INSTALL_MCP="${INSTALL_MCP:-1}"
+INSTALL_EXTERNAL_SKILLS="${INSTALL_EXTERNAL_SKILLS:-0}"
 
 link_agents() {
   if [[ -L "${TARGET}" ]]; then
@@ -61,10 +62,32 @@ install_mcp_profile() {
   echo "Skip later with: INSTALL_MCP=0 ./install.sh"
 }
 
+install_external_skills() {
+  if [[ "${INSTALL_EXTERNAL_SKILLS}" != "1" ]]; then
+    echo "Skipping external skills (set INSTALL_EXTERNAL_SKILLS=1 to sync Cloudflare/Vercel skills)"
+    return 0
+  fi
+
+  local sync="${REPO_DIR}/scripts/sync-external-skills.sh"
+  if [[ ! -x "${sync}" ]]; then
+    echo "WARN: ${sync} missing or not executable; skipping external skills"
+    return 0
+  fi
+
+  echo ""
+  echo "Syncing external skills from skills/external.lock.json"
+  "${sync}" --install || {
+    echo "WARN: external skills sync failed; run ./scripts/sync-external-skills.sh --install manually"
+    return 0
+  }
+}
+
 link_agents
 ensure_system_config
 install_mcp_profile
+install_external_skills
 
 echo ""
 echo "Optional: add to a project repo (copy templates/project-AGENTS.md as AGENTS.md):"
 echo '  Standards and lifecycle agents live in ~/.agents - read ~/.agents/AGENTS.md before starting work'
+echo "External skills: INSTALL_EXTERNAL_SKILLS=1 ./install.sh  or  ./scripts/sync-external-skills.sh --install"
