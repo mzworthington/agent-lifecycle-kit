@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -150,6 +150,16 @@
       "phases": ["spec", "impl", "telemetry"],
       "triggers": ["Obsidian", "vault", "second brain", "notes", "daily note"],
       "requiredEnv": ["OBSIDIAN_API_KEY"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "raspberry-pi",
+      "name": "Raspberry Pi",
+      "summary": "Remote shell control of a Raspberry Pi (or any Linux SBC) over SSH via ssh-mcp.",
+      "transport": "stdio",
+      "phases": ["impl", "adapter", "telemetry"],
+      "triggers": ["Raspberry Pi", "RPi", "GPIO host", "SBC", "raspi-config", "ssh pi"],
+      "requiredEnv": ["RASPBERRY_PI_HOST", "RASPBERRY_PI_USER", "RASPBERRY_PI_SSH_KEY"],
       "enabledByDefault": false
     }
   ]

@@ -13,6 +13,7 @@ mcps/
 │   ├── devtools.json         # Chrome DevTools + Next.js DevTools + Playwright
 │   ├── cloud.json            # Cloudflare API (+ Context7)
 │   ├── personal.json         # Bitwarden + LinkedIn + Polyglot + Obsidian (machine-local)
+│   ├── lab.json              # Raspberry Pi / home-lab hosts
 │   └── project-example.json  # App-repo example
 ├── servers/<id>/
 │   ├── server.json           # Metadata + Cursor mcpServers fragment
@@ -29,6 +30,7 @@ mcps/
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
 | `cloud` | context7, cloudflare | Workers / DNS / R2 work |
 | `personal` | bitwarden, linkedin, polyglot, obsidian | **Your machine only** (secrets / vault) |
+| `lab` | raspberry-pi | Home-lab SSH to a Pi / SBC |
 | `project-example` | context7, github, next-devtools, chrome-devtools, playwright, postgres | App `.cursor/mcp.json` |
 
 Prefer composing **one** profile that matches the work. Extra MCP tools compete for attention and slow agents.
@@ -43,7 +45,8 @@ Prefer composing **one** profile that matches the work. Extra MCP tools compete 
 ```bash
 ./scripts/compose-mcp.sh default --install
 ./scripts/compose-mcp.sh collab --install
-./scripts/compose-mcp.sh personal --install          # Bitwarden / LinkedIn / Polyglot
+./scripts/compose-mcp.sh personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
+./scripts/compose-mcp.sh lab --install               # Raspberry Pi over SSH
 ./scripts/compose-mcp.sh devtools -o .cursor/mcp.json
 ./scripts/compose-mcp.sh cloud -o .cursor/mcp.json
 ./scripts/compose-mcp.sh project-example -o .cursor/mcp.json
@@ -70,6 +73,7 @@ Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/C
 | bitwarden | stdio | `BW_SESSION` (from `bw unlock --raw`) |
 | polyglot | stdio | `POLYGLOT_TOKEN` (+ project `.polyglot-mcp.json`) |
 | obsidian | stdio | `OBSIDIAN_API_KEY` (Local REST API plugin; Obsidian running) |
+| raspberry-pi | stdio | `RASPBERRY_PI_HOST`, `RASPBERRY_PI_USER`, `RASPBERRY_PI_SSH_KEY` |
 
 ## Adding a server
 
