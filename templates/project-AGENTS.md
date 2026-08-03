@@ -8,6 +8,7 @@ Before starting work, read:
 - `~/.agents/CODING_PHILOSOPHY.md` - hexagonal architecture, DDD, vertical slices, clean code
 - `~/.agents/SOPs/behavior-catalog-and-xfn.md` - tests as behavior catalog; XFN matrix
 - `~/.agents/mcps/README.md` - shared MCP catalog and profiles (optional project `.cursor/mcp.json`)
+- `~/.agents/skills/agent-adr/SKILL.md` - sparse ADRs in `docs/ADRs/` (hard to reverse / off-norm only)
 
 For non-trivial work, before coding:
 

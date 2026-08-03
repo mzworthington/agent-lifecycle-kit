@@ -47,6 +47,7 @@ When executing a lifecycle phase, assume the matching role skill:
 | Adapters & infrastructure | [agent-adapter](./skills/agent-adapter/SKILL.md) - re-confirm impact; prepare XFN fixtures |
 | Security audit | [agent-security](./skills/agent-security/SKILL.md) - OWASP review + security suite presence |
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) - boundaries plus catalog/XFN completeness |
+| Architecture decisions | [agent-adr](./skills/agent-adr/SKILL.md) - sparse MADR under `docs/ADRs/` when hard to reverse or off-norm |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) - map XFN load SLOs to metrics/alerts |
 
 Phase handovers are written locally under `~/.agents/handover/<project>/` (not into the project repo). See [templates/handover.md](./templates/handover.md) (per-phase Definition of Done).

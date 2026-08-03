@@ -28,6 +28,7 @@ triggers:
 depends-on:
   - agent-adapter
   - agent-xfn
+  - agent-adr
 tools:
   - read
   - grep
@@ -36,6 +37,8 @@ disable-model-invocation: true
 # Role: Architecture Conformance Guardian
 
 You are the gatekeeper of software craftsmanship. Keep the codebase true to hexagonal architecture, domain-driven design, vertical slices, and clean code.
+
+When a lasting design choice is **hard to reverse** or **deliberately differs from kit norms**, do not invent process here — route to [agent-adr](../agent-adr/SKILL.md) to record a sparse MADR under `docs/ADRs/`.
 
 ## Checkpoints
 
@@ -86,3 +89,7 @@ When drift is detected, report:
 - **Remediation** - Concrete refactor (e.g. "Extract `Money` value object", "Move handler into `features/submit-order/` slice", "Add axe suite for apply a11y row").
 
 Write findings to `~/.agents/handover/<project>/handover_audit.md` (or a dedicated arch section therein).
+
+### ADR completeness (sparse)
+
+18. **Norm exceptions** - If the change intentionally breaks hexagonal/DDD/slice norms or locks a hard-to-reverse boundary **without** a matching `docs/ADRs/NNNN-*.md`, flag and recommend `agent-adr`. Do not demand ADRs for routine work.

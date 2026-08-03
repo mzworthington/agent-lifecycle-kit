@@ -27,6 +27,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-adapter](./agent-adapter/SKILL.md) | impl | Infrastructure, DB, external APIs; re-confirm impact; XFN fixtures |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets; verify XFN security suites |
 | [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID, catalog/XFN completeness |
+| [agent-adr](./agent-adr/SKILL.md) | audit | Sparse MADR ADRs in `docs/ADRs/` (hard to reverse / off-norm only) |
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
 
 Related SOP: [SOPs/behavior-catalog-and-xfn.md](../SOPs/behavior-catalog-and-xfn.md).
