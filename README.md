@@ -28,6 +28,15 @@ cd ~/Documents/dev/agent-lifecycle-kit
 
 This creates `~/.agents` as a symlink to the clone, copies a local config file, and installs the default MCP profile to `~/.cursor/mcp.json` (skip with `INSTALL_MCP=0 ./install.sh`).
 
+Optional: pull official Cloudflare + Vercel React skills into Cursor user scope (keeps upgrade via `gh skill`):
+
+```bash
+INSTALL_EXTERNAL_SKILLS=1 ./install.sh
+# or later:
+./scripts/sync-external-skills.sh --install
+./scripts/sync-external-skills.sh --update
+```
+
 **2. Add to a project**
 
 Copy [templates/project-AGENTS.md](./templates/project-AGENTS.md) into your project root as `AGENTS.md` (or add a short handshake that links to `~/.agents`). Agents will pick up the kit automatically.
@@ -53,6 +62,7 @@ Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.
 |-------|-------|
 | Coding standards | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
 | Skills and roles | [skills/README.md](./skills/README.md) |
+| Official external skills | [skills/external.lock.json](./skills/external.lock.json), [SOPs/external-skills.md](./SOPs/external-skills.md) |
 | MCP library | [mcps/README.md](./mcps/README.md), [SOPs/mcp-library.md](./SOPs/mcp-library.md) |
 | Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md) |
 | Local config | `system/config.json` (created from `config.example.json`) |

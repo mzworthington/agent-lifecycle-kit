@@ -33,6 +33,7 @@ See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/REA
 3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN plan → Implementation → XFN green → Audit → Telemetry.
 4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
 5. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) when a task matches their phases/triggers. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
+6. **External skills** - Official Cloudflare / Vercel (and similar) skills are declared in [skills/external.lock.json](./skills/external.lock.json) and synced with `gh skill` via [SOPs/external-skills.md](./SOPs/external-skills.md). Do not vendor them into `skills/`.
 
 ## 3. Dynamic specialist activation
 

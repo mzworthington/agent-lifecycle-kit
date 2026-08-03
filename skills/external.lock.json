@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "description": "Official / third-party agent skills managed by gh skill (not vendored into this repo). Install to Cursor user scope so updates stay outside kit git history.",
+  "agent": "cursor",
+  "scope": "user",
+  "skills": [
+    {
+      "id": "cloudflare",
+      "repository": "cloudflare/skills",
+      "skill": "skills/cloudflare",
+      "summary": "Cloudflare platform skill (Workers, Pages, KV, D1, R2, AI, networking, security)."
+    },
+    {
+      "id": "wrangler",
+      "repository": "cloudflare/skills",
+      "skill": "skills/wrangler",
+      "summary": "Deploy and manage Workers, KV, R2, D1, Vectorize, Queues, Workflows with Wrangler."
+    },
+    {
+      "id": "workers-best-practices",
+      "repository": "cloudflare/skills",
+      "skill": "skills/workers-best-practices",
+      "summary": "Production best practices and wrangler.jsonc conventions for Workers."
+    },
+    {
+      "id": "durable-objects",
+      "repository": "cloudflare/skills",
+      "skill": "skills/durable-objects",
+      "summary": "Stateful coordination with Durable Objects (RPC, SQLite, alarms, WebSockets)."
+    },
+    {
+      "id": "agents-sdk",
+      "repository": "cloudflare/skills",
+      "skill": "skills/agents-sdk",
+      "summary": "Build stateful AI agents on Cloudflare (scheduling, RPC, MCP servers)."
+    },
+    {
+      "id": "react-best-practices",
+      "repository": "vercel-labs/agent-skills",
+      "skill": "skills/react-best-practices",
+      "summary": "Vercel Engineering React/Next.js performance best practices (70+ rules)."
+    }
+  ]
+}
