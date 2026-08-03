@@ -4,6 +4,7 @@
   "servers": [
     "bitwarden",
     "linkedin",
-    "polyglot"
+    "polyglot",
+    "obsidian"
   ]
 }

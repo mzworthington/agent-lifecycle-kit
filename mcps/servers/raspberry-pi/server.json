@@ -1,0 +1,24 @@
+{
+  "id": "raspberry-pi",
+  "name": "Raspberry Pi",
+  "summary": "Remote shell control of a Raspberry Pi (or any Linux SBC) over SSH via ssh-mcp.",
+  "homepage": "https://github.com/tufantunc/ssh-mcp",
+  "transport": "stdio",
+  "phases": ["impl", "adapter", "telemetry"],
+  "triggers": ["Raspberry Pi", "RPi", "GPIO host", "SBC", "raspi-config", "ssh pi"],
+  "requiredEnv": ["RASPBERRY_PI_HOST", "RASPBERRY_PI_USER", "RASPBERRY_PI_SSH_KEY"],
+  "mcp": {
+    "raspberry-pi": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "ssh-mcp",
+        "--",
+        "--host=${env:RASPBERRY_PI_HOST}",
+        "--user=${env:RASPBERRY_PI_USER}",
+        "--key=${env:RASPBERRY_PI_SSH_KEY}",
+        "--maxChars=none"
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "lab",
+  "description": "Home-lab / hardware hosts. Machine-local; do not commit secrets or device IPs with credentials.",
+  "servers": [
+    "raspberry-pi"
+  ]
+}

@@ -21,7 +21,8 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Linear / Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
 | Cloudflare Workers / DNS / R2 | `mcps/profiles/cloud.json` |
-| Bitwarden / LinkedIn / Polyglot | `mcps/profiles/personal.json` (**machine-local only**) |
+| Bitwarden / LinkedIn / Polyglot / Obsidian | `mcps/profiles/personal.json` (**machine-local only**) |
+| Raspberry Pi / home lab SSH | `mcps/profiles/lab.json` (**machine-local only**) |
 | App-specific DB + frontend stack | `project-example` or a custom project `.cursor/mcp.json` |
 | Personal-only experiment | Local `~/.cursor/mcp.json` override (do not commit secrets) |
 
@@ -75,8 +76,11 @@ Prefer a **small** enabled set. Extra MCP tools compete for attention and slow a
 # Collab tools (Linear OAuth, Notion OAuth, Slack env tokens)
 ./scripts/compose-mcp.sh collab --install
 
-# Personal / sensitive (Bitwarden, LinkedIn, Polyglot) — machine only
+# Personal / sensitive (Bitwarden, LinkedIn, Polyglot, Obsidian) — machine only
 ./scripts/compose-mcp.sh personal --install
+
+# Home lab (Raspberry Pi over SSH) — machine only
+./scripts/compose-mcp.sh lab --install
 
 # Project config (Next + Chrome DevTools + Playwright + read-only Postgres)
 mkdir -p .cursor
