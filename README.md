@@ -62,6 +62,7 @@ Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.
 |-------|-------|
 | Coding standards | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
 | Skills and roles | [skills/README.md](./skills/README.md) |
+| ADRs (project docs) | [skills/agent-adr/SKILL.md](./skills/agent-adr/SKILL.md), [templates/adr.md](./templates/adr.md) → `docs/ADRs/` |
 | Official external skills | [skills/external.lock.json](./skills/external.lock.json), [SOPs/external-skills.md](./SOPs/external-skills.md) |
 | MCP library | [mcps/README.md](./mcps/README.md), [SOPs/mcp-library.md](./SOPs/mcp-library.md) |
 | Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md) |

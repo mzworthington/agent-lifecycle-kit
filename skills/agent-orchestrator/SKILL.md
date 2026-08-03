@@ -22,6 +22,7 @@ depends-on:
   - agent-adapter
   - agent-security
   - agent-arch-drift
+  - agent-adr
   - agent-telemetry
 tools:
   - read
@@ -45,6 +46,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 | Implementation | [agent-adapter](../agent-adapter/SKILL.md) |
 | Security audit | [agent-security](../agent-security/SKILL.md) |
 | Architecture audit | [agent-arch-drift](../agent-arch-drift/SKILL.md) |
+| Architecture decisions | [agent-adr](../agent-adr/SKILL.md) — sparse MADR in `docs/ADRs/` when hard to reverse / off-norm |
 | Telemetry | [agent-telemetry](../agent-telemetry/SKILL.md) |
 
 ## Handover protocol
@@ -96,7 +98,7 @@ Applies when the scope gate selects **full lifecycle** (adapt with light XFN on 
 3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
 4. **Execution** - Route to `agent-adapter`. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need.
 5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
-6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness (security suites; a11y/E2E/load paths; no silent rewrites). On failure, return to `agent-adapter` or `agent-xfn`.
+6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness (security suites; a11y/E2E/load paths; no silent rewrites). On failure, return to `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr` (sparse; skip when the ADR gate fails).
 7. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. Instrument metrics/alerts that match those thresholds.
 8. **Release** - Report completion, including catalog cases changed and XFN matrix summary.
 9. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md).
