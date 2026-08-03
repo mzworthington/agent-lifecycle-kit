@@ -18,7 +18,8 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Need | Put it in |
 |------|-----------|
 | Useful across most projects | `mcps/profiles/default.json` (+ global install) |
-| App-specific (browser, DB, vendor API) | Project profile / `<app>/.cursor/mcp.json` |
+| Linear / Notion / Slack | `mcps/profiles/collab.json` (or add those ids to a project file) |
+| App-specific (browser, DB) | `project-example` or a custom project profile / `<app>/.cursor/mcp.json` |
 | Personal-only experiment | Local `~/.cursor/mcp.json` override (do not commit secrets) |
 
 Prefer a **small** enabled set. Extra MCP tools compete for attention and slow agents.
@@ -68,12 +69,15 @@ Prefer a **small** enabled set. Extra MCP tools compete for attention and slow a
 # Global Cursor config (backup written if file exists)
 ./scripts/compose-mcp.sh default --install
 
-# Project config
+# Collab tools (Linear OAuth, Notion OAuth, Slack env tokens)
+./scripts/compose-mcp.sh collab --install
+
+# Project config (Playwright + read-only Postgres)
 mkdir -p .cursor
 ./scripts/compose-mcp.sh project-example -o .cursor/mcp.json
 ```
 
-`./install.sh` runs the default profile install when `~/.cursor` is available.
+`./install.sh` runs the **default** profile install (not `collab`). Opt into collab explicitly.
 
 ## 4. Verify in Cursor
 

@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -21,6 +21,56 @@
       "triggers": ["GitHub issue", "pull request", "repo metadata"],
       "requiredEnv": ["GITHUB_PERSONAL_ACCESS_TOKEN"],
       "enabledByDefault": true
+    },
+    {
+      "id": "memory",
+      "name": "Memory",
+      "summary": "Local knowledge-graph memory for durable facts across agent sessions.",
+      "transport": "stdio",
+      "phases": ["spec", "impl", "telemetry"],
+      "triggers": ["memory", "remember", "knowledge graph", "preferences"],
+      "requiredEnv": [],
+      "enabledByDefault": true
+    },
+    {
+      "id": "linear",
+      "name": "Linear",
+      "summary": "Official Linear remote MCP for issues, projects, and status updates (OAuth).",
+      "transport": "http",
+      "phases": ["spec", "impl", "audit"],
+      "triggers": ["Linear", "issue tracker", "ticket", "project board"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "summary": "Official Notion remote MCP for specs, PRDs, and workspace docs (OAuth).",
+      "transport": "http",
+      "phases": ["spec", "impl", "telemetry"],
+      "triggers": ["Notion", "PRD", "spec doc", "runbook", "wiki"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "summary": "Read channels, threads, and post updates via the Slack MCP server.",
+      "transport": "stdio",
+      "phases": ["spec", "impl", "telemetry"],
+      "triggers": ["Slack", "channel", "thread", "standup", "incident chat"],
+      "requiredEnv": ["SLACK_BOT_TOKEN", "SLACK_TEAM_ID"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "summary": "Read-only PostgreSQL schema inspection and SQL queries for adapter/data work.",
+      "transport": "stdio",
+      "phases": ["impl", "tdd", "audit"],
+      "triggers": ["Postgres", "SQL", "schema", "database", "migration verify"],
+      "requiredEnv": ["DATABASE_URL"],
+      "enabledByDefault": false
     },
     {
       "id": "playwright",

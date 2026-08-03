@@ -1,9 +1,10 @@
 {
   "name": "project-example",
-  "description": "Example project profile for an app repo .cursor/mcp.json. Adds Playwright for XFN browser work.",
+  "description": "Example app-repo .cursor/mcp.json: docs + GitHub + browser E2E + read-only Postgres. Add linear/notion from collab as needed.",
   "servers": [
     "context7",
     "github",
-    "playwright"
+    "playwright",
+    "postgres"
   ]
 }

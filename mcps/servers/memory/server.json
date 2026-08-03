@@ -1,0 +1,19 @@
+{
+  "id": "memory",
+  "name": "Memory",
+  "summary": "Local knowledge-graph memory for durable facts across agent sessions.",
+  "homepage": "https://www.npmjs.com/package/@modelcontextprotocol/server-memory",
+  "transport": "stdio",
+  "phases": ["spec", "impl", "telemetry"],
+  "triggers": ["memory", "remember", "knowledge graph", "preferences"],
+  "requiredEnv": [],
+  "mcp": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "${userHome}/.agents/sync/mcp-memory.jsonl"
+      }
+    }
+  }
+}

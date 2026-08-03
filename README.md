@@ -37,6 +37,8 @@ For project-scoped MCP tools, copy [templates/project-mcp.json](./templates/proj
 ```bash
 mkdir -p .cursor
 ~/.agents/scripts/compose-mcp.sh project-example -o .cursor/mcp.json
+# Optional global collab tools (Linear, Notion, Slack):
+# ~/.agents/scripts/compose-mcp.sh collab --install
 ```
 
 **3. Start working**

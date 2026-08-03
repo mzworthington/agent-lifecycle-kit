@@ -1,0 +1,20 @@
+{
+  "id": "slack",
+  "name": "Slack",
+  "summary": "Read channels, threads, and post updates via the Slack MCP server.",
+  "homepage": "https://www.npmjs.com/package/@modelcontextprotocol/server-slack",
+  "transport": "stdio",
+  "phases": ["spec", "impl", "telemetry"],
+  "triggers": ["Slack", "channel", "thread", "standup", "incident chat"],
+  "requiredEnv": ["SLACK_BOT_TOKEN", "SLACK_TEAM_ID"],
+  "mcp": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${env:SLACK_BOT_TOKEN}",
+        "SLACK_TEAM_ID": "${env:SLACK_TEAM_ID}"
+      }
+    }
+  }
+}

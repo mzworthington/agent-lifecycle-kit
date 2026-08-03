@@ -1,0 +1,12 @@
+{
+  "name": "collab",
+  "description": "Issue tracking, docs, and chat. Compose into ~/.cursor/mcp.json or a project file when the team uses Linear/Notion/Slack.",
+  "servers": [
+    "context7",
+    "github",
+    "memory",
+    "linear",
+    "notion",
+    "slack"
+  ]
+}

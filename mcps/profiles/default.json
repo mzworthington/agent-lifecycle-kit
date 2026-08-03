@@ -1,8 +1,9 @@
 {
   "name": "default",
-  "description": "Global profile installed to ~/.cursor/mcp.json by install.sh. Everyday docs + GitHub; opt into heavier servers per project.",
+  "description": "Global profile → ~/.cursor/mcp.json. Lean everyday set: docs, GitHub, local memory. Heavier/vendor servers go in collab or project profiles.",
   "servers": [
     "context7",
-    "github"
+    "github",
+    "memory"
   ]
 }

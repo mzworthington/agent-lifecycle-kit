@@ -1,0 +1,15 @@
+{
+  "id": "linear",
+  "name": "Linear",
+  "summary": "Official Linear remote MCP for issues, projects, and status updates (OAuth).",
+  "homepage": "https://linear.app/integrations/cursor-mcp",
+  "transport": "http",
+  "phases": ["spec", "impl", "audit"],
+  "triggers": ["Linear", "issue tracker", "ticket", "project board"],
+  "requiredEnv": [],
+  "mcp": {
+    "linear": {
+      "url": "https://mcp.linear.app/mcp"
+    }
+  }
+}
