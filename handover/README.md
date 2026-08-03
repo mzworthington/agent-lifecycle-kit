@@ -11,6 +11,7 @@ handover/
     ├── handover_tdd.md
     ├── handover_xfn.md
     ├── handover_impl.md
+    ├── dead-code-backlog.md   # maintenance queue for agent-prune
     └── ...
 ```
 

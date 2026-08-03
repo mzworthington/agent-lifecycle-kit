@@ -93,3 +93,5 @@ Write findings to `~/.agents/handover/<project>/handover_audit.md` (or a dedicat
 ### ADR completeness (sparse)
 
 18. **Norm exceptions** - If the change intentionally breaks hexagonal/DDD/slice norms or locks a hard-to-reverse boundary **without** a matching `docs/ADRs/NNNN-*.md`, flag and recommend `agent-adr`. Do not demand ADRs for routine work.
+
+For **dead code** and **deletion over addition** findings, add a row to `~/.agents/handover/<project>/dead-code-backlog.md` instead of deleting during an audit. Execution is [agent-prune](../agent-prune/SKILL.md).

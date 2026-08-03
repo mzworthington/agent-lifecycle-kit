@@ -23,6 +23,7 @@ triggers:
   - use case
 depends-on:
   - agent-spec
+  - agent-pre-commit
 tools:
   - read
   - write
@@ -89,5 +90,7 @@ When specs describe format conversion (diagram → schema, file import):
 - Define `parseXToSchema(input, options) → { schema, format, warnings }` in core.
 - Define `computeImportMergePlan` / `applyImportMergePlan` with explicit conflict resolution; default `skip`.
 - UI shows merge preview; no auto-save without user approval.
+
+Before handover, run [agent-pre-commit](../agent-pre-commit/SKILL.md) when tests are green.
 
 Write handover to `~/.agents/handover/<project>/handover_tdd.md` when the phase completes.

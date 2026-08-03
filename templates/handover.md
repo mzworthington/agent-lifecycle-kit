@@ -63,3 +63,11 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 ## Context for next agent
 
 Pointers to files, decisions, constraints, and (for telemetry) load/performance SLOs from the XFN matrix.
+
+## Pre-commit (when applicable)
+
+| Field | Value |
+|-------|-------|
+| **Hook** | `.husky/pre-commit` / `.pre-commit-config.yaml` / none |
+| **Commands run** | e.g. `pnpm lint`, `pnpm typecheck` |
+| **Status** | PASS \| FAIL (do not mark COMPLETE if FAIL) |

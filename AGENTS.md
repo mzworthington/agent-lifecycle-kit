@@ -16,7 +16,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 |----------|------|---------|
 | Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
-| Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, telemetry |
+| Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, ADR, prune, telemetry, pre-commit |
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C# |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET |
 | MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
@@ -48,9 +48,13 @@ When executing a lifecycle phase, assume the matching role skill:
 | Security audit | [agent-security](./skills/agent-security/SKILL.md) - OWASP review + security suite presence |
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) - boundaries plus catalog/XFN completeness |
 | Architecture decisions | [agent-adr](./skills/agent-adr/SKILL.md) - sparse MADR under `docs/ADRs/` when hard to reverse or off-norm |
+| Dead-code pruning | [agent-prune](./skills/agent-prune/SKILL.md) |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) - map XFN load SLOs to metrics/alerts |
+| Pre-commit / quality gate | [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) |
 
 Phase handovers are written locally under `~/.agents/handover/<project>/` (not into the project repo). See [templates/handover.md](./templates/handover.md) (per-phase Definition of Done).
+
+Before marking a phase **COMPLETE**, run [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) when the repo has a pre-commit hook.
 
 ## 4. Further reading
 
