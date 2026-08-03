@@ -1,0 +1,16 @@
+{
+  "id": "chrome-devtools",
+  "name": "Chrome DevTools",
+  "summary": "Official Chrome DevTools MCP for live browser inspection, debugging, and performance analysis.",
+  "homepage": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+  "transport": "stdio",
+  "phases": ["xfn", "impl", "audit"],
+  "triggers": ["Chrome DevTools", "browser debug", "console", "network panel", "performance trace"],
+  "requiredEnv": [],
+  "mcp": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    }
+  }
+}

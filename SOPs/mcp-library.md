@@ -18,11 +18,14 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Need | Put it in |
 |------|-----------|
 | Useful across most projects | `mcps/profiles/default.json` (+ global install) |
-| Linear / Notion / Slack | `mcps/profiles/collab.json` (or add those ids to a project file) |
-| App-specific (browser, DB) | `project-example` or a custom project profile / `<app>/.cursor/mcp.json` |
+| Linear / Notion / Slack | `mcps/profiles/collab.json` |
+| Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
+| Cloudflare Workers / DNS / R2 | `mcps/profiles/cloud.json` |
+| Bitwarden / LinkedIn / Polyglot | `mcps/profiles/personal.json` (**machine-local only**) |
+| App-specific DB + frontend stack | `project-example` or a custom project `.cursor/mcp.json` |
 | Personal-only experiment | Local `~/.cursor/mcp.json` override (do not commit secrets) |
 
-Prefer a **small** enabled set. Extra MCP tools compete for attention and slow agents.
+Prefer a **small** enabled set. Extra MCP tools compete for attention and slow agents. Never commit vault sessions or compose `personal` into shared app repos.
 
 ## 2. Add a server definition
 
@@ -72,12 +75,16 @@ Prefer a **small** enabled set. Extra MCP tools compete for attention and slow a
 # Collab tools (Linear OAuth, Notion OAuth, Slack env tokens)
 ./scripts/compose-mcp.sh collab --install
 
-# Project config (Playwright + read-only Postgres)
+# Personal / sensitive (Bitwarden, LinkedIn, Polyglot) — machine only
+./scripts/compose-mcp.sh personal --install
+
+# Project config (Next + Chrome DevTools + Playwright + read-only Postgres)
 mkdir -p .cursor
 ./scripts/compose-mcp.sh project-example -o .cursor/mcp.json
+./scripts/compose-mcp.sh cloud -o .cursor/mcp.cloud.json   # optional merge by hand
 ```
 
-`./install.sh` runs the **default** profile install (not `collab`). Opt into collab explicitly.
+`./install.sh` runs the **default** profile install only. Opt into `collab`, `personal`, `devtools`, and `cloud` explicitly.
 
 ## 4. Verify in Cursor
 

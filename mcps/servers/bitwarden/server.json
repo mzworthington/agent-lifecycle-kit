@@ -1,0 +1,19 @@
+{
+  "id": "bitwarden",
+  "name": "Bitwarden",
+  "summary": "Official Bitwarden MCP for local vault operations via the Bitwarden CLI session.",
+  "homepage": "https://github.com/bitwarden/mcp-server",
+  "transport": "stdio",
+  "phases": ["impl", "adapter"],
+  "triggers": ["Bitwarden", "password vault", "credentials", "secrets"],
+  "requiredEnv": ["BW_SESSION"],
+  "mcp": {
+    "bitwarden": {
+      "command": "npx",
+      "args": ["-y", "@bitwarden/mcp-server"],
+      "env": {
+        "BW_SESSION": "${env:BW_SESSION}"
+      }
+    }
+  }
+}

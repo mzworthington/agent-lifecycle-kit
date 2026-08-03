@@ -1,0 +1,9 @@
+{
+  "name": "personal",
+  "description": "Sensitive / personal tools. Install only to your machine (~/.cursor/mcp.json); do not commit composed output with secrets.",
+  "servers": [
+    "bitwarden",
+    "linkedin",
+    "polyglot"
+  ]
+}

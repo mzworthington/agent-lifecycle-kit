@@ -1,0 +1,20 @@
+{
+  "id": "linkedin",
+  "name": "LinkedIn",
+  "summary": "Community LinkedIn MCP for profile reads and posting (OAuth client credentials).",
+  "homepage": "https://www.npmjs.com/package/@pegasusheavy/linkedin-mcp",
+  "transport": "stdio",
+  "phases": ["spec", "impl"],
+  "triggers": ["LinkedIn", "social post", "professional network", "profile"],
+  "requiredEnv": ["LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"],
+  "mcp": {
+    "linkedin": {
+      "command": "npx",
+      "args": ["-y", "@pegasusheavy/linkedin-mcp"],
+      "env": {
+        "LINKEDIN_CLIENT_ID": "${env:LINKEDIN_CLIENT_ID}",
+        "LINKEDIN_CLIENT_SECRET": "${env:LINKEDIN_CLIENT_SECRET}"
+      }
+    }
+  }
+}

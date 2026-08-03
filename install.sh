@@ -53,8 +53,10 @@ install_mcp_profile() {
     return 0
   }
   echo "Set GITHUB_PERSONAL_ACCESS_TOKEN in the environment that launches Cursor for the GitHub MCP."
-  echo "Collab tools (Linear/Notion/Slack): ./scripts/compose-mcp.sh collab --install"
-  echo "Project-scoped MCPs: copy templates/project-mcp.json or compose project-example into .cursor/mcp.json"
+  echo "More profiles: collab | personal | devtools | cloud | project-example"
+  echo "  ./scripts/compose-mcp.sh collab --install"
+  echo "  ./scripts/compose-mcp.sh personal --install   # Bitwarden/LinkedIn/Polyglot (local only)"
+  echo "Project-scoped: compose project-example or templates/project-mcp.json into .cursor/mcp.json"
   echo "Skip later with: INSTALL_MCP=0 ./install.sh"
 }
 

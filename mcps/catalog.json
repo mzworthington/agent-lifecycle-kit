@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -80,6 +80,66 @@
       "phases": ["xfn", "impl"],
       "triggers": ["browser E2E", "Playwright", "UI verification", "screenshot"],
       "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "chrome-devtools",
+      "name": "Chrome DevTools",
+      "summary": "Official Chrome DevTools MCP for live browser inspection, debugging, and performance analysis.",
+      "transport": "stdio",
+      "phases": ["xfn", "impl", "audit"],
+      "triggers": ["Chrome DevTools", "browser debug", "console", "network panel", "performance trace"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "next-devtools",
+      "name": "Next.js DevTools",
+      "summary": "Connects agents to a running Next.js 16+ dev server for routes, errors, and runtime tools.",
+      "transport": "stdio",
+      "phases": ["impl", "tdd", "xfn"],
+      "triggers": ["Next.js", "next-devtools", "App Router", "dev server errors", "routes"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare",
+      "summary": "Official Cloudflare API MCP (Workers, DNS, R2, and related account APIs) via OAuth.",
+      "transport": "http",
+      "phases": ["impl", "adapter", "telemetry"],
+      "triggers": ["Cloudflare", "Workers", "DNS", "R2", "Pages", "Wrangler"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn",
+      "summary": "Community LinkedIn MCP for profile reads and posting (OAuth client credentials).",
+      "transport": "stdio",
+      "phases": ["spec", "impl"],
+      "triggers": ["LinkedIn", "social post", "professional network", "profile"],
+      "requiredEnv": ["LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "bitwarden",
+      "name": "Bitwarden",
+      "summary": "Official Bitwarden MCP for local vault operations via the Bitwarden CLI session.",
+      "transport": "stdio",
+      "phases": ["impl", "adapter"],
+      "triggers": ["Bitwarden", "password vault", "credentials", "secrets"],
+      "requiredEnv": ["BW_SESSION"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "polyglot",
+      "name": "Polyglot",
+      "summary": "Infinum Polyglot MCP for fetching and creating i18n translation keys across locales.",
+      "transport": "stdio",
+      "phases": ["impl", "tdd"],
+      "triggers": ["Polyglot", "i18n", "translations", "locale", "l10n"],
+      "requiredEnv": ["POLYGLOT_TOKEN"],
       "enabledByDefault": false
     }
   ]
