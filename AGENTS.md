@@ -17,8 +17,9 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
 | Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, ADR, prune, telemetry, pre-commit |
-| Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C# |
-| Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET |
+| Domain profiles | [skills/profile-*](./skills/) | Secure IaC, CAF, least privilege ([profile-iac](./skills/profile-iac/SKILL.md)) |
+| Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C#, HCL |
+| Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
 | MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
 | Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md)) |
 | Templates | [templates/](./templates/) | Handover, lesson, project handshake, and project MCP formats |

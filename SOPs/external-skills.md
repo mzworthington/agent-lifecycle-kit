@@ -69,6 +69,8 @@ Use `"pin": "v1.2.0"` (or a commit SHA) when you need a frozen upgrade. Pinned s
 
 Prefer the exact path form (`skills/<name>`) so installs skip full-repo discovery.
 
+5. Run `./scripts/verify-skills-layout.sh` to confirm no upstream dirs remain under kit `skills/`.
+
 ## Why not vendor into `skills/`?
 
 This kit is symlinked to `~/.agents`. Vendoring upstream skills into `skills/` freezes them in git and mixes ownership with lifecycle roles. `gh skill` writes provenance into frontmatter so upgrades detect real content changes.

@@ -11,8 +11,9 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | Prefix | `kind` | When to use |
 |--------|--------|-------------|
 | `agent-*` | `role` | Lifecycle persona for a single phase (spec, TDD, audit, …) |
-| `lang-*` | `profile` | Language-wide coding rules (TypeScript, Java, C#) |
-| `framework-*` | `profile` | Framework-specific delivery rules (Next.js, Spring, …) |
+| `profile-*` | `profile` | Cross-stack domain rules (IaC security, CAF, …) |
+| `lang-*` | `profile` | Language-wide coding rules (TypeScript, Java, C#, HCL) |
+| `framework-*` | `profile` | Framework-specific delivery rules (Next.js, Spring, Terraform, …) |
 
 **Roles vs profiles:** Roles define *who you are* and *what phase output* to produce. Profiles define *how to write code* for a stack. The orchestrator (`agent-orchestrator`) routes between roles; stack detection activates profiles.
 
@@ -36,9 +37,11 @@ Related SOP: [SOPs/behavior-catalog-and-xfn.md](../SOPs/behavior-catalog-and-xfn
 
 ## Stack profiles
 
-| Language | Frameworks |
-|----------|------------|
-| [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md) |
+| Language / domain | Frameworks |
+|-------------------|------------|
+| [profile-iac](./profile-iac/SKILL.md) (secure IaC, CAF, least privilege) | [framework-terraform](./framework-terraform/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
+| [lang-hcl](./lang-hcl/SKILL.md) | [framework-terraform](./framework-terraform/SKILL.md) |
+| [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
 | [lang-java](./lang-java/SKILL.md) | [framework-springboot](./framework-springboot/SKILL.md), [framework-quarkus](./framework-quarkus/SKILL.md) |
 | [lang-csharp](./lang-csharp/SKILL.md) | [framework-dotnet](./framework-dotnet/SKILL.md) |
 
@@ -66,13 +69,45 @@ tools: []                     # optional CLI/tool hints for the agent
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).
 
-## External (official) skills
+## Kit vs external
 
-Do **not** vendor Cloudflare / Vercel / other upstream skills into this tree. Declare them in [external.lock.json](./external.lock.json) and sync with `gh skill`:
+Two ownership models — do not mix them in git.
+
+| Kind | Committed in this repo? | Location | Update path |
+|------|-------------------------|----------|-------------|
+| **Kit-authored** | Yes | `skills/agent-*`, `skills/profile-*`, `skills/lang-*`, `skills/framework-*` | PRs in this repo |
+| **Upstream / official** | No (lockfile only) | `~/.cursor/skills` via `gh skill` | [external.lock.json](./external.lock.json) + sync script |
+
+**Why:** Upstream skills (Cloudflare, Vercel, etc.) are large, change often, and carry their own licenses. Vendoring them into `skills/` bloats the repo, blocks clean upgrades, and blurs ownership with lifecycle roles.
+
+`.gitignore` blocks accidental commits of non-kit directories under `skills/`. Validate locally:
 
 ```bash
-./scripts/sync-external-skills.sh --install   # → ~/.cursor/skills (user scope)
+chmod +x scripts/verify-skills-layout.sh   # once
+./scripts/verify-skills-layout.sh
+```
+
+### Install upstream skills
+
+Declare in [external.lock.json](./external.lock.json); install to Cursor **user** scope:
+
+```bash
+./scripts/sync-external-skills.sh --install   # → ~/.cursor/skills
 ./scripts/sync-external-skills.sh --update    # pull upstream changes
 ```
 
+Or during bootstrap: `INSTALL_EXTERNAL_SKILLS=1 ./install.sh`
+
 Defaults include Cloudflare platform skills (`cloudflare/skills`) and Vercel `react-best-practices` (`vercel-labs/agent-skills`). Full procedure: [SOPs/external-skills.md](../SOPs/external-skills.md).
+
+### If upstream skills landed in `skills/`
+
+`gh skill` or Cursor sometimes writes into the kit tree when `~/.agents` is symlinked here. Remove them from `skills/` (they are gitignored) and reinstall:
+
+```bash
+rm -rf skills/cloudflare skills/wrangler   # example — only non-kit dirs
+./scripts/sync-external-skills.sh --install
+./scripts/verify-skills-layout.sh
+```
+
+Do **not** add upstream skills to git. To pin a new upstream skill, append to the lockfile and re-run `--install`.
