@@ -69,6 +69,7 @@ Apply Robert C. Martin's craft principles inside every layer and slice.
 - **Single responsibility:** Functions and classes do one thing at one level of abstraction. Maximum three parameters; use a parameter object beyond that.
 - **Intention-revealing names:** Domain-driven names from ubiquitous language. No `data`, `info`, `manager`, or `helper` without a precise role.
 - **No dead code:** Delete unused abstractions. Do not build frameworks inside the product for one call site.
+- **Complexity hotspots:** When code is hard to change safely (high complexity, god modules, duplication), backlog and reduce via [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) — do not grow new layers to work around it.
 - **Error handling:** Use domain-specific failures at the core; map to HTTP/CLI errors only in adapters. Fail fast with clear messages.
 - **Self-documenting code:** No inline comments except non-obvious workarounds. Public ports, endpoints, and boundaries require docstrings (JSDoc, Javadoc, XML docs) for API documentation generation.
 

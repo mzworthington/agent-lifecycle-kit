@@ -25,6 +25,10 @@ triggers:
   - over-engineering
   - behavior catalog
   - test impact
+  - complexity
+  - hotspot
+  - cognitive complexity
+  - simplify
 depends-on:
   - agent-adapter
   - agent-xfn
@@ -62,24 +66,25 @@ When a lasting design choice is **hard to reverse** or **deliberately differs fr
 
 8. **SOLID** - Flag SRP violations (e.g. service mixing business logic and SQL parsing).
 9. **Dead code** - Flag unused abstractions and over-engineering.
+10. **Complexity hotspots** - Flag functions/modules exceeding project complexity limits, deep nesting, god files, or duplicate logic clusters. See [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
 
 ### Code volume
 
 See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
 
-10. **File sprawl** - Flag new files when the change could live in an existing module.
-11. **Single-use helpers** - Flag helpers used once; suggest inlining.
-12. **Premature abstraction** - Flag new types or interfaces with a single consumer.
-13. **Deletion over addition** - In reviews, prefer removing or consolidating code over adding layers.
+11. **File sprawl** - Flag new files when the change could live in an existing module.
+12. **Single-use helpers** - Flag helpers used once; suggest inlining.
+13. **Premature abstraction** - Flag new types or interfaces with a single consumer.
+14. **Deletion over addition** - In reviews, prefer removing or consolidating code over adding layers.
 
 ### Behavior catalog & XFN completeness
 
 See [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Security-suite presence is also checked by [agent-security](../agent-security/SKILL.md); you own the broader catalog gate.
 
-14. **XFN matrix present** - `handover_xfn.md` has apply/skip + rationale for every quality. Missing matrix → **REJECT**.
-15. **Apply suites exist** - Browser E2E, a11y, and load rows marked apply have suite paths on disk (not only planned stubs left red without BLOCKED). Missing → **REJECT** (route to `agent-xfn`).
-16. **No silent catalog rewrites** - Diff must not weaken assertions or delete catalog cases unless the impact map shows rewrite/retire with Aligned = yes. Unaligned changes → **REJECT**.
-17. **Functional impact aligned** - `handover_tdd.md` impact rows are Aligned = yes for touched slices.
+15. **XFN matrix present** - `handover_xfn.md` has apply/skip + rationale for every quality. Missing matrix → **REJECT**.
+16. **Apply suites exist** - Browser E2E, a11y, and load rows marked apply have suite paths on disk (not only planned stubs left red without BLOCKED). Missing → **REJECT** (route to `agent-xfn`).
+17. **No silent catalog rewrites** - Diff must not weaken assertions or delete catalog cases unless the impact map shows rewrite/retire with Aligned = yes. Unaligned changes → **REJECT**.
+18. **Functional impact aligned** - `handover_tdd.md` impact rows are Aligned = yes for touched slices.
 
 ## Output mandate
 
@@ -92,6 +97,6 @@ Write findings to `~/.agents/handover/<project>/handover_audit.md` (or a dedicat
 
 ### ADR completeness (sparse)
 
-18. **Norm exceptions** - If the change intentionally breaks hexagonal/DDD/slice norms or locks a hard-to-reverse boundary **without** a matching `docs/ADRs/NNNN-*.md`, flag and recommend `agent-adr`. Do not demand ADRs for routine work.
+19. **Norm exceptions** - If the change intentionally breaks hexagonal/DDD/slice norms or locks a hard-to-reverse boundary **without** a matching `docs/ADRs/NNNN-*.md`, flag and recommend `agent-adr`. Do not demand ADRs for routine work.
 
-For **dead code** and **deletion over addition** findings, add a row to `~/.agents/handover/<project>/dead-code-backlog.md` instead of deleting during an audit. Execution is [agent-prune](../agent-prune/SKILL.md).
+For **dead code** and **deletion over addition** findings, add a row to `~/.agents/handover/<project>/dead-code-backlog.md` instead of deleting during an audit. For **complexity hotspots**, add a row to `~/.agents/handover/<project>/complexity-backlog.md`. Execution for both backlogs is [agent-prune](../agent-prune/SKILL.md). Procedure: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
