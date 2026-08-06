@@ -21,7 +21,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C#, HCL |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
 | MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
-| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md)) |
+| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](./SOPs/complexity-hotspots.md)) |
 | Templates | [templates/](./templates/) | Handover, lesson, project handshake, and project MCP formats |
 | Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
 
@@ -33,8 +33,9 @@ See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/REA
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
 3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN plan → Implementation → XFN green → Audit → Telemetry.
 4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
-5. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) when a task matches their phases/triggers. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
-6. **External skills** - Official Cloudflare / Vercel (and similar) skills are declared in [skills/external.lock.json](./skills/external.lock.json) and synced with `gh skill` via [SOPs/external-skills.md](./SOPs/external-skills.md). Do not vendor them into `skills/`.
+5. **Complexity hotspots** - [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) (audit backlog → `agent-prune` complexity track).
+6. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) when a task matches their phases/triggers. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
+7. **External skills** - Official Cloudflare / Vercel (and similar) skills are declared in [skills/external.lock.json](./skills/external.lock.json) and synced with `gh skill` via [SOPs/external-skills.md](./SOPs/external-skills.md). Do not vendor them into `skills/`.
 
 ## 3. Dynamic specialist activation
 
@@ -49,7 +50,7 @@ When executing a lifecycle phase, assume the matching role skill:
 | Security audit | [agent-security](./skills/agent-security/SKILL.md) - OWASP review + security suite presence |
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) - boundaries plus catalog/XFN completeness |
 | Architecture decisions | [agent-adr](./skills/agent-adr/SKILL.md) - sparse MADR under `docs/ADRs/` when hard to reverse or off-norm |
-| Dead-code pruning | [agent-prune](./skills/agent-prune/SKILL.md) |
+| Dead-code pruning | [agent-prune](./skills/agent-prune/SKILL.md) - dead-code and complexity hotspot tracks |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) - map XFN load SLOs to metrics/alerts |
 | Pre-commit / quality gate | [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) |
 
