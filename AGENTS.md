@@ -16,7 +16,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 |----------|------|---------|
 | Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
-| Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, ADR, prune, telemetry, pre-commit |
+| Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD, XFN quality, adapter, security, arch-drift, ADR, prune, debug, telemetry, pre-commit |
 | Domain profiles | [skills/profile-*](./skills/) | Secure IaC, CAF, least privilege ([profile-iac](./skills/profile-iac/SKILL.md)) |
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C#, HCL |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
@@ -51,6 +51,7 @@ When executing a lifecycle phase, assume the matching role skill:
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) - boundaries plus catalog/XFN completeness |
 | Architecture decisions | [agent-adr](./skills/agent-adr/SKILL.md) - sparse MADR under `docs/ADRs/` when hard to reverse or off-norm |
 | Dead-code pruning | [agent-prune](./skills/agent-prune/SKILL.md) - dead-code and complexity hotspot tracks |
+| Debugging / RCA | [agent-debug](./skills/agent-debug/SKILL.md) - hypothesis board, repro, proof gates ([SOP](./SOPs/hypothesis-driven-debug.md)) |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) - map XFN load SLOs to metrics/alerts |
 | Pre-commit / quality gate | [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) |
 

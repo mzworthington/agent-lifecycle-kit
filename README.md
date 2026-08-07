@@ -7,10 +7,11 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 ## What you get
 
 - **Shared engineering standards** - hexagonal architecture, domain-driven design, vertical slices, and clean code
-- **Lifecycle roles** - spec → TDD → XFN plan → implementation → XFN green → audit → telemetry
+- **Lifecycle roles** - spec → TDD → XFN plan → implementation → XFN green → audit → telemetry (plus debug / prune maintenance paths)
 - **Behavior catalog & XFN** - tests as source of truth; apply/skip matrix for browser E2E, a11y, security, load ([SOP](./SOPs/behavior-catalog-and-xfn.md))
+- **Hypothesis-driven debug** - bugs, CI failures, and live-site RCA with repro + proof gates ([SOP](./SOPs/hypothesis-driven-debug.md), [agent-debug](./skills/agent-debug/SKILL.md))
 - **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more (with XFN tooling defaults)
-- **Operational playbooks** - SOPs, checklists, and handover templates with per-phase Definition of Done
+- **Operational playbooks** - SOPs, checklists, debug-board tooling, and handover templates with per-phase Definition of Done
 - **MCP library** - versioned server catalog and profiles composed into Cursor `mcp.json` ([mcps/](./mcps/))
 - **Self-improving kit** - local lesson capture and weekly review to promote learnings into shared standards
 
