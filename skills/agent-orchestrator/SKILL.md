@@ -24,6 +24,7 @@ depends-on:
   - agent-arch-drift
   - agent-adr
   - agent-prune
+  - agent-debug
   - agent-telemetry
   - agent-pre-commit
 tools:
@@ -36,7 +37,7 @@ disable-model-invocation: false
 
 You are the master coordinator responsible for guiding feature development through the multi-agent software engineering lifecycle.
 
-Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
+Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 
 ## Specialist roles
 
@@ -50,6 +51,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 | Architecture audit | [agent-arch-drift](../agent-arch-drift/SKILL.md) |
 | Architecture decisions | [agent-adr](../agent-adr/SKILL.md) — sparse MADR in `docs/ADRs/` when hard to reverse / off-norm |
 | Dead-code & complexity pruning | [agent-prune](../agent-prune/SKILL.md) |
+| Debugging / RCA | [agent-debug](../agent-debug/SKILL.md) — bugs, CI failures, live-site symptoms (not full lifecycle) |
 | Telemetry | [agent-telemetry](../agent-telemetry/SKILL.md) |
 | Pre-commit / quality gate | [agent-pre-commit](../agent-pre-commit/SKILL.md) |
 
@@ -72,7 +74,8 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 
 | Request type | Route |
 |--------------|-------|
-| Bug fix, typo, small UI change | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
+| Bug, failed job, live-site / fetch symptom, flake | **`agent-debug`** → `agent-pre-commit` (hypothesis board + repro + proof). Light XFN when UI/auth/SLO touched. |
+| Tiny typo / obvious one-liner with clear repro | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
 | Extends existing behavior in one module | Design light: functional impact align → light or full XFN matrix → implement |
 | Dead-code cleanup, post-migration prune | `agent-prune` (dead-code track) → `agent-pre-commit` (not full lifecycle) |
 | Complexity hotspot cleanup | `agent-arch-drift` (scan) → `agent-prune` (complexity track) → `agent-pre-commit` |

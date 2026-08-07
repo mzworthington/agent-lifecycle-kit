@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | spec \| tdd \| xfn \| impl \| audit \| telemetry \| release |
+| **Phase** | spec \| tdd \| xfn \| impl \| audit \| debug \| telemetry \| release \| maintenance |
 | **Status** | COMPLETE \| BLOCKED |
 | **Project** | `<project-name>` |
 | **Next agent** | `agent-<role>` |
@@ -53,8 +53,10 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 | **xfn** (green) | Every **apply** row Green status = green (or BLOCKED with owner); how-to-run documented |
 | **impl** | Adapters wired; confirmation stayed-within Design maps **or** revised maps re-aligned; fixtures needed by XFN noted |
 | **audit** | Security + arch findings recorded; catalog/XFN completeness checked (missing apply suites or silent rewrites = fail) |
+| **debug** | Root cause stated; debug board updated; reproduce + proof gates passed for the symptom class (UI visual / published artifact / CI step); regression test added when domain logic changed; out-of-scope buckets not mixed without user OK. See [SOPs/hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) |
 | **telemetry** | Instrumentation added; XFN load SLOs (if any) mapped to metrics/alerts or explicit N/A |
 | **release** | Prior phase DoDs satisfied; catalog + matrix summary reported to user |
+| **maintenance** | Prune/complexity batch complete; backlog rows updated; pre-commit green |
 
 ## Open questions / blockers
 
