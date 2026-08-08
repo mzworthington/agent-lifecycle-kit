@@ -25,6 +25,10 @@ triggers:
   - empty diagram
   - live site
   - hypothesis
+  - Cloudflare
+  - Workers
+  - wrangler tail
+  - ray id
 depends-on:
   - agent-tdd
   - agent-pre-commit
@@ -41,6 +45,7 @@ disable-model-invocation: false
 You fix **broken behavior** with a short, evidence-first loop. Do **not** open the full feature lifecycle (`agent-spec` → …) for a bug unless root cause expands into a new bounded context.
 
 Procedure: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
+Cloudflare hosting: [SOPs/cloudflare-observability-and-diagnosis.md](../../SOPs/cloudflare-observability-and-diagnosis.md) §2 (signal ladder, ray ID / deploy parity).
 Board template: [templates/debug-board.md](../../templates/debug-board.md).
 Tooling: [scripts/init-debug-board.sh](../../scripts/init-debug-board.sh), [scripts/debug-ci-failed.sh](../../scripts/debug-ci-failed.sh).
 
@@ -80,6 +85,7 @@ Classify before deep code walks:
 | **Live catalog / published data** | Fetch live revision artifacts; count nodes in the **named** entity |
 | **CI / workflow / docs-media** | `scripts/debug-ci-failed.sh` → classify flake vs config drift vs tool/auth |
 | **Fetch / network** | One failing URL + status vs `TypeError`; recent diff on that path |
+| **Cloudflare edge / Worker** | Deploy/version parity → DNS/route → `wrangler tail` / Workers Logs → traces → metrics ([CF SOP](../../SOPs/cloudflare-observability-and-diagnosis.md) §2) |
 | **Already shipped?** | `git log` / PR search for the capability before implementing |
 
 Normalize vocabulary once (“packages” vs “plugins”, “caps” vs ChaosSpec). If live data contradicts the user’s label, **ask once** immediately.
@@ -147,6 +153,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 | Init board | `scripts/init-debug-board.sh` |
 | Failed Actions logs | `scripts/debug-ci-failed.sh` ([gh](https://cli.github.com/)) |
 | Prior cloud-agent context | `cursor-cloud` MCP: `list-cloud-agents` → `batch-fetch-details` (transcripts via subagents) |
+| Cloudflare live logs / account | `npx wrangler tail`; Cloudflare MCP (`cloud` profile); Workers Observability dashboard |
 | Instrumented deep dive | Cursor **debug** subagent / Debug mode (hypothesis + runtime logs) |
 | UI verify | computerUse / browser / RecordScreen — required for visual bugs |
 | Domain regression | Vitest/Jest/etc. in the owning package |

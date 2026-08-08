@@ -8,6 +8,7 @@ Before starting work, read:
 - `~/.agents/CODING_PHILOSOPHY.md` - hexagonal architecture, DDD, vertical slices, clean code
 - `~/.agents/SOPs/behavior-catalog-and-xfn.md` - tests as behavior catalog; XFN matrix
 - `~/.agents/SOPs/hypothesis-driven-debug.md` - bugs, CI failures, live-site RCA
+- `~/.agents/SOPs/cloudflare-observability-and-diagnosis.md` - Workers observability + prod diagnosis when hosting on Cloudflare
 - `~/.agents/mcps/README.md` - shared MCP catalog and profiles (optional project `.cursor/mcp.json`)
 - `~/.agents/skills/agent-adr/SKILL.md` - sparse ADRs in `docs/ADRs/` (hard to reverse / off-norm only)
 - `~/.agents/skills/agent-debug/SKILL.md` - when something is broken today

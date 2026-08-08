@@ -10,6 +10,7 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 - **Lifecycle roles** - spec → TDD → XFN plan → implementation → XFN green → audit → telemetry (plus debug / prune maintenance paths)
 - **Behavior catalog & XFN** - tests as source of truth; apply/skip matrix for browser E2E, a11y, security, load ([SOP](./SOPs/behavior-catalog-and-xfn.md))
 - **Hypothesis-driven debug** - bugs, CI failures, and live-site RCA with repro + proof gates ([SOP](./SOPs/hypothesis-driven-debug.md), [agent-debug](./skills/agent-debug/SKILL.md))
+- **Cloudflare observability & diagnosis** - Workers Logs/traces, SLO mapping, and a production signal ladder when Cloudflare is the hosting surface ([SOP](./SOPs/cloudflare-observability-and-diagnosis.md))
 - **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more (with XFN tooling defaults)
 - **Operational playbooks** - SOPs, checklists, debug-board tooling, and handover templates with per-phase Definition of Done
 - **MCP library** - versioned server catalog and profiles composed into Cursor `mcp.json` ([mcps/](./mcps/))
@@ -65,6 +66,7 @@ Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.
 | Skills and roles | [skills/README.md](./skills/README.md) |
 | ADRs (project docs) | [skills/agent-adr/SKILL.md](./skills/agent-adr/SKILL.md), [templates/adr.md](./templates/adr.md) → `docs/ADRs/` |
 | Official external skills | [skills/external.lock.json](./skills/external.lock.json), [SOPs/external-skills.md](./SOPs/external-skills.md) |
+| Cloudflare observability & diagnosis | [SOPs/cloudflare-observability-and-diagnosis.md](./SOPs/cloudflare-observability-and-diagnosis.md) |
 | MCP library | [mcps/README.md](./mcps/README.md), [SOPs/mcp-library.md](./SOPs/mcp-library.md) |
 | Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md) |
 | Local config | `system/config.json` (created from `config.example.json`) |

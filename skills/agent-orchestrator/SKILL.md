@@ -109,6 +109,6 @@ Applies when the scope gate selects **full lifecycle** (adapt with light XFN on 
 5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness (security suites; a11y/E2E/load paths; no silent rewrites). On failure, return to `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr` (sparse; skip when the ADR gate fails).
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
-8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. Instrument metrics/alerts that match those thresholds.
+8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. Instrument metrics/alerts that match those thresholds. When the app hosts on Cloudflare, also apply [SOPs/cloudflare-observability-and-diagnosis.md](../../SOPs/cloudflare-observability-and-diagnosis.md) §1.
 9. **Release** - Report completion, including catalog cases changed and XFN matrix summary.
 10. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md).

@@ -45,6 +45,7 @@ If the user omitted env or action, ask **once** with a tight list—or infer fro
 | Published data | `curl`/fetch live catalog revision; compare named entity vs peers |
 | CI / media / sync | Failed-step log; diff failing suite config vs a green suite (viewport, workers, webServer) |
 | Fetch / bulk load | Single-URL probe → concurrency/SW → CORS last |
+| Cloudflare edge / Worker | Deploy/version parity → DNS/route → real-time logs → Workers Logs/traces → metrics ([cloudflare-observability-and-diagnosis](./cloudflare-observability-and-diagnosis.md) §2) |
 | Naming mismatch | Search peer entities when the named one looks fine in artifacts |
 | Already on main? | Search merged PRs / `git log -S` for the feature before implementing |
 
@@ -137,6 +138,7 @@ Prefer learning the prior RCA over rediscovering it.
 | Request | Route |
 |---------|-------|
 | Bug, failed job, live symptom | `agent-debug` → `agent-pre-commit` |
+| Cloudflare-hosted prod symptom | `agent-debug` + [cloudflare-observability-and-diagnosis](./cloudflare-observability-and-diagnosis.md) §2 |
 | UI/auth/SLO touched | + light XFN floor ([agent-orchestrator](../skills/agent-orchestrator/SKILL.md)) |
 | RCA needs new capability | `agent-debug` (COMPLETE with RCA) → `agent-orchestrator` |
 | Complexity-only cleanup | `agent-arch-drift` → `agent-prune` (not debug) |

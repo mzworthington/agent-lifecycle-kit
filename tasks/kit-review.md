@@ -34,6 +34,7 @@ For each entry, decide:
 |-------------|---------------|
 | Tone, planning, collaboration | [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8 |
 | Catalog / XFN procedure | [SOPs/behavior-catalog-and-xfn.md](../SOPs/behavior-catalog-and-xfn.md) |
+| Cloudflare hosting / ops diagnosis | [SOPs/cloudflare-observability-and-diagnosis.md](../SOPs/cloudflare-observability-and-diagnosis.md) |
 | Repeatable procedure | [SOPs/](../SOPs/) or [tasks/](../tasks/) |
 | Stack-specific / XFN tooling | [skills/lang-*](../skills/) or [skills/framework-*](../skills/) |
 | Lifecycle behavior | [skills/agent-*](../skills/) (esp. tdd, xfn, arch-drift, telemetry) |

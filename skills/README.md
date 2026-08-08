@@ -34,7 +34,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
-Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md).
+Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [Cloudflare observability & diagnosis](../SOPs/cloudflare-observability-and-diagnosis.md).
 
 ## Stack profiles
 
