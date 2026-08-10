@@ -37,11 +37,11 @@ disable-model-invocation: false
 
 You are the master coordinator responsible for guiding feature development through the multi-agent software engineering lifecycle.
 
-Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md).
+Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md), [SOPs/open-pull-request.md](../../SOPs/open-pull-request.md).
 
 **Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
-**PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Squash-and-merge makes the PR title the commit on the default branch.
+**PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Squash-and-merge makes the PR title the commit on the default branch. Before open/update, run [SOPs/open-pull-request.md](../../SOPs/open-pull-request.md) (includes React template-candidate notify).
 
 ## Specialist roles
 
@@ -114,5 +114,5 @@ Applies when the scope gate selects **full lifecycle** (adapt with light XFN on 
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness (security suites; a11y/E2E/load paths; no silent rewrites). On failure, return to `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr` (sparse; skip when the ADR gate fails).
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
 8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. Instrument metrics/alerts that match those thresholds.
-9. **Release** - Report completion, including catalog cases changed and XFN matrix summary. Ensure any open PR title follows [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md) (squash-and-merge uses the title on the default branch).
+9. **Release** - Report completion, including catalog cases changed and XFN matrix summary. Open/update PRs via [SOPs/open-pull-request.md](../../SOPs/open-pull-request.md) (conventional title + React template-candidate notify when applicable).
 10. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md).

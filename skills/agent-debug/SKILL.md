@@ -139,7 +139,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Proof of fix (paths, screenshots, job URL)
 - Ops follow-ups (republish, workflow_dispatch, tool install)
 - Whether a feature slice is still needed
-- PR link with a **conventional** title when a PR exists ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md))
+- PR link with a **conventional** title when a PR exists; confirm [SOPs/open-pull-request.md](../../SOPs/open-pull-request.md) was applied (template-candidate notify or N/A)
 
 ## Tooling map
 
@@ -164,6 +164,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Leaving the user to ask “Pushed to main?” / “Merged yet?” — state branch/PR/merge status unprompted
 - Drawing RCA or system-flow sketches as ASCII/box-drawing art — use Mermaid ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8)
 - Opening or updating a PR with a free-form title — use Conventional Commits for the **PR title** ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md)); squash-and-merge uses it on the default branch
+- Skipping [SOPs/open-pull-request.md](../../SOPs/open-pull-request.md) — including the React template-candidate notify when the diff adds reusable frontend building blocks
 
 ## After debug
 

@@ -47,6 +47,9 @@ Examples:
 
 ## Checklist before open / update PR
 
+Full PR gate (title + React template candidate + checks): [open-pull-request.md](./open-pull-request.md).
+
 - [ ] PR title matches `<type>(scope): description`
 - [ ] Title summarizes the whole PR (what lands on main after squash), not a single intermediate commit
 - [ ] Body can stay free-form (summary, test plan); title stays conventional
+- [ ] Ran the React template-candidate scan in [open-pull-request.md](./open-pull-request.md) §2 and notified the user if it matched
