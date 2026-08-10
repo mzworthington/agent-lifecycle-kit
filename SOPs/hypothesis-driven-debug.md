@@ -98,7 +98,7 @@ Separate PRs (or ask before combining) when any two differ:
 | “Job fixed” | Failing step green locally or in Actions |
 | “On main” | `gh pr view` + compare squash tip to branch tip; open follow-up if tip diverged |
 
-State merge/PR status in the user-facing summary without waiting to be asked.
+State merge/PR status in the user-facing summary without waiting to be asked. PR titles must follow [conventional-commits.md](./conventional-commits.md) (squash-and-merge uses the title on the default branch).
 
 ## 7. CI / ops playbook
 

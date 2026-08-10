@@ -34,7 +34,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
-Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md).
+Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md).
 
 ## Stack profiles
 
@@ -67,6 +67,7 @@ tools: []                     # optional CLI/tool hints for the agent
 - Add project-specific rules in **your app repo** (`.cursor/skills/` or a local overlay), not here.
 - Add new languages/frameworks by copying a profile skill and adjusting frontmatter.
 - Keep role skills focused on behavior and output schema; keep stack detail in profiles.
+- Prefer **Mermaid** for architecture/flow diagrams in skill docs and outputs; do not add ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8).
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).
 

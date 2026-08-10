@@ -21,7 +21,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Java, C#, HCL |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
 | MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
-| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](./SOPs/complexity-hotspots.md)) |
+| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](./SOPs/complexity-hotspots.md), [conventional commits & PR titles](./SOPs/conventional-commits.md)) |
 | Templates | [templates/](./templates/) | Handover, lesson, project handshake, and project MCP formats |
 | Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
 
@@ -29,7 +29,7 @@ See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/REA
 
 ## 2. Bootstrapping instruction
 
-1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code.
+1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code. Prefer **Mermaid** for diagrams; do not create or maintain ASCII/box-drawing art diagrams (see Interaction Mandate §8). Use **conventional commit** subjects for git commits **and** PR titles ([SOPs/conventional-commits.md](./SOPs/conventional-commits.md)) — squash-and-merge uses the PR title on the default branch.
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
 3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN plan → Implementation → XFN green → Audit → Telemetry.
 4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
@@ -57,10 +57,11 @@ When executing a lifecycle phase, assume the matching role skill:
 
 Phase handovers are written locally under `~/.agents/handover/<project>/` (not into the project repo). See [templates/handover.md](./templates/handover.md) (per-phase Definition of Done).
 
-Before marking a phase **COMPLETE**, run [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) when the repo has a pre-commit hook.
+Before marking a phase **COMPLETE**, run [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) when the repo has a pre-commit hook. Commit subjects and PR titles must follow [SOPs/conventional-commits.md](./SOPs/conventional-commits.md).
 
 ## 4. Further reading
 
 - [README.md](./README.md) - directory layout and installation
 - [mcps/README.md](./mcps/README.md) - MCP catalog, profiles, and compose/install
+- [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) - Conventional Commits for git commits and PR titles (squash-and-merge)
 - [lessons/README.md](./lessons/README.md) - capture session learnings; promote via [tasks/kit-review.md](./tasks/kit-review.md)

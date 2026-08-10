@@ -4,9 +4,9 @@ description: >-
   Writes sparse Markdown Architectural Decision Records (MADR) under docs/ADRs
   when a choice is hard to reverse or deliberately differs from kit norms.
   Builds on agent-arch-drift for hexagonal/DDD/slice fit; includes a simple
-  Mermaid diagram of the chosen shape. Use when recording architecture
-  decisions, ADR, MADR, trade-offs, or irreversible design choices — not for
-  routine implementation details.
+  Mermaid diagram of the chosen shape (never ASCII art). Use when recording
+  architecture decisions, ADR, MADR, trade-offs, or irreversible design choices
+  — not for routine implementation details.
 kind: role
 phase: audit
 triggers:
@@ -65,14 +65,14 @@ Template: [templates/adr.md](../../templates/adr.md).
 2. **Inventory** related code, prior ADRs in `docs/ADRs/`, and arch-drift concerns (ports, aggregates, slice ownership).
 3. **List 2–4 real options** (including “status quo” when relevant). Reject strawmen.
 4. **Choose** with justification tied to drivers (reversibility, boundaries, operability, security, team norms).
-5. **Write** the ADR from the template. Include **one** Mermaid diagram that shows the chosen structure (context map, request flow, or component boundary) — not decorative charts.
+5. **Write** the ADR from the template. Include **one** Mermaid diagram that shows the chosen structure (context map, request flow, or component boundary) — not decorative charts and never ASCII art.
 6. **Link** from handover or PR description when this decision unblocks impl/audit.
 
 ## Content rules
 
 - Keep the body short: context → options → outcome → consequences.
 - Status is usually `Accepted` at write time; use `Proposed` only when waiting on a human.
-- Mermaid: prefer `flowchart` or `C4Context`-style simplicity; label ports/adapters in ubiquitous language.
+- **Mermaid only for diagrams** — prefer `flowchart` or `C4Context`-style simplicity; label ports/adapters in ubiquitous language. Never use ASCII/box-drawing art for architecture sketches; convert any ASCII diagram you encounter while editing an ADR.
 - No secrets, tokens, or environment-specific hostnames.
 - If the decision **violates** hexagonal/DDD/slice norms, state that under Consequences and what mitigates drift (anti-corruption layer, follow-up ADR, etc.).
 

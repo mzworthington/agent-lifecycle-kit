@@ -86,6 +86,14 @@ See [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). 
 17. **No silent catalog rewrites** - Diff must not weaken assertions or delete catalog cases unless the impact map shows rewrite/retire with Aligned = yes. Unaligned changes → **REJECT**.
 18. **Functional impact aligned** - `handover_tdd.md` impact rows are Aligned = yes for touched slices.
 
+### Documentation diagrams
+
+19. **Mermaid over ASCII** - Architecture, sequence, flow, and context-map diagrams in docs/ADRs/READMEs must be Mermaid. Flag new or edited ASCII/box-drawing art diagrams as drift; remediate by converting to Mermaid (see [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Simple indented directory listings are exempt.
+
+### ADR completeness (sparse)
+
+20. **Norm exceptions** - If the change intentionally breaks hexagonal/DDD/slice norms or locks a hard-to-reverse boundary **without** a matching `docs/ADRs/NNNN-*.md`, flag and recommend `agent-adr`. Do not demand ADRs for routine work.
+
 ## Output mandate
 
 When drift is detected, report:
@@ -94,9 +102,5 @@ When drift is detected, report:
 - **Remediation** - Concrete refactor (e.g. "Extract `Money` value object", "Move handler into `features/submit-order/` slice", "Add axe suite for apply a11y row").
 
 Write findings to `~/.agents/handover/<project>/handover_audit.md` (or a dedicated arch section therein).
-
-### ADR completeness (sparse)
-
-19. **Norm exceptions** - If the change intentionally breaks hexagonal/DDD/slice norms or locks a hard-to-reverse boundary **without** a matching `docs/ADRs/NNNN-*.md`, flag and recommend `agent-adr`. Do not demand ADRs for routine work.
 
 For **dead code** and **deletion over addition** findings, add a row to `~/.agents/handover/<project>/dead-code-backlog.md` instead of deleting during an audit. For **complexity hotspots**, add a row to `~/.agents/handover/<project>/complexity-backlog.md`. Execution for both backlogs is [agent-prune](../agent-prune/SKILL.md). Procedure: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).

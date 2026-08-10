@@ -35,7 +35,7 @@ Chosen option: "**Option A**", because …
 
 ## Architecture sketch
 
-One Mermaid diagram of the **chosen** shape (ports/adapters, slice boundary, or request flow). Replace the example.
+One **Mermaid** diagram of the **chosen** shape (ports/adapters, slice boundary, or request flow). Replace the example. Do not use ASCII/box-drawing art.
 
 ```mermaid
 flowchart LR

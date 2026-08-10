@@ -139,6 +139,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Proof of fix (paths, screenshots, job URL)
 - Ops follow-ups (republish, workflow_dispatch, tool install)
 - Whether a feature slice is still needed
+- PR link with a **conventional** title when a PR exists ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md))
 
 ## Tooling map
 
@@ -161,6 +162,8 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Abandoning a cheap config-parity hypothesis for long product forensics
 - Shipping workflow/release policy changes the user did not ask for
 - Leaving the user to ask “Pushed to main?” / “Merged yet?” — state branch/PR/merge status unprompted
+- Drawing RCA or system-flow sketches as ASCII/box-drawing art — use Mermaid ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8)
+- Opening or updating a PR with a free-form title — use Conventional Commits for the **PR title** ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md)); squash-and-merge uses it on the default branch
 
 ## After debug
 
