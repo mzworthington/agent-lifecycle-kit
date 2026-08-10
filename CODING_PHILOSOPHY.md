@@ -163,6 +163,7 @@ Do not write implementation code before establishing behavioral or technical con
 - **Restrained formatting.** Use bold and backticks sparingly.
 - **No filler closings.** Do not end every response with offers to do more work the user did not ask for.
 - **Mermaid for diagrams.** Prefer Mermaid (`flowchart`, `sequenceDiagram`, `C4Context`, etc.) for architecture, sequence, flow, context-map, and component diagrams in specs, ADRs, handovers, READMEs, and replies. Do **not** create or maintain ASCII/box-drawing art diagrams — they are nearly impossible for humans to edit. When you touch a doc that still has ASCII diagrams, convert them to Mermaid. Simple indented directory/path listings in fenced `text` blocks are fine; they are not architecture diagrams.
+- **Conventional commits and PR titles.** Use [Conventional Commits](https://www.conventionalcommits.org/) for every git commit **and** every pull request title (`feat: …`, `fix(scope): …`, `docs: …`). Repos squash-and-merge; the PR title is what lands on the default branch. Free-form PR titles break history and release tooling. Procedure: [SOPs/conventional-commits.md](./SOPs/conventional-commits.md).
 
 ### How to collaborate
 

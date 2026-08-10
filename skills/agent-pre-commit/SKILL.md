@@ -2,10 +2,11 @@
 name: agent-pre-commit
 description: >-
   Discovers and runs git pre-commit hook checks before handover or commit,
-  then fixes failures until green. Use when finishing implementation, before
-  declaring work complete, when the user asks to fix lint/build/hook errors,
-  or when a repo has .husky/pre-commit, .git/hooks/pre-commit, or
-  .pre-commit-config.yaml.
+  then fixes failures until green. Also enforces Conventional Commits for
+  commit subjects and PR titles (squash-merge uses the PR title). Use when
+  finishing implementation, before declaring work complete, when opening or
+  updating a PR, when the user asks to fix lint/build/hook errors, or when a
+  repo has .husky/pre-commit, .git/hooks/pre-commit, or .pre-commit-config.yaml.
 kind: role
 phase: quality
 triggers:
@@ -17,6 +18,9 @@ triggers:
   - fix lint
   - fix build
   - quality gate
+  - conventional commits
+  - PR title
+  - commit message
 depends-on: []
 tools:
   - read
@@ -116,3 +120,11 @@ When completing a lifecycle phase, include in the handover:
 ```
 
 Do not mark **COMPLETE** while hook checks are failing.
+
+## 6. Commit messages and PR titles
+
+When you (or the user) create commits or open/update a pull request, follow [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md).
+
+- **Commit subject** and **PR title** both use `type(optional-scope): description` (e.g. `feat: …`, `fix(cli): …`, `docs: …`).
+- Repos **squash-and-merge**: the PR title becomes the commit on the default branch. A conventional tip commit does not fix a free-form PR title.
+- Before handover that includes a PR link, verify the PR title is conventional; retitle if it drifted.
