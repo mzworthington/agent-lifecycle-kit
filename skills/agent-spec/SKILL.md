@@ -55,6 +55,7 @@ Specifications are stakeholder-facing. Follow [CODING_PHILOSOPHY.md](../../CODIN
 - **Business first.** Lead scenarios with user or domain outcomes, not database tables, APIs, or class names.
 - **No implementation detail.** No frameworks, file paths, HTTP verbs, or schema names in Gherkin or glossaries.
 - **Testable and precise.** Each scenario has a clear Given-When-Then with unambiguous acceptance criteria.
+- **Mermaid for diagrams.** Bounded-context maps, aggregate relationships, and flow sketches use Mermaid — never ASCII/box-drawing art (hard for humans to maintain).
 
 ## Output format
 

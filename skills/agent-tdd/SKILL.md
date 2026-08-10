@@ -47,6 +47,8 @@ Complete this before writing new failing tests or changing production code. See 
 
 If discovery during later phases shows cases outside this map, stop and re-confirm with the user before changing those tests.
 
+When sketching slice boundaries or request flows in the design handover, use Mermaid — not ASCII art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+
 ## Guardrails
 
 1. **Red** - Write failing tests first: domain unit tests for invariants; handler/slice tests for the use case. **Run tests and confirm failure** before implementation.

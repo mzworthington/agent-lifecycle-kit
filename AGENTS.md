@@ -29,7 +29,7 @@ See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/REA
 
 ## 2. Bootstrapping instruction
 
-1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code.
+1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code. Prefer **Mermaid** for diagrams; do not create or maintain ASCII/box-drawing art diagrams (see Interaction Mandate §8).
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
 3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Analysis → TDD design → XFN plan → Implementation → XFN green → Audit → Telemetry.
 4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).

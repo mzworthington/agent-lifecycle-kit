@@ -39,6 +39,8 @@ You are the master coordinator responsible for guiding feature development throu
 
 Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 
+**Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+
 ## Specialist roles
 
 | Phase | Skill |

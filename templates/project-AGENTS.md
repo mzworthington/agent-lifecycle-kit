@@ -5,7 +5,7 @@ Standards and lifecycle agents live in `~/.agents`.
 Before starting work, read:
 
 - `~/.agents/AGENTS.md` - bootstrap and lifecycle routing
-- `~/.agents/CODING_PHILOSOPHY.md` - hexagonal architecture, DDD, vertical slices, clean code
+- `~/.agents/CODING_PHILOSOPHY.md` - hexagonal architecture, DDD, vertical slices, clean code; Mermaid for diagrams (no ASCII art diagrams)
 - `~/.agents/SOPs/behavior-catalog-and-xfn.md` - tests as behavior catalog; XFN matrix
 - `~/.agents/SOPs/hypothesis-driven-debug.md` - bugs, CI failures, live-site RCA
 - `~/.agents/mcps/README.md` - shared MCP catalog and profiles (optional project `.cursor/mcp.json`)

@@ -161,6 +161,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Abandoning a cheap config-parity hypothesis for long product forensics
 - Shipping workflow/release policy changes the user did not ask for
 - Leaving the user to ask “Pushed to main?” / “Merged yet?” — state branch/PR/merge status unprompted
+- Drawing RCA or system-flow sketches as ASCII/box-drawing art — use Mermaid ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8)
 
 ## After debug
 
