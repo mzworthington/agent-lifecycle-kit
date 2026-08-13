@@ -1,0 +1,9 @@
+{
+  "name": "security",
+  "description": "Security audit profile: Semgrep SAST plus GitHub for PR/advisory context. Keep lean; do not mix with personal vault servers.",
+  "servers": [
+    "context7",
+    "github",
+    "semgrep"
+  ]
+}

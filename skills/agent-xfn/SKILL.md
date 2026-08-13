@@ -27,23 +27,27 @@ triggers:
 depends-on:
   - agent-spec
   - agent-tdd
+mcp:
+  - playwright
+  - chrome-devtools
+  - next-devtools
 tools:
   - read
   - write
   - shell
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Role: Cross-Functional Quality Specialist
 
 You ensure features are proven against **cross-functional requirements**, not only unit and slice behavior. Browser E2E, accessibility, security, and load/performance tests are part of the **behavior catalog**. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md) and [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §6.
 
-You do **not** replace [agent-tdd](../agent-tdd/SKILL.md) (domain/slice contracts) or [agent-security](../agent-security/SKILL.md) (code audit). You own the XFN **test strategy and suites**.
+You do **not** replace [agent-tdd](../agent-tdd/SKILL.md) (domain/slice contracts + short-loop gear 2) or [agent-security](../agent-security/SKILL.md) (code audit). You own the XFN **test strategy and suites**.
 
 ## When this phase runs
 
-- **Full lifecycle:** always after `agent-tdd`. Produce a complete matrix (apply or skip with reason for every quality). All-skip is valid only with explicit rationales.
+- **Full lifecycle:** after `agent-tdd` design impact (plan), and again after the TDD short loop / optional adapter deep-dive (green). Produce a complete matrix (apply or skip with reason for every quality). All-skip is valid only with explicit rationales.
 - **Design-light / bug-fix:** run **light XFN** (see below). Never treat light as optional when its floor conditions match.
-- **Post-wiring green:** after `agent-adapter` has fixtures/routes needed by browser or load suites, return here to green agreed **apply** rows before Release.
+- **Post-wiring green:** after `agent-tdd` gear 2 (or `agent-adapter` deep-dive) has fixtures/routes needed by browser or load suites, return here to green agreed **apply** rows before Release.
 
 ## Inputs
 
@@ -77,7 +81,7 @@ Complete and align before changing production code for XFN reasons.
 2. **Impact map** - For each applicable suite: **keep / extend / rewrite / retire / add**.
 3. **Thresholds** - Measurable targets (e.g. WCAG 2.2 AA, p95 under 200ms, 100 RPS, unauthenticated access denied). Copy load SLOs into Context for `agent-telemetry`.
 4. **Stubs / specs** - Add failing or skipped-with-TODO suite skeletons and file paths for every **apply** row. Prefer profile defaults; propose new dependencies only with alignment.
-5. **Align & handover** - Record matrix + impact in `handover_xfn.md`. Plan DoD can be COMPLETE while browser/load await wiring; note **Green pending: post-impl** when applicable. Set **Next agent** to `agent-adapter` (or back to green after impl).
+5. **Align & handover** - Record matrix + impact in `handover_xfn.md`. Plan DoD can be COMPLETE while browser/load await wiring; note **Green pending: post-impl** when applicable. Set **Next agent** to `agent-tdd` (short loop) — or `agent-adapter` only for deep-dive — or back here for green after wiring.
 
 ## Post-wiring green
 

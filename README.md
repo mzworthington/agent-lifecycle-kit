@@ -7,13 +7,13 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 ## What you get
 
 - **Shared engineering standards** - hexagonal architecture, domain-driven design, vertical slices, and clean code
-- **Lifecycle roles** - spec → TDD → XFN plan → implementation → XFN green → audit → telemetry (plus debug / prune maintenance paths)
+- **Lifecycle roles** - spec → TDD short loop (gear 1 domain + gear 2 thin adapters) → XFN plan/green → optional adapter deep-dive → audit → telemetry → release (plus debug / prune / migration / review paths)
 - **Behavior catalog & XFN** - tests as source of truth; apply/skip matrix for browser E2E, a11y, security, load ([SOP](./SOPs/behavior-catalog-and-xfn.md))
 - **Hypothesis-driven debug** - bugs, CI failures, and live-site RCA with repro + proof gates ([SOP](./SOPs/hypothesis-driven-debug.md), [agent-debug](./skills/agent-debug/SKILL.md))
-- **Stack profiles** - TypeScript, Java, C#, .NET, Next.js, Nuxt, Spring Boot, Quarkus, and more (with XFN tooling defaults)
-- **Operational playbooks** - SOPs, checklists, debug-board tooling, and handover templates with per-phase Definition of Done
-- **MCP library** - versioned server catalog and profiles composed into Cursor `mcp.json` ([mcps/](./mcps/))
-- **Self-improving kit** - local lesson capture and weekly review to promote learnings into shared standards
+- **Stack profiles** - TypeScript, Python, Go, Java, C#, .NET, Next.js, Nuxt, FastAPI, Spring Boot, Quarkus, and more (with XFN tooling defaults)
+- **Operational playbooks** - SOPs (catalog/XFN, migrations, API contracts, release), checklists, debug-board tooling, and handover templates with per-phase Definition of Done
+- **MCP library** - versioned server catalog and profiles (default, collab, ops, security, design, payments, …) composed into Cursor `mcp.json` ([mcps/](./mcps/))
+- **Self-improving kit** - local lesson capture, weekly review, and [routing eval harness](./tasks/kit-eval-harness.md)
 
 Works with Cursor and Gemini-style IDEs. Install once on your machine; point any project at it.
 
@@ -47,8 +47,9 @@ For project-scoped MCP tools, copy [templates/project-mcp.json](./templates/proj
 ```bash
 mkdir -p .cursor
 ~/.agents/scripts/compose-mcp.sh project-example -o .cursor/mcp.json
-# Optional:
 # ~/.agents/scripts/compose-mcp.sh collab --install     # Linear, Notion, Slack
+# ~/.agents/scripts/compose-mcp.sh ops --install        # Sentry, Slack
+# ~/.agents/scripts/compose-mcp.sh security -o .cursor/mcp.security.json
 # ~/.agents/scripts/compose-mcp.sh personal --install   # Bitwarden, LinkedIn, Polyglot (local only)
 # ~/.agents/scripts/compose-mcp.sh cloud -o .cursor/mcp.json
 ```
@@ -66,7 +67,7 @@ Open the project in your IDE. The agent reads [AGENTS.md](./AGENTS.md) (via `~/.
 | ADRs (project docs) | [skills/agent-adr/SKILL.md](./skills/agent-adr/SKILL.md), [templates/adr.md](./templates/adr.md) → `docs/ADRs/` |
 | Official external skills | [skills/external.lock.json](./skills/external.lock.json), [SOPs/external-skills.md](./SOPs/external-skills.md) |
 | MCP library | [mcps/README.md](./mcps/README.md), [SOPs/mcp-library.md](./SOPs/mcp-library.md) |
-| Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md) |
+| Kit improvement | [lessons/README.md](./lessons/README.md), [tasks/kit-review.md](./tasks/kit-review.md), [tasks/kit-eval-harness.md](./tasks/kit-eval-harness.md) |
 | Local config | `system/config.json` (created from `config.example.json`) |
 
 ## License

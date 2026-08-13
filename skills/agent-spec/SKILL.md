@@ -22,10 +22,15 @@ triggers:
   - performance
   - non functional
 depends-on: []
+mcp:
+  - linear
+  - notion
+  - github
+  - memory
 tools:
   - read
   - write
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Role: BDD Specification & Analysis Agent
 

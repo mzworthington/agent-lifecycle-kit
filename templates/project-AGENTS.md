@@ -20,4 +20,4 @@ For non-trivial **feature** work, before coding:
 
 1. Inventory related tests (functional + XFN) and align on **test-case impact**.
 2. Complete an **XFN apply/skip matrix** (browser E2E, a11y, security, load) - light floor on bug-fixes when UI/auth/SLO is touched.
-3. Follow orchestrator routing: Spec → TDD → XFN plan → Impl → XFN green → Audit → Telemetry.
+3. Follow orchestrator routing: Spec → TDD impact → XFN plan → **TDD short loop (gear 1+2)** → XFN green → Audit → Telemetry → Release. Use `agent-adapter` only for large adapter deep-dives.

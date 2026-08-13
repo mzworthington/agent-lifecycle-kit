@@ -59,7 +59,7 @@ Minimum floor - not optional when the condition matches:
 ## 4. Plan vs green (XFN)
 
 1. **Plan (Design)** - Matrix, impact, thresholds, suite stubs/specs, how-to-run. Status may be COMPLETE for planning even if browser/load are not green yet.
-2. **Wire (Impl)** - Adapters/fixtures needed by suites; re-confirm if impact expands.
+2. **Wire (TDD short loop)** - [agent-tdd](../skills/agent-tdd/SKILL.md) gear 1+2 (or optional [agent-adapter](../skills/agent-adapter/SKILL.md) deep-dive) provides adapters/fixtures; re-confirm if impact expands.
 3. **Green (post-wiring)** - Return to `agent-xfn` (or complete under orchestrator) to make agreed apply suites pass. Do not mark Release COMPLETE while apply rows lack green suites.
 
 ## 5. Suite paths & how to run

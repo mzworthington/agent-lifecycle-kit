@@ -34,8 +34,8 @@ Run the repo's pre-commit checks after code changes and **fix all failures** bef
 
 ## When to run
 
-- End of **impl** (`agent-adapter`) and **refactor** (`agent-tdd`) phases
-- Before **release** in `agent-orchestrator`
+- End of **tdd short loop** (`agent-tdd`) and optional **adapter deep-dive** (`agent-adapter`)
+- Before **release** in `agent-orchestrator` / `agent-release`
 - Any time the user reports hook, lint, format, typecheck, or build failures
 - Proactively when you have modified tracked files in a repo with a pre-commit hook
 

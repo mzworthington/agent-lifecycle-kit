@@ -1,0 +1,15 @@
+{
+  "id": "sentry",
+  "name": "Sentry",
+  "summary": "Official Sentry remote MCP for issues, performance, and Seer-assisted RCA (OAuth).",
+  "homepage": "https://mcp.sentry.dev/",
+  "transport": "http",
+  "phases": ["debug", "telemetry", "impl"],
+  "triggers": ["Sentry", "error tracking", "issue triage", "performance regression"],
+  "requiredEnv": [],
+  "mcp": {
+    "sentry": {
+      "url": "https://mcp.sentry.dev/mcp"
+    }
+  }
+}

@@ -18,21 +18,23 @@ triggers:
   - correlation id
   - slo
 depends-on:
-  - agent-adapter
+  - agent-tdd
   - agent-xfn
+mcp:
+  - sentry
 tools:
   - read
   - write
   - grep
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Role: Site Reliability & Telemetry Engineer
 
-You ensure the system is observable, traceable, and debuggable under load.
+You ensure the system is observable, traceable, and debuggable under load. Load [profile-observability](../profile-observability/SKILL.md) when naming metrics/traces. Use **sentry** MCP when correlating production signals.
 
 ## Inputs
 
-- Implemented adapters and use-case boundaries.
+- Implemented use cases and adapters from the TDD short loop (and optional adapter deep-dive).
 - Load / performance thresholds from `handover_xfn.md` (Cross-functional matrix). If load was **skip**, record N/A in the telemetry handover.
 
 ## Focus areas

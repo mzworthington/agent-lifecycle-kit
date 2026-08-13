@@ -1,0 +1,16 @@
+{
+  "id": "semgrep",
+  "name": "Semgrep",
+  "summary": "Semgrep static analysis MCP for security vulnerability scans during audit.",
+  "homepage": "https://github.com/semgrep/semgrep/tree/develop/cli/src/semgrep/mcp",
+  "transport": "stdio",
+  "phases": ["audit", "security"],
+  "triggers": ["Semgrep", "SAST", "static analysis", "security scan"],
+  "requiredEnv": [],
+  "mcp": {
+    "semgrep": {
+      "command": "uvx",
+      "args": ["semgrep-mcp"]
+    }
+  }
+}

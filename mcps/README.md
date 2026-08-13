@@ -11,7 +11,11 @@ mcps/
 │   ├── default.json          # Everyday kit profile → ~/.cursor/mcp.json
 │   ├── collab.json           # Linear + Notion + Slack on top of default
 │   ├── devtools.json         # Chrome DevTools + Next.js DevTools + Playwright
-│   ├── cloud.json            # Cloudflare API (+ Context7)
+│   ├── cloud.json            # Cloudflare + Vercel (+ Context7)
+│   ├── ops.json              # Sentry + Slack (+ default lean set)
+│   ├── security.json         # Semgrep + GitHub
+│   ├── design.json           # Figma (token)
+│   ├── payments.json         # Stripe (OAuth)
 │   ├── personal.json         # Bitwarden + LinkedIn + Polyglot + Obsidian (machine-local)
 │   ├── lab.json              # Raspberry Pi / home-lab hosts
 │   └── project-example.json  # App-repo example
@@ -28,7 +32,11 @@ mcps/
 | `default` | context7, github, memory | `~/.cursor/mcp.json` via `install.sh` |
 | `collab` | default + linear, notion, slack | Global/project when the team uses those tools |
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
-| `cloud` | context7, cloudflare | Workers / DNS / R2 work |
+| `cloud` | context7, cloudflare, vercel | Workers / DNS / R2 / deploy work |
+| `ops` | context7, github, memory, sentry, slack | Debug / incident / telemetry |
+| `security` | context7, github, semgrep | Security audit sessions |
+| `design` | context7, figma | UI delivery from designs |
+| `payments` | context7, stripe | Billing adapter work |
 | `personal` | bitwarden, linkedin, polyglot, obsidian | **Your machine only** (secrets / vault) |
 | `lab` | raspberry-pi | Home-lab SSH to a Pi / SBC |
 | `project-example` | context7, github, next-devtools, chrome-devtools, playwright, postgres | App `.cursor/mcp.json` |
@@ -45,6 +53,10 @@ Prefer composing **one** profile that matches the work. Extra MCP tools compete 
 ```bash
 ./scripts/compose-mcp.sh default --install
 ./scripts/compose-mcp.sh collab --install
+./scripts/compose-mcp.sh ops --install
+./scripts/compose-mcp.sh security -o .cursor/mcp.security.json
+./scripts/compose-mcp.sh design -o .cursor/mcp.design.json
+./scripts/compose-mcp.sh payments -o .cursor/mcp.payments.json
 ./scripts/compose-mcp.sh personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
 ./scripts/compose-mcp.sh lab --install               # Raspberry Pi over SSH
 ./scripts/compose-mcp.sh devtools -o .cursor/mcp.json
@@ -52,7 +64,7 @@ Prefer composing **one** profile that matches the work. Extra MCP tools compete 
 ./scripts/compose-mcp.sh project-example -o .cursor/mcp.json
 ```
 
-Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare use Cursor OAuth on first tool use.
+Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare/Sentry/Stripe/Vercel use Cursor OAuth on first tool use.
 
 ## Catalog
 
@@ -69,6 +81,11 @@ Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/C
 | chrome-devtools | stdio | none (local Chrome) |
 | next-devtools | stdio | none (Next.js 16+ `npm run dev`) |
 | cloudflare | http | OAuth |
+| sentry | http | OAuth |
+| semgrep | stdio | none (`uvx semgrep-mcp`; optional `SEMGREP_APP_TOKEN`) |
+| stripe | http | OAuth |
+| figma | stdio | `FIGMA_API_KEY` |
+| vercel | http | OAuth |
 | linkedin | stdio | `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` |
 | bitwarden | stdio | `BW_SESSION` (from `bw unlock --raw`) |
 | polyglot | stdio | `POLYGLOT_TOKEN` (+ project `.polyglot-mcp.json`) |
@@ -81,4 +98,4 @@ Follow [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 
 ## Agent guidance
 
-Lifecycle agents should prefer MCP tools when a catalog entry’s `phases` / `triggers` match the task. Prefer the smallest useful set of servers — more tools ≠ better agent behavior. Never load `personal` servers into shared project configs.
+Lifecycle agents declare preferred MCP ids in skill frontmatter (`mcp:`). Prefer those servers when a catalog entry’s `phases` / `triggers` match the task. Prefer the smallest useful set of servers — more tools ≠ better agent behavior. Never load `personal` servers into shared project configs.

@@ -29,6 +29,10 @@ depends-on:
   - agent-tdd
   - agent-pre-commit
   - agent-xfn
+mcp:
+  - sentry
+  - chrome-devtools
+  - github
 tools:
   - read
   - grep

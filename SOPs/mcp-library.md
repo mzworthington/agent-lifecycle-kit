@@ -20,7 +20,11 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Useful across most projects | `mcps/profiles/default.json` (+ global install) |
 | Linear / Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
-| Cloudflare Workers / DNS / R2 | `mcps/profiles/cloud.json` |
+| Cloudflare / Vercel | `mcps/profiles/cloud.json` |
+| Sentry / Slack ops | `mcps/profiles/ops.json` |
+| Semgrep security scans | `mcps/profiles/security.json` |
+| Figma design context | `mcps/profiles/design.json` |
+| Stripe payments | `mcps/profiles/payments.json` |
 | Bitwarden / LinkedIn / Polyglot / Obsidian | `mcps/profiles/personal.json` (**machine-local only**) |
 | Raspberry Pi / home lab SSH | `mcps/profiles/lab.json` (**machine-local only**) |
 | App-specific DB + frontend stack | `project-example` or a custom project `.cursor/mcp.json` |
@@ -76,6 +80,16 @@ Prefer a **small** enabled set. Extra MCP tools compete for attention and slow a
 # Collab tools (Linear OAuth, Notion OAuth, Slack env tokens)
 ./scripts/compose-mcp.sh collab --install
 
+# Ops / incident (Sentry OAuth + Slack)
+./scripts/compose-mcp.sh ops --install
+
+# Security audit (Semgrep)
+./scripts/compose-mcp.sh security -o .cursor/mcp.security.json
+
+# Design / payments (opt-in; tokens or OAuth)
+./scripts/compose-mcp.sh design -o .cursor/mcp.design.json
+./scripts/compose-mcp.sh payments -o .cursor/mcp.payments.json
+
 # Personal / sensitive (Bitwarden, LinkedIn, Polyglot, Obsidian) — machine only
 ./scripts/compose-mcp.sh personal --install
 
@@ -88,7 +102,7 @@ mkdir -p .cursor
 ./scripts/compose-mcp.sh cloud -o .cursor/mcp.cloud.json   # optional merge by hand
 ```
 
-`./install.sh` runs the **default** profile install only. Opt into `collab`, `personal`, `devtools`, and `cloud` explicitly.
+`./install.sh` runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, and `cloud` explicitly.
 
 ## 4. Verify in Cursor
 

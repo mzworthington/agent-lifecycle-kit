@@ -11,9 +11,9 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | Prefix | `kind` | When to use |
 |--------|--------|-------------|
 | `agent-*` | `role` | Lifecycle persona for a single phase (spec, TDD, audit, …) |
-| `profile-*` | `profile` | Cross-stack domain rules (IaC security, CAF, …) |
-| `lang-*` | `profile` | Language-wide coding rules (TypeScript, Java, C#, HCL) |
-| `framework-*` | `profile` | Framework-specific delivery rules (Next.js, Spring, Terraform, …) |
+| `profile-*` | `profile` | Cross-stack domain rules (IaC security, API, observability, …) |
+| `lang-*` | `profile` | Language-wide coding rules (TypeScript, Java, C#, Python, Go, HCL) |
+| `framework-*` | `profile` | Framework-specific delivery rules (Next.js, FastAPI, Spring, Terraform, …) |
 
 **Roles vs profiles:** Roles define *who you are* and *what phase output* to produce. Profiles define *how to write code* for a stack. The orchestrator (`agent-orchestrator`) routes between roles; stack detection activates profiles.
 
@@ -23,9 +23,16 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 |-------|-------|------------|
 | [agent-orchestrator](./agent-orchestrator/SKILL.md) | orchestration | Multi-phase feature work, handovers |
 | [agent-spec](./agent-spec/SKILL.md) | spec | Requirements, Gherkin, XFN criteria, ambiguity removal |
-| [agent-tdd](./agent-tdd/SKILL.md) | tdd | Functional catalog, test-impact plan, red-green-refactor, port interfaces → always hands off to XFN |
+| [agent-tdd](./agent-tdd/SKILL.md) | tdd | Short loop: catalog impact, gear-1 domain/handlers, gear-2 thin adapters → hands XFN to `agent-xfn` |
 | [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
-| [agent-adapter](./agent-adapter/SKILL.md) | impl | Infrastructure, DB, external APIs; re-confirm impact; XFN fixtures |
+| [agent-adapter](./agent-adapter/SKILL.md) | impl | **Optional deep-dive** when gear 2 is too large; else prefer `agent-tdd` |
+| [agent-ui](./agent-ui/SKILL.md) | impl | Thin UI/delivery adapters; a11y-first |
+| [agent-migration](./agent-migration/SKILL.md) | maintenance | Expand/contract schema migrations |
+| [agent-api-contract](./agent-api-contract/SKILL.md) | spec | OpenAPI/AsyncAPI contract evolution |
+| [agent-review](./agent-review/SKILL.md) | audit | PR/diff review vs boundaries + catalog/XFN |
+| [agent-docs](./agent-docs/SKILL.md) | release | README/runbook/API narrative updates |
+| [agent-release](./agent-release/SKILL.md) | release | Ship checklist, conventional PR title, catalog summary |
+| [agent-incident](./agent-incident/SKILL.md) | debug | Production incident coordination → `agent-debug` |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets; verify XFN security suites |
 | [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID, catalog/XFN completeness |
 | [agent-adr](./agent-adr/SKILL.md) | audit | Sparse MADR ADRs in `docs/ADRs/` (hard to reverse / off-norm only) |
@@ -34,15 +41,23 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
-Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md).
+Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md).
+
+### TDD short loop (important)
+
+`agent-tdd` owns **gear 1** (domain + mocked ports) and **gear 2** (thin adapter + integration test) in the **same session**. Do not insert a handover between inventing a port and wiring its first adapter. `agent-adapter` is an escape hatch for large integrations only. XFN remains the intentional slow outer loop.
 
 ## Stack profiles
 
 | Language / domain | Frameworks |
 |-------------------|------------|
 | [profile-iac](./profile-iac/SKILL.md) (secure IaC, CAF, least privilege) | [framework-terraform](./framework-terraform/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
+| [profile-api](./profile-api/SKILL.md) | (cross-stack HTTP/event APIs) |
+| [profile-observability](./profile-observability/SKILL.md) | feeds [agent-telemetry](./agent-telemetry/SKILL.md) |
 | [lang-hcl](./lang-hcl/SKILL.md) | [framework-terraform](./framework-terraform/SKILL.md) |
 | [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
+| [lang-python](./lang-python/SKILL.md) | [framework-fastapi](./framework-fastapi/SKILL.md) |
+| [lang-go](./lang-go/SKILL.md) | — |
 | [lang-java](./lang-java/SKILL.md) | [framework-springboot](./framework-springboot/SKILL.md), [framework-quarkus](./framework-quarkus/SKILL.md) |
 | [lang-csharp](./lang-csharp/SKILL.md) | [framework-dotnet](./framework-dotnet/SKILL.md) |
 
@@ -58,9 +73,14 @@ kind: role | profile          # taxonomy
 phase: spec | tdd | xfn | ... # lifecycle phase (roles only)
 triggers: [...]               # keywords for routing
 depends-on: [...]             # related skills
+mcp: [...]                    # optional catalogued MCP server ids (see mcps/)
 tools: []                     # optional CLI/tool hints for the agent
 ---
 ```
+
+**Skill length budget:** Prefer role `SKILL.md` bodies under ~150 lines; put long procedures in [SOPs/](../SOPs/). Enforce during [kit-review](../tasks/kit-review.md).
+
+**Discoverability:** Prefer `disable-model-invocation: false` so specialists can be selected when users `@` them; the orchestrator still owns multi-phase routing.
 
 ## Extending
 
@@ -70,6 +90,7 @@ tools: []                     # optional CLI/tool hints for the agent
 - Prefer **Mermaid** for architecture/flow diagrams in skill docs and outputs; do not add ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8).
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).
+- Routing regressions: [tasks/kit-eval-harness.md](../tasks/kit-eval-harness.md).
 
 ## Kit vs external
 
@@ -80,7 +101,9 @@ Two ownership models — do not mix them in git.
 | **Kit-authored** | Yes | `skills/agent-*`, `skills/profile-*`, `skills/lang-*`, `skills/framework-*` | PRs in this repo |
 | **Upstream / official** | No (lockfile only) | `~/.cursor/skills` via `gh skill` | [external.lock.json](./external.lock.json) + sync script |
 
-**Why:** Upstream skills (Cloudflare, Vercel, etc.) are large, change often, and carry their own licenses. Vendoring them into `skills/` bloats the repo, blocks clean upgrades, and blurs ownership with lifecycle roles.
+**When to prefer kit profile vs upstream skill:** Use kit `lang-*` / `framework-*` for hexagonal/DDD/vertical-slice rules. Use upstream skills (Cloudflare, Vercel React, Stripe, …) for vendor-specific APIs and platform idioms. If both apply, kit architecture wins on structure; upstream wins on vendor API details—do not duplicate long vendor guides into kit skills.
+
+**Why:** Upstream skills are large, change often, and carry their own licenses. Vendoring them into `skills/` bloats the repo, blocks clean upgrades, and blurs ownership with lifecycle roles.
 
 `.gitignore` blocks accidental commits of non-kit directories under `skills/`. Validate locally:
 

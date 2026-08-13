@@ -28,7 +28,7 @@ tools:
   - read
   - grep
   - shell
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Role: Dead Code & Complexity Pruner
 
