@@ -1,0 +1,15 @@
+{
+  "id": "vercel",
+  "name": "Vercel",
+  "summary": "Official Vercel remote MCP for projects, deployments, and docs (OAuth).",
+  "homepage": "https://vercel.com/docs/mcp",
+  "transport": "http",
+  "phases": ["impl", "telemetry", "release"],
+  "triggers": ["Vercel", "deployment", "preview URL", "Next.js deploy"],
+  "requiredEnv": [],
+  "mcp": {
+    "vercel": {
+      "url": "https://mcp.vercel.com"
+    }
+  }
+}

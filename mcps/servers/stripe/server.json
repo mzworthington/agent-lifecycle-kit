@@ -1,0 +1,15 @@
+{
+  "id": "stripe",
+  "name": "Stripe",
+  "summary": "Official Stripe remote MCP for Payments API tools and docs search (OAuth).",
+  "homepage": "https://docs.stripe.com/mcp",
+  "transport": "http",
+  "phases": ["impl", "tdd", "adapter"],
+  "triggers": ["Stripe", "payments", "billing", "subscriptions", "checkout"],
+  "requiredEnv": [],
+  "mcp": {
+    "stripe": {
+      "url": "https://mcp.stripe.com"
+    }
+  }
+}

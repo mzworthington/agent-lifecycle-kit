@@ -1,0 +1,19 @@
+{
+  "id": "figma",
+  "name": "Figma",
+  "summary": "Figma design context via Framelink stdio MCP (personal access token).",
+  "homepage": "https://www.framelink.ai/docs/quickstart",
+  "transport": "stdio",
+  "phases": ["impl", "spec", "xfn"],
+  "triggers": ["Figma", "design file", "frame", "UI mock"],
+  "requiredEnv": ["FIGMA_API_KEY"],
+  "mcp": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio"],
+      "env": {
+        "FIGMA_API_KEY": "${env:FIGMA_API_KEY}"
+      }
+    }
+  }
+}

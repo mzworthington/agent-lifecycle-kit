@@ -30,13 +30,13 @@ triggers:
   - cognitive complexity
   - simplify
 depends-on:
-  - agent-adapter
+  - agent-tdd
   - agent-xfn
   - agent-adr
 tools:
   - read
   - grep
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Role: Architecture Conformance Guardian
 

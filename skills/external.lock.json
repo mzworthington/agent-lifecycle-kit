@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "description": "Official / third-party agent skills managed by gh skill (not vendored into this repo). Install to Cursor user scope so updates stay outside kit git history.",
+  "version": "1.1.0",
+  "description": "Official / third-party agent skills managed by gh skill (not vendored into this repo). Install to Cursor user scope so updates stay outside kit git history. Prefer kit lang-*/framework-* for hexagonal/DDD structure; prefer upstream for vendor APIs.",
   "agent": "cursor",
   "scope": "user",
   "skills": [
@@ -39,6 +39,12 @@
       "repository": "vercel-labs/agent-skills",
       "skill": "skills/react-best-practices",
       "summary": "Vercel Engineering React/Next.js performance best practices (70+ rules)."
+    },
+    {
+      "id": "web-design-guidelines",
+      "repository": "vercel-labs/agent-skills",
+      "skill": "skills/web-design-guidelines",
+      "summary": "Vercel web interface guidelines for UI quality (use alongside kit agent-ui; kit hexagonal rules still win on structure)."
     }
   ]
 }

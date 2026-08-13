@@ -1,0 +1,11 @@
+{
+  "name": "ops",
+  "description": "Operations signals: Sentry errors/performance plus Slack for incident chat. Compose on top of default when doing debug/telemetry/incident work.",
+  "servers": [
+    "context7",
+    "github",
+    "memory",
+    "sentry",
+    "slack"
+  ]
+}

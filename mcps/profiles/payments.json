@@ -1,0 +1,8 @@
+{
+  "name": "payments",
+  "description": "Billing/payments work with Stripe remote MCP (OAuth). Compose for projects that implement payment ports.",
+  "servers": [
+    "context7",
+    "stripe"
+  ]
+}

@@ -42,10 +42,13 @@ For each entry, decide:
 ## 3. Audit the shared kit
 
 - [ ] Run [agent-arch-drift](../skills/agent-arch-drift/SKILL.md) against the kit repo: duplicate rules, contradictions, skills that grew too long
+- [ ] **Skill length budget:** flag role `SKILL.md` bodies over ~150 lines; move procedure detail into [SOPs/](../SOPs/)
 - [ ] Check [skills/README.md](../skills/README.md) taxonomy still matches actual skills
+- [ ] Confirm skill frontmatter `mcp:` ids exist in [mcps/catalog.json](../mcps/catalog.json)
 - [ ] Confirm [AGENTS.md](../AGENTS.md) is canonical and [GEMINI.md](../GEMINI.md) still points to it
-- [ ] Spot-check recent `handover/<project>/` runs: was test impact aligned? Was an XFN matrix present (including skip reasons)? Were apply suites greened?
+- [ ] Spot-check recent `handover/<project>/` runs: was test impact aligned? Was an XFN matrix present (including skip reasons)? Were apply suites greened? Was TDD gear 2 done in-session (not a late adapter-only phase)?
 - [ ] Confirm stack profiles still list XFN tooling defaults consistent with [agent-xfn](../skills/agent-xfn/SKILL.md)
+- [ ] Run [kit-eval-harness.md](./kit-eval-harness.md) golden prompts after routing changes
 
 ## 4. Commit promoted changes
 

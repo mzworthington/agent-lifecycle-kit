@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -109,6 +109,56 @@
       "transport": "http",
       "phases": ["impl", "adapter", "telemetry"],
       "triggers": ["Cloudflare", "Workers", "DNS", "R2", "Pages", "Wrangler"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "sentry",
+      "name": "Sentry",
+      "summary": "Official Sentry remote MCP for issues, performance, and Seer-assisted RCA (OAuth).",
+      "transport": "http",
+      "phases": ["debug", "telemetry", "impl"],
+      "triggers": ["Sentry", "error tracking", "issue triage", "performance regression"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "summary": "Semgrep static analysis MCP for security vulnerability scans during audit.",
+      "transport": "stdio",
+      "phases": ["audit", "security"],
+      "triggers": ["Semgrep", "SAST", "static analysis", "security scan"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe",
+      "summary": "Official Stripe remote MCP for Payments API tools and docs search (OAuth).",
+      "transport": "http",
+      "phases": ["impl", "tdd", "adapter"],
+      "triggers": ["Stripe", "payments", "billing", "subscriptions", "checkout"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "figma",
+      "name": "Figma",
+      "summary": "Figma design context via Framelink stdio MCP (personal access token).",
+      "transport": "stdio",
+      "phases": ["impl", "spec", "xfn"],
+      "triggers": ["Figma", "design file", "frame", "UI mock"],
+      "requiredEnv": ["FIGMA_API_KEY"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "vercel",
+      "name": "Vercel",
+      "summary": "Official Vercel remote MCP for projects, deployments, and docs (OAuth).",
+      "transport": "http",
+      "phases": ["impl", "telemetry", "release"],
+      "triggers": ["Vercel", "deployment", "preview URL", "Next.js deploy"],
       "requiredEnv": [],
       "enabledByDefault": false
     },

@@ -1,0 +1,8 @@
+{
+  "name": "design",
+  "description": "Design-to-code: Figma context for UI delivery. Requires FIGMA_API_KEY. Keep out of default global profile.",
+  "servers": [
+    "context7",
+    "figma"
+  ]
+}

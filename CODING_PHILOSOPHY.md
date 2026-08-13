@@ -88,8 +88,9 @@ Prefer the smallest change that satisfies the requirement. Architecture (hexagon
 
 - Edit existing files before creating new ones.
 - Add types only when they clarify invariants or shared contracts - not for one-off plumbing.
-- Skip the full lifecycle (spec / TDD / adapter / audit) for bug fixes, refactors, and small UI tweaks unless the user asks for it.
+- Skip the full lifecycle (spec / TDD short loop / XFN / audit) for bug fixes, refactors, and small UI tweaks unless the user asks for it.
 - When TDD applies, **green means minimal** - no "while I'm here" refactors or speculative APIs.
+- Prefer **gear 2 thin adapters in the same TDD session** as the port they serve; reserve `agent-adapter` for large deep-dives.
 
 **Reject:**
 
@@ -102,6 +103,8 @@ Prefer the smallest change that satisfies the requirement. Architecture (hexagon
 Depending on the active technology stack, load the appropriate skill:
 
 - [TypeScript / Node.js](./skills/lang-typescript/SKILL.md)
+- [Python](./skills/lang-python/SKILL.md)
+- [Go](./skills/lang-go/SKILL.md)
 - [Java](./skills/lang-java/SKILL.md)
 - [C#](./skills/lang-csharp/SKILL.md)
 
@@ -113,6 +116,7 @@ Depending on the framework used, load the appropriate skill:
 
 - [Next.js (App Router)](./skills/framework-next/SKILL.md)
 - [Nuxt.js](./skills/framework-nuxt/SKILL.md)
+- [FastAPI](./skills/framework-fastapi/SKILL.md)
 - [Spring Boot](./skills/framework-springboot/SKILL.md)
 - [Quarkus](./skills/framework-quarkus/SKILL.md)
 - [.NET (ASP.NET Core)](./skills/framework-dotnet/SKILL.md)
@@ -128,7 +132,7 @@ Do not write implementation code before establishing behavioral or technical con
 - **Cross-functional requirements are tested, not assumed:** Spec captures measurable quality criteria; Design selects an XFN matrix (browser E2E, a11y, security tests, load) with apply/skip rationale; suites join the catalog. Procedure: [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md). Role: [agent-xfn](./skills/agent-xfn/SKILL.md).
 - **TDD / red-green-refactor:** Propose failing tests first. **Never skip the red phase** - run tests and confirm failure before implementation.
 - **BDD / Gherkin:** For rich domain behavior, write `Given-When-Then` scenarios before code. Scenarios must use ubiquitous language from the domain glossary.
-- **Test variety:** Unit tests for domain logic; slice/handler tests for use cases; integration tests for adapters; browser E2E for critical journeys; accessibility, security, and load suites when the XFN matrix applies.
+- **Test variety:** Unit tests for domain logic; slice/handler tests for use cases; integration tests for adapters (often in the same TDD session as gear 2); browser E2E for critical journeys; accessibility, security, and load suites when the XFN matrix applies.
 - **Test isolation:** Mock outbound ports in domain and slice tests. Do not boot full framework contexts for pure logic. Keep destructive load and E2E fixtures off shared production.
 - **Secure coding:** Treat all input as untrusted. Parameterize queries; manage secrets via environment variables (`.env.example`).
 
