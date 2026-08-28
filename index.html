@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent Lifecycle Kit — Autonomous AI Agent Architecture & Governance</title>
-  <meta name="description" content="Production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf & Copilot. Enforce hexagonal architecture, TDD, security audits, and MCP profiles.">
-  <meta name="keywords" content="AI coding assistant, agent lifecycle framework, Cursor rules, Gemini CLI, Claude Code, Windsurf rules, GitHub Copilot, Hexagonal Architecture, TDD, Model Context Protocol, MCP, software governance, AI code review">
+  <meta name="description"
+    content="Production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf & Copilot. Enforce hexagonal architecture, TDD, security audits, and MCP profiles.">
+  <meta name="keywords"
+    content="AI coding assistant, agent lifecycle framework, Cursor rules, Gemini CLI, Claude Code, Windsurf rules, GitHub Copilot, Hexagonal Architecture, TDD, Model Context Protocol, MCP, software governance, AI code review">
   <meta name="author" content="mzworthington">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#090d16">
@@ -18,7 +21,8 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
   <meta property="og:title" content="Agent Lifecycle Kit — Autonomous AI Agent Architecture & Governance">
-  <meta property="og:description" content="Production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf & Copilot. Enforce hexagonal architecture, TDD, security audits, and MCP profiles.">
+  <meta property="og:description"
+    content="Production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf & Copilot. Enforce hexagonal architecture, TDD, security audits, and MCP profiles.">
   <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -29,7 +33,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
   <meta name="twitter:title" content="Agent Lifecycle Kit — Autonomous AI Agent Architecture & Governance">
-  <meta name="twitter:description" content="Production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf & Copilot.">
+  <meta name="twitter:description"
+    content="Production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf & Copilot.">
   <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta name="twitter:image:alt" content="Agent Lifecycle Kit Framework Banner">
 
@@ -56,9 +61,12 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
-  <!-- Marked & Mermaid -->
+  <!-- D3, Marked & Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
@@ -197,14 +205,234 @@
     /* Hero Section */
     .hero {
       text-align: center;
-      padding: 3rem 1rem 4rem;
+      padding: 2.5rem 1rem 3.5rem;
     }
 
-    .hero-banner {
-      max-width: 100%;
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-accent);
-      margin-bottom: 2.5rem;
+    .hero-d3-wrapper {
+      width: 100%;
+      height: 720px;
+      background: radial-gradient(circle at center, rgba(16, 23, 38, 0.95) 0%, rgba(6, 9, 17, 0.99) 100%);
+      border-top: 0;
+      border-bottom: 1px solid var(--border-accent);
+      border-radius: 0;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(99, 102, 241, 0.15);
+      position: relative;
+      overflow: hidden;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .cyber-header-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-accent);
+      border-radius: 14px;
+      padding: 0.6rem 1rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .cyber-status-badge {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cyber-filter-bar {
+      display: flex;
+      gap: 0.3rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-accent);
+      border-radius: 10px;
+      padding: 0.3rem;
+    }
+
+    .cyber-hud-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+    }
+
+
+
+    .hero-d3-svg {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    .hero-d3-svg:active {
+      cursor: grabbing;
+    }
+
+    .cyber-hud-controls {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 60;
+    }
+
+    .cyber-status-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-accent);
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 60;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse-dot 1.5s infinite alternate;
+    }
+
+    @keyframes pulse-dot {
+      0% {
+        opacity: 0.4;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .cyber-btn {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .cyber-btn:hover {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
+    }
+
+    .d3-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-accent);
+      border-radius: 12px;
+      padding: 0.85rem 1.1rem;
+      color: #fff;
+      font-size: 0.85rem;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(99, 102, 241, 0.25);
+      opacity: 0;
+      transition: opacity 0.18s ease, transform 0.05s linear;
+      z-index: 100;
+      max-width: 340px;
+      text-align: left;
+    }
+
+    .tooltip-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.45rem;
+    }
+
+    .tooltip-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .tooltip-badge {
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid var(--primary);
+      color: var(--primary-light);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-left: auto;
+    }
+
+    .tooltip-desc {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin-bottom: 0.55rem;
+    }
+
+    .tooltip-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tooltip-tags .tag {
+      background: rgba(255, 255, 255, 0.06);
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
     }
 
     .hero-title {
@@ -309,9 +537,17 @@
       border-radius: 50%;
     }
 
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
+    .dot-red {
+      background: #ef4444;
+    }
+
+    .dot-yellow {
+      background: #f59e0b;
+    }
+
+    .dot-green {
+      background: #10b981;
+    }
 
     .cli-code {
       color: #38bdf8;
@@ -319,9 +555,18 @@
       line-height: 1.8;
     }
 
-    .cli-code span.cmd { color: #f43f5e; }
-    .cli-code span.arg { color: #a7f3d0; }
-    .cli-code span.comment { color: #64748b; font-style: italic; }
+    .cli-code span.cmd {
+      color: #f43f5e;
+    }
+
+    .cli-code span.arg {
+      color: #a7f3d0;
+    }
+
+    .cli-code span.comment {
+      color: #64748b;
+      font-style: italic;
+    }
 
     /* Main Docs Content */
     .docs-wrapper {
@@ -329,26 +574,84 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 2.5rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
-    .docs-content h1, .docs-content h2, .docs-content h3 {
+    .docs-content h1,
+    .docs-content h2,
+    .docs-content h3 {
       color: var(--text);
       margin-top: 1.75rem;
       margin-bottom: 0.75rem;
     }
 
-    .docs-content h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-    .docs-content h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
-    .docs-content p { color: var(--text-muted); margin-bottom: 1rem; }
-    .docs-content ul, .docs-content ol { color: var(--text-muted); margin-left: 1.5rem; margin-bottom: 1rem; }
-    .docs-content code { background: rgba(255,255,255,0.08); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em; }
-    .docs-content pre { background: #060911; padding: 1.25rem; border-radius: 10px; overflow-x: auto; margin-bottom: 1.25rem; border: 1px solid var(--border); }
-    .docs-content pre code { background: none; padding: 0; }
-    .docs-content table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
-    .docs-content th, .docs-content td { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
-    .docs-content th { background: rgba(255,255,255,0.04); color: var(--text); }
-    .docs-content td { color: var(--text-muted); }
+    .docs-content h1 {
+      font-size: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    .docs-content h2 {
+      font-size: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+
+    .docs-content p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .docs-content ul,
+    .docs-content ol {
+      color: var(--text-muted);
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .docs-content code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+    }
+
+    .docs-content pre {
+      background: #060911;
+      padding: 1.25rem;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border);
+    }
+
+    .docs-content pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .docs-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+
+    .docs-content th,
+    .docs-content td {
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+
+    .docs-content th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .docs-content td {
+      color: var(--text-muted);
+    }
 
     footer {
       text-align: center;
@@ -360,6 +663,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="glow-1"></div>
@@ -376,25 +680,39 @@
         <a href="#cli" class="nav-link">CLI</a>
         <a href="#flow" class="nav-link">Lifecycle Flow</a>
         <a href="#docs" class="nav-link">Documentation</a>
-        <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github">GitHub Repository</a>
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github">GitHub
+          Repository</a>
       </div>
     </div>
   </header>
+
+  <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
+  <div id="hero-d3-container" class="hero-d3-wrapper"
+    aria-label="Interactive Autonomous AI Agent Neural Mesh Simulation">
+  </div>
 
   <main class="container">
 
     <!-- Hero Section -->
     <section class="hero">
-      <img src="./assets/kit_banner.png" alt="Kit Banner" class="hero-banner">
       <h1 class="hero-title">Autonomous AI Agent Lifecycle & Governance</h1>
-      <p class="hero-subtitle">Consistent, production-grade AI-assisted software engineering across every IDE and tech stack.</p>
+      <p class="hero-subtitle">Consistent, production-grade AI-assisted software engineering across every IDE and tech
+        stack.</p>
 
       <div class="badge-bar">
-        <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions" alt="CI"></a>
-        <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github" alt="Docs"></a>
-        <a href="./evals/"><img src="https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target" alt="Evals"></a>
-        <a href="./package.json"><img src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs" alt="Node"></a>
-        <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge" alt="License"></a>
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
+            src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
+            alt="CI"></a>
+        <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github"
+            alt="Docs"></a>
+        <a href="./evals/"><img
+            src="https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target"
+            alt="Evals"></a>
+        <a href="./package.json"><img
+            src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs"
+            alt="Node"></a>
+        <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
+            alt="License"></a>
       </div>
     </section>
 
@@ -403,28 +721,27 @@
       <div class="card">
         <div class="card-icon">🛡️</div>
         <div class="card-title">Architectural Mandates</div>
-        <div class="card-desc">Strict Hexagonal Architecture, DDD domain invariants, vertical slices, and clean code guardrails.</div>
+        <div class="card-desc">Strict Hexagonal Architecture, DDD domain invariants, vertical slices, and clean code
+          guardrails.</div>
       </div>
       <div class="card">
         <div class="card-icon">🔄</div>
         <div class="card-title">Multi-IDE Rule Sync</div>
-        <div class="card-desc">Write core standards in AGENTS.md once. Kit syncs across Cursor, Gemini CLI, Claude, Windsurf, & Copilot.</div>
+        <div class="card-desc">Write core standards in AGENTS.md once. Kit syncs across Cursor, Gemini CLI, Claude,
+          Windsurf, & Copilot.</div>
       </div>
       <div class="card">
         <div class="card-icon">🎯</div>
-        <div class="card-title">44 Specialist Skills</div>
-        <div class="card-desc">Modular skills covering lifecycle phases (spec, TDD, security, arch-drift), tech stacks, and domain profiles.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🧪</div>
-        <div class="card-title">100% Evaluation Engine</div>
-        <div class="card-desc">Live trigger benchmark harness running 66 test cases across 37 suites with 100% accuracy validation.</div>
+        <div class="card-title">44 Specialist Skills & Evals</div>
+        <div class="card-desc">Modular skills covering lifecycle phases, tech stacks, and domain profiles—backed by a
+          live harness.</div>
       </div>
     </section>
 
     <!-- CLI Section -->
     <section id="cli">
-      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">🚀 Unified Terminal CLI (`kit`)</h2>
+      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">🚀 Unified Terminal CLI
+        (`kit`)</h2>
       <div class="cli-box">
         <div class="cli-header">
           <div class="cli-dots">
@@ -454,11 +771,16 @@
     <section id="docs" class="docs-wrapper" aria-label="Documentation Section">
       <div id="markdown-body" class="docs-content">
         <h2>About Agent Lifecycle Kit</h2>
-        <p>The Autonomous AI Agent Lifecycle, Architecture &amp; Governance Framework provides consistent, production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.</p>
+        <p>The Autonomous AI Agent Lifecycle, Architecture &amp; Governance Framework provides consistent,
+          production-grade AI-assisted software engineering across Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub
+          Copilot.</p>
         <h3>Core Architecture &amp; Philosophy</h3>
-        <p>Kit enforces Hexagonal Architecture (Ports &amp; Adapters), Domain-Driven Design (DDD) invariants, Vertical Slice Architecture, TDD short loops, and clean code principles. Avoid unhandled errors, swallowed exceptions, ASCII box diagrams, and architectural drift.</p>
+        <p>Kit enforces Hexagonal Architecture (Ports &amp; Adapters), Domain-Driven Design (DDD) invariants, Vertical
+          Slice Architecture, TDD short loops, and clean code principles. Avoid unhandled errors, swallowed exceptions,
+          ASCII box diagrams, and architectural drift.</p>
         <h3>Unified Terminal CLI (kit)</h3>
-        <p>Kit includes a TypeScript CLI executable from anywhere in your shell PATH for bootstrapping applications, managing Model Context Protocol (MCP) profiles, running security audits, and validating skill evaluations.</p>
+        <p>Kit includes a TypeScript CLI executable from anywhere in your shell PATH for bootstrapping applications,
+          managing Model Context Protocol (MCP) profiles, running security audits, and validating skill evaluations.</p>
       </div>
     </section>
 
@@ -466,36 +788,736 @@
 
   <footer>
     <p>Agent Lifecycle Kit is open source and released under the Unlicense (Public Domain).</p>
-    <p style="margin-top: 0.5rem; color: #64748b;">Autonomous AI Agent Lifecycle, Architecture & Governance Framework</p>
+    <p style="margin-top: 0.5rem; color: #64748b;">Autonomous AI Agent Lifecycle, Architecture & Governance Framework
+    </p>
   </footer>
 
   <script>
-    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+    let globalSimulation = null;
+    let globalLinks = [];
+    let globalNodes = [];
+    let globalSvg = null;
+    let globalZoom = null;
+    let globalParticlesGroup = null;
+    let globalNodeElements = null;
+    let globalLinkElements = null;
 
-    fetch('./README.md')
-      .then(res => res.text())
-      .then(text => {
-        // Strip header logo image since hero banner is already present
-        const cleanedText = text.replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '');
-        const html = marked.parse(cleanedText);
-        const container = document.getElementById('markdown-body');
-        container.innerHTML = html;
+    function hexPoints(r) {
+      const a = (2 * Math.PI) / 6;
+      const points = [];
+      for (let i = 0; i < 6; i++) {
+        const angle = i * a - Math.PI / 6;
+        points.push([r * Math.cos(angle), r * Math.sin(angle)]);
+      }
+      return 'M' + points.map(p => p.join(',')).join('L') + 'Z';
+    }
 
-        // Render Mermaid diagrams
-        const codeBlocks = container.querySelectorAll('code.language-mermaid');
-        codeBlocks.forEach((block, index) => {
-          const pre = block.parentElement;
-          const div = document.createElement('div');
-          div.className = 'mermaid';
-          div.textContent = block.textContent;
-          pre.replaceWith(div);
+    function initHeroD3() {
+      const container = document.getElementById('hero-d3-container');
+      if (!container) return;
+
+      const width = container.clientWidth || 1600;
+      const height = container.clientHeight || 720;
+
+      const existingSvg = container.querySelector('svg');
+      if (existingSvg) existingSvg.remove();
+      const existingTooltip = container.querySelector('.d3-tooltip');
+      if (existingTooltip) existingTooltip.remove();
+
+      const tooltip = d3.select(container)
+        .append('div')
+        .attr('class', 'd3-tooltip');
+
+      const svg = d3.select(container)
+        .append('svg')
+        .attr('class', 'hero-d3-svg')
+        .attr('viewBox', [0, 0, width, height])
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .style('width', '100%')
+        .style('height', '100%')
+        .style('transition', 'transform 0.15s ease-out');
+
+      globalSvg = svg;
+
+      // 3D Parallax
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+        const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+        svg.style('transform', `perspective(1000px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`);
+      });
+
+      container.addEventListener('mouseleave', () => {
+        svg.style('transform', 'perspective(1000px) rotateX(0deg) rotateY(0deg)');
+      });
+
+      const defs = svg.append('defs');
+
+      // High Intensity Glow
+      const filter = defs.append('filter')
+        .attr('id', 'cyber-glow')
+        .attr('x', '-50%')
+        .attr('y', '-50%')
+        .attr('width', '200%')
+        .attr('height', '200%');
+
+      filter.append('feGaussianBlur').attr('stdDeviation', '4.5').attr('result', 'coloredBlur');
+      const feMerge = filter.append('feMerge');
+      feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+      feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+      const gradient = defs.append('linearGradient')
+        .attr('id', 'circuit-grad')
+        .attr('x1', '0%')
+        .attr('y1', '0%')
+        .attr('x2', '100%')
+        .attr('y2', '100%');
+      gradient.append('stop').attr('offset', '0%').attr('stop-color', '#38bdf8').attr('stop-opacity', 0.9);
+      gradient.append('stop').attr('offset', '50%').attr('stop-color', '#6366f1').attr('stop-opacity', 0.9);
+      gradient.append('stop').attr('offset', '100%').attr('stop-color', '#a855f7').attr('stop-opacity', 0.9);
+
+      const nodes = [
+        // Central Engine
+        { id: 'KIT_CORE', label: 'KIT CORE', group: 'core', category: 'core', icon: '⚡', radius: 46, color: '#6366f1', desc: 'Autonomous AI Agent Lifecycle, Architecture & Governance Engine.', tags: ['#hexagonal', '#tdd', '#security', '#telemetry', '#multi-ide'] },
+
+        // 5 Primary Sector Hubs
+        { id: 'sec-lifecycle', label: 'LIFECYCLE ROLES', group: 'sector', category: 'lifecycle', icon: '🔄', radius: 30, color: '#a855f7', desc: 'Lifecycle role skills governing every phase from idea stress-testing to release.', tags: ['#agent-spec', '#agent-tdd', '#agent-security'] },
+        { id: 'sec-lang', label: 'LANGUAGES', group: 'sector', category: 'lang', icon: '💻', radius: 28, color: '#38bdf8', desc: '7 strict language profiles enforcing clean code & idiomatic patterns.', tags: ['#typescript', '#rust', '#python', '#go', '#java', '#csharp', '#hcl'] },
+        { id: 'sec-framework', label: 'FRAMEWORKS', group: 'sector', category: 'framework', icon: '⚙️', radius: 28, color: '#10b981', desc: '10 framework profiles for React 19, Next.js, Express, Spring Boot, FastAPI & IaC.', tags: ['#nextjs', '#react', '#express', '#springboot', '#fastapi'] },
+        { id: 'sec-domain', label: 'DOMAINS', group: 'sector', category: 'profile', icon: '🛡️', radius: 28, color: '#f59e0b', desc: '4 domain profiles for API contracts, IaC security, MCP, and Observability.', tags: ['#profile-api', '#profile-iac', '#profile-mcp', '#profile-obs'] },
+        { id: 'sec-ide', label: 'MULTI-IDE SYNC', group: 'sector', category: 'ide', icon: '🌐', radius: 28, color: '#ec4899', desc: 'Single source of truth AGENTS.md auto-synced across Cursor, Gemini, Claude, Windsurf & Copilot.', tags: ['#cursor', '#gemini', '#claude', '#windsurf', '#copilot'] },
+
+        // 4 Lifecycle Sub-Hubs
+        { id: 'sub-plan', label: 'PLAN & SPEC', group: 'subsector', category: 'lifecycle', icon: '📝', radius: 20, color: '#c084fc', desc: 'Requirements, grilling, BDD specs & acceptance criteria.', tags: ['#spec', '#grilling', '#bdd'] },
+        { id: 'sub-build', label: 'BUILD & TDD', group: 'subsector', category: 'lifecycle', icon: '🧪', radius: 20, color: '#60a5fa', desc: 'TDD short loops, adapters, UI delivery & API contracts.', tags: ['#tdd', '#adapters', '#ui'] },
+        { id: 'sub-verify', label: 'AUDIT & GOVERN', group: 'subsector', category: 'lifecycle', icon: '🔒', radius: 20, color: '#f87171', desc: 'Security audit, architecture drift, ADRs & pre-commit gates.', tags: ['#security', '#arch-drift', '#adr'] },
+        { id: 'sub-ops', label: 'OPS & TELEMETRY', group: 'subsector', category: 'lifecycle', icon: '📈', radius: 20, color: '#34d399', desc: 'OpenTelemetry, profiling, RCA debugging, pruning & release.', tags: ['#telemetry', '#perf', '#debug'] },
+
+        // Sub-Plan Skills
+        { id: 'agent-orchestrator', label: 'orchestrator', group: 'role', category: 'lifecycle', icon: '🎯', radius: 15, color: '#a855f7', desc: 'Routes work across lifecycle phases: Grilling → Spec → TDD → Security → Telemetry.', tags: ['#orchestration', '#phase-routing'] },
+        { id: 'agent-grilling', label: 'grilling', group: 'role', category: 'lifecycle', icon: '🔥', radius: 14, color: '#ec4899', desc: 'Idea stress-testing & decision tree frontier exploration.', tags: ['#stress-testing', '#design-tree'] },
+        { id: 'agent-grill-me', label: 'grill-me', group: 'role', category: 'lifecycle', icon: '🌶️', radius: 14, color: '#ec4899', desc: 'Stateless interactive design interview mode.', tags: ['#grill-me', '#interview'] },
+        { id: 'agent-spec', label: 'spec', group: 'role', category: 'lifecycle', icon: '📝', radius: 15, color: '#8b5cf6', desc: 'BDD requirement specification & acceptance criteria.', tags: ['#bdd', '#gherkin', '#acceptance'] },
+
+        // Sub-Build Skills
+        { id: 'agent-tdd', label: 'tdd', group: 'role', category: 'lifecycle', icon: '🧪', radius: 16, color: '#3b82f6', desc: 'TDD short loop (gear 1 domain invariants + gear 2 thin adapters).', tags: ['#tdd', '#behavior-catalog', '#gear-1', '#gear-2'] },
+        { id: 'agent-adapter', label: 'adapter', group: 'role', category: 'lifecycle', icon: '🔌', radius: 14, color: '#38bdf8', desc: 'Hexagonal adapter deep-dive implementation.', tags: ['#ports-and-adapters', '#infrastructure'] },
+        { id: 'agent-ui', label: 'ui', group: 'role', category: 'lifecycle', icon: '🎨', radius: 14, color: '#818cf8', desc: 'UI component delivery & accessibility implementation.', tags: ['#ui', '#a11y', '#components'] },
+        { id: 'agent-copy', label: 'copy', group: 'role', category: 'lifecycle', icon: '✍️', radius: 14, color: '#f43f5e', desc: 'UI microcopy, error text, tone tuning & messaging.', tags: ['#copywriting', '#microcopy', '#tone'] },
+        { id: 'agent-api-contract', label: 'api-contract', group: 'role', category: 'lifecycle', icon: '📜', radius: 14, color: '#10b981', desc: 'OpenAPI & AsyncAPI contract specifications.', tags: ['#openapi', '#asyncapi', '#contracts'] },
+        { id: 'agent-migration', label: 'migration', group: 'role', category: 'lifecycle', icon: '🗄️', radius: 14, color: '#f59e0b', desc: 'Database expand-contract schema migration SOP.', tags: ['#db-migration', '#expand-contract'] },
+
+        // Sub-Verify Skills
+        { id: 'agent-xfn', label: 'xfn', group: 'role', category: 'lifecycle', icon: '📊', radius: 14, color: '#06b6d4', desc: 'Cross-functional quality matrix (accessibility, load, security).', tags: ['#xfn', '#a11y', '#load-matrix'] },
+        { id: 'agent-security', label: 'security', group: 'role', category: 'lifecycle', icon: '🔒', radius: 15, color: '#ef4444', desc: 'Hardened OWASP review & prompt injection audit.', tags: ['#owasp', '#security-audit', '#secrets'] },
+        { id: 'agent-arch-drift', label: 'arch-drift', group: 'role', category: 'lifecycle', icon: '📐', radius: 14, color: '#f59e0b', desc: 'Hexagonal boundary & zero-drift architecture audit.', tags: ['#hexagonal', '#arch-drift'] },
+        { id: 'agent-adr', label: 'adr', group: 'role', category: 'lifecycle', icon: '📋', radius: 14, color: '#8b5cf6', desc: 'MADR Architecture Decision Record creation under docs/ADRs/.', tags: ['#adr', '#madr', '#architecture-decisions'] },
+        { id: 'agent-review', label: 'review', group: 'role', category: 'lifecycle', icon: '👀', radius: 14, color: '#38bdf8', desc: 'PR boundary & architectural review.', tags: ['#pr-review', '#boundaries'] },
+        { id: 'agent-pre-commit', label: 'pre-commit', group: 'role', category: 'lifecycle', icon: '✅', radius: 14, color: '#14b8a6', desc: 'Pre-commit quality & security gate.', tags: ['#pre-commit', '#quality-gate'] },
+
+        // Sub-Ops Skills
+        { id: 'agent-debug', label: 'debug', group: 'role', category: 'lifecycle', icon: '🔍', radius: 15, color: '#38bdf8', desc: 'Hypothesis-driven RCA debugging & proof gates.', tags: ['#rca', '#hypothesis', '#debugging'] },
+        { id: 'agent-telemetry', label: 'telemetry', group: 'role', category: 'lifecycle', icon: '📈', radius: 14, color: '#10b981', desc: 'OpenTelemetry runtime SLO metrics mapping.', tags: ['#opentelemetry', '#slo', '#metrics'] },
+        { id: 'agent-perf-opt', label: 'perf-opt', group: 'role', category: 'lifecycle', icon: '⚡', radius: 14, color: '#10b981', desc: 'Memory leak profiling, CPU bottlenecks & EXPLAIN ANALYZE.', tags: ['#profiling', '#memory-leaks', '#perf'] },
+        { id: 'agent-prune', label: 'prune', group: 'role', category: 'lifecycle', icon: '✂️', radius: 14, color: '#f97316', desc: 'Dead-code & complexity hotspot pruning.', tags: ['#dead-code', '#prune', '#hotspots'] },
+        { id: 'agent-incident', label: 'incident', group: 'role', category: 'lifecycle', icon: '🚨', radius: 14, color: '#ef4444', desc: 'Incident triage & emergency stabilization.', tags: ['#incident', '#stabilize'] },
+        { id: 'agent-release', label: 'release', group: 'role', category: 'lifecycle', icon: '🚀', radius: 14, color: '#10b981', desc: 'Release management & conventional commits.', tags: ['#release', '#conventional-commits'] },
+        { id: 'agent-docs', label: 'docs', group: 'role', category: 'lifecycle', icon: '📚', radius: 14, color: '#6366f1', desc: 'Documentation generation & architecture diagrams.', tags: ['#docs', '#mermaid'] },
+
+        // 7 Language Profiles
+        { id: 'lang-typescript', label: 'TypeScript', group: 'lang', category: 'lang', icon: '💻', radius: 14, color: '#38bdf8', desc: 'Strict typing, ESM & clean code profile.', tags: ['#typescript', '#esm', '#strict'] },
+        { id: 'lang-rust', label: 'Rust', group: 'lang', category: 'lang', icon: '🦀', radius: 14, color: '#f97316', desc: 'Strict memory safety & borrow checker profile.', tags: ['#rust', '#memory-safety', '#cargo'] },
+        { id: 'lang-python', label: 'Python', group: 'lang', category: 'lang', icon: '🐍', radius: 14, color: '#eab308', desc: 'Type hints, pytest & clean code profile.', tags: ['#python', '#type-hints', '#pytest'] },
+        { id: 'lang-go', label: 'Go', group: 'lang', category: 'lang', icon: '🐹', radius: 14, color: '#06b6d4', desc: 'Idiomatic concurrency & interface guardrails.', tags: ['#go', '#concurrency', '#interfaces'] },
+        { id: 'lang-java', label: 'Java', group: 'lang', category: 'lang', icon: '☕', radius: 14, color: '#ec4899', desc: 'Immutability & clean code profile.', tags: ['#java', '#immutability'] },
+        { id: 'lang-csharp', label: 'C#', group: 'lang', category: 'lang', icon: '♯', radius: 14, color: '#8b5cf6', desc: 'Value types & clean code profile.', tags: ['#csharp', '#dotnet'] },
+        { id: 'lang-hcl', label: 'HCL', group: 'lang', category: 'lang', icon: '🏗️', radius: 14, color: '#64748b', desc: 'Infrastructure as Code profile.', tags: ['#hcl', '#terraform'] },
+
+        // 10 Framework Profiles
+        { id: 'framework-react', label: 'React 19', group: 'framework', category: 'framework', icon: '⚛️', radius: 13, color: '#06b6d4', desc: 'React 19 SPA & component profile.', tags: ['#react', '#jsx'] },
+        { id: 'framework-next', label: 'Next.js', group: 'framework', category: 'framework', icon: '▲', radius: 13, color: '#f8fafc', desc: 'App router & server components profile.', tags: ['#nextjs', '#app-router'] },
+        { id: 'framework-express', label: 'Express', group: 'framework', category: 'framework', icon: '🚂', radius: 13, color: '#22c55e', desc: 'Node backend router & middleware profile.', tags: ['#express', '#middleware'] },
+        { id: 'framework-fastapi', label: 'FastAPI', group: 'framework', category: 'framework', icon: '⚡', radius: 13, color: '#10b981', desc: 'Async routing & Pydantic profile.', tags: ['#fastapi', '#pydantic'] },
+        { id: 'framework-springboot', label: 'Spring Boot', group: 'framework', category: 'framework', icon: '🍃', radius: 13, color: '#84cc16', desc: 'Spring Boot hexagonal architecture profile.', tags: ['#springboot', '#spring'] },
+        { id: 'framework-quarkus', label: 'Quarkus', group: 'framework', category: 'framework', icon: '🚀', radius: 13, color: '#ef4444', desc: 'Supersonic subatomic Java profile.', tags: ['#quarkus', '#graalvm'] },
+        { id: 'framework-dotnet', label: '.NET', group: 'framework', category: 'framework', icon: '🔷', radius: 13, color: '#8b5cf6', desc: '.NET Web API & architecture profile.', tags: ['#dotnet', '#aspnet'] },
+        { id: 'framework-nuxt', label: 'Nuxt', group: 'framework', category: 'framework', icon: '💚', radius: 13, color: '#10b981', desc: 'Vue 3 & SSR profile.', tags: ['#nuxt', '#vue'] },
+        { id: 'framework-terraform', label: 'Terraform', group: 'framework', category: 'framework', icon: '🗺️', radius: 13, color: '#6366f1', desc: 'Terraform provider & module profile.', tags: ['#terraform', '#hcl'] },
+        { id: 'framework-pulumi', label: 'Pulumi', group: 'framework', category: 'framework', icon: '🔮', radius: 13, color: '#a855f7', desc: 'Programming language IaC profile.', tags: ['#pulumi', '#iac'] },
+
+        // 4 Domain Profiles
+        { id: 'profile-api', label: 'api', group: 'profile', category: 'profile', icon: '📡', radius: 14, color: '#ec4899', desc: 'REST & Event Contract specification profile.', tags: ['#api', '#rest', '#async'] },
+        { id: 'profile-iac', label: 'iac', group: 'profile', category: 'profile', icon: '☁️', radius: 14, color: '#6366f1', desc: 'Secure Cloud Adoption Framework profile.', tags: ['#iac', '#cloud-security'] },
+        { id: 'profile-mcp', label: 'mcp', group: 'profile', category: 'profile', icon: '🔌', radius: 15, color: '#a855f7', desc: 'Model Context Protocol server integration profile.', tags: ['#mcp', '#tools'] },
+        { id: 'profile-observability', label: 'observability', group: 'profile', category: 'profile', icon: '📊', radius: 14, color: '#38bdf8', desc: 'OpenTelemetry metrics & tracing profile.', tags: ['#tracing', '#metrics'] },
+
+        // 5 IDE Targets
+        { id: 'ide-cursor', label: 'Cursor', group: 'ide', category: 'ide', icon: '🖱️', radius: 15, color: '#38bdf8', desc: 'Cursor rules (.cursorrules & .cursor/mcp.json).', tags: ['#cursor', '#mcp'] },
+        { id: 'ide-gemini', label: 'Gemini CLI', group: 'ide', category: 'ide', icon: '♊', radius: 15, color: '#8b5cf6', desc: 'Gemini CLI rules (GEMINI.md).', tags: ['#gemini', '#cli'] },
+        { id: 'ide-claude', label: 'Claude Code', group: 'ide', category: 'ide', icon: '🎭', radius: 15, color: '#f97316', desc: 'Claude Code rules (CLAUDE.md).', tags: ['#claude', '#anthropic'] },
+        { id: 'ide-windsurf', label: 'Windsurf', group: 'ide', category: 'ide', icon: '🏄', radius: 15, color: '#06b6d4', desc: 'Windsurf rules (.windsurfrules).', tags: ['#windsurf', '#codeium'] },
+        { id: 'ide-copilot', label: 'GitHub Copilot', group: 'ide', category: 'ide', icon: '🤖', radius: 15, color: '#10b981', desc: 'Copilot rules (.github/copilot-instructions.md).', tags: ['#copilot', '#github'] },
+
+        // kit CLI
+        { id: 'kit-cli', label: 'kit CLI', group: 'tool', category: 'tool', icon: '💻', radius: 18, color: '#10b981', desc: 'Unified terminal executable installed in $PATH.', tags: ['#cli', '#kit-init', '#kit-audit'] }
+      ];
+
+      const links = [
+        // Core to 5 Sector Hubs & Tool
+        { source: 'KIT_CORE', target: 'sec-lifecycle', value: 3.5 },
+        { source: 'KIT_CORE', target: 'sec-lang', value: 3.5 },
+        { source: 'KIT_CORE', target: 'sec-framework', value: 3.5 },
+        { source: 'KIT_CORE', target: 'sec-domain', value: 3.5 },
+        { source: 'KIT_CORE', target: 'sec-ide', value: 3.5 },
+        { source: 'KIT_CORE', target: 'kit-cli', value: 3 },
+
+        // sec-lifecycle Hub to 4 Sub-Hubs
+        { source: 'sec-lifecycle', target: 'sub-plan', value: 2.5 },
+        { source: 'sec-lifecycle', target: 'sub-build', value: 2.5 },
+        { source: 'sec-lifecycle', target: 'sub-verify', value: 2.5 },
+        { source: 'sec-lifecycle', target: 'sub-ops', value: 2.5 },
+
+        // Sub-Plan Hub -> Skills
+        { source: 'sub-plan', target: 'agent-orchestrator', value: 1.5 },
+        { source: 'sub-plan', target: 'agent-grilling', value: 1.5 },
+        { source: 'sub-plan', target: 'agent-grill-me', value: 1.5 },
+        { source: 'sub-plan', target: 'agent-spec', value: 1.8 },
+
+        // Sub-Build Hub -> Skills
+        { source: 'sub-build', target: 'agent-tdd', value: 2 },
+        { source: 'sub-build', target: 'agent-adapter', value: 1.5 },
+        { source: 'sub-build', target: 'agent-ui', value: 1.5 },
+        { source: 'sub-build', target: 'agent-copy', value: 1.5 },
+        { source: 'sub-build', target: 'agent-api-contract', value: 1.5 },
+        { source: 'sub-build', target: 'agent-migration', value: 1.5 },
+
+        // Sub-Verify Hub -> Skills
+        { source: 'sub-verify', target: 'agent-xfn', value: 1.8 },
+        { source: 'sub-verify', target: 'agent-security', value: 2 },
+        { source: 'sub-verify', target: 'agent-arch-drift', value: 1.8 },
+        { source: 'sub-verify', target: 'agent-adr', value: 1.5 },
+        { source: 'sub-verify', target: 'agent-review', value: 1.5 },
+        { source: 'sub-verify', target: 'agent-pre-commit', value: 1.8 },
+
+        // Sub-Ops Hub -> Skills
+        { source: 'sub-ops', target: 'agent-debug', value: 1.8 },
+        { source: 'sub-ops', target: 'agent-telemetry', value: 1.8 },
+        { source: 'sub-ops', target: 'agent-perf-opt', value: 1.5 },
+        { source: 'sub-ops', target: 'agent-prune', value: 1.5 },
+        { source: 'sub-ops', target: 'agent-incident', value: 1.5 },
+        { source: 'sub-ops', target: 'agent-release', value: 1.5 },
+        { source: 'sub-ops', target: 'agent-docs', value: 1.5 },
+
+        // sec-lang Hub -> Languages
+        { source: 'sec-lang', target: 'lang-typescript', value: 1.8 },
+        { source: 'sec-lang', target: 'lang-rust', value: 1.8 },
+        { source: 'sec-lang', target: 'lang-python', value: 1.8 },
+        { source: 'sec-lang', target: 'lang-go', value: 1.8 },
+        { source: 'sec-lang', target: 'lang-java', value: 1.5 },
+        { source: 'sec-lang', target: 'lang-csharp', value: 1.5 },
+        { source: 'sec-lang', target: 'lang-hcl', value: 1.5 },
+
+        // sec-framework Hub -> Frameworks
+        { source: 'sec-framework', target: 'framework-react', value: 1.8 },
+        { source: 'sec-framework', target: 'framework-next', value: 1.8 },
+        { source: 'sec-framework', target: 'framework-express', value: 1.8 },
+        { source: 'sec-framework', target: 'framework-fastapi', value: 1.8 },
+        { source: 'sec-framework', target: 'framework-springboot', value: 1.5 },
+        { source: 'sec-framework', target: 'framework-quarkus', value: 1.5 },
+        { source: 'sec-framework', target: 'framework-dotnet', value: 1.5 },
+        { source: 'sec-framework', target: 'framework-nuxt', value: 1.5 },
+        { source: 'sec-framework', target: 'framework-terraform', value: 1.5 },
+        { source: 'sec-framework', target: 'framework-pulumi', value: 1.5 },
+
+        // sec-domain Hub -> Domains
+        { source: 'sec-domain', target: 'profile-api', value: 1.8 },
+        { source: 'sec-domain', target: 'profile-iac', value: 1.8 },
+        { source: 'sec-domain', target: 'profile-mcp', value: 2 },
+        { source: 'sec-domain', target: 'profile-observability', value: 1.8 },
+
+        // sec-ide Hub -> IDE Targets
+        { source: 'sec-ide', target: 'ide-cursor', value: 2 },
+        { source: 'sec-ide', target: 'ide-gemini', value: 2 },
+        { source: 'sec-ide', target: 'ide-claude', value: 2 },
+        { source: 'sec-ide', target: 'ide-windsurf', value: 2 },
+        { source: 'sec-ide', target: 'ide-copilot', value: 2 }
+      ];
+
+      globalNodes = nodes;
+      globalLinks = links;
+
+      // Deterministic Celestial Constellation Layout Engine
+      const cx = width / 2;
+      const cy = height / 2;
+
+      const hubPos = {
+        'KIT_CORE': { x: cx, y: cy },
+        'sec-lifecycle': { x: cx - 340, y: cy - 140 },
+        'sec-lang': { x: cx + 340, y: cy - 140 },
+        'sec-framework': { x: cx + 280, y: cy + 200 },
+        'sec-domain': { x: cx - 360, y: cy + 180 },
+        'sec-ide': { x: cx + 560, y: cy },
+        'kit-cli': { x: cx - 110, y: cy }
+      };
+
+      const subCenter = {
+        'sub-plan': { x: cx - 520, y: cy - 250 },
+        'sub-build': { x: cx - 340, y: cy - 280 },
+        'sub-verify': { x: cx - 120, y: cy - 250 },
+        'sub-ops': { x: cx - 540, y: cy - 100 }
+      };
+
+      const fixedCoords = {
+        'agent-orchestrator': { x: cx - 650, y: cy - 300 },
+        'agent-grilling': { x: cx - 640, y: cy - 230 },
+        'agent-grill-me': { x: cx - 550, y: cy - 320 },
+        'agent-spec': { x: cx - 450, y: cy - 325 },
+
+        'agent-tdd': { x: cx - 340, y: cy - 340 },
+        'agent-adapter': { x: cx - 260, y: cy - 330 },
+        'agent-ui': { x: cx - 420, y: cy - 210 },
+        'agent-copy': { x: cx - 340, y: cy - 210 },
+        'agent-api-contract': { x: cx - 250, y: cy - 210 },
+        'agent-migration': { x: cx - 180, y: cy - 320 },
+
+        'agent-xfn': { x: cx - 120, y: cy - 335 },
+        'agent-security': { x: cx - 40, y: cy - 315 },
+        'agent-arch-drift': { x: cx + 40, y: cy - 280 },
+        'agent-adr': { x: cx - 150, y: cy - 185 },
+        'agent-review': { x: cx - 70, y: cy - 185 },
+        'agent-pre-commit': { x: cx + 10, y: cy - 185 },
+
+        'agent-debug': { x: cx - 660, y: cy - 160 },
+        'agent-telemetry': { x: cx - 660, y: cy - 90 },
+        'agent-perf-opt': { x: cx - 660, y: cy - 20 },
+        'agent-prune': { x: cx - 570, y: cy - 150 },
+        'agent-incident': { x: cx - 570, y: cy - 20 },
+        'agent-release': { x: cx - 480, y: cy - 30 },
+        'agent-docs': { x: cx - 460, y: cy - 100 },
+
+        'lang-typescript': { x: cx + 220, y: cy - 260 },
+        'lang-rust': { x: cx + 340, y: cy - 280 },
+        'lang-python': { x: cx + 460, y: cy - 260 },
+        'lang-go': { x: cx + 540, y: cy - 190 },
+        'lang-java': { x: cx + 480, y: cy - 100 },
+        'lang-csharp': { x: cx + 380, y: cy - 50 },
+        'lang-hcl': { x: cx + 260, y: cy - 70 },
+
+        'framework-react': { x: cx + 140, y: cy + 80 },
+        'framework-next': { x: cx + 260, y: cy + 80 },
+        'framework-express': { x: cx + 380, y: cy + 90 },
+        'framework-fastapi': { x: cx + 480, y: cy + 150 },
+        'framework-springboot': { x: cx + 520, y: cy + 230 },
+        'framework-quarkus': { x: cx + 460, y: cy + 300 },
+        'framework-dotnet': { x: cx + 340, y: cy + 310 },
+        'framework-nuxt': { x: cx + 220, y: cy + 300 },
+        'framework-terraform': { x: cx + 400, y: cy + 170 },
+        'framework-pulumi': { x: cx + 280, y: cy + 130 },
+
+        'profile-api': { x: cx - 540, y: cy + 120 },
+        'profile-iac': { x: cx - 560, y: cy + 220 },
+        'profile-mcp': { x: cx - 420, y: cy + 280 },
+        'profile-observability': { x: cx - 300, y: cy + 260 },
+
+        'ide-cursor': { x: cx + 680, y: cy - 110 },
+        'ide-gemini': { x: cx + 700, y: cy - 30 },
+        'ide-claude': { x: cx + 700, y: cy + 50 },
+        'ide-windsurf': { x: cx + 660, y: cy + 130 },
+        'ide-copilot': { x: cx + 600, y: cy - 160 }
+      };
+
+      nodes.forEach(n => {
+        let pos = { x: cx, y: cy };
+        if (hubPos[n.id]) pos = hubPos[n.id];
+        else if (subCenter[n.id]) pos = subCenter[n.id];
+        else if (fixedCoords[n.id]) pos = fixedCoords[n.id];
+
+        n.x = pos.x;
+        n.y = pos.y;
+        n.fx = pos.x;
+        n.fy = pos.y;
+      });
+
+      // Explicitly map link source & target to node objects
+      const nodeMap = new Map(nodes.map(n => [n.id, n]));
+      links.forEach(l => {
+        if (typeof l.source !== 'object') l.source = nodeMap.get(l.source);
+        if (typeof l.target !== 'object') l.target = nodeMap.get(l.target);
+      });
+
+      const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id))
+        .stop();
+
+      globalSimulation = simulation;
+
+      function curvedPath(d) {
+        if (!d.source.x || !d.target.x) return '';
+        const sx = d.source.x;
+        const sy = d.source.y;
+        const tx = d.target.x;
+        const ty = d.target.y;
+        const mx = (sx + tx) / 2;
+        const my = (sy + ty) / 2;
+        return `M ${sx},${sy} Q ${mx},${my} ${tx},${ty}`;
+      }
+
+      // Zoom Container Group
+      const g = svg.append('g').attr('class', 'zoom-container');
+
+      const zoom = d3.zoom()
+        .scaleExtent([0.3, 3.5])
+        .on('zoom', (event) => {
+          g.attr('transform', event.transform);
         });
 
-        mermaid.run();
-      })
-      .catch(err => {
-        document.getElementById('markdown-body').innerHTML = '<p style="color: #ef4444;">Failed to load README.md documentation.</p>';
+      svg.call(zoom);
+      globalZoom = zoom;
+
+      // Auto-fit Layout Engine for Responsive Mobile & Desktop Viewports
+      function handleResponsiveFit() {
+        const containerWidth = container.clientWidth || window.innerWidth;
+        if (containerWidth < 768) {
+          const fitScale = Math.max(0.4, containerWidth / 1600);
+          const tx = (containerWidth - 1600 * fitScale) / 2;
+          const ty = (720 - 720 * fitScale) / 2;
+          svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(fitScale));
+        } else {
+          svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+        }
+      }
+
+      handleResponsiveFit();
+      window.addEventListener('resize', handleResponsiveFit);
+
+      // Draw Curved Arcs
+      const linkGroup = g.append('g').attr('class', 'links');
+      const link = linkGroup.selectAll('path')
+        .data(links)
+        .join('path')
+        .attr('class', 'circuit-link')
+        .attr('d', curvedPath)
+        .attr('fill', 'none')
+        .attr('stroke', 'url(#circuit-grad)')
+        .attr('stroke-opacity', 0.6)
+        .attr('stroke-width', d => d.value || 1.8)
+        .attr('filter', 'url(#cyber-glow)');
+
+      globalLinkElements = link;
+
+      function dragstarted(event, d) {
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.x = event.x;
+        d.y = event.y;
+        d.fx = event.x;
+        d.fy = event.y;
+        d3.select(this).attr('transform', `translate(${d.x}, ${d.y})`);
+        link.attr('d', curvedPath);
+      }
+
+      function dragended(event, d) { }
+
+      // Render Nodes
+      const nodeGroup = g.append('g').attr('class', 'nodes');
+      const node = nodeGroup.selectAll('.node')
+        .data(nodes)
+        .join('g')
+        .attr('class', 'node-item')
+        .attr('transform', d => `translate(${d.x}, ${d.y})`)
+        .call(d3.drag()
+          .on('start', dragstarted)
+          .on('drag', dragged)
+          .on('end', dragended));
+
+      globalNodeElements = node;
+
+      node.append('path')
+        .attr('d', d => hexPoints(d.radius))
+        .attr('fill', 'rgba(15, 23, 42, 0.92)')
+        .attr('stroke', d => d.color)
+        .attr('stroke-width', d => d.group === 'core' ? 3.5 : (d.group === 'sector' ? 2.5 : 1.6))
+        .attr('filter', 'url(#cyber-glow)')
+        .style('cursor', 'pointer');
+
+      node.filter(d => d.group === 'core' || d.group === 'sector')
+        .append('path')
+        .attr('d', d => hexPoints(d.radius - 5))
+        .attr('fill', 'none')
+        .attr('stroke', d => d.color)
+        .attr('stroke-width', 1)
+        .attr('stroke-dasharray', '3 2')
+        .attr('stroke-opacity', 0.6);
+
+      node.append('text')
+        .text(d => d.icon || '⚡')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('font-size', d => d.group === 'core' ? '18px' : (d.group === 'sector' ? '14px' : '11px'))
+        .attr('pointer-events', 'none');
+
+      node.append('text')
+        .text(d => d.label)
+        .attr('text-anchor', d => {
+          if (d.id === 'KIT_CORE') return 'middle';
+          return d.x >= cx ? 'start' : 'end';
+        })
+        .attr('dx', d => {
+          if (d.id === 'KIT_CORE') return 0;
+          return d.x >= cx ? (d.radius + 8) : (-d.radius - 8);
+        })
+        .attr('dy', d => {
+          if (d.id === 'KIT_CORE') return d.radius + 16;
+          return 4;
+        })
+        .attr('fill', '#f1f5f9')
+        .attr('font-size', d => d.group === 'core' ? '12px' : (d.group === 'sector' ? '10px' : '8.5px'))
+        .attr('font-weight', d => d.group === 'core' ? '800' : (d.group === 'sector' ? '700' : '500'))
+        .attr('font-family', 'Inter, sans-serif')
+        .attr('pointer-events', 'none');
+
+      // Interactive Node Focus & Child Highlight Engine
+      let activeFocusId = null;
+
+      function focusNode(targetNode) {
+        if (!targetNode || activeFocusId === targetNode.id) {
+          activeFocusId = null;
+          globalNodeElements.transition().duration(300).style('opacity', 1);
+          globalLinkElements.transition().duration(300).style('stroke-opacity', 0.6);
+          return;
+        }
+
+        activeFocusId = targetNode.id;
+
+        const activeSet = new Set([targetNode.id]);
+
+        function traverse(currId) {
+          links.forEach(l => {
+            const sId = typeof l.source === 'object' ? l.source.id : l.source;
+            const tId = typeof l.target === 'object' ? l.target.id : l.target;
+
+            if (sId === currId && !activeSet.has(tId)) {
+              activeSet.add(tId);
+              traverse(tId);
+            }
+            if (tId === currId && !activeSet.has(sId)) {
+              activeSet.add(sId);
+            }
+          });
+        }
+
+        traverse(targetNode.id);
+
+        globalNodeElements.transition().duration(300)
+          .style('opacity', n => activeSet.has(n.id) ? 1 : 0.15);
+
+        globalLinkElements.transition().duration(300)
+          .style('stroke-opacity', l => {
+            const sId = typeof l.source === 'object' ? l.source.id : l.source;
+            const tId = typeof l.target === 'object' ? l.target.id : l.target;
+            return (activeSet.has(sId) && activeSet.has(tId)) ? 0.95 : 0.05;
+          });
+      }
+
+      svg.on('click', (event) => {
+        if (event.target === svg.node()) {
+          focusNode(null);
+        }
       });
+
+      // Hover Tooltip & Click Interaction
+      node.on('mouseover', (event, d) => {
+        const badge = (d.category || d.group).toUpperCase();
+        const tagsHtml = (d.tags || ['#kit', '#agent']).map(t => `<span class="tag">${t}</span>`).join('');
+
+        tooltip.style('opacity', 1)
+          .html(`
+            <div class="tooltip-header">
+              <span style="font-size:1.15rem;">${d.icon || '⚡'}</span>
+              <strong class="tooltip-title" style="color:${d.color || '#fff'};">${d.label}</strong>
+              <span class="tooltip-badge">${badge}</span>
+            </div>
+            <div class="tooltip-desc">${d.desc || 'Autonomous AI Agent Skill Profile.'}</div>
+            <div class="tooltip-tags">${tagsHtml}</div>
+          `);
+      })
+        .on('mousemove', (event) => {
+          const rect = container.getBoundingClientRect();
+          const tooltipWidth = 340;
+          let left = event.clientX - rect.left + 15;
+          let top = event.clientY - rect.top + 15;
+
+          if (left + tooltipWidth > rect.width) {
+            left = event.clientX - rect.left - tooltipWidth - 10;
+          }
+
+          tooltip.style('transform', `translate(${left}px, ${top}px)`);
+        })
+        .on('mouseleave', () => {
+          tooltip.style('opacity', 0);
+        })
+        .on('click', (event, d) => {
+          event.stopPropagation();
+          focusNode(d);
+
+          const shock = nodeGroup.append('circle')
+            .attr('cx', d.x)
+            .attr('cy', d.y)
+            .attr('r', d.radius)
+            .attr('fill', 'none')
+            .attr('stroke', d.color)
+            .attr('stroke-width', 3.5)
+            .attr('filter', 'url(#cyber-glow)');
+
+          shock.transition()
+            .duration(750)
+            .ease(d3.easeQuadOut)
+            .attr('r', d.radius + 75)
+            .attr('stroke-opacity', 0)
+            .remove();
+        });
+    }
+
+    // Category Filter Function
+    window.filterNodes = function (category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (!globalNodeElements) return;
+
+      if (category === 'all') {
+        globalNodeElements.style('opacity', 1);
+        if (globalLinkElements) globalLinkElements.style('opacity', 0.65);
+      } else {
+        globalNodeElements.style('opacity', d => (d.category === category || d.group === category || d.id === 'KIT_CORE') ? 1 : 0.15);
+        if (globalLinkElements) {
+          globalLinkElements.style('opacity', l => (l.source.category === category || l.target.category === category) ? 0.9 : 0.08);
+        }
+      }
+    };
+
+    // Initialize D3 Constellation Engine
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHeroD3);
+    } else {
+      initHeroD3();
+    }
+
+    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+    const FALLBACK_README = `
+# 🤖 Kit (Agent Lifecycle Kit)
+
+**The Autonomous AI Agent Lifecycle, Architecture & Governance Framework.**
+
+Consistent, production-grade AI-assisted software engineering across every IDE and tech stack.
+
+---
+
+## ⚡ Why Kit?
+
+AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot, Google Antigravity) are powerful—but without strict governance, they drift into inconsistent architecture, swallowed exceptions, skipped tests, and bloated abstractions.
+
+**Kit** gives your team a unified, cross-IDE framework that standardizes how AI agents work: from idea stress-testing, specification, and TDD short loops to security audits, architecture drift detection, and telemetry tracking.
+
+---
+
+## ✨ Core Pillars
+
+- **🛡️ Shared Architectural Philosophy**: Enforces Hexagonal Architecture (Ports & Adapters), Domain-Driven Design (DDD invariants), Vertical Slice Architecture, and Clean Code standards.
+- **🔄 Single Source of Truth & Multi-IDE Sync**: Write rules once in \`AGENTS.md\`. Kit synchronizes entry points automatically across Cursor (\`.cursorrules\`), Gemini (\`GEMINI.md\`), Claude (\`CLAUDE.md\`), Windsurf (\`.windsurfrules\`), and Copilot (\`.github/copilot-instructions.md\`).
+- **🎯 44 Modular Specialist Skills**:
+  - **Lifecycle Roles (\`agent-*\`)**: \`agent-orchestrator\`, \`agent-grilling\`, \`agent-spec\`, \`agent-tdd\`, \`agent-xfn\`, \`agent-adapter\`, \`agent-ui\`, \`agent-migration\`, \`agent-api-contract\`, \`agent-review\`, \`agent-security\`, \`agent-arch-drift\`, \`agent-perf-opt\`, \`agent-debug\`, \`agent-telemetry\`, \`agent-pre-commit\`.
+  - **Language Profiles (\`lang-*\`)**: \`TypeScript\`, \`Rust\`, \`Python\`, \`Go\`, \`Java\`, \`C#\`, \`HCL\`.
+  - **Framework Profiles (\`framework-*\`)**: \`React 19\`, \`Next.js\`, \`Express\`, \`FastAPI\`, \`Spring Boot\`, \`Quarkus\`, \`.NET\`, \`Terraform\`, \`Pulumi\`.
+  - **Domain Profiles (\`profile-*\`)**: \`profile-api\`, \`profile-iac\`, \`profile-mcp\`, \`profile-observability\`.
+- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (\`pnpm kit audit\`).
+- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 66 test cases across 37 suites with 100% accuracy (\`pnpm kit eval\`).
+- **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into \`.cursor/mcp.json\`.
+
+---
+
+## 🧭 Multi-Agent Lifecycle Flow
+
+\`\`\`mermaid
+sequenceDiagram
+  autonumber
+  participant O as agent-orchestrator
+  participant G as agent-grilling
+  participant S as agent-spec
+  participant T as agent-tdd
+  participant X as agent-xfn
+  participant Sec as agent-security
+  participant Arch as agent-arch-drift
+  participant Tel as agent-telemetry
+  participant R as agent-release
+
+  O->>G: 1. Stress-test idea & decision frontier
+  O->>S: 2. Formulate BDD spec & acceptance criteria
+  O->>T: 3. Inventory behavior catalog & plan test impact
+  O->>X: 4. Define cross-functional quality matrix (a11y/load/sec)
+  O->>T: 5. Execute TDD short loop (gear 1 domain + gear 2 thin adapters)
+  O->>X: 6. Green all active XFN quality suites
+  O->>Sec: 7. Audit security & OWASP compliance
+  O->>Arch: 8. Verify hexagonal boundaries & zero architectural drift
+  O->>Tel: 9. Map runtime SLOs to OpenTelemetry metrics
+  O->>R: 10. Release via conventional PR title & handover summary
+\`\`\`
+
+---
+
+## 🚀 Unified CLI (\`kit\`)
+
+Kit comes with a unified TypeScript CLI powered by \`tsx/esm\` for project bootstrapping, rule export, security auditing, and evaluation.
+
+\`\`\`bash
+# Display CLI help menu
+pnpm kit help
+\`\`\`
+
+| Command | Purpose |
+| :--- | :--- |
+| \`pnpm kit init [dir]\` | Bootstrap \`AGENTS.md\`, multi-IDE rules, \`.cursor/mcp.json\`, and git pre-commit hook |
+| \`pnpm kit mcp <profile>\` | Compose and install MCP profiles (\`default\`, \`collab\`, \`ops\`, \`security\`, \`lab\`) |
+| \`pnpm kit audit\` | Run hardened security & supply chain audit across skills and scripts |
+| \`pnpm kit validate\` | Validate evals structure against JSON Schemas |
+| \`pnpm kit eval\` | Run live trigger evaluation benchmarks across all skill suites |
+| \`pnpm kit export-rules\` | Export and sync \`AGENTS.md\` to \`GEMINI.md\`, \`CLAUDE.md\`, \`.windsurfrules\`, \`.cursorrules\`, and Copilot |
+| \`pnpm kit metrics\` | Display telemetry analytics summary for subagent phase handovers |
+| \`pnpm kit verify\` | Verify skills directory layout conventions |
+`;
+
+    function renderMarkdownContent(text) {
+      const container = document.getElementById('markdown-body');
+      if (!container) return;
+
+      const cleanedText = text.replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '');
+      const html = marked.parse(cleanedText);
+      container.innerHTML = html;
+
+      const codeBlocks = container.querySelectorAll('code.language-mermaid');
+      codeBlocks.forEach((block) => {
+        const pre = block.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = block.textContent;
+        pre.replaceWith(div);
+      });
+
+      mermaid.run();
+    }
+
+    fetch('./README.md')
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP Error');
+        return res.text();
+      })
+      .then(text => renderMarkdownContent(text))
+      .catch(() => renderMarkdownContent(FALLBACK_README));
   </script>
 </body>
+
 </html>
