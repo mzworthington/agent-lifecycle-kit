@@ -43,8 +43,8 @@ AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot,
   - **Language Profiles (`lang-*`)**: `TypeScript`, `Rust`, `Python`, `Go`, `Java`, `C#`, `HCL`.
   - **Framework Profiles (`framework-*`)**: `React 19`, `Next.js`, `Express`, `FastAPI`, `Spring Boot`, `Quarkus`, `.NET`, `Terraform`, `Pulumi`.
   - **Domain Profiles (`profile-*`)**: `profile-api`, `profile-iac`, `profile-mcp`, `profile-observability`.
-- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (`pnpm kit audit`).
-- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 65+ test cases across 36 suites with 100% accuracy (`pnpm kit eval`).
+- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (`kit audit`).
+- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 65+ test cases across 36 suites with 100% accuracy (`kit eval`).
 - **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into `.cursor/mcp.json` ([mcps/](./mcps/)).
 
 ---
@@ -84,19 +84,19 @@ Kit comes with a unified TypeScript CLI powered by `tsx/esm` for project bootstr
 
 ```bash
 # Display CLI help menu
-pnpm kit help
+kit help
 ```
 
 | Command | Purpose |
 | :--- | :--- |
-| `pnpm kit init [dir]` | Bootstrap `AGENTS.md`, multi-IDE rules, `.cursor/mcp.json`, and git pre-commit hook |
-| `pnpm kit mcp <profile>` | Compose and install MCP profiles (`default`, `collab`, `ops`, `security`, `lab`) |
-| `pnpm kit audit` | Run hardened security & supply chain audit across skills and scripts |
-| `pnpm kit validate` | Validate evals structure against JSON Schemas |
-| `pnpm kit eval` | Run live trigger evaluation benchmarks across all skill suites |
-| `pnpm kit export-rules` | Export and sync `AGENTS.md` to `GEMINI.md`, `CLAUDE.md`, `.windsurfrules`, `.cursorrules`, and Copilot |
-| `pnpm kit metrics` | Display telemetry analytics summary for subagent phase handovers |
-| `pnpm kit verify` | Verify skills directory layout conventions |
+| `kit init [dir]` | Bootstrap `AGENTS.md`, multi-IDE rules, `.cursor/mcp.json`, and git pre-commit hook |
+| `kit mcp <profile>` | Compose and install MCP profiles (`default`, `collab`, `ops`, `security`, `lab`) |
+| `kit audit` | Run hardened security & supply chain audit across skills and scripts |
+| `kit validate` | Validate evals structure against JSON Schemas |
+| `kit eval` | Run live trigger evaluation benchmarks across all skill suites |
+| `kit export-rules` | Export and sync `AGENTS.md` to `GEMINI.md`, `CLAUDE.md`, `.windsurfrules`, `.cursorrules`, and Copilot |
+| `kit metrics` | Display telemetry analytics summary for subagent phase handovers |
+| `kit verify` | Verify skills directory layout conventions |
 
 ---
 
@@ -117,7 +117,7 @@ This symlinks `~/.agents` -> `~/Documents/dev/agent-lifecycle-kit` and initializ
 Inside any target application project, run the `kit init` command:
 
 ```bash
-pnpm kit init ./my-app --mcp collab --hook
+kit init ./my-app --mcp collab --hook
 ```
 
 This instantly creates:

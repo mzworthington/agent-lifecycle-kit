@@ -93,6 +93,15 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
+    section,
+    [id] {
+      scroll-margin-top: 90px;
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
@@ -179,20 +188,25 @@
     }
 
     .btn-github {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #fff;
-      padding: 0.5rem 1.25rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 0.5rem 0.65rem;
       border-radius: 8px;
-      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-accent);
       text-decoration: none;
-      font-size: 0.9rem;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.2);
+      transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .btn-github:hover {
       transform: translateY(-2px);
+      background: rgba(99, 102, 241, 0.3);
+      border-color: var(--primary-light);
       box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+      color: #fff;
     }
 
     /* Container */
@@ -662,6 +676,97 @@
       margin-top: 5rem;
       font-size: 0.9rem;
     }
+
+    /* Mobile & Tablet Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        padding: 0.75rem 1rem;
+      }
+
+      .brand {
+        font-size: 1.05rem;
+        gap: 0.5rem;
+        white-space: nowrap;
+      }
+
+      .brand img {
+        height: 28px;
+      }
+
+      .nav-links {
+        gap: 0.6rem;
+      }
+
+      .nav-link {
+        font-size: 0.8rem;
+      }
+
+      .btn-github {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      .hero {
+        padding: 1.5rem 1rem;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.95rem;
+      }
+
+      .badge-bar {
+        gap: 0.4rem;
+      }
+
+      .badge-bar img {
+        height: 22px;
+      }
+
+      .hero-d3-wrapper {
+        height: 480px;
+      }
+
+      .pillars-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .cli-container {
+        padding: 1.25rem;
+      }
+
+      .cli-header h2 {
+        font-size: 1.25rem;
+      }
+
+      .cli-code {
+        font-size: 0.8rem;
+        padding: 0.75rem;
+      }
+
+      .docs-wrapper {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links .nav-link:not(.btn-github) {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 1.45rem;
+      }
+
+      .hero-d3-wrapper {
+        height: 420px;
+      }
+    }
   </style>
 </head>
 
@@ -679,10 +784,14 @@
       <div class="nav-links">
         <a href="#pillars" class="nav-link">Pillars</a>
         <a href="#cli" class="nav-link">CLI</a>
-        <a href="#flow" class="nav-link">Lifecycle Flow</a>
         <a href="#docs" class="nav-link">Documentation</a>
-        <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github">GitHub
-          Repository</a>
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github"
+          aria-label="GitHub Repository" title="GitHub Repository">
+          <svg height="22" width="22" viewBox="0 0 16 16" fill="currentColor">
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+          </svg>
+        </a>
       </div>
     </div>
   </header>
@@ -736,7 +845,7 @@
       <div class="card">
         <div class="card-icon">🎯</div>
         <div class="card-title">44 Specialist Skills & Evals</div>
-        <div class="card-desc">Modular skills covering lifecycle phases, tech stacks, and domain profiles—backed by a
+        <div class="card-desc">Modular skills covering lifecycle phases, tech stacks, and domain profiles, backed by a
           live harness.</div>
       </div>
     </section>
@@ -834,7 +943,7 @@
       const svg = d3.select(container)
         .append('svg')
         .attr('class', 'hero-d3-svg')
-        .attr('viewBox', [0, 0, width, height])
+        .attr('viewBox', [360, 40, 880, 880])
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .style('width', '100%')
         .style('height', '100%')
@@ -1188,15 +1297,7 @@
 
       // Auto-fit Layout Engine for Responsive Mobile & Desktop Viewports
       function handleResponsiveFit() {
-        const containerWidth = container.clientWidth || window.innerWidth;
-        if (containerWidth < 768) {
-          const fitScale = Math.max(0.4, containerWidth / 1600);
-          const tx = (containerWidth - 1600 * fitScale) / 2;
-          const ty = (720 - 720 * fitScale) / 2;
-          svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(fitScale));
-        } else {
-          svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
-        }
+        svg.transition().duration(300).call(zoom.transform, d3.zoomIdentity);
       }
 
       handleResponsiveFit();
@@ -1435,8 +1536,8 @@ AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot,
   - **Language Profiles (\`lang-*\`)**: \`TypeScript\`, \`Rust\`, \`Python\`, \`Go\`, \`Java\`, \`C#\`, \`HCL\`.
   - **Framework Profiles (\`framework-*\`)**: \`React 19\`, \`Next.js\`, \`Express\`, \`FastAPI\`, \`Spring Boot\`, \`Quarkus\`, \`.NET\`, \`Terraform\`, \`Pulumi\`.
   - **Domain Profiles (\`profile-*\`)**: \`profile-api\`, \`profile-iac\`, \`profile-mcp\`, \`profile-observability\`.
-- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (\`pnpm kit audit\`).
-- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 66 test cases across 37 suites with 100% accuracy (\`pnpm kit eval\`).
+- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (\`kit audit\`).
+- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 66 test cases across 37 suites with 100% accuracy (\`kit eval\`).
 - **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into \`.cursor/mcp.json\`.
 
 ---
@@ -1476,19 +1577,19 @@ Kit comes with a unified TypeScript CLI powered by \`tsx/esm\` for project boots
 
 \`\`\`bash
 # Display CLI help menu
-pnpm kit help
+kit help
 \`\`\`
 
 | Command | Purpose |
 | :--- | :--- |
-| \`pnpm kit init [dir]\` | Bootstrap \`AGENTS.md\`, multi-IDE rules, \`.cursor/mcp.json\`, and git pre-commit hook |
-| \`pnpm kit mcp <profile>\` | Compose and install MCP profiles (\`default\`, \`collab\`, \`ops\`, \`security\`, \`lab\`) |
-| \`pnpm kit audit\` | Run hardened security & supply chain audit across skills and scripts |
-| \`pnpm kit validate\` | Validate evals structure against JSON Schemas |
-| \`pnpm kit eval\` | Run live trigger evaluation benchmarks across all skill suites |
-| \`pnpm kit export-rules\` | Export and sync \`AGENTS.md\` to \`GEMINI.md\`, \`CLAUDE.md\`, \`.windsurfrules\`, \`.cursorrules\`, and Copilot |
-| \`pnpm kit metrics\` | Display telemetry analytics summary for subagent phase handovers |
-| \`pnpm kit verify\` | Verify skills directory layout conventions |
+| \`kit init [dir]\` | Bootstrap \`AGENTS.md\`, multi-IDE rules, \`.cursor/mcp.json\`, and git pre-commit hook |
+| \`kit mcp <profile>\` | Compose and install MCP profiles (\`default\`, \`collab\`, \`ops\`, \`security\`, \`lab\`) |
+| \`kit audit\` | Run hardened security & supply chain audit across skills and scripts |
+| \`kit validate\` | Validate evals structure against JSON Schemas |
+| \`kit eval\` | Run live trigger evaluation benchmarks across all skill suites |
+| \`kit export-rules\` | Export and sync \`AGENTS.md\` to \`GEMINI.md\`, \`CLAUDE.md\`, \`.windsurfrules\`, \`.cursorrules\`, and Copilot |
+| \`kit metrics\` | Display telemetry analytics summary for subagent phase handovers |
+| \`kit verify\` | Verify skills directory layout conventions |
 `;
 
     function renderMarkdownContent(text) {
@@ -1496,7 +1597,9 @@ pnpm kit help
       if (!container) return;
 
       try {
-        const cleanedText = text.replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '');
+        const cleanedText = text
+          .replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '')
+          .replace(/## 🧭 Multi-Agent Lifecycle Flow/, '<h2 id="flow">🧭 Multi-Agent Lifecycle Flow</h2>');
         let parsedHtml = '';
         if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
           parsedHtml = marked.parse(cleanedText);
