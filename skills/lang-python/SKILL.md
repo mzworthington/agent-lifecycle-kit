@@ -14,6 +14,7 @@ triggers:
   - poetry
   - uv
   - mypy
+  - type hints
 depends-on: []
 tools:
   - read

@@ -91,15 +91,27 @@ export_ide_rules() {
   fi
 }
 
+install_cli_bin() {
+  local target_bin="${HOME}/.local/bin"
+  if [[ ! -d "${target_bin}" && -d "${HOME}/bin" ]]; then
+    target_bin="${HOME}/bin"
+  fi
+  mkdir -p "${target_bin}"
+  ln -sf "${REPO_DIR}/bin/kit" "${target_bin}/kit"
+  echo "Linked CLI binary: ${target_bin}/kit -> ${REPO_DIR}/bin/kit"
+}
+
 link_agents
 ensure_system_config
 export_ide_rules
 install_mcp_profile
 install_external_skills
+install_cli_bin
 
 echo ""
 echo "✨ Agent Lifecycle Kit is ready!"
-echo "Unified CLI: pnpm kit (or node --import tsx/esm ${REPO_DIR}/bin/kit.ts)"
+echo "Unified CLI: kit (or pnpm kit)"
 echo "Bootstrap a new app project with:"
-echo "  pnpm kit init ./path-to-app --mcp collab --hook"
+echo "  kit init ./path-to-app --mcp collab --hook"
 echo "External skills: INSTALL_EXTERNAL_SKILLS=1 ./install.sh  or  ./scripts/sync-external-skills.sh --install"
+

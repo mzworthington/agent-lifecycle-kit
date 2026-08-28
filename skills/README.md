@@ -29,6 +29,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
 | [agent-adapter](./agent-adapter/SKILL.md) | impl | **Optional deep-dive** when gear 2 is too large; else prefer `agent-tdd` |
 | [agent-ui](./agent-ui/SKILL.md) | impl | Thin UI/delivery adapters; a11y-first |
+| [agent-copy](./agent-copy/SKILL.md) | impl | Product copy, UI microcopy, error text, tone of voice tuning |
 | [agent-migration](./agent-migration/SKILL.md) | maintenance | Expand/contract schema migrations |
 | [agent-api-contract](./agent-api-contract/SKILL.md) | spec | OpenAPI/AsyncAPI contract evolution |
 | [agent-review](./agent-review/SKILL.md) | audit | PR/diff review vs boundaries + catalog/XFN |

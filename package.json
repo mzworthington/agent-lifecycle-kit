@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Modular agent lifecycle guardrails, skills, and tooling",
   "bin": {
-    "kit": "./bin/kit.ts"
+    "kit": "./bin/kit"
   },
   "scripts": {
     "prepare": "husky",

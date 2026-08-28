@@ -14,6 +14,7 @@ triggers:
   - form
   - design system
   - client component
+  - a11y
 depends-on:
   - agent-tdd
   - agent-xfn

@@ -11,6 +11,7 @@ triggers:
   - metrics naming
   - tracing conventions
   - slo mapping
+  - opentelemetry
 depends-on:
   - agent-telemetry
 tools:

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+BIN_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+REPO_DIR="$( cd -P "$BIN_DIR/.." >/dev/null 2>&1 && pwd )"
+
+if [[ -x "$REPO_DIR/node_modules/.bin/tsx" ]]; then
+  exec "$REPO_DIR/node_modules/.bin/tsx" "$REPO_DIR/bin/kit.ts" "$@"
+else
+  exec node --import tsx/esm "$REPO_DIR/bin/kit.ts" "$@"
+fi

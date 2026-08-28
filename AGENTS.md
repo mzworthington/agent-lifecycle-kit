@@ -49,6 +49,7 @@ When executing a lifecycle phase, assume the matching role skill:
 | Design / cross-functional quality | [agent-xfn](./skills/agent-xfn/SKILL.md) - matrix + stubs in plan; green apply suites after wiring |
 | Adapter deep-dive (optional) | [agent-adapter](./skills/agent-adapter/SKILL.md) - only when gear 2 is too large |
 | UI delivery | [agent-ui](./skills/agent-ui/SKILL.md) - thin delivery adapters; a11y with XFN |
+| Copywriting & Tone | [agent-copy](./skills/agent-copy/SKILL.md) - UI microcopy, messaging, error text, tone tuning |
 | Schema migration | [agent-migration](./skills/agent-migration/SKILL.md) - expand/contract ([SOP](./SOPs/db-migration.md)) |
 | API contracts | [agent-api-contract](./skills/agent-api-contract/SKILL.md) - OpenAPI/AsyncAPI ([SOP](./SOPs/api-contracts.md)) |
 | PR review | [agent-review](./skills/agent-review/SKILL.md) - boundaries + catalog/XFN |

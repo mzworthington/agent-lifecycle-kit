@@ -11,6 +11,7 @@ triggers:
   - apirouter
   - uvicorn
   - starlette
+  - pydantic
 depends-on:
   - lang-python
 tools:
