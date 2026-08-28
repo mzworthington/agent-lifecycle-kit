@@ -12,7 +12,7 @@ const lockFilePath: string = path.join(skillsDir, 'external.lock.json');
 interface SecurityViolation {
   file: string;
   line: number;
-  category: 'PROMPT_INJECTION' | 'EXFILTRATION_RISK' | 'OBFUSCATED_EXEC' | 'HARDCODED_SECRET' | 'SUPPLY_CHAIN_UNPINNED';
+  category: 'PROMPT_INJECTION' | 'EXFILTRATION_RISK' | 'OBFUSCATED_EXEC' | 'HARDCODED_SECRET' | 'SUPPLY_CHAIN_UNPINNED' | 'FRONTMATTER_SCHEMA';
   rule: string;
   snippet: string;
 }
@@ -41,12 +41,102 @@ const SECURITY_RULES = [
 ];
 
 const ALLOWED_LOCK_ORGS = ['cloudflare', 'vercel-labs', 'mzworthington'];
+const VALID_KINDS = ['role', 'profile'];
+const VALID_PHASES = [
+  'orchestration', 'spec', 'tdd', 'xfn', 'impl', 'audit', 'maintenance', 'debug', 'telemetry', 'quality', 'docs', 'release'
+];
 
 const violations: SecurityViolation[] = [];
+
+// Calculate Shannon entropy (bits per character) to detect obfuscated secrets or payloads
+function calculateEntropy(str: string): number {
+  if (!str || str.length === 0) return 0;
+  const frequencies: Record<string, number> = {};
+  for (const char of str) {
+    frequencies[char] = (frequencies[char] || 0) + 1;
+  }
+  let entropy = 0;
+  for (const count of Object.values(frequencies)) {
+    const p = count / str.length;
+    entropy -= p * Math.log2(p);
+  }
+  return entropy;
+}
+
+function scanFrontmatter(filePath: string, relPath: string, content: string): void {
+  const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!match) {
+    violations.push({
+      file: relPath,
+      line: 1,
+      category: 'FRONTMATTER_SCHEMA',
+      rule: 'SKILL.md missing valid YAML frontmatter delimiters (---)',
+      snippet: ''
+    });
+    return;
+  }
+
+  const yamlText = match[1];
+
+  const nameMatch = yamlText.match(/^name:\s*(.+)$/m);
+  const kindMatch = yamlText.match(/^kind:\s*(.+)$/m);
+  const phaseMatch = yamlText.match(/^phase:\s*(.+)$/m);
+  const triggersMatch = yamlText.match(/triggers:\s*\n((?:\s*-\s*.*\n?)+)/);
+
+  if (!nameMatch) {
+    violations.push({
+      file: relPath,
+      line: 1,
+      category: 'FRONTMATTER_SCHEMA',
+      rule: 'Frontmatter missing required field: name',
+      snippet: ''
+    });
+  }
+
+  if (kindMatch) {
+    const kind = kindMatch[1].trim();
+    if (!VALID_KINDS.includes(kind)) {
+      violations.push({
+        file: relPath,
+        line: 1,
+        category: 'FRONTMATTER_SCHEMA',
+        rule: `Invalid frontmatter kind "${kind}". Allowed: [${VALID_KINDS.join(', ')}]`,
+        snippet: kindMatch[0]
+      });
+    }
+
+    if (kind === 'role' && phaseMatch) {
+      const phase = phaseMatch[1].trim();
+      if (!VALID_PHASES.includes(phase)) {
+        violations.push({
+          file: relPath,
+          line: 1,
+          category: 'FRONTMATTER_SCHEMA',
+          rule: `Invalid role phase "${phase}". Allowed: [${VALID_PHASES.join(', ')}]`,
+          snippet: phaseMatch[0]
+        });
+      }
+    }
+  }
+
+  if (!triggersMatch) {
+    violations.push({
+      file: relPath,
+      line: 1,
+      category: 'FRONTMATTER_SCHEMA',
+      rule: 'Frontmatter missing required non-empty triggers array',
+      snippet: ''
+    });
+  }
+}
 
 function scanFile(filePath: string, relPath: string): void {
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
+
+  if (relPath.endsWith('SKILL.md')) {
+    scanFrontmatter(filePath, relPath, content);
+  }
 
   lines.forEach((line, index) => {
     SECURITY_RULES.forEach(rule => {
@@ -60,6 +150,23 @@ function scanFile(filePath: string, relPath: string): void {
         });
       }
     });
+
+    // High entropy check for single contiguous tokens > 32 chars (excluding standard URLs and Markdown links)
+    const tokens = line.split(/[\s,;()\[\]{}'"]+/);
+    for (const token of tokens) {
+      if (token.length > 32 && !token.startsWith('http://') && !token.startsWith('https://') && !token.includes('file://')) {
+        const entropy = calculateEntropy(token);
+        if (entropy > 4.95) {
+          violations.push({
+            file: relPath,
+            line: index + 1,
+            category: 'HARDCODED_SECRET',
+            rule: `High Shannon entropy token detected (${entropy.toFixed(2)} bits/char)`,
+            snippet: token.substring(0, 40) + '...'
+          });
+        }
+      }
+    }
   });
 }
 
@@ -101,7 +208,13 @@ function scanExternalLock(): void {
       }
 
       if (!pin) {
-        console.warn(`  ⚠️ [SUPPLY_CHAIN_UNPINNED] skills/external.lock.json: Skill "${repo}" is missing exact commit SHA pin.`);
+        violations.push({
+          file: 'skills/external.lock.json',
+          line: 1,
+          category: 'SUPPLY_CHAIN_UNPINNED',
+          rule: `External skill "${repo}" is missing required commit SHA or version pin`,
+          snippet: JSON.stringify(skill)
+        });
       }
     }
   } catch (err: unknown) {
@@ -116,7 +229,7 @@ function scanExternalLock(): void {
   }
 }
 
-console.log('=== Agent Skill Security & Supply Chain Audit ===');
+console.log('=== Agent Skill Hardened Security & Supply Chain Audit ===');
 console.log('');
 
 scanSkillsDirectory(skillsDir);
@@ -130,8 +243,8 @@ if (violations.length > 0) {
       console.error(`     Snippet: "${v.snippet.substring(0, 100)}"`);
     }
   });
-  console.error('\nSecurity audit FAILED.');
+  console.error('\nHardened Security audit FAILED.');
   process.exit(1);
 } else {
-  console.log('✅ Security audit PASSED: No malicious patterns, secret leaks, or untrusted external lock entries detected.');
+  console.log('✅ Hardened Security audit PASSED: No prompt injections, secret leaks, schema violations, or unpinned supply-chain dependencies detected.');
 }
