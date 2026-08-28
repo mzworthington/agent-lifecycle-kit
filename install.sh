@@ -82,12 +82,24 @@ install_external_skills() {
   }
 }
 
+export_ide_rules() {
+  local export_script="${REPO_DIR}/scripts/export-ide-rules.sh"
+  if [[ -x "${export_script}" ]]; then
+    echo ""
+    echo "Exporting Multi-IDE rules (CLAUDE.md, .windsurfrules, Copilot)..."
+    "${export_script}" || true
+  fi
+}
+
 link_agents
 ensure_system_config
+export_ide_rules
 install_mcp_profile
 install_external_skills
 
 echo ""
-echo "Optional: add to a project repo (copy templates/project-AGENTS.md as AGENTS.md):"
-echo '  Standards and lifecycle agents live in ~/.agents - read ~/.agents/AGENTS.md before starting work'
+echo "✨ Agent Lifecycle Kit is ready!"
+echo "Unified CLI: pnpm kit (or node --import tsx/esm ${REPO_DIR}/bin/kit.ts)"
+echo "Bootstrap a new app project with:"
+echo "  pnpm kit init ./path-to-app --mcp collab --hook"
 echo "External skills: INSTALL_EXTERNAL_SKILLS=1 ./install.sh  or  ./scripts/sync-external-skills.sh --install"

@@ -4,18 +4,26 @@
   "private": true,
   "type": "module",
   "description": "Modular agent lifecycle guardrails, skills, and tooling",
+  "bin": {
+    "kit": "./bin/kit.ts"
+  },
   "scripts": {
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
+    "kit": "node --import tsx/esm bin/kit.ts",
     "scan": "./scripts/scan-skill-security.sh",
     "validate": "./scripts/validate-evals.sh",
     "verify": "./scripts/verify-skills-layout.sh",
-    "check": "pnpm run scan && pnpm run validate && pnpm run verify"
+    "export-rules": "./scripts/export-ide-rules.sh",
+    "eval:run": "./scripts/run-evals.sh",
+    "init-project": "./scripts/init-project.sh",
+    "check": "pnpm run scan && pnpm run validate && pnpm run verify && pnpm run export-rules -- --check && pnpm run eval:run"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
     "ajv": "^8.20.0",
     "husky": "^9.1.7",
+    "tsx": "^4.19.2",
     "typescript": "^7.0.2"
   },
   "engines": {

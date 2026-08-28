@@ -52,7 +52,25 @@ jobs:
           chmod +x scripts/verify-skills-layout.sh
           ./scripts/verify-skills-layout.sh
 
+      - name: Verify Multi-IDE Rules Sync
+        run: |
+          chmod +x scripts/export-ide-rules.sh
+          ./scripts/export-ide-rules.sh --check
+
+      - name: Run Live Skill Trigger Evals
+        run: |
+          chmod +x scripts/run-evals.sh
+          ./scripts/run-evals.sh
+
       - name: Test MCP Profile Composition
         run: |
           chmod +x scripts/compose-mcp.sh
           ./scripts/compose-mcp.sh default
+
+      - name: Test kit CLI Executable
+        run: |
+          chmod +x bin/kit.ts
+          pnpm kit audit
+          pnpm kit validate
+          pnpm kit eval
+          pnpm kit metrics

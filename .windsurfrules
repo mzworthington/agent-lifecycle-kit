@@ -1,0 +1,5 @@
+# Windsurf Rules Entry Point
+
+The canonical bootstrap for this workspace lives in [AGENTS.md](./AGENTS.md).
+
+Read [AGENTS.md](./AGENTS.md) for context structure, hexagonal architecture guardrails, lifecycle routing, and specialist activation.
