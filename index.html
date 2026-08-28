@@ -210,7 +210,8 @@
 
     .hero-d3-wrapper {
       width: 100%;
-      height: 720px;
+      height: 780px;
+      max-height: 85vh;
       background: radial-gradient(circle at center, rgba(16, 23, 38, 0.95) 0%, rgba(6, 9, 17, 0.99) 100%);
       border-top: 0;
       border-bottom: 1px solid var(--border-accent);
@@ -686,20 +687,14 @@
     </div>
   </header>
 
-  <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
-  <div id="hero-d3-container" class="hero-d3-wrapper"
-    aria-label="Interactive Autonomous AI Agent Neural Mesh Simulation">
-  </div>
-
-  <main class="container">
-
+  <main class="container" style="padding-bottom: 0;">
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" style="padding-bottom: 1.5rem;">
       <h1 class="hero-title">Autonomous AI Agent Lifecycle & Governance</h1>
       <p class="hero-subtitle">Consistent, production-grade AI-assisted software engineering across every IDE and tech
         stack.</p>
 
-      <div class="badge-bar">
+      <div class="badge-bar" style="margin-bottom: 1.5rem;">
         <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
             src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
             alt="CI"></a>
@@ -715,6 +710,14 @@
             alt="License"></a>
       </div>
     </section>
+  </main>
+
+  <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
+  <div id="hero-d3-container" class="hero-d3-wrapper"
+    aria-label="Interactive Autonomous AI Agent Neural Mesh Simulation">
+  </div>
+
+  <main class="container">
 
     <!-- Pillars Grid -->
     <section id="pillars" class="pillars-grid">
@@ -816,8 +819,8 @@
       const container = document.getElementById('hero-d3-container');
       if (!container) return;
 
-      const width = container.clientWidth || 1600;
-      const height = container.clientHeight || 720;
+      const width = 1600;
+      const height = 960;
 
       const existingSvg = container.querySelector('svg');
       if (existingSvg) existingSvg.remove();
@@ -1050,120 +1053,129 @@
       const cx = width / 2;
       const cy = height / 2;
 
-      const hubPos = {
-        'KIT_CORE': { x: cx, y: cy },
-        'sec-lifecycle': { x: cx - 340, y: cy - 140 },
-        'sec-lang': { x: cx + 340, y: cy - 140 },
-        'sec-framework': { x: cx + 280, y: cy + 200 },
-        'sec-domain': { x: cx - 360, y: cy + 180 },
-        'sec-ide': { x: cx + 560, y: cy },
-        'kit-cli': { x: cx - 110, y: cy }
-      };
+      function getRadialCoords(angleDeg, r) {
+        const rad = (angleDeg * Math.PI) / 180;
+        return {
+          x: cx + r * Math.cos(rad),
+          y: cy + r * Math.sin(rad),
+          angle: angleDeg
+        };
+      }
 
-      const subCenter = {
-        'sub-plan': { x: cx - 520, y: cy - 250 },
-        'sub-build': { x: cx - 340, y: cy - 280 },
-        'sub-verify': { x: cx - 120, y: cy - 250 },
-        'sub-ops': { x: cx - 540, y: cy - 100 }
-      };
+      const radialCoords = {
+        'KIT_CORE': { x: cx, y: cy, angle: 0 },
+        'kit-cli': getRadialCoords(180, 85),
 
-      const fixedCoords = {
-        'agent-orchestrator': { x: cx - 650, y: cy - 300 },
-        'agent-grilling': { x: cx - 640, y: cy - 230 },
-        'agent-grill-me': { x: cx - 550, y: cy - 320 },
-        'agent-spec': { x: cx - 450, y: cy - 325 },
+        // Tier 1: 5 Sectors (r = 145)
+        'sec-lifecycle': getRadialCoords(215, 145),
+        'sec-lang': getRadialCoords(305, 145),
+        'sec-framework': getRadialCoords(20, 145),
+        'sec-domain': getRadialCoords(95, 145),
+        'sec-ide': getRadialCoords(140, 145),
 
-        'agent-tdd': { x: cx - 340, y: cy - 340 },
-        'agent-adapter': { x: cx - 260, y: cy - 330 },
-        'agent-ui': { x: cx - 420, y: cy - 210 },
-        'agent-copy': { x: cx - 340, y: cy - 210 },
-        'agent-api-contract': { x: cx - 250, y: cy - 210 },
-        'agent-migration': { x: cx - 180, y: cy - 320 },
+        // Tier 2: Lifecycle Sub-Hubs (r = 245)
+        'sub-plan': getRadialCoords(182, 245),
+        'sub-build': getRadialCoords(208, 245),
+        'sub-verify': getRadialCoords(234, 245),
+        'sub-ops': getRadialCoords(260, 245),
 
-        'agent-xfn': { x: cx - 120, y: cy - 335 },
-        'agent-security': { x: cx - 40, y: cy - 315 },
-        'agent-arch-drift': { x: cx + 40, y: cy - 280 },
-        'agent-adr': { x: cx - 150, y: cy - 185 },
-        'agent-review': { x: cx - 70, y: cy - 185 },
-        'agent-pre-commit': { x: cx + 10, y: cy - 185 },
+        // Tier 3: Sub-Plan Skills (r = 355)
+        'agent-orchestrator': getRadialCoords(170, 355),
+        'agent-grilling': getRadialCoords(178, 355),
+        'agent-grill-me': getRadialCoords(186, 355),
+        'agent-spec': getRadialCoords(194, 355),
 
-        'agent-debug': { x: cx - 660, y: cy - 160 },
-        'agent-telemetry': { x: cx - 660, y: cy - 90 },
-        'agent-perf-opt': { x: cx - 660, y: cy - 20 },
-        'agent-prune': { x: cx - 570, y: cy - 150 },
-        'agent-incident': { x: cx - 570, y: cy - 20 },
-        'agent-release': { x: cx - 480, y: cy - 30 },
-        'agent-docs': { x: cx - 460, y: cy - 100 },
+        // Tier 3: Sub-Build Skills (r = 355)
+        'agent-tdd': getRadialCoords(199, 355),
+        'agent-adapter': getRadialCoords(205, 355),
+        'agent-ui': getRadialCoords(211, 355),
+        'agent-copy': getRadialCoords(217, 355),
+        'agent-api-contract': getRadialCoords(222, 355),
+        'agent-migration': getRadialCoords(227, 355),
 
-        'lang-typescript': { x: cx + 220, y: cy - 260 },
-        'lang-rust': { x: cx + 340, y: cy - 280 },
-        'lang-python': { x: cx + 460, y: cy - 260 },
-        'lang-go': { x: cx + 540, y: cy - 190 },
-        'lang-java': { x: cx + 480, y: cy - 100 },
-        'lang-csharp': { x: cx + 380, y: cy - 50 },
-        'lang-hcl': { x: cx + 260, y: cy - 70 },
+        // Tier 3: Sub-Verify Skills (r = 355)
+        'agent-xfn': getRadialCoords(231, 355),
+        'agent-security': getRadialCoords(236, 355),
+        'agent-arch-drift': getRadialCoords(241, 355),
+        'agent-adr': getRadialCoords(246, 355),
+        'agent-review': getRadialCoords(251, 355),
+        'agent-pre-commit': getRadialCoords(256, 355),
 
-        'framework-react': { x: cx + 140, y: cy + 80 },
-        'framework-next': { x: cx + 260, y: cy + 80 },
-        'framework-express': { x: cx + 380, y: cy + 90 },
-        'framework-fastapi': { x: cx + 480, y: cy + 150 },
-        'framework-springboot': { x: cx + 520, y: cy + 230 },
-        'framework-quarkus': { x: cx + 460, y: cy + 300 },
-        'framework-dotnet': { x: cx + 340, y: cy + 310 },
-        'framework-nuxt': { x: cx + 220, y: cy + 300 },
-        'framework-terraform': { x: cx + 400, y: cy + 170 },
-        'framework-pulumi': { x: cx + 280, y: cy + 130 },
+        // Tier 3: Sub-Ops Skills (r = 355)
+        'agent-debug': getRadialCoords(260, 355),
+        'agent-telemetry': getRadialCoords(265, 355),
+        'agent-perf-opt': getRadialCoords(270, 355),
+        'agent-prune': getRadialCoords(275, 355),
+        'agent-incident': getRadialCoords(280, 355),
+        'agent-release': getRadialCoords(285, 355),
+        'agent-docs': getRadialCoords(290, 355),
 
-        'profile-api': { x: cx - 540, y: cy + 120 },
-        'profile-iac': { x: cx - 560, y: cy + 220 },
-        'profile-mcp': { x: cx - 420, y: cy + 280 },
-        'profile-observability': { x: cx - 300, y: cy + 260 },
+        // Tier 3: Language Nodes (r = 355)
+        'lang-typescript': getRadialCoords(296, 355),
+        'lang-rust': getRadialCoords(304, 355),
+        'lang-python': getRadialCoords(312, 355),
+        'lang-go': getRadialCoords(320, 355),
+        'lang-java': getRadialCoords(328, 355),
+        'lang-csharp': getRadialCoords(336, 355),
+        'lang-hcl': getRadialCoords(344, 355),
 
-        'ide-cursor': { x: cx + 680, y: cy - 110 },
-        'ide-gemini': { x: cx + 700, y: cy - 30 },
-        'ide-claude': { x: cx + 700, y: cy + 50 },
-        'ide-windsurf': { x: cx + 660, y: cy + 130 },
-        'ide-copilot': { x: cx + 600, y: cy - 160 }
+        // Tier 3: Framework Nodes (r = 355)
+        'framework-react': getRadialCoords(352, 355),
+        'framework-next': getRadialCoords(0, 355),
+        'framework-express': getRadialCoords(10, 355),
+        'framework-fastapi': getRadialCoords(20, 355),
+        'framework-springboot': getRadialCoords(30, 355),
+        'framework-quarkus': getRadialCoords(40, 355),
+        'framework-dotnet': getRadialCoords(50, 355),
+        'framework-nuxt': getRadialCoords(60, 355),
+        'framework-terraform': getRadialCoords(70, 355),
+        'framework-pulumi': getRadialCoords(80, 355),
+
+        // Tier 3: Domain Nodes (r = 355)
+        'profile-api': getRadialCoords(90, 355),
+        'profile-iac': getRadialCoords(100, 355),
+        'profile-mcp': getRadialCoords(110, 355),
+        'profile-observability': getRadialCoords(120, 355),
+
+        // Tier 3: IDE Nodes (r = 355)
+        'ide-cursor': getRadialCoords(132, 355),
+        'ide-gemini': getRadialCoords(140, 355),
+        'ide-claude': getRadialCoords(148, 355),
+        'ide-windsurf': getRadialCoords(156, 355),
+        'ide-copilot': getRadialCoords(164, 355)
       };
 
       nodes.forEach(n => {
-        let pos = { x: cx, y: cy };
-        if (hubPos[n.id]) pos = hubPos[n.id];
-        else if (subCenter[n.id]) pos = subCenter[n.id];
-        else if (fixedCoords[n.id]) pos = fixedCoords[n.id];
-
+        const pos = radialCoords[n.id] || { x: cx, y: cy, angle: 0 };
         n.x = pos.x;
         n.y = pos.y;
-        n.fx = pos.x;
-        n.fy = pos.y;
+        n.angle = pos.angle || 0;
       });
 
-      // Explicitly map link source & target to node objects
+      // Map link source & target to node objects
       const nodeMap = new Map(nodes.map(n => [n.id, n]));
       links.forEach(l => {
         if (typeof l.source !== 'object') l.source = nodeMap.get(l.source);
         if (typeof l.target !== 'object') l.target = nodeMap.get(l.target);
       });
 
-      const simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id))
-        .stop();
-
-      globalSimulation = simulation;
-
-      function curvedPath(d) {
-        if (!d.source.x || !d.target.x) return '';
-        const sx = d.source.x;
-        const sy = d.source.y;
-        const tx = d.target.x;
-        const ty = d.target.y;
-        const mx = (sx + tx) / 2;
-        const my = (sy + ty) / 2;
-        return `M ${sx},${sy} Q ${mx},${my} ${tx},${ty}`;
-      }
-
       // Zoom Container Group
       const g = svg.append('g').attr('class', 'zoom-container');
+
+      // Draw Tier Orbit Rings (Tier 1: 145px, Tier 2: 245px, Tier 3: 355px)
+      const orbitGroup = g.append('g').attr('class', 'orbit-rings');
+      [145, 245, 355].forEach((r, idx) => {
+        orbitGroup.append('circle')
+          .attr('cx', cx)
+          .attr('cy', cy)
+          .attr('r', r)
+          .attr('fill', 'none')
+          .attr('stroke', idx === 0 ? '#a855f7' : (idx === 1 ? '#6366f1' : '#38bdf8'))
+          .attr('stroke-width', 1)
+          .attr('stroke-dasharray', '4 6')
+          .attr('stroke-opacity', 0.25)
+          .attr('filter', 'url(#cyber-glow)');
+      });
 
       const zoom = d3.zoom()
         .scaleExtent([0.3, 3.5])
@@ -1190,6 +1202,15 @@
       handleResponsiveFit();
       window.addEventListener('resize', handleResponsiveFit);
 
+      function curvedPath(d) {
+        if (!d.source || !d.target || d.source.x === undefined || d.target.x === undefined) return '';
+        const sx = d.source.x, sy = d.source.y;
+        const tx = d.target.x, ty = d.target.y;
+        const mx = (sx + tx) / 2;
+        const my = (sy + ty) / 2;
+        return `M ${sx},${sy} Q ${mx},${my} ${tx},${ty}`;
+      }
+
       // Draw Curved Arcs
       const linkGroup = g.append('g').attr('class', 'links');
       const link = linkGroup.selectAll('path')
@@ -1205,33 +1226,13 @@
 
       globalLinkElements = link;
 
-      function dragstarted(event, d) {
-        d.fx = d.x;
-        d.fy = d.y;
-      }
-
-      function dragged(event, d) {
-        d.x = event.x;
-        d.y = event.y;
-        d.fx = event.x;
-        d.fy = event.y;
-        d3.select(this).attr('transform', `translate(${d.x}, ${d.y})`);
-        link.attr('d', curvedPath);
-      }
-
-      function dragended(event, d) { }
-
       // Render Nodes
       const nodeGroup = g.append('g').attr('class', 'nodes');
       const node = nodeGroup.selectAll('.node')
         .data(nodes)
         .join('g')
         .attr('class', 'node-item')
-        .attr('transform', d => `translate(${d.x}, ${d.y})`)
-        .call(d3.drag()
-          .on('start', dragstarted)
-          .on('drag', dragged)
-          .on('end', dragended));
+        .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
       globalNodeElements = node;
 
@@ -1494,29 +1495,55 @@ pnpm kit help
       const container = document.getElementById('markdown-body');
       if (!container) return;
 
-      const cleanedText = text.replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '');
-      const html = marked.parse(cleanedText);
-      container.innerHTML = html;
+      try {
+        const cleanedText = text.replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '');
+        let parsedHtml = '';
+        if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+          parsedHtml = marked.parse(cleanedText);
+        } else if (typeof marked === 'function') {
+          parsedHtml = marked(cleanedText);
+        } else {
+          parsedHtml = `<pre style="white-space: pre-wrap; font-family: var(--font-mono); color: var(--text-muted);">${cleanedText}</pre>`;
+        }
+        container.innerHTML = parsedHtml;
 
-      const codeBlocks = container.querySelectorAll('code.language-mermaid');
-      codeBlocks.forEach((block) => {
-        const pre = block.parentElement;
-        const div = document.createElement('div');
-        div.className = 'mermaid';
-        div.textContent = block.textContent;
-        pre.replaceWith(div);
-      });
+        if (typeof mermaid !== 'undefined') {
+          const codeBlocks = container.querySelectorAll('code.language-mermaid');
+          codeBlocks.forEach((block) => {
+            const pre = block.parentElement;
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = block.textContent;
+            pre.replaceWith(div);
+          });
 
-      mermaid.run();
+          try {
+            if (typeof mermaid.run === 'function') {
+              mermaid.run();
+            } else if (typeof mermaid.init === 'function') {
+              mermaid.init();
+            }
+          } catch (mErr) {
+            console.warn('Mermaid rendering warning:', mErr);
+          }
+        }
+      } catch (err) {
+        console.error('Markdown rendering error:', err);
+        container.innerHTML = `<pre style="white-space: pre-wrap; font-family: var(--font-mono); color: var(--text-muted);">${text}</pre>`;
+      }
     }
 
-    fetch('./README.md')
-      .then(res => {
-        if (!res.ok) throw new Error('HTTP Error');
-        return res.text();
-      })
-      .then(text => renderMarkdownContent(text))
-      .catch(() => renderMarkdownContent(FALLBACK_README));
+    if (window.location.protocol === 'file:') {
+      renderMarkdownContent(FALLBACK_README);
+    } else {
+      fetch('./README.md')
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP Error');
+          return res.text();
+        })
+        .then(text => renderMarkdownContent(text))
+        .catch(() => renderMarkdownContent(FALLBACK_README));
+    }
   </script>
 </body>
 

@@ -1,8 +1,8 @@
-<div align="center">
+<!-- <div align="center">
 
 <img src="./assets/kit_banner.png" alt="Kit - AI Agent Lifecycle Framework" width="100%" />
 
-<br />
+<br /> -->
 
 # 🤖 Kit (Agent Lifecycle Kit)
 
