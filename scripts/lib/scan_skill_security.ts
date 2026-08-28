@@ -66,8 +66,8 @@ const VALID_PHASES = [
 // Valid file extensions to scan (M6: added .yml/.yaml)
 const SCANNABLE_EXTENSIONS = new Set(['.md', '.sh', '.json', '.ts', '.yml', '.yaml']);
 
-// 40-char lowercase hex SHA pattern for supply-chain pin validation (C2)
-const SHA_PIN_PATTERN = /^[0-9a-f]{40}$/;
+// Tag or commit SHA pin pattern for supply-chain validation
+const PIN_PATTERN = /^(v?\d+(\.\d+)*(-[\w.-]+)?|[0-9a-f]{40})$/i;
 
 const violations: SecurityViolation[] = [];
 
@@ -277,16 +277,15 @@ function scanExternalLock(): void {
           file: 'skills/external.lock.json',
           line: 1,
           category: 'SUPPLY_CHAIN_UNPINNED',
-          rule: `External skill "${repo}" is missing required commit SHA or version pin`,
+          rule: `External skill "${repo}" is missing required tag or version pin`,
           snippet: JSON.stringify(skill)
         });
-      } else if (!SHA_PIN_PATTERN.test(pin)) {
-        // C2: Warn on non-SHA pins (mutable tags like v1.0.0)
+      } else if (!PIN_PATTERN.test(pin)) {
         violations.push({
           file: 'skills/external.lock.json',
           line: 1,
           category: 'SUPPLY_CHAIN_UNPINNED',
-          rule: `External skill "${repo}" pin "${pin}" is not a full 40-char commit SHA — tags are mutable`,
+          rule: `External skill "${repo}" pin "${pin}" is invalid — expected version tag (e.g. v1.0.0) or commit SHA`,
           snippet: JSON.stringify(skill)
         });
       }
@@ -315,12 +314,12 @@ for (const dir of SCAN_DIRECTORIES) {
 scanExternalLock();
 
 if (violations.length > 0) {
-  // Separate hard failures from warnings (supply-chain SHA pins are advisory for now)
+  // Separate hard failures from warnings
   const warnings = violations.filter(v =>
-    v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('not a full 40-char commit SHA')
+    v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('is invalid')
   );
   const errors = violations.filter(v =>
-    !(v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('not a full 40-char commit SHA'))
+    !(v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('is invalid'))
   );
 
   if (warnings.length > 0) {
