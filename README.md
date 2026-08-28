@@ -7,7 +7,7 @@ AI coding assistants are powerful, but without shared standards they drift: inco
 ## What you get
 
 - **Shared engineering standards** - hexagonal architecture, domain-driven design, vertical slices, and clean code
-- **Lifecycle roles** - spec → TDD short loop (gear 1 domain + gear 2 thin adapters) → XFN plan/green → optional adapter deep-dive → audit → telemetry → release (plus debug / prune / migration / review paths)
+- **Lifecycle roles** - grilling (design-tree frontier stress-testing) → spec → TDD short loop (gear 1 domain + gear 2 thin adapters) → XFN plan/green → optional adapter deep-dive → audit → telemetry → release (plus debug / prune / migration / review paths)
 - **Behavior catalog & XFN** - tests as source of truth; apply/skip matrix for browser E2E, a11y, security, load ([SOP](./SOPs/behavior-catalog-and-xfn.md))
 - **Hypothesis-driven debug** - bugs, CI failures, and live-site RCA with repro + proof gates ([SOP](./SOPs/hypothesis-driven-debug.md), [agent-debug](./skills/agent-debug/SKILL.md))
 - **Stack profiles** - TypeScript, Python, Go, Java, C#, .NET, Next.js, Nuxt, FastAPI, Spring Boot, Quarkus, and more (with XFN tooling defaults)
