@@ -1,0 +1,5 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+Sitemap: https://mzworthington.github.io/agent-lifecycle-kit/sitemap.xml
