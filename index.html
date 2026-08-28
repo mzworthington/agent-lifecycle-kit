@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Lifecycle Kit — Autonomous AI Agent Architecture & Governance</title>
+  <meta name="description" content="Consistent, production-grade AI-assisted software engineering across every IDE and tech stack.">
+  <link rel="icon" type="image/png" href="./assets/kit_logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Marked & Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-surface: #101726;
+      --bg-card: rgba(22, 31, 50, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.3);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --accent: #a855f7;
+      --success: #10b981;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Ambient Background Glows */
+    .glow-1 {
+      position: fixed;
+      top: -200px;
+      left: 20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .glow-2 {
+      position: fixed;
+      top: 400px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Header Nav */
+    header {
+      backdrop-filter: blur(16px);
+      background: rgba(9, 13, 22, 0.8);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .brand img {
+      height: 36px;
+      width: auto;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .btn-github {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-github:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 4rem;
+    }
+
+    .hero-banner {
+      max-width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-accent);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 30%, var(--primary-light) 70%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 800px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Badges Bar */
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .badge-bar img {
+      height: 28px;
+    }
+
+    /* Grid Sections */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-accent);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* CLI Showcase Box */
+    .cli-box {
+      background: #060911;
+      border: 1px solid var(--border-accent);
+      border-radius: 14px;
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      margin-bottom: 4rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .cli-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .cli-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .cli-code {
+      color: #38bdf8;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .cli-code span.cmd { color: #f43f5e; }
+    .cli-code span.arg { color: #a7f3d0; }
+    .cli-code span.comment { color: #64748b; font-style: italic; }
+
+    /* Main Docs Content */
+    .docs-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .docs-content h1, .docs-content h2, .docs-content h3 {
+      color: var(--text);
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .docs-content h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .docs-content h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+    .docs-content p { color: var(--text-muted); margin-bottom: 1rem; }
+    .docs-content ul, .docs-content ol { color: var(--text-muted); margin-left: 1.5rem; margin-bottom: 1rem; }
+    .docs-content code { background: rgba(255,255,255,0.08); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em; }
+    .docs-content pre { background: #060911; padding: 1.25rem; border-radius: 10px; overflow-x: auto; margin-bottom: 1.25rem; border: 1px solid var(--border); }
+    .docs-content pre code { background: none; padding: 0; }
+    .docs-content table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .docs-content th, .docs-content td { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
+    .docs-content th { background: rgba(255,255,255,0.04); color: var(--text); }
+    .docs-content td { color: var(--text-muted); }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 5rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <img src="./assets/kit_logo.png" alt="Kit Logo">
+        <span>Agent Lifecycle Kit</span>
+      </a>
+      <div class="nav-links">
+        <a href="#pillars" class="nav-link">Pillars</a>
+        <a href="#cli" class="nav-link">CLI</a>
+        <a href="#flow" class="nav-link">Lifecycle Flow</a>
+        <a href="#docs" class="nav-link">Documentation</a>
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github">GitHub Repository</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <img src="./assets/kit_banner.png" alt="Kit Banner" class="hero-banner">
+      <h1 class="hero-title">Autonomous AI Agent Lifecycle & Governance</h1>
+      <p class="hero-subtitle">Consistent, production-grade AI-assisted software engineering across every IDE and tech stack.</p>
+
+      <div class="badge-bar">
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions" alt="CI"></a>
+        <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github" alt="Docs"></a>
+        <a href="./evals/"><img src="https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target" alt="Evals"></a>
+        <a href="./package.json"><img src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs" alt="Node"></a>
+        <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge" alt="License"></a>
+      </div>
+    </section>
+
+    <!-- Pillars Grid -->
+    <section id="pillars" class="pillars-grid">
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">Architectural Mandates</div>
+        <div class="card-desc">Strict Hexagonal Architecture, DDD domain invariants, vertical slices, and clean code guardrails.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <div class="card-title">Multi-IDE Rule Sync</div>
+        <div class="card-desc">Write core standards in AGENTS.md once. Kit syncs across Cursor, Gemini CLI, Claude, Windsurf, & Copilot.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">44 Specialist Skills</div>
+        <div class="card-desc">Modular skills covering lifecycle phases (spec, TDD, security, arch-drift), tech stacks, and domain profiles.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧪</div>
+        <div class="card-title">100% Evaluation Engine</div>
+        <div class="card-desc">Live trigger benchmark harness running 66 test cases across 37 suites with 100% accuracy validation.</div>
+      </div>
+    </section>
+
+    <!-- CLI Section -->
+    <section id="cli">
+      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">🚀 Unified Terminal CLI (`kit`)</h2>
+      <div class="cli-box">
+        <div class="cli-header">
+          <div class="cli-dots">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <span>zsh — kit CLI</span>
+        </div>
+        <div class="cli-code">
+          <div><span class="comment"># Global installation script links kit directly into your $PATH</span></div>
+          <div>$ <span class="cmd">./install.sh</span></div>
+          <br>
+          <div><span class="comment"># Bootstrap any new application codebase with standards & MCP profile</span></div>
+          <div>$ <span class="cmd">kit init</span> <span class="arg">./my-app --mcp collab --hook</span></div>
+          <br>
+          <div><span class="comment"># Run hardened security & supply chain audit</span></div>
+          <div>$ <span class="cmd">kit audit</span></div>
+          <br>
+          <div><span class="comment"># Run live trigger evaluation benchmarks</span></div>
+          <div>$ <span class="cmd">kit eval</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Docs Section -->
+    <section id="docs" class="docs-wrapper">
+      <div id="markdown-body" class="docs-content">
+        <p style="text-align: center; color: var(--text-muted);">Loading documentation from README.md...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Agent Lifecycle Kit is open source and released under the Unlicense (Public Domain).</p>
+    <p style="margin-top: 0.5rem; color: #64748b;">Autonomous AI Agent Lifecycle, Architecture & Governance Framework</p>
+  </footer>
+
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+    fetch('./README.md')
+      .then(res => res.text())
+      .then(text => {
+        // Strip header logo image since hero banner is already present
+        const cleanedText = text.replace(/<img src="\.\/assets\/kit_banner\.png"[\s\S]*?\/>/, '');
+        const html = marked.parse(cleanedText);
+        const container = document.getElementById('markdown-body');
+        container.innerHTML = html;
+
+        // Render Mermaid diagrams
+        const codeBlocks = container.querySelectorAll('code.language-mermaid');
+        codeBlocks.forEach((block, index) => {
+          const pre = block.parentElement;
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = block.textContent;
+          pre.replaceWith(div);
+        });
+
+        mermaid.run();
+      })
+      .catch(err => {
+        document.getElementById('markdown-body').innerHTML = '<p style="color: #ef4444;">Failed to load README.md documentation.</p>';
+      });
+  </script>
+</body>
+</html>
