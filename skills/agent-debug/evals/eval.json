@@ -1,0 +1,23 @@
+{
+  "suite": "agent-debug-co-located",
+  "description": "Co-located evaluation benchmark for agent-debug hypothesis-driven RCA skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-DBG-COLOCATED-001",
+      "name": "Single Skill Debug Verification",
+      "description": "Ensures agent-debug creates hypothesis boards, minimal repros, and relies strictly on empirical log evidence.",
+      "target_skill": "agent-debug",
+      "prompt": "Our canvas state store throws an unhandled rejection when deserializing corrupt share links. Debug this crash.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": ["hypothesis", "root cause", "reproduce"],
+        "required_patterns": ["Hypothesis", "Evidence", "Root Cause"],
+        "forbidden_patterns": ["guessing without logs"],
+        "required_output_sections": ["Hypothesis Board", "Empirical Evidence & Logs", "Root Cause & Fix"]
+      }
+    }
+  ]
+}

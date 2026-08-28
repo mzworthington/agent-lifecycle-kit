@@ -1,0 +1,23 @@
+{
+  "suite": "agent-pre-commit-co-located",
+  "description": "Co-located evaluation benchmark for agent-pre-commit skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PRE-COLOCATED-001",
+      "name": "Single Skill Pre-Commit Verification",
+      "description": "Ensures agent-pre-commit runs linting/formatting bounds and enforces conventional commit PR titles.",
+      "target_skill": "agent-pre-commit",
+      "prompt": "Validate git pre-commit checks and format the commit message.",
+      "context": {
+        "active_phase": "quality"
+      },
+      "assertions": {
+        "required_triggers": ["pre-commit", "quality gate", "conventional commits"],
+        "required_patterns": ["feat:", "fix:", "conventional commit"],
+        "forbidden_patterns": ["WIP", "fixed stuff"],
+        "required_output_sections": ["Pre-Commit Checks Summary", "Conventional Commit Subject & PR Title"]
+      }
+    }
+  ]
+}

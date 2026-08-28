@@ -1,0 +1,23 @@
+{
+  "suite": "agent-prune-co-located",
+  "description": "Co-located evaluation benchmark for agent-prune dead code and complexity hotspot skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PRUNE-COLOCATED-001",
+      "name": "Dead Code & Complexity Hotspot Pruning",
+      "description": "Ensures agent-prune identifies unreferenced exports and refactors high cognitive complexity methods in safe, test-backed batches.",
+      "target_skill": "agent-prune",
+      "prompt": "Prune unused exports and reduce cognitive complexity in the storage adapter package.",
+      "context": {
+        "active_phase": "maintenance"
+      },
+      "assertions": {
+        "required_triggers": ["dead code", "prune", "complexity"],
+        "required_patterns": ["Dead Code Inventory", "Cognitive Complexity Audit", "Batch Removal Plan"],
+        "forbidden_patterns": ["deleting active tests"],
+        "required_output_sections": ["Hotspot Audit", "Pruning Verification Plan"]
+      }
+    }
+  ]
+}

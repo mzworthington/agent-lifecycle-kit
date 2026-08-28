@@ -1,0 +1,23 @@
+{
+  "suite": "agent-orchestrator-co-located",
+  "description": "Co-located evaluation benchmark for agent-orchestrator skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-ORCH-COLOCATED-001",
+      "name": "Multi-Phase Lifecycle Orchestration",
+      "description": "Ensures orchestrator coordinates specialist handovers in order without bypassing spec or TDD phases.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Orchestrate the end-to-end development of a real-time presence awareness feature.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": ["lifecycle", "multi-phase", "orchestrate"],
+        "required_patterns": ["agent-spec", "agent-tdd", "agent-xfn", "agent-adapter"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Phase Handover Plan", "Specialist Role Assignments"]
+      }
+    }
+  ]
+}

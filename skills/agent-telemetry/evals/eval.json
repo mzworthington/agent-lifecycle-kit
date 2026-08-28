@@ -1,0 +1,23 @@
+{
+  "suite": "agent-telemetry-co-located",
+  "description": "Co-located evaluation benchmark for agent-telemetry skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-TEL-COLOCATED-001",
+      "name": "Single Skill Telemetry Verification",
+      "description": "Ensures agent-telemetry maps XFN SLOs to metrics, structured logging, and distributed tracing.",
+      "target_skill": "agent-telemetry",
+      "prompt": "Configure telemetry and alerting rules for the document storage adapter.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["logging", "tracing", "metrics"],
+        "required_patterns": ["SLO", "Metric", "Trace Context"],
+        "forbidden_patterns": ["unstructured console.log"],
+        "required_output_sections": ["Telemetry Strategy", "Metric & Trace Definitions", "Alerting & Dashboard Rules"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "suite": "agent-adapter-co-located",
+  "description": "Co-located evaluation benchmark for agent-adapter skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-ADAPT-COLOCATED-001",
+      "name": "Single Skill Adapter Verification",
+      "description": "Ensures agent-adapter isolates infrastructure details behind ports, re-confirms test impact, and aligns fixtures.",
+      "target_skill": "agent-adapter",
+      "prompt": "Implement the Redis cache adapter for the user session port.",
+      "context": {
+        "active_phase": "impl"
+      },
+      "assertions": {
+        "required_triggers": ["adapter", "infrastructure", "repository"],
+        "required_patterns": ["Implements", "Port", "Adapter"],
+        "forbidden_patterns": ["domain logic inside adapter"],
+        "required_output_sections": ["Impact Re-confirmation", "Adapter Implementation", "Fixture Alignment"]
+      }
+    }
+  ]
+}

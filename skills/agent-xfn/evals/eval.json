@@ -1,0 +1,23 @@
+{
+  "suite": "agent-xfn-co-located",
+  "description": "Co-located evaluation benchmark for agent-xfn skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-XFN-COLOCATED-001",
+      "name": "Single Skill XFN Quality Verification",
+      "description": "Ensures agent-xfn produces cross-functional quality matrices for browser E2E, accessibility, security, and load suites.",
+      "target_skill": "agent-xfn",
+      "prompt": "Design the XFN test plan for the workspace sharing modal.",
+      "context": {
+        "active_phase": "xfn"
+      },
+      "assertions": {
+        "required_triggers": ["xfn matrix", "accessibility", "browser e2e"],
+        "required_patterns": ["Accessibility", "Security", "Performance", "SLO"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["XFN Quality Matrix", "Test Suite Stubs", "SLO Verification Plan"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "suite": "agent-adr-co-located",
+  "description": "Co-located evaluation benchmark for agent-adr architecture decision record skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-ADR-COLOCATED-001",
+      "name": "MADR Architecture Decision Record Creation",
+      "description": "Ensures agent-adr generates sparse MADR ADR records under docs/ADRs/ for hard-to-reverse architectural decisions.",
+      "target_skill": "agent-adr",
+      "prompt": "Create an Architecture Decision Record (ADR) for choosing hybrid WebSockets and HTTP long-polling for real-time sync.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["adr", "madr", "architecture decision"],
+        "required_patterns": ["Context and Problem Statement", "Decision Drivers", "Considered Options", "Decision Outcome"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["MADR Specification", "Consequences"]
+      }
+    }
+  ]
+}

@@ -100,6 +100,38 @@
       }
     },
     {
+      "id": "EVAL-ADR-001",
+      "name": "MADR Architecture Decision Record Creation",
+      "description": "Verifies that off-norm or hard-to-reverse architectural decisions produce sparse MADR ADRs under docs/ADRs/.",
+      "target_skill": "agent-adr",
+      "prompt": "Record an ADR for switching our canvas storage adapter from browser local storage to hybrid object storage.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["adr", "madr", "architecture decision"],
+        "required_patterns": ["Context and Problem Statement", "Decision Drivers", "Decision Outcome"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["MADR Specification", "Consequences"]
+      }
+    },
+    {
+      "id": "EVAL-PRUNE-001",
+      "name": "Dead Code & Complexity Hotspot Pruning",
+      "description": "Verifies that dead code pruning removes unreferenced exports and refactors complexity hotspots in safe batches.",
+      "target_skill": "agent-prune",
+      "prompt": "Identify dead code and reduce high cognitive complexity methods in the canvas package.",
+      "context": {
+        "active_phase": "maintenance"
+      },
+      "assertions": {
+        "required_triggers": ["dead code", "prune", "complexity"],
+        "required_patterns": ["Dead Code Inventory", "Cognitive Complexity Audit"],
+        "forbidden_patterns": ["deleting active tests"],
+        "required_output_sections": ["Hotspot Audit", "Pruning Verification Plan"]
+      }
+    },
+    {
       "id": "EVAL-DEBUG-001",
       "name": "Hypothesis-Driven Debugging & RCA",
       "description": "Verifies structured root cause analysis using hypothesis boards, minimal repros, and empirical log evidence.",
