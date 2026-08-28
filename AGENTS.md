@@ -31,7 +31,7 @@ See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/REA
 
 1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code. Prefer **Mermaid** for diagrams; do not create or maintain ASCII/box-drawing art diagrams (see Interaction Mandate §8). Use **conventional commit** subjects for git commits **and** PR titles ([SOPs/conventional-commits.md](./SOPs/conventional-commits.md)) — squash-and-merge uses the PR title on the default branch.
 2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
-3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: Spec → TDD impact → XFN plan → **TDD short loop (gear 1+2)** → XFN green → Audit → Telemetry → Release. Prefer gear-2 thin adapters inside `agent-tdd`; use `agent-adapter` only for deep-dives.
+3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: **Grilling (if ambiguous/unsettled)** → Spec → TDD impact → XFN plan → **TDD short loop (gear 1+2)** → XFN green → Audit → Telemetry → Release. Prefer gear-2 thin adapters inside `agent-tdd`; use `agent-adapter` only for deep-dives.
 4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
 5. **Complexity hotspots** - [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) (audit backlog → `agent-prune` complexity track).
 6. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) (and skill frontmatter `mcp:`) when phases/triggers match. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
@@ -43,6 +43,7 @@ When executing a lifecycle phase, assume the matching role skill:
 
 | Phase | Skill |
 |-------|-------|
+| Idea / plan stress-testing | [agent-grilling](./skills/agent-grilling/SKILL.md) (primitive) / [agent-grill-me](./skills/agent-grill-me/SKILL.md) (stateless) - design tree & decision frontier |
 | Requirements / specs | [agent-spec](./skills/agent-spec/SKILL.md) - include cross-functional acceptance criteria |
 | Design / functional tests + short loop | [agent-tdd](./skills/agent-tdd/SKILL.md) - catalog impact; gear-1 domain/handlers; gear-2 thin adapters same session |
 | Design / cross-functional quality | [agent-xfn](./skills/agent-xfn/SKILL.md) - matrix + stubs in plan; green apply suites after wiring |

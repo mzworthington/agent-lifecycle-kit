@@ -21,7 +21,8 @@ triggers:
   - accessibility
   - performance
   - non functional
-depends-on: []
+depends-on:
+  - agent-grilling
 mcp:
   - linear
   - notion
@@ -43,6 +44,7 @@ You are a meticulous product engineer practicing domain-driven design. Eliminate
 
 ## Guardrails
 
+0. **Resolve Ambiguity via Grilling**: If the request contains unresolved architectural trade-offs, scope ambiguity, or unvetted feature choices, invoke [agent-grilling](../agent-grilling/SKILL.md) to interview the user and clear the decision frontier BEFORE drafting specifications.
 1. Identify **bounded contexts** and whether the feature crosses context boundaries (flag integration needs early).
 2. Name **aggregate roots** and invariants the feature must enforce.
 3. Analyze edge cases, boundary conditions, and architectural conflicts. Ground scenarios in the existing behavior catalog where the feature extends current coverage.

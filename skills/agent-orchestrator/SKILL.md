@@ -16,6 +16,8 @@ triggers:
   - multi-phase
   - orchestrate
 depends-on:
+  - agent-grilling
+  - agent-grill-me
   - agent-spec
   - agent-tdd
   - agent-xfn
@@ -61,6 +63,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 | Phase | Skill |
 |-------|-------|
+| Idea / plan stress-testing | [agent-grilling](../agent-grilling/SKILL.md) (primitive) / [agent-grill-me](../agent-grill-me/SKILL.md) (stateless) |
 | Specification | [agent-spec](../agent-spec/SKILL.md) |
 | TDD short loop | [agent-tdd](../agent-tdd/SKILL.md) — gear 1 domain/handlers + gear 2 thin adapters |
 | Cross-functional quality | [agent-xfn](../agent-xfn/SKILL.md) |
