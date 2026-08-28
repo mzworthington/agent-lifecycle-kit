@@ -10,7 +10,7 @@
     "scan": "./scripts/scan-skill-security.sh",
     "validate": "./scripts/validate-evals.sh",
     "verify": "./scripts/verify-skills-layout.sh",
-    "check": "npm run scan && npm run validate && npm run verify"
+    "check": "pnpm run scan && pnpm run validate && pnpm run verify"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
