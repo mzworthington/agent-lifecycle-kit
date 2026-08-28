@@ -48,14 +48,29 @@ Debug in progress. Board: \`${boardPath}\`.
 
 const args = process.argv.slice(2);
 if (args.length < 1) {
+  console.error('Usage: init_debug_board.ts <board|handover> [args...]');
   process.exit(1);
 }
 
 const cmd = args[0];
 if (cmd === 'board') {
-  const [template, out, title, project, date] = args.slice(1);
+  if (args.length < 6) {
+    console.error('Usage: init_debug_board.ts board <template> <out> <title> <project> <date>');
+    console.error(`  Got ${args.length - 1} arg(s), expected 5`);
+    process.exit(1);
+  }
+  const [, template, out, title, project, date] = args;
   initBoard(template, out, title, project, date);
 } else if (cmd === 'handover') {
-  const [handover, project, date, board] = args.slice(1);
+  if (args.length < 5) {
+    console.error('Usage: init_debug_board.ts handover <handover-path> <project> <date> <board-path>');
+    console.error(`  Got ${args.length - 1} arg(s), expected 4`);
+    process.exit(1);
+  }
+  const [, handover, project, date, board] = args;
   initHandover(handover, project, date, board);
+} else {
+  console.error(`ERROR: unknown subcommand "${cmd}". Expected "board" or "handover".`);
+  process.exit(1);
 }
+

@@ -1,0 +1,24 @@
+{
+  "name": "agent-lifecycle-kit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Modular agent lifecycle guardrails, skills, and tooling",
+  "scripts": {
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit",
+    "scan": "./scripts/scan-skill-security.sh",
+    "validate": "./scripts/validate-evals.sh",
+    "verify": "./scripts/verify-skills-layout.sh",
+    "check": "npm run scan && npm run validate && npm run verify"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "ajv": "^8.20.0",
+    "husky": "^9.1.7",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

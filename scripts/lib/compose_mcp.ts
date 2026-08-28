@@ -11,6 +11,12 @@ interface ProfileConfig {
   servers?: string[];
 }
 
+/** Exit with an error message — typed as `never` so TS knows execution stops. */
+function fail(msg: string): never {
+  console.error(msg);
+  process.exit(1);
+}
+
 const profilePathStr = process.env.PROFILE_PATH;
 const mcpsDirStr = process.env.MCPS_DIR;
 
@@ -27,7 +33,13 @@ if (!fs.existsSync(profilePath)) {
   process.exit(1);
 }
 
-const profile: ProfileConfig = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
+let profile: ProfileConfig;
+try {
+  profile = JSON.parse(fs.readFileSync(profilePath, 'utf8')) as ProfileConfig;
+} catch (err: unknown) {
+  const message = err instanceof Error ? err.message : String(err);
+  fail(`ERROR: invalid JSON in profile ${profilePath}: ${message}`);
+}
 const serverIds = profile.servers || [];
 
 if (!Array.isArray(serverIds)) {
@@ -45,7 +57,13 @@ for (const serverId of serverIds) {
     process.exit(1);
   }
 
-  const data: ServerConfig = JSON.parse(fs.readFileSync(serverFile, 'utf8'));
+  let data: ServerConfig;
+  try {
+    data = JSON.parse(fs.readFileSync(serverFile, 'utf8')) as ServerConfig;
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    fail(`ERROR: invalid JSON in server ${serverFile}: ${message}`);
+  }
   const fragment = data.mcp;
 
   if (!fragment || typeof fragment !== 'object' || Object.keys(fragment).length === 0) {

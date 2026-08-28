@@ -14,19 +14,29 @@ interface LockFile {
   skills?: SkillEntry[];
 }
 
+/** Exit with an error message — typed as `never` so TS knows execution stops. */
+function fail(msg: string): never {
+  console.error(msg);
+  process.exit(1);
+}
+
 const lockFileStr = process.env.LOCK_FILE;
 if (!lockFileStr) {
-  console.error("ERROR: LOCK_FILE environment variable required");
-  process.exit(1);
+  fail("ERROR: LOCK_FILE environment variable required");
 }
 
 const lockFilePath = path.resolve(lockFileStr);
 if (!fs.existsSync(lockFilePath)) {
-  console.error(`ERROR: lockfile not found: ${lockFilePath}`);
-  process.exit(1);
+  fail(`ERROR: lockfile not found: ${lockFilePath}`);
 }
 
-const lock: LockFile = JSON.parse(fs.readFileSync(lockFilePath, 'utf8'));
+let lock: LockFile;
+try {
+  lock = JSON.parse(fs.readFileSync(lockFilePath, 'utf8')) as LockFile;
+} catch (err: unknown) {
+  const message = err instanceof Error ? err.message : String(err);
+  fail(`ERROR: invalid JSON in lockfile ${lockFilePath}: ${message}`);
+}
 const agent = lock.agent || "cursor";
 const scope = lock.scope || "user";
 

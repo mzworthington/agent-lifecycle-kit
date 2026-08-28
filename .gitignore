@@ -33,6 +33,7 @@ skills/*
 *.key
 secrets.json
 credentials.json
+node_modules/
 .pnpm-store/
 
 # OS / editor

@@ -9,10 +9,27 @@ const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..')
 const skillsDir: string = path.join(repoDir, 'skills');
 const lockFilePath: string = path.join(skillsDir, 'external.lock.json');
 
+// Directories to scan — covers the full content surface, not just skills/ (C1)
+const SCAN_DIRECTORIES: string[] = [
+  'skills',
+  'scripts',
+  'SOPs',
+  'templates',
+  'mcps',
+];
+
+// Directories and patterns to skip during scanning
+const SKIP_DIRS = new Set(['.git', 'node_modules', '.pnpm-store', '.pnpm', '.husky']);
+
+// Paths excluded from content scanning (relative to repo root).
+// scripts/lib/ contains our own tooling — scanning it produces false positives
+// (e.g., the scanner's own regex patterns mention 'ignore instructions', process.env usage)
+const SKIP_REL_PATHS = new Set(['scripts/lib']);
+
 interface SecurityViolation {
   file: string;
   line: number;
-  category: 'PROMPT_INJECTION' | 'EXFILTRATION_RISK' | 'OBFUSCATED_EXEC' | 'HARDCODED_SECRET' | 'SUPPLY_CHAIN_UNPINNED' | 'FRONTMATTER_SCHEMA';
+  category: 'PROMPT_INJECTION' | 'EXFILTRATION_RISK' | 'OBFUSCATED_EXEC' | 'HARDCODED_SECRET' | 'SUPPLY_CHAIN_UNPINNED' | 'FRONTMATTER_SCHEMA' | 'SYMLINK';
   rule: string;
   snippet: string;
 }
@@ -45,6 +62,12 @@ const VALID_KINDS = ['role', 'profile'];
 const VALID_PHASES = [
   'orchestration', 'spec', 'tdd', 'xfn', 'impl', 'audit', 'maintenance', 'debug', 'telemetry', 'quality', 'docs', 'release'
 ];
+
+// Valid file extensions to scan (M6: added .yml/.yaml)
+const SCANNABLE_EXTENSIONS = new Set(['.md', '.sh', '.json', '.ts', '.yml', '.yaml']);
+
+// 40-char lowercase hex SHA pattern for supply-chain pin validation (C2)
+const SHA_PIN_PATTERN = /^[0-9a-f]{40}$/;
 
 const violations: SecurityViolation[] = [];
 
@@ -79,6 +102,7 @@ function scanFrontmatter(filePath: string, relPath: string, content: string): vo
   const yamlText = match[1];
 
   const nameMatch = yamlText.match(/^name:\s*(.+)$/m);
+  const descMatch = yamlText.match(/^description:\s*/m);
   const kindMatch = yamlText.match(/^kind:\s*(.+)$/m);
   const phaseMatch = yamlText.match(/^phase:\s*(.+)$/m);
   const triggersMatch = yamlText.match(/triggers:\s*\n((?:\s*-\s*.*\n?)+)/);
@@ -89,6 +113,17 @@ function scanFrontmatter(filePath: string, relPath: string, content: string): vo
       line: 1,
       category: 'FRONTMATTER_SCHEMA',
       rule: 'Frontmatter missing required field: name',
+      snippet: ''
+    });
+  }
+
+  // H5: description is required per AGENTS.md
+  if (!descMatch) {
+    violations.push({
+      file: relPath,
+      line: 1,
+      category: 'FRONTMATTER_SCHEMA',
+      rule: 'Frontmatter missing required field: description',
       snippet: ''
     });
   }
@@ -134,11 +169,12 @@ function scanFile(filePath: string, relPath: string): void {
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
 
-  if (relPath.endsWith('SKILL.md')) {
+  // Only validate frontmatter on SKILL.md files inside skills/ directory
+  if (relPath.endsWith('SKILL.md') && relPath.startsWith('skills/')) {
     scanFrontmatter(filePath, relPath, content);
   }
 
-  lines.forEach((line, index) => {
+  lines.forEach((line: string, index: number) => {
     SECURITY_RULES.forEach(rule => {
       if (rule.pattern.test(line)) {
         violations.push({
@@ -152,7 +188,7 @@ function scanFile(filePath: string, relPath: string): void {
     });
 
     // High entropy check for single contiguous tokens > 32 chars (excluding standard URLs and Markdown links)
-    const tokens = line.split(/[\s,;()\[\]{}'"]+/);
+    const tokens = line.split(/[\s,;()\[\]{}'\"]+/);
     for (const token of tokens) {
       if (token.length > 32 && !token.startsWith('http://') && !token.startsWith('https://') && !token.includes('file://')) {
         const entropy = calculateEntropy(token);
@@ -170,7 +206,17 @@ function scanFile(filePath: string, relPath: string): void {
   });
 }
 
-function scanSkillsDirectory(dirPath: string): void {
+// L3: Detect symlinks and warn instead of following them
+function isSymlink(entryPath: string): boolean {
+  try {
+    const stat = fs.lstatSync(entryPath);
+    return stat.isSymbolicLink();
+  } catch {
+    return false;
+  }
+}
+
+function scanDirectory(dirPath: string): void {
   if (!fs.existsSync(dirPath)) return;
 
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
@@ -179,10 +225,29 @@ function scanSkillsDirectory(dirPath: string): void {
     const fullPath = path.join(dirPath, entry.name);
     const relPath = path.relative(repoDir, fullPath);
 
+    // L3: Skip and warn on symlinks
+    if (isSymlink(fullPath)) {
+      violations.push({
+        file: relPath,
+        line: 0,
+        category: 'SYMLINK',
+        rule: `Symlink detected — not followed (potential traversal attack)`,
+        snippet: `-> ${fs.readlinkSync(fullPath)}`
+      });
+      continue;
+    }
+
+    // Skip excluded directories by name or relative path
     if (entry.isDirectory()) {
-      scanSkillsDirectory(fullPath);
-    } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.sh') || entry.name.endsWith('.json') || entry.name.endsWith('.ts'))) {
-      scanFile(fullPath, relPath);
+      if (SKIP_DIRS.has(entry.name)) continue;
+      const dirRelPath = path.relative(repoDir, fullPath);
+      if (SKIP_REL_PATHS.has(dirRelPath)) continue;
+      scanDirectory(fullPath);
+    } else if (entry.isFile()) {
+      const ext = path.extname(entry.name);
+      if (SCANNABLE_EXTENSIONS.has(ext)) {
+        scanFile(fullPath, relPath);
+      }
     }
   }
 }
@@ -215,6 +280,15 @@ function scanExternalLock(): void {
           rule: `External skill "${repo}" is missing required commit SHA or version pin`,
           snippet: JSON.stringify(skill)
         });
+      } else if (!SHA_PIN_PATTERN.test(pin)) {
+        // C2: Warn on non-SHA pins (mutable tags like v1.0.0)
+        violations.push({
+          file: 'skills/external.lock.json',
+          line: 1,
+          category: 'SUPPLY_CHAIN_UNPINNED',
+          rule: `External skill "${repo}" pin "${pin}" is not a full 40-char commit SHA — tags are mutable`,
+          snippet: JSON.stringify(skill)
+        });
       }
     }
   } catch (err: unknown) {
@@ -232,19 +306,47 @@ function scanExternalLock(): void {
 console.log('=== Agent Skill Hardened Security & Supply Chain Audit ===');
 console.log('');
 
-scanSkillsDirectory(skillsDir);
+// C1: Scan all content directories, not just skills/
+for (const dir of SCAN_DIRECTORIES) {
+  const dirPath = path.join(repoDir, dir);
+  scanDirectory(dirPath);
+}
+
 scanExternalLock();
 
 if (violations.length > 0) {
-  console.error(`🚨 Security Violations Found: ${violations.length}\n`);
-  violations.forEach(v => {
-    console.error(`  ❌ [${v.category}] ${v.file}:${v.line} - ${v.rule}`);
-    if (v.snippet) {
-      console.error(`     Snippet: "${v.snippet.substring(0, 100)}"`);
-    }
-  });
-  console.error('\nHardened Security audit FAILED.');
-  process.exit(1);
+  // Separate hard failures from warnings (supply-chain SHA pins are advisory for now)
+  const warnings = violations.filter(v =>
+    v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('not a full 40-char commit SHA')
+  );
+  const errors = violations.filter(v =>
+    !(v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('not a full 40-char commit SHA'))
+  );
+
+  if (warnings.length > 0) {
+    console.warn(`⚠️  Supply Chain Warnings: ${warnings.length}\n`);
+    warnings.forEach(v => {
+      console.warn(`  ⚠️  [${v.category}] ${v.file}:${v.line} - ${v.rule}`);
+      if (v.snippet) {
+        console.warn(`     Snippet: "${v.snippet.substring(0, 100)}"`);
+      }
+    });
+    console.warn('');
+  }
+
+  if (errors.length > 0) {
+    console.error(`🚨 Security Violations Found: ${errors.length}\n`);
+    errors.forEach(v => {
+      console.error(`  ❌ [${v.category}] ${v.file}:${v.line} - ${v.rule}`);
+      if (v.snippet) {
+        console.error(`     Snippet: "${v.snippet.substring(0, 100)}"`);
+      }
+    });
+    console.error('\nHardened Security audit FAILED.');
+    process.exit(1);
+  } else {
+    console.log(`✅ Hardened Security audit PASSED (${warnings.length} advisory warning(s)).`);
+  }
 } else {
   console.log('✅ Hardened Security audit PASSED: No prompt injections, secret leaks, schema violations, or unpinned supply-chain dependencies detected.');
 }

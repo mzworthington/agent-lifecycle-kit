@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import AjvModule, { type ValidateFunction } from 'ajv';
+
+// Ajv uses CJS default export wrapped in ESM — resolve the double-default
+const Ajv = AjvModule.default ?? AjvModule;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,10 +49,29 @@ interface EvalFileInfo {
 const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..');
 const skillsDir: string = path.join(repoDir, 'skills');
 const centralSuitesDir: string = path.join(repoDir, 'evals', 'suites');
+const schemaPath: string = path.join(repoDir, 'evals', 'schema.json');
 
 let totalSuites = 0;
 let totalTests = 0;
 let errors = 0;
+
+// H2: Load and compile JSON Schema via ajv — the schema is now the source of truth
+function loadSchemaValidator(): ValidateFunction | null {
+  if (!fs.existsSync(schemaPath)) {
+    console.warn(`  ⚠️ Schema file not found at ${schemaPath} — falling back to structural checks only`);
+    return null;
+  }
+
+  try {
+    const schema: Record<string, unknown> = JSON.parse(fs.readFileSync(schemaPath, 'utf8')) as Record<string, unknown>;
+    const ajv = new Ajv({ allErrors: true });
+    return ajv.compile(schema);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn(`  ⚠️ Failed to compile schema: ${message} — falling back to structural checks only`);
+    return null;
+  }
+}
 
 function parseYamlFrontmatter(content: string): SkillFrontmatter | null {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
@@ -92,6 +115,7 @@ function findEvalFiles(): EvalFileInfo[] {
   return files;
 }
 
+const validate = loadSchemaValidator();
 const evalFiles = findEvalFiles();
 
 for (const fileInfo of evalFiles) {
@@ -109,10 +133,23 @@ for (const fileInfo of evalFiles) {
     continue;
   }
 
-  if (!data.suite || !data.version || !Array.isArray(data.test_cases)) {
-    console.error(`  ❌ Suite ${fileInfo.relPath} missing required fields (suite, version, test_cases)`);
-    errors++;
-    continue;
+  // H2: Validate against JSON Schema if available
+  if (validate) {
+    const valid = validate(data);
+    if (!valid && validate.errors) {
+      for (const schemaError of validate.errors) {
+        console.error(`  ❌ Schema violation in ${fileInfo.relPath}: ${schemaError.instancePath} ${schemaError.message}`);
+      }
+      errors++;
+      continue;
+    }
+  } else {
+    // Fallback: manual structural check (only if schema is unavailable)
+    if (!data.suite || !data.version || !Array.isArray(data.test_cases)) {
+      console.error(`  ❌ Suite ${fileInfo.relPath} missing required fields (suite, version, test_cases)`);
+      errors++;
+      continue;
+    }
   }
 
   for (const test of data.test_cases) {

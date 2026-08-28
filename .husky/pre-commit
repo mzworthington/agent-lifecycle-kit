@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Agent Lifecycle Kit — Pre-Commit Quality & Security Gate (Husky)
+set -euo pipefail
+
+REPO_DIR="$(git rev-parse --show-toplevel)"
+
+echo "=== Pre-Commit Quality & Security Gate ==="
+
+"${REPO_DIR}/scripts/scan-skill-security.sh"
+"${REPO_DIR}/scripts/validate-evals.sh"
+"${REPO_DIR}/scripts/verify-skills-layout.sh"
+
+echo "✅ Pre-commit quality gate PASSED."

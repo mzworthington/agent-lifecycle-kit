@@ -24,7 +24,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "pattern": "^EVAL-[A-Z0-9]+-[0-9]{3}$",
+            "pattern": "^EVAL-[A-Z0-9]+(-[A-Z0-9]+)*-[0-9]{3}$",
             "description": "Unique test ID (e.g., EVAL-SPEC-001)"
           },
           "name": {

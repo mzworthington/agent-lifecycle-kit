@@ -1,0 +1,16 @@
+# Ownership rules for sensitive paths — require explicit review.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# CI / GitHub Actions
+.github/                   @mzworthington
+
+# Security scanner, pre-commit, tooling scripts
+scripts/                   @mzworthington
+
+# Supply chain lockfile for external skills
+skills/external.lock.json  @mzworthington
+
+# Core guardrails & bootstrap
+AGENTS.md                  @mzworthington
+CODING_PHILOSOPHY.md       @mzworthington
+install.sh                 @mzworthington
