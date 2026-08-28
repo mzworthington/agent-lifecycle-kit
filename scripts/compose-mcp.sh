@@ -70,62 +70,13 @@ if [[ ! -f "${PROFILE_PATH}" ]]; then
   exit 1
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "ERROR: python3 is required to compose mcp.json" >&2
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERROR: node is required to compose mcp.json" >&2
   exit 1
 fi
 
 COMPOSED="$(
-  PROFILE_PATH="${PROFILE_PATH}" MCPS_DIR="${MCPS_DIR}" python3 <<'PY'
-import json
-import os
-import sys
-from pathlib import Path
-
-profile_path = Path(os.environ["PROFILE_PATH"])
-mcps_dir = Path(os.environ["MCPS_DIR"])
-profile = json.loads(profile_path.read_text())
-server_ids = profile.get("servers") or []
-if not isinstance(server_ids, list):
-    print("ERROR: profile.servers must be a list", file=sys.stderr)
-    sys.exit(1)
-
-mcp_servers = {}
-missing_env = []
-for server_id in server_ids:
-    server_file = mcps_dir / "servers" / server_id / "server.json"
-    if not server_file.is_file():
-        print(f"ERROR: server definition missing: {server_file}", file=sys.stderr)
-        sys.exit(1)
-    data = json.loads(server_file.read_text())
-    fragment = data.get("mcp")
-    if not isinstance(fragment, dict) or not fragment:
-        print(f"ERROR: {server_file} must contain a non-empty mcp object", file=sys.stderr)
-        sys.exit(1)
-    for key, value in fragment.items():
-        if key in mcp_servers:
-            print(f"ERROR: duplicate mcpServers key '{key}' from {server_id}", file=sys.stderr)
-            sys.exit(1)
-        mcp_servers[key] = value
-    for env_name in data.get("requiredEnv") or []:
-        if not os.environ.get(env_name):
-            missing_env.append(f"{server_id}:{env_name}")
-
-if missing_env:
-    print(
-        "WARN: required env vars not set in this shell (Cursor may still resolve them): "
-        + ", ".join(missing_env),
-        file=sys.stderr,
-    )
-
-print(json.dumps({"mcpServers": mcp_servers}, indent=2))
-print(file=sys.stderr)
-print(
-    f"OK: composed profile '{profile.get('name', profile_path.stem)}' "
-    f"with {len(mcp_servers)} server(s)",
-    file=sys.stderr,
-)
-PY
+  PROFILE_PATH="${PROFILE_PATH}" MCPS_DIR="${MCPS_DIR}" node "${REPO_DIR}/scripts/lib/compose_mcp.ts"
 )"
 
 write_target() {

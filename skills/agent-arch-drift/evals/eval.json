@@ -1,0 +1,23 @@
+{
+  "suite": "agent-arch-drift-co-located",
+  "description": "Co-located evaluation benchmark for agent-arch-drift architecture audit skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-ARCH-COLOCATED-001",
+      "name": "Single Skill Architecture Audit Verification",
+      "description": "Ensures agent-arch-drift enforces hexagonal boundaries, SOLID principles, and clean dependency direction.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "Review canvas application state and storage adapter packages for hexagonal boundary violations.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["hexagonal", "boundary", "solid"],
+        "required_patterns": ["Hexagonal Boundary", "Dependency Direction", "SOLID"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Boundary Conformance Analysis", "Dependency Direction Audit", "Remediation Checklist"]
+      }
+    }
+  ]
+}

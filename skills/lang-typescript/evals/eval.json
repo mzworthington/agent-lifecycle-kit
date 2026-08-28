@@ -1,0 +1,23 @@
+{
+  "suite": "lang-typescript-co-located",
+  "description": "Co-located evaluation benchmark for lang-typescript coding profile",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-TS-COLOCATED-001",
+      "name": "TypeScript Strict Typing Verification",
+      "description": "Ensures lang-typescript enforces strict type safety, immutability, and avoids 'any'.",
+      "target_skill": "lang-typescript",
+      "prompt": "Create a TypeScript value object codec for share payloads.",
+      "context": {
+        "detected_stack": ["TypeScript"]
+      },
+      "assertions": {
+        "required_triggers": ["typescript", "node", "zod"],
+        "required_patterns": ["readonly", "interface", "export type"],
+        "forbidden_patterns": [": any", "as unknown as"],
+        "required_output_sections": ["Type Definitions", "Domain Service Implementation"]
+      }
+    }
+  ]
+}

@@ -66,8 +66,8 @@ if ! gh skill --help >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "ERROR: python3 is required to read ${LOCK_FILE}" >&2
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERROR: node is required to read ${LOCK_FILE}" >&2
   exit 1
 fi
 
@@ -76,28 +76,10 @@ if [[ ! -f "${LOCK_FILE}" ]]; then
   exit 1
 fi
 
-# Records are RS-separated fields: repo|skill|pin|agent|scope|id  (pin may be empty)
-mapfile -t ENTRIES < <(
-  LOCK_FILE="${LOCK_FILE}" python3 <<'PY'
-import json
-import os
-from pathlib import Path
-
-lock = json.loads(Path(os.environ["LOCK_FILE"]).read_text())
-agent = lock.get("agent") or "cursor"
-scope = lock.get("scope") or "user"
-for entry in lock.get("skills") or []:
-    repo = entry.get("repository")
-    skill = entry.get("skill") or entry.get("id")
-    pin = entry.get("pin") or ""
-    skill_id = entry.get("id") or Path(str(skill)).name
-    if not repo or not skill:
-        raise SystemExit("ERROR: each lock entry needs repository and skill")
-    if "|" in f"{repo}{skill}{pin}{agent}{scope}{skill_id}":
-        raise SystemExit("ERROR: lock fields must not contain '|'")
-    print("|".join([repo, skill, pin, agent, scope, skill_id]))
-PY
-)
+ENTRIES=()
+while IFS= read -r line; do
+  [[ -n "${line}" ]] && ENTRIES+=("${line}")
+done < <(LOCK_FILE="${LOCK_FILE}" node "${REPO_DIR}/scripts/lib/parse_external_lock.ts")
 
 if [[ ${#ENTRIES[@]} -eq 0 ]]; then
   echo "No skills declared in ${LOCK_FILE}"

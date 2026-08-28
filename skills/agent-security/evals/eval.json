@@ -1,0 +1,23 @@
+{
+  "suite": "agent-security-co-located",
+  "description": "Co-located evaluation benchmark for agent-security security audit skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-SEC-COLOCATED-001",
+      "name": "Single Skill Security Audit Verification",
+      "description": "Ensures agent-security performs OWASP vulnerability scanning, input validation reviews, and secret protection checks.",
+      "target_skill": "agent-security",
+      "prompt": "Audit our object storage share adapter for OWASP Top 10 vulnerabilities.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["owasp", "security audit", "vulnerability"],
+        "required_patterns": ["OWASP", "Input Validation", "Authentication/Authorization"],
+        "forbidden_patterns": ["hardcoded secret", "eval("],
+        "required_output_sections": ["Vulnerability Assessment", "OWASP Verification Matrix", "Remediation Steps"]
+      }
+    }
+  ]
+}

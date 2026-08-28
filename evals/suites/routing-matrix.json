@@ -1,0 +1,98 @@
+{
+  "suite": "routing-matrix",
+  "description": "Evaluation benchmarks for cross-skill routing accuracy and specialist role activation",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-ROUTE-001",
+      "name": "Route to Agent Spec",
+      "description": "Verifies that prompts asking for user stories, Gherkin scenarios, or requirement ambiguity resolution route to agent-spec.",
+      "target_skill": "agent-spec",
+      "prompt": "I need to outline the requirements and write acceptance criteria for our export feature before writing tests.",
+      "assertions": {
+        "required_triggers": ["acceptance criteria", "requirements"],
+        "required_patterns": ["agent-spec"],
+        "forbidden_patterns": ["agent-adapter"],
+        "required_output_sections": ["Target Role: agent-spec"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-002",
+      "name": "Route to Agent TDD",
+      "description": "Verifies that prompts asking for test-case impact maps, port interface definitions, or red-green-refactor plans route to agent-tdd.",
+      "target_skill": "agent-tdd",
+      "prompt": "Let's inventory our functional test catalog and design the test impact map for the storage adapter.",
+      "assertions": {
+        "required_triggers": ["behavior catalog", "test impact"],
+        "required_patterns": ["agent-tdd"],
+        "forbidden_patterns": ["agent-spec"],
+        "required_output_sections": ["Target Role: agent-tdd"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-003",
+      "name": "Route to Agent Security",
+      "description": "Verifies that security review, OWASP vulnerability scans, and secret protection requests route to agent-security.",
+      "target_skill": "agent-security",
+      "prompt": "We need an OWASP top 10 security review on our auth and token handlers before deploying.",
+      "assertions": {
+        "required_triggers": ["owasp", "security"],
+        "required_patterns": ["agent-security"],
+        "forbidden_patterns": ["agent-telemetry"],
+        "required_output_sections": ["Target Role: agent-security"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-004",
+      "name": "Route to Agent Debug",
+      "description": "Verifies that prompts describing bug repros, stack trace analysis, or CI job failures route to agent-debug.",
+      "target_skill": "agent-debug",
+      "prompt": "Our E2E tour test randomly times out in GitHub Actions. Help me run a hypothesis-driven RCA to fix it.",
+      "assertions": {
+        "required_triggers": ["hypothesis", "root cause"],
+        "required_patterns": ["agent-debug"],
+        "forbidden_patterns": ["agent-prune"],
+        "required_output_sections": ["Target Role: agent-debug"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-005",
+      "name": "Route to Agent Prune",
+      "description": "Verifies that requests for dead code removal, unused exports cleanup, or complexity hotspot reduction route to agent-prune.",
+      "target_skill": "agent-prune",
+      "prompt": "The storage adapter package has accumulated dead code and high cyclomatic complexity. Let's prune it in safe batches.",
+      "assertions": {
+        "required_triggers": ["dead code", "complexity"],
+        "required_patterns": ["agent-prune"],
+        "forbidden_patterns": ["agent-security"],
+        "required_output_sections": ["Target Role: agent-prune"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-006",
+      "name": "Route to Agent Arch Drift",
+      "description": "Verifies that requests to check package boundary violations, layer leaking, or hexagonal compliance route to agent-arch-drift.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "Audit our app structure to ensure core domain packages don't depend on UI or storage adapters.",
+      "assertions": {
+        "required_triggers": ["hexagonal", "boundary"],
+        "required_patterns": ["agent-arch-drift"],
+        "forbidden_patterns": ["agent-telemetry"],
+        "required_output_sections": ["Target Role: agent-arch-drift"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-007",
+      "name": "Route to Agent Orchestrator",
+      "description": "Verifies that multi-phase end-to-end feature requests route to agent-orchestrator to coordinate phase handovers.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "We want to build a brand new collaborative whiteboard sharing feature from end-to-end through all lifecycle phases.",
+      "assertions": {
+        "required_triggers": ["lifecycle", "multi-phase", "orchestrate"],
+        "required_patterns": ["agent-orchestrator"],
+        "forbidden_patterns": ["jumping straight to code"],
+        "required_output_sections": ["Target Role: agent-orchestrator"]
+      }
+    }
+  ]
+}

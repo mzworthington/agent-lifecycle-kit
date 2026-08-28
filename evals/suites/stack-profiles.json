@@ -1,0 +1,119 @@
+{
+  "suite": "stack-profiles",
+  "description": "Evaluation benchmarks for lang-* and framework-* stack profiles",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-TS-001",
+      "name": "TypeScript Strict Typing & Clean Code Profile",
+      "description": "Verifies that TypeScript development enforces strict types, avoids 'any', and isolates side effects.",
+      "target_skill": "lang-typescript",
+      "prompt": "Write a TypeScript domain service for calculating workspace usage metrics.",
+      "context": {
+        "detected_stack": ["TypeScript"]
+      },
+      "assertions": {
+        "required_triggers": ["typescript", "node", "zod"],
+        "required_patterns": ["readonly", "interface", "export type"],
+        "forbidden_patterns": [": any", "as unknown as"],
+        "required_output_sections": ["Type Definitions", "Domain Service Implementation"]
+      }
+    },
+    {
+      "id": "EVAL-LANG-JAVA-001",
+      "name": "Java Clean Code & Immutability Profile",
+      "description": "Verifies modern Java idioms (records, sealed interfaces, streams, optional) and dependency injection.",
+      "target_skill": "lang-java",
+      "prompt": "Implement a Java value object and domain event for tenant registration.",
+      "context": {
+        "detected_stack": ["Java"]
+      },
+      "assertions": {
+        "required_triggers": ["java", "junit", "record"],
+        "required_patterns": ["record ", "final ", "Optional<"],
+        "forbidden_patterns": ["public String name;"],
+        "required_output_sections": ["Domain Record Definitions", "Domain Event Implementation"]
+      }
+    },
+    {
+      "id": "EVAL-LANG-CSHARP-001",
+      "name": "C# Clean Code & Value Types Profile",
+      "description": "Verifies modern C# features (records, pattern matching, nullable reference types, async/await).",
+      "target_skill": "lang-csharp",
+      "prompt": "Create C# domain entities and value objects for user subscription billing.",
+      "context": {
+        "detected_stack": ["C#"]
+      },
+      "assertions": {
+        "required_triggers": ["csharp", "c#", "record"],
+        "required_patterns": ["public record", "init;", "async Task"],
+        "forbidden_patterns": ["#nullable disable"],
+        "required_output_sections": ["Entity Definitions", "Value Object Contracts"]
+      }
+    },
+    {
+      "id": "EVAL-LANG-HCL-001",
+      "name": "HCL Syntax & Modular Infrastructure Profile",
+      "description": "Verifies HCL formatting, explicit variable typing, locals usage, and resource tagging.",
+      "target_skill": "lang-hcl",
+      "prompt": "Write HCL module definitions for an S3 bucket with encryption and lifecycle rules.",
+      "context": {
+        "detected_stack": ["Terraform", "HCL"]
+      },
+      "assertions": {
+        "required_triggers": ["hcl", "terraform hcl", ".tf"],
+        "required_patterns": ["variable \"", "resource \"", "locals {"],
+        "forbidden_patterns": ["type = any"],
+        "required_output_sections": ["Variables Definition", "Resource Configuration", "Outputs"]
+      }
+    },
+    {
+      "id": "EVAL-FW-NEXT-001",
+      "name": "Next.js App Router & Server Components Profile",
+      "description": "Verifies Next.js App Router patterns, separation of Server vs Client components, and route handlers.",
+      "target_skill": "framework-next",
+      "prompt": "Build a Next.js App Router page and server action for editing project metadata.",
+      "context": {
+        "detected_stack": ["TypeScript", "Next.js"]
+      },
+      "assertions": {
+        "required_triggers": ["next.js", "app router", "server action"],
+        "required_patterns": ["'use server'", "async function Page"],
+        "forbidden_patterns": ["pages/api/"],
+        "required_output_sections": ["Server Component Layout", "Server Action Handler"]
+      }
+    },
+    {
+      "id": "EVAL-FW-SPRING-001",
+      "name": "Spring Boot Hexagonal Architecture Profile",
+      "description": "Verifies Spring Boot layered architecture, constructor injection, annotations, and test slicing.",
+      "target_skill": "framework-springboot",
+      "prompt": "Create a Spring Boot REST controller and application service for document management.",
+      "context": {
+        "detected_stack": ["Java", "Spring Boot"]
+      },
+      "assertions": {
+        "required_triggers": ["spring boot", "restcontroller", "spring data jpa"],
+        "required_patterns": ["@RestController", "@Service", "private final"],
+        "forbidden_patterns": ["@Autowired private"],
+        "required_output_sections": ["REST Controller", "Application Service"]
+      }
+    },
+    {
+      "id": "EVAL-PROF-IAC-001",
+      "name": "Secure IaC & Cloud Adoption Framework Profile",
+      "description": "Verifies least privilege IAM rules, encryption at rest/transit, and CAF compliance in IaC.",
+      "target_skill": "profile-iac",
+      "prompt": "Define secure IAM roles and KMS encryption key policies for an AWS deployment.",
+      "context": {
+        "detected_stack": ["IaC", "AWS"]
+      },
+      "assertions": {
+        "required_triggers": ["infrastructure as code", "least privilege", "caf"],
+        "required_patterns": ["Least Privilege", "KMS", "Policy"],
+        "forbidden_patterns": ["\"Action\": \"*\"", "\"Resource\": \"*\""],
+        "required_output_sections": ["KMS Key Policy", "IAM Role & Policy Definitions"]
+      }
+    }
+  ]
+}

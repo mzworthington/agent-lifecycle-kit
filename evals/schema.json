@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentSkillEvalSuite",
+  "type": "object",
+  "required": ["suite", "description", "version", "test_cases"],
+  "properties": {
+    "suite": {
+      "type": "string",
+      "description": "Identifier for the evaluation suite (e.g., lifecycle-roles, stack-profiles, routing-matrix)"
+    },
+    "description": {
+      "type": "string",
+      "description": "High-level summary of what this eval suite measures"
+    },
+    "version": {
+      "type": "string",
+      "description": "SemVer version of the test suite"
+    },
+    "test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "target_skill", "prompt", "assertions"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EVAL-[A-Z0-9]+-[0-9]{3}$",
+            "description": "Unique test ID (e.g., EVAL-SPEC-001)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Short title describing the eval scenario"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed explanation of the expected behavior being tested"
+          },
+          "target_skill": {
+            "type": "string",
+            "description": "The target skill identifier expected to be activated (e.g., agent-spec)"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "The exact user prompt used to trigger the evaluation"
+          },
+          "context": {
+            "type": "object",
+            "description": "Optional simulated workspace context (e.g. stack detected, active files)",
+            "properties": {
+              "detected_stack": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "active_phase": { "type": "string" },
+              "files_present": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "assertions": {
+            "type": "object",
+            "description": "Evaluation rules and output validation criteria",
+            "properties": {
+              "required_triggers": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Keywords that must match target skill frontmatter triggers"
+              },
+              "required_patterns": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Regex/substring patterns that must be present in output"
+              },
+              "forbidden_patterns": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Regex/substring patterns that must NOT be present in output"
+              },
+              "required_output_sections": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Mandatory structural headings/sections in the generated response"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

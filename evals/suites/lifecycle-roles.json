@@ -1,0 +1,151 @@
+{
+  "suite": "lifecycle-roles",
+  "description": "Evaluation benchmarks for agent-* specialist lifecycle roles",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-SPEC-001",
+      "name": "BDD Requirement Specification",
+      "description": "Verifies that raw user stories yield Gherkin acceptance scenarios, bounded contexts, and cross-functional criteria without implementation code.",
+      "target_skill": "agent-spec",
+      "prompt": "We need to allow workspace owners to invite team members with fine-grained access permissions. Draft the specification.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["acceptance criteria", "user story", "gherkin", "bounded context"],
+        "required_patterns": ["Scenario:", "Given ", "When ", "Then "],
+        "forbidden_patterns": ["```typescript", "```java", "import {", "ASCII art"],
+        "required_output_sections": ["Bounded Contexts", "Gherkin Acceptance Scenarios", "Cross-Functional Criteria"]
+      }
+    },
+    {
+      "id": "EVAL-TDD-001",
+      "name": "TDD Design & Test Impact Mapping",
+      "description": "Verifies that TDD design inventories the functional catalog, establishes red-green-refactor steps, and maps port interfaces.",
+      "target_skill": "agent-tdd",
+      "prompt": "Design the test-driven implementation for token-based invitation links with expiration rules.",
+      "context": {
+        "active_phase": "tdd"
+      },
+      "assertions": {
+        "required_triggers": ["behavior catalog", "test impact", "red green refactor"],
+        "required_patterns": ["Red", "Green", "Refactor", "Port Interface"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Behavior Catalog Impact", "Port Interface Contracts", "Red-Green-Refactor Plan"]
+      }
+    },
+    {
+      "id": "EVAL-XFN-001",
+      "name": "Cross-Functional Quality Matrix",
+      "description": "Verifies that XFN planning produces matrices for accessibility, security, and performance suites.",
+      "target_skill": "agent-xfn",
+      "prompt": "Create the XFN quality plan and test stubs for our new real-time canvas collaboration feature.",
+      "context": {
+        "active_phase": "xfn"
+      },
+      "assertions": {
+        "required_triggers": ["xfn matrix", "accessibility", "browser e2e"],
+        "required_patterns": ["Accessibility", "Security", "Performance", "SLO"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["XFN Quality Matrix", "Test Suite Stubs", "SLO Verification Plan"]
+      }
+    },
+    {
+      "id": "EVAL-ADAPTER-001",
+      "name": "Hexagonal Adapter & Infrastructure Wiring",
+      "description": "Verifies that adapter implementation re-confirms test impact, isolates infrastructure details behind ports, and avoids domain coupling.",
+      "target_skill": "agent-adapter",
+      "prompt": "Implement the Postgres adapter for the user repository domain port.",
+      "context": {
+        "active_phase": "impl"
+      },
+      "assertions": {
+        "required_triggers": ["infrastructure", "adapter", "repository"],
+        "required_patterns": ["Implements", "Port", "Adapter"],
+        "forbidden_patterns": ["domain logic inside adapter"],
+        "required_output_sections": ["Impact Re-confirmation", "Adapter Implementation", "Fixture Alignment"]
+      }
+    },
+    {
+      "id": "EVAL-SECURITY-001",
+      "name": "Security Audit & OWASP Review",
+      "description": "Verifies OWASP vulnerability scanning, input validation review, and secrets protection checks.",
+      "target_skill": "agent-security",
+      "prompt": "Perform a security audit on the file upload and object storage share endpoints.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["owasp", "security audit", "vulnerability"],
+        "required_patterns": ["OWASP", "Input Validation", "Authentication/Authorization"],
+        "forbidden_patterns": ["hardcoded secret", "eval("],
+        "required_output_sections": ["Vulnerability Assessment", "OWASP Verification Matrix", "Remediation Steps"]
+      }
+    },
+    {
+      "id": "EVAL-ARCH-001",
+      "name": "Architecture Drift & Boundary Audit",
+      "description": "Verifies hexagonal boundary enforcement, SOLID principles conformance, and catalog completeness.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "Check our canvas state management and storage adapter packages for architectural drift.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["hexagonal", "boundary", "solid"],
+        "required_patterns": ["Hexagonal Boundary", "Dependency Direction", "SOLID"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Boundary Conformance Analysis", "Dependency Direction Audit", "Remediation Checklist"]
+      }
+    },
+    {
+      "id": "EVAL-DEBUG-001",
+      "name": "Hypothesis-Driven Debugging & RCA",
+      "description": "Verifies structured root cause analysis using hypothesis boards, minimal repros, and empirical log evidence.",
+      "target_skill": "agent-debug",
+      "prompt": "The export PDF endpoint occasionally returns a 504 gateway timeout on CI. Debug this issue.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": ["hypothesis", "root cause", "reproduce"],
+        "required_patterns": ["Hypothesis", "Evidence", "Root Cause"],
+        "forbidden_patterns": ["guessing without logs"],
+        "required_output_sections": ["Hypothesis Board", "Empirical Evidence & Logs", "Root Cause & Fix"]
+      }
+    },
+    {
+      "id": "EVAL-TELEMETRY-001",
+      "name": "Observability & Telemetry Mapping",
+      "description": "Verifies telemetry integration mapping XFN SLOs to metrics, structured logs, and distributed traces.",
+      "target_skill": "agent-telemetry",
+      "prompt": "Add observability and telemetry tracking for the share payload encoding pipeline.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["logging", "tracing", "metrics"],
+        "required_patterns": ["SLO", "Metric", "Trace Context"],
+        "forbidden_patterns": ["unstructured console.log"],
+        "required_output_sections": ["Telemetry Strategy", "Metric & Trace Definitions", "Alerting & Dashboard Rules"]
+      }
+    },
+    {
+      "id": "EVAL-PRECOMMIT-001",
+      "name": "Pre-Commit Quality Gate & Conventional Commits",
+      "description": "Verifies lint/formatting execution and conventional commit formatting for git commit subjects and PR titles.",
+      "target_skill": "agent-pre-commit",
+      "prompt": "Run pre-commit checks on staged changes and format the PR title.",
+      "context": {
+        "active_phase": "quality"
+      },
+      "assertions": {
+        "required_triggers": ["pre-commit", "quality gate", "conventional commits"],
+        "required_patterns": ["feat:", "fix:", "conventional commit"],
+        "forbidden_patterns": ["WIP", "fixed stuff"],
+        "required_output_sections": ["Pre-Commit Checks Summary", "Conventional Commit Subject & PR Title"]
+      }
+    }
+  ]
+}

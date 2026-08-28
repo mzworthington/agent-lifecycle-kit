@@ -1,0 +1,23 @@
+{
+  "suite": "agent-tdd-co-located",
+  "description": "Co-located evaluation benchmark for agent-tdd test-driven design skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-TDD-COLOCATED-001",
+      "name": "Single Skill TDD Design Verification",
+      "description": "Ensures agent-tdd inventories the functional catalog, establishes red-green-refactor steps, and maps port interfaces.",
+      "target_skill": "agent-tdd",
+      "prompt": "Design the TDD strategy and test impact map for canvas collaboration state transitions.",
+      "context": {
+        "active_phase": "tdd"
+      },
+      "assertions": {
+        "required_triggers": ["behavior catalog", "test impact", "red green refactor"],
+        "required_patterns": ["Red", "Green", "Refactor", "Port Interface"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Behavior Catalog Impact", "Port Interface Contracts", "Red-Green-Refactor Plan"]
+      }
+    }
+  ]
+}

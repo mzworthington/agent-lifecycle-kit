@@ -32,54 +32,11 @@ if [[ -e "${OUT_FILE}" ]]; then
   exit 1
 fi
 
-python3 - "$TEMPLATE" "$OUT_FILE" "$TITLE" "$PROJECT" "$DATE" <<'PY'
-import pathlib, sys
-template, out, title, project, date = sys.argv[1:]
-text = pathlib.Path(template).read_text()
-text = (
-    text.replace("<short title>", title)
-    .replace("<project-name>", project)
-    .replace("YYYY-MM-DD", date)
-)
-pathlib.Path(out).write_text(text)
-PY
+node "${REPO_DIR}/scripts/lib/init_debug_board.ts" board "$TEMPLATE" "$OUT_FILE" "$TITLE" "$PROJECT" "$DATE"
 
 HANDOVER="${OUT_DIR}/handover_debug.md"
 if [[ ! -e "${HANDOVER}" ]]; then
-  python3 - "$HANDOVER" "$PROJECT" "$DATE" "$OUT_FILE" <<'PY'
-import pathlib, sys
-handover, project, date, board = sys.argv[1:]
-pathlib.Path(handover).write_text(
-    f"""# Handover: debug
-
-## Metadata
-
-| Field | Value |
-|-------|-------|
-| **Phase** | debug |
-| **Status** | BLOCKED |
-| **Project** | `{project}` |
-| **Next agent** | `agent-pre-commit` |
-| **Date** | {date} |
-
-## Summary
-
-Debug in progress. Board: `{board}`.
-
-## Deliverables
-
-- Debug board (intake)
-
-## Open questions / blockers
-
-- Reproduce not yet proven
-
-## Context for next agent
-
-- See debug board for hypotheses and proof gates
-"""
-)
-PY
+  node "${REPO_DIR}/scripts/lib/init_debug_board.ts" handover "$HANDOVER" "$PROJECT" "$DATE" "$OUT_FILE"
 fi
 
 echo "Wrote ${OUT_FILE}"

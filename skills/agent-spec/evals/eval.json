@@ -1,0 +1,23 @@
+{
+  "suite": "agent-spec-co-located",
+  "description": "Co-located evaluation benchmark for agent-spec BDD specification skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-SPEC-COLOCATED-001",
+      "name": "Single Skill BDD Spec Verification",
+      "description": "Ensures agent-spec generates Gherkin acceptance scenarios, bounded context maps, and XFN criteria without code.",
+      "target_skill": "agent-spec",
+      "prompt": "Create acceptance criteria and BDD scenarios for multi-tenant workspace isolation.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["acceptance criteria", "gherkin", "user story"],
+        "required_patterns": ["Scenario:", "Given ", "When ", "Then "],
+        "forbidden_patterns": ["```typescript", "```java", "import {", "ASCII art"],
+        "required_output_sections": ["Bounded Contexts", "Gherkin Acceptance Scenarios", "Cross-Functional Criteria"]
+      }
+    }
+  ]
+}

@@ -88,6 +88,7 @@ tools: []                     # optional CLI/tool hints for the agent
 - Add new languages/frameworks by copying a profile skill and adjusting frontmatter.
 - Keep role skills focused on behavior and output schema; keep stack detail in profiles.
 - Prefer **Mermaid** for architecture/flow diagrams in skill docs and outputs; do not add ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8).
+- Co-locate skill unit evals under `skills/<skill-name>/evals/eval.json` (see [evals/README.md](../evals/README.md) for the hybrid evals model).
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).
 - Routing regressions: [tasks/kit-eval-harness.md](../tasks/kit-eval-harness.md).
