@@ -1,0 +1,41 @@
+name: Agent Lifecycle Kit CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validate Skills & Evals
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Audit Skill Security & Secrets
+        run: |
+          chmod +x scripts/scan-skill-security.sh
+          ./scripts/scan-skill-security.sh
+
+      - name: Run Evals Schema & Trigger Validation
+        run: |
+          chmod +x scripts/validate-evals.sh
+          ./scripts/validate-evals.sh
+
+      - name: Verify Skills Directory Layout
+        run: |
+          chmod +x scripts/verify-skills-layout.sh
+          ./scripts/verify-skills-layout.sh
+
+      - name: Test MCP Profile Composition
+        run: |
+          chmod +x scripts/compose-mcp.sh
+          ./scripts/compose-mcp.sh default
