@@ -1,0 +1,20 @@
+{
+  "suite": "profile-mcp-evals",
+  "description": "Co-located evaluation tests for MCP profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PROF-MCP-COLOCATED-001",
+      "name": "Model Context Protocol Server & Tool Profile Trigger",
+      "target_skill": "profile-mcp",
+      "prompt": "Build a custom MCP server using stdio transport and define JSON Schema tool signatures.",
+      "assertions": {
+        "required_triggers": [
+          "mcp",
+          "mcp server",
+          "mcp tool"
+        ]
+      }
+    }
+  ]
+}

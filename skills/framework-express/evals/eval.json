@@ -1,0 +1,20 @@
+{
+  "suite": "framework-express-evals",
+  "description": "Co-located evaluation tests for Express framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-EXPRESS-COLOCATED-001",
+      "name": "Express Router & Middleware Profile Trigger",
+      "target_skill": "framework-express",
+      "prompt": "Create an Express router service with Zod validation middleware and error handling.",
+      "assertions": {
+        "required_triggers": [
+          "express",
+          "express router",
+          "express middleware"
+        ]
+      }
+    }
+  ]
+}

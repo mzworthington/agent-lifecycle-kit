@@ -1,0 +1,19 @@
+{
+  "suite": "profile-iac-evals",
+  "description": "Co-located evaluation tests for Infrastructure as Code profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PROF-IAC-COLOCATED-001",
+      "name": "Secure IaC & Cloud Framework Profile Trigger",
+      "target_skill": "profile-iac",
+      "prompt": "Audit this terraform infrastructure as code setup for security and least privilege access.",
+      "assertions": {
+        "required_triggers": [
+          "iac",
+          "infrastructure as code"
+        ]
+      }
+    }
+  ]
+}

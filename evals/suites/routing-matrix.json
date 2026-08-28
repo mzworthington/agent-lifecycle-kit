@@ -93,6 +93,19 @@
         "forbidden_patterns": ["jumping straight to code"],
         "required_output_sections": ["Target Role: agent-orchestrator"]
       }
+    },
+    {
+      "id": "EVAL-ROUTE-008",
+      "name": "Route to Agent Perf Opt",
+      "description": "Verifies that performance profiling, memory leak, and latency optimization requests route to agent-perf-opt.",
+      "target_skill": "agent-perf-opt",
+      "prompt": "Our database API endpoint is experiencing high latency and memory leak issues under load. Analyze EXPLAIN ANALYZE for performance optimization.",
+      "assertions": {
+        "required_triggers": ["latency optimization", "memory leak", "explain analyze"],
+        "required_patterns": ["agent-perf-opt"],
+        "forbidden_patterns": ["agent-spec"],
+        "required_output_sections": ["Target Role: agent-perf-opt"]
+      }
     }
   ]
 }

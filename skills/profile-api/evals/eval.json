@@ -1,0 +1,19 @@
+{
+  "suite": "profile-api-evals",
+  "description": "Co-located evaluation tests for API technical domain profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PROF-API-COLOCATED-001",
+      "name": "API Design & REST / Event Contract Profile Trigger",
+      "target_skill": "profile-api",
+      "prompt": "Design a REST API contract with OpenAPI schema definitions and error envelopes.",
+      "assertions": {
+        "required_triggers": [
+          "api",
+          "rest api"
+        ]
+      }
+    }
+  ]
+}

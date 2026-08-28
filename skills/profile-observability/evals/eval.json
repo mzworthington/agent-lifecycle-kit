@@ -1,0 +1,19 @@
+{
+  "suite": "profile-observability-evals",
+  "description": "Co-located evaluation tests for Observability technical domain profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PROF-OBS-COLOCATED-001",
+      "name": "Observability & OpenTelemetry Metrics Profile Trigger",
+      "target_skill": "profile-observability",
+      "prompt": "Configure OpenTelemetry distributed tracing and prometheus metrics for this backend.",
+      "assertions": {
+        "required_triggers": [
+          "opentelemetry",
+          "tracing"
+        ]
+      }
+    }
+  ]
+}

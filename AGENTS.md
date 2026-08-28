@@ -17,9 +17,9 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Core guardrails | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | Hexagonal architecture, DDD, vertical slices, clean code, TDD/BDD, security |
 | Orchestration | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) | Routes work across lifecycle phases |
 | Lifecycle roles | [skills/agent-*](./skills/) | Spec, TDD short loop, XFN, optional adapter deep-dive, migration, review, docs, release, incident, security, arch-drift, ADR, prune, debug, telemetry, pre-commit |
-| Domain profiles | [skills/profile-*](./skills/) | Secure IaC, API, observability ([profile-iac](./skills/profile-iac/SKILL.md), [profile-api](./skills/profile-api/SKILL.md), [profile-observability](./skills/profile-observability/SKILL.md)) |
-| Language profiles | [skills/lang-*](./skills/) | TypeScript, Python, Go, Java, C#, HCL |
-| Framework profiles | [skills/framework-*](./skills/) | Next.js, Nuxt, FastAPI, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
+| Domain profiles | [skills/profile-*](./skills/) | Secure IaC, API, MCP, observability ([profile-iac](./skills/profile-iac/SKILL.md), [profile-api](./skills/profile-api/SKILL.md), [profile-mcp](./skills/profile-mcp/SKILL.md), [profile-observability](./skills/profile-observability/SKILL.md)) |
+| Language profiles | [skills/lang-*](./skills/) | TypeScript, Rust, Python, Go, Java, C#, HCL |
+| Framework profiles | [skills/framework-*](./skills/) | Next.js, React, Express, Nuxt, FastAPI, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
 | MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
 | Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](./SOPs/complexity-hotspots.md), [conventional commits & PR titles](./SOPs/conventional-commits.md)) |
 | Templates | [templates/](./templates/) | Handover, lesson, project handshake, and project MCP formats |
@@ -58,6 +58,7 @@ When executing a lifecycle phase, assume the matching role skill:
 | Architecture conformance | [agent-arch-drift](./skills/agent-arch-drift/SKILL.md) - boundaries plus catalog/XFN completeness |
 | Architecture decisions | [agent-adr](./skills/agent-adr/SKILL.md) - sparse MADR under `docs/ADRs/` when hard to reverse or off-norm |
 | Dead-code pruning | [agent-prune](./skills/agent-prune/SKILL.md) - dead-code and complexity hotspot tracks |
+| Performance optimization | [agent-perf-opt](./skills/agent-perf-opt/SKILL.md) - profiling memory leaks, CPU bottlenecks, SQL EXPLAIN ANALYZE |
 | Debugging / RCA | [agent-debug](./skills/agent-debug/SKILL.md) - hypothesis board, repro, proof gates ([SOP](./SOPs/hypothesis-driven-debug.md)) |
 | Observability | [agent-telemetry](./skills/agent-telemetry/SKILL.md) - map XFN load SLOs to metrics/alerts |
 | Pre-commit / quality gate | [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) |

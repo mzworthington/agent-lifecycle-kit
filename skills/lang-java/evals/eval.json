@@ -1,0 +1,18 @@
+{
+  "suite": "lang-java-evals",
+  "description": "Co-located evaluation tests for Java language profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-JAVA-COLOCATED-001",
+      "name": "Java Clean Code & Immutability Profile Trigger",
+      "target_skill": "lang-java",
+      "prompt": "Apply Java 21 records and immutability rules to this domain model.",
+      "assertions": {
+        "required_triggers": [
+          "java"
+        ]
+      }
+    }
+  ]
+}

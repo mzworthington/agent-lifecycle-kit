@@ -114,6 +114,70 @@
         "forbidden_patterns": ["\"Action\": \"*\"", "\"Resource\": \"*\""],
         "required_output_sections": ["KMS Key Policy", "IAM Role & Policy Definitions"]
       }
+    },
+    {
+      "id": "EVAL-LANG-RUST-001",
+      "name": "Rust Strict Memory Safety & Borrowing Profile",
+      "description": "Verifies Rust memory safety, ownership semantics, zero-cost abstractions, and error handling.",
+      "target_skill": "lang-rust",
+      "prompt": "Write a Rust module for domain invariant verification with clean Result propagation.",
+      "context": {
+        "detected_stack": ["Rust", "Cargo"]
+      },
+      "assertions": {
+        "required_triggers": ["rust", "cargo", "ownership"],
+        "required_patterns": ["Result<", "pub struct"],
+        "forbidden_patterns": [".unwrap()"],
+        "required_output_sections": ["Domain Types", "Error Handling"]
+      }
+    },
+    {
+      "id": "EVAL-FW-REACT-001",
+      "name": "React 19 & SPA Framework Profile",
+      "description": "Verifies React 19 component structure, custom hooks, and immutability rules.",
+      "target_skill": "framework-react",
+      "prompt": "Build a React 19 interactive view component with state management.",
+      "context": {
+        "detected_stack": ["TypeScript", "React"]
+      },
+      "assertions": {
+        "required_triggers": ["react", "react component", "hooks"],
+        "required_patterns": ["export function", "useState"],
+        "forbidden_patterns": ["class extends React.Component"],
+        "required_output_sections": ["Custom Hook", "Component Definition"]
+      }
+    },
+    {
+      "id": "EVAL-FW-EXPRESS-001",
+      "name": "Express.js Backend Framework Profile",
+      "description": "Verifies Express router structure, middleware chaining, and validation schemas.",
+      "target_skill": "framework-express",
+      "prompt": "Create an Express router service with request validation middleware.",
+      "context": {
+        "detected_stack": ["TypeScript", "Express"]
+      },
+      "assertions": {
+        "required_triggers": ["express", "express router", "express middleware"],
+        "required_patterns": ["Router()", "next()"],
+        "forbidden_patterns": ["eval("],
+        "required_output_sections": ["Express Router", "Validation Middleware"]
+      }
+    },
+    {
+      "id": "EVAL-PROF-MCP-001",
+      "name": "Model Context Protocol Integration Profile",
+      "description": "Verifies MCP server tools, stdio transport, and JSON Schema signatures.",
+      "target_skill": "profile-mcp",
+      "prompt": "Build a Model Context Protocol MCP server with custom tools.",
+      "context": {
+        "detected_stack": ["MCP", "TypeScript"]
+      },
+      "assertions": {
+        "required_triggers": ["mcp", "mcp server", "mcp tool"],
+        "required_patterns": ["inputSchema", "Server"],
+        "forbidden_patterns": ["hardcoded_secret"],
+        "required_output_sections": ["Tool Schema", "Server Definition"]
+      }
     }
   ]
 }

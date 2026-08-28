@@ -1,0 +1,20 @@
+{
+  "suite": "lang-rust-evals",
+  "description": "Co-located evaluation tests for Rust language profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-RUST-COLOCATED-001",
+      "name": "Rust Strict Memory Safety & Ownership Profile Trigger",
+      "target_skill": "lang-rust",
+      "prompt": "Review this Cargo workspace and refactor the Rust borrow checker lifetimes to avoid unwrap.",
+      "assertions": {
+        "required_triggers": [
+          "rust",
+          "cargo",
+          "borrow checker"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "suite": "framework-next-evals",
+  "description": "Co-located evaluation tests for Next.js framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-NEXT-COLOCATED-001",
+      "name": "Next.js App Router Profile Trigger",
+      "target_skill": "framework-next",
+      "prompt": "Build a Next.js App Router page using Server Components and Server Actions.",
+      "assertions": {
+        "required_triggers": [
+          "next.js",
+          "app router"
+        ]
+      }
+    }
+  ]
+}

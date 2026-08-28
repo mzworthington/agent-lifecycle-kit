@@ -1,0 +1,19 @@
+{
+  "suite": "framework-fastapi-evals",
+  "description": "Co-located evaluation tests for FastAPI framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-FASTAPI-COLOCATED-001",
+      "name": "FastAPI Async Routing & Pydantic Profile Trigger",
+      "target_skill": "framework-fastapi",
+      "prompt": "Create a FastAPI router with Pydantic v2 schemas and async route handlers.",
+      "assertions": {
+        "required_triggers": [
+          "fastapi",
+          "pydantic"
+        ]
+      }
+    }
+  ]
+}

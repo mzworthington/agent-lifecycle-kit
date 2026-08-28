@@ -1,0 +1,19 @@
+{
+  "suite": "lang-python-evals",
+  "description": "Co-located evaluation tests for Python language profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-PYTHON-COLOCATED-001",
+      "name": "Python Type Hints & Clean Code Profile Trigger",
+      "target_skill": "lang-python",
+      "prompt": "Apply python type hints, ruff lints, and dataclasses to this module.",
+      "assertions": {
+        "required_triggers": [
+          "python",
+          "type hints"
+        ]
+      }
+    }
+  ]
+}

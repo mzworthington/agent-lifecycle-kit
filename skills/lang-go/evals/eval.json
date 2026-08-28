@@ -1,0 +1,19 @@
+{
+  "suite": "lang-go-evals",
+  "description": "Co-located evaluation tests for Go language profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-GO-COLOCATED-001",
+      "name": "Go Idiomatic Concurrency & Interfaces Profile Trigger",
+      "target_skill": "lang-go",
+      "prompt": "Refactor this golang microservice using explicit interfaces and goroutines with context.",
+      "assertions": {
+        "required_triggers": [
+          "go",
+          "golang"
+        ]
+      }
+    }
+  ]
+}

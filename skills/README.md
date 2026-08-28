@@ -41,6 +41,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-prune](./agent-prune/SKILL.md) | maintenance | Dead-code removal and complexity hotspot reduction in safe batches |
 | [agent-debug](./agent-debug/SKILL.md) | debug | Hypothesis-driven RCA for bugs, CI failures, live-site symptoms |
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
+| [agent-perf-opt](./agent-perf-opt/SKILL.md) | maintenance | Profiling memory leaks, CPU bottlenecks, SQL EXPLAIN ANALYZE |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
 Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md).
@@ -55,10 +56,12 @@ Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [co
 |-------------------|------------|
 | [profile-iac](./profile-iac/SKILL.md) (secure IaC, CAF, least privilege) | [framework-terraform](./framework-terraform/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
 | [profile-api](./profile-api/SKILL.md) | (cross-stack HTTP/event APIs) |
+| [profile-mcp](./profile-mcp/SKILL.md) | (MCP tools, stdio/SSE transports, LLM JSON schemas) |
 | [profile-observability](./profile-observability/SKILL.md) | feeds [agent-telemetry](./agent-telemetry/SKILL.md) |
 | [lang-hcl](./lang-hcl/SKILL.md) | [framework-terraform](./framework-terraform/SKILL.md) |
-| [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
+| [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-react](./framework-react/SKILL.md), [framework-express](./framework-express/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
 | [lang-python](./lang-python/SKILL.md) | [framework-fastapi](./framework-fastapi/SKILL.md) |
+| [lang-rust](./lang-rust/SKILL.md) | — |
 | [lang-go](./lang-go/SKILL.md) | — |
 | [lang-java](./lang-java/SKILL.md) | [framework-springboot](./framework-springboot/SKILL.md), [framework-quarkus](./framework-quarkus/SKILL.md) |
 | [lang-csharp](./lang-csharp/SKILL.md) | [framework-dotnet](./framework-dotnet/SKILL.md) |

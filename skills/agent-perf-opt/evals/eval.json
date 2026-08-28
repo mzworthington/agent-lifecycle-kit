@@ -1,0 +1,20 @@
+{
+  "suite": "agent-perf-opt-evals",
+  "description": "Co-located evaluation tests for Performance Optimization role trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PERF-COLOCATED-001",
+      "name": "Performance Profiling & Memory Leak Optimization Trigger",
+      "target_skill": "agent-perf-opt",
+      "prompt": "Analyze the memory leak and run EXPLAIN ANALYZE for latency optimization on this API.",
+      "assertions": {
+        "required_triggers": [
+          "memory leak",
+          "explain analyze",
+          "latency optimization"
+        ]
+      }
+    }
+  ]
+}

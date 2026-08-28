@@ -1,0 +1,19 @@
+{
+  "suite": "agent-api-contract-evals",
+  "description": "Co-located evaluation tests for API Contract role trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-CONTRACT-COLOCATED-001",
+      "name": "API Contract Specification Trigger",
+      "target_skill": "agent-api-contract",
+      "prompt": "Evolve the openapi contract specification to add backwards compatible endpoints.",
+      "assertions": {
+        "required_triggers": [
+          "openapi",
+          "api contract"
+        ]
+      }
+    }
+  ]
+}

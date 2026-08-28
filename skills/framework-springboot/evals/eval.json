@@ -1,0 +1,19 @@
+{
+  "suite": "framework-springboot-evals",
+  "description": "Co-located evaluation tests for Spring Boot framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-SPRING-COLOCATED-001",
+      "name": "Spring Boot Hexagonal Architecture Profile Trigger",
+      "target_skill": "framework-springboot",
+      "prompt": "Architect a Spring Boot application using hexagonal ports and adapters.",
+      "assertions": {
+        "required_triggers": [
+          "spring boot",
+          "spring"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "suite": "agent-ui-evals",
+  "description": "Co-located evaluation tests for UI Delivery role trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-UI-COLOCATED-001",
+      "name": "UI Delivery & Accessibility Specialist Trigger",
+      "target_skill": "agent-ui",
+      "prompt": "Build an accessible UI design component with ARIA attributes and keyboard focus state.",
+      "assertions": {
+        "required_triggers": [
+          "ui",
+          "a11y"
+        ]
+      }
+    }
+  ]
+}

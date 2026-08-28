@@ -1,0 +1,19 @@
+{
+  "suite": "lang-csharp-evals",
+  "description": "Co-located evaluation tests for C# language profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-CSHARP-COLOCATED-001",
+      "name": "C# Clean Code & Value Types Profile Trigger",
+      "target_skill": "lang-csharp",
+      "prompt": "Refactor this c# class to use primary constructors and record structs.",
+      "assertions": {
+        "required_triggers": [
+          "c#",
+          "csharp"
+        ]
+      }
+    }
+  ]
+}

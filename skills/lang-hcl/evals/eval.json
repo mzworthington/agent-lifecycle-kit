@@ -1,0 +1,19 @@
+{
+  "suite": "lang-hcl-evals",
+  "description": "Co-located evaluation tests for HCL language profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-LANG-HCL-COLOCATED-001",
+      "name": "HCL Infrastructure Code Profile Trigger",
+      "target_skill": "lang-hcl",
+      "prompt": "Format and modularize these HCL terraform configuration files.",
+      "assertions": {
+        "required_triggers": [
+          "hcl",
+          "terraform"
+        ]
+      }
+    }
+  ]
+}

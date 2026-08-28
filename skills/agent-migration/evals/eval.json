@@ -1,0 +1,19 @@
+{
+  "suite": "agent-migration-evals",
+  "description": "Co-located evaluation tests for Migration role trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-MIG-COLOCATED-001",
+      "name": "Database Migration & Expand-Contract Pattern Trigger",
+      "target_skill": "agent-migration",
+      "prompt": "Create an expand-contract database migration script to rename a column without downtime.",
+      "assertions": {
+        "required_triggers": [
+          "migration",
+          "expand contract"
+        ]
+      }
+    }
+  ]
+}
