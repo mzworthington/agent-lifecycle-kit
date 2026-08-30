@@ -33,7 +33,7 @@ flowchart LR
 | **CI quality gates** | `kit eval ci --threshold-routing 95` blocks merges when routing/schema drift. |
 | **Closed-loop telemetry** | Production failures become `.jsonl` regression cases; shadow evals sample ~5% of live traffic. |
 
-EDD sits alongside Kit’s skill-trigger harness (`kit eval`): triggers validate *which specialist skill activates*; EDD validates *how an agent calls tools*.
+EDD sits alongside Kit’s skill-trigger harness: bare `kit eval` validates *which specialist skill activates*; `kit eval run|watch|report|ci` validates *how an agent calls tools*.
 
 ## Quick start
 
@@ -44,7 +44,7 @@ kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
 # Threshold gate + Markdown/JSON artifacts
 kit eval ci --threshold-routing 95 --out out/reports
 
-# Readable PR report (failure traces, tokens, latency)
+# Readable PR report (writes eval-report.md + edd-report.md / .json)
 kit eval report --format md --out out/reports
 
 # Hot-reload while editing prompts or MCP tool schemas

@@ -93,6 +93,7 @@ describe('EDD EvalRunner', () => {
     const report = await runner.runSuite(path.join(repoDir, 'evals/edd/architecture_routing.yaml'));
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-report-'));
     const written = generateReport([report], { format: 'md', outDir: dir });
+    assert.ok(written.some((p) => p.endsWith('edd-report.md')));
     assert.ok(written.some((p) => p.endsWith('eval-report.md')));
     const md = fs.readFileSync(path.join(dir, 'eval-report.md'), 'utf8');
     assert.match(md, /Agent Eval Report:/);

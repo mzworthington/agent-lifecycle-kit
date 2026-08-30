@@ -16,7 +16,7 @@ tools:
 ---
 # Standard Operating Procedure: Eval-Driven Development (EDD)
 
-Use this when changing agent prompts, MCP tool schemas, or routing behavior. Companion to [evals/edd/](../evals/edd/) and the `kit eval` / `agent-kit eval` CLI.
+Use this when changing agent prompts, MCP tool schemas, or routing behavior. Companion to [evals/edd/README.md](../evals/edd/README.md) and the `kit eval` / `agent-kit eval` CLI.
 
 ## EDD loop (red → green → refactor)
 
@@ -43,7 +43,7 @@ Use this when changing agent prompts, MCP tool schemas, or routing behavior. Com
 
 ## Markdown reports
 
-`kit eval report` emits actionable PR artifacts (`out/reports/eval-report.md`): overall pass rate, token/latency cost, routing + schema adherence, and **failure traces** (expected vs actual tool/args, LLM output, diagnosis, suggested fix). See [evals/edd/examples/eval-report.md](../evals/edd/examples/eval-report.md).
+`kit eval report` emits actionable PR artifacts (`out/reports/eval-report.md`, plus `edd-report.md` / `edd-report.json`): overall pass rate, token/latency cost, routing + schema adherence, and **failure traces** (expected vs actual tool/args, LLM output, diagnosis, suggested fix). See [evals/edd/examples/eval-report.md](../evals/edd/examples/eval-report.md).
 
 ## Production telemetry bridge
 

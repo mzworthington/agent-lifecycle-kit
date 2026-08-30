@@ -268,6 +268,7 @@ export function generateReport(
   fs.writeFileSync(outPath, body, 'utf8');
   written.push(outPath);
 
+  // Stable PR-facing alias (docs and examples refer to eval-report.md)
   const alias = path.join(options.outDir, 'eval-report.md');
   fs.copyFileSync(outPath, alias);
   written.push(alias);

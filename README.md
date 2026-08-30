@@ -40,7 +40,7 @@ kit eval report --format md --out out/reports
 | :--- | :--- |
 | **Guide** | [docs/edd.md](./docs/edd.md) — what EDD is and why |
 | **Site** | [edd/](./edd/) — landing page |
-| **Suites** | [evals/edd/](./evals/edd/) — YAML harness + JSONL datasets |
+| **Suites** | [evals/edd/README.md](./evals/edd/README.md) — YAML harness + JSONL datasets |
 | **SOP** | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
 | **Blog** | [Moving Beyond Vibes](./docs/blog/moving-beyond-vibes-edd.md) |
 
@@ -161,7 +161,8 @@ This instantly creates:
 | :--- | :--- | :--- |
 | **Eval-Driven Development** | What EDD is, red/green/refactor loop, CLI & CI | [docs/edd.md](./docs/edd.md) |
 | **EDD site page** | Public landing for EDD | [edd/](./edd/) |
-| **EDD suites** | YAML harness, JSONL datasets, example report | [evals/edd/](./evals/edd/) |
+| **EDD suites** | YAML harness, JSONL datasets, example report | [evals/edd/README.md](./evals/edd/README.md) |
+| **EDD SOP** | Day-to-day red/green/refactor + CI gates | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
 | **Coding Philosophy** | Core architectural mandates, DDD, TDD short loop, clean code | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
 | **Skills Directory** | Full taxonomy of 43+ roles, language, framework, and domain profiles | [skills/README.md](./skills/README.md) |
 | **MCP Catalog** | Composable Model Context Protocol library and profiles | [mcps/README.md](./mcps/README.md) |

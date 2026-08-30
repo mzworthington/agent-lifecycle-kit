@@ -1019,28 +1019,27 @@
       <h2>What is Eval-Driven Development?</h2>
       <p>
         <strong style="color:#fff;">EDD is TDD for agents.</strong>
-        Write a failing eval for the user intent you care about, green the tool contract and system prompt,
-        then refine descriptions until routing and schemas hold under CI—and feed production failures straight
-        back into the suite.
+        Write a failing eval for the intent you care about, green the tool contract and prompt,
+        refine until routing holds under CI—and feed production misses straight back into the suite.
       </p>
       <div class="edd-steps">
         <div class="edd-step">
           <strong>Red</strong>
-          <span>Define intent in JSONL + YAML metrics (tool selection, schema, judge).</span>
+          <span>JSONL intent + YAML metrics (tool, schema, judge).</span>
         </div>
         <div class="edd-step">
           <strong>Green</strong>
-          <span>Register MCP tool schemas and minimal instructions; run until asserts pass.</span>
+          <span>Register MCP schemas and minimal instructions; run until green.</span>
         </div>
         <div class="edd-step">
           <strong>Refactor</strong>
-          <span>Iterate prompts &amp; descriptions; gate merges at 95% routing accuracy.</span>
+          <span>Tighten prompts; gate merges at 95% routing accuracy.</span>
         </div>
       </div>
       <div class="edd-links">
         <a href="./edd/">EDD landing →</a>
         <a href="./docs/edd.md">Full guide →</a>
-        <a href="./evals/edd/">Suites &amp; reports →</a>
+        <a href="./evals/edd/README.md">Suites &amp; reports →</a>
         <a href="./docs/blog/moving-beyond-vibes-edd.md">Moving Beyond Vibes →</a>
       </div>
     </section>

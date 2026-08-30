@@ -10,12 +10,13 @@ We are excited to announce the **v1.0.0** Eval-Driven Development harness for th
   - `eval run` — targeted suites across foundation models (or `scripted` offline driver)
   - `eval watch` — hot-reload on prompt / MCP tool schema changes
   - `eval ci` — headless execution with `--threshold-routing` gates
-  - `eval report` — Markdown/JSON performance and cost breakdowns (`out/reports/eval-report.md`)
+  - `eval report` — Markdown/JSON performance and cost breakdowns (`out/reports/eval-report.md` + `edd-report.md` / `.json`)
 - **OpenTelemetry instrumentation:** Spans for token usage, latency, routing confidence, and payload capture; prod→JSONL closed loop; shadow eval sampling; routing-drift detection.
 - **CI path filtering + artifact upload:** Runs only when harness/suites change; uploads reports with `if: always()` for debuggability.
 
 ## Docs
 
+- [EDD guide](./edd.md)
 - [EDD SOP](../SOPs/eval-driven-development.md)
 - [Production telemetry SOP](../SOPs/edd-production-telemetry.md)
 - [Blog: Moving Beyond Vibes](./blog/moving-beyond-vibes-edd.md)

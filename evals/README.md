@@ -85,3 +85,10 @@ Ensure skill folder layout rules remain valid:
 ```bash
 ./scripts/verify-skills-layout.sh
 ```
+
+Run the EDD harness unit tests and the scripted routing CI gate (YAML/JSONL under `evals/edd/`):
+
+```bash
+pnpm test:edd
+pnpm eval:edd
+```

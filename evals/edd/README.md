@@ -50,7 +50,15 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 
 ## Markdown reports
 
-`kit eval report --format md --out out/reports` writes `out/reports/eval-report.md` with:
+`kit eval report --format md --out out/reports` writes:
+
+| Artifact | Role |
+|----------|------|
+| `out/reports/eval-report.md` | Stable alias for PR / product review |
+| `out/reports/edd-report.md` | Same Markdown body (primary write) |
+| `out/reports/edd-report.json` | Machine-readable suite results (`--from` / CI) |
+
+Reports include:
 
 - Overall pass rate, model, date
 - Performance metrics (tokens, latency, routing accuracy, schema adherence)
