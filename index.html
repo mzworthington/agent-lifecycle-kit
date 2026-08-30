@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Lifecycle Kit — Eval-Driven Development for AI Agents</title>
+  <title>Agent Lifecycle Kit — Ship AI agents you can prove</title>
   <meta name="description"
-    content="Eval-Driven Development (EDD) for AI agents: TDD-style tool routing, schema asserts, LLM-as-a-judge, CI gates, and production telemetry—plus hexagonal lifecycle governance across Cursor, Gemini, Claude, Windsurf & Copilot.">
+    content="Ship AI agents you can prove. Eval-Driven Development (EDD) is the sensible default for tool-using agents—plus lifecycle governance across Cursor, Gemini, Claude, Windsurf & Copilot.">
   <meta name="keywords"
     content="Eval-Driven Development, EDD, AI agent evals, tool routing, MCP, LLM-as-a-judge, Cursor rules, Gemini CLI, Claude Code, Hexagonal Architecture, TDD, Model Context Protocol">
   <meta name="author" content="mzworthington">
@@ -20,9 +20,9 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <meta property="og:title" content="Agent Lifecycle Kit — Eval-Driven Development for AI Agents">
+  <meta property="og:title" content="Agent Lifecycle Kit — Ship AI agents you can prove">
   <meta property="og:description"
-    content="EDD: TDD for AI agents—tool routing, schema match, CI threshold gates, and closed-loop telemetry. Plus hexagonal lifecycle governance across every IDE.">
+    content="EDD is the sensible default for tool-using agents—assert routing and schemas, gate PRs, close the loop from production. Plus hexagonal lifecycle governance across every IDE.">
   <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -32,9 +32,9 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <meta name="twitter:title" content="Agent Lifecycle Kit — Eval-Driven Development for AI Agents">
+  <meta name="twitter:title" content="Agent Lifecycle Kit — Ship AI agents you can prove">
   <meta name="twitter:description"
-    content="EDD: TDD for AI agents—tool routing, schema match, CI threshold gates, and closed-loop telemetry.">
+    content="EDD is the sensible default for tool-using agents—tool routing, schema match, CI gates, and closed-loop telemetry.">
   <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta name="twitter:image:alt" content="Agent Lifecycle Kit Framework Banner">
 
@@ -44,7 +44,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     "name": "Agent Lifecycle Kit",
-    "description": "Eval-Driven Development (EDD) harness and autonomous AI agent lifecycle governance for Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.",
+    "description": "Ship AI agents you can prove. Eval-Driven Development (EDD) is the sensible default for tool-using agents, plus lifecycle governance for Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.",
     "url": "https://mzworthington.github.io/agent-lifecycle-kit/",
     "codeRepository": "https://github.com/mzworthington/agent-lifecycle-kit",
     "programmingLanguage": ["TypeScript", "Bash", "JSON"],
@@ -223,6 +223,15 @@
       padding: 0.35rem 0.9rem;
       margin-bottom: 1.15rem;
       background: rgba(99, 102, 241, 0.12);
+    }
+
+    .hero-brand {
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 0.85rem;
+      color: #fff;
     }
 
     .hero-ctas {
@@ -577,13 +586,13 @@
     }
 
     .hero-title {
-      font-size: 3rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 30%, var(--primary-light) 70%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--primary-light);
       margin-bottom: 1rem;
+      background: none;
+      -webkit-text-fill-color: unset;
     }
 
     .hero-subtitle {
@@ -886,8 +895,12 @@
         padding: 1.5rem 1rem;
       }
 
+      .hero-brand {
+        font-size: 1.85rem;
+      }
+
       .hero-title {
-        font-size: 1.75rem;
+        font-size: 1.15rem;
       }
 
       .hero-subtitle {
@@ -934,8 +947,12 @@
         display: none;
       }
 
+      .hero-brand {
+        font-size: 1.55rem;
+      }
+
       .hero-title {
-        font-size: 1.45rem;
+        font-size: 1.05rem;
       }
 
       .hero-d3-wrapper {
@@ -960,10 +977,11 @@
         <span>Agent Lifecycle Kit</span>
       </a>
       <div class="nav-links">
-        <a href="./edd/" class="nav-link">EDD</a>
-        <a href="#pillars" class="nav-link">Pillars</a>
-        <a href="#cli" class="nav-link">CLI</a>
-        <a href="#docs" class="nav-link">Documentation</a>
+        <a href="#edd" class="nav-link">EDD</a>
+        <a href="#cli" class="nav-link">Try</a>
+        <a href="#pillars" class="nav-link">Why Kit</a>
+        <a href="#map" class="nav-link">Map</a>
+        <a href="#docs" class="nav-link">Docs</a>
         <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github"
           aria-label="GitHub Repository" title="GitHub Repository">
           <svg height="22" width="22" viewBox="0 0 16 16" fill="currentColor">
@@ -976,17 +994,18 @@
   </header>
 
   <main class="container" style="padding-bottom: 0;">
-    <!-- Hero Section -->
+    <!-- Hero: brand + value -->
     <section class="hero" style="padding-bottom: 1.5rem;">
-      <div class="hero-eyebrow">Agent Lifecycle Kit · Eval-Driven Development</div>
-      <h1 class="hero-title">Eval-Driven Development for AI Agents</h1>
-      <p class="hero-subtitle">TDD for tool-using agents—assert routing and schemas, mock MCP tools, gate PRs at 95%
-        accuracy, and turn production misses into the next eval.</p>
+      <div class="hero-eyebrow">Eval-Driven Development · sensible default</div>
+      <h1 class="hero-brand">Agent Lifecycle Kit</h1>
+      <p class="hero-title">Ship AI agents you can prove</p>
+      <p class="hero-subtitle">EDD is TDD for tool-using agents—assert routing and schemas, mock MCP tools, gate
+        PRs at 95% accuracy, and turn production misses into the next eval.</p>
 
       <div class="hero-ctas">
-        <a class="btn-cta btn-cta-primary" href="./edd/">Explore EDD</a>
+        <a class="btn-cta btn-cta-primary" href="#edd">Why EDD</a>
         <a class="btn-cta btn-cta-ghost" href="#cli">Try <code style="font-family: var(--font-mono);">kit eval ci</code></a>
-        <a class="btn-cta btn-cta-ghost" href="./docs/edd.md">Read the guide</a>
+        <a class="btn-cta btn-cta-ghost" href="./edd/">EDD guide</a>
       </div>
 
       <div class="badge-bar" style="margin-bottom: 1.5rem;">
@@ -998,27 +1017,19 @@
             alt="EDD" width="140" height="28" loading="lazy"></a>
         <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github"
             alt="Docs" width="165" height="28" loading="lazy"></a>
-        <a href="./package.json"><img
-            src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs"
-            alt="Node" width="160" height="28" loading="lazy"></a>
         <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
             alt="License" width="140" height="28" loading="lazy"></a>
       </div>
     </section>
   </main>
 
-  <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
-  <div id="hero-d3-container" class="hero-d3-wrapper" role="region"
-    aria-label="Interactive Autonomous AI Agent Neural Mesh Simulation">
-  </div>
-
   <main class="container">
 
-    <!-- EDD Spotlight -->
+    <!-- EDD first (value) -->
     <section id="edd" class="edd-spotlight" aria-label="Eval-Driven Development">
-      <h2>What is Eval-Driven Development?</h2>
+      <h2>Eval-Driven Development is the default</h2>
       <p>
-        <strong style="color:#fff;">EDD is TDD for agents.</strong>
+        <strong style="color:#fff;">When agents call tools, vibes are not a test strategy.</strong>
         Write a failing eval for the intent you care about, green the tool contract and prompt,
         refine until routing holds under CI—and feed production misses straight back into the suite.
       </p>
@@ -1044,32 +1055,9 @@
       </div>
     </section>
 
-    <!-- Pillars Grid -->
-    <section id="pillars" class="pillars-grid">
-      <div class="card">
-        <div class="card-icon">🧪</div>
-        <div class="card-title">Eval-Driven Development</div>
-        <div class="card-desc">YAML + JSONL harness, mocked tools, LLM-as-a-judge, CI threshold gates, Markdown failure
-          traces, and prod→JSONL closed loops.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🛡️</div>
-        <div class="card-title">Architectural Mandates</div>
-        <div class="card-desc">Strict Hexagonal Architecture, DDD domain invariants, vertical slices, and clean code
-          guardrails.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">🎯</div>
-        <div class="card-title">44 Specialist Skills</div>
-        <div class="card-desc">Modular skills covering lifecycle phases, tech stacks, and domain profiles—paired with
-          live trigger evals.</div>
-      </div>
-    </section>
-
-    <!-- CLI Section -->
+    <!-- Try it -->
     <section id="cli">
-      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">🚀 Unified Terminal CLI
-        (`kit`)</h2>
+      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Try it</h2>
       <div class="cli-box">
         <div class="cli-header">
           <div class="cli-dots">
@@ -1080,34 +1068,62 @@
           <span>zsh — kit EDD</span>
         </div>
         <div class="cli-code">
-          <div><span class="comment"># Run an EDD suite (scripted driver works offline)</span></div>
+          <div><span class="comment"># Offline scripted driver — no API key required</span></div>
           <div>$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span></div>
           <br>
           <div><span class="comment"># CI gate — fail if routing accuracy &lt; 95%</span></div>
           <div>$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span></div>
           <br>
-          <div><span class="comment"># Markdown report with failure traces for PRs</span></div>
+          <div><span class="comment"># Markdown failure traces for PRs</span></div>
           <div>$ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></div>
-          <br>
-          <div><span class="comment"># Still available: skill-trigger harness</span></div>
-          <div>$ <span class="cmd">kit eval</span></div>
         </div>
       </div>
     </section>
 
-    <!-- Docs Section -->
+    <!-- Supporting pillars -->
+    <section id="pillars" class="pillars-grid" aria-label="Why Kit">
+      <div class="card">
+        <div class="card-icon">🧪</div>
+        <div class="card-title">EDD harness</div>
+        <div class="card-desc">YAML + JSONL, mocked tools, LLM-as-a-judge, CI threshold gates, and prod→JSONL closed
+          loops.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">Architecture that holds</div>
+        <div class="card-desc">Hexagonal, DDD, vertical slices, and clean code—so agent-written code stays maintainable.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <div class="card-title">One rules file, every IDE</div>
+        <div class="card-desc">Write AGENTS.md once. Kit syncs Cursor, Claude, Gemini, Windsurf, and Copilot.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Kit map after the value story -->
+  <div id="map" class="hero-d3-wrapper" role="region"
+    aria-label="Interactive Kit skill and profile map">
+    <div id="hero-d3-container" style="width:100%;height:100%;"></div>
+  </div>
+
+  <main class="container">
+
+    <!-- Docs -->
     <section id="docs" class="docs-wrapper" aria-label="Documentation Section">
       <div id="markdown-body" class="docs-content">
         <h2>About Agent Lifecycle Kit</h2>
-        <p>Kit ships <strong>Eval-Driven Development (EDD)</strong>—TDD for tool-using AI agents—alongside hexagonal
-          lifecycle governance across Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.</p>
-        <h3>Eval-Driven Development</h3>
-        <p>Assert tool routing and JSON schemas, mock MCP tools, gate pull requests on routing accuracy, and convert
-          production misses into regression datasets. Start at <a href="./edd/">/edd/</a> or
-          <a href="./docs/edd.md">docs/edd.md</a>.</p>
-        <h3>Core Architecture &amp; Philosophy</h3>
-        <p>Kit enforces Hexagonal Architecture (Ports &amp; Adapters), Domain-Driven Design (DDD) invariants, Vertical
-          Slice Architecture, TDD short loops, and clean code principles.</p>
+        <p><strong>Ship AI agents you can prove.</strong> Kit makes
+          <a href="./docs/edd.md">Eval-Driven Development (EDD)</a> the sensible default for tool-using agents,
+          then wraps it in lifecycle skills, hexagonal architecture, and multi-IDE governance.</p>
+        <h3>Start here</h3>
+        <ul>
+          <li><a href="./docs/edd.md">EDD guide</a> — why and what</li>
+          <li><a href="./SOPs/eval-driven-development.md">EDD SOP</a> — red → green → refactor</li>
+          <li><a href="./CODING_PHILOSOPHY.md">Coding philosophy</a> — architecture + quality defaults</li>
+          <li><a href="./AGENTS.md">Agent bootstrap</a> — how agents load the kit</li>
+        </ul>
       </div>
     </section>
 
@@ -1115,7 +1131,7 @@
 
   <footer>
     <p>Agent Lifecycle Kit is open source and released under the Unlicense (Public Domain).</p>
-    <p style="margin-top: 0.5rem; color: #94a3b8;">Eval-Driven Development for AI agents · Lifecycle, Architecture &amp; Governance
+    <p style="margin-top: 0.5rem; color: #94a3b8;">Ship agents you can prove · Eval-Driven Development
     </p>
     <p style="margin-top: 0.75rem;"><a href="./edd/" style="color:#818cf8; text-decoration:none; font-weight:600;">Explore EDD →</a></p>
   </footer>
@@ -1206,7 +1222,7 @@
 
       const nodes = [
         // Central Engine
-        { id: 'KIT_CORE', label: 'KIT CORE', group: 'core', category: 'core', icon: '⚡', radius: 46, color: '#6366f1', desc: 'Autonomous AI Agent Lifecycle, Architecture & Governance Engine.', tags: ['#hexagonal', '#tdd', '#security', '#telemetry', '#multi-ide'] },
+        { id: 'KIT_CORE', label: 'KIT CORE', group: 'core', category: 'core', icon: '⚡', radius: 46, color: '#6366f1', desc: 'Eval-Driven Development for AI agents—plus lifecycle, architecture & multi-IDE governance.', tags: ['#edd', '#hexagonal', '#tdd', '#multi-ide'] },
 
         // 5 Primary Sector Hubs
         { id: 'sec-lifecycle', label: 'LIFECYCLE ROLES', group: 'sector', category: 'lifecycle', icon: '🔄', radius: 30, color: '#a855f7', desc: 'Lifecycle role skills governing every phase from idea stress-testing to release.', tags: ['#agent-spec', '#agent-tdd', '#agent-security'] },
@@ -1790,21 +1806,8 @@
       }
     }
 
-    const loadDocs = () => {
-      fetch('./README.md')
-        .then(res => {
-          if (!res.ok) throw new Error('HTTP Error');
-          return res.text();
-        })
-        .then(text => renderMarkdownContent(text))
-        .catch(err => console.error('Failed to load README.md:', err));
-    };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadDocs);
-    } else {
-      loadDocs();
-    }
+    // Homepage docs section is authored inline (value-first). Full README lives on GitHub;
+    // deep EDD narrative lives at ./edd/ and ./docs/edd.md.
   </script>
 </body>
 

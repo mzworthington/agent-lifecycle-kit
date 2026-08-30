@@ -21,7 +21,7 @@ All standards and lifecycle roles live under `.agents/` as Cursor-compatible ski
 | Language profiles | [skills/lang-*](./skills/) | TypeScript, Rust, Python, Go, Java, C#, HCL |
 | Framework profiles | [skills/framework-*](./skills/) | Next.js, React, Express, Nuxt, FastAPI, Spring Boot, Quarkus, .NET, Terraform, Pulumi |
 | MCP library | [mcps/](./mcps/) | Catalogued MCP servers + profiles composed into Cursor `mcp.json` |
-| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Repeatable operational checklists (incl. [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](./SOPs/complexity-hotspots.md), [conventional commits & PR titles](./SOPs/conventional-commits.md)) |
+| Procedures | [SOPs/](./SOPs/), [tasks/](./tasks/) | Checklists incl. [EDD](./SOPs/eval-driven-development.md), [behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](./SOPs/complexity-hotspots.md), [conventional commits](./SOPs/conventional-commits.md) |
 | Templates | [templates/](./templates/) | Handover, lesson, project handshake, and project MCP formats |
 | Kit improvement | [lessons/](./lessons/), [tasks/kit-review.md](./tasks/kit-review.md) | Local lesson capture and weekly promotion |
 
@@ -30,12 +30,13 @@ See [skills/README.md](./skills/README.md) for the skills taxonomy and [mcps/REA
 ## 2. Bootstrapping instruction
 
 1. **Read [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) first** to align on hexagonal architecture, DDD, vertical slices, and clean code. Prefer **Mermaid** for diagrams; do not create or maintain ASCII/box-drawing art diagrams (see Interaction Mandate §8). Use **conventional commit** subjects for git commits **and** PR titles ([SOPs/conventional-commits.md](./SOPs/conventional-commits.md)) — squash-and-merge uses the PR title on the default branch.
-2. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
-3. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: **Grilling (if ambiguous/unsettled)** → Spec → TDD impact → XFN plan → **TDD short loop (gear 1+2)** → XFN green → Audit → Telemetry → Release. Prefer gear-2 thin adapters inside `agent-tdd`; use `agent-adapter` only for deep-dives.
-4. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
-5. **Complexity hotspots** - [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) (audit backlog → `agent-prune` complexity track).
-6. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) (and skill frontmatter `mcp:`) when phases/triggers match. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
-7. **External skills** - Official Cloudflare / Vercel (and similar) skills are declared in [skills/external.lock.json](./skills/external.lock.json) and synced with `gh skill` via [SOPs/external-skills.md](./SOPs/external-skills.md). Do not vendor them into `skills/`.
+2. **EDD is the default for agentic work** — When changing prompts, MCP tool schemas, or agent routing, follow [docs/edd.md](./docs/edd.md) and [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) (`kit eval run|ci`). Do not ship tool-using agent changes on vibes alone.
+3. **Detect the stack** from the user's codebase. Activate matching `lang-*` and `framework-*` skills.
+4. **Follow the orchestrator** via [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) for feature work: **Grilling (if ambiguous/unsettled)** → Spec → TDD impact → XFN plan → **TDD short loop (gear 1+2)** → XFN green → Audit → Telemetry → Release. Prefer gear-2 thin adapters inside `agent-tdd`; use `agent-adapter` only for deep-dives.
+5. **Catalog & XFN procedure** - [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md).
+6. **Complexity hotspots** - [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) (audit backlog → `agent-prune` complexity track).
+7. **MCP tools** - Prefer catalogued servers in [mcps/](./mcps/) (and skill frontmatter `mcp:`) when phases/triggers match. Add/compose via [SOPs/mcp-library.md](./SOPs/mcp-library.md).
+8. **External skills** - Official Cloudflare / Vercel (and similar) skills are declared in [skills/external.lock.json](./skills/external.lock.json) and synced with `gh skill` via [SOPs/external-skills.md](./SOPs/external-skills.md). Do not vendor them into `skills/`.
 
 ## 3. Dynamic specialist activation
 
@@ -70,9 +71,9 @@ Before marking a phase **COMPLETE**, run [agent-pre-commit](./skills/agent-pre-c
 
 ## 4. Further reading
 
-- [docs/edd.md](./docs/edd.md) - **Eval-Driven Development (EDD)** — TDD for tool-using agents
-- [README.md](./README.md) - directory layout and installation
+- [docs/edd.md](./docs/edd.md) - **Eval-Driven Development (EDD)** — sensible default for tool-using agents
+- [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) - EDD red → green → refactor
+- [README.md](./README.md) - product overview and quick start
 - [mcps/README.md](./mcps/README.md) - MCP catalog, profiles, and compose/install
 - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) - Conventional Commits for git commits and PR titles (squash-and-merge)
-- [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) - EDD day-to-day procedure
 - [lessons/README.md](./lessons/README.md) - capture session learnings; promote via [tasks/kit-review.md](./tasks/kit-review.md)

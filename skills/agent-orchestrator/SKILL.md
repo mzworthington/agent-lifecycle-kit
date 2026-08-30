@@ -51,7 +51,7 @@ disable-model-invocation: false
 
 You are the master coordinator responsible for guiding feature development through the multi-agent software engineering lifecycle.
 
-Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). API contracts: [SOPs/api-contracts.md](../../SOPs/api-contracts.md). Releases: [SOPs/release.md](../../SOPs/release.md).
+Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). **EDD (default for agent prompts/tools/routing):** [docs/edd.md](../../docs/edd.md), [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). API contracts: [SOPs/api-contracts.md](../../SOPs/api-contracts.md). Releases: [SOPs/release.md](../../SOPs/release.md).
 
 **Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
@@ -102,6 +102,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 
 | Request type | Route |
 |--------------|-------|
+| Prompt, MCP tool schema, or agent routing change | **EDD default:** [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md) (`kit eval run\|ci`) before merge |
 | Bug, failed job, live-site / fetch symptom, flake | **`agent-debug`** → `agent-pre-commit` (hypothesis board + repro + proof). Light XFN when UI/auth/SLO touched. |
 | Production incident / page | **`agent-incident`** → `agent-debug` (+ Slack/Notion when configured) |
 | Tiny typo / obvious one-liner with clear repro | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |

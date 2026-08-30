@@ -123,15 +123,15 @@ Depending on the framework used, load the appropriate skill:
 
 ---
 
-## 6. Methodology: TDD, BDD & Quality Guardrails
+## 6. Methodology: TDD, BDD, EDD & Quality Guardrails
 
 Do not write implementation code before establishing behavioral or technical contracts.
 
+- **Eval-Driven Development (EDD) is the sensible default for agentic work:** When changing prompts, MCP tool schemas, or agent routing, write failing evals first (`kit eval run` / `ci`). Isolate context, mock tools, assert tool selection and JSON schemas, optionally LLM-as-a-judge, and gate merges on routing accuracy. Guide: [docs/edd.md](./docs/edd.md). Procedure: [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md).
 - **Tests are the behavior catalog:** Unit, slice, and cross-functional suites (browser E2E, accessibility, security regression, load/performance) are the living inventory of features and the **source of truth for intended behavior**, above documentation, READMEs, and comments. When docs and tests disagree, trust the tests until stakeholders explicitly change the contract.
 - **Plan test impact before coding:** During design (TDD + XFN), inventory which existing cases the change will add, modify, or invalidate. Align with the user on that impact before implementation. Re-confirm during implementation whenever the work starts to affect cases not covered in the plan.
 - **Cross-functional requirements are tested, not assumed:** Spec captures measurable quality criteria; Design selects an XFN matrix (browser E2E, a11y, security tests, load) with apply/skip rationale; suites join the catalog. Procedure: [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md). Role: [agent-xfn](./skills/agent-xfn/SKILL.md).
 - **TDD / red-green-refactor:** Propose failing tests first. **Never skip the red phase** - run tests and confirm failure before implementation.
-- **Eval-Driven Development (EDD) for agents:** When changing prompts, MCP tool schemas, or agent routing, write failing evals first (`kit eval run` / `ci`). Isolate context, mock tools, assert tool selection and JSON schemas, optionally LLM-as-a-judge, and gate merges on routing accuracy. Guide: [docs/edd.md](./docs/edd.md). Procedure: [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md).
 - **BDD / Gherkin:** For rich domain behavior, write `Given-When-Then` scenarios before code. Scenarios must use ubiquitous language from the domain glossary.
 - **Test variety:** Unit tests for domain logic; slice/handler tests for use cases; integration tests for adapters (often in the same TDD session as gear 2); browser E2E for critical journeys; accessibility, security, and load suites when the XFN matrix applies.
 - **Test isolation:** Mock outbound ports in domain and slice tests. Do not boot full framework contexts for pure logic. Keep destructive load and E2E fixtures off shared production.

@@ -16,9 +16,9 @@ tools:
 ---
 # Standard Operating Procedure: Eval-Driven Development (EDD)
 
-Use this when changing agent prompts, MCP tool schemas, or routing behavior. Companion to [evals/edd/README.md](../evals/edd/README.md) and the `kit eval` / `agent-kit eval` CLI.
+**Default:** When changing agent prompts, MCP tool schemas, or routing behavior, use EDD—not ad-hoc playground checks. Companion: [docs/edd.md](../docs/edd.md), [evals/edd/README.md](../evals/edd/README.md).
 
-## EDD loop (red → green → refactor)
+## Loop (red → green → refactor)
 
 1. **Red — Define intent:** Add a JSONL case (`id`, `prompt`, optional `history` / `tags` / `expect`) and point a YAML suite at it with metrics (`tool_selection`, `schema_match`, `llm_as_judge`, `self_correction`, `terminal_fallback`).
 2. **Green — Implement interface:** Register the tool contract (MCP JSON under `evals/edd/tools/` or suite `mcp_tools`) and system prompt. Run `kit eval run --suite … --model scripted` (or a live model).
@@ -35,18 +35,16 @@ Use this when changing agent prompts, MCP tool schemas, or routing behavior. Com
 
 `agent-kit` is an alias of `kit`.
 
-## CI features
+## CI
 
-- **Path filtering:** [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) runs only when EDD harness, suites, or CLI change.
-- **Threshold gating:** `--threshold-routing 95` blocks merges when tool routing / schema extraction fails more than 5% of routing-tagged cases.
-- **Artifact preservation:** Reports upload with `if: always()` so failures are debuggable from JSON/Markdown artifacts.
+- **Path filtering:** [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) runs when the EDD harness, suites, or CLI change.
+- **Threshold gating:** `--threshold-routing 95` blocks merges when routing/schema extraction fails more than 5% of routing-tagged cases.
+- **Artifacts:** Reports upload with `if: always()` (`out/reports/eval-report.md`, `edd-report.md` / `.json`).
 
-## Markdown reports
+## Reports
 
-`kit eval report` emits actionable PR artifacts (`out/reports/eval-report.md`, plus `edd-report.md` / `edd-report.json`): overall pass rate, token/latency cost, routing + schema adherence, and **failure traces** (expected vs actual tool/args, LLM output, diagnosis, suggested fix). See [evals/edd/examples/eval-report.md](../evals/edd/examples/eval-report.md).
+`kit eval report` emits overall pass rate, token/latency cost, routing + schema adherence, and **failure traces** (expected vs actual tool/args, diagnosis, suggested fix). Example: [evals/edd/examples/eval-report.md](../evals/edd/examples/eval-report.md).
 
-## Production telemetry bridge
+## Production bridge
 
-Live spans share eval field names (`kit.prompt`, `kit.tool_name`, `kit.tool_payload`, `kit.routing_confidence`, `kit.latency_ms`, `kit.tokens`). Hard failures (tool exceptions, circuit-breaker trips, user downvotes) convert to JSONL via `productionTraceToJsonl`. Shadow evals sample ~5% of production traffic for `llm_as_judge`. Routing drift uses `detectRoutingDrift` against baseline tool-share distributions.
-
-See [SOPs/edd-production-telemetry.md](./edd-production-telemetry.md).
+Live spans share eval field names. Hard failures convert to JSONL via `productionTraceToJsonl`. Shadow evals sample ~5% of production traffic. See [SOPs/edd-production-telemetry.md](./edd-production-telemetry.md).

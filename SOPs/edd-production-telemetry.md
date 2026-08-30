@@ -14,7 +14,7 @@ tools:
 ---
 # Standard Operating Procedure: EDD Production Telemetry
 
-Local and CI evals protect predefined intents. Production is unpredictable. Kit bridges both by using the **same attribute schema** for OTel spans and eval datasets.
+Local and CI evals protect predefined intents. Production is unpredictable. Close the EDD loop by using the **same attribute schema** for OTel spans and eval datasets—so yesterday’s incident becomes tomorrow’s passing case.
 
 ## Mechanisms
 
