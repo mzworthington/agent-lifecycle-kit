@@ -58,16 +58,17 @@
   }
   </script>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts & CDN Preconnects -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <!-- D3, Marked & Mermaid -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- D3, Marked & Mermaid (Deferred non-blocking loading) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
   <style>
@@ -592,6 +593,21 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
+    .docs-wrapper a,
+    .docs-content a {
+      color: #a5b4fc;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+    }
+
+    .docs-wrapper a:hover,
+    .docs-wrapper a:focus,
+    .docs-content a:hover,
+    .docs-content a:focus {
+      color: #c7d2fe;
+    }
+
     .docs-content h1,
     .docs-content h2,
     .docs-content h3 {
@@ -624,12 +640,19 @@
       margin-bottom: 1rem;
     }
 
+    .docs-wrapper code,
     .docs-content code {
       background: rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
       padding: 0.2rem 0.4rem;
       border-radius: 4px;
       font-family: var(--font-mono);
       font-size: 0.9em;
+    }
+
+    .docs-wrapper a code,
+    .docs-content a code {
+      color: inherit;
     }
 
     .docs-content pre {
@@ -643,7 +666,17 @@
 
     .docs-content pre code {
       background: none;
+      color: #f1f5f9;
       padding: 0;
+    }
+
+    .docs-content blockquote {
+      border-left: 4px solid var(--primary);
+      padding: 0.5rem 1rem;
+      margin: 1rem 0;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0 8px 8px 0;
     }
 
     .docs-content .table-wrapper {
@@ -795,7 +828,10 @@
   <header>
     <div class="nav-container">
       <a href="#" class="brand">
-        <img src="./assets/kit_logo.png" alt="Kit Logo" width="32" height="32">
+        <picture>
+          <source srcset="./assets/kit_logo_256.webp" type="image/webp">
+          <img src="./assets/kit_logo.png" alt="Agent Lifecycle Kit Logo" width="36" height="36">
+        </picture>
         <span>Agent Lifecycle Kit</span>
       </a>
       <div class="nav-links">
@@ -823,17 +859,17 @@
       <div class="badge-bar" style="margin-bottom: 1.5rem;">
         <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
             src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
-            alt="CI" height="28" loading="lazy"></a>
+            alt="CI" width="130" height="28" loading="lazy"></a>
         <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github"
-            alt="Docs" height="28" loading="lazy"></a>
+            alt="Docs" width="165" height="28" loading="lazy"></a>
         <a href="./evals/"><img
             src="https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target"
-            alt="Evals" height="28" loading="lazy"></a>
+            alt="Evals" width="180" height="28" loading="lazy"></a>
         <a href="./package.json"><img
             src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs"
-            alt="Node" height="28" loading="lazy"></a>
+            alt="Node" width="160" height="28" loading="lazy"></a>
         <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
-            alt="License" height="28" loading="lazy"></a>
+            alt="License" width="140" height="28" loading="lazy"></a>
       </div>
     </section>
   </main>
@@ -1537,88 +1573,6 @@
       initMermaid();
     }
 
-    const FALLBACK_README = `
-# 🤖 Kit (Agent Lifecycle Kit)
-
-**The Autonomous AI Agent Lifecycle, Architecture & Governance Framework.**
-
-Consistent, production-grade AI-assisted software engineering across every IDE and tech stack.
-
----
-
-## ⚡ Why Kit?
-
-AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot, Google Antigravity) are powerful—but without strict governance, they drift into inconsistent architecture, swallowed exceptions, skipped tests, and bloated abstractions.
-
-**Kit** gives your team a unified, cross-IDE framework that standardizes how AI agents work: from idea stress-testing, specification, and TDD short loops to security audits, architecture drift detection, and telemetry tracking.
-
----
-
-## ✨ Core Pillars
-
-- **🛡️ Shared Architectural Philosophy**: Enforces Hexagonal Architecture (Ports & Adapters), Domain-Driven Design (DDD invariants), Vertical Slice Architecture, and Clean Code standards.
-- **🔄 Single Source of Truth & Multi-IDE Sync**: Write rules once in \`AGENTS.md\`. Kit synchronizes entry points automatically across Cursor (\`.cursorrules\`), Gemini (\`GEMINI.md\`), Claude (\`CLAUDE.md\`), Windsurf (\`.windsurfrules\`), and Copilot (\`.github/copilot-instructions.md\`).
-- **🎯 44 Modular Specialist Skills**:
-  - **Lifecycle Roles (\`agent-*\`)**: \`agent-orchestrator\`, \`agent-grilling\`, \`agent-spec\`, \`agent-tdd\`, \`agent-xfn\`, \`agent-adapter\`, \`agent-ui\`, \`agent-migration\`, \`agent-api-contract\`, \`agent-review\`, \`agent-security\`, \`agent-arch-drift\`, \`agent-perf-opt\`, \`agent-debug\`, \`agent-telemetry\`, \`agent-pre-commit\`.
-  - **Language Profiles (\`lang-*\`)**: \`TypeScript\`, \`Rust\`, \`Python\`, \`Go\`, \`Java\`, \`C#\`, \`HCL\`.
-  - **Framework Profiles (\`framework-*\`)**: \`React 19\`, \`Next.js\`, \`Express\`, \`FastAPI\`, \`Spring Boot\`, \`Quarkus\`, \`.NET\`, \`Terraform\`, \`Pulumi\`.
-  - **Domain Profiles (\`profile-*\`)**: \`profile-api\`, \`profile-iac\`, \`profile-mcp\`, \`profile-observability\`.
-- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (\`kit audit\`).
-- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 66 test cases across 37 suites with 100% accuracy (\`kit eval\`).
-- **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into \`.cursor/mcp.json\`.
-
----
-
-## 🧭 Multi-Agent Lifecycle Flow
-
-\`\`\`mermaid
-sequenceDiagram
-  autonumber
-  participant O as agent-orchestrator
-  participant G as agent-grilling
-  participant S as agent-spec
-  participant T as agent-tdd
-  participant X as agent-xfn
-  participant Sec as agent-security
-  participant Arch as agent-arch-drift
-  participant Tel as agent-telemetry
-  participant R as agent-release
-
-  O->>G: 1. Stress-test idea & decision frontier
-  O->>S: 2. Formulate BDD spec & acceptance criteria
-  O->>T: 3. Inventory behavior catalog & plan test impact
-  O->>X: 4. Define cross-functional quality matrix (a11y/load/sec)
-  O->>T: 5. Execute TDD short loop (gear 1 domain + gear 2 thin adapters)
-  O->>X: 6. Green all active XFN quality suites
-  O->>Sec: 7. Audit security & OWASP compliance
-  O->>Arch: 8. Verify hexagonal boundaries & zero architectural drift
-  O->>Tel: 9. Map runtime SLOs to OpenTelemetry metrics
-  O->>R: 10. Release via conventional PR title & handover summary
-\`\`\`
-
----
-
-## 🚀 Unified CLI (\`kit\`)
-
-Kit comes with a unified TypeScript CLI powered by \`tsx/esm\` for project bootstrapping, rule export, security auditing, and evaluation.
-
-\`\`\`bash
-# Display CLI help menu
-kit help
-\`\`\`
-
-| Command | Purpose |
-| :--- | :--- |
-| \`kit init [dir]\` | Bootstrap \`AGENTS.md\`, multi-IDE rules, \`.cursor/mcp.json\`, and git pre-commit hook |
-| \`kit mcp <profile>\` | Compose and install MCP profiles (\`default\`, \`collab\`, \`ops\`, \`security\`, \`lab\`) |
-| \`kit audit\` | Run hardened security & supply chain audit across skills and scripts |
-| \`kit validate\` | Validate evals structure against JSON Schemas |
-| \`kit eval\` | Run live trigger evaluation benchmarks across all skill suites |
-| \`kit export-rules\` | Export and sync \`AGENTS.md\` to \`GEMINI.md\`, \`CLAUDE.md\`, \`.windsurfrules\`, \`.cursorrules\`, and Copilot |
-| \`kit metrics\` | Display telemetry analytics summary for subagent phase handovers |
-| \`kit verify\` | Verify skills directory layout conventions |
-`;
-
     function renderMarkdownContent(text) {
       const container = document.getElementById('markdown-body');
       if (!container) return;
@@ -1674,17 +1628,13 @@ kit help
     }
 
     const loadDocs = () => {
-      if (window.location.protocol === 'file:') {
-        renderMarkdownContent(FALLBACK_README);
-      } else {
-        fetch('./README.md')
-          .then(res => {
-            if (!res.ok) throw new Error('HTTP Error');
-            return res.text();
-          })
-          .then(text => renderMarkdownContent(text))
-          .catch(() => renderMarkdownContent(FALLBACK_README));
-      }
+      fetch('./README.md')
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP Error');
+          return res.text();
+        })
+        .then(text => renderMarkdownContent(text))
+        .catch(err => console.error('Failed to load README.md:', err));
     };
 
     if (document.readyState === 'loading') {
