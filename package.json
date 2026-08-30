@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Modular agent lifecycle guardrails, skills, and tooling",
   "bin": {
-    "kit": "./bin/kit"
+    "kit": "./bin/kit",
+    "agent-kit": "./bin/kit"
   },
   "scripts": {
     "prepare": "husky",
@@ -16,8 +17,10 @@
     "verify": "./scripts/verify-skills-layout.sh",
     "export-rules": "./scripts/export-ide-rules.sh",
     "eval:run": "./scripts/run-evals.sh",
+    "eval:edd": "node --import tsx/esm bin/kit.ts eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --model scripted --out out/reports",
+    "test:edd": "node --import tsx/esm --test scripts/lib/edd/edd.test.ts",
     "init-project": "./scripts/init-project.sh",
-    "check": "pnpm run scan && pnpm run validate && pnpm run verify && pnpm run export-rules -- --check && pnpm run eval:run"
+    "check": "pnpm run scan && pnpm run validate && pnpm run verify && pnpm run export-rules -- --check && pnpm run eval:run && pnpm run test:edd && pnpm run eval:edd"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
@@ -28,5 +31,9 @@
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0",
+    "zod": "^4.5.4"
   }
 }

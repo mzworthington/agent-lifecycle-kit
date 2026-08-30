@@ -1,0 +1,20 @@
+name: "Routing: Architecture Extraction"
+dataset: "architecture_routing.jsonl"
+mcp_tools:
+  - "tools/read_architecture_yaml.json"
+metrics:
+  - type: "tool_selection"
+    expected: "read_architecture_yaml"
+  - type: "schema_match"
+    strict: true
+  - type: "llm_as_judge"
+mocks:
+  - tool: "read_architecture_yaml"
+    response:
+      status: "success"
+      component: "payment-api"
+      containers:
+        - "payment-api"
+        - "payment-db"
+      relationships:
+        - "payment-api -> payment-db"

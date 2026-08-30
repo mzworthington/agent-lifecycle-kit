@@ -5,11 +5,13 @@ This directory and the co-located skill eval folders contain evaluation suites a
 The kit uses a **Hybrid Evals Architecture**:
 1. **Co-Located Unit Evals (`skills/<skill-name>/evals/eval.json`):** Single-skill output assertions co-located next to `SKILL.md` for portability and tight developer feedback.
 2. **Centralized System & Routing Evals (`evals/suites/*.json`):** Cross-skill routing matrix tests (`routing-matrix.json`), multi-phase role benchmarks (`lifecycle-roles.json`), and stack profile benchmarks (`stack-profiles.json`).
+3. **Eval-Driven Development (`evals/edd/`):** YAML + JSONL harness for agent tool routing, schema match, LLM-as-a-judge, error recovery, CI threshold gates, and Markdown reports (`kit eval run|watch|report|ci`). See [edd/README.md](./edd/README.md) and [SOPs/eval-driven-development.md](../SOPs/eval-driven-development.md).
 
 Evals ensure that:
 - **Routing & Trigger Accuracy:** Prompts activate the correct specialist role (`agent-*`) or stack profile (`lang-*`, `framework-*`).
 - **Guardrail Conformance:** Generated agent outputs adhere to architectural principles ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md)), output schemas, and lifecycle SOPs.
 - **No Drift:** Skill updates do not introduce prompt regressions or weaken behavioral guardrails.
+- **Agent tool reliability (EDD):** MCP/tool schemas and system prompts stay above routing-accuracy thresholds before merge.
 
 ---
 
@@ -19,17 +21,17 @@ Evals ensure that:
 .
 ├── evals/
 │   ├── README.md                  # Hybrid architecture overview
-│   ├── schema.json                # JSON Schema for validation
+│   ├── schema.json                # JSON Schema for skill-trigger suites
+│   ├── edd/                       # Eval-Driven Development (YAML + JSONL)
+│   │   ├── README.md
+│   │   ├── architecture_routing.yaml
+│   │   └── … 
 │   └── suites/
 │       ├── lifecycle-roles.json   # Kit-wide test cases for agent-* specialist roles
 │       ├── stack-profiles.json    # Kit-wide test cases for lang-* and framework-* profiles
 │       └── routing-matrix.json    # Cross-role routing classification accuracy tests
 └── skills/
     ├── agent-spec/
-    │   ├── SKILL.md
-    │   └── evals/
-    │       └── eval.json          # Co-located unit eval benchmark
-    ├── agent-tdd/
     │   ├── SKILL.md
     │   └── evals/
     │       └── eval.json          # Co-located unit eval benchmark

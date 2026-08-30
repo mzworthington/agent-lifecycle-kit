@@ -44,7 +44,7 @@ AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot,
   - **Framework Profiles (`framework-*`)**: `React 19`, `Next.js`, `Express`, `FastAPI`, `Spring Boot`, `Quarkus`, `.NET`, `Terraform`, `Pulumi`.
   - **Domain Profiles (`profile-*`)**: `profile-api`, `profile-iac`, `profile-mcp`, `profile-observability`.
 - **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (`kit audit`).
-- **🧪 Automated Evaluation Harness**: Live trigger validation engine evaluating 65+ test cases across 36 suites with 100% accuracy (`kit eval`).
+- **🧪 Automated Evaluation Harness**: Live trigger validation across 65+ cases (`kit eval`) plus **Eval-Driven Development (EDD)** for tool routing, schema match, LLM-as-a-judge, CI threshold gates, and Markdown reports (`kit eval run|ci|report`).
 - **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into `.cursor/mcp.json` ([mcps/](./mcps/)).
 
 ---
@@ -94,6 +94,7 @@ kit help
 | `kit audit` | Run hardened security & supply chain audit across skills and scripts |
 | `kit validate` | Validate evals structure against JSON Schemas |
 | `kit eval` | Run live trigger evaluation benchmarks across all skill suites |
+| `kit eval run\|watch\|report\|ci` | Eval-Driven Development (EDD) harness — see [evals/edd](./evals/edd/) |
 | `kit export-rules` | Export and sync `AGENTS.md` to `GEMINI.md`, `CLAUDE.md`, `.windsurfrules`, `.cursorrules`, and Copilot |
 | `kit metrics` | Display telemetry analytics summary for subagent phase handovers |
 | `kit verify` | Verify skills directory layout conventions |

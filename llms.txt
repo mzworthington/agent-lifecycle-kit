@@ -8,8 +8,11 @@
 - 20+ specialized lifecycle role skills (agent-spec, agent-tdd, agent-security, agent-arch-drift, agent-telemetry)
 - Language & framework profiles (TypeScript, Rust, Go, Python, Java, C#, Next.js, React, Express, Spring Boot)
 - Unified kit CLI for application bootstrapping and automated security/eval auditing
+- Eval-Driven Development (EDD) harness: `kit eval run|watch|report|ci` with YAML suites, JSONL datasets, OTel spans, and CI threshold gates
 
 ## Key Documentation
 - [README](https://mzworthington.github.io/agent-lifecycle-kit/)
 - [Coding Philosophy](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md)
 - [Agent Bootstrap](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/AGENTS.md)
+- [EDD SOP](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md)
+- [EDD blog](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/docs/blog/moving-beyond-vibes-edd.md)

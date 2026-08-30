@@ -36,6 +36,9 @@ credentials.json
 node_modules/
 .pnpm-store/
 
+# EDD / eval report artifacts
+out/
+
 # OS / editor
 .DS_Store
 *.swp

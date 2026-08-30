@@ -1,0 +1,15 @@
+name: "Recovery: Self-correction"
+dataset: "architecture_self_correction.jsonl"
+mcp_tools:
+  - "tools/read_architecture_yaml.json"
+metrics:
+  - type: "self_correction"
+  - type: "tool_selection"
+    expected: "read_architecture_yaml"
+  - type: "schema_match"
+    strict: true
+mocks:
+  - tool: "read_architecture_yaml"
+    response:
+      status: "success"
+      component: "payment-api"

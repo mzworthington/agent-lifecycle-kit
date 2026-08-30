@@ -1,0 +1,14 @@
+{
+  "name": "read_architecture_yaml",
+  "description": "Read the C4 / architecture YAML for a named component (e.g. payment-api).",
+  "inputSchema": {
+    "type": "object",
+    "required": ["componentId"],
+    "properties": {
+      "componentId": {
+        "type": "string",
+        "description": "Stable component identifier such as payment-api"
+      }
+    }
+  }
+}

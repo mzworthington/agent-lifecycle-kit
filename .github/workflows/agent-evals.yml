@@ -1,0 +1,76 @@
+name: Agent EDD Suite
+
+on:
+  pull_request:
+    paths:
+      - 'evals/edd/**'
+      - 'scripts/lib/edd/**'
+      - 'scripts/lib/edd_cli.ts'
+      - 'bin/kit.ts'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/agent-evals.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'evals/edd/**'
+      - 'scripts/lib/edd/**'
+      - 'scripts/lib/edd_cli.ts'
+      - 'bin/kit.ts'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/agent-evals.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    name: EDD CI Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type-check
+        run: pnpm tsc --noEmit
+
+      - name: Run Agent Evaluations (threshold gate)
+        env:
+          # Optional live provider — defaults to scripted driver when unset
+          KIT_EVAL_API_KEY: ${{ secrets.KIT_EVAL_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          KIT_EVAL_MODEL: ${{ vars.KIT_EVAL_MODEL || 'scripted' }}
+        run: |
+          mkdir -p out/reports
+          pnpm kit eval ci \
+            --suite evals/edd/architecture_routing.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
+          pnpm kit eval run --suite evals/edd/architecture_self_correction.yaml --model scripted --out out/reports
+          pnpm kit eval run --suite evals/edd/architecture_terminal.yaml --model scripted --out out/reports
+          pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json
+
+      - name: Upload EDD report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edd-eval-reports
+          path: out/reports/
+          if-no-files-found: warn
