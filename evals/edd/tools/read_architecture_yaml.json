@@ -1,14 +1,15 @@
 {
   "name": "read_architecture_yaml",
-  "description": "Read the C4 / architecture YAML for a named component (e.g. payment-api).",
+  "description": "Read the C4 / architecture YAML for a single named component (e.g. payment-api, auth-service). Call once per component — componentId must be a string, not an array. Use this whenever the user asks about architecture, databases, or connections for a service; never invent those details.",
   "inputSchema": {
     "type": "object",
     "required": ["componentId"],
     "properties": {
       "componentId": {
         "type": "string",
-        "description": "Stable component identifier such as payment-api"
+        "description": "Stable component identifier such as payment-api or auth-service (string only; one component per call)"
       }
-    }
+    },
+    "additionalProperties": false
   }
 }

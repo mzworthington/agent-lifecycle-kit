@@ -16,6 +16,7 @@ import {
   generateReport,
   printReportSummary,
   type CaseResult,
+  type FailureTrace,
   type SuiteReport
 } from './telemetry.js';
 import { emitAgentSpan, type OtelEmitter } from './otel.js';
@@ -44,6 +45,65 @@ function parseArgs(raw: string | Record<string, unknown>): Record<string, unknow
   } catch {
     return null;
   }
+}
+
+function buildFailureTrace(input: {
+  testCase: EvalCase;
+  response: AgentResponse;
+  failures: string[];
+  metricExpectedTool?: string;
+}): FailureTrace | undefined {
+  if (!input.failures.length) return undefined;
+  const expectedTool =
+    input.testCase.expect?.no_tool === true
+      ? undefined
+      : (input.testCase.expect?.tool ?? input.metricExpectedTool);
+  const actualTool = input.response.tool_calls?.[0]?.name;
+  const actualArguments = input.response.tool_calls?.[0]
+    ? typeof input.response.tool_calls[0].arguments === 'string'
+      ? input.response.tool_calls[0].arguments
+      : JSON.stringify(input.response.tool_calls[0].arguments)
+    : undefined;
+  const expectedArguments = input.testCase.expect?.arguments_contains
+    ? JSON.stringify(input.testCase.expect.arguments_contains)
+    : undefined;
+
+  const failureText = input.failures.join('; ');
+  if (failureText.includes('routing:')) {
+    return {
+      diagnosis:
+        'Tool Selection Failure. The model refused to use the tool and hallucinated a generic answer, or selected the wrong tool.',
+      suggestedFix:
+        'Add a constraint to the system prompt instructing the agent to never guess architectural details and to always use the provided C4 tools.',
+      expectedTool,
+      actualTool,
+      llmOutput: input.response.content,
+      expectedArguments,
+      actualArguments
+    };
+  }
+  if (failureText.includes('schema:')) {
+    return {
+      diagnosis:
+        'Schema Violation. The tool only accepts the declared argument types, but the model produced incompatible JSON (e.g. an array for a string field).',
+      suggestedFix:
+        'Update the tool description to explicitly state that it can only be called for one component at a time, or update the tool\'s backend logic to accept arrays.',
+      expectedTool,
+      actualTool,
+      expectedArguments,
+      actualArguments,
+      llmOutput: input.response.content
+    };
+  }
+  return {
+    diagnosis: failureText,
+    suggestedFix: 'Inspect the prompt, tool schema, and system instructions for this case.',
+    expectedTool,
+    actualTool,
+    expectedArguments,
+    actualArguments,
+    llmOutput: input.response.content
+  };
 }
 
 export class EvalRunner {
@@ -149,6 +209,7 @@ export class EvalRunner {
         passed: assertion.passed
       });
 
+      const metricExpectedTool = config.metrics.find((m) => m.type === 'tool_selection')?.expected;
       results.push({
         id: testCase.id,
         prompt: testCase.prompt,
@@ -158,7 +219,17 @@ export class EvalRunner {
         routingConfidence: response.routingConfidence,
         failures: assertion.failures,
         tags: testCase.tags,
-        hallucinated: assertion.hallucinated
+        hallucinated: assertion.hallucinated,
+        routingOk: assertion.routingOk,
+        schemaOk: assertion.schemaOk,
+        trace: assertion.passed
+          ? undefined
+          : buildFailureTrace({
+              testCase,
+              response,
+              failures: assertion.failures,
+              metricExpectedTool
+            })
       });
     }
 
@@ -193,9 +264,17 @@ export class EvalRunner {
     metrics: EvalMetric[],
     testCase: EvalCase,
     config: EvalConfig
-  ): Promise<{ passed: boolean; failures: string[]; hallucinated?: boolean }> {
+  ): Promise<{
+    passed: boolean;
+    failures: string[];
+    hallucinated?: boolean;
+    routingOk?: boolean;
+    schemaOk?: boolean;
+  }> {
     const failures: string[] = [];
     let hallucinated: boolean | undefined;
+    let routingOk: boolean | undefined;
+    let schemaOk: boolean | undefined;
 
     for (const metric of metrics) {
       if (metric.type === 'tool_selection') {
@@ -206,6 +285,7 @@ export class EvalRunner {
             : (testCase.expect?.tool ?? metric.expected);
 
         if (testCase.expect?.no_tool) {
+          routingOk = !selected;
           if (selected) {
             failures.push(`routing: expected no tool, got ${selected}`);
           }
@@ -214,10 +294,12 @@ export class EvalRunner {
 
         if (!expected) {
           failures.push('routing: tool_selection metric missing expected tool');
+          routingOk = false;
           continue;
         }
 
-        if (selected !== expected) {
+        routingOk = selected === expected;
+        if (!routingOk) {
           failures.push(`routing: expected tool ${expected}, got ${selected ?? '(none)'}`);
         }
       }
@@ -225,28 +307,46 @@ export class EvalRunner {
       if (metric.type === 'schema_match') {
         const call = response.tool_calls?.[0];
         if (!call) {
-          if (testCase.expect?.no_tool) continue;
+          if (testCase.expect?.no_tool) {
+            schemaOk = true;
+            continue;
+          }
           failures.push('schema: no tool call to validate');
+          schemaOk = false;
           continue;
         }
         const parsed = parseArgs(call.arguments);
         if (!parsed) {
           failures.push('schema: tool arguments are not valid JSON');
+          schemaOk = false;
           continue;
         }
+        let ok = true;
         if (metric.strict !== false) {
-          // Strict mode: arguments must be a JSON object
           if (typeof parsed !== 'object' || Array.isArray(parsed)) {
             failures.push('schema: arguments must be a JSON object');
+            ok = false;
+          }
+          for (const [key, value] of Object.entries(parsed)) {
+            if (Array.isArray(value)) {
+              failures.push(
+                `schema: expected ${key} to be a string, got array ${JSON.stringify(value)}`
+              );
+              ok = false;
+            }
           }
         }
         if (testCase.expect?.arguments_contains) {
           for (const [key, value] of Object.entries(testCase.expect.arguments_contains)) {
             if (parsed[key] !== value) {
-              failures.push(`schema: expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`);
+              failures.push(
+                `schema: expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
+              );
+              ok = false;
             }
           }
         }
+        schemaOk = ok;
       }
 
       if (metric.type === 'self_correction') {
@@ -295,6 +395,6 @@ export class EvalRunner {
       }
     }
 
-    return { passed: failures.length === 0, failures, hallucinated };
+    return { passed: failures.length === 0, failures, hallucinated, routingOk, schemaOk };
   }
 }

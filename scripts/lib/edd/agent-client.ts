@@ -110,15 +110,19 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks }) => {
     prompt.includes('c4') ||
     prompt.includes('payment') ||
     prompt.includes('connects to') ||
-    prompt.includes('pull up')
+    prompt.includes('pull up') ||
+    prompt.includes('database for') ||
+    prompt.includes('auth service')
   ) {
     const toolName = 'read_architecture_yaml';
     const mocksForTool = mocks.get(toolName) ?? [];
     const mock = mocksForTool[0];
-    const args = { componentId: prompt.includes('payment') ? 'payment-api' : 'payment-api' };
+    // One component per call — prefer auth-service when both are mentioned (schema-03)
+    const componentId = prompt.includes('auth') ? 'auth-service' : 'payment-api';
+    const args = { componentId };
     return {
       content: mock
-        ? `Architecture for ${(mock.response as { component?: string })?.component ?? 'payment-api'} loaded successfully.`
+        ? `Architecture for ${componentId} loaded successfully.`
         : 'Fetching architecture…',
       tool_calls: [{ name: toolName, arguments: args }],
       usage: { promptTokens: 55, completionTokens: 45, totalTokens: 100 },

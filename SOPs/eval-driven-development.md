@@ -41,6 +41,10 @@ Use this when changing agent prompts, MCP tool schemas, or routing behavior. Com
 - **Threshold gating:** `--threshold-routing 95` blocks merges when tool routing / schema extraction fails more than 5% of routing-tagged cases.
 - **Artifact preservation:** Reports upload with `if: always()` so failures are debuggable from JSON/Markdown artifacts.
 
+## Markdown reports
+
+`kit eval report` emits actionable PR artifacts (`out/reports/eval-report.md`): overall pass rate, token/latency cost, routing + schema adherence, and **failure traces** (expected vs actual tool/args, LLM output, diagnosis, suggested fix). See [evals/edd/examples/eval-report.md](../evals/edd/examples/eval-report.md).
+
 ## Production telemetry bridge
 
 Live spans share eval field names (`kit.prompt`, `kit.tool_name`, `kit.tool_payload`, `kit.routing_confidence`, `kit.latency_ms`, `kit.tokens`). Hard failures (tool exceptions, circuit-breaker trips, user downvotes) convert to JSONL via `productionTraceToJsonl`. Shadow evals sample ~5% of production traffic for `llm_as_judge`. Routing drift uses `detectRoutingDrift` against baseline tool-share distributions.

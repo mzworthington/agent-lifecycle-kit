@@ -8,6 +8,8 @@ Declarative agent evaluation harness for the Agent Lifecycle Kit.
 evals/edd/
 ├── README.md
 ├── system_prompt.md
+├── examples/
+│   └── eval-report.md                 # Canonical Markdown report artifact
 ├── architecture_routing.yaml          # YAML harness
 ├── architecture_routing.jsonl         # Streaming dataset
 ├── architecture_self_correction.yaml
@@ -46,6 +48,16 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 | `self_correction` | Agent updates params after injected errors |
 | `terminal_fallback` | Circuit breaker stops endless retries |
 
-Live models: set `KIT_EVAL_API_KEY` / `OPENAI_API_KEY` and `--model <name>`. Optional `KIT_EVAL_BASE_URL` for Ollama or other OpenAI-compatible endpoints.
+## Markdown reports
+
+`kit eval report --format md --out out/reports` writes `out/reports/eval-report.md` with:
+
+- Overall pass rate, model, date
+- Performance metrics (tokens, latency, routing accuracy, schema adherence)
+- **Failure traces** per failing case (prompt, expected vs actual tool/args, LLM output, diagnosis, suggested fix)
+
+Canonical example: [examples/eval-report.md](./examples/eval-report.md).
+
+Live models: set `KIT_EVAL_API_KEY` / `OPENAI_API_KEY` and `--model <name>`. Optional `KIT_EVAL_BASE_URL` for Ollama or other OpenAI-compatible endpoints. Optional `KIT_EVAL_TOKEN_USD_PER_1K` to estimate cost in reports.
 
 See [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md).
