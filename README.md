@@ -87,12 +87,14 @@ kit init ./my-app --mcp collab --hook
 
 ## Docs map
 
-| Start here | Then |
-| :--- | :--- |
-| [docs/edd.md](./docs/edd.md) — EDD guide | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
-| [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | [AGENTS.md](./AGENTS.md) bootstrap |
-| [skills/README.md](./skills/README.md) | [mcps/README.md](./mcps/README.md) |
-| [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) | [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
+Start with the path that matches what you’re trying to do:
+
+1. **Prove agents** — [EDD guide](./docs/edd.md) → [EDD SOP](./SOPs/eval-driven-development.md) → [suites](./evals/edd/README.md)
+2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) → [AGENTS.md](./AGENTS.md)
+3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
+4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
+
+Site landing: [GitHub Pages](https://mzworthington.github.io/agent-lifecycle-kit/) · [EDD page](./edd/)
 
 ---
 
