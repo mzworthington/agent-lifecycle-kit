@@ -66,9 +66,9 @@
     rel="stylesheet">
 
   <!-- D3, Marked & Mermaid -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
   <style>
     :root {
@@ -579,7 +579,7 @@
     }
 
     .cli-code span.comment {
-      color: #64748b;
+      color: #94a3b8;
       font-style: italic;
     }
 
@@ -795,7 +795,7 @@
   <header>
     <div class="nav-container">
       <a href="#" class="brand">
-        <img src="./assets/kit_logo.png" alt="Kit Logo">
+        <img src="./assets/kit_logo.png" alt="Kit Logo" width="32" height="32">
         <span>Agent Lifecycle Kit</span>
       </a>
       <div class="nav-links">
@@ -823,23 +823,23 @@
       <div class="badge-bar" style="margin-bottom: 1.5rem;">
         <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
             src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
-            alt="CI"></a>
+            alt="CI" height="28"></a>
         <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github"
-            alt="Docs"></a>
+            alt="Docs" height="28"></a>
         <a href="./evals/"><img
             src="https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target"
-            alt="Evals"></a>
+            alt="Evals" height="28"></a>
         <a href="./package.json"><img
             src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs"
-            alt="Node"></a>
+            alt="Node" height="28"></a>
         <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
-            alt="License"></a>
+            alt="License" height="28"></a>
       </div>
     </section>
   </main>
 
   <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
-  <div id="hero-d3-container" class="hero-d3-wrapper"
+  <div id="hero-d3-container" class="hero-d3-wrapper" role="region"
     aria-label="Interactive Autonomous AI Agent Neural Mesh Simulation">
   </div>
 
