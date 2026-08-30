@@ -499,11 +499,62 @@
       display: none;
     }
 
-    #guide .mermaid {
-      margin: 1.25rem 0;
+    .diagram {
+      margin: 1.25rem 0 1.75rem;
+      overflow-x: auto;
       background: #0b1220;
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1rem;
+    }
+
+    .diagram figcaption {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .diagram .mermaid svg {
+      max-width: none;
+    }
+
+    .lifecycle {
+      margin: 0 auto 3.5rem;
+      max-width: 920px;
+      text-align: left;
+    }
+
+    .lifecycle h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .lifecycle > p {
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      font-size: 1.05rem;
+    }
+
+    .lifecycle-steps {
+      margin: 0 0 1.25rem;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    .lifecycle-steps li {
+      margin-bottom: 0.55rem;
+    }
+
+    .lifecycle-steps strong {
+      color: var(--text);
+    }
+
+    .lifecycle a {
+      color: var(--primary-light);
+      font-weight: 600;
     }
 
     @media (max-width: 768px) {
@@ -1263,6 +1314,7 @@
       </a>
       <nav class="nav-links" aria-label="Page">
         <a href="#edd" class="nav-link">How it works</a>
+        <a href="#lifecycle" class="nav-link">Lifecycle</a>
         <a href="#guide" class="nav-link">Guide</a>
         <a href="#map" class="nav-link">Map</a>
         <a href="https://github.com/mzworthington/agent-lifecycle-kit" class="btn-github"
@@ -1293,11 +1345,6 @@
         <li><a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
             src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
             alt="CI passing" width="130" height="28" loading="lazy"></a></li>
-        <li><a href="#guide"><img
-            src="https://img.shields.io/badge/EDD-Harness-2a9d8f?style=for-the-badge&logo=target"
-            alt="EDD harness" width="140" height="28" loading="lazy"></a></li>
-        <li><a href="#guide"><img src="https://img.shields.io/badge/Guide-eval--driven--development.dev-blue?style=for-the-badge"
-            alt="EDD guide on this site" width="280" height="28" loading="lazy"></a></li>
         <li><a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
             alt="Unlicense" width="140" height="28" loading="lazy"></a></li>
       </ul>
@@ -1324,6 +1371,15 @@
           <p>Tighten wording; block merges below 95% routing accuracy.</p>
         </li>
       </ol>
+      <figure class="diagram">
+        <figcaption>EDD closed loop</figcaption>
+        <pre class="mermaid">flowchart LR
+  intent[Agent intent] --&gt; edd[Red / green / refactor]
+  edd --&gt; ci[CI threshold gate]
+  ci --&gt; ship[Ship]
+  ship --&gt; prod[Prod traces + shadow judge]
+  prod --&gt;|miss| edd</pre>
+      </figure>
       <nav class="edd-links" aria-label="EDD resources">
         <a href="#guide">Full guide</a>
         <a href="./evals/edd/README.md">Suites and reports</a>
@@ -1364,6 +1420,50 @@ $ <span class="cmd">kit eval report</span> <span class="arg">--format md --out o
         <summary>What happens after a production miss?</summary>
         <p>Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample live traffic so the next failure is a test, not a surprise.</p>
       </details>
+    </section>
+
+    <section id="lifecycle" class="lifecycle" aria-labelledby="lifecycle-heading">
+      <h2 id="lifecycle-heading">The rest of the kit</h2>
+      <p>
+        EDD is how you prove tool calls. When the job is a product feature, the orchestrator still
+        routes work through specialist roles: grilling, spec, TDD, cross-functional quality, audit,
+        telemetry, and release. Language and framework profiles load on top of that once the stack is known.
+      </p>
+      <figure class="diagram">
+        <figcaption>Orchestrator routing for a feature</figcaption>
+        <pre class="mermaid">sequenceDiagram
+  autonumber
+  participant O as orchestrator
+  participant G as grilling
+  participant S as spec
+  participant T as tdd
+  participant X as xfn
+  participant Sec as security
+  participant Arch as arch-drift
+  participant Tel as telemetry
+  participant R as release
+
+  O-&gt;&gt;G: Stress-test idea and decision frontier
+  O-&gt;&gt;S: BDD spec and acceptance criteria
+  O-&gt;&gt;T: Inventory catalog and plan test impact
+  O-&gt;&gt;X: Cross-functional quality matrix
+  O-&gt;&gt;T: TDD short loop (gear 1 + gear 2)
+  O-&gt;&gt;X: Green apply-row XFN suites
+  O-&gt;&gt;Sec: Security and OWASP audit
+  O-&gt;&gt;Arch: Hexagonal boundaries, no drift
+  O-&gt;&gt;Tel: Map SLOs to OpenTelemetry
+  O-&gt;&gt;R: Conventional PR title and handover</pre>
+      </figure>
+      <ol class="lifecycle-steps">
+        <li><strong>Grilling:</strong> If the idea is still mushy, interview until the decision frontier is clear.</li>
+        <li><strong>Spec:</strong> Gherkin and acceptance criteria, including cross-functional rows.</li>
+        <li><strong>TDD:</strong> Inventory the behavior catalog, then gear 1 (domain) and gear 2 (thin adapters) in the same loop. EDD lives here when the change is a prompt or tool schema.</li>
+        <li><strong>XFN:</strong> Green the apply rows (accessibility, load, security) or skip with a reason.</li>
+        <li><strong>Audit:</strong> Security and architecture-drift checks, then pre-commit.</li>
+        <li><strong>Telemetry and release:</strong> Map SLOs, update public docs if you touched them, ship with a conventional PR title.</li>
+      </ol>
+      <p><a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/skills/agent-orchestrator/SKILL.md">Orchestrator skill</a>
+        · <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md">Coding philosophy</a></p>
     </section>
 
     <article id="guide" class="docs-wrapper docs-content" aria-labelledby="guide-heading">
@@ -1424,6 +1524,12 @@ $ <span class="cmd">kit eval report</span> <span class="arg">--format md --out o
               <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md">
                 <span class="start-title">EDD SOP</span>
                 <span class="start-desc">Red → green → refactor for day-to-day agent work</span>
+              </a>
+            </li>
+            <li>
+              <a href="#lifecycle">
+                <span class="start-title">Lifecycle</span>
+                <span class="start-desc">How feature work moves through grilling, spec, TDD, XFN, audit, and release</span>
               </a>
             </li>
             <li>
@@ -2060,8 +2166,10 @@ $ <span class="cmd">kit eval report</span> <span class="arg">--format md --out o
     }
 
     const initMermaid = () => {
-      if (typeof mermaid !== 'undefined' && typeof mermaid.initialize === 'function') {
-        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+      if (typeof mermaid === 'undefined' || typeof mermaid.initialize !== 'function') return;
+      mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+      if (typeof mermaid.run === 'function') {
+        mermaid.run({ querySelector: '.diagram .mermaid' });
       }
     };
 
@@ -2135,30 +2243,17 @@ $ <span class="cmd">kit eval report</span> <span class="arg">--format md --out o
           return r.text();
         })
         .then((md) => {
+          const withoutDiagrams = md.replace(/```mermaid[\s\S]*?```/g, '');
           let html = '';
           if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
-            html = marked.parse(md);
+            html = marked.parse(withoutDiagrams);
           } else if (typeof marked === 'function') {
-            html = marked(md);
+            html = marked(withoutDiagrams);
           } else {
-            html = '<pre>' + md.replace(/</g, '&lt;') + '</pre>';
+            html = '<pre>' + withoutDiagrams.replace(/</g, '&lt;') + '</pre>';
           }
           el.innerHTML = html;
           if (fallback) fallback.hidden = true;
-          el.querySelectorAll('pre code').forEach((block) => {
-            const text = block.textContent || '';
-            if (text.trim().startsWith('flowchart') || text.trim().startsWith('sequenceDiagram') || text.trim().startsWith('graph ')) {
-              const pre = block.parentElement;
-              const div = document.createElement('div');
-              div.className = 'mermaid';
-              div.textContent = text;
-              pre.replaceWith(div);
-            }
-          });
-          if (window.mermaid) {
-            mermaid.initialize({ startOnLoad: false, theme: 'dark' });
-            mermaid.run({ querySelector: '#guide .mermaid' });
-          }
         })
         .catch(() => {
           el.innerHTML = '<p>Could not load <a href="./docs/edd.md">docs/edd.md</a>.</p>';

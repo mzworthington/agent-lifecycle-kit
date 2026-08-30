@@ -57,7 +57,32 @@ flowchart LR
   prod -->|miss| edd
 ```
 
-Lifecycle feature work still follows: Grilling → Spec → TDD + XFN → Audit → Telemetry → Release ([agent-orchestrator](./skills/agent-orchestrator/SKILL.md)).
+Feature work still follows the orchestrator: Grilling → Spec → TDD + XFN → Audit → Telemetry → Release ([agent-orchestrator](./skills/agent-orchestrator/SKILL.md)).
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant O as agent-orchestrator
+  participant G as agent-grilling
+  participant S as agent-spec
+  participant T as agent-tdd
+  participant X as agent-xfn
+  participant Sec as agent-security
+  participant Arch as agent-arch-drift
+  participant Tel as agent-telemetry
+  participant R as agent-release
+
+  O->>G: Stress-test idea and decision frontier
+  O->>S: BDD spec and acceptance criteria
+  O->>T: Inventory catalog and plan test impact
+  O->>X: Cross-functional quality matrix
+  O->>T: TDD short loop (gear 1 + gear 2)
+  O->>X: Green apply-row XFN suites
+  O->>Sec: Security and OWASP audit
+  O->>Arch: Hexagonal boundaries, no drift
+  O->>Tel: Map SLOs to OpenTelemetry
+  O->>R: Conventional PR title and handover
+```
 
 ---
 
