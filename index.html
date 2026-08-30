@@ -862,6 +862,22 @@
     }
 
     /* Mobile & Tablet Responsive Design */
+    @media (max-width: 900px) {
+      .cyber-filter-bar {
+        flex-wrap: wrap;
+        max-width: min(92vw, 420px);
+        justify-content: flex-end;
+      }
+      .cyber-hud-controls {
+        left: auto;
+        right: 0.5rem;
+        top: 3.2rem;
+      }
+      .cyber-status-badge {
+        font-size: 0.68rem;
+      }
+    }
+
     @media (max-width: 768px) {
       header {
         padding: 0.75rem 1rem;
@@ -977,10 +993,10 @@
         <span>Agent Lifecycle Kit</span>
       </a>
       <div class="nav-links">
+        <a href="#map" class="nav-link">Map</a>
         <a href="#edd" class="nav-link">EDD</a>
         <a href="#cli" class="nav-link">Try</a>
         <a href="#pillars" class="nav-link">Why Kit</a>
-        <a href="#map" class="nav-link">Map</a>
         <a href="#docs" class="nav-link">Docs</a>
         <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github"
           aria-label="GitHub Repository" title="GitHub Repository">
@@ -1004,7 +1020,7 @@
 
       <div class="hero-ctas">
         <a class="btn-cta btn-cta-primary" href="#edd">Why EDD</a>
-        <a class="btn-cta btn-cta-ghost" href="#cli">Try <code style="font-family: var(--font-mono);">kit eval ci</code></a>
+        <a class="btn-cta btn-cta-ghost" href="#cli">Try&nbsp;<code style="font-family: var(--font-mono);">kit eval ci</code></a>
         <a class="btn-cta btn-cta-ghost" href="./edd/">EDD guide</a>
       </div>
 
@@ -1022,6 +1038,25 @@
       </div>
     </section>
   </main>
+
+  <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
+  <div id="map" class="hero-d3-wrapper" role="region"
+    aria-label="Interactive Kit skill and profile constellation">
+    <div class="cyber-status-badge" aria-hidden="true">
+      <span class="status-dot"></span>
+      KIT MESH · ONLINE
+    </div>
+    <div class="cyber-hud-controls" role="group" aria-label="Constellation filters">
+      <div class="cyber-filter-bar">
+        <button type="button" class="filter-btn active" onclick="filterNodes('all', this)">ALL</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('lifecycle', this)">LIFECYCLE</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('lang', this)">LANG</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('framework', this)">FRAMEWORK</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('profile', this)">DOMAIN</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('ide', this)">IDE</button>
+      </div>
+    </div>
+  </div>
 
   <main class="container">
 
@@ -1100,16 +1135,6 @@
       </div>
     </section>
 
-  </main>
-
-  <!-- Kit map after the value story -->
-  <div id="map" class="hero-d3-wrapper" role="region"
-    aria-label="Interactive Kit skill and profile map">
-    <div id="hero-d3-container" style="width:100%;height:100%;"></div>
-  </div>
-
-  <main class="container">
-
     <!-- Docs -->
     <section id="docs" class="docs-wrapper" aria-label="Documentation Section">
       <div id="markdown-body" class="docs-content">
@@ -1157,7 +1182,7 @@
     }
 
     function initHeroD3() {
-      const container = document.getElementById('hero-d3-container');
+      const container = document.getElementById('map') || document.getElementById('hero-d3-container');
       if (!container) return;
 
       const width = 1600;
