@@ -178,6 +178,86 @@
         "forbidden_patterns": ["hardcoded_secret"],
         "required_output_sections": ["Tool Schema", "Server Definition"]
       }
+    },
+    {
+      "id": "EVAL-FW-PULUMI-001",
+      "name": "Pulumi ComponentResource Profile",
+      "description": "Verifies Pulumi ComponentResource layout, stack isolation, and CrossGuard usage.",
+      "target_skill": "framework-pulumi",
+      "prompt": "Create a Pulumi ComponentResource and run pulumi preview with CrossGuard and pulumi ESC secrets.",
+      "context": {
+        "detected_stack": ["Pulumi", "TypeScript"]
+      },
+      "assertions": {
+        "required_triggers": ["pulumi", "pulumi preview", "component resource", "crossguard", "pulumi esc"],
+        "required_patterns": ["ComponentResource"],
+        "forbidden_patterns": ["hardcoded secret"],
+        "required_output_sections": ["Component Layout", "Secrets"]
+      }
+    },
+    {
+      "id": "EVAL-FW-TF-001",
+      "name": "Terraform Module Profile",
+      "description": "Verifies Terraform module layout, remote state locking, and plan/apply discipline.",
+      "target_skill": "framework-terraform",
+      "prompt": "Write a Terraform module with remote state and document the tf plan / tf apply CI path for Terragrunt.",
+      "context": {
+        "detected_stack": ["Terraform"]
+      },
+      "assertions": {
+        "required_triggers": ["terraform", "terraform module", "remote state", "tf plan", "terragrunt"],
+        "required_patterns": ["remote state"],
+        "forbidden_patterns": ["hardcoded secret"],
+        "required_output_sections": ["Module Layout", "Remote State"]
+      }
+    },
+    {
+      "id": "EVAL-FW-NUXT-001",
+      "name": "Nuxt Vertical Slice Profile",
+      "description": "Verifies Nuxt feature folders, useFetch keys, and thin Nitro routes.",
+      "target_skill": "framework-nuxt",
+      "prompt": "Add a Nuxt feature that uses useFetch and a Nitro /server/api handler.",
+      "context": {
+        "detected_stack": ["Nuxt", "TypeScript"]
+      },
+      "assertions": {
+        "required_triggers": ["nuxt", "nitro", "usefetch"],
+        "required_patterns": ["useFetch"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Feature Slice", "Nitro Route"]
+      }
+    },
+    {
+      "id": "EVAL-FW-QUARKUS-001",
+      "name": "Quarkus RESTEasy Profile",
+      "description": "Verifies Quarkus resources, handlers, and Panache stay in hexagonal slices.",
+      "target_skill": "framework-quarkus",
+      "prompt": "Implement a Quarkus RESTEasy resource with Panache and GraalVM native image notes.",
+      "context": {
+        "detected_stack": ["Quarkus", "Java"]
+      },
+      "assertions": {
+        "required_triggers": ["quarkus", "resteasy", "panache", "graalvm"],
+        "required_patterns": ["resource"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Resource Adapter", "Handler"]
+      }
+    },
+    {
+      "id": "EVAL-FW-DOTNET-001",
+      "name": ".NET ASP.NET Core Profile",
+      "description": "Verifies ASP.NET Core delivery, EF Core adapters, and MediatR-style handlers.",
+      "target_skill": "framework-dotnet",
+      "prompt": "Build an ASP.NET Core Web API with EF Core in the adapter and a MediatR handler tested via xUnit WebApplicationFactory.",
+      "context": {
+        "detected_stack": [".NET"]
+      },
+      "assertions": {
+        "required_triggers": ["dotnet", "asp.net", "ef core", "mediatr", "xunit"],
+        "required_patterns": ["handler"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Delivery Adapter", "Handler"]
+      }
     }
   ]
 }

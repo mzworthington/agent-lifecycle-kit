@@ -170,4 +170,109 @@ describe('EDD EvalRunner', () => {
     assert.match(md, /Schema Violation/);
     assert.match(md, /Suggested Fix/);
   });
+
+  it('skips requires-live cases when using the scripted driver', async () => {
+    const all = await loadDataset(path.join(repoDir, 'evals/edd/architecture_routing.jsonl'));
+    assert.ok(all.some((c) => c.tags?.includes('requires-live')));
+    const runner = new EvalRunner({
+      model: 'scripted',
+      systemPromptPath: path.join(repoDir, 'evals/edd/system_prompt.md')
+    });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/architecture_routing.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => r.failures.join(',')).join(' | '));
+    assert.ok(report.results.some((r) => r.id === 'inject-01'));
+    assert.ok(!report.results.some((r) => r.id === 'schema-04'));
+    assert.ok(!report.results.some((r) => (r.tags ?? []).includes('requires-live')));
+  });
+
+  it('excludes requires-live tags from loadDataset', async () => {
+    const cases = await loadDataset(
+      path.join(repoDir, 'evals/edd/architecture_routing.jsonl'),
+      undefined,
+      ['requires-live']
+    );
+    assert.ok(cases.every((c) => !(c.tags ?? []).includes('requires-live')));
+    assert.ok(cases.some((c) => c.id === 'inject-01'));
+  });
+
+  it('asserts ordered expect.tools calls', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-tools-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'multi-01',
+        prompt: 'lookup both',
+        tags: ['routing'],
+        expect: {
+          tools: [
+            { name: 'read_architecture_yaml', arguments_contains: { componentId: 'auth-service' } },
+            { name: 'read_architecture_yaml', arguments_contains: { componentId: 'payment-api' } }
+          ]
+        }
+      })}\n`
+    );
+    fs.writeFileSync(
+      path.join(dir, 'suite.yaml'),
+      `name: "Multi-tool"
+dataset: "cases.jsonl"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+`
+    );
+    const runner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => ({
+        content: 'Looked up both components.',
+        tool_calls: [
+          { name: 'read_architecture_yaml', arguments: { componentId: 'auth-service' } },
+          { name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }
+        ],
+        usage: { promptTokens: 10, completionTokens: 10, totalTokens: 20 }
+      })
+    });
+    const report = await runner.runSuite(path.join(dir, 'suite.yaml'));
+    assert.equal(report.failed, 0, report.results[0]?.failures.join(','));
+    assert.equal(report.results[0]?.routingOk, true);
+    assert.equal(report.results[0]?.schemaOk, true);
+  });
+
+  it('passes kit-knowledge suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/kit_knowledge.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.ok(!report.results.some((r) => r.id === 'kit-live-01'));
+  });
+
+  it('loads a prod-derived circuit-breaker case', async () => {
+    const cases = await loadDataset(path.join(repoDir, 'evals/edd/architecture_terminal.jsonl'), [
+      'prod-derived'
+    ]);
+    assert.equal(cases.length, 1);
+    assert.equal(cases[0]?.id, 'prod-cb-01');
+    assert.equal(cases[0]?.expect?.no_tool, true);
+  });
+
+  it('round-trips the prod-trace example through productionTraceToJsonl', () => {
+    const fixturePath = path.join(repoDir, 'evals/edd/examples/prod-trace.json');
+    const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8')) as {
+      id: string;
+      prompt: string;
+      reason: 'circuit_breaker';
+      history: unknown[];
+      expect: { no_tool: boolean };
+    };
+    const line = productionTraceToJsonl({
+      id: fixture.id,
+      prompt: fixture.prompt,
+      reason: fixture.reason,
+      history: fixture.history as never,
+      expect: fixture.expect
+    });
+    const parsed = JSON.parse(line) as { tags: string[]; expect?: { no_tool?: boolean } };
+    assert.ok(parsed.tags.includes('prod-derived'));
+    assert.ok(parsed.tags.includes('circuit_breaker'));
+    assert.equal(parsed.expect?.no_tool, true);
+  });
 });

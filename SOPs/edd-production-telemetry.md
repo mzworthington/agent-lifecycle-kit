@@ -20,7 +20,7 @@ Local and CI evals protect predefined intents. Production is unpredictable. Clos
 
 1. **Standardized trace emitting** — `AgentClient` / `emitAgentSpan` records prompt, routing confidence, JSON tool payload, latency, and tokens on every agentic loop.
 2. **Asynchronous shadow evals** — Do not judge every live prompt inline. Stream logs to a queue; run `llm_as_judge` on a randomized ~5% sample (`shouldShadowEval(0.05)`).
-3. **Prod → JSONL** — On unhandled tool exceptions, circuit-breaker trips, or user downvotes, extract history with `productionTraceToJsonl` and append to `evals/edd/*.jsonl`.
+3. **Prod → JSONL** — On unhandled tool exceptions, circuit-breaker trips, or user downvotes, extract history with `productionTraceToJsonl` and append to `evals/edd/*.jsonl` (tag `prod-derived`). Example input: [evals/edd/examples/prod-trace.json](../evals/edd/examples/prod-trace.json); catalog case `prod-cb-01` in `architecture_terminal.jsonl`.
 4. **Routing drift detection** — Compare tool-share distributions across versions with `detectRoutingDrift`. Alert when e.g. `read_architecture_yaml` drops from ~30% to ~2% traffic.
 
 ## Dashboard signals

@@ -12,6 +12,17 @@
         "required_triggers": [
           "next.js",
           "app router"
+        ],
+        "required_patterns": [
+          "Server Components",
+          "server action"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Route Adapter",
+          "Server Action"
         ]
       }
     }

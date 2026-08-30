@@ -12,6 +12,17 @@
         "required_triggers": [
           "ui",
           "a11y"
+        ],
+        "required_patterns": [
+          "semantic HTML",
+          "landmark"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Landmarks",
+          "Keyboard"
         ]
       }
     },
@@ -25,6 +36,17 @@
           "semantic html",
           "landmarks",
           "heading order"
+        ],
+        "required_patterns": [
+          "main",
+          "heading"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Landmarks",
+          "Heading outline"
         ]
       }
     }

@@ -24,6 +24,7 @@ Subcommands:
 
 Notes:
   - Default model is "scripted" (deterministic local driver for CI / offline).
+  - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
   - Set KIT_EVAL_API_KEY (or OPENAI_API_KEY) and --model <provider-model> for live LLM runs.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
 `);

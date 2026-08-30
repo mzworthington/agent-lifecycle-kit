@@ -37,13 +37,16 @@ export async function* streamDataset(filePath: string): AsyncGenerator<EvalCase>
   }
 }
 
-export async function loadDataset(filePath: string, tags?: string[]): Promise<EvalCase[]> {
+export async function loadDataset(
+  filePath: string,
+  tags?: string[],
+  excludeTags?: string[]
+): Promise<EvalCase[]> {
   const cases: EvalCase[] = [];
   for await (const testCase of streamDataset(filePath)) {
-    if (tags?.length) {
-      const caseTags = testCase.tags ?? [];
-      if (!tags.some((t) => caseTags.includes(t))) continue;
-    }
+    const caseTags = testCase.tags ?? [];
+    if (tags?.length && !tags.some((t) => caseTags.includes(t))) continue;
+    if (excludeTags?.length && excludeTags.some((t) => caseTags.includes(t))) continue;
     cases.push(testCase);
   }
   return cases;
@@ -55,13 +58,15 @@ export function productionTraceToJsonl(input: {
   prompt: string;
   history?: EvalCase['history'];
   tags?: string[];
+  expect?: EvalCase['expect'];
   reason: 'unhandled_tool_exception' | 'circuit_breaker' | 'user_downvote' | 'shadow_fail';
 }): string {
   const row: EvalCase = {
     id: input.id,
     prompt: input.prompt,
     history: input.history,
-    tags: [...(input.tags ?? []), 'prod-derived', input.reason]
+    tags: [...(input.tags ?? []), 'prod-derived', input.reason],
+    ...(input.expect ? { expect: input.expect } : {})
   };
   return JSON.stringify(row);
 }

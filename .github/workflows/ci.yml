@@ -38,29 +38,19 @@ jobs:
         run: pnpm tsc --noEmit
 
       - name: Audit Skill Security & Secrets
-        run: |
-          chmod +x scripts/scan-skill-security.sh
-          ./scripts/scan-skill-security.sh
+        run: ./scripts/scan-skill-security.sh
 
       - name: Run Evals Schema & Trigger Validation
-        run: |
-          chmod +x scripts/validate-evals.sh
-          ./scripts/validate-evals.sh
+        run: ./scripts/validate-evals.sh
 
       - name: Verify Skills Directory Layout
-        run: |
-          chmod +x scripts/verify-skills-layout.sh
-          ./scripts/verify-skills-layout.sh
+        run: ./scripts/verify-skills-layout.sh
 
       - name: Verify Multi-IDE Rules Sync
-        run: |
-          chmod +x scripts/export-ide-rules.sh
-          ./scripts/export-ide-rules.sh --check
+        run: ./scripts/export-ide-rules.sh --check
 
       - name: Run Live Skill Trigger Evals
-        run: |
-          chmod +x scripts/run-evals.sh
-          ./scripts/run-evals.sh
+        run: ./scripts/run-evals.sh
 
       - name: Run EDD harness unit tests
         run: pnpm test:edd
@@ -79,15 +69,13 @@ jobs:
           if-no-files-found: warn
 
       - name: Test MCP Profile Composition
-        run: |
-          chmod +x scripts/compose-mcp.sh
-          ./scripts/compose-mcp.sh default
+        run: ./scripts/compose-mcp.sh default
 
       - name: Test kit CLI Executable
         run: |
-          chmod +x bin/kit.ts
           pnpm kit audit
           pnpm kit validate
           pnpm kit eval
           pnpm kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
+          pnpm kit eval run --suite evals/edd/kit_knowledge.yaml --model scripted
           pnpm kit metrics

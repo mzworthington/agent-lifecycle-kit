@@ -1,0 +1,22 @@
+{
+  "suite": "framework-nuxt-evals",
+  "description": "Co-located evaluation tests for Nuxt framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-NUXT-COLOCATED-001",
+      "name": "Nuxt Vertical Slice & Nitro Trigger",
+      "target_skill": "framework-nuxt",
+      "prompt": "Build a Nuxt feature with useFetch / useAsyncData and a thin Nitro /server/api route.",
+      "context": {
+        "detected_stack": ["TypeScript", "Nuxt"]
+      },
+      "assertions": {
+        "required_triggers": ["nuxt", "nitro", "usefetch", "useasyncdata"],
+        "required_patterns": ["useFetch", "features/"],
+        "forbidden_patterns": ["onMounted(() => fetch("],
+        "required_output_sections": ["Feature Slice", "Nitro Route"]
+      }
+    }
+  ]
+}

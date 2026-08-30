@@ -1,0 +1,30 @@
+name: "Routing: Kit Knowledge MCP"
+dataset: "kit_knowledge.jsonl"
+system_prompt: "kit_knowledge_prompt.md"
+mcp_tools:
+  - "tools/search_kit.json"
+  - "tools/get_sop.json"
+  - "tools/get_philosophy_section.json"
+  - "tools/list_kit_index.json"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+mocks:
+  - tool: "get_sop"
+    response:
+      id: "conventional-commits"
+      path: "SOPs/conventional-commits.md"
+  - tool: "search_kit"
+    response:
+      hits:
+        - path: "CODING_PHILOSOPHY.md"
+          excerpt: "Hexagonal architecture"
+  - tool: "get_philosophy_section"
+    response:
+      id: "8"
+      title: "Interaction Mandate"
+  - tool: "list_kit_index"
+    response:
+      sops:
+        - "conventional-commits"

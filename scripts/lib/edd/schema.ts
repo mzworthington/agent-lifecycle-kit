@@ -32,6 +32,8 @@ export const EvalConfigSchema = z.object({
   mocks: z.array(EvalMockSchema).optional(),
   /** Optional MCP tool schema files (JSON) to register contracts during the run. */
   mcp_tools: z.array(z.string()).optional(),
+  /** Optional system prompt file, relative to the suite YAML. */
+  system_prompt: z.string().optional(),
   judge_model: z.string().optional()
 });
 
@@ -53,10 +55,17 @@ export const HistoryTurnSchema = z.object({
   name: z.string().optional()
 });
 
+export const ExpectedToolCallSchema = z.object({
+  name: z.string().min(1),
+  arguments_contains: z.record(z.string(), z.unknown()).optional()
+});
+
 export const CaseExpectSchema = z.object({
   tool: z.string().optional(),
   no_tool: z.boolean().optional(),
-  arguments_contains: z.record(z.string(), z.unknown()).optional()
+  arguments_contains: z.record(z.string(), z.unknown()).optional(),
+  /** Ordered tool calls (multi-step). Takes precedence over `tool` when set. */
+  tools: z.array(ExpectedToolCallSchema).min(1).optional()
 });
 
 export const EvalCaseSchema = z.object({

@@ -1,0 +1,6 @@
+{"id": "kit-sop-01", "prompt": "Open the kit SOP for conventional commits.", "tags": ["happy-path", "routing"], "expect": {"tool": "get_sop", "arguments_contains": {"name": "conventional-commits"}}}
+{"id": "kit-search-01", "prompt": "Search the kit for hexagonal architecture boundaries.", "tags": ["happy-path", "routing"], "expect": {"tool": "search_kit", "arguments_contains": {"query": "hexagonal architecture"}}}
+{"id": "kit-philosophy-01", "prompt": "Which philosophy section covers diagrams and Mermaid?", "tags": ["happy-path", "routing"], "expect": {"tool": "get_philosophy_section", "arguments_contains": {"section": "8"}}}
+{"id": "kit-index-01", "prompt": "List the kit SOP and philosophy index without loading full files.", "tags": ["happy-path", "routing"], "expect": {"tool": "list_kit_index"}}
+{"id": "kit-ignore-01", "prompt": "What is the weather in Oslo?", "tags": ["negative-test", "conversational"], "expect": {"no_tool": true}}
+{"id": "kit-live-01", "prompt": "Where do we document how to title pull requests in this kit?", "tags": ["semantic-variance", "routing", "requires-live"], "expect": {"tool": "get_sop", "arguments_contains": {"name": "conventional-commits"}}}

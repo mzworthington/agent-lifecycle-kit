@@ -178,6 +178,70 @@
         "forbidden_patterns": ["WIP", "fixed stuff"],
         "required_output_sections": ["Pre-Commit Checks Summary", "Conventional Commit Subject & PR Title"]
       }
+    },
+    {
+      "id": "EVAL-INCIDENT-001",
+      "name": "Incident Coordination",
+      "description": "Verifies production outage prompts stabilize, gather signals, and hand off to hypothesis-driven debug.",
+      "target_skill": "agent-incident",
+      "prompt": "We have a Sev-1 incident: production down. Coordinate the outage response before anyone starts patching code.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": ["incident", "outage", "sev", "production down"],
+        "required_patterns": ["Stabilize", "agent-debug"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Stabilize", "Signal Board", "Handoff to RCA"]
+      }
+    },
+    {
+      "id": "EVAL-REVIEW-001",
+      "name": "PR / Diff Review",
+      "description": "Verifies pull-request reviews check hexagonal boundaries, catalog impact, and XFN completeness.",
+      "target_skill": "agent-review",
+      "prompt": "Run a pull request review and diff review of this change set before merge.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["pr review", "pull request review", "diff review", "change set"],
+        "required_patterns": ["must-fix", "catalog"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Must-fix", "Should-fix", "Nit"]
+      }
+    },
+    {
+      "id": "EVAL-RELEASE-001",
+      "name": "Release Checklist",
+      "description": "Verifies ship / changelog / version-bump requests produce a conventional PR title and catalog summary.",
+      "target_skill": "agent-release",
+      "prompt": "Ship the release: changelog, version bump, and a conventional PR title so we can prepare merge.",
+      "context": {
+        "active_phase": "release"
+      },
+      "assertions": {
+        "required_triggers": ["release", "ship", "changelog", "version bump", "prepare merge"],
+        "required_patterns": ["feat:", "changelog"],
+        "forbidden_patterns": ["WIP", "fixed stuff"],
+        "required_output_sections": ["Conventional PR Title", "Changelog Notes"]
+      }
+    },
+    {
+      "id": "EVAL-GRILLME-001",
+      "name": "Stateless Idea Grilling",
+      "description": "Verifies grill-me interview loops stay stateless and do not write workspace files.",
+      "target_skill": "agent-grill-me",
+      "prompt": "Use grill-me to interview this idea and explore the idea without writing files.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["grill-me", "interview idea", "explore idea"],
+        "required_patterns": ["stateless"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Frontier", "Settled Choices"]
+      }
     }
   ]
 }

@@ -132,6 +132,32 @@
         "forbidden_patterns": ["agent-prune"],
         "required_output_sections": ["Target Role: agent-docs"]
       }
+    },
+    {
+      "id": "EVAL-ROUTE-011",
+      "name": "Route to Agent Incident",
+      "description": "Verifies production-down / Sev prompts route to agent-incident rather than jumping to TDD.",
+      "target_skill": "agent-incident",
+      "prompt": "Sev-1 incident: production down. Coordinate the outage before we debug.",
+      "assertions": {
+        "required_triggers": ["incident", "outage", "sev"],
+        "required_patterns": ["agent-incident"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["Target Role: agent-incident"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-012",
+      "name": "Route to Agent Review",
+      "description": "Verifies pull-request and diff-review requests route to agent-review.",
+      "target_skill": "agent-review",
+      "prompt": "Need a PR review and code review of this change set before merge.",
+      "assertions": {
+        "required_triggers": ["pr review", "code review", "change set"],
+        "required_patterns": ["agent-review"],
+        "forbidden_patterns": ["agent-spec"],
+        "required_output_sections": ["Target Role: agent-review"]
+      }
     }
   ]
 }

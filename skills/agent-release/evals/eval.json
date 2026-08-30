@@ -1,0 +1,23 @@
+{
+  "suite": "agent-release-co-located",
+  "description": "Co-located evaluation benchmark for agent-release checklist skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-RELEASE-COLOCATED-001",
+      "name": "Release Checklist Trigger",
+      "description": "Ensures ship / changelog / version-bump requests run the release checklist with conventional PR titles.",
+      "target_skill": "agent-release",
+      "prompt": "Prepare the release: ship this feature, write the changelog, and version bump with a conventional PR title before we merge.",
+      "context": {
+        "active_phase": "release"
+      },
+      "assertions": {
+        "required_triggers": ["release", "ship", "changelog", "version bump"],
+        "required_patterns": ["feat:", "changelog", "XFN"],
+        "forbidden_patterns": ["WIP", "fixed stuff"],
+        "required_output_sections": ["Conventional PR Title", "Changelog Notes", "Catalog & XFN Summary"]
+      }
+    }
+  ]
+}

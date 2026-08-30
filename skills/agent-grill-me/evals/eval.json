@@ -1,0 +1,23 @@
+{
+  "suite": "agent-grill-me-co-located",
+  "description": "Co-located evaluation benchmark for the stateless grill-me interview wrapper",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-GRILLME-COLOCATED-001",
+      "name": "Stateless Grill-Me Trigger",
+      "description": "Ensures grill-me / interview-idea prompts stay stateless and do not write workspace files.",
+      "target_skill": "agent-grill-me",
+      "prompt": "Run grill-me on this idea. Interview the idea until I can commit, and do not write CONTEXT.md or ADRs.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["grill-me", "interview idea"],
+        "required_patterns": ["stateless", "agent-grilling"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Frontier", "Settled Choices"]
+      }
+    }
+  ]
+}

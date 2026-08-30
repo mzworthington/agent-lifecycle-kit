@@ -42,13 +42,92 @@ function normalizeArgs(args: string | Record<string, unknown>): Record<string, u
   return args;
 }
 
+/** True when the harness will use the local keyword driver instead of a live model. */
+export function usesScriptedDriver(model: string, apiKey?: string): boolean {
+  return model === 'scripted' || model === 'mock' || (!apiKey && model !== 'openai');
+}
+
+function toolNames(tools: ToolContract[]): Set<string> {
+  return new Set(tools.map((t) => t.name));
+}
+
+function scriptedNoTool(content: string, confidence = 0.92): Omit<
+  Awaited<ReturnType<AgentDriver>>,
+  never
+> {
+  return {
+    content,
+    tool_calls: [],
+    usage: { promptTokens: 40, completionTokens: 35, totalTokens: 75 },
+    consecutiveToolFailures: 0,
+    haltedAutonomousExecution: false,
+    routingConfidence: confidence
+  };
+}
+
 /**
  * Keyword/scripted driver for local + CI harness self-tests without live LLM spend.
  * Real model drivers are selected when model !== "scripted".
+ * Cases tagged `requires-live` must not rely on these heuristics.
  */
-export const scriptedDriver: AgentDriver = async ({ messages, mocks }) => {
+export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) => {
   const lastUser = [...messages].reverse().find((m) => m.role === 'user');
   const prompt = (lastUser?.content ?? '').toLowerCase();
+  const names = toolNames(tools);
+  const hasKit = names.has('search_kit') || names.has('get_sop') || names.has('get_philosophy_section');
+  const hasArch = names.has('read_architecture_yaml');
+
+  if (hasKit && !hasArch) {
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea') ||
+      prompt.includes('sonnet')
+    ) {
+      return scriptedNoTool('That is outside the kit. I can search SOPs or philosophy if you ask about those.');
+    }
+    if (prompt.includes('conventional-commit') || prompt.includes('conventional commit')) {
+      return {
+        content: 'Opening the conventional-commits SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'conventional-commits' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (prompt.includes('philosophy') && (prompt.includes('diagram') || prompt.includes('mermaid') || prompt.includes('section'))) {
+      return {
+        content: 'Fetching the diagrams / Interaction Mandate philosophy section.',
+        tool_calls: [{ name: 'get_philosophy_section', arguments: { section: '8' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    if (prompt.includes('hexagonal') || prompt.includes('search the kit') || prompt.includes('search kit')) {
+      return {
+        content: 'Searching the kit for hexagonal architecture.',
+        tool_calls: [{ name: 'search_kit', arguments: { query: 'hexagonal architecture' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    if (prompt.includes('list') && (prompt.includes('sop') || prompt.includes('index') || prompt.includes('philosophy'))) {
+      return {
+        content: 'Listing kit index entries.',
+        tool_calls: [{ name: 'list_kit_index', arguments: {} }],
+        usage: { promptTokens: 40, completionTokens: 20, totalTokens: 70 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.88
+      };
+    }
+    return scriptedNoTool('I am not sure which kit tool to use. Could you name an SOP or topic?', 0.4);
+  }
 
   const priorToolError = [...messages]
     .reverse()
@@ -300,8 +379,7 @@ export class AgentClient {
   async executePrompt(prompt: string): Promise<AgentResponse> {
     this.messages.push({ role: 'user', content: prompt });
 
-    const useScripted =
-      this.model === 'scripted' || this.model === 'mock' || (!this.apiKey && this.model !== 'openai');
+    const useScripted = usesScriptedDriver(this.model, this.apiKey);
 
     let raw: Awaited<ReturnType<AgentDriver>>;
     if (this.driver) {

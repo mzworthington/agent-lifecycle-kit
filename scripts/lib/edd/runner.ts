@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { parse as parseYaml } from 'yaml';
-import { AgentClient, type AgentDriver } from './agent-client.js';
+import { AgentClient, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 import { loadDataset } from './dataset.js';
 import { runLlmJudge } from './judge.js';
 import {
@@ -140,13 +140,30 @@ export class EvalRunner {
     const fileContent = fs.readFileSync(absoluteYaml, 'utf8');
     const config: EvalConfig = EvalConfigSchema.parse(parseYaml(fileContent));
     const datasetPath = resolvePath(absoluteYaml, config.dataset);
-    const dataset = await loadDataset(datasetPath, this.tags);
+    const skipLive = !this.driver && usesScriptedDriver(this.model, this.apiKey);
+    const loaded = await loadDataset(datasetPath, this.tags);
+    const skippedLive = skipLive
+      ? loaded.filter((c) => (c.tags ?? []).includes('requires-live'))
+      : [];
+    const dataset = skipLive
+      ? loaded.filter((c) => !(c.tags ?? []).includes('requires-live'))
+      : loaded;
+    if (skippedLive.length) {
+      console.log(
+        `Skipping ${skippedLive.length} requires-live case(s) (scripted driver).`
+      );
+    }
 
+    const suitePromptPath = config.system_prompt
+      ? resolvePath(absoluteYaml, config.system_prompt)
+      : undefined;
     const systemPrompt =
       this.systemPrompt ??
-      (this.systemPromptPath && fs.existsSync(this.systemPromptPath)
-        ? fs.readFileSync(this.systemPromptPath, 'utf8')
-        : undefined);
+      (suitePromptPath && fs.existsSync(suitePromptPath)
+        ? fs.readFileSync(suitePromptPath, 'utf8')
+        : this.systemPromptPath && fs.existsSync(this.systemPromptPath)
+          ? fs.readFileSync(this.systemPromptPath, 'utf8')
+          : undefined);
 
     const agent = new AgentClient({
       model: this.model,
@@ -278,19 +295,39 @@ export class EvalRunner {
 
     for (const metric of metrics) {
       if (metric.type === 'tool_selection') {
-        const selected = response.tool_calls?.[0]?.name;
-        const expected =
-          testCase.expect?.no_tool === true
-            ? undefined
-            : (testCase.expect?.tool ?? metric.expected);
-
         if (testCase.expect?.no_tool) {
+          const selected = response.tool_calls?.[0]?.name;
           routingOk = !selected;
           if (selected) {
             failures.push(`routing: expected no tool, got ${selected}`);
           }
           continue;
         }
+
+        if (testCase.expect?.tools?.length) {
+          const expected = testCase.expect.tools;
+          const calls = response.tool_calls ?? [];
+          routingOk = true;
+          if (calls.length < expected.length) {
+            routingOk = false;
+            failures.push(
+              `routing: expected ${expected.length} tool call(s), got ${calls.length}`
+            );
+          }
+          for (let i = 0; i < expected.length; i++) {
+            const got = calls[i]?.name;
+            if (got !== expected[i].name) {
+              routingOk = false;
+              failures.push(
+                `routing: call[${i}] expected ${expected[i].name}, got ${got ?? '(none)'}`
+              );
+            }
+          }
+          continue;
+        }
+
+        const selected = response.tool_calls?.[0]?.name;
+        const expected = testCase.expect?.tool ?? metric.expected;
 
         if (!expected) {
           failures.push('routing: tool_selection metric missing expected tool');
@@ -305,12 +342,58 @@ export class EvalRunner {
       }
 
       if (metric.type === 'schema_match') {
+        if (testCase.expect?.no_tool) {
+          schemaOk = true;
+          continue;
+        }
+
+        if (testCase.expect?.tools?.length) {
+          let ok = true;
+          for (let i = 0; i < testCase.expect.tools.length; i++) {
+            const expected = testCase.expect.tools[i];
+            const call = response.tool_calls?.[i];
+            if (!call) {
+              failures.push(`schema: missing tool call at index ${i}`);
+              ok = false;
+              continue;
+            }
+            const parsed = parseArgs(call.arguments);
+            if (!parsed) {
+              failures.push(`schema: call[${i}] arguments are not valid JSON`);
+              ok = false;
+              continue;
+            }
+            if (metric.strict !== false) {
+              if (typeof parsed !== 'object' || Array.isArray(parsed)) {
+                failures.push(`schema: call[${i}] arguments must be a JSON object`);
+                ok = false;
+              }
+              for (const [key, value] of Object.entries(parsed)) {
+                if (Array.isArray(value)) {
+                  failures.push(
+                    `schema: call[${i}] expected ${key} to be a string, got array ${JSON.stringify(value)}`
+                  );
+                  ok = false;
+                }
+              }
+            }
+            if (expected.arguments_contains) {
+              for (const [key, value] of Object.entries(expected.arguments_contains)) {
+                if (parsed[key] !== value) {
+                  failures.push(
+                    `schema: call[${i}] expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
+                  );
+                  ok = false;
+                }
+              }
+            }
+          }
+          schemaOk = ok;
+          continue;
+        }
+
         const call = response.tool_calls?.[0];
         if (!call) {
-          if (testCase.expect?.no_tool) {
-            schemaOk = true;
-            continue;
-          }
           failures.push('schema: no tool call to validate');
           schemaOk = false;
           continue;
@@ -376,6 +459,9 @@ export class EvalRunner {
       }
 
       if (metric.type === 'llm_as_judge') {
+        if (testCase.expect?.no_tool) {
+          continue;
+        }
         const toolOutput =
           testCase.tool_output ??
           config.mocks?.find((m) => m.tool === (response.tool_calls?.[0]?.name ?? ''))?.response ??

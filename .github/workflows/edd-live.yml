@@ -1,0 +1,72 @@
+name: Nightly live-model EDD
+
+# Scripted CI proves the harness. This job runs paraphrase / prompt-injection /
+# multi-tool cases tagged `requires-live` against a real model.
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notice:
+    name: Skip notice
+    runs-on: ubuntu-latest
+    if: ${{ secrets.KIT_EVAL_API_KEY == '' }}
+    steps:
+      - name: Live evals not configured
+        run: echo "KIT_EVAL_API_KEY is not set; skipping live-model EDD. Scripted CI remains the merge gate."
+
+  live:
+    name: Live-model EDD
+    runs-on: ubuntu-latest
+    if: ${{ secrets.KIT_EVAL_API_KEY != '' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run live EDD suites (includes requires-live)
+        env:
+          KIT_EVAL_API_KEY: ${{ secrets.KIT_EVAL_API_KEY }}
+          KIT_EVAL_MODEL: ${{ vars.KIT_EVAL_MODEL }}
+          KIT_EVAL_BASE_URL: ${{ vars.KIT_EVAL_BASE_URL }}
+        run: |
+          if [ -z "${KIT_EVAL_MODEL}" ]; then
+            echo "Set repository variable KIT_EVAL_MODEL to a provider model id."
+            exit 1
+          fi
+          mkdir -p out/reports
+          pnpm kit eval ci \
+            --suite evals/edd/architecture_routing.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
+          pnpm kit eval ci \
+            --suite evals/edd/kit_knowledge.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
+
+      - name: Upload EDD report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edd-live-eval-reports
+          path: out/reports/
+          if-no-files-found: warn

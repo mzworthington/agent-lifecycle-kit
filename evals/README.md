@@ -87,3 +87,5 @@ Run the EDD harness unit tests and the scripted routing CI gate (YAML/JSONL unde
 pnpm test:edd
 pnpm eval:edd
 ```
+
+`pnpm eval:edd` runs architecture routing **and** kit-knowledge MCP suites with the scripted driver. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml).

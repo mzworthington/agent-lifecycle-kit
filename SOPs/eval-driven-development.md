@@ -37,7 +37,8 @@ tools:
 
 ## CI
 
-- **Path filtering:** [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) runs when the EDD harness, suites, or CLI change.
+- **Scripted gate:** [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) and `pnpm eval:edd` use the keyword driver. Cases tagged `requires-live` are skipped so paraphrases do not fail CI.
+- **Live nightly:** [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) runs on a schedule when `KIT_EVAL_API_KEY` is set and `KIT_EVAL_MODEL` is a real provider model. That job includes `requires-live` rows.
 - **Threshold gating:** `--threshold-routing 95` blocks merges when routing/schema extraction fails more than 5% of routing-tagged cases.
 - **Artifacts:** Reports upload with `if: always()` (`out/reports/eval-report.md`, `edd-report.md` / `.json`).
 

@@ -1,0 +1,23 @@
+{
+  "suite": "agent-incident-co-located",
+  "description": "Co-located evaluation benchmark for agent-incident coordinator skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-INCIDENT-COLOCATED-001",
+      "name": "Incident Coordination Trigger",
+      "description": "Ensures production outage / Sev prompts activate incident coordination rather than jumping straight to code edits.",
+      "target_skill": "agent-incident",
+      "prompt": "Production is down — Sev-1 outage. Coordinate the incident: stabilize, gather signals, then hand off to RCA.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": ["incident", "outage", "sev", "production down"],
+        "required_patterns": ["Stabilize", "Signals", "agent-debug"],
+        "forbidden_patterns": ["ASCII art", "hardcoded secret"],
+        "required_output_sections": ["Stabilize", "Signal Board", "Handoff to RCA"]
+      }
+    }
+  ]
+}

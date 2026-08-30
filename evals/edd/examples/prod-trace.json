@@ -1,0 +1,34 @@
+{
+  "id": "prod-cb-01",
+  "prompt": "Show me the billing service topology again.",
+  "reason": "circuit_breaker",
+  "expect": { "no_tool": true },
+  "history": [
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "name": "read_architecture_yaml",
+          "arguments": "{\"componentId\": \"payment-api\"}"
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "content": "{\"error\": \"Timeout\", \"message\": \"network timed out\"}"
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "name": "read_architecture_yaml",
+          "arguments": "{\"componentId\": \"payment-api\"}"
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "content": "{\"error\": \"Timeout\", \"message\": \"network timed out again\"}"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "get_philosophy_section",
+  "description": "Return one CODING_PHILOSOPHY.md section by number (e.g. \"8\") or title substring.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["section"],
+    "properties": {
+      "section": {
+        "type": "string",
+        "description": "Section id or title, e.g. \"8\" or \"Interaction Mandate\""
+      }
+    },
+    "additionalProperties": false
+  }
+}

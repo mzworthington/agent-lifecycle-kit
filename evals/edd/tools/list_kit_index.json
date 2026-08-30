@@ -1,0 +1,9 @@
+{
+  "name": "list_kit_index",
+  "description": "List philosophy section ids, SOP names, and skill names without loading full bodies. Prefer this before search.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  }
+}

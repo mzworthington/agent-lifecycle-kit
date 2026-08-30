@@ -63,6 +63,11 @@ jobs:
             --model "${KIT_EVAL_MODEL}" \
             --threshold-routing 95 \
             --out out/reports
+          pnpm kit eval ci \
+            --suite evals/edd/kit_knowledge.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
           pnpm kit eval run --suite evals/edd/architecture_self_correction.yaml --model scripted --out out/reports
           pnpm kit eval run --suite evals/edd/architecture_terminal.yaml --model scripted --out out/reports
           pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json

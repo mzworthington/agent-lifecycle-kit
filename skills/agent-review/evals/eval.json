@@ -1,0 +1,23 @@
+{
+  "suite": "agent-review-co-located",
+  "description": "Co-located evaluation benchmark for agent-review PR / diff review skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-REVIEW-COLOCATED-001",
+      "name": "PR Diff Review Trigger",
+      "description": "Ensures pull-request and change-set reviews check hexagonal boundaries, catalog impact, and XFN completeness.",
+      "target_skill": "agent-review",
+      "prompt": "Please do a pull request review of this diff before merge. Walk the change set for hexagonal boundaries and catalog honesty.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": ["pr review", "pull request review", "diff review", "change set"],
+        "required_patterns": ["must-fix", "hexagonal", "catalog"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Must-fix", "Should-fix", "Nit"]
+      }
+    }
+  ]
+}

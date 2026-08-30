@@ -13,6 +13,13 @@
           "documentation",
           "readme",
           "runbook"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "README",
+          "Runbook"
         ]
       }
     },
@@ -30,6 +37,14 @@
         "required_patterns": [
           "agent-copy",
           "human-centric"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "sensible default"
+        ],
+        "required_output_sections": [
+          "Narrative",
+          "Voice"
         ]
       }
     }

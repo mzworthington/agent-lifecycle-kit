@@ -1,0 +1,22 @@
+{
+  "suite": "framework-terraform-evals",
+  "description": "Co-located evaluation tests for Terraform framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-TF-COLOCATED-001",
+      "name": "Terraform Module & Remote State Trigger",
+      "target_skill": "framework-terraform",
+      "prompt": "Author a Terraform module with remote state locking and show the tf plan / tf apply OIDC CI path.",
+      "context": {
+        "detected_stack": ["Terraform", "HCL"]
+      },
+      "assertions": {
+        "required_triggers": ["terraform", "terraform module", "remote state", "tf plan"],
+        "required_patterns": ["remote state", "module"],
+        "forbidden_patterns": ["hardcoded secret"],
+        "required_output_sections": ["Module Layout", "Remote State", "CI Apply"]
+      }
+    }
+  ]
+}

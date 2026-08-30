@@ -1,0 +1,22 @@
+{
+  "suite": "framework-pulumi-evals",
+  "description": "Co-located evaluation tests for Pulumi framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-PULUMI-COLOCATED-001",
+      "name": "Pulumi ComponentResource Profile Trigger",
+      "target_skill": "framework-pulumi",
+      "prompt": "Write a Pulumi ComponentResource for this zone and run pulumi preview with a CrossGuard policy pack.",
+      "context": {
+        "detected_stack": ["Pulumi", "TypeScript"]
+      },
+      "assertions": {
+        "required_triggers": ["pulumi", "pulumi preview", "component resource", "crossguard"],
+        "required_patterns": ["ComponentResource", "stack"],
+        "forbidden_patterns": ["hardcoded secret", "pulumi config set --plaintext password"],
+        "required_output_sections": ["Component Layout", "Stack Isolation", "Secrets"]
+      }
+    }
+  ]
+}

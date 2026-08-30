@@ -1,0 +1,23 @@
+{
+  "suite": "agent-grilling-co-located",
+  "description": "Co-located evaluation benchmark for the design-tree grilling primitive",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-GRILLING-COLOCATED-001",
+      "name": "Design-Tree Grilling Trigger",
+      "description": "Ensures stress-test / design-tree / decision-frontier prompts activate the grilling primitive.",
+      "target_skill": "agent-grilling",
+      "prompt": "Grill this plan with a design tree. Stress test the decision frontier before we write a spec.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["grilling", "design tree", "decision frontier", "stress test plan"],
+        "required_patterns": ["Frontier", "design tree"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Design Tree", "Decision Frontier", "Round"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "get_sop",
+  "description": "Return one SOP by stem name (e.g. conventional-commits, context-budget). Truncated if very long.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["name"],
+    "properties": {
+      "name": { "type": "string", "description": "SOP file stem without .md" }
+    },
+    "additionalProperties": false
+  }
+}
