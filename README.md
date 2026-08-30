@@ -1,34 +1,23 @@
-<!-- <div align="center">
+# Kit (Agent Lifecycle Kit)
 
-<img src="./assets/kit_banner.png" alt="Kit - AI Agent Lifecycle Framework" width="100%" />
+**Ship AI agents you can prove.**
 
-<br /> -->
-
-# 🤖 Kit (Agent Lifecycle Kit)
-
-**Eval-Driven Development for AI agents**—plus the autonomous lifecycle, architecture & governance framework.
+When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit makes **Eval-Driven Development (EDD)** the sensible default for that work—TDD for tool-using agents—then wraps it in the lifecycle, architecture, and multi-IDE governance your team already needs.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
 [![Pages](https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://mzworthington.github.io/agent-lifecycle-kit/)
-[![Node](https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs)](./package.json)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
-
-<p align="center">
-  <b>TDD for tool-using agents. Governance for every IDE.</b>
-</p>
-
-</div>
 
 ---
 
-## Eval-Driven Development (EDD)
+## The value: Eval-Driven Development
 
-**EDD is TDD for agents.** Connecting an LLM to MCP tools, APIs, or terminals turns a chatbot into a decision-maker—but failures are probabilistic: wrong tool, hallucinated parameter, endless retries. EDD treats prompts and tool schemas as **version-controlled, evaluated contracts**.
+**EDD is TDD for agents.** Treat prompts and tool schemas as version-controlled contracts:
 
-1. **Red — Define intent.** JSONL cases + YAML metrics assert the tool (and arguments) you expect.
-2. **Green — Implement the interface.** Register the MCP/tool contract and system prompt; run until asserts pass.
-3. **Refactor — Refine context.** Iterate descriptions and constraints; gate merges with `kit eval ci --threshold-routing 95`.
+1. **Red** — Write a failing eval (JSONL intent + YAML metrics) for the routing or schema you care about.
+2. **Green** — Register the MCP/tool contract and system prompt; run until asserts pass.
+3. **Refactor** — Tighten descriptions and constraints; gate merges with `kit eval ci --threshold-routing 95`.
 
 ```bash
 kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
@@ -38,141 +27,75 @@ kit eval report --format md --out out/reports
 
 | | |
 | :--- | :--- |
-| **Guide** | [docs/edd.md](./docs/edd.md) — what EDD is and why |
-| **Site** | [edd/](./edd/) — landing page |
-| **Suites** | [evals/edd/README.md](./evals/edd/README.md) — YAML harness + JSONL datasets |
-| **SOP** | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
-| **Blog** | [Moving Beyond Vibes](./docs/blog/moving-beyond-vibes-edd.md) |
+| **Why** | [docs/edd.md](./docs/edd.md) · [Blog](./docs/blog/moving-beyond-vibes-edd.md) |
+| **How** | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
+| **Suites** | [evals/edd/README.md](./evals/edd/README.md) |
+| **Site** | [edd/](./edd/) |
 
-Context isolation · deterministic tool mocks · schema match + LLM-as-a-judge · CI path filters & artifacts · OTel spans · prod→JSONL closed loop.
-
----
-
-## ⚡ Why Kit?
-
-AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot, Google Antigravity) are powerful—but without strict governance, they drift into inconsistent architecture, swallowed exceptions, skipped tests, and bloated abstractions.
-
-**Kit** pairs **EDD** with a unified, cross-IDE framework that standardizes how AI agents work: from idea stress-testing, specification, and TDD short loops to security audits, architecture drift detection, and telemetry tracking.
-
-<div align="center">
-  <img src="./assets/kit_logo.png" alt="Kit Badge" width="220" />
-</div>
+Context isolation · mocked tools · schema match + LLM-as-a-judge · CI gates · prod→JSONL closed loop.
 
 ---
 
-## ✨ Core Pillars
+## What else Kit gives you
 
-- **🧪 Eval-Driven Development (EDD)**: Declarative YAML + JSONL agent evals, mocked MCP tools, dual-layer assertions, CI threshold gates, Markdown failure traces, and production telemetry ([docs/edd.md](./docs/edd.md)).
-- **🛡️ Shared Architectural Philosophy**: Enforces Hexagonal Architecture (Ports & Adapters), Domain-Driven Design (DDD invariants), Vertical Slice Architecture, and Clean Code standards ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md)).
-- **🔄 Single Source of Truth & Multi-IDE Sync**: Write rules once in [`AGENTS.md`](./AGENTS.md). Kit synchronizes entry points automatically across Cursor (`.cursorrules`), Gemini (`GEMINI.md`), Claude (`CLAUDE.md`), Windsurf (`.windsurfrules`), and Copilot (`.github/copilot-instructions.md`).
-- **🎯 43+ Modular Specialist Skills**:
-  - **Lifecycle Roles (`agent-*`)**: `agent-orchestrator`, `agent-grilling`, `agent-spec`, `agent-tdd`, `agent-xfn`, `agent-adapter`, `agent-ui`, `agent-migration`, `agent-api-contract`, `agent-review`, `agent-security`, `agent-arch-drift`, `agent-perf-opt`, `agent-debug`, `agent-telemetry`, `agent-pre-commit`, and more.
-  - **Language Profiles (`lang-*`)**: `TypeScript`, `Rust`, `Python`, `Go`, `Java`, `C#`, `HCL`.
-  - **Framework Profiles (`framework-*`)**: `React 19`, `Next.js`, `Express`, `FastAPI`, `Spring Boot`, `Quarkus`, `.NET`, `Terraform`, `Pulumi`.
-  - **Domain Profiles (`profile-*`)**: `profile-api`, `profile-iac`, `profile-mcp`, `profile-observability`.
-- **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (`kit audit`).
-- **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into `.cursor/mcp.json` ([mcps/](./mcps/)).
+EDD is the agent default. Around it, Kit standardizes how coding agents work across Cursor, Claude Code, Gemini CLI, Windsurf, and Copilot:
 
----
-
-## 🧭 Multi-Agent Lifecycle Flow
+| Pillar | Outcome |
+| :--- | :--- |
+| **Architecture** | Hexagonal + DDD + vertical slices + clean code ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md)) |
+| **Lifecycle skills** | Spec → TDD short loop → XFN → security → release via `agent-*` roles |
+| **One rules file** | `AGENTS.md` syncs to every IDE entry point |
+| **MCP catalog** | Composable profiles into `.cursor/mcp.json` ([mcps/](./mcps/)) |
+| **Security audit** | Prompt injection, secrets, entropy, unpinned skills (`kit audit`) |
 
 ```mermaid
-sequenceDiagram
-  autonumber
-  participant O as agent-orchestrator
-  participant G as agent-grilling
-  participant S as agent-spec
-  participant T as agent-tdd
-  participant X as agent-xfn
-  participant Sec as agent-security
-  participant Arch as agent-arch-drift
-  participant Tel as agent-telemetry
-  participant R as agent-release
-
-  O->>G: 1. Stress-test idea & decision frontier
-  O->>S: 2. Formulate BDD spec & acceptance criteria
-  O->>T: 3. Inventory behavior catalog & plan test impact
-  O->>X: 4. Define cross-functional quality matrix (a11y/load/sec)
-  O->>T: 5. Execute TDD short loop (gear 1 domain + gear 2 thin adapters)
-  O->>X: 6. Green all active XFN quality suites
-  O->>Sec: 7. Audit security & OWASP compliance
-  O->>Arch: 8. Verify hexagonal boundaries & zero architectural drift
-  O->>Tel: 9. Map runtime SLOs to OpenTelemetry metrics
-  O->>R: 10. Release via conventional PR title & handover summary
+flowchart LR
+  intent[Agent intent] --> edd[EDD red / green / refactor]
+  edd --> ci[CI threshold gate]
+  ci --> ship[Ship]
+  ship --> prod[Prod OTel + shadow judge]
+  prod -->|miss| edd
 ```
+
+Lifecycle feature work still follows: Grilling → Spec → TDD + XFN → Audit → Telemetry → Release ([agent-orchestrator](./skills/agent-orchestrator/SKILL.md)).
 
 ---
 
-## 🚀 Unified CLI (`kit`)
-
-Kit comes with a unified TypeScript CLI powered by `tsx/esm` for project bootstrapping, rule export, security auditing, and evaluation.
+## Quick start
 
 ```bash
-# Display CLI help menu
-kit help
+git clone https://github.com/mzworthington/agent-lifecycle-kit.git
+cd agent-lifecycle-kit && ./install.sh
+
+# Prove agent tool-routing locally (offline scripted driver)
+kit eval ci --threshold-routing 95 --model scripted --out out/reports
+
+# Bootstrap an app repo with Kit standards + MCP profile
+kit init ./my-app --mcp collab --hook
 ```
 
 | Command | Purpose |
 | :--- | :--- |
-| `kit init [dir]` | Bootstrap `AGENTS.md`, multi-IDE rules, `.cursor/mcp.json`, and git pre-commit hook |
-| `kit mcp <profile>` | Compose and install MCP profiles (`default`, `collab`, `ops`, `security`, `lab`) |
-| `kit audit` | Run hardened security & supply chain audit across skills and scripts |
-| `kit validate` | Validate evals structure against JSON Schemas |
-| `kit eval` | Run live trigger evaluation benchmarks across all skill suites |
-| `kit eval run\|watch\|report\|ci` | **EDD harness** — tool routing, schema, judge, CI gates ([docs/edd.md](./docs/edd.md)) |
-| `kit export-rules` | Export and sync `AGENTS.md` to `GEMINI.md`, `CLAUDE.md`, `.windsurfrules`, `.cursorrules`, and Copilot |
-| `kit metrics` | Display telemetry analytics summary for subagent phase handovers |
-| `kit verify` | Verify skills directory layout conventions |
+| `kit eval run\|watch\|report\|ci` | **EDD harness** — agent tool routing & schemas |
+| `kit eval` | Skill-trigger harness (which specialist activates) |
+| `kit init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
+| `kit mcp <profile>` | Compose MCP profiles |
+| `kit audit` | Security & supply-chain audit |
+| `kit export-rules` | Sync `AGENTS.md` → IDE entry points |
 
 ---
 
-## ⚙️ Quick Start Setup
+## Docs map
 
-### 1. Clone & Bootstrap Kit globally
-
-```bash
-git clone https://github.com/mzworthington/agent-lifecycle-kit.git ~/Documents/dev/agent-lifecycle-kit
-cd ~/Documents/dev/agent-lifecycle-kit
-./install.sh
-```
-
-This symlinks `~/.agents` -> `~/Documents/dev/agent-lifecycle-kit` and initializes the system configuration.
-
-### 2. Bootstrap any App Repository
-
-Inside any target application project, run the `kit init` command:
-
-```bash
-kit init ./my-app --mcp collab --hook
-```
-
-This instantly creates:
-- `AGENTS.md` (pointing to Kit core standards)
-- Multi-IDE rule entry points (`CLAUDE.md`, `GEMINI.md`, `.windsurfrules`, `.cursorrules`, `.github/copilot-instructions.md`)
-- `.cursor/mcp.json` pre-configured with your selected MCP profile
-- Executable `.git/hooks/pre-commit` security & quality gate
+| Start here | Then |
+| :--- | :--- |
+| [docs/edd.md](./docs/edd.md) — EDD guide | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
+| [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) | [AGENTS.md](./AGENTS.md) bootstrap |
+| [skills/README.md](./skills/README.md) | [mcps/README.md](./mcps/README.md) |
+| [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) | [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
 
 ---
 
-## 📚 Navigation & Documentation
-
-| Resource | Description | Path |
-| :--- | :--- | :--- |
-| **Eval-Driven Development** | What EDD is, red/green/refactor loop, CLI & CI | [docs/edd.md](./docs/edd.md) |
-| **EDD site page** | Public landing for EDD | [edd/](./edd/) |
-| **EDD suites** | YAML harness, JSONL datasets, example report | [evals/edd/README.md](./evals/edd/README.md) |
-| **EDD SOP** | Day-to-day red/green/refactor + CI gates | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
-| **Coding Philosophy** | Core architectural mandates, DDD, TDD short loop, clean code | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
-| **Skills Directory** | Full taxonomy of 43+ roles, language, framework, and domain profiles | [skills/README.md](./skills/README.md) |
-| **MCP Catalog** | Composable Model Context Protocol library and profiles | [mcps/README.md](./mcps/README.md) |
-| **Behavior Catalog & XFN** | Testing as source of truth and cross-functional matrices | [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) |
-| **Hypothesis Debugging** | RCA SOP for bugs, CI failures, and proof gates | [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
-| **Conventional Commits** | Commit subject and squash-and-merge PR title rules | [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) |
-| **DB Migration SOP** | Expand-contract database schema migration procedure | [SOPs/db-migration.md](./SOPs/db-migration.md) |
-
----
-
-## 📄 License
+## License
 
 [Unlicense](./LICENSE) (Public Domain).

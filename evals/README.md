@@ -1,17 +1,12 @@
-# Hybrid Skill Evaluation Framework (`evals/`)
+# Evaluation Framework (`evals/`)
 
-This directory and the co-located skill eval folders contain evaluation suites and benchmark contracts for `agent-lifecycle-kit` (`.agents`).
+Kit evaluates two layers: **skill routing** (which specialist activates) and **agent tool use** (EDD—how an agent calls tools). EDD is the sensible default when you change prompts, MCP schemas, or routing.
 
-The kit uses a **Hybrid Evals Architecture**:
-1. **Co-Located Unit Evals (`skills/<skill-name>/evals/eval.json`):** Single-skill output assertions co-located next to `SKILL.md` for portability and tight developer feedback.
-2. **Centralized System & Routing Evals (`evals/suites/*.json`):** Cross-skill routing matrix tests (`routing-matrix.json`), multi-phase role benchmarks (`lifecycle-roles.json`), and stack profile benchmarks (`stack-profiles.json`).
-3. **Eval-Driven Development (`evals/edd/`):** YAML + JSONL harness for agent tool routing, schema match, LLM-as-a-judge, error recovery, CI threshold gates, and Markdown reports (`kit eval run|watch|report|ci`). See [edd/README.md](./edd/README.md) and [SOPs/eval-driven-development.md](../SOPs/eval-driven-development.md).
+1. **Eval-Driven Development (`evals/edd/`):** YAML + JSONL harness for tool routing, schema match, LLM-as-a-judge, CI gates (`kit eval run|watch|report|ci`). Guide: [docs/edd.md](../docs/edd.md) · Suites: [edd/README.md](./edd/README.md).
+2. **Co-located skill evals (`skills/<skill>/evals/eval.json`):** Single-skill output assertions next to `SKILL.md`.
+3. **Centralized routing suites (`evals/suites/*.json`):** Cross-skill routing matrix, lifecycle roles, stack profiles (`kit eval`).
 
-Evals ensure that:
-- **Routing & Trigger Accuracy:** Prompts activate the correct specialist role (`agent-*`) or stack profile (`lang-*`, `framework-*`).
-- **Guardrail Conformance:** Generated agent outputs adhere to architectural principles ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md)), output schemas, and lifecycle SOPs.
-- **No Drift:** Skill updates do not introduce prompt regressions or weaken behavioral guardrails.
-- **Agent tool reliability (EDD):** MCP/tool schemas and system prompts stay above routing-accuracy thresholds before merge.
+Together they guard: correct skill activation, architectural conformance, no prompt drift, and agent tool reliability above CI thresholds.
 
 ---
 

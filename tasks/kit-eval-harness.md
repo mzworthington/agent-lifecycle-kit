@@ -31,6 +31,7 @@ For each golden prompt: note expected route, actual route an agent took (or woul
 | 5 | “One-line typo in copy” | Direct fix + light XFN floor; no spec handover |
 | 6 | “Wire Stripe for a port we just greened” | Prefer **tdd gear 2** same session; `agent-adapter` only if deep-dive |
 | 7 | “Production 500s spiking” | `agent-incident` → `agent-debug` (+ Sentry/Slack when configured) |
+| 8 | “Change MCP tool schema / system prompt for routing” | **EDD:** `kit eval run|ci` ([docs/edd.md](../docs/edd.md)); not vibes-only |
 
 ### Pass criteria
 
