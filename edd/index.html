@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eval-Driven Development (EDD) — Agent Lifecycle Kit</title>
   <meta name="description"
-    content="EDD is the sensible default for agentic AI: TDD for tool-using agents. Isolate context, mock tools, assert routing and schemas, gate PRs at 95% accuracy, close the loop with production telemetry.">
+    content="EDD is TDD for tool-using agents: isolate context, mock tools, assert routing and schemas, gate PRs at 95% accuracy, and close the loop with production telemetry.">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#090d16">
+  <meta name="theme-color" content="#0c1017">
   <link rel="canonical" href="https://mzworthington.github.io/agent-lifecycle-kit/edd/">
   <link rel="icon" type="image/png" href="../assets/kit_logo.png">
 
@@ -16,14 +16,14 @@
   <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/edd/">
   <meta property="og:title" content="Eval-Driven Development (EDD) — Agent Lifecycle Kit">
   <meta property="og:description"
-    content="TDD for AI agents: tool routing, schema match, LLM-as-a-judge, CI threshold gates, and prod→JSONL closed loops.">
+    content="TDD for tool-using agents: routing asserts, schema match, optional LLM-as-a-judge, CI gates, and a closed loop from production.">
   <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta property="og:site_name" content="Agent Lifecycle Kit">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Eval-Driven Development (EDD) — Agent Lifecycle Kit">
   <meta name="twitter:description"
-    content="TDD for AI agents: tool routing, schema match, LLM-as-a-judge, CI threshold gates, and prod→JSONL closed loops.">
+    content="TDD for tool-using agents: routing asserts, schema match, CI gates, and a closed loop from production.">
   <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
 
   <script type="application/ld+json">
@@ -44,24 +44,24 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
   <style>
     :root {
-      --bg: #090d16;
-      --bg-card: rgba(22, 31, 50, 0.7);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(99, 102, 241, 0.3);
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --accent: #a855f7;
-      --success: #10b981;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg: #0c1017;
+      --bg-card: rgba(24, 32, 44, 0.82);
+      --border: rgba(232, 237, 244, 0.1);
+      --border-accent: rgba(42, 157, 143, 0.4);
+      --text: #e8edf4;
+      --text-muted: #9aa7b8;
+      --primary: #2a9d8f;
+      --primary-light: #4db6a9;
+      --accent: #d4a017;
+      --success: #3dba7c;
+      --font-sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -76,18 +76,18 @@
 
     .glow {
       position: fixed;
-      top: -180px;
-      left: 15%;
-      width: 640px;
-      height: 640px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, transparent 70%);
+      top: -160px;
+      left: 12%;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.08) 0%, transparent 70%);
       z-index: -1;
       pointer-events: none;
     }
 
     header {
       backdrop-filter: blur(16px);
-      background: rgba(9, 13, 22, 0.85);
+      background: rgba(12, 16, 23, 0.9);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -138,25 +138,22 @@
     .eyebrow {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
       color: var(--primary-light);
-      border: 1px solid var(--border-accent);
-      border-radius: 999px;
-      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
       margin-bottom: 1.25rem;
-      background: rgba(99, 102, 241, 0.12);
+      background: rgba(42, 157, 143, 0.08);
     }
 
     h1 {
       font-size: clamp(2.1rem, 5vw, 3rem);
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.15;
-      background: linear-gradient(135deg, #fff 30%, var(--primary-light) 70%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #fff;
       margin-bottom: 1rem;
     }
 
@@ -188,7 +185,7 @@
     }
     .btn:hover { transform: translateY(-2px); }
     .btn-primary {
-      background: rgba(99, 102, 241, 0.35);
+      background: rgba(42, 157, 143, 0.32);
       border-color: var(--primary-light);
       color: #fff;
     }
@@ -245,7 +242,7 @@
       line-height: 1.7;
     }
     .cli-code .comment { color: #64748b; }
-    .cli-code .cmd { color: #a5b4fc; }
+    .cli-code .cmd { color: var(--primary-light); }
     .cli-code .arg { color: #86efac; }
 
     #doc {
@@ -325,38 +322,35 @@
 
   <main class="container">
     <section class="hero">
-      <div class="eyebrow">Sensible default for agentic AI</div>
-      <h1>Agent Lifecycle Kit</h1>
-      <p class="lede" style="font-size:1.35rem;color:var(--primary-light);font-weight:600;margin-bottom:0.75rem;">
-        Eval-Driven Development
-      </p>
+      <div class="eyebrow">From Agent Lifecycle Kit</div>
+      <h1>Eval-Driven Development</h1>
       <p class="lede">
-        TDD for tool-using agents. Treat prompts and MCP schemas as evaluated contracts—
-        not informal vibes.
+        TDD for agents that call tools. Treat prompts and MCP schemas like code contracts—
+        something you can assert, gate, and improve—not a vibe you hope holds in prod.
       </p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#doc">Read the guide</a>
         <a class="btn btn-ghost" href="../evals/edd/README.md">Browse suites</a>
-        <a class="btn btn-ghost" href="../docs/blog/moving-beyond-vibes-edd.md">Why EDD?</a>
+        <a class="btn btn-ghost" href="../docs/blog/moving-beyond-vibes-edd.md">Why we left vibes</a>
       </div>
     </section>
 
     <section class="grid" aria-label="EDD tenets">
       <div class="card">
-        <h3>Context isolation</h3>
-        <p>Every case starts with a fresh context window—no conversational cross-contamination between tests.</p>
+        <h3>Fresh context each case</h3>
+        <p>No leftover chat history bleeding into the next test. Each case starts clean.</p>
       </div>
       <div class="card">
-        <h3>Deterministic mocks</h3>
-        <p>Stub tool payloads so you measure model routing and extraction, not third-party network latency.</p>
+        <h3>Mocked tools</h3>
+        <p>Stub the payloads so you measure routing and extraction—not someone else’s API latency.</p>
       </div>
       <div class="card">
-        <h3>Dual-layer asserts</h3>
-        <p>Strict JSON schema match plus optional LLM-as-a-judge for unstructured synthesis and hallucination.</p>
+        <h3>Schema + judgment</h3>
+        <p>Strict JSON schema match, plus an optional LLM-as-a-judge when the answer isn’t structured.</p>
       </div>
       <div class="card">
-        <h3>CI + prod loop</h3>
-        <p>Threshold gates on PRs; production misses become JSONL cases; shadow judges sample live traffic.</p>
+        <h3>CI, then prod feedback</h3>
+        <p>Gate PRs on a threshold. Turn production misses into new cases. Sample live traffic with a shadow judge.</p>
       </div>
     </section>
 
@@ -365,16 +359,16 @@
         <div class="dot dot-red"></div>
         <div class="dot dot-yellow"></div>
         <div class="dot dot-green"></div>
-        <span>kit eval — EDD harness</span>
+        <span>kit eval</span>
       </div>
       <div class="cli-code">
-        <div><span class="comment"># Red → green → refactor against a suite</span></div>
+        <div><span class="comment"># Red → green → refactor on a suite</span></div>
         <div>$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span></div>
         <br>
-        <div><span class="comment"># Block merges when routing accuracy drops below 95%</span></div>
+        <div><span class="comment"># Block the merge if routing accuracy drops below 95%</span></div>
         <div>$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span></div>
         <br>
-        <div><span class="comment"># Markdown failure traces for PRs</span></div>
+        <div><span class="comment"># Markdown failure report for the PR</span></div>
         <div>$ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></div>
       </div>
     </div>
@@ -385,7 +379,7 @@
   </main>
 
   <footer>
-    <p><a href="../">Agent Lifecycle Kit</a> · Eval-Driven Development · Unlicense</p>
+    <p><a href="../">Agent Lifecycle Kit</a> · EDD · Unlicense</p>
   </footer>
 
   <script>

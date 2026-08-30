@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Lifecycle Kit — Ship AI agents you can prove</title>
+  <title>Agent Lifecycle Kit — Test the tools your agents call</title>
   <meta name="description"
-    content="Ship AI agents you can prove. Eval-Driven Development (EDD) is the sensible default for tool-using agents—plus lifecycle governance across Cursor, Gemini, Claude, Windsurf & Copilot.">
+    content="A practical kit for teams shipping tool-using agents: Eval-Driven Development (EDD), lifecycle skills, and shared rules across Cursor, Gemini, Claude, Windsurf & Copilot.">
   <meta name="keywords"
     content="Eval-Driven Development, EDD, AI agent evals, tool routing, MCP, LLM-as-a-judge, Cursor rules, Gemini CLI, Claude Code, Hexagonal Architecture, TDD, Model Context Protocol">
   <meta name="author" content="mzworthington">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#090d16">
+  <meta name="theme-color" content="#0c1017">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://mzworthington.github.io/agent-lifecycle-kit/">
@@ -20,9 +20,9 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <meta property="og:title" content="Agent Lifecycle Kit — Ship AI agents you can prove">
+  <meta property="og:title" content="Agent Lifecycle Kit — Test the tools your agents call">
   <meta property="og:description"
-    content="EDD is the sensible default for tool-using agents—assert routing and schemas, gate PRs, close the loop from production. Plus hexagonal lifecycle governance across every IDE.">
+    content="EDD puts prompts and MCP schemas under the same red→green→refactor discipline as code. Assert routing, gate PRs, and feed production misses back into the suite.">
   <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -32,9 +32,9 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <meta name="twitter:title" content="Agent Lifecycle Kit — Ship AI agents you can prove">
+  <meta name="twitter:title" content="Agent Lifecycle Kit — Test the tools your agents call">
   <meta name="twitter:description"
-    content="EDD is the sensible default for tool-using agents—tool routing, schema match, CI gates, and closed-loop telemetry.">
+    content="EDD for tool-using agents: routing asserts, schema match, CI gates, and a closed loop from production misses.">
   <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
   <meta name="twitter:image:alt" content="Agent Lifecycle Kit Framework Banner">
 
@@ -44,7 +44,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     "name": "Agent Lifecycle Kit",
-    "description": "Ship AI agents you can prove. Eval-Driven Development (EDD) is the sensible default for tool-using agents, plus lifecycle governance for Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.",
+    "description": "Practical kit for tool-using agents: Eval-Driven Development (EDD), lifecycle skills, and multi-IDE governance for Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.",
     "url": "https://mzworthington.github.io/agent-lifecycle-kit/",
     "codeRepository": "https://github.com/mzworthington/agent-lifecycle-kit",
     "programmingLanguage": ["TypeScript", "Bash", "JSON"],
@@ -64,7 +64,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
     rel="stylesheet">
 
   <!-- D3, Marked & Mermaid (Deferred non-blocking loading) -->
@@ -74,19 +74,19 @@
 
   <style>
     :root {
-      --bg: #090d16;
-      --bg-surface: #101726;
-      --bg-card: rgba(22, 31, 50, 0.7);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(99, 102, 241, 0.3);
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --accent: #a855f7;
-      --success: #10b981;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg: #0c1017;
+      --bg-surface: #151b26;
+      --bg-card: rgba(24, 32, 44, 0.82);
+      --border: rgba(232, 237, 244, 0.1);
+      --border-accent: rgba(42, 157, 143, 0.4);
+      --text: #e8edf4;
+      --text-muted: #9aa7b8;
+      --primary: #2a9d8f;
+      --primary-light: #4db6a9;
+      --accent: #d4a017;
+      --success: #3dba7c;
+      --font-sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
     }
 
     * {
@@ -113,25 +113,25 @@
       min-height: 100vh;
     }
 
-    /* Ambient Background Glows */
+    /* Soft atmosphere (kept quiet on purpose) */
     .glow-1 {
       position: fixed;
-      top: -200px;
-      left: 20%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      top: -160px;
+      left: 10%;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.08) 0%, transparent 70%);
       z-index: -1;
       pointer-events: none;
     }
 
     .glow-2 {
       position: fixed;
-      top: 400px;
-      right: -100px;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+      bottom: -120px;
+      right: -80px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(212, 160, 23, 0.05) 0%, transparent 70%);
       z-index: -1;
       pointer-events: none;
     }
@@ -139,7 +139,7 @@
     /* Header Nav */
     header {
       backdrop-filter: blur(16px);
-      background: rgba(9, 13, 22, 0.8);
+      background: rgba(12, 16, 23, 0.88);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -199,35 +199,34 @@
       justify-content: center;
       border: 1px solid var(--border-accent);
       text-decoration: none;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
       transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .btn-github:hover {
       transform: translateY(-2px);
-      background: rgba(99, 102, 241, 0.3);
+      background: rgba(42, 157, 143, 0.28);
       border-color: var(--primary-light);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
       color: #fff;
     }
 
     .hero-eyebrow {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
       color: var(--primary-light);
-      border: 1px solid var(--border-accent);
-      border-radius: 999px;
-      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
       margin-bottom: 1.15rem;
-      background: rgba(99, 102, 241, 0.12);
+      background: rgba(42, 157, 143, 0.08);
     }
 
     .hero-brand {
       font-size: clamp(2.4rem, 6vw, 3.4rem);
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: -0.03em;
       line-height: 1.1;
       margin-bottom: 0.85rem;
@@ -246,7 +245,7 @@
       display: inline-flex;
       align-items: center;
       padding: 0.7rem 1.2rem;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: 600;
       font-size: 0.95rem;
       text-decoration: none;
@@ -259,7 +258,7 @@
     }
 
     .btn-cta-primary {
-      background: rgba(99, 102, 241, 0.35);
+      background: rgba(42, 157, 143, 0.32);
       border-color: var(--primary-light);
       color: #fff;
     }
@@ -310,9 +309,8 @@
       display: block;
       color: var(--primary-light);
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
       margin-bottom: 0.35rem;
     }
 
@@ -365,7 +363,7 @@
       border-top: 0;
       border-bottom: 1px solid var(--border-accent);
       border-radius: 0;
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(99, 102, 241, 0.15);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), inset 0 0 40px rgba(42, 157, 143, 0.06);
       position: relative;
       overflow: hidden;
       margin-top: 0;
@@ -395,7 +393,7 @@
       padding: 0.4rem 0.8rem;
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: #38bdf8;
+      color: var(--primary-light);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -434,9 +432,9 @@
     }
 
     .filter-btn.active {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #fff;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+      background: var(--primary);
+      color: #0c1017;
+      box-shadow: none;
     }
 
 
@@ -471,7 +469,7 @@
       padding: 0.4rem 0.8rem;
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      color: #38bdf8;
+      color: var(--primary-light);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -482,9 +480,9 @@
     .status-dot {
       width: 8px;
       height: 8px;
-      background: #10b981;
+      background: var(--success);
       border-radius: 50%;
-      box-shadow: 0 0 10px #10b981;
+      box-shadow: none;
       animation: pulse-dot 1.5s infinite alternate;
     }
 
@@ -513,11 +511,11 @@
     }
 
     .cyber-btn:hover {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: rgba(42, 157, 143, 0.25);
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
     }
 
     .d3-tooltip {
@@ -530,7 +528,7 @@
       padding: 0.85rem 1.1rem;
       color: #fff;
       font-size: 0.85rem;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(99, 102, 241, 0.25);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
       opacity: 0;
       transition: opacity 0.18s ease, transform 0.05s linear;
       z-index: 100;
@@ -551,7 +549,7 @@
     }
 
     .tooltip-badge {
-      background: rgba(99, 102, 241, 0.25);
+      background: rgba(42, 157, 143, 0.22);
       border: 1px solid var(--primary);
       color: var(--primary-light);
       font-family: var(--font-mono);
@@ -587,9 +585,9 @@
 
     .hero-title {
       font-size: clamp(1.35rem, 3vw, 1.75rem);
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: -0.01em;
-      color: var(--primary-light);
+      color: var(--text);
       margin-bottom: 1rem;
       background: none;
       -webkit-text-fill-color: unset;
@@ -633,13 +631,17 @@
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
       border-color: var(--border-accent);
     }
 
     .card-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--primary-light);
+      margin-bottom: 0.85rem;
     }
 
     .card-title {
@@ -729,7 +731,7 @@
 
     .docs-wrapper a,
     .docs-content a {
-      color: #a5b4fc;
+      color: var(--primary-light);
       text-decoration: underline;
       text-underline-offset: 3px;
       transition: color 0.2s ease;
@@ -739,7 +741,7 @@
     .docs-wrapper a:focus,
     .docs-content a:hover,
     .docs-content a:focus {
-      color: #c7d2fe;
+      color: #7dd3c7;
     }
 
     .docs-content h1,
@@ -1012,16 +1014,16 @@
   <main class="container" style="padding-bottom: 0;">
     <!-- Hero: brand + value -->
     <section class="hero" style="padding-bottom: 1.5rem;">
-      <div class="hero-eyebrow">Eval-Driven Development · sensible default</div>
+      <div class="hero-eyebrow">Eval-Driven Development</div>
       <h1 class="hero-brand">Agent Lifecycle Kit</h1>
-      <p class="hero-title">Ship AI agents you can prove</p>
-      <p class="hero-subtitle">EDD is TDD for tool-using agents—assert routing and schemas, mock MCP tools, gate
-        PRs at 95% accuracy, and turn production misses into the next eval.</p>
+      <p class="hero-title">Test the tools your agents call</p>
+      <p class="hero-subtitle">Wrong tool, made-up args, endless retries—those failures don’t look like stack traces.
+        EDD gives you a red→green→refactor loop for prompts, MCP schemas, and routing, with CI gates you can trust.</p>
 
       <div class="hero-ctas">
-        <a class="btn-cta btn-cta-primary" href="#edd">Why EDD</a>
-        <a class="btn-cta btn-cta-ghost" href="#cli">Try&nbsp;<code style="font-family: var(--font-mono);">kit eval ci</code></a>
-        <a class="btn-cta btn-cta-ghost" href="./edd/">EDD guide</a>
+        <a class="btn-cta btn-cta-primary" href="#edd">How EDD works</a>
+        <a class="btn-cta btn-cta-ghost" href="#cli">Run&nbsp;<code style="font-family: var(--font-mono);">kit eval ci</code></a>
+        <a class="btn-cta btn-cta-ghost" href="./edd/">Read the guide</a>
       </div>
 
       <div class="badge-bar" style="margin-bottom: 1.5rem;">
@@ -1041,18 +1043,18 @@
 
   <!-- Full-Bleed Edge-to-Edge Hero D3 Constellation Visualizer -->
   <div id="map" class="hero-d3-wrapper" role="region"
-    aria-label="Interactive Kit skill and profile constellation">
+    aria-label="Interactive map of Kit skills and profiles">
     <div class="cyber-status-badge" aria-hidden="true">
       <span class="status-dot"></span>
-      KIT MESH · ONLINE
+      Kit map
     </div>
-    <div class="cyber-hud-controls" role="group" aria-label="Constellation filters">
+    <div class="cyber-hud-controls" role="group" aria-label="Map filters">
       <div class="cyber-filter-bar">
-        <button type="button" class="filter-btn active" onclick="filterNodes('all', this)">ALL</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('lifecycle', this)">LIFECYCLE</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('lang', this)">LANG</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('framework', this)">FRAMEWORK</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('profile', this)">DOMAIN</button>
+        <button type="button" class="filter-btn active" onclick="filterNodes('all', this)">All</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('lifecycle', this)">Lifecycle</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('lang', this)">Lang</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('framework', this)">Framework</button>
+        <button type="button" class="filter-btn" onclick="filterNodes('profile', this)">Domain</button>
         <button type="button" class="filter-btn" onclick="filterNodes('ide', this)">IDE</button>
       </div>
     </div>
@@ -1062,37 +1064,37 @@
 
     <!-- EDD first (value) -->
     <section id="edd" class="edd-spotlight" aria-label="Eval-Driven Development">
-      <h2>Eval-Driven Development is the default</h2>
+      <h2>Same loop you already trust for code</h2>
       <p>
-        <strong style="color:#fff;">When agents call tools, vibes are not a test strategy.</strong>
-        Write a failing eval for the intent you care about, green the tool contract and prompt,
-        refine until routing holds under CI—and feed production misses straight back into the suite.
+        <strong style="color:#fff;">If an agent can call tools, guessing isn’t a test plan.</strong>
+        Start with a failing eval for the behavior you care about, wire the tool contract and prompt
+        until it passes, then tighten until CI holds—and drop production misses back into the suite.
       </p>
       <div class="edd-steps">
         <div class="edd-step">
           <strong>Red</strong>
-          <span>JSONL intent + YAML metrics (tool, schema, judge).</span>
+          <span>Write the intent and metrics (tool, schema, judge).</span>
         </div>
         <div class="edd-step">
           <strong>Green</strong>
-          <span>Register MCP schemas and minimal instructions; run until green.</span>
+          <span>Register the MCP schema and a minimal prompt; run until it passes.</span>
         </div>
         <div class="edd-step">
           <strong>Refactor</strong>
-          <span>Tighten prompts; gate merges at 95% routing accuracy.</span>
+          <span>Tighten wording; block merges below 95% routing accuracy.</span>
         </div>
       </div>
       <div class="edd-links">
-        <a href="./edd/">EDD landing →</a>
+        <a href="./edd/">EDD overview →</a>
         <a href="./docs/edd.md">Full guide →</a>
         <a href="./evals/edd/README.md">Suites &amp; reports →</a>
-        <a href="./docs/blog/moving-beyond-vibes-edd.md">Moving Beyond Vibes →</a>
+        <a href="./docs/blog/moving-beyond-vibes-edd.md">Why we left vibes behind →</a>
       </div>
     </section>
 
     <!-- Try it -->
     <section id="cli">
-      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Try it</h2>
+      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Try it locally</h2>
       <div class="cli-box">
         <div class="cli-header">
           <div class="cli-dots">
@@ -1100,16 +1102,16 @@
             <div class="dot dot-yellow"></div>
             <div class="dot dot-green"></div>
           </div>
-          <span>zsh — kit EDD</span>
+          <span>terminal</span>
         </div>
         <div class="cli-code">
-          <div><span class="comment"># Offline scripted driver — no API key required</span></div>
+          <div><span class="comment"># Works offline with the scripted driver — no API key</span></div>
           <div>$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span></div>
           <br>
-          <div><span class="comment"># CI gate — fail if routing accuracy &lt; 95%</span></div>
+          <div><span class="comment"># Fail the PR if routing accuracy drops under 95%</span></div>
           <div>$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span></div>
           <br>
-          <div><span class="comment"># Markdown failure traces for PRs</span></div>
+          <div><span class="comment"># Write a markdown failure report for the PR</span></div>
           <div>$ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></div>
         </div>
       </div>
@@ -1118,35 +1120,34 @@
     <!-- Supporting pillars -->
     <section id="pillars" class="pillars-grid" aria-label="Why Kit">
       <div class="card">
-        <div class="card-icon">🧪</div>
-        <div class="card-title">EDD harness</div>
-        <div class="card-desc">YAML + JSONL, mocked tools, LLM-as-a-judge, CI threshold gates, and prod→JSONL closed
-          loops.</div>
+        <div class="card-icon">Evals</div>
+        <div class="card-title">A harness you can run in CI</div>
+        <div class="card-desc">Suites in YAML and JSONL, mocked tools, optional LLM-as-a-judge, threshold gates, and a path from production misses back into the suite.</div>
       </div>
       <div class="card">
-        <div class="card-icon">🛡️</div>
-        <div class="card-title">Architecture that holds</div>
-        <div class="card-desc">Hexagonal, DDD, vertical slices, and clean code—so agent-written code stays maintainable.</div>
+        <div class="card-icon">Architecture</div>
+        <div class="card-title">Boundaries agents respect</div>
+        <div class="card-desc">Hexagonal layout, DDD language, vertical slices, and clean-code defaults—so generated code doesn’t sprawl into a mess.</div>
       </div>
       <div class="card">
-        <div class="card-icon">🔄</div>
-        <div class="card-title">One rules file, every IDE</div>
-        <div class="card-desc">Write AGENTS.md once. Kit syncs Cursor, Claude, Gemini, Windsurf, and Copilot.</div>
+        <div class="card-icon">IDEs</div>
+        <div class="card-title">One rules file, every editor</div>
+        <div class="card-desc">Write AGENTS.md once. Kit keeps Cursor, Claude, Gemini, Windsurf, and Copilot on the same page.</div>
       </div>
     </section>
 
     <!-- Docs -->
     <section id="docs" class="docs-wrapper" aria-label="Documentation Section">
       <div id="markdown-body" class="docs-content">
-        <h2>About Agent Lifecycle Kit</h2>
-        <p><strong>Ship AI agents you can prove.</strong> Kit makes
-          <a href="./docs/edd.md">Eval-Driven Development (EDD)</a> the sensible default for tool-using agents,
-          then wraps it in lifecycle skills, hexagonal architecture, and multi-IDE governance.</p>
+        <h2>What this kit is</h2>
+        <p>Kit is for teams who are tired of shipping agents on good intentions.
+          It centers <a href="./docs/edd.md">Eval-Driven Development (EDD)</a>,
+          then layers in lifecycle skills, architecture guardrails, and shared IDE rules so the rest of the workflow stays coherent.</p>
         <h3>Start here</h3>
         <ul>
-          <li><a href="./docs/edd.md">EDD guide</a> — why and what</li>
-          <li><a href="./SOPs/eval-driven-development.md">EDD SOP</a> — red → green → refactor</li>
-          <li><a href="./CODING_PHILOSOPHY.md">Coding philosophy</a> — architecture + quality defaults</li>
+          <li><a href="./docs/edd.md">EDD guide</a> — the why and the what</li>
+          <li><a href="./SOPs/eval-driven-development.md">EDD SOP</a> — red → green → refactor day to day</li>
+          <li><a href="./CODING_PHILOSOPHY.md">Coding philosophy</a> — architecture and quality defaults</li>
           <li><a href="./AGENTS.md">Agent bootstrap</a> — how agents load the kit</li>
         </ul>
       </div>
@@ -1155,10 +1156,9 @@
   </main>
 
   <footer>
-    <p>Agent Lifecycle Kit is open source and released under the Unlicense (Public Domain).</p>
-    <p style="margin-top: 0.5rem; color: #94a3b8;">Ship agents you can prove · Eval-Driven Development
-    </p>
-    <p style="margin-top: 0.75rem;"><a href="./edd/" style="color:#818cf8; text-decoration:none; font-weight:600;">Explore EDD →</a></p>
+    <p>Agent Lifecycle Kit is open source under the Unlicense (public domain).</p>
+    <p style="margin-top: 0.5rem; color: var(--text-muted);">Built for people who ship agents that call tools</p>
+    <p style="margin-top: 0.75rem;"><a href="./edd/" style="color:var(--primary-light); text-decoration:none; font-weight:600;">Read the EDD guide →</a></p>
   </footer>
 
   <script>
@@ -1230,7 +1230,7 @@
         .attr('width', '200%')
         .attr('height', '200%');
 
-      filter.append('feGaussianBlur').attr('stdDeviation', '4.5').attr('result', 'coloredBlur');
+      filter.append('feGaussianBlur').attr('stdDeviation', '2.2').attr('result', 'coloredBlur');
       const feMerge = filter.append('feMerge');
       feMerge.append('feMergeNode').attr('in', 'coloredBlur');
       feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
@@ -1242,36 +1242,36 @@
         .attr('x2', '100%')
         .attr('y2', '100%');
       gradient.append('stop').attr('offset', '0%').attr('stop-color', '#38bdf8').attr('stop-opacity', 0.9);
-      gradient.append('stop').attr('offset', '50%').attr('stop-color', '#6366f1').attr('stop-opacity', 0.9);
-      gradient.append('stop').attr('offset', '100%').attr('stop-color', '#a855f7').attr('stop-opacity', 0.9);
+      gradient.append('stop').attr('offset', '50%').attr('stop-color', '#2a9d8f').attr('stop-opacity', 0.9);
+      gradient.append('stop').attr('offset', '100%').attr('stop-color', '#c9843a').attr('stop-opacity', 0.9);
 
       const nodes = [
         // Central Engine
-        { id: 'KIT_CORE', label: 'KIT CORE', group: 'core', category: 'core', icon: '⚡', radius: 46, color: '#6366f1', desc: 'Eval-Driven Development for AI agents—plus lifecycle, architecture & multi-IDE governance.', tags: ['#edd', '#hexagonal', '#tdd', '#multi-ide'] },
+        { id: 'KIT_CORE', label: 'KIT CORE', group: 'core', category: 'core', icon: '⚡', radius: 46, color: '#2a9d8f', desc: 'EDD for tool-using agents, plus lifecycle skills, architecture defaults, and multi-IDE rules.', tags: ['#edd', '#hexagonal', '#tdd', '#multi-ide'] },
 
         // 5 Primary Sector Hubs
-        { id: 'sec-lifecycle', label: 'LIFECYCLE ROLES', group: 'sector', category: 'lifecycle', icon: '🔄', radius: 30, color: '#a855f7', desc: 'Lifecycle role skills governing every phase from idea stress-testing to release.', tags: ['#agent-spec', '#agent-tdd', '#agent-security'] },
+        { id: 'sec-lifecycle', label: 'LIFECYCLE ROLES', group: 'sector', category: 'lifecycle', icon: '🔄', radius: 30, color: '#c9843a', desc: 'Role skills for each phase—from stress-testing an idea through release.', tags: ['#agent-spec', '#agent-tdd', '#agent-security'] },
         { id: 'sec-lang', label: 'LANGUAGES', group: 'sector', category: 'lang', icon: '💻', radius: 28, color: '#38bdf8', desc: '7 strict language profiles enforcing clean code & idiomatic patterns.', tags: ['#typescript', '#rust', '#python', '#go', '#java', '#csharp', '#hcl'] },
         { id: 'sec-framework', label: 'FRAMEWORKS', group: 'sector', category: 'framework', icon: '⚙️', radius: 28, color: '#10b981', desc: '10 framework profiles for React 19, Next.js, Express, Spring Boot, FastAPI & IaC.', tags: ['#nextjs', '#react', '#express', '#springboot', '#fastapi'] },
         { id: 'sec-domain', label: 'DOMAINS', group: 'sector', category: 'profile', icon: '🛡️', radius: 28, color: '#f59e0b', desc: '4 domain profiles for API contracts, IaC security, MCP, and Observability.', tags: ['#profile-api', '#profile-iac', '#profile-mcp', '#profile-obs'] },
-        { id: 'sec-ide', label: 'MULTI-IDE SYNC', group: 'sector', category: 'ide', icon: '🌐', radius: 28, color: '#ec4899', desc: 'Single source of truth AGENTS.md auto-synced across Cursor, Gemini, Claude, Windsurf & Copilot.', tags: ['#cursor', '#gemini', '#claude', '#windsurf', '#copilot'] },
+        { id: 'sec-ide', label: 'MULTI-IDE SYNC', group: 'sector', category: 'ide', icon: '🌐', radius: 28, color: '#ec4899', desc: 'One AGENTS.md kept in sync across Cursor, Gemini, Claude, Windsurf, and Copilot.', tags: ['#cursor', '#gemini', '#claude', '#windsurf', '#copilot'] },
 
         // 4 Lifecycle Sub-Hubs
-        { id: 'sub-plan', label: 'PLAN & SPEC', group: 'subsector', category: 'lifecycle', icon: '📝', radius: 20, color: '#c084fc', desc: 'Requirements, grilling, BDD specs & acceptance criteria.', tags: ['#spec', '#grilling', '#bdd'] },
+        { id: 'sub-plan', label: 'PLAN & SPEC', group: 'subsector', category: 'lifecycle', icon: '📝', radius: 20, color: '#d4a574', desc: 'Requirements, grilling, BDD specs & acceptance criteria.', tags: ['#spec', '#grilling', '#bdd'] },
         { id: 'sub-build', label: 'BUILD & TDD', group: 'subsector', category: 'lifecycle', icon: '🧪', radius: 20, color: '#60a5fa', desc: 'TDD short loops, adapters, UI delivery & API contracts.', tags: ['#tdd', '#adapters', '#ui'] },
         { id: 'sub-verify', label: 'AUDIT & GOVERN', group: 'subsector', category: 'lifecycle', icon: '🔒', radius: 20, color: '#f87171', desc: 'Security audit, architecture drift, ADRs & pre-commit gates.', tags: ['#security', '#arch-drift', '#adr'] },
         { id: 'sub-ops', label: 'OPS & TELEMETRY', group: 'subsector', category: 'lifecycle', icon: '📈', radius: 20, color: '#34d399', desc: 'OpenTelemetry, profiling, RCA debugging, pruning & release.', tags: ['#telemetry', '#perf', '#debug'] },
 
         // Sub-Plan Skills
-        { id: 'agent-orchestrator', label: 'orchestrator', group: 'role', category: 'lifecycle', icon: '🎯', radius: 15, color: '#a855f7', desc: 'Routes work across lifecycle phases: Grilling → Spec → TDD → Security → Telemetry.', tags: ['#orchestration', '#phase-routing'] },
+        { id: 'agent-orchestrator', label: 'orchestrator', group: 'role', category: 'lifecycle', icon: '🎯', radius: 15, color: '#c9843a', desc: 'Routes work across lifecycle phases: Grilling → Spec → TDD → Security → Telemetry.', tags: ['#orchestration', '#phase-routing'] },
         { id: 'agent-grilling', label: 'grilling', group: 'role', category: 'lifecycle', icon: '🔥', radius: 14, color: '#ec4899', desc: 'Idea stress-testing & decision tree frontier exploration.', tags: ['#stress-testing', '#design-tree'] },
         { id: 'agent-grill-me', label: 'grill-me', group: 'role', category: 'lifecycle', icon: '🌶️', radius: 14, color: '#ec4899', desc: 'Stateless interactive design interview mode.', tags: ['#grill-me', '#interview'] },
-        { id: 'agent-spec', label: 'spec', group: 'role', category: 'lifecycle', icon: '📝', radius: 15, color: '#8b5cf6', desc: 'BDD requirement specification & acceptance criteria.', tags: ['#bdd', '#gherkin', '#acceptance'] },
+        { id: 'agent-spec', label: 'spec', group: 'role', category: 'lifecycle', icon: '📝', radius: 15, color: '#b8956c', desc: 'BDD requirement specification & acceptance criteria.', tags: ['#bdd', '#gherkin', '#acceptance'] },
 
         // Sub-Build Skills
         { id: 'agent-tdd', label: 'tdd', group: 'role', category: 'lifecycle', icon: '🧪', radius: 16, color: '#3b82f6', desc: 'TDD short loop (gear 1 domain invariants + gear 2 thin adapters).', tags: ['#tdd', '#behavior-catalog', '#gear-1', '#gear-2'] },
         { id: 'agent-adapter', label: 'adapter', group: 'role', category: 'lifecycle', icon: '🔌', radius: 14, color: '#38bdf8', desc: 'Hexagonal adapter deep-dive implementation.', tags: ['#ports-and-adapters', '#infrastructure'] },
-        { id: 'agent-ui', label: 'ui', group: 'role', category: 'lifecycle', icon: '🎨', radius: 14, color: '#818cf8', desc: 'UI component delivery & accessibility implementation.', tags: ['#ui', '#a11y', '#components'] },
+        { id: 'agent-ui', label: 'ui', group: 'role', category: 'lifecycle', icon: '🎨', radius: 14, color: '#4db6a9', desc: 'UI component delivery & accessibility implementation.', tags: ['#ui', '#a11y', '#components'] },
         { id: 'agent-copy', label: 'copy', group: 'role', category: 'lifecycle', icon: '✍️', radius: 14, color: '#f43f5e', desc: 'UI microcopy, error text, tone tuning & messaging.', tags: ['#copywriting', '#microcopy', '#tone'] },
         { id: 'agent-api-contract', label: 'api-contract', group: 'role', category: 'lifecycle', icon: '📜', radius: 14, color: '#10b981', desc: 'OpenAPI & AsyncAPI contract specifications.', tags: ['#openapi', '#asyncapi', '#contracts'] },
         { id: 'agent-migration', label: 'migration', group: 'role', category: 'lifecycle', icon: '🗄️', radius: 14, color: '#f59e0b', desc: 'Database expand-contract schema migration SOP.', tags: ['#db-migration', '#expand-contract'] },
@@ -1280,7 +1280,7 @@
         { id: 'agent-xfn', label: 'xfn', group: 'role', category: 'lifecycle', icon: '📊', radius: 14, color: '#06b6d4', desc: 'Cross-functional quality matrix (accessibility, load, security).', tags: ['#xfn', '#a11y', '#load-matrix'] },
         { id: 'agent-security', label: 'security', group: 'role', category: 'lifecycle', icon: '🔒', radius: 15, color: '#ef4444', desc: 'Hardened OWASP review & prompt injection audit.', tags: ['#owasp', '#security-audit', '#secrets'] },
         { id: 'agent-arch-drift', label: 'arch-drift', group: 'role', category: 'lifecycle', icon: '📐', radius: 14, color: '#f59e0b', desc: 'Hexagonal boundary & zero-drift architecture audit.', tags: ['#hexagonal', '#arch-drift'] },
-        { id: 'agent-adr', label: 'adr', group: 'role', category: 'lifecycle', icon: '📋', radius: 14, color: '#8b5cf6', desc: 'MADR Architecture Decision Record creation under docs/ADRs/.', tags: ['#adr', '#madr', '#architecture-decisions'] },
+        { id: 'agent-adr', label: 'adr', group: 'role', category: 'lifecycle', icon: '📋', radius: 14, color: '#b8956c', desc: 'MADR Architecture Decision Record creation under docs/ADRs/.', tags: ['#adr', '#madr', '#architecture-decisions'] },
         { id: 'agent-review', label: 'review', group: 'role', category: 'lifecycle', icon: '👀', radius: 14, color: '#38bdf8', desc: 'PR boundary & architectural review.', tags: ['#pr-review', '#boundaries'] },
         { id: 'agent-pre-commit', label: 'pre-commit', group: 'role', category: 'lifecycle', icon: '✅', radius: 14, color: '#14b8a6', desc: 'Pre-commit quality & security gate.', tags: ['#pre-commit', '#quality-gate'] },
 
@@ -1291,7 +1291,7 @@
         { id: 'agent-prune', label: 'prune', group: 'role', category: 'lifecycle', icon: '✂️', radius: 14, color: '#f97316', desc: 'Dead-code & complexity hotspot pruning.', tags: ['#dead-code', '#prune', '#hotspots'] },
         { id: 'agent-incident', label: 'incident', group: 'role', category: 'lifecycle', icon: '🚨', radius: 14, color: '#ef4444', desc: 'Incident triage & emergency stabilization.', tags: ['#incident', '#stabilize'] },
         { id: 'agent-release', label: 'release', group: 'role', category: 'lifecycle', icon: '🚀', radius: 14, color: '#10b981', desc: 'Release management & conventional commits.', tags: ['#release', '#conventional-commits'] },
-        { id: 'agent-docs', label: 'docs', group: 'role', category: 'lifecycle', icon: '📚', radius: 14, color: '#6366f1', desc: 'Documentation generation & architecture diagrams.', tags: ['#docs', '#mermaid'] },
+        { id: 'agent-docs', label: 'docs', group: 'role', category: 'lifecycle', icon: '📚', radius: 14, color: '#2a9d8f', desc: 'Documentation generation & architecture diagrams.', tags: ['#docs', '#mermaid'] },
 
         // 7 Language Profiles
         { id: 'lang-typescript', label: 'TypeScript', group: 'lang', category: 'lang', icon: '💻', radius: 14, color: '#38bdf8', desc: 'Strict typing, ESM & clean code profile.', tags: ['#typescript', '#esm', '#strict'] },
@@ -1299,7 +1299,7 @@
         { id: 'lang-python', label: 'Python', group: 'lang', category: 'lang', icon: '🐍', radius: 14, color: '#eab308', desc: 'Type hints, pytest & clean code profile.', tags: ['#python', '#type-hints', '#pytest'] },
         { id: 'lang-go', label: 'Go', group: 'lang', category: 'lang', icon: '🐹', radius: 14, color: '#06b6d4', desc: 'Idiomatic concurrency & interface guardrails.', tags: ['#go', '#concurrency', '#interfaces'] },
         { id: 'lang-java', label: 'Java', group: 'lang', category: 'lang', icon: '☕', radius: 14, color: '#ec4899', desc: 'Immutability & clean code profile.', tags: ['#java', '#immutability'] },
-        { id: 'lang-csharp', label: 'C#', group: 'lang', category: 'lang', icon: '♯', radius: 14, color: '#8b5cf6', desc: 'Value types & clean code profile.', tags: ['#csharp', '#dotnet'] },
+        { id: 'lang-csharp', label: 'C#', group: 'lang', category: 'lang', icon: '♯', radius: 14, color: '#b8956c', desc: 'Value types & clean code profile.', tags: ['#csharp', '#dotnet'] },
         { id: 'lang-hcl', label: 'HCL', group: 'lang', category: 'lang', icon: '🏗️', radius: 14, color: '#64748b', desc: 'Infrastructure as Code profile.', tags: ['#hcl', '#terraform'] },
 
         // 10 Framework Profiles
@@ -1309,20 +1309,20 @@
         { id: 'framework-fastapi', label: 'FastAPI', group: 'framework', category: 'framework', icon: '⚡', radius: 13, color: '#10b981', desc: 'Async routing & Pydantic profile.', tags: ['#fastapi', '#pydantic'] },
         { id: 'framework-springboot', label: 'Spring Boot', group: 'framework', category: 'framework', icon: '🍃', radius: 13, color: '#84cc16', desc: 'Spring Boot hexagonal architecture profile.', tags: ['#springboot', '#spring'] },
         { id: 'framework-quarkus', label: 'Quarkus', group: 'framework', category: 'framework', icon: '🚀', radius: 13, color: '#ef4444', desc: 'Supersonic subatomic Java profile.', tags: ['#quarkus', '#graalvm'] },
-        { id: 'framework-dotnet', label: '.NET', group: 'framework', category: 'framework', icon: '🔷', radius: 13, color: '#8b5cf6', desc: '.NET Web API & architecture profile.', tags: ['#dotnet', '#aspnet'] },
+        { id: 'framework-dotnet', label: '.NET', group: 'framework', category: 'framework', icon: '🔷', radius: 13, color: '#b8956c', desc: '.NET Web API & architecture profile.', tags: ['#dotnet', '#aspnet'] },
         { id: 'framework-nuxt', label: 'Nuxt', group: 'framework', category: 'framework', icon: '💚', radius: 13, color: '#10b981', desc: 'Vue 3 & SSR profile.', tags: ['#nuxt', '#vue'] },
-        { id: 'framework-terraform', label: 'Terraform', group: 'framework', category: 'framework', icon: '🗺️', radius: 13, color: '#6366f1', desc: 'Terraform provider & module profile.', tags: ['#terraform', '#hcl'] },
-        { id: 'framework-pulumi', label: 'Pulumi', group: 'framework', category: 'framework', icon: '🔮', radius: 13, color: '#a855f7', desc: 'Programming language IaC profile.', tags: ['#pulumi', '#iac'] },
+        { id: 'framework-terraform', label: 'Terraform', group: 'framework', category: 'framework', icon: '🗺️', radius: 13, color: '#2a9d8f', desc: 'Terraform provider & module profile.', tags: ['#terraform', '#hcl'] },
+        { id: 'framework-pulumi', label: 'Pulumi', group: 'framework', category: 'framework', icon: '🔮', radius: 13, color: '#c9843a', desc: 'Programming language IaC profile.', tags: ['#pulumi', '#iac'] },
 
         // 4 Domain Profiles
         { id: 'profile-api', label: 'api', group: 'profile', category: 'profile', icon: '📡', radius: 14, color: '#ec4899', desc: 'REST & Event Contract specification profile.', tags: ['#api', '#rest', '#async'] },
-        { id: 'profile-iac', label: 'iac', group: 'profile', category: 'profile', icon: '☁️', radius: 14, color: '#6366f1', desc: 'Secure Cloud Adoption Framework profile.', tags: ['#iac', '#cloud-security'] },
-        { id: 'profile-mcp', label: 'mcp', group: 'profile', category: 'profile', icon: '🔌', radius: 15, color: '#a855f7', desc: 'Model Context Protocol server integration profile.', tags: ['#mcp', '#tools'] },
+        { id: 'profile-iac', label: 'iac', group: 'profile', category: 'profile', icon: '☁️', radius: 14, color: '#2a9d8f', desc: 'Secure Cloud Adoption Framework profile.', tags: ['#iac', '#cloud-security'] },
+        { id: 'profile-mcp', label: 'mcp', group: 'profile', category: 'profile', icon: '🔌', radius: 15, color: '#c9843a', desc: 'Model Context Protocol server integration profile.', tags: ['#mcp', '#tools'] },
         { id: 'profile-observability', label: 'observability', group: 'profile', category: 'profile', icon: '📊', radius: 14, color: '#38bdf8', desc: 'OpenTelemetry metrics & tracing profile.', tags: ['#tracing', '#metrics'] },
 
         // 5 IDE Targets
         { id: 'ide-cursor', label: 'Cursor', group: 'ide', category: 'ide', icon: '🖱️', radius: 15, color: '#38bdf8', desc: 'Cursor rules (.cursorrules & .cursor/mcp.json).', tags: ['#cursor', '#mcp'] },
-        { id: 'ide-gemini', label: 'Gemini CLI', group: 'ide', category: 'ide', icon: '♊', radius: 15, color: '#8b5cf6', desc: 'Gemini CLI rules (GEMINI.md).', tags: ['#gemini', '#cli'] },
+        { id: 'ide-gemini', label: 'Gemini CLI', group: 'ide', category: 'ide', icon: '♊', radius: 15, color: '#b8956c', desc: 'Gemini CLI rules (GEMINI.md).', tags: ['#gemini', '#cli'] },
         { id: 'ide-claude', label: 'Claude Code', group: 'ide', category: 'ide', icon: '🎭', radius: 15, color: '#f97316', desc: 'Claude Code rules (CLAUDE.md).', tags: ['#claude', '#anthropic'] },
         { id: 'ide-windsurf', label: 'Windsurf', group: 'ide', category: 'ide', icon: '🏄', radius: 15, color: '#06b6d4', desc: 'Windsurf rules (.windsurfrules).', tags: ['#windsurf', '#codeium'] },
         { id: 'ide-copilot', label: 'GitHub Copilot', group: 'ide', category: 'ide', icon: '🤖', radius: 15, color: '#10b981', desc: 'Copilot rules (.github/copilot-instructions.md).', tags: ['#copilot', '#github'] },
@@ -1536,10 +1536,10 @@
           .attr('cy', cy)
           .attr('r', r)
           .attr('fill', 'none')
-          .attr('stroke', idx === 0 ? '#a855f7' : (idx === 1 ? '#6366f1' : '#38bdf8'))
+          .attr('stroke', idx === 0 ? '#c9843a' : (idx === 1 ? '#2a9d8f' : '#38bdf8'))
           .attr('stroke-width', 1)
           .attr('stroke-dasharray', '4 6')
-          .attr('stroke-opacity', 0.25)
+          .attr('stroke-opacity', 0.18)
           .attr('filter', 'url(#cyber-glow)');
       });
 
@@ -1635,7 +1635,7 @@
         .attr('fill', '#f1f5f9')
         .attr('font-size', d => d.group === 'core' ? '12px' : (d.group === 'sector' ? '10px' : '8.5px'))
         .attr('font-weight', d => d.group === 'core' ? '800' : (d.group === 'sector' ? '700' : '500'))
-        .attr('font-family', 'Inter, sans-serif')
+        .attr('font-family', 'IBM Plex Sans, sans-serif')
         .attr('pointer-events', 'none');
 
       // Interactive Node Focus & Child Highlight Engine
