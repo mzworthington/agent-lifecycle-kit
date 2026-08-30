@@ -11,6 +11,8 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Feature lifecycle | `skills/agent-orchestrator` |
 | Bug / CI / live symptom | `skills/agent-debug` (+ hypothesis-driven-debug SOP) |
 | Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`kit eval run\|ci`) |
+| Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |
+| Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
 | Committing / opening a PR | `SOPs/conventional-commits.md` |
 | SOP / handover lookup | kit-knowledge MCP when installed |
 | Durable project facts | memory MCP (glossary, SLOs, prefs — never secrets) |

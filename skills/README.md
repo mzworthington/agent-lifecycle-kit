@@ -33,7 +33,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-migration](./agent-migration/SKILL.md) | maintenance | Expand/contract schema migrations |
 | [agent-api-contract](./agent-api-contract/SKILL.md) | spec | OpenAPI/AsyncAPI contract evolution |
 | [agent-review](./agent-review/SKILL.md) | audit | PR/diff review vs boundaries + catalog/XFN |
-| [agent-docs](./agent-docs/SKILL.md) | release | README/runbook/API narrative updates |
+| [agent-docs](./agent-docs/SKILL.md) | release | README/runbook/API narrative; loads `agent-copy` for human-centric voice |
 | [agent-release](./agent-release/SKILL.md) | release | Ship checklist, conventional PR title, catalog summary |
 | [agent-incident](./agent-incident/SKILL.md) | debug | Production incident coordination → `agent-debug` |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets; verify XFN security suites |

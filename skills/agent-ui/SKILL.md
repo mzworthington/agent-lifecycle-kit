@@ -18,6 +18,7 @@ triggers:
 depends-on:
   - agent-tdd
   - agent-xfn
+  - agent-copy
 mcp:
   - figma
   - playwright

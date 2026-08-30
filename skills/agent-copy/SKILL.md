@@ -44,8 +44,19 @@ Default stance: write like a sharp teammate explaining the product to another pr
 - UI microcopy, errors, empty states, or onboarding need a voice pass
 - Brand or product naming must stay hero-level while headlines stay secondary
 - User asks to humanize, de-AI, or tighten wording without a full redesign
+- **Docs / release narrative** - [agent-docs](../agent-docs/SKILL.md) must load this skill before rewriting README leads, landing, blog, or changelog blurbs
 
 Prefer **tweaks over rewrites** when the structure is mostly good. Preserve meaning and information density; change voice, specificity, and telltale phrasing first.
+
+### How activation is guaranteed
+
+| Mechanism | What it does |
+|-----------|--------------|
+| Frontmatter `triggers` | Cursor routes prompts that mention copy, humanize, landing, marketing, tone, etc. |
+| `AGENTS.md` phase table | UI/copy and docs/release rows point here for voice |
+| Orchestrator scope gate | Landing/marketing → `agent-copy`; docs narrative → `agent-docs` **and** `agent-copy` |
+| `agent-docs` / `agent-ui` `depends-on` | Docs and UI hand narrative/chrome voice work here |
+| Co-located + routing evals | `kit eval` / CI fail if triggers drift off the skill |
 
 Coordinate visual chrome (emoji labels, neon status pills, gradient slogans) with [agent-ui](../agent-ui/SKILL.md). This skill owns the words; UI owns layout and styling.
 

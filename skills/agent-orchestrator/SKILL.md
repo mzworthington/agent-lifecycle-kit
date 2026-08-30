@@ -25,6 +25,7 @@ depends-on:
   - agent-review
   - agent-migration
   - agent-docs
+  - agent-copy
   - agent-release
   - agent-api-contract
   - agent-ui
@@ -74,8 +75,9 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 | Schema migration | [agent-migration](../agent-migration/SKILL.md) |
 | API contracts | [agent-api-contract](../agent-api-contract/SKILL.md) |
 | UI delivery | [agent-ui](../agent-ui/SKILL.md) |
+| Copy / human-centric voice | [agent-copy](../agent-copy/SKILL.md) |
 | PR / diff review | [agent-review](../agent-review/SKILL.md) |
-| Docs | [agent-docs](../agent-docs/SKILL.md) |
+| Docs | [agent-docs](../agent-docs/SKILL.md) (loads `agent-copy` for narrative voice) |
 | Release | [agent-release](../agent-release/SKILL.md) |
 | Incident | [agent-incident](../agent-incident/SKILL.md) |
 | Security audit | [agent-security](../agent-security/SKILL.md) |
@@ -115,6 +117,8 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Dead-code cleanup, post-migration prune | `agent-prune` → `agent-pre-commit` |
 | Complexity hotspot cleanup | `agent-arch-drift` → `agent-prune` → `agent-pre-commit` |
 | PR / diff review request | `agent-review` |
+| Landing / marketing / AI-sounding copy, microcopy, errors | `agent-copy` (+ `agent-ui` if layout/chrome) |
+| Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
 | New feature, new bounded context, new external integration | Full lifecycle |
 
 When in doubt, prefer the smaller route and ask.
@@ -168,5 +172,5 @@ sequenceDiagram
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
 8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`.
-9. **Docs / Release** - `agent-docs` when public surfaces changed; `agent-release` for version/changelog/conventional PR title and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
+9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
 10. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md).

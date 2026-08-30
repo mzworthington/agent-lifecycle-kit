@@ -17,6 +17,7 @@ depends-on:
   - agent-arch-drift
   - agent-security
   - agent-xfn
+  - agent-copy
 mcp:
   - github
 tools:
@@ -37,6 +38,7 @@ You review change sets for craft and catalog honesty—not style nitpicks.
 4. **Security** - Trust boundaries, validation, secrets ([agent-security](../agent-security/SKILL.md)).
 5. **Minimal change** - No speculative abstractions ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
 6. **Commits / PR title** - Conventional ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md)).
+7. **Public copy / docs voice** - If landing, README lead, marketing, or UI microcopy changed, check for AI-template tells (slogan stacks, "sensible default", fake systems chrome, emoji-as-heading) per [agent-copy](../agent-copy/SKILL.md).
 
 ## Output
 
