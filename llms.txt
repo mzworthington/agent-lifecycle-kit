@@ -1,17 +1,21 @@
-# Agent Lifecycle Kit
+# Eval-Driven Development
 
-> Ship AI agents you can prove. Eval-Driven Development (EDD) is the sensible default for tool-using agents—plus lifecycle governance across Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.
+> TDD for AI agents that call tools. Write evals, mock MCP schemas, assert routing, gate PRs, and turn production misses into the next case.
 
-## Core value
-- **Eval-Driven Development (EDD):** TDD for agents—YAML suites, JSONL datasets, mocked MCP tools, schema/routing asserts, LLM-as-a-judge, CI gates, prod→JSONL
-- Architecture: Hexagonal, DDD, vertical slices, clean code
-- Lifecycle skills, language/framework profiles, MCP catalog
-- CLI: `kit eval run|watch|report|ci` (alias `agent-kit`); `kit init`, `kit audit`
+## What this site is
+Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`).
 
-## Documentation
-- [Site](https://mzworthington.github.io/agent-lifecycle-kit/)
-- [EDD guide](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/docs/edd.md)
-- [EDD landing](https://mzworthington.github.io/agent-lifecycle-kit/edd/)
-- [EDD SOP](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md)
-- [Coding Philosophy](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md)
-- [Agent Bootstrap](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/AGENTS.md)
+## Start here
+- [Home](https://eval-driven-development.dev/)
+- [EDD guide](https://eval-driven-development.dev/edd/)
+- [Why we left vibes](https://eval-driven-development.dev/blog/moving-beyond-vibes/)
+- [Markdown guide](https://eval-driven-development.dev/docs/edd.md)
+- [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
+- [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
+
+## Commands
+```
+kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
+kit eval ci --threshold-routing 95 --out out/reports
+kit eval report --format md --out out/reports
+```

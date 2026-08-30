@@ -4,41 +4,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eval-Driven Development (EDD) — Agent Lifecycle Kit</title>
+  <title>Eval-Driven Development (EDD) — How to test AI agent tool calls</title>
   <meta name="description"
-    content="EDD is TDD for tool-using agents: isolate context, mock tools, assert routing and schemas, gate PRs at 95% accuracy, and close the loop with production telemetry.">
-  <meta name="robots" content="index, follow">
+    content="Eval-Driven Development (EDD) is TDD for tool-using agents: isolate context, mock tools, assert routing and schemas, gate PRs at 95%, and close the loop from production.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#0c1017">
-  <link rel="canonical" href="https://mzworthington.github.io/agent-lifecycle-kit/edd/">
-  <link rel="icon" type="image/png" href="../assets/kit_logo.png">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://eval-driven-development.dev/edd/">
+  <link rel="alternate" type="text/markdown" title="EDD guide (Markdown)" href="https://eval-driven-development.dev/docs/edd.md">
+  <link rel="alternate" type="text/plain" title="llms.txt" href="https://eval-driven-development.dev/llms.txt">
+  <link rel="sitemap" type="application/xml" href="https://eval-driven-development.dev/sitemap.xml">
+  <link rel="icon" type="image/webp" href="../assets/kit_logo_256.webp" sizes="256x256">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="me" href="https://github.com/mzworthington/agent-lifecycle-kit">
 
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/edd/">
-  <meta property="og:title" content="Eval-Driven Development (EDD) — Agent Lifecycle Kit">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://eval-driven-development.dev/edd/">
+  <meta property="og:title" content="Eval-Driven Development (EDD) — How to test AI agent tool calls">
   <meta property="og:description"
-    content="TDD for tool-using agents: routing asserts, schema match, optional LLM-as-a-judge, CI gates, and a closed loop from production.">
-  <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
-  <meta property="og:site_name" content="Agent Lifecycle Kit">
+    content="Isolate context, mock tools, assert routing and schemas, gate PRs at 95% accuracy, and turn production misses into new eval cases.">
+  <meta property="og:image" content="https://eval-driven-development.dev/assets/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Eval-Driven Development: TDD for tool-using AI agents">
+  <meta property="og:site_name" content="Eval-Driven Development">
+  <meta property="article:section" content="Engineering">
+  <meta property="article:published_time" content="2026-08-01T00:00:00Z">
+  <meta property="article:modified_time" content="2026-08-30T00:00:00Z">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Eval-Driven Development (EDD) — Agent Lifecycle Kit">
+  <meta name="twitter:title" content="Eval-Driven Development (EDD) — How to test AI agent tool calls">
   <meta name="twitter:description"
-    content="TDD for tool-using agents: routing asserts, schema match, CI gates, and a closed loop from production.">
-  <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
+    content="Isolate context, mock tools, assert routing and schemas, then gate PRs at 95% accuracy.">
+  <meta name="twitter:image" content="https://eval-driven-development.dev/assets/og.jpg">
+  <meta name="twitter:image:alt" content="Eval-Driven Development: TDD for tool-using AI agents">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "TechArticle",
-    "headline": "Eval-Driven Development (EDD)",
-    "description": "TDD for AI agents: context isolation, mocked tools, dual-layer assertions, CI quality gates, and closed-loop telemetry.",
-    "url": "https://mzworthington.github.io/agent-lifecycle-kit/edd/",
-    "author": { "@type": "Person", "name": "mzworthington" },
-    "isPartOf": {
-      "@type": "SoftwareSourceCode",
-      "name": "Agent Lifecycle Kit",
-      "url": "https://mzworthington.github.io/agent-lifecycle-kit/"
-    }
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "@id": "https://eval-driven-development.dev/edd/#article",
+        "headline": "Eval-Driven Development (EDD)",
+        "alternativeHeadline": "TDD for tool-using AI agents",
+        "description": "TDD for AI agents: context isolation, mocked tools, schema and routing asserts, CI quality gates, and closed-loop telemetry.",
+        "url": "https://eval-driven-development.dev/edd/",
+        "image": "https://eval-driven-development.dev/assets/og.jpg",
+        "datePublished": "2026-08-01",
+        "dateModified": "2026-08-30",
+        "inLanguage": "en",
+        "author": { "@type": "Person", "name": "mzworthington", "url": "https://github.com/mzworthington" },
+        "isPartOf": { "@id": "https://eval-driven-development.dev/#website" },
+        "mainEntityOfPage": "https://eval-driven-development.dev/edd/",
+        "keywords": ["Eval-Driven Development", "EDD", "AI agent evals", "MCP", "tool routing", "TDD"]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://eval-driven-development.dev/edd/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Eval-Driven Development?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Eval-Driven Development (EDD) is TDD for agents that call tools. You write a failing eval for the tool and arguments you expect, implement the schema and prompt until it passes, then tighten until CI holds."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is EDD different from eyeballing prompts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Each case starts from a fresh context. Tools are mocked, so you measure routing and extraction rather than network luck. Asserts cover JSON schema match plus an optional LLM-as-a-judge. CI can block the merge when routing accuracy drops."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I run EDD in CI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Run kit eval ci --threshold-routing 95 --out out/reports. The scripted driver works offline with no API key. Live models can be used when KIT_EVAL_API_KEY or OPENAI_API_KEY is set."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens after a production miss?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample live traffic so the next failure is a test, not a surprise."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://eval-driven-development.dev/" },
+          { "@type": "ListItem", "position": 2, "name": "Eval-Driven Development", "item": "https://eval-driven-development.dev/edd/" }
+        ]
+      }
+    ]
   }
   </script>
 
@@ -287,6 +355,35 @@
     #doc th { background: rgba(255,255,255,0.04); color: #fff; }
     #doc .mermaid { margin: 1.25rem 0; background: #0b1220; border-radius: 12px; padding: 1rem; }
 
+    .faq {
+      margin: 2.5rem 0 2rem;
+    }
+    .faq h2 {
+      font-size: 1.45rem;
+      margin-bottom: 1rem;
+    }
+    .faq details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.6rem;
+      background: var(--bg-card);
+    }
+    .faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #fff;
+    }
+    .faq details p {
+      margin-top: 0.65rem;
+      color: var(--text-muted);
+    }
+    .faq code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      color: var(--primary-light);
+    }
+
     footer {
       text-align: center;
       padding: 2rem 1rem 3rem;
@@ -308,12 +405,13 @@
   <header>
     <div class="nav">
       <a class="brand" href="../">
-        <img src="../assets/kit_logo.png" alt="" width="32" height="32">
+        <img src="../assets/kit_logo.png" alt="Agent Lifecycle Kit" width="32" height="32">
         <span>Agent Lifecycle Kit</span>
       </a>
       <div class="nav-links">
         <a href="../">Home</a>
-        <a href="../docs/edd.md">Docs</a>
+        <a href="#doc">Guide</a>
+        <a href="../blog/moving-beyond-vibes/">Why EDD</a>
         <a href="../evals/edd/README.md">Suites</a>
         <a href="https://github.com/mzworthington/agent-lifecycle-kit">GitHub</a>
       </div>
@@ -331,7 +429,7 @@
       <div class="cta-row">
         <a class="btn btn-primary" href="#doc">Read the guide</a>
         <a class="btn btn-ghost" href="../evals/edd/README.md">Browse suites</a>
-        <a class="btn btn-ghost" href="../docs/blog/moving-beyond-vibes-edd.md">Why we left vibes</a>
+        <a class="btn btn-ghost" href="../blog/moving-beyond-vibes/">Why we left vibes</a>
       </div>
     </section>
 
@@ -373,8 +471,42 @@
       </div>
     </div>
 
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Questions</h2>
+      <details open>
+        <summary>What is Eval-Driven Development?</summary>
+        <p>EDD is TDD for agents that call tools. You write a failing eval for the tool and arguments you expect, implement the schema and prompt until it passes, then tighten until CI holds.</p>
+      </details>
+      <details>
+        <summary>How is EDD different from eyeballing prompts?</summary>
+        <p>Each case starts from a fresh context. Tools are mocked, so you measure routing and extraction rather than network luck. Asserts cover JSON schema match plus an optional LLM-as-a-judge. CI can block the merge when routing accuracy drops.</p>
+      </details>
+      <details>
+        <summary>How do I run EDD in CI?</summary>
+        <p>Run <code>kit eval ci --threshold-routing 95 --out out/reports</code>. The scripted driver works offline with no API key. Live models can be used when <code>KIT_EVAL_API_KEY</code> or <code>OPENAI_API_KEY</code> is set.</p>
+      </details>
+      <details>
+        <summary>What happens after a production miss?</summary>
+        <p>Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample live traffic so the next failure is a test, not a surprise.</p>
+      </details>
+    </section>
+
     <article id="doc" aria-label="EDD documentation">
-      <p style="color: var(--text-muted);">Loading EDD guide…</p>
+      <div id="doc-static">
+        <h2>The loop</h2>
+        <p>Connecting an LLM to MCP tools, APIs, or terminals turns a chatbot into a decision-maker. Failures rarely look like stack traces. They look like a wrong tool, a hallucinated parameter, or an infinite retry loop.</p>
+        <p>EDD treats prompts and tool schemas as version-controlled, evaluated contracts:</p>
+        <ol>
+          <li><strong>Red</strong> — JSONL cases and YAML metrics assert the tool (and arguments) you expect.</li>
+          <li><strong>Green</strong> — Register the MCP contract and minimal system instructions. Run until asserts pass.</li>
+          <li><strong>Refactor</strong> — Iterate descriptions and constraints without breaking existing cases. Gate merges with <code>kit eval ci --threshold-routing 95</code>.</li>
+        </ol>
+        <p>The full guide loads below. If it does not, read <a href="../docs/edd.md">docs/edd.md</a>.</p>
+      </div>
+      <div id="doc-full"></div>
+      <noscript>
+        <p>JavaScript is off. Open the <a href="../docs/edd.md">Markdown guide</a>.</p>
+      </noscript>
     </article>
   </main>
 
@@ -384,7 +516,9 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const el = document.getElementById('doc');
+      const el = document.getElementById('doc-full');
+      const fallback = document.getElementById('doc-static');
+      if (!el) return;
       fetch('../docs/edd.md')
         .then((r) => {
           if (!r.ok) throw new Error(String(r.status));
@@ -400,6 +534,7 @@
             html = '<pre>' + md.replace(/</g, '&lt;') + '</pre>';
           }
           el.innerHTML = html;
+          if (fallback) fallback.hidden = true;
           document.querySelectorAll('#doc pre code').forEach((block) => {
             const text = block.textContent || '';
             if (text.trim().startsWith('flowchart') || text.trim().startsWith('sequenceDiagram') || text.trim().startsWith('graph ')) {
@@ -416,7 +551,7 @@
           }
         })
         .catch(() => {
-          el.innerHTML = '<p>Could not load <a href="../docs/edd.md">docs/edd.md</a>. Open it directly on GitHub.</p>';
+          el.innerHTML = '<p>Could not load <a href="../docs/edd.md">docs/edd.md</a>.</p>';
         });
     });
   </script>

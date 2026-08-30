@@ -1,5 +1,16 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Disallow: /infra/
+Disallow: /bin/
+Disallow: /.github/
+Disallow: /node_modules/
+Disallow: /out/
 
-Sitemap: https://mzworthington.github.io/agent-lifecycle-kit/sitemap.xml
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://eval-driven-development.dev/sitemap.xml

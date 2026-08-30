@@ -6,7 +6,7 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
-[![Pages](https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://mzworthington.github.io/agent-lifecycle-kit/)
+[![Pages](https://img.shields.io/badge/Docs-eval--driven--development.dev-blue?style=for-the-badge&logo=github)](https://eval-driven-development.dev/)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
 
 ---
@@ -94,7 +94,7 @@ Start with the path that matches what you’re trying to do:
 3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
 
-Site landing: [GitHub Pages](https://mzworthington.github.io/agent-lifecycle-kit/) · [EDD page](./edd/)
+Site: [eval-driven-development.dev](https://eval-driven-development.dev/) · [EDD page](./edd/)
 
 ---
 

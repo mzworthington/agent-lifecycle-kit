@@ -4,58 +4,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Lifecycle Kit — Test the tools your agents call</title>
+  <title>Eval-Driven Development (EDD) — TDD for tool-using AI agents</title>
   <meta name="description"
-    content="A practical kit for teams shipping tool-using agents: Eval-Driven Development (EDD), lifecycle skills, and shared rules across Cursor, Gemini, Claude, Windsurf & Copilot.">
-  <meta name="keywords"
-    content="Eval-Driven Development, EDD, AI agent evals, tool routing, MCP, LLM-as-a-judge, Cursor rules, Gemini CLI, Claude Code, Hexagonal Architecture, TDD, Model Context Protocol">
+    content="Eval-Driven Development is TDD for AI agents: write evals, mock tools, assert routing and schemas, then gate PRs at 95% accuracy. From Agent Lifecycle Kit.">
   <meta name="author" content="mzworthington">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#0c1017">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://eval-driven-development.dev/">
+  <link rel="alternate" type="text/plain" title="llms.txt" href="https://eval-driven-development.dev/llms.txt">
+  <link rel="alternate" href="https://eval-driven-development.dev/edd/" title="EDD guide">
+  <link rel="sitemap" type="application/xml" href="https://eval-driven-development.dev/sitemap.xml">
+  <link rel="icon" type="image/webp" href="./assets/kit_logo_256.webp" sizes="256x256">
+  <link rel="icon" type="image/jpeg" href="./assets/kit_logo.png" sizes="1024x1024">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="me" href="https://github.com/mzworthington/agent-lifecycle-kit">
 
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <link rel="icon" type="image/png" href="./assets/kit_logo.png">
-
-  <!-- Open Graph / Facebook -->
+  <meta property="og:locale" content="en_GB">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <meta property="og:title" content="Agent Lifecycle Kit — Test the tools your agents call">
+  <meta property="og:url" content="https://eval-driven-development.dev/">
+  <meta property="og:title" content="Eval-Driven Development (EDD) — TDD for tool-using AI agents">
   <meta property="og:description"
-    content="EDD puts prompts and MCP schemas under the same red→green→refactor discipline as code. Assert routing, gate PRs, and feed production misses back into the suite.">
-  <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
+    content="Write evals, mock tools, assert routing and schemas, then gate PRs at 95% accuracy. The same red-green-refactor loop you already use for code.">
+  <meta property="og:image" content="https://eval-driven-development.dev/assets/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Agent Lifecycle Kit Framework Banner">
-  <meta property="og:site_name" content="Agent Lifecycle Kit">
+  <meta property="og:image:alt" content="Eval-Driven Development: TDD for tool-using AI agents">
+  <meta property="og:site_name" content="Eval-Driven Development">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://mzworthington.github.io/agent-lifecycle-kit/">
-  <meta name="twitter:title" content="Agent Lifecycle Kit — Test the tools your agents call">
+  <meta name="twitter:title" content="Eval-Driven Development (EDD) — TDD for tool-using AI agents">
   <meta name="twitter:description"
-    content="EDD for tool-using agents: routing asserts, schema match, CI gates, and a closed loop from production misses.">
-  <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
-  <meta name="twitter:image:alt" content="Agent Lifecycle Kit Framework Banner">
+    content="Write evals, mock tools, assert routing and schemas, then gate PRs at 95% accuracy.">
+  <meta name="twitter:image" content="https://eval-driven-development.dev/assets/og.jpg">
+  <meta name="twitter:image:alt" content="Eval-Driven Development: TDD for tool-using AI agents">
 
-  <!-- JSON-LD Structured Data Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareSourceCode",
-    "name": "Agent Lifecycle Kit",
-    "description": "Practical kit for tool-using agents: Eval-Driven Development (EDD), lifecycle skills, and multi-IDE governance for Cursor, Gemini CLI, Claude Code, Windsurf, and GitHub Copilot.",
-    "url": "https://mzworthington.github.io/agent-lifecycle-kit/",
-    "codeRepository": "https://github.com/mzworthington/agent-lifecycle-kit",
-    "programmingLanguage": ["TypeScript", "Bash", "JSON"],
-    "runtimePlatform": "Node.js >= 22.0.0",
-    "license": "https://spdx.org/licenses/Unlicense.html",
-    "author": {
-      "@type": "Person",
-      "name": "mzworthington",
-      "url": "https://github.com/mzworthington"
-    },
-    "keywords": ["Eval-Driven Development", "EDD", "MCP", "AI agents", "TDD"]
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://eval-driven-development.dev/#website",
+        "url": "https://eval-driven-development.dev/",
+        "name": "Eval-Driven Development",
+        "alternateName": ["EDD", "Agent Lifecycle Kit"],
+        "description": "TDD for AI agents that call tools: evals, mocked MCP schemas, routing asserts, and CI gates.",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://eval-driven-development.dev/#person" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://eval-driven-development.dev/#person",
+        "name": "mzworthington",
+        "url": "https://github.com/mzworthington"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://eval-driven-development.dev/#app",
+        "name": "Agent Lifecycle Kit",
+        "alternateName": "kit",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Node.js >= 22",
+        "license": "https://spdx.org/licenses/Unlicense.html",
+        "url": "https://eval-driven-development.dev/",
+        "codeRepository": "https://github.com/mzworthington/agent-lifecycle-kit",
+        "description": "Eval harness and lifecycle skills for tool-using agents. Run kit eval ci to gate routing accuracy.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://eval-driven-development.dev/#person" }
+      },
+      {
+        "@type": "HowTo",
+        "@id": "https://eval-driven-development.dev/#howto",
+        "name": "Run Eval-Driven Development",
+        "description": "The same red, green, refactor loop as TDD, applied to agent tool use.",
+        "totalTime": "PT15M",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Red",
+            "text": "Write a failing eval: the user intent, expected tool, and schema or judge metrics."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Green",
+            "text": "Register the MCP schema and a minimal prompt. Run until the eval passes."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Refactor",
+            "text": "Tighten wording and constraints. Block merges below 95% routing accuracy with kit eval ci."
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://eval-driven-development.dev/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Eval-Driven Development",
+            "item": "https://eval-driven-development.dev/"
+          }
+        ]
+      }
+    ]
   }
   </script>
 
@@ -97,6 +152,22 @@
 
     html {
       scroll-behavior: smooth;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 0.75rem;
+      top: -3rem;
+      z-index: 200;
+      padding: 0.5rem 0.9rem;
+      background: var(--primary);
+      color: #0c1017;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+
+    .skip-link:focus {
+      top: 0.75rem;
     }
 
     section,
@@ -1052,24 +1123,25 @@
 
 <body>
 
+  <a class="skip-link" href="#edd">Skip to content</a>
   <div class="glow-1"></div>
   <div class="glow-2"></div>
 
   <header>
     <div class="nav-container">
-      <a href="#" class="brand">
+      <a href="/" class="brand">
         <picture>
           <source srcset="./assets/kit_logo_256.webp" type="image/webp">
-          <img src="./assets/kit_logo.png" alt="Agent Lifecycle Kit Logo" width="36" height="36">
+          <img src="./assets/kit_logo.png" alt="Agent Lifecycle Kit" width="36" height="36" fetchpriority="high">
         </picture>
         <span>Agent Lifecycle Kit</span>
       </a>
-      <div class="nav-links">
-        <a href="#map" class="nav-link">Map</a>
+      <nav class="nav-links">
+        <!-- <a href="#map" class="nav-link">Map</a>
         <a href="#edd" class="nav-link">EDD</a>
         <a href="#cli" class="nav-link">Try</a>
         <a href="#pillars" class="nav-link">Why Kit</a>
-        <a href="#docs" class="nav-link">Docs</a>
+        <a href="#docs" class="nav-link">Docs</a> -->
         <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github"
           aria-label="GitHub Repository" title="GitHub Repository">
           <svg height="22" width="22" viewBox="0 0 16 16" fill="currentColor">
@@ -1077,15 +1149,14 @@
               d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
           </svg>
         </a>
-      </div>
+      </nav>
     </div>
   </header>
 
-  <main class="container" style="padding-bottom: 0;">
+  <main class="container" style="padding-bottom: 0;" id="top">
     <!-- Hero: brand + value -->
     <section class="hero" style="padding-bottom: 1.5rem;">
-      <div class="hero-eyebrow">Eval-Driven Development</div>
-      <h1 class="hero-brand">Agent Lifecycle Kit</h1>
+      <h1 class="hero-brand">Eval-Driven Development</h1>
       <p class="hero-title">Test the tools your agents call</p>
       <p class="hero-subtitle">Wrong tool, made-up args, endless retries—those failures don’t look like stack traces.
         EDD gives you a red→green→refactor loop for prompts, MCP schemas, and routing, with CI gates you can trust.</p>
@@ -1102,9 +1173,9 @@
             alt="CI" width="130" height="28" loading="lazy"></a>
         <a href="./edd/"><img
             src="https://img.shields.io/badge/EDD-Harness-2a9d8f?style=for-the-badge&logo=target"
-            alt="EDD" width="140" height="28" loading="lazy"></a>
-        <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github"
-            alt="Docs" width="165" height="28" loading="lazy"></a>
+            alt="Eval-Driven Development harness" width="140" height="28" loading="lazy"></a>
+        <a href="./edd/"><img src="https://img.shields.io/badge/Guide-eval--driven--development.dev-blue?style=for-the-badge&logo=cloudflare"
+            alt="EDD guide" width="280" height="28" loading="lazy"></a>
         <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
             alt="License" width="140" height="28" loading="lazy"></a>
       </div>
@@ -1114,11 +1185,11 @@
   <!-- Interactive skill map -->
   <div id="map" class="hero-d3-wrapper" role="region"
     aria-label="Interactive map of Kit skills and profiles">
-    <div class="cyber-status-badge" aria-hidden="true">
+    <!-- <div class="cyber-status-badge" aria-hidden="true">
       <span class="status-dot"></span>
       Kit map
-    </div>
-    <div class="cyber-hud-controls" role="group" aria-label="Map filters">
+    </div> -->
+    <!-- <div class="cyber-hud-controls" role="group" aria-label="Map filters">
       <div class="cyber-filter-bar">
         <button type="button" class="filter-btn active" onclick="filterNodes('all', this)">All</button>
         <button type="button" class="filter-btn" onclick="filterNodes('lifecycle', this)">Lifecycle</button>
@@ -1127,7 +1198,7 @@
         <button type="button" class="filter-btn" onclick="filterNodes('profile', this)">Domain</button>
         <button type="button" class="filter-btn" onclick="filterNodes('ide', this)">IDE</button>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <main class="container">
@@ -1156,9 +1227,9 @@
       </div>
       <div class="edd-links">
         <a href="./edd/">EDD overview →</a>
-        <a href="./docs/edd.md">Full guide →</a>
+        <a href="./edd/#doc">Full guide →</a>
         <a href="./evals/edd/README.md">Suites &amp; reports →</a>
-        <a href="./docs/blog/moving-beyond-vibes-edd.md">Why we left vibes behind →</a>
+        <a href="./blog/moving-beyond-vibes/">Why we left vibes behind →</a>
       </div>
     </section>
 
@@ -1217,7 +1288,11 @@
         <nav class="start-here" aria-label="Getting started">
           <a href="./edd/">
             <span class="start-title">EDD guide</span>
-            <span class="start-desc">The why and the what—eval-driven development as the default</span>
+            <span class="start-desc">The why and the what: write evals, then gate the merge</span>
+          </a>
+          <a href="./blog/moving-beyond-vibes/">
+            <span class="start-title">Why we left vibes</span>
+            <span class="start-desc">The essay behind the loop: wrong tool, invented args, no asserts</span>
           </a>
           <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md">
             <span class="start-title">EDD SOP</span>
