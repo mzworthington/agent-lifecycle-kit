@@ -776,6 +776,76 @@
       margin-bottom: 1rem;
     }
 
+    /* Start-here path grid (interactive nav — not a decorative card wall) */
+    .start-here {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin: 0.35rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .docs-content .start-here a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 1.05rem 1.15rem;
+      background: rgba(9, 13, 22, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      min-height: 100%;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    }
+
+    .docs-content .start-here a:hover,
+    .docs-content .start-here a:focus {
+      border-color: var(--border-accent);
+      background: rgba(42, 157, 143, 0.1);
+      transform: translateY(-1px);
+      color: inherit;
+      text-decoration: none;
+      outline: none;
+    }
+
+    .docs-content .start-here a:focus-visible {
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--primary-light);
+    }
+
+    .start-here .start-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    .start-here .start-title::after {
+      content: "→";
+      color: var(--primary-light);
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .start-here .start-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 640px) {
+      .start-here {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .docs-wrapper code,
     .docs-content code {
       background: rgba(255, 255, 255, 0.08);
@@ -1141,15 +1211,27 @@
       <div id="markdown-body" class="docs-content">
         <h2>What this kit is</h2>
         <p>Kit is for teams who are tired of shipping agents on good intentions.
-          It centers <a href="./docs/edd.md">Eval-Driven Development (EDD)</a>,
+          It centers <a href="./edd/">Eval-Driven Development (EDD)</a>,
           then layers in lifecycle skills, architecture guardrails, and shared IDE rules so the rest of the workflow stays coherent.</p>
         <h3>Start here</h3>
-        <ul>
-          <li><a href="./docs/edd.md">EDD guide</a> — the why and the what</li>
-          <li><a href="./SOPs/eval-driven-development.md">EDD SOP</a> — red → green → refactor day to day</li>
-          <li><a href="./CODING_PHILOSOPHY.md">Coding philosophy</a> — architecture and quality defaults</li>
-          <li><a href="./AGENTS.md">Agent bootstrap</a> — how agents load the kit</li>
-        </ul>
+        <nav class="start-here" aria-label="Getting started">
+          <a href="./edd/">
+            <span class="start-title">EDD guide</span>
+            <span class="start-desc">The why and the what—eval-driven development as the default</span>
+          </a>
+          <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md">
+            <span class="start-title">EDD SOP</span>
+            <span class="start-desc">Red → green → refactor for day-to-day agent work</span>
+          </a>
+          <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md">
+            <span class="start-title">Coding philosophy</span>
+            <span class="start-desc">Architecture and quality defaults agents should keep</span>
+          </a>
+          <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/AGENTS.md">
+            <span class="start-title">Agent bootstrap</span>
+            <span class="start-desc">How agents load the kit and pick a lifecycle role</span>
+          </a>
+        </nav>
       </div>
     </section>
 
