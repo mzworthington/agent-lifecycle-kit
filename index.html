@@ -646,10 +646,27 @@
       padding: 0;
     }
 
-    .docs-content table {
+    .docs-content .table-wrapper {
       width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .docs-content table {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
       border-collapse: collapse;
       margin-bottom: 1.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .docs-content .table-wrapper table {
+      display: table;
+      margin-bottom: 0;
     }
 
     .docs-content th,
@@ -1609,6 +1626,16 @@ kit help
           parsedHtml = `<pre style="white-space: pre-wrap; font-family: var(--font-mono); color: var(--text-muted);">${cleanedText}</pre>`;
         }
         container.innerHTML = parsedHtml;
+
+        // Wrap tables in responsive container to prevent horizontal viewport expansion on mobile/small screens
+        container.querySelectorAll('table').forEach((table) => {
+          if (!table.parentElement.classList.contains('table-wrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+            table.parentNode.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+          }
+        });
 
         if (typeof mermaid !== 'undefined') {
           const codeBlocks = container.querySelectorAll('code.language-mermaid');
