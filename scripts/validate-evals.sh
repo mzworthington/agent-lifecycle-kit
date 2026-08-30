@@ -8,4 +8,4 @@ export REPO_DIR
 echo "=== Agent Lifecycle Kit - Skill Evals Validation ==="
 echo ""
 
-node "${REPO_DIR}/scripts/lib/validate_evals.ts"
+node --import tsx/esm "${REPO_DIR}/scripts/lib/validate_evals.ts"

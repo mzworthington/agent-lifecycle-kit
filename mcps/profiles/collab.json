@@ -2,6 +2,7 @@
   "name": "collab",
   "description": "Issue tracking, docs, and chat. Compose into ~/.cursor/mcp.json or a project file when the team uses Linear/Notion/Slack.",
   "servers": [
+    "kit-knowledge",
     "context7",
     "github",
     "memory",

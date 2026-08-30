@@ -45,7 +45,9 @@ For each entry, decide:
 - [ ] **Skill length budget:** flag role `SKILL.md` bodies over ~150 lines; move procedure detail into [SOPs/](../SOPs/)
 - [ ] Check [skills/README.md](../skills/README.md) taxonomy still matches actual skills
 - [ ] Confirm skill frontmatter `mcp:` ids exist in [mcps/catalog.json](../mcps/catalog.json)
-- [ ] Confirm [AGENTS.md](../AGENTS.md) is canonical and [GEMINI.md](../GEMINI.md) still points to it
+- [ ] Confirm MCP install is a **single** profile (not stacked collab+devtools+ops); default includes kit-knowledge + memory
+- [ ] Run `./scripts/measure-context-budget.sh` — always-on surface within target ([SOPs/context-budget.md](../SOPs/context-budget.md))
+- [ ] Confirm [AGENTS.md](../AGENTS.md) stays a thin index (no eager “read these eight files” lists)
 - [ ] Spot-check recent `handover/<project>/` runs: was test impact aligned? Was an XFN matrix present (including skip reasons)? Were apply suites greened? Was TDD gear 2 done in-session (not a late adapter-only phase)?
 - [ ] Confirm stack profiles still list XFN tooling defaults consistent with [agent-xfn](../skills/agent-xfn/SKILL.md)
 - [ ] Run [kit-eval-harness.md](./kit-eval-harness.md) golden prompts after routing changes

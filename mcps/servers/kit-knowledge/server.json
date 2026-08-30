@@ -1,0 +1,23 @@
+{
+  "id": "kit-knowledge",
+  "name": "Kit Knowledge",
+  "summary": "On-demand chunks from the agent lifecycle kit (philosophy sections, SOPs, handovers) to avoid bulk prompt loads.",
+  "homepage": "https://github.com/mzworthington/agent-lifecycle-kit/tree/main/mcps/servers/kit-knowledge",
+  "transport": "stdio",
+  "phases": ["spec", "tdd", "xfn", "impl", "audit", "orchestration"],
+  "triggers": ["SOP", "CODING_PHILOSOPHY", "handover", "kit search", "context budget"],
+  "requiredEnv": [],
+  "mcp": {
+    "kit-knowledge": {
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx/esm",
+        "${userHome}/.agents/mcps/servers/kit-knowledge/src/server.ts"
+      ],
+      "env": {
+        "KIT_ROOT": "${userHome}/.agents"
+      }
+    }
+  }
+}

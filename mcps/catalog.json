@@ -1,7 +1,17 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
+    {
+      "id": "kit-knowledge",
+      "name": "Kit Knowledge",
+      "summary": "On-demand chunks from the agent lifecycle kit (philosophy sections, SOPs, handovers).",
+      "transport": "stdio",
+      "phases": ["spec", "tdd", "xfn", "impl", "audit", "orchestration"],
+      "triggers": ["SOP", "CODING_PHILOSOPHY", "handover", "kit search", "context budget"],
+      "requiredEnv": [],
+      "enabledByDefault": true
+    },
     {
       "id": "context7",
       "name": "Context7",

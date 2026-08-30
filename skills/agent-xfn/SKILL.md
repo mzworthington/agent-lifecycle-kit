@@ -31,6 +31,8 @@ mcp:
   - playwright
   - chrome-devtools
   - next-devtools
+  - memory
+  - kit-knowledge
 tools:
   - read
   - write
@@ -119,3 +121,5 @@ Prefer project tooling, then stack profile defaults:
 - How to run locally/CI; SLOs listed for telemetry.
 
 Write handover to `~/.agents/handover/<project>/handover_xfn.md` when the phase completes (update the same file after post-wiring green).
+
+**Memory DoD:** Persist agreed load/performance SLOs and apply thresholds via the **memory** MCP (never secrets), or mark Memory = n/a with reason in the handover. Refresh memory if SLOs change at green.

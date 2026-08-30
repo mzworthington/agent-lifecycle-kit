@@ -28,6 +28,7 @@ mcp:
   - notion
   - github
   - memory
+  - kit-knowledge
 tools:
   - read
   - write
@@ -74,3 +75,5 @@ Specifications are stakeholder-facing. Follow [CODING_PHILOSOPHY.md](../../CODIN
 - **Technical constraints notice** (e.g. "This modifies the `Order` aggregate")
 
 Write handover to `~/.agents/handover/<project>/handover_spec.md` when the phase completes.
+
+**Memory DoD:** Persist new/changed glossary terms and stakeholder preferences via the **memory** MCP (never secrets), or mark Memory = n/a with reason in the handover.
