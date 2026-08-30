@@ -29,11 +29,11 @@ mcps/
 
 | Profile | Servers | Install target |
 |---------|---------|----------------|
-| `default` | context7, github, memory | `~/.cursor/mcp.json` via `install.sh` |
+| `default` | kit-knowledge, context7, github, memory | `~/.cursor/mcp.json` via `install.sh` |
 | `collab` | default + linear, notion, slack | Global/project when the team uses those tools |
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
 | `cloud` | context7, cloudflare, vercel | Workers / DNS / R2 / deploy work |
-| `ops` | context7, github, memory, sentry, slack | Debug / incident / telemetry |
+| `ops` | kit-knowledge, context7, github, memory, sentry, slack | Debug / incident / telemetry |
 | `security` | context7, github, semgrep | Security audit sessions |
 | `design` | context7, figma | UI delivery from designs |
 | `payments` | context7, stripe | Billing adapter work |
@@ -41,7 +41,7 @@ mcps/
 | `lab` | raspberry-pi | Home-lab SSH to a Pi / SBC |
 | `project-example` | context7, github, next-devtools, chrome-devtools, playwright, postgres | App `.cursor/mcp.json` |
 
-Prefer composing **one** profile that matches the work. Extra MCP tools compete for attention and slow agents.
+**One profile per session.** Compose **one** profile that matches the work. Do not stack `collab` + `devtools` + `ops` into a single global `mcp.json`. Extra MCP tools compete for attention, inflate tool-schema tokens, and slow agents.
 
 ## How it is wired
 
@@ -70,6 +70,7 @@ Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/C
 
 | Id | Transport | Secrets / auth |
 |----|-----------|----------------|
+| kit-knowledge | stdio | none (reads `KIT_ROOT` / `~/.agents`) |
 | context7 | stdio | none |
 | github | stdio | `GITHUB_PERSONAL_ACCESS_TOKEN` |
 | memory | stdio | none (file under `~/.agents/sync/`) |
@@ -98,4 +99,21 @@ Follow [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 
 ## Agent guidance
 
-Lifecycle agents declare preferred MCP ids in skill frontmatter (`mcp:`). Prefer those servers when a catalog entry’s `phases` / `triggers` match the task. Prefer the smallest useful set of servers — more tools ≠ better agent behavior. Never load `personal` servers into shared project configs.
+### What belongs where
+
+| Content | Mechanism |
+|---------|-----------|
+| Role / phase behavior | Skills (`agent-*`) |
+| Architecture invariants | Thin [AGENTS.md](../AGENTS.md); philosophy sections on demand |
+| SOP / handover chunks | **kit-knowledge** |
+| Cross-session glossary / SLOs | **memory** |
+| Vendor API docs | **context7** |
+| Live trackers / browsers / cloud | Phase profiles (`collab`, `devtools`, `ops`, …) |
+
+### Discipline
+
+1. Lifecycle agents declare preferred MCP ids in skill frontmatter (`mcp:`). Prefer those servers when a catalog entry’s `phases` / `triggers` match — and only if that server is in the **installed** profile.
+2. Prefer the smallest useful set of servers — more tools ≠ better agent behavior.
+3. Never load `personal` servers into shared project configs.
+4. Do not use MCP to host skill bodies; skills stay progressive-disclosure via Cursor discovery.
+5. Context budget: [SOPs/context-budget.md](../SOPs/context-budget.md).

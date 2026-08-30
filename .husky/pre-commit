@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # Agent Lifecycle Kit — Pre-Commit Quality & Security Gate (Husky)
-set -euo pipefail
+# Husky invokes hooks with `sh`; keep this POSIX-compatible.
+set -eu
 
 REPO_DIR="$(git rev-parse --show-toplevel)"
 

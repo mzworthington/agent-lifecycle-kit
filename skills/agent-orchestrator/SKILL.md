@@ -38,6 +38,7 @@ depends-on:
   - agent-pre-commit
 mcp:
   - memory
+  - kit-knowledge
   - github
   - linear
   - notion
@@ -57,7 +58,9 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Squash-and-merge makes the PR title the commit on the default branch.
 
-**Memory MCP:** After meaningful handovers, optionally store durable facts (glossary terms, agreed SLOs, project preferences)—never secrets—via the catalogued **memory** server so later sessions keep XFN thresholds and ubiquitous language.
+**Memory MCP (DoD):** After **spec** and **xfn** handovers, store durable facts (glossary terms, agreed SLOs, project preferences) via the catalogued **memory** server — or record explicit N/A in the handover Memory table. Never store secrets. Later sessions should recall XFN thresholds and ubiquitous language from memory before re-asking.
+
+**Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
 ## Specialist roles
 

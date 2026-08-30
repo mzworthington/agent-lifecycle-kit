@@ -18,6 +18,7 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Need | Put it in |
 |------|-----------|
 | Useful across most projects | `mcps/profiles/default.json` (+ global install) |
+| Kit SOP / philosophy / handover chunks | `kit-knowledge` on `default` (already) |
 | Linear / Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
 | Cloudflare / Vercel | `mcps/profiles/cloud.json` |
@@ -30,7 +31,14 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | App-specific DB + frontend stack | `project-example` or a custom project `.cursor/mcp.json` |
 | Personal-only experiment | Local `~/.cursor/mcp.json` override (do not commit secrets) |
 
-Prefer a **small** enabled set. Extra MCP tools compete for attention and slow agents. Never commit vault sessions or compose `personal` into shared app repos.
+### Profile discipline (token / attention budget)
+
+1. **One profile per session.** Compose a single named profile into `mcp.json`. Do not merge collab + devtools + ops + personal into one global file.
+2. **Match skill `mcp:` frontmatter.** If `agent-xfn` lists `playwright`, use `devtools` or a project profile that includes it — do not enable every catalog server “just in case.”
+3. **Skills ≠ MCP.** Role behavior stays in `skills/`. MCP is for live systems, vendor docs, memory, and kit chunk retrieval (`kit-knowledge`).
+4. Prefer a **small** enabled set. Extra MCP tools compete for attention and inflate tool-schema tokens. Never commit vault sessions or compose `personal` into shared app repos.
+
+See [SOPs/context-budget.md](./context-budget.md).
 
 ## 2. Add a server definition
 

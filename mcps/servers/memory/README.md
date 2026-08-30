@@ -10,6 +10,6 @@ No API keys. The composed config stores the graph at `${userHome}/.agents/sync/m
 
 - Persisting user/project preferences and recurring domain facts
 - Carrying glossary or stakeholder notes across sessions without stuffing prompts
-- After handovers: store agreed XFN SLOs and ubiquitous-language terms (orchestrator guidance)
+- After **spec** and **xfn** handovers: store agreed glossary terms and XFN SLOs (orchestrator / handover DoD) — or record explicit N/A
 
 Safe for the global `default` profile; keep the graph free of secrets.

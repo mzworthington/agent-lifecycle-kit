@@ -86,6 +86,8 @@ tools: []                     # optional CLI/tool hints for the agent
 
 **Skill length budget:** Prefer role `SKILL.md` bodies under ~150 lines; put long procedures in [SOPs/](../SOPs/). Enforce during [kit-review](../tasks/kit-review.md).
 
+**Context budget:** Always-on bootstrap stays thin ([AGENTS.md](../AGENTS.md)); load SOPs/philosophy via file read or **kit-knowledge** MCP. See [SOPs/context-budget.md](../SOPs/context-budget.md). Match installed MCP profile to skill `mcp:` frontmatter — one profile per session.
+
 **Discoverability:** Prefer `disable-model-invocation: false` so specialists can be selected when users `@` them; the orchestrator still owns multi-phase routing.
 
 ## Extending
