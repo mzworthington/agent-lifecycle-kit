@@ -29,11 +29,11 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
 | [agent-adapter](./agent-adapter/SKILL.md) | impl | **Optional deep-dive** when gear 2 is too large; else prefer `agent-tdd` |
 | [agent-ui](./agent-ui/SKILL.md) | impl | Thin UI/delivery adapters; a11y-first |
-| [agent-copy](./agent-copy/SKILL.md) | impl | Product copy, UI microcopy, error text, tone of voice tuning |
+| [agent-copy](./agent-copy/SKILL.md) | impl | Product/landing copy, microcopy, human-centric voice; strips AI-template slogans |
 | [agent-migration](./agent-migration/SKILL.md) | maintenance | Expand/contract schema migrations |
 | [agent-api-contract](./agent-api-contract/SKILL.md) | spec | OpenAPI/AsyncAPI contract evolution |
 | [agent-review](./agent-review/SKILL.md) | audit | PR/diff review vs boundaries + catalog/XFN |
-| [agent-docs](./agent-docs/SKILL.md) | release | README/runbook/API narrative updates |
+| [agent-docs](./agent-docs/SKILL.md) | release | README/runbook/API narrative; loads `agent-copy` for human-centric voice |
 | [agent-release](./agent-release/SKILL.md) | release | Ship checklist, conventional PR title, catalog summary |
 | [agent-incident](./agent-incident/SKILL.md) | debug | Production incident coordination → `agent-debug` |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets; verify XFN security suites |

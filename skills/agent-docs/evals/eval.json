@@ -1,0 +1,37 @@
+{
+  "suite": "agent-docs-evals",
+  "description": "Co-located evaluation tests for Documentation Specialist and agent-copy voice handoff",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-DOCS-COLOCATED-001",
+      "name": "Documentation Specialist Trigger",
+      "target_skill": "agent-docs",
+      "prompt": "Update the README and runbook documentation after the new export behavior landed.",
+      "assertions": {
+        "required_triggers": [
+          "documentation",
+          "readme",
+          "runbook"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-DOCS-COLOCATED-002",
+      "name": "Docs Narrative Loads Copy Voice",
+      "description": "Docs narrative rewrites must depend on agent-copy for human-centric voice.",
+      "target_skill": "agent-docs",
+      "prompt": "Rewrite the README lead and docs narrative so they do not sound AI-generated.",
+      "assertions": {
+        "required_triggers": [
+          "docs narrative",
+          "documentation"
+        ],
+        "required_patterns": [
+          "agent-copy",
+          "human-centric"
+        ]
+      }
+    }
+  ]
+}

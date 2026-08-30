@@ -1,7 +1,7 @@
 {
   "suite": "agent-copy-evals",
-  "description": "Co-located evaluation tests for Copy & Messaging Specialist role trigger resolution",
-  "version": "1.0.0",
+  "description": "Co-located evaluation tests for Copy & Messaging Specialist trigger resolution and human-centric voice routing",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-COPY-COLOCATED-001",
@@ -12,6 +12,44 @@
         "required_triggers": [
           "copy",
           "tone of voice"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-002",
+      "name": "Humanize AI-sounding Landing Copy",
+      "description": "Routes requests to de-AI or humanize landing/marketing copy to agent-copy.",
+      "target_skill": "agent-copy",
+      "prompt": "The website and content looks very much AI generated. Can we humanize the landing page copy and make it more human-centric? Mostly tweaks.",
+      "assertions": {
+        "required_triggers": [
+          "humanize",
+          "human-centric",
+          "landing page copy"
+        ],
+        "required_patterns": [
+          "Human-centric",
+          "Anti-patterns",
+          "Practitioner"
+        ],
+        "forbidden_patterns": [
+          "Ship AI agents you can prove",
+          "sensible default",
+          "KIT MESH"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-003",
+      "name": "Sounds-AI Marketing Pass",
+      "description": "Marketing and AI-generated copy audits activate agent-copy.",
+      "target_skill": "agent-copy",
+      "prompt": "This marketing copy sounds AI-written. Tighten the brand voice and strip slogan padding.",
+      "assertions": {
+        "required_triggers": [
+          "sounds AI",
+          "marketing copy",
+          "brand voice"
         ]
       }
     }

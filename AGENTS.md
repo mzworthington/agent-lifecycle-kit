@@ -38,9 +38,9 @@ Do not commit or push unless the user explicitly asks.
 | TDD short loop | [agent-tdd](./skills/agent-tdd/SKILL.md) |
 | XFN | [agent-xfn](./skills/agent-xfn/SKILL.md) |
 | Adapter deep-dive | [agent-adapter](./skills/agent-adapter/SKILL.md) (only if gear 2 is too large) |
-| UI / copy | [agent-ui](./skills/agent-ui/SKILL.md), [agent-copy](./skills/agent-copy/SKILL.md) |
+| UI / copy | [agent-ui](./skills/agent-ui/SKILL.md), [agent-copy](./skills/agent-copy/SKILL.md) (human-centric / de-AI voice) |
 | Migration / API contract | [agent-migration](./skills/agent-migration/SKILL.md), [agent-api-contract](./skills/agent-api-contract/SKILL.md) |
-| Review / docs / release | [agent-review](./skills/agent-review/SKILL.md), [agent-docs](./skills/agent-docs/SKILL.md), [agent-release](./skills/agent-release/SKILL.md) |
+| Review / docs / release | [agent-review](./skills/agent-review/SKILL.md), [agent-docs](./skills/agent-docs/SKILL.md) (+ [agent-copy](./skills/agent-copy/SKILL.md) for narrative voice), [agent-release](./skills/agent-release/SKILL.md) |
 | Incident / security / arch | [agent-incident](./skills/agent-incident/SKILL.md), [agent-security](./skills/agent-security/SKILL.md), [agent-arch-drift](./skills/agent-arch-drift/SKILL.md), [agent-adr](./skills/agent-adr/SKILL.md) |
 | Prune / perf / debug / telemetry | [agent-prune](./skills/agent-prune/SKILL.md), [agent-perf-opt](./skills/agent-perf-opt/SKILL.md), [agent-debug](./skills/agent-debug/SKILL.md), [agent-telemetry](./skills/agent-telemetry/SKILL.md) |
 | Pre-commit | [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) |

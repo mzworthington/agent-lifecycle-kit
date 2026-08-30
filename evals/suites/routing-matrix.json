@@ -106,6 +106,32 @@
         "forbidden_patterns": ["agent-spec"],
         "required_output_sections": ["Target Role: agent-perf-opt"]
       }
+    },
+    {
+      "id": "EVAL-ROUTE-009",
+      "name": "Route to Agent Copy",
+      "description": "Verifies that humanize / AI-sounding landing or marketing copy requests route to agent-copy.",
+      "target_skill": "agent-copy",
+      "prompt": "The website copy sounds AI-generated. Humanize the landing page wording and tighten brand voice without a redesign.",
+      "assertions": {
+        "required_triggers": ["humanize", "landing page copy", "sounds AI"],
+        "required_patterns": ["agent-copy"],
+        "forbidden_patterns": ["agent-security"],
+        "required_output_sections": ["Target Role: agent-copy"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-010",
+      "name": "Route Docs Narrative With Copy",
+      "description": "Verifies that README/docs narrative rewrites route to agent-docs (which depends on agent-copy for voice).",
+      "target_skill": "agent-docs",
+      "prompt": "Rewrite the README lead and docs narrative so public documentation does not sound like template marketing copy.",
+      "assertions": {
+        "required_triggers": ["documentation", "docs narrative", "readme"],
+        "required_patterns": ["agent-docs", "agent-copy"],
+        "forbidden_patterns": ["agent-prune"],
+        "required_output_sections": ["Target Role: agent-docs"]
+      }
     }
   ]
 }
