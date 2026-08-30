@@ -180,6 +180,8 @@
       --success: #3dba7c;
       --font-sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
       --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+      --page-width: 1200px;
+      --page-gutter: 1.5rem;
     }
 
     * {
@@ -253,12 +255,13 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      padding: 1rem 2rem;
+      padding: 1rem 0;
     }
 
     .nav-container {
-      max-width: 1200px;
+      max-width: var(--page-width);
       margin: 0 auto;
+      padding: 0 var(--page-gutter);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -382,8 +385,7 @@
     }
 
     .edd-spotlight {
-      margin: 0 auto 3.5rem;
-      max-width: 920px;
+      margin: 0 0 3.5rem;
       background: var(--bg-card);
       border: 1px solid var(--border-accent);
       border-radius: 18px;
@@ -520,8 +522,7 @@
     }
 
     .lifecycle {
-      margin: 0 auto 3.5rem;
-      max-width: 920px;
+      margin: 0 0 3.5rem;
       text-align: left;
     }
 
@@ -565,15 +566,15 @@
 
     /* Container */
     .container {
-      max-width: 1200px;
+      max-width: var(--page-width);
       margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+      padding: 2.5rem var(--page-gutter);
     }
 
     /* Hero Section */
     .hero {
       text-align: center;
-      padding: 2.5rem 1rem 3.5rem;
+      padding: 2.5rem 0 3.5rem;
       position: static;
       background: transparent;
       border: none;
@@ -834,8 +835,7 @@
     .hero-subtitle {
       font-size: 1.25rem;
       color: var(--text-muted);
-      max-width: 800px;
-      margin: 0 auto 2rem;
+      margin: 0 0 2rem;
     }
 
     /* Badges Bar */
@@ -912,8 +912,7 @@
       border-radius: 14px;
       padding: 1.5rem;
       font-family: var(--font-mono);
-      margin: 0 auto 4rem;
-      max-width: 920px;
+      margin: 0 0 4rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
@@ -1199,8 +1198,12 @@
     }
 
     @media (max-width: 768px) {
+      :root {
+        --page-gutter: 1rem;
+      }
+
       body > header {
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 0;
       }
 
       .brand {
@@ -1228,7 +1231,7 @@
       }
 
       .hero {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem 0;
       }
 
       .hero-brand {
