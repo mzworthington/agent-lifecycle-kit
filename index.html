@@ -66,8 +66,8 @@
     rel="stylesheet">
 
   <!-- D3, Marked & Mermaid -->
-  <script defer src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
   <style>
@@ -823,17 +823,17 @@
       <div class="badge-bar" style="margin-bottom: 1.5rem;">
         <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
             src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
-            alt="CI" height="28"></a>
+            alt="CI" height="28" loading="lazy"></a>
         <a href="#docs"><img src="https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github"
-            alt="Docs" height="28"></a>
+            alt="Docs" height="28" loading="lazy"></a>
         <a href="./evals/"><img
             src="https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target"
-            alt="Evals" height="28"></a>
+            alt="Evals" height="28" loading="lazy"></a>
         <a href="./package.json"><img
             src="https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs"
-            alt="Node" height="28"></a>
+            alt="Node" height="28" loading="lazy"></a>
         <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
-            alt="License" height="28"></a>
+            alt="License" height="28" loading="lazy"></a>
       </div>
     </section>
   </main>
@@ -917,7 +917,7 @@
 
   <footer>
     <p>Agent Lifecycle Kit is open source and released under the Unlicense (Public Domain).</p>
-    <p style="margin-top: 0.5rem; color: #64748b;">Autonomous AI Agent Lifecycle, Architecture & Governance Framework
+    <p style="margin-top: 0.5rem; color: #94a3b8;">Autonomous AI Agent Lifecycle, Architecture & Governance Framework
     </p>
   </footer>
 
@@ -1525,7 +1525,17 @@
       initHeroD3();
     }
 
-    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+    const initMermaid = () => {
+      if (typeof mermaid !== 'undefined' && typeof mermaid.initialize === 'function') {
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMermaid);
+    } else {
+      initMermaid();
+    }
 
     const FALLBACK_README = `
 # 🤖 Kit (Agent Lifecycle Kit)
@@ -1663,16 +1673,24 @@ kit help
       }
     }
 
-    if (window.location.protocol === 'file:') {
-      renderMarkdownContent(FALLBACK_README);
+    const loadDocs = () => {
+      if (window.location.protocol === 'file:') {
+        renderMarkdownContent(FALLBACK_README);
+      } else {
+        fetch('./README.md')
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP Error');
+            return res.text();
+          })
+          .then(text => renderMarkdownContent(text))
+          .catch(() => renderMarkdownContent(FALLBACK_README));
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadDocs);
     } else {
-      fetch('./README.md')
-        .then(res => {
-          if (!res.ok) throw new Error('HTTP Error');
-          return res.text();
-        })
-        .then(text => renderMarkdownContent(text))
-        .catch(() => renderMarkdownContent(FALLBACK_README));
+      loadDocs();
     }
   </script>
 </body>
