@@ -70,7 +70,9 @@ Before marking a phase **COMPLETE**, run [agent-pre-commit](./skills/agent-pre-c
 
 ## 4. Further reading
 
+- [docs/edd.md](./docs/edd.md) - **Eval-Driven Development (EDD)** — TDD for tool-using agents
 - [README.md](./README.md) - directory layout and installation
 - [mcps/README.md](./mcps/README.md) - MCP catalog, profiles, and compose/install
 - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) - Conventional Commits for git commits and PR titles (squash-and-merge)
+- [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) - EDD day-to-day procedure
 - [lessons/README.md](./lessons/README.md) - capture session learnings; promote via [tasks/kit-review.md](./tasks/kit-review.md)

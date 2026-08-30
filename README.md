@@ -6,19 +6,45 @@
 
 # 🤖 Kit (Agent Lifecycle Kit)
 
-**The Autonomous AI Agent Lifecycle, Architecture & Governance Framework.**
+**Eval-Driven Development for AI agents**—plus the autonomous lifecycle, architecture & governance framework.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
+[![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
 [![Pages](https://img.shields.io/badge/Docs-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://mzworthington.github.io/agent-lifecycle-kit/)
-[![Evals](https://img.shields.io/badge/Evals_Accuracy-100%25-blueviolet?style=for-the-badge&logo=target)](./evals/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D22.0.0-informational?style=for-the-badge&logo=nodedotjs)](./package.json)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
 
 <p align="center">
-  <b>Consistent, production-grade AI-assisted software engineering across every IDE and tech stack.</b>
+  <b>TDD for tool-using agents. Governance for every IDE.</b>
 </p>
 
 </div>
+
+---
+
+## Eval-Driven Development (EDD)
+
+**EDD is TDD for agents.** Connecting an LLM to MCP tools, APIs, or terminals turns a chatbot into a decision-maker—but failures are probabilistic: wrong tool, hallucinated parameter, endless retries. EDD treats prompts and tool schemas as **version-controlled, evaluated contracts**.
+
+1. **Red — Define intent.** JSONL cases + YAML metrics assert the tool (and arguments) you expect.
+2. **Green — Implement the interface.** Register the MCP/tool contract and system prompt; run until asserts pass.
+3. **Refactor — Refine context.** Iterate descriptions and constraints; gate merges with `kit eval ci --threshold-routing 95`.
+
+```bash
+kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
+kit eval ci --threshold-routing 95 --out out/reports
+kit eval report --format md --out out/reports
+```
+
+| | |
+| :--- | :--- |
+| **Guide** | [docs/edd.md](./docs/edd.md) — what EDD is and why |
+| **Site** | [edd/](./edd/) — landing page |
+| **Suites** | [evals/edd/](./evals/edd/) — YAML harness + JSONL datasets |
+| **SOP** | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
+| **Blog** | [Moving Beyond Vibes](./docs/blog/moving-beyond-vibes-edd.md) |
+
+Context isolation · deterministic tool mocks · schema match + LLM-as-a-judge · CI path filters & artifacts · OTel spans · prod→JSONL closed loop.
 
 ---
 
@@ -26,7 +52,7 @@
 
 AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot, Google Antigravity) are powerful—but without strict governance, they drift into inconsistent architecture, swallowed exceptions, skipped tests, and bloated abstractions.
 
-**Kit** gives your team a unified, cross-IDE framework that standardizes how AI agents work: from idea stress-testing, specification, and TDD short loops to security audits, architecture drift detection, and telemetry tracking.
+**Kit** pairs **EDD** with a unified, cross-IDE framework that standardizes how AI agents work: from idea stress-testing, specification, and TDD short loops to security audits, architecture drift detection, and telemetry tracking.
 
 <div align="center">
   <img src="./assets/kit_logo.png" alt="Kit Badge" width="220" />
@@ -36,6 +62,7 @@ AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot,
 
 ## ✨ Core Pillars
 
+- **🧪 Eval-Driven Development (EDD)**: Declarative YAML + JSONL agent evals, mocked MCP tools, dual-layer assertions, CI threshold gates, Markdown failure traces, and production telemetry ([docs/edd.md](./docs/edd.md)).
 - **🛡️ Shared Architectural Philosophy**: Enforces Hexagonal Architecture (Ports & Adapters), Domain-Driven Design (DDD invariants), Vertical Slice Architecture, and Clean Code standards ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md)).
 - **🔄 Single Source of Truth & Multi-IDE Sync**: Write rules once in [`AGENTS.md`](./AGENTS.md). Kit synchronizes entry points automatically across Cursor (`.cursorrules`), Gemini (`GEMINI.md`), Claude (`CLAUDE.md`), Windsurf (`.windsurfrules`), and Copilot (`.github/copilot-instructions.md`).
 - **🎯 43+ Modular Specialist Skills**:
@@ -44,7 +71,6 @@ AI coding assistants (Cursor, Gemini CLI, Claude Code, Windsurf, GitHub Copilot,
   - **Framework Profiles (`framework-*`)**: `React 19`, `Next.js`, `Express`, `FastAPI`, `Spring Boot`, `Quarkus`, `.NET`, `Terraform`, `Pulumi`.
   - **Domain Profiles (`profile-*`)**: `profile-api`, `profile-iac`, `profile-mcp`, `profile-observability`.
 - **🔒 Hardened Security & Supply Chain Audit**: Built-in scanning for prompt injections, secret leaks, high Shannon entropy tokens, and unpinned external skill dependencies (`kit audit`).
-- **🧪 Automated Evaluation Harness**: Live trigger validation across 65+ cases (`kit eval`) plus **Eval-Driven Development (EDD)** for tool routing, schema match, LLM-as-a-judge, CI threshold gates, and Markdown reports (`kit eval run|ci|report`).
 - **🔌 Versioned MCP Server Catalog**: Composable Model Context Protocol catalog for Linear, Notion, Slack, Sentry, GitHub, and local tooling composed straight into `.cursor/mcp.json` ([mcps/](./mcps/)).
 
 ---
@@ -94,7 +120,7 @@ kit help
 | `kit audit` | Run hardened security & supply chain audit across skills and scripts |
 | `kit validate` | Validate evals structure against JSON Schemas |
 | `kit eval` | Run live trigger evaluation benchmarks across all skill suites |
-| `kit eval run\|watch\|report\|ci` | Eval-Driven Development (EDD) harness — see [evals/edd](./evals/edd/) |
+| `kit eval run\|watch\|report\|ci` | **EDD harness** — tool routing, schema, judge, CI gates ([docs/edd.md](./docs/edd.md)) |
 | `kit export-rules` | Export and sync `AGENTS.md` to `GEMINI.md`, `CLAUDE.md`, `.windsurfrules`, `.cursorrules`, and Copilot |
 | `kit metrics` | Display telemetry analytics summary for subagent phase handovers |
 | `kit verify` | Verify skills directory layout conventions |
@@ -133,6 +159,9 @@ This instantly creates:
 
 | Resource | Description | Path |
 | :--- | :--- | :--- |
+| **Eval-Driven Development** | What EDD is, red/green/refactor loop, CLI & CI | [docs/edd.md](./docs/edd.md) |
+| **EDD site page** | Public landing for EDD | [edd/](./edd/) |
+| **EDD suites** | YAML harness, JSONL datasets, example report | [evals/edd/](./evals/edd/) |
 | **Coding Philosophy** | Core architectural mandates, DDD, TDD short loop, clean code | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) |
 | **Skills Directory** | Full taxonomy of 43+ roles, language, framework, and domain profiles | [skills/README.md](./skills/README.md) |
 | **MCP Catalog** | Composable Model Context Protocol library and profiles | [mcps/README.md](./mcps/README.md) |
