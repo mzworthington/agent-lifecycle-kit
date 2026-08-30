@@ -39,6 +39,6 @@ This profile defines architectural and implementation standards for client-side 
    - Wrap dynamic async states with error boundaries and suspense loading states.
 
 4. **Accessibility & Design System**:
-   - Use semantic HTML tags (`<main>`, `<nav>`, `<article>`, `<button>`).
+   - Use semantic HTML first: landmarks (`header`, `nav`, `main`, `article`, `section` with heading, `footer`, `figure`), one `h1`, no skipped heading levels, lists for lists, `button`/`a` for interaction. ARIA only when no native element exists.
    - Include ARIA attributes (`aria-label`, `aria-expanded`, `aria-describedby`) for interactive UI controls lacking default native semantics.
    - Enforce keyboard navigation support (`onKeyDown` paired with `onClick`).

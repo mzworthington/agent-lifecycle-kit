@@ -12,18 +12,6 @@
     </image:image>
   </url>
   <url>
-    <loc>https://eval-driven-development.dev/edd/</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://eval-driven-development.dev/blog/moving-beyond-vibes/</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
     <loc>https://eval-driven-development.dev/llms.txt</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>

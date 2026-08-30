@@ -13,7 +13,7 @@
   <meta name="color-scheme" content="dark">
   <link rel="canonical" href="https://eval-driven-development.dev/">
   <link rel="alternate" type="text/plain" title="llms.txt" href="https://eval-driven-development.dev/llms.txt">
-  <link rel="alternate" href="https://eval-driven-development.dev/edd/" title="EDD guide">
+  <link rel="alternate" type="text/markdown" title="EDD guide (Markdown)" href="https://eval-driven-development.dev/docs/edd.md">
   <link rel="sitemap" type="application/xml" href="https://eval-driven-development.dev/sitemap.xml">
   <link rel="icon" type="image/webp" href="./assets/kit_logo_256.webp" sizes="256x256">
   <link rel="icon" type="image/jpeg" href="./assets/kit_logo.png" sizes="1024x1024">
@@ -95,6 +95,44 @@
             "@type": "HowToStep",
             "name": "Refactor",
             "text": "Tighten wording and constraints. Block merges below 95% routing accuracy with kit eval ci."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://eval-driven-development.dev/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Eval-Driven Development?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Eval-Driven Development (EDD) is TDD for agents that call tools. You write a failing eval for the tool and arguments you expect, implement the schema and prompt until it passes, then tighten until CI holds."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is EDD different from eyeballing prompts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Each case starts from a fresh context. Tools are mocked, so you measure routing and extraction rather than network luck. Asserts cover JSON schema match plus an optional LLM-as-a-judge. CI can block the merge when routing accuracy drops."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I run EDD in CI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Run kit eval ci --threshold-routing 95 --out out/reports. The scripted driver works offline with no API key. Live models can be used when KIT_EVAL_API_KEY or OPENAI_API_KEY is set."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens after a production miss?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample live traffic so the next failure is a test, not a surprise."
+            }
           }
         ]
       },
@@ -207,8 +245,8 @@
       pointer-events: none;
     }
 
-    /* Header Nav */
-    header {
+    /* Site banner only — do not match <header class="hero"> inside main */
+    body > header {
       backdrop-filter: blur(16px);
       background: rgba(12, 16, 23, 0.88);
       border-bottom: 1px solid var(--border);
@@ -339,6 +377,10 @@
       color: var(--text);
     }
 
+    .btn-cta-ghost code {
+      font-family: var(--font-mono);
+    }
+
     .edd-spotlight {
       margin: 0 auto 3.5rem;
       max-width: 920px;
@@ -347,6 +389,10 @@
       border-radius: 18px;
       padding: 2rem 1.75rem;
       text-align: left;
+    }
+
+    .edd-spotlight p strong {
+      color: #fff;
     }
 
     .edd-spotlight h2 {
@@ -367,6 +413,8 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       margin-bottom: 1.25rem;
+      list-style: none;
+      padding: 0;
     }
 
     .edd-step {
@@ -376,16 +424,17 @@
       padding: 1rem;
     }
 
-    .edd-step strong {
+    .edd-step h3 {
       display: block;
       color: var(--primary-light);
       font-family: var(--font-mono);
       font-size: 0.85rem;
+      font-weight: 600;
       letter-spacing: 0.01em;
       margin-bottom: 0.35rem;
     }
 
-    .edd-step span {
+    .edd-step p {
       color: var(--text-muted);
       font-size: 0.92rem;
     }
@@ -407,6 +456,56 @@
       text-decoration: underline;
     }
 
+    .faq {
+      margin: 0 0 2.5rem;
+    }
+
+    .faq h2 {
+      font-size: 1.45rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .faq details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.6rem;
+      background: var(--bg-card);
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .faq details p {
+      margin-top: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .faq code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      color: var(--primary-light);
+    }
+
+    #guide {
+      margin: 0 0 2.5rem;
+    }
+
+    #doc-full > h1:first-child {
+      display: none;
+    }
+
+    #guide .mermaid {
+      margin: 1.25rem 0;
+      background: #0b1220;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
     @media (max-width: 768px) {
       .edd-steps {
         grid-template-columns: 1fr;
@@ -424,6 +523,10 @@
     .hero {
       text-align: center;
       padding: 2.5rem 1rem 3.5rem;
+      position: static;
+      background: transparent;
+      border: none;
+      z-index: auto;
     }
 
     .hero-d3-wrapper {
@@ -431,7 +534,7 @@
       height: 780px;
       max-height: 85vh;
       background: radial-gradient(circle at center, rgba(16, 23, 38, 0.95) 0%, rgba(6, 9, 17, 0.99) 100%);
-      border-top: 0;
+      border-top: 1px solid var(--border-accent);
       border-bottom: 1px solid var(--border-accent);
       border-radius: 0;
       box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), inset 0 0 40px rgba(42, 157, 143, 0.06);
@@ -439,6 +542,19 @@
       overflow: hidden;
       margin-top: 0;
       margin-bottom: 0;
+    }
+
+    .map-figure {
+      margin: 0;
+    }
+
+    .map-figure figcaption {
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 1.5rem 1rem 0.75rem;
+      color: var(--text);
+      background: var(--bg);
     }
 
     .cyber-header-bar {
@@ -678,6 +794,8 @@
       justify-content: center;
       gap: 0.75rem;
       margin-bottom: 3rem;
+      list-style: none;
+      padding: 0;
     }
 
     .badge-bar img {
@@ -690,6 +808,15 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 4rem;
+      list-style: none;
+      padding: 0;
+    }
+
+    .pillars-heading {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      text-align: center;
     }
 
     .card {
@@ -734,14 +861,12 @@
       border-radius: 14px;
       padding: 1.5rem;
       font-family: var(--font-mono);
-      margin-bottom: 4rem;
+      margin: 0 auto 4rem;
+      max-width: 920px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
-    .cli-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .cli-box figcaption {
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.75rem;
       margin-bottom: 1rem;
@@ -749,33 +874,13 @@
       font-size: 0.85rem;
     }
 
-    .cli-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .dot-red {
-      background: #ef4444;
-    }
-
-    .dot-yellow {
-      background: #f59e0b;
-    }
-
-    .dot-green {
-      background: #10b981;
-    }
-
     .cli-code {
+      margin: 0;
+      overflow-x: auto;
       color: #38bdf8;
       font-size: 0.95rem;
       line-height: 1.8;
+      font-family: var(--font-mono);
     }
 
     .cli-code span.cmd {
@@ -857,6 +962,11 @@
       list-style: none;
     }
 
+    .start-here > li {
+      display: flex;
+      min-height: 100%;
+    }
+
     .docs-content .start-here a {
       display: flex;
       flex-direction: column;
@@ -868,6 +978,8 @@
       text-decoration: none;
       color: inherit;
       min-height: 100%;
+      flex: 1;
+      width: 100%;
       transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
     }
 
@@ -1000,8 +1112,22 @@
       padding: 3rem 1rem;
       color: var(--text-muted);
       border-top: 1px solid var(--border);
-      margin-top: 5rem;
+      margin-top: 0;
       font-size: 0.9rem;
+    }
+
+    footer p + p {
+      margin-top: 0.5rem;
+    }
+
+    footer a {
+      color: var(--primary-light);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
 
     /* Mobile & Tablet Responsive Design */
@@ -1022,7 +1148,7 @@
     }
 
     @media (max-width: 768px) {
-      header {
+      body > header {
         padding: 0.75rem 1rem;
       }
 
@@ -1102,8 +1228,8 @@
     }
 
     @media (max-width: 480px) {
-      .nav-links .nav-link:not(.btn-github) {
-        display: none;
+      .nav-link {
+        font-size: 0.8rem;
       }
 
       .hero-brand {
@@ -1122,29 +1248,26 @@
 </head>
 
 <body>
-
-  <a class="skip-link" href="#edd">Skip to content</a>
-  <div class="glow-1"></div>
-  <div class="glow-2"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="glow-1" aria-hidden="true"></div>
+  <div class="glow-2" aria-hidden="true"></div>
 
   <header>
     <div class="nav-container">
       <a href="/" class="brand">
         <picture>
           <source srcset="./assets/kit_logo_256.webp" type="image/webp">
-          <img src="./assets/kit_logo.png" alt="Agent Lifecycle Kit" width="36" height="36" fetchpriority="high">
+          <img src="./assets/kit_logo.png" alt="" width="36" height="36" fetchpriority="high">
         </picture>
         <span>Agent Lifecycle Kit</span>
       </a>
-      <nav class="nav-links">
-        <!-- <a href="#map" class="nav-link">Map</a>
-        <a href="#edd" class="nav-link">EDD</a>
-        <a href="#cli" class="nav-link">Try</a>
-        <a href="#pillars" class="nav-link">Why Kit</a>
-        <a href="#docs" class="nav-link">Docs</a> -->
-        <a href="https://github.com/mzworthington/agent-lifecycle-kit" target="_blank" class="btn-github"
-          aria-label="GitHub Repository" title="GitHub Repository">
-          <svg height="22" width="22" viewBox="0 0 16 16" fill="currentColor">
+      <nav class="nav-links" aria-label="Page">
+        <a href="#edd" class="nav-link">How it works</a>
+        <a href="#guide" class="nav-link">Guide</a>
+        <a href="#map" class="nav-link">Map</a>
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit" class="btn-github"
+          aria-label="GitHub repository">
+          <svg height="22" width="22" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path
               d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
           </svg>
@@ -1153,169 +1276,183 @@
     </div>
   </header>
 
-  <main class="container" style="padding-bottom: 0;" id="top">
-    <!-- Hero: brand + value -->
-    <section class="hero" style="padding-bottom: 1.5rem;">
+  <main id="main" class="container">
+    <header class="hero">
       <h1 class="hero-brand">Eval-Driven Development</h1>
       <p class="hero-title">Test the tools your agents call</p>
       <p class="hero-subtitle">Wrong tool, made-up args, endless retries—those failures don’t look like stack traces.
         EDD gives you a red→green→refactor loop for prompts, MCP schemas, and routing, with CI gates you can trust.</p>
 
-      <div class="hero-ctas">
+      <nav class="hero-ctas" aria-label="Primary">
         <a class="btn-cta btn-cta-primary" href="#edd">How EDD works</a>
-        <a class="btn-cta btn-cta-ghost" href="#cli">Run&nbsp;<code style="font-family: var(--font-mono);">kit eval ci</code></a>
-        <a class="btn-cta btn-cta-ghost" href="./edd/">Read the guide</a>
-      </div>
+        <a class="btn-cta btn-cta-ghost" href="#cli">Run&nbsp;<code>kit eval ci</code></a>
+        <a class="btn-cta btn-cta-ghost" href="#guide">Read the guide</a>
+      </nav>
 
-      <div class="badge-bar" style="margin-bottom: 1.5rem;">
-        <a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
+      <ul class="badge-bar">
+        <li><a href="https://github.com/mzworthington/agent-lifecycle-kit/actions"><img
             src="https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions"
-            alt="CI" width="130" height="28" loading="lazy"></a>
-        <a href="./edd/"><img
+            alt="CI passing" width="130" height="28" loading="lazy"></a></li>
+        <li><a href="#guide"><img
             src="https://img.shields.io/badge/EDD-Harness-2a9d8f?style=for-the-badge&logo=target"
-            alt="Eval-Driven Development harness" width="140" height="28" loading="lazy"></a>
-        <a href="./edd/"><img src="https://img.shields.io/badge/Guide-eval--driven--development.dev-blue?style=for-the-badge&logo=cloudflare"
-            alt="EDD guide" width="280" height="28" loading="lazy"></a>
-        <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
-            alt="License" width="140" height="28" loading="lazy"></a>
-      </div>
-    </section>
-  </main>
+            alt="EDD harness" width="140" height="28" loading="lazy"></a></li>
+        <li><a href="#guide"><img src="https://img.shields.io/badge/Guide-eval--driven--development.dev-blue?style=for-the-badge"
+            alt="EDD guide on this site" width="280" height="28" loading="lazy"></a></li>
+        <li><a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
+            alt="Unlicense" width="140" height="28" loading="lazy"></a></li>
+      </ul>
+    </header>
 
-  <!-- Interactive skill map -->
-  <div id="map" class="hero-d3-wrapper" role="region"
-    aria-label="Interactive map of Kit skills and profiles">
-    <!-- <div class="cyber-status-badge" aria-hidden="true">
-      <span class="status-dot"></span>
-      Kit map
-    </div> -->
-    <!-- <div class="cyber-hud-controls" role="group" aria-label="Map filters">
-      <div class="cyber-filter-bar">
-        <button type="button" class="filter-btn active" onclick="filterNodes('all', this)">All</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('lifecycle', this)">Lifecycle</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('lang', this)">Lang</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('framework', this)">Framework</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('profile', this)">Domain</button>
-        <button type="button" class="filter-btn" onclick="filterNodes('ide', this)">IDE</button>
-      </div>
-    </div> -->
-  </div>
-
-  <main class="container">
-
-    <!-- EDD first (value) -->
-    <section id="edd" class="edd-spotlight" aria-label="Eval-Driven Development">
-      <h2>Same loop you already trust for code</h2>
+    <section id="edd" class="edd-spotlight" aria-labelledby="edd-heading">
+      <h2 id="edd-heading">Same loop you already trust for code</h2>
       <p>
-        <strong style="color:#fff;">If an agent can call tools, guessing isn’t a test plan.</strong>
+        <strong>If an agent can call tools, guessing isn’t a test plan.</strong>
         Start with a failing eval for the behavior you care about, wire the tool contract and prompt
         until it passes, then tighten until CI holds—and drop production misses back into the suite.
       </p>
-      <div class="edd-steps">
-        <div class="edd-step">
-          <strong>Red</strong>
-          <span>Write the intent and metrics (tool, schema, judge).</span>
-        </div>
-        <div class="edd-step">
-          <strong>Green</strong>
-          <span>Register the MCP schema and a minimal prompt; run until it passes.</span>
-        </div>
-        <div class="edd-step">
-          <strong>Refactor</strong>
-          <span>Tighten wording; block merges below 95% routing accuracy.</span>
-        </div>
-      </div>
-      <div class="edd-links">
-        <a href="./edd/">EDD overview →</a>
-        <a href="./edd/#doc">Full guide →</a>
-        <a href="./evals/edd/README.md">Suites &amp; reports →</a>
-        <a href="./blog/moving-beyond-vibes/">Why we left vibes behind →</a>
-      </div>
+      <ol class="edd-steps">
+        <li class="edd-step">
+          <h3>Red</h3>
+          <p>Write the intent and metrics (tool, schema, judge).</p>
+        </li>
+        <li class="edd-step">
+          <h3>Green</h3>
+          <p>Register the MCP schema and a minimal prompt; run until it passes.</p>
+        </li>
+        <li class="edd-step">
+          <h3>Refactor</h3>
+          <p>Tighten wording; block merges below 95% routing accuracy.</p>
+        </li>
+      </ol>
+      <nav class="edd-links" aria-label="EDD resources">
+        <a href="#guide">Full guide</a>
+        <a href="./evals/edd/README.md">Suites and reports</a>
+        <a href="./docs/edd.md">Markdown source</a>
+      </nav>
     </section>
 
-    <!-- Try it -->
-    <section id="cli">
-      <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Try it locally</h2>
-      <div class="cli-box">
-        <div class="cli-header">
-          <div class="cli-dots">
-            <div class="dot dot-red"></div>
-            <div class="dot dot-yellow"></div>
-            <div class="dot dot-green"></div>
-          </div>
-          <span>terminal</span>
-        </div>
-        <div class="cli-code">
-          <div><span class="comment"># Works offline with the scripted driver — no API key</span></div>
-          <div>$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span></div>
-          <br>
-          <div><span class="comment"># Fail the PR if routing accuracy drops under 95%</span></div>
-          <div>$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span></div>
-          <br>
-          <div><span class="comment"># Write a markdown failure report for the PR</span></div>
-          <div>$ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></div>
-        </div>
-      </div>
+    <section id="cli" aria-labelledby="cli-heading">
+      <h2 id="cli-heading" style="font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Try it locally</h2>
+      <figure class="cli-box">
+        <figcaption>kit eval</figcaption>
+        <pre class="cli-code"><code><span class="comment"># Works offline with the scripted driver — no API key</span>
+$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span>
+
+<span class="comment"># Fail the PR if routing accuracy drops under 95%</span>
+$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span>
+
+<span class="comment"># Write a markdown failure report for the PR</span>
+$ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></code></pre>
+      </figure>
     </section>
 
-    <!-- Supporting pillars -->
-    <section id="pillars" class="pillars-grid" aria-label="Why Kit">
-      <div class="card">
-        <div class="card-icon">Evals</div>
-        <div class="card-title">A harness you can run in CI</div>
-        <div class="card-desc">Suites in YAML and JSONL, mocked tools, optional LLM-as-a-judge, threshold gates, and a path from production misses back into the suite.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">Architecture</div>
-        <div class="card-title">Boundaries agents respect</div>
-        <div class="card-desc">Hexagonal layout, DDD language, vertical slices, and clean-code defaults—so generated code doesn’t sprawl into a mess.</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">IDEs</div>
-        <div class="card-title">One rules file, every editor</div>
-        <div class="card-desc">Write AGENTS.md once. Kit keeps Cursor, Claude, Gemini, Windsurf, and Copilot on the same page.</div>
-      </div>
+    <section id="faq" class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Questions</h2>
+      <details open>
+        <summary>What is Eval-Driven Development?</summary>
+        <p>EDD is TDD for agents that call tools. You write a failing eval for the tool and arguments you expect, implement the schema and prompt until it passes, then tighten until CI holds.</p>
+      </details>
+      <details>
+        <summary>How is EDD different from eyeballing prompts?</summary>
+        <p>Each case starts from a fresh context. Tools are mocked, so you measure routing and extraction rather than network luck. Asserts cover JSON schema match plus an optional LLM-as-a-judge. CI can block the merge when routing accuracy drops.</p>
+      </details>
+      <details>
+        <summary>How do I run EDD in CI?</summary>
+        <p>Run <code>kit eval ci --threshold-routing 95 --out out/reports</code>. The scripted driver works offline with no API key. Live models can be used when <code>KIT_EVAL_API_KEY</code> or <code>OPENAI_API_KEY</code> is set.</p>
+      </details>
+      <details>
+        <summary>What happens after a production miss?</summary>
+        <p>Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample live traffic so the next failure is a test, not a surprise.</p>
+      </details>
     </section>
 
-    <!-- Docs -->
-    <section id="docs" class="docs-wrapper" aria-label="Documentation Section">
-      <div id="markdown-body" class="docs-content">
-        <h2>What this kit is</h2>
+    <article id="guide" class="docs-wrapper docs-content" aria-labelledby="guide-heading">
+      <h2 id="guide-heading">The guide</h2>
+      <div id="doc-static">
+        <p>Connecting an LLM to MCP tools, APIs, or terminals turns a chatbot into a decision-maker. Failures rarely look like stack traces. They look like a wrong tool, a hallucinated parameter, or an infinite retry loop.</p>
+        <p>EDD treats prompts and tool schemas as version-controlled, evaluated contracts:</p>
+        <ol>
+          <li><strong>Red</strong> — JSONL cases and YAML metrics assert the tool (and arguments) you expect.</li>
+          <li><strong>Green</strong> — Register the MCP contract and minimal system instructions. Run until asserts pass.</li>
+          <li><strong>Refactor</strong> — Iterate descriptions and constraints without breaking existing cases. Gate merges with <code>kit eval ci --threshold-routing 95</code>.</li>
+        </ol>
+        <p>The full guide loads below. If it does not, read <a href="./docs/edd.md">docs/edd.md</a>.</p>
+      </div>
+      <div id="doc-full"></div>
+      <noscript>
+        <p>JavaScript is off. Open the <a href="./docs/edd.md">Markdown guide</a>.</p>
+      </noscript>
+    </article>
+
+    <section id="pillars" aria-labelledby="pillars-heading">
+      <h2 id="pillars-heading" class="pillars-heading">Around the eval loop</h2>
+      <ul class="pillars-grid">
+        <li class="card">
+          <p class="card-icon">Evals</p>
+          <h3 class="card-title">A harness you can run in CI</h3>
+          <p class="card-desc">Suites in YAML and JSONL, mocked tools, optional LLM-as-a-judge, threshold gates, and a path from production misses back into the suite.</p>
+        </li>
+        <li class="card">
+          <p class="card-icon">Architecture</p>
+          <h3 class="card-title">Boundaries agents respect</h3>
+          <p class="card-desc">Hexagonal layout, DDD language, vertical slices, and clean-code defaults—so generated code doesn’t sprawl into a mess.</p>
+        </li>
+        <li class="card">
+          <p class="card-icon">IDEs</p>
+          <h3 class="card-title">One rules file, every editor</h3>
+          <p class="card-desc">Write AGENTS.md once. Kit keeps Cursor, Claude, Gemini, Windsurf, and Copilot on the same page.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="docs" class="docs-wrapper" aria-labelledby="docs-heading">
+      <div class="docs-content">
+        <h2 id="docs-heading">What this kit is</h2>
         <p>Kit is for teams who are tired of shipping agents on good intentions.
-          It centers <a href="./edd/">Eval-Driven Development (EDD)</a>,
+          It centers <a href="#edd">Eval-Driven Development (EDD)</a>,
           then layers in lifecycle skills, architecture guardrails, and shared IDE rules so the rest of the workflow stays coherent.</p>
         <h3>Start here</h3>
-        <nav class="start-here" aria-label="Getting started">
-          <a href="./edd/">
-            <span class="start-title">EDD guide</span>
-            <span class="start-desc">The why and the what: write evals, then gate the merge</span>
-          </a>
-          <a href="./blog/moving-beyond-vibes/">
-            <span class="start-title">Why we left vibes</span>
-            <span class="start-desc">The essay behind the loop: wrong tool, invented args, no asserts</span>
-          </a>
-          <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md">
-            <span class="start-title">EDD SOP</span>
-            <span class="start-desc">Red → green → refactor for day-to-day agent work</span>
-          </a>
-          <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md">
-            <span class="start-title">Coding philosophy</span>
-            <span class="start-desc">Architecture and quality defaults agents should keep</span>
-          </a>
-          <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/AGENTS.md">
-            <span class="start-title">Agent bootstrap</span>
-            <span class="start-desc">How agents load the kit and pick a lifecycle role</span>
-          </a>
+        <nav aria-label="Getting started">
+          <ul class="start-here">
+            <li>
+              <a href="#guide">
+                <span class="start-title">EDD guide</span>
+                <span class="start-desc">The why and the what: write evals, then gate the merge</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md">
+                <span class="start-title">EDD SOP</span>
+                <span class="start-desc">Red → green → refactor for day-to-day agent work</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md">
+                <span class="start-title">Coding philosophy</span>
+                <span class="start-desc">Architecture and quality defaults agents should keep</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/AGENTS.md">
+                <span class="start-title">Agent bootstrap</span>
+                <span class="start-desc">How agents load the kit and pick a lifecycle role</span>
+              </a>
+            </li>
+          </ul>
         </nav>
       </div>
     </section>
-
   </main>
+
+  <figure class="map-figure">
+    <figcaption id="map-heading">Kit skills and profiles</figcaption>
+    <div id="map" class="hero-d3-wrapper" aria-labelledby="map-heading"></div>
+  </figure>
 
   <footer>
     <p>Agent Lifecycle Kit is open source under the Unlicense (public domain).</p>
-    <p style="margin-top: 0.5rem; color: var(--text-muted);">Built for people who ship agents that call tools</p>
-    <p style="margin-top: 0.75rem;"><a href="./edd/" style="color:var(--primary-light); text-decoration:none; font-weight:600;">Read the EDD guide →</a></p>
+    <p>Built for people who ship agents that call tools.</p>
+    <p><a href="#guide">Read the EDD guide</a></p>
   </footer>
 
   <script>
@@ -1988,8 +2125,51 @@
       }
     }
 
-    // Homepage docs section is authored inline (value-first). Full README lives on GitHub;
-    // deep EDD narrative lives at ./edd/ and ./docs/edd.md.
+    function loadEddGuide() {
+      const el = document.getElementById('doc-full');
+      const fallback = document.getElementById('doc-static');
+      if (!el) return;
+      fetch('./docs/edd.md')
+        .then((r) => {
+          if (!r.ok) throw new Error(String(r.status));
+          return r.text();
+        })
+        .then((md) => {
+          let html = '';
+          if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+            html = marked.parse(md);
+          } else if (typeof marked === 'function') {
+            html = marked(md);
+          } else {
+            html = '<pre>' + md.replace(/</g, '&lt;') + '</pre>';
+          }
+          el.innerHTML = html;
+          if (fallback) fallback.hidden = true;
+          el.querySelectorAll('pre code').forEach((block) => {
+            const text = block.textContent || '';
+            if (text.trim().startsWith('flowchart') || text.trim().startsWith('sequenceDiagram') || text.trim().startsWith('graph ')) {
+              const pre = block.parentElement;
+              const div = document.createElement('div');
+              div.className = 'mermaid';
+              div.textContent = text;
+              pre.replaceWith(div);
+            }
+          });
+          if (window.mermaid) {
+            mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+            mermaid.run({ querySelector: '#guide .mermaid' });
+          }
+        })
+        .catch(() => {
+          el.innerHTML = '<p>Could not load <a href="./docs/edd.md">docs/edd.md</a>.</p>';
+        });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadEddGuide);
+    } else {
+      loadEddGuide();
+    }
   </script>
 </body>
 

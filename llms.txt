@@ -7,8 +7,7 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 
 ## Start here
 - [Home](https://eval-driven-development.dev/)
-- [EDD guide](https://eval-driven-development.dev/edd/)
-- [Why we left vibes](https://eval-driven-development.dev/blog/moving-beyond-vibes/)
+- [EDD guide](https://eval-driven-development.dev/#guide)
 - [Markdown guide](https://eval-driven-development.dev/docs/edd.md)
 - [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)

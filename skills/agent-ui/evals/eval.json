@@ -14,6 +14,19 @@
           "a11y"
         ]
       }
+    },
+    {
+      "id": "EVAL-UI-COLOCATED-002",
+      "name": "Semantic HTML on a landing page",
+      "target_skill": "agent-ui",
+      "prompt": "Merge two marketing pages into one and fix the semantic HTML: landmarks, heading order, lists instead of div soup.",
+      "assertions": {
+        "required_triggers": [
+          "semantic html",
+          "landmarks",
+          "heading order"
+        ]
+      }
     }
   ]
 }

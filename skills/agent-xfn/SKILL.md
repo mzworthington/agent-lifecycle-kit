@@ -76,7 +76,7 @@ Complete and align before changing production code for XFN reasons.
 | Quality | Apply when | Skip when |
 |---------|------------|-----------|
 | Browser E2E | User-visible journey or critical path | Pure domain/API with no UI and covered by slice/API tests |
-| Accessibility | Any UI surface (pages, forms, dialogs, navigation) | No UI change |
+| Accessibility | Any UI surface (pages, forms, dialogs, navigation). Assert landmarks, heading order, and native controls—not `div`+ARIA | No UI change |
 | Security tests | Authn/authz, sensitive data, trust boundaries, new inputs | No security-relevant surface (still note skip) |
 | Load / performance | Latency SLOs, high traffic, bulk/import, public spikes | No performance risk or SLO in spec |
 

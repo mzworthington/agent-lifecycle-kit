@@ -27,10 +27,10 @@ kit eval report --format md --out out/reports
 
 | | |
 | :--- | :--- |
-| **Why** | [docs/edd.md](./docs/edd.md) · [Blog](./docs/blog/moving-beyond-vibes-edd.md) |
+| **Why** | [docs/edd.md](./docs/edd.md) |
 | **How** | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
 | **Suites** | [evals/edd/README.md](./evals/edd/README.md) |
-| **Site** | [edd/](./edd/) |
+| **Site** | [eval-driven-development.dev](https://eval-driven-development.dev/) |
 
 Context isolation · mocked tools · schema match + LLM-as-a-judge · CI gates · prod→JSONL closed loop.
 
@@ -94,7 +94,7 @@ Start with the path that matches what you’re trying to do:
 3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
 
-Site: [eval-driven-development.dev](https://eval-driven-development.dev/) · [EDD page](./edd/)
+Site: [eval-driven-development.dev](https://eval-driven-development.dev/)
 
 ---
 
