@@ -1,0 +1,14 @@
+name: "Recovery: Terminal Fallback"
+dataset: "architecture_terminal.jsonl"
+mcp_tools:
+  - "tools/read_architecture_yaml.json"
+metrics:
+  - type: "terminal_fallback"
+    max_retries: 2
+mocks:
+  - tool: "read_architecture_yaml"
+    error:
+      status: 504
+      body:
+        error: "Timeout"
+        message: "network timed out"

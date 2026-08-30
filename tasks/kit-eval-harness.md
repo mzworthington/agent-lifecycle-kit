@@ -1,5 +1,5 @@
 ---
-title: Kit routing eval harness
+title: Kit routing & EDD eval harness
 kind: task
 frequency: on-demand
 triggers:
@@ -7,16 +7,20 @@ triggers:
   - routing eval
   - golden prompts
   - kit quality
+  - edd
+  - eval driven development
 ---
-# Kit routing eval harness
+# Kit routing & EDD eval harness
+
+## A. Orchestrator routing (skill triggers)
 
 Score whether [agent-orchestrator](../skills/agent-orchestrator/SKILL.md) picks the **smallest correct route**. Run after kit changes that touch routing, or during [kit-review](./kit-review.md).
 
-## Method
+### Method
 
 For each golden prompt: note expected route, actual route an agent took (or would take from the scope gate table), and pass/fail. Do not invent calendar estimates—record only routing correctness and missing handovers.
 
-## Golden prompts
+### Golden prompts
 
 | # | Prompt (summary) | Expect |
 |---|------------------|--------|
@@ -28,9 +32,24 @@ For each golden prompt: note expected route, actual route an agent took (or woul
 | 6 | “Wire Stripe for a port we just greened” | Prefer **tdd gear 2** same session; `agent-adapter` only if deep-dive |
 | 7 | “Production 500s spiking” | `agent-incident` → `agent-debug` (+ Sentry/Slack when configured) |
 
-## Pass criteria
+### Pass criteria
 
 - [ ] No prompt routed to a larger path than required
 - [ ] TDD vs adapter deep-dive distinction held for #6
 - [ ] XFN never assigned to `agent-tdd`
 - [ ] Failures become lessons under `~/.agents/lessons/<project>/` or kit PRs
+
+## B. Eval-Driven Development (agent tools / MCP)
+
+After prompt or MCP tool schema changes:
+
+```bash
+pnpm test:edd
+pnpm kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
+pnpm kit eval report --format md --out out/reports
+```
+
+- [ ] Routing accuracy ≥ 95% on routing-tagged cases
+- [ ] Self-correction + terminal-fallback suites green
+- [ ] Markdown report attached / uploaded as CI artifact
+- [ ] Prod failures converted to JSONL when applicable ([SOP](../SOPs/edd-production-telemetry.md))

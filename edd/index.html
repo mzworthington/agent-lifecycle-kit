@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval-Driven Development (EDD) — Agent Lifecycle Kit</title>
+  <meta name="description"
+    content="Eval-Driven Development (EDD): TDD for AI agents. Isolate context, mock tools, assert routing and schemas, gate PRs at 95% routing accuracy, and close the loop with production telemetry.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#090d16">
+  <link rel="canonical" href="https://mzworthington.github.io/agent-lifecycle-kit/edd/">
+  <link rel="icon" type="image/png" href="../assets/kit_logo.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mzworthington.github.io/agent-lifecycle-kit/edd/">
+  <meta property="og:title" content="Eval-Driven Development (EDD) — Agent Lifecycle Kit">
+  <meta property="og:description"
+    content="TDD for AI agents: tool routing, schema match, LLM-as-a-judge, CI threshold gates, and prod→JSONL closed loops.">
+  <meta property="og:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
+  <meta property="og:site_name" content="Agent Lifecycle Kit">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Eval-Driven Development (EDD) — Agent Lifecycle Kit">
+  <meta name="twitter:description"
+    content="TDD for AI agents: tool routing, schema match, LLM-as-a-judge, CI threshold gates, and prod→JSONL closed loops.">
+  <meta name="twitter:image" content="https://mzworthington.github.io/agent-lifecycle-kit/assets/kit_banner.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Eval-Driven Development (EDD)",
+    "description": "TDD for AI agents: context isolation, mocked tools, dual-layer assertions, CI quality gates, and closed-loop telemetry.",
+    "url": "https://mzworthington.github.io/agent-lifecycle-kit/edd/",
+    "author": { "@type": "Person", "name": "mzworthington" },
+    "isPartOf": {
+      "@type": "SoftwareSourceCode",
+      "name": "Agent Lifecycle Kit",
+      "url": "https://mzworthington.github.io/agent-lifecycle-kit/"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: rgba(22, 31, 50, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.3);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --accent: #a855f7;
+      --success: #10b981;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .glow {
+      position: fixed;
+      top: -180px;
+      left: 15%;
+      width: 640px;
+      height: 640px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    header {
+      backdrop-filter: blur(16px);
+      background: rgba(9, 13, 22, 0.85);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 1.5rem;
+    }
+
+    .nav {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .brand img { height: 32px; width: 32px; border-radius: 8px; }
+
+    .nav-links { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 2rem 0 2.5rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary-light);
+      border: 1px solid var(--border-accent);
+      border-radius: 999px;
+      padding: 0.35rem 0.85rem;
+      margin-bottom: 1.25rem;
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff 30%, var(--primary-light) 70%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .lede {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 42rem;
+      margin: 0 auto 1.75rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.15rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: transform 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: rgba(99, 102, 241, 0.35);
+      border-color: var(--primary-light);
+      color: #fff;
+    }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 2.5rem 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem;
+    }
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.45rem;
+      color: #fff;
+    }
+    .card p { color: var(--text-muted); font-size: 0.92rem; }
+
+    .cli-box {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 1.5rem 0 2.5rem;
+    }
+    .cli-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #eab308; }
+    .dot-green { background: #22c55e; }
+    .cli-code {
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      padding: 1.1rem 1.2rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+    .cli-code .comment { color: #64748b; }
+    .cli-code .cmd { color: #a5b4fc; }
+    .cli-code .arg { color: #86efac; }
+
+    #doc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem 2rem;
+    }
+    #doc h1 { display: none; }
+    #doc h2 {
+      font-size: 1.35rem;
+      margin: 1.75rem 0 0.75rem;
+      color: #fff;
+    }
+    #doc h2:first-of-type { margin-top: 0; }
+    #doc h3 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
+    #doc p, #doc li { color: var(--text-muted); margin-bottom: 0.75rem; }
+    #doc ul, #doc ol { padding-left: 1.25rem; margin-bottom: 1rem; }
+    #doc a { color: var(--primary-light); }
+    #doc code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      background: rgba(255,255,255,0.06);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+    #doc pre {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+    }
+    #doc pre code { background: none; padding: 0; }
+    #doc table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.92rem; }
+    #doc th, #doc td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+    }
+    #doc th { background: rgba(255,255,255,0.04); color: #fff; }
+    #doc .mermaid { margin: 1.25rem 0; background: #0b1220; border-radius: 12px; padding: 1rem; }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--primary-light); }
+
+    @media (max-width: 640px) {
+      .nav-links a:not(.brand) { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow"></div>
+
+  <header>
+    <div class="nav">
+      <a class="brand" href="../">
+        <img src="../assets/kit_logo.png" alt="" width="32" height="32">
+        <span>Agent Lifecycle Kit</span>
+      </a>
+      <div class="nav-links">
+        <a href="../">Home</a>
+        <a href="../docs/edd.md">Docs</a>
+        <a href="../evals/edd/README.md">Suites</a>
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">Eval-Driven Development</div>
+      <h1>TDD for AI agents</h1>
+      <p class="lede">
+        EDD turns non-deterministic tool use into version-controlled tests—
+        routing, schemas, and prompts with CI gates, not informal vibes.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#doc">Read the EDD guide</a>
+        <a class="btn btn-ghost" href="../evals/edd/README.md">Browse eval suites</a>
+        <a class="btn btn-ghost" href="../docs/blog/moving-beyond-vibes-edd.md">Why EDD?</a>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="EDD tenets">
+      <div class="card">
+        <h3>Context isolation</h3>
+        <p>Every case starts with a fresh context window—no conversational cross-contamination between tests.</p>
+      </div>
+      <div class="card">
+        <h3>Deterministic mocks</h3>
+        <p>Stub tool payloads so you measure model routing and extraction, not third-party network latency.</p>
+      </div>
+      <div class="card">
+        <h3>Dual-layer asserts</h3>
+        <p>Strict JSON schema match plus optional LLM-as-a-judge for unstructured synthesis and hallucination.</p>
+      </div>
+      <div class="card">
+        <h3>CI + prod loop</h3>
+        <p>Threshold gates on PRs; production misses become JSONL cases; shadow judges sample live traffic.</p>
+      </div>
+    </section>
+
+    <div class="cli-box" aria-label="EDD CLI examples">
+      <div class="cli-header">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <span>kit eval — EDD harness</span>
+      </div>
+      <div class="cli-code">
+        <div><span class="comment"># Red → green → refactor against a suite</span></div>
+        <div>$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span></div>
+        <br>
+        <div><span class="comment"># Block merges when routing accuracy drops below 95%</span></div>
+        <div>$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span></div>
+        <br>
+        <div><span class="comment"># Markdown failure traces for PRs</span></div>
+        <div>$ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></div>
+      </div>
+    </div>
+
+    <article id="doc" aria-label="EDD documentation">
+      <p style="color: var(--text-muted);">Loading EDD guide…</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="../">Agent Lifecycle Kit</a> · Eval-Driven Development · Unlicense</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('doc');
+      fetch('../docs/edd.md')
+        .then((r) => {
+          if (!r.ok) throw new Error(String(r.status));
+          return r.text();
+        })
+        .then((md) => {
+          let html = '';
+          if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+            html = marked.parse(md);
+          } else if (typeof marked === 'function') {
+            html = marked(md);
+          } else {
+            html = '<pre>' + md.replace(/</g, '&lt;') + '</pre>';
+          }
+          el.innerHTML = html;
+          document.querySelectorAll('#doc pre code').forEach((block) => {
+            const text = block.textContent || '';
+            if (text.trim().startsWith('flowchart') || text.trim().startsWith('sequenceDiagram') || text.trim().startsWith('graph ')) {
+              const pre = block.parentElement;
+              const div = document.createElement('div');
+              div.className = 'mermaid';
+              div.textContent = text;
+              pre.replaceWith(div);
+            }
+          });
+          if (window.mermaid) {
+            mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+            mermaid.run({ querySelector: '#doc .mermaid' });
+          }
+        })
+        .catch(() => {
+          el.innerHTML = '<p>Could not load <a href="../docs/edd.md">docs/edd.md</a>. Open it directly on GitHub.</p>';
+        });
+    });
+  </script>
+</body>
+
+</html>

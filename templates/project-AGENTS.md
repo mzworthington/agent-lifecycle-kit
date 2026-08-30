@@ -13,6 +13,8 @@ Before starting work, read:
 - `~/.agents/skills/agent-adr/SKILL.md` - sparse ADRs in `docs/ADRs/` (hard to reverse / off-norm only)
 - `~/.agents/skills/agent-debug/SKILL.md` - when something is broken today
 - `~/.agents/skills/agent-pre-commit/SKILL.md` - hook checks plus conventional commit/PR title gate
+- `~/.agents/docs/edd.md` - **Eval-Driven Development (EDD)** when changing prompts, MCP tools, or agent routing
+- `~/.agents/SOPs/eval-driven-development.md` - EDD red → green → refactor (`kit eval run|ci`)
 
 For **bugs / failed jobs / live symptoms**, use `agent-debug` (reproduce → hypothesis board → proof). Do not open the full feature lifecycle unless RCA needs a new capability.
 
