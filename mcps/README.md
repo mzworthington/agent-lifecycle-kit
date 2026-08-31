@@ -47,21 +47,21 @@ mcps/
 
 | Scope | Path | When |
 |-------|------|------|
-| Global (all projects) | `~/.cursor/mcp.json` | `./install.sh` (or `./scripts/compose-mcp.sh default --install`) |
+| Global (all projects) | `~/.cursor/mcp.json` | `./install.sh` (or `kit mcp default --install`) |
 | Project (one app) | `<repo>/.cursor/mcp.json` | Copy/compose from a profile; see [templates/project-mcp.json](../templates/project-mcp.json) |
 
 ```bash
-./scripts/compose-mcp.sh default --install
-./scripts/compose-mcp.sh collab --install
-./scripts/compose-mcp.sh ops --install
-./scripts/compose-mcp.sh security -o .cursor/mcp.security.json
-./scripts/compose-mcp.sh design -o .cursor/mcp.design.json
-./scripts/compose-mcp.sh payments -o .cursor/mcp.payments.json
-./scripts/compose-mcp.sh personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
-./scripts/compose-mcp.sh lab --install               # Raspberry Pi over SSH
-./scripts/compose-mcp.sh devtools -o .cursor/mcp.json
-./scripts/compose-mcp.sh cloud -o .cursor/mcp.json
-./scripts/compose-mcp.sh project-example -o .cursor/mcp.json
+kit mcp default --install
+kit mcp collab --install
+kit mcp ops --install
+kit mcp security -o .cursor/mcp.security.json
+kit mcp design -o .cursor/mcp.design.json
+kit mcp payments -o .cursor/mcp.payments.json
+kit mcp personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
+kit mcp lab --install               # Raspberry Pi over SSH
+kit mcp devtools -o .cursor/mcp.json
+kit mcp cloud -o .cursor/mcp.json
+kit mcp project-example -o .cursor/mcp.json
 ```
 
 Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare/Sentry/Stripe/Vercel use Cursor OAuth on first tool use.

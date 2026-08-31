@@ -1,12 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { fileURLToPath } from 'url';
+import { backupExistingFile } from './backup_file.js';
+import { resolveRepoDir } from './paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..');
-const mcpsDir: string = path.join(repoDir, 'mcps');
+const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
 interface ServerConfig {
   mcp?: Record<string, unknown>;
@@ -18,7 +16,23 @@ interface ProfileConfig {
   servers?: string[];
 }
 
-export function composeMCP(profileName: string, outputFile?: string, installGlobally: boolean = false): void {
+export interface ComposeMcpOptions {
+  repoDir?: string;
+  homedir?: string;
+  env?: NodeJS.ProcessEnv;
+}
+
+export function composeMCP(
+  profileName: string,
+  outputFile?: string,
+  installGlobally: boolean = false,
+  options: ComposeMcpOptions = {}
+): void {
+  const repoDir = options.repoDir ?? defaultRepoDir;
+  const mcpsDir = path.join(repoDir, 'mcps');
+  const env = options.env ?? process.env;
+  const homedir = options.homedir ?? os.homedir();
+
   let profilePath: string;
 
   if (profileName.endsWith('.json') || profileName.includes('/') || profileName.includes('\\')) {
@@ -74,7 +88,7 @@ export function composeMCP(profileName: string, outputFile?: string, installGlob
     }
 
     for (const envName of data.requiredEnv || []) {
-      if (!process.env[envName]) {
+      if (!env[envName]) {
         missingEnv.push(`${serverId}:${envName}`);
       }
     }
@@ -95,25 +109,19 @@ export function composeMCP(profileName: string, outputFile?: string, installGlob
     if (!fs.existsSync(parentDir)) {
       fs.mkdirSync(parentDir, { recursive: true });
     }
+    backupExistingFile(targetPath);
     fs.writeFileSync(targetPath, resultJSON, 'utf8');
     console.log(`Composed profile '${profileName}' saved to ${targetPath}`);
   } else if (installGlobally) {
-    const cursorDir = path.join(os.homedir(), '.cursor');
+    const cursorDir = path.join(homedir, '.cursor');
     if (!fs.existsSync(cursorDir)) {
       fs.mkdirSync(cursorDir, { recursive: true });
     }
     const targetPath = path.join(cursorDir, 'mcp.json');
+    backupExistingFile(targetPath);
     fs.writeFileSync(targetPath, resultJSON, 'utf8');
     console.log(`Installed profile '${profileName}' to ${targetPath}`);
   } else {
     console.log(resultJSON);
-  }
-}
-
-// Standalone execution support via PROFILE_PATH and MCPS_DIR
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1].endsWith('compose_mcp.ts')) {
-  const profilePathStr = process.env.PROFILE_PATH;
-  if (profilePathStr) {
-    composeMCP(profilePathStr);
   }
 }

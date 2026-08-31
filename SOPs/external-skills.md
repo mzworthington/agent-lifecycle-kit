@@ -19,7 +19,7 @@ Use this for **official / third-party** Agent Skills (Cloudflare, Vercel, etc.).
 | Kind | Location | Update path |
 |------|----------|-------------|
 | Kit lifecycle / stack skills | `skills/agent-*`, `lang-*`, `framework-*` | PRs in this repo |
-| Official upstream skills | Cursor user scope via `gh skill` | `scripts/sync-external-skills.sh` |
+| Official upstream skills | Cursor user scope via `gh skill` | `kit sync` |
 
 Declared list: [skills/external.lock.json](../skills/external.lock.json).
 
@@ -32,13 +32,13 @@ Declared list: [skills/external.lock.json](../skills/external.lock.json).
 
 ```bash
 # Install everything in the lockfile (Cursor --scope user)
-./scripts/sync-external-skills.sh --install
+kit sync --install
 
 # Preview commands
-./scripts/sync-external-skills.sh --dry-run
+kit sync --dry-run
 
 # Pull upstream changes for already-installed skills
-./scripts/sync-external-skills.sh --update
+kit sync --update
 ```
 
 Optional from bootstrap:
@@ -59,17 +59,17 @@ INSTALL_EXTERNAL_SKILLS=1 ./install.sh
   "repository": "owner/repo",
   "skill": "skills/short-name",
   "summary": "One line.",
-  "pin": null
+  "pin": "latest"
 }
 ```
 
-Use `"pin": "v1.2.0"` (or a commit SHA) when you need a frozen upgrade. Pinned skills are skipped by `gh skill update` until unpinned.
+Prefer a published version tag (`"pin": "v1.2.0"`). Use `"pin": "latest"` when the repo has no semver tags — `gh skill` then installs the latest GitHub release, else default-branch HEAD. Do not pin commit SHAs unless you are freezing a specific commit. Version tags are passed as `refs/tags/…` so they are not mistaken for SHAs. Tag pins are skipped by `gh skill update` until you change or drop them.
 
-4. Run `./scripts/sync-external-skills.sh --install --force`.
+4. Run `kit sync --install --force`.
 
 Prefer the exact path form (`skills/<name>`) so installs skip full-repo discovery.
 
-5. Run `./scripts/verify-skills-layout.sh` to confirm no upstream dirs remain under kit `skills/`.
+5. Run `kit verify` to confirm no upstream dirs remain under kit `skills/`.
 
 ## Why not vendor into `skills/`?
 

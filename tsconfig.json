@@ -13,5 +13,5 @@
     "isolatedModules": true,
     "types": ["node"]
   },
-  "include": ["scripts/lib/**/*.ts", "bin/**/*.ts"]
+  "include": ["kit/src/**/*.ts", "bin/**/*.ts"]
 }

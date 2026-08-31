@@ -1,12 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { composeMCP } from './compose_mcp.js';
 import { exportIDERules } from './export_ide_rules.js';
+import { resolveRepoDir } from './paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..');
+const defaultKitRepoDir: string = resolveRepoDir(import.meta.url);
 
 export interface InitProjectOptions {
   targetDir: string;
@@ -14,10 +12,12 @@ export interface InitProjectOptions {
   installMCP: boolean;
   installIDE: boolean;
   installHook: boolean;
+  kitRepoDir?: string;
 }
 
 export function initProject(options: InitProjectOptions): void {
   const { targetDir, mcpProfile, installMCP, installIDE, installHook } = options;
+  const kitRepoDir = options.kitRepoDir ?? defaultKitRepoDir;
 
   console.log(`=== Agent Lifecycle Kit - Project Bootstrapper ===`);
   console.log(`Target directory: ${targetDir}`);
@@ -31,7 +31,7 @@ export function initProject(options: InitProjectOptions): void {
   if (fs.existsSync(agentsPath)) {
     console.log(`✓ AGENTS.md already exists in ${targetDir}`);
   } else {
-    const templatePath = path.join(repoDir, 'templates', 'project-AGENTS.md');
+    const templatePath = path.join(kitRepoDir, 'templates', 'project-AGENTS.md');
     if (fs.existsSync(templatePath)) {
       fs.copyFileSync(templatePath, agentsPath);
       console.log(`✅ Created AGENTS.md in ${targetDir}`);
@@ -45,7 +45,7 @@ export function initProject(options: InitProjectOptions): void {
   // 2. Export Multi-IDE Rules
   if (installIDE) {
     console.log(`Exporting Multi-IDE rule entry points...`);
-    exportIDERules(targetDir, false);
+    exportIDERules(targetDir, false, kitRepoDir);
   }
 
   // 3. Setup .cursor/mcp.json
@@ -56,7 +56,7 @@ export function initProject(options: InitProjectOptions): void {
       fs.mkdirSync(cursorDir, { recursive: true });
     }
     try {
-      composeMCP(mcpProfile, mcpPath, false);
+      composeMCP(mcpProfile, mcpPath, false, { repoDir: kitRepoDir });
       console.log(`✅ Composed MCP profile "${mcpProfile}" to ${mcpPath}`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -73,7 +73,7 @@ export function initProject(options: InitProjectOptions): void {
         fs.mkdirSync(hooksDir, { recursive: true });
       }
       const hookPath = path.join(hooksDir, 'pre-commit');
-      const hookScript = `#!/usr/bin/env bash\n# Pre-Commit Security & Quality Gate via Agent Lifecycle Kit\nset -e\nif [ -x "$HOME/.agents/scripts/scan-skill-security.sh" ]; then\n  "$HOME/.agents/scripts/scan-skill-security.sh"\nfi\n`;
+      const hookScript = `#!/usr/bin/env bash\n# Pre-Commit Security & Quality Gate via Agent Lifecycle Kit\nset -e\nKIT="$HOME/.agents/bin/kit"\nif [ -x "$KIT" ]; then\n  "$KIT" audit\nelif command -v kit >/dev/null 2>&1; then\n  kit audit\nfi\n`;
       fs.writeFileSync(hookPath, hookScript, { mode: 0o755 });
       console.log(`✅ Installed pre-commit hook to ${hookPath}`);
     } else {
@@ -82,38 +82,4 @@ export function initProject(options: InitProjectOptions): void {
   }
 
   console.log(`\n🎉 Project bootstrapping complete!`);
-}
-
-// CLI entry point handling
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1].endsWith('init_project.ts')) {
-  const args = process.argv.slice(2);
-
-  let targetDir = process.cwd();
-  let mcpProfile = 'default';
-  let installMCP = true;
-  let installIDE = true;
-  let installHook = false;
-
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (arg === '--target' && i + 1 < args.length) {
-      targetDir = path.resolve(process.cwd(), args[++i]);
-    } else if (arg === '--mcp' && i + 1 < args.length) {
-      mcpProfile = args[++i];
-    } else if (arg === '--skip-mcp') {
-      installMCP = false;
-    } else if (arg === '--skip-ide') {
-      installIDE = false;
-    } else if (arg === '--hook' || arg === '--with-hook') {
-      installHook = true;
-    }
-  }
-
-  initProject({
-    targetDir,
-    mcpProfile,
-    installMCP,
-    installIDE,
-    installHook
-  });
 }

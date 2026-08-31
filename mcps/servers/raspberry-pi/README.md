@@ -19,9 +19,9 @@ Optional local overrides (edit composed `args`): `--port=22`, `--password=...`, 
 ## Install
 
 ```bash
-./scripts/compose-mcp.sh lab --install
+kit mcp lab --install
 # or merge into personal:
-# ./scripts/compose-mcp.sh personal --install
+# kit mcp personal --install
 ```
 
 ## When to use

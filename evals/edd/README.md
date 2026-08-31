@@ -22,8 +22,10 @@ evals/edd/
 
 | Driver | When | What it proves |
 |--------|------|----------------|
-| `scripted` (CI default) | `pnpm eval:edd`, PR CI | Harness, schema, keyword routing. **Not** a product LLM test. |
+| `scripted` (CI default) | `kit eval ci`, PR CI (`kit check`), Cursor / Copilot daily work | Harness, schema, keyword routing. **Not** a product LLM test. No API key. |
 | Live model | Nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) when `KIT_EVAL_API_KEY` is set | Paraphrases, prompt-injection, multi-tool sequences tagged `requires-live` |
+
+Cursor and GitHub Copilot are IDE hosts (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). They are **not** the live eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and a local live example: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
 
 Do not extend the scripted driver to pass `requires-live` cases. Add JSONL rows instead.
 
@@ -68,4 +70,4 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 
 Includes pass rate, tokens/latency, routing + schema adherence, and failure traces. Example: [examples/eval-report.md](./examples/eval-report.md).
 
-Live models: `KIT_EVAL_API_KEY` / `OPENAI_API_KEY`. Optional `KIT_EVAL_BASE_URL`, `KIT_EVAL_TOKEN_USD_PER_1K`, `KIT_EVAL_MODEL`.
+Live models (optional): `KIT_EVAL_API_KEY` first, then `OPENAI_API_KEY`, then `ANTHROPIC_API_KEY`. Optional `KIT_EVAL_BASE_URL` / `OPENAI_BASE_URL` (OpenAI-compatible `/chat/completions`; default `https://api.openai.com/v1`), `KIT_EVAL_TOKEN_USD_PER_1K`, `KIT_EVAL_MODEL`. Nightly CI only reads `KIT_EVAL_API_KEY`.

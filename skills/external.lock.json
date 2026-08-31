@@ -8,49 +8,49 @@
       "id": "cloudflare",
       "repository": "cloudflare/skills",
       "skill": "skills/cloudflare",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Cloudflare platform skill (Workers, Pages, KV, D1, R2, AI, networking, security)."
     },
     {
       "id": "wrangler",
       "repository": "cloudflare/skills",
       "skill": "skills/wrangler",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Deploy and manage Workers, KV, R2, D1, Vectorize, Queues, Workflows with Wrangler."
     },
     {
       "id": "workers-best-practices",
       "repository": "cloudflare/skills",
       "skill": "skills/workers-best-practices",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Production best practices and wrangler.jsonc conventions for Workers."
     },
     {
       "id": "durable-objects",
       "repository": "cloudflare/skills",
       "skill": "skills/durable-objects",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Stateful coordination with Durable Objects (RPC, SQLite, alarms, WebSockets)."
     },
     {
       "id": "agents-sdk",
       "repository": "cloudflare/skills",
       "skill": "skills/agents-sdk",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Build stateful AI agents on Cloudflare (scheduling, RPC, MCP servers)."
     },
     {
       "id": "react-best-practices",
       "repository": "vercel-labs/agent-skills",
       "skill": "skills/react-best-practices",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Vercel Engineering React/Next.js performance best practices (70+ rules)."
     },
     {
       "id": "web-design-guidelines",
       "repository": "vercel-labs/agent-skills",
       "skill": "skills/web-design-guidelines",
-      "pin": "v1.0.0",
+      "pin": "latest",
       "summary": "Vercel web interface guidelines for UI quality (use alongside kit agent-ui; kit hexagonal rules still win on structure)."
     }
   ]

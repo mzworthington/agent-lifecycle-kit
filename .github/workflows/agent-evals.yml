@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - 'evals/edd/**'
-      - 'scripts/lib/edd/**'
-      - 'scripts/lib/edd_cli.ts'
+      - 'kit/src/edd/**'
+      - 'kit/src/edd_cli.ts'
       - 'bin/kit.ts'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -14,8 +14,8 @@ on:
     branches: [main]
     paths:
       - 'evals/edd/**'
-      - 'scripts/lib/edd/**'
-      - 'scripts/lib/edd_cli.ts'
+      - 'kit/src/edd/**'
+      - 'kit/src/edd_cli.ts'
       - 'bin/kit.ts'
       - 'package.json'
       - 'pnpm-lock.yaml'

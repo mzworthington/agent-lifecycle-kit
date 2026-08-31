@@ -15,7 +15,7 @@ lessons/*
 # Machine-specific overrides (copy from config.example.json)
 system/config.json
 
-# Upstream Agent Skills (install via scripts/sync-external-skills.sh → ~/.cursor/skills)
+# Upstream Agent Skills (install via `kit sync` → ~/.cursor/skills)
 # Only kit prefixes are committed: agent-*, profile-*, lang-*, framework-*
 skills/*
 !skills/README.md

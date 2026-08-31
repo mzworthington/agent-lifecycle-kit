@@ -23,41 +23,51 @@ Subcommands:
   ci       --suite <path> [--threshold-routing <pct>] [--model <name>] [--out <dir>]
 
 Notes:
-  - Default model is "scripted" (deterministic local driver for CI / offline).
+  - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
   - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
-  - Set KIT_EVAL_API_KEY (or OPENAI_API_KEY) and --model <provider-model> for live LLM runs.
+  - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
 `);
 }
 
-function getFlag(args: string[], name: string): string | undefined {
+export function getEddFlag(args: string[], name: string): string | undefined {
   const idx = args.indexOf(name);
   if (idx === -1) return undefined;
   return args[idx + 1];
 }
 
-function getNumberFlag(args: string[], name: string, fallback: number): number {
-  const raw = getFlag(args, name);
+export function getEddNumberFlag(args: string[], name: string, fallback: number): number {
+  const raw = getEddFlag(args, name);
   if (raw === undefined) return fallback;
   const n = Number(raw);
   if (Number.isNaN(n)) throw new Error(`Invalid number for ${name}: ${raw}`);
   return n;
 }
 
-function defaultSuite(repoDir: string): string {
+export function defaultEddSuite(repoDir: string): string {
   return path.join(repoDir, 'evals', 'edd', 'architecture_routing.yaml');
 }
 
-function resolveSuite(repoDir: string, args: string[]): string {
-  return path.resolve(process.cwd(), getFlag(args, '--suite') ?? defaultSuite(repoDir));
+export function resolveEddSuite(repoDir: string, args: string[]): string {
+  return path.resolve(process.cwd(), getEddFlag(args, '--suite') ?? defaultEddSuite(repoDir));
+}
+
+export function eddWatchTargets(repoDir: string, args: string[]): string[] {
+  const suite = resolveEddSuite(repoDir, args);
+  return [
+    suite,
+    getEddFlag(args, '--target'),
+    path.join(repoDir, 'evals', 'edd'),
+    path.dirname(suite)
+  ].filter((t): t is string => Boolean(t));
 }
 
 function createRunner(repoDir: string, args: string[]): EvalRunner {
-  const model = getFlag(args, '--model') ?? process.env.KIT_EVAL_MODEL ?? 'scripted';
-  const tagsRaw = getFlag(args, '--tags');
+  const model = getEddFlag(args, '--model') ?? process.env.KIT_EVAL_MODEL ?? 'scripted';
+  const tagsRaw = getEddFlag(args, '--tags');
   const tags = tagsRaw ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean) : undefined;
   const systemPromptPath =
-    getFlag(args, '--system-prompt') ?? path.join(repoDir, 'evals', 'edd', 'system_prompt.md');
+    getEddFlag(args, '--system-prompt') ?? path.join(repoDir, 'evals', 'edd', 'system_prompt.md');
   return new EvalRunner({
     model,
     tags,
@@ -68,13 +78,13 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
 }
 
 async function cmdRun(repoDir: string, args: string[]): Promise<number> {
-  const suite = resolveSuite(repoDir, args);
+  const suite = resolveEddSuite(repoDir, args);
   const runner = createRunner(repoDir, args);
   const report = await runner.runSuite(suite);
-  const out = getFlag(args, '--out');
+  const out = getEddFlag(args, '--out');
   if (out) {
     const outDir = path.resolve(process.cwd(), out);
-    const format = (getFlag(args, '--format') as 'md' | 'json' | undefined) ?? 'md';
+    const format = (getEddFlag(args, '--format') as 'md' | 'json' | undefined) ?? 'md';
     const written = [
       ...runner.writeReports(format, outDir),
       ...(format === 'md' ? runner.writeReports('json', outDir) : [])
@@ -85,14 +95,9 @@ async function cmdRun(repoDir: string, args: string[]): Promise<number> {
 }
 
 async function cmdWatch(repoDir: string, args: string[]): Promise<number> {
-  const suite = resolveSuite(repoDir, args);
-  const model = getFlag(args, '--model') ?? 'scripted';
-  const targets = [
-    suite,
-    getFlag(args, '--target'),
-    path.join(repoDir, 'evals', 'edd'),
-    path.dirname(suite)
-  ].filter((t): t is string => Boolean(t));
+  const suite = resolveEddSuite(repoDir, args);
+  const model = getEddFlag(args, '--model') ?? 'scripted';
+  const targets = eddWatchTargets(repoDir, args);
 
   const runOnce = async (reason: string) => {
     console.log(`\n[edd watch] re-run (${reason}) model=${model}`);
@@ -121,9 +126,9 @@ async function cmdWatch(repoDir: string, args: string[]): Promise<number> {
 }
 
 async function cmdReport(repoDir: string, args: string[]): Promise<number> {
-  const format = (getFlag(args, '--format') as 'md' | 'json' | undefined) ?? 'md';
-  const outDir = path.resolve(process.cwd(), getFlag(args, '--out') ?? 'out/reports');
-  const fromPath = getFlag(args, '--from');
+  const format = (getEddFlag(args, '--format') as 'md' | 'json' | undefined) ?? 'md';
+  const outDir = path.resolve(process.cwd(), getEddFlag(args, '--out') ?? 'out/reports');
+  const fromPath = getEddFlag(args, '--from');
 
   let reports: SuiteReport[];
   if (fromPath) {
@@ -133,7 +138,7 @@ async function cmdReport(repoDir: string, args: string[]): Promise<number> {
   } else {
     // Re-run default suite to produce a fresh report artifact
     const runner = createRunner(repoDir, args);
-    reports = await runner.runSuites([resolveSuite(repoDir, args)]);
+    reports = await runner.runSuites([resolveEddSuite(repoDir, args)]);
   }
 
   const written = generateReport(reports, { format, outDir });
@@ -142,10 +147,10 @@ async function cmdReport(repoDir: string, args: string[]): Promise<number> {
 }
 
 async function cmdCi(repoDir: string, args: string[]): Promise<number> {
-  const suite = resolveSuite(repoDir, args);
-  const threshold = getNumberFlag(args, '--threshold-routing', 95);
-  const outDir = path.resolve(process.cwd(), getFlag(args, '--out') ?? 'out/reports');
-  const runner = createRunner(repoDir, ['--model', getFlag(args, '--model') ?? 'scripted', ...args]);
+  const suite = resolveEddSuite(repoDir, args);
+  const threshold = getEddNumberFlag(args, '--threshold-routing', 95);
+  const outDir = path.resolve(process.cwd(), getEddFlag(args, '--out') ?? 'out/reports');
+  const runner = createRunner(repoDir, ['--model', getEddFlag(args, '--model') ?? 'scripted', ...args]);
   const report = await runner.runSuite(suite);
   const written = runner.writeReports('md', outDir);
   runner.writeReports('json', outDir);

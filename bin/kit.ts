@@ -1,13 +1,20 @@
 #!/usr/bin/env node --import tsx/esm
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { spawnSync } from 'child_process';
-import { exportIDERules } from '../scripts/lib/export_ide_rules.js';
-import { initProject } from '../scripts/lib/init_project.js';
-import { renderAnalyticsSummary } from '../scripts/lib/telemetry_analytics.js';
-import { composeMCP } from '../scripts/lib/compose_mcp.js';
-import { runEvals } from '../scripts/lib/run_evals.js';
-import { handleEddEvalCli } from '../scripts/lib/edd_cli.js';
+import { exportIDERules } from '../kit/src/export_ide_rules.js';
+import { initProject } from '../kit/src/init_project.js';
+import { renderAnalyticsSummary } from '../kit/src/telemetry_analytics.js';
+import { composeMCP } from '../kit/src/compose_mcp.js';
+import { runEvals } from '../kit/src/run_evals.js';
+import { handleEddEvalCli } from '../kit/src/edd_cli.js';
+import { scanSkillSecurity } from '../kit/src/scan_skill_security.js';
+import { validateEvals } from '../kit/src/validate_evals.js';
+import { verifySkillsLayout, printSkillsLayoutResult } from '../kit/src/verify_skills_layout.js';
+import { syncExternalSkills } from '../kit/src/sync_external_skills.js';
+import { measureContextBudget, printContextBudget } from '../kit/src/measure_context_budget.js';
+import { initDebugBoardSession } from '../kit/src/init_debug_board.js';
+import { debugCiFailed } from '../kit/src/debug_ci_failed.js';
+import { runKitCheck } from '../kit/src/quality_gate.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +37,10 @@ Commands:
   metrics              Display telemetry analytics summary for subagent phase handovers
   verify               Verify skills directory layout conventions
   sync                 Sync official external skills (Cloudflare, Vercel)
+  measure-context      Report always-on context budget
+  debug-board <proj>   Scaffold a hypothesis-driven debug board
+  debug-ci             Fetch failed GitHub Actions logs
+  check                Run the local quality gate (audit, evals, EDD CI, context budget)
   help                 Display this help menu
 
 Examples:
@@ -42,7 +53,14 @@ Examples:
   kit eval report --format md --out out/reports
   kit export-rules
   kit metrics
+  kit sync --install
+  kit debug-board archlens "initial load overlap"
+  kit check
 `);
+}
+
+function exitStatus(ok: boolean): never {
+  process.exit(ok ? 0 : 1);
 }
 
 async function main(): Promise<void> {
@@ -77,36 +95,25 @@ async function main(): Promise<void> {
       const install = args.includes('--install');
       const outIdx = args.indexOf('-o');
       const outputFile = outIdx !== -1 ? args[outIdx + 1] : undefined;
-
       composeMCP(profile, outputFile, install);
       break;
     }
 
-    case 'audit': {
-      const res = spawnSync(path.join(repoDir, 'scripts', 'scan-skill-security.sh'), {
-        stdio: 'inherit',
-        env: { ...process.env, REPO_DIR: repoDir }
-      });
-      process.exit(res.status ?? 0);
+    case 'audit':
+    case 'scan':
+      exitStatus(scanSkillSecurity(repoDir).ok);
       break;
-    }
 
-    case 'validate': {
-      const res = spawnSync(path.join(repoDir, 'scripts', 'validate-evals.sh'), {
-        stdio: 'inherit',
-        env: { ...process.env, REPO_DIR: repoDir }
-      });
-      process.exit(res.status ?? 0);
+    case 'validate':
+      exitStatus(validateEvals(repoDir).ok);
       break;
-    }
 
     case 'eval': {
       const eddCode = await handleEddEvalCli({ repoDir, args: args.slice(1) });
       if (eddCode !== null) {
         process.exit(eddCode);
       }
-      const ok = runEvals();
-      process.exit(ok ? 0 : 1);
+      exitStatus(runEvals());
       break;
     }
 
@@ -114,9 +121,12 @@ async function main(): Promise<void> {
       const check = args.includes('--check');
       const target = args.find((a) => a !== 'export-rules' && !a.startsWith('--'));
       const dir = target ? path.resolve(process.cwd(), target) : repoDir;
-
       const ok = exportIDERules(dir, check);
-      process.exit(ok ? 0 : 1);
+      if (check) {
+        if (ok) console.log('✅ Multi-IDE rule check PASSED.');
+        else console.error('Multi-IDE rule check FAILED.');
+      }
+      exitStatus(ok);
       break;
     }
 
@@ -126,23 +136,52 @@ async function main(): Promise<void> {
     }
 
     case 'verify': {
-      const res = spawnSync(path.join(repoDir, 'scripts', 'verify-skills-layout.sh'), {
-        stdio: 'inherit',
-        env: { ...process.env, REPO_DIR: repoDir }
-      });
-      process.exit(res.status ?? 0);
+      const result = verifySkillsLayout(repoDir);
+      printSkillsLayoutResult(result);
+      exitStatus(result.ok);
       break;
     }
 
-    case 'sync': {
-      const syncArgs = args.slice(1);
-      const res = spawnSync(path.join(repoDir, 'scripts', 'sync-external-skills.sh'), syncArgs, {
-        stdio: 'inherit',
-        env: { ...process.env, REPO_DIR: repoDir }
-      });
-      process.exit(res.status ?? 0);
+    case 'sync':
+      process.exit(syncExternalSkills(repoDir, args.slice(1)));
+      break;
+
+    case 'measure-context': {
+      const result = measureContextBudget(repoDir);
+      printContextBudget(result);
+      exitStatus(result.ok);
       break;
     }
+
+    case 'debug-board': {
+      const project = args[1];
+      if (!project) {
+        console.error('Usage: kit debug-board <project> [title]');
+        process.exit(2);
+      }
+      try {
+        const result = initDebugBoardSession({
+          repoDir,
+          project,
+          title: args.slice(2).join(' ') || 'debug session'
+        });
+        console.log(`Wrote ${result.boardPath}`);
+        console.log(`Handover: ${result.handoverPath}`);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.error(`ERROR: ${message}`);
+        process.exit(1);
+      }
+      break;
+    }
+
+    case 'debug-ci':
+      process.exit(debugCiFailed(args.slice(1)));
+      break;
+
+    case 'check':
+      process.exit(await runKitCheck(repoDir));
+      break;
 
     case 'help':
     case '--help':

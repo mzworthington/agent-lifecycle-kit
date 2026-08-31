@@ -72,20 +72,21 @@ Every eval test case is defined in JSON adhering to `evals/schema.json`:
 Validate schema compliance, syntax, and skill reference integrity across both centralized suites and co-located skill evals:
 
 ```bash
-./scripts/validate-evals.sh
+pnpm kit validate
 ```
 
 Ensure skill folder layout rules remain valid:
 
 ```bash
-./scripts/verify-skills-layout.sh
+pnpm kit verify
 ```
 
-Run the EDD harness unit tests and the scripted routing CI gate (YAML/JSONL under `evals/edd/`):
+Run the CLI unit tests (`kit/src/**/*.test.ts`) and the scripted routing CI gate (YAML/JSONL under `evals/edd/`):
 
 ```bash
-pnpm test:edd
-pnpm eval:edd
+pnpm test
+pnpm kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --model scripted --out out/reports
+pnpm kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 ```
 
-`pnpm eval:edd` runs architecture routing **and** kit-knowledge MCP suites with the scripted driver. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml).
+`kit eval ci` with the scripted driver runs architecture routing **and** kit-knowledge MCP suites in `kit check`. That path is what Cursor and Copilot users run; no provider API key. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml). Key order and IDE vs HTTP driver: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).

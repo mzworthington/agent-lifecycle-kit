@@ -14,7 +14,7 @@ handover/
     ├── dead-code-backlog.md   # maintenance queue for agent-prune (dead-code track)
     ├── complexity-backlog.md  # maintenance queue for agent-prune (complexity track)
     ├── handover_debug.md      # agent-debug phase artifact
-    ├── debug-board-*.md       # hypothesis boards (`scripts/init-debug-board.sh`)
+    ├── debug-board-*.md       # hypothesis boards (`kit debug-board`)
     └── ...
 ```
 

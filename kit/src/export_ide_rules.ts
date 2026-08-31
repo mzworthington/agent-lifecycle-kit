@@ -1,10 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { resolveRepoDir } from './paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..');
+const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
 interface IDETarget {
   filename: string;
@@ -40,12 +38,16 @@ const IDE_TARGETS: IDETarget[] = [
   }
 ];
 
-export function exportIDERules(targetDir: string = repoDir, checkOnly: boolean = false): boolean {
+export function exportIDERules(
+  targetDir: string = defaultRepoDir,
+  checkOnly: boolean = false,
+  kitRepoDir: string = defaultRepoDir
+): boolean {
   let allValid = true;
 
   for (const target of IDE_TARGETS) {
     const destPath = path.join(targetDir, target.filename);
-    const templatePath = path.join(repoDir, 'templates', target.templateName);
+    const templatePath = path.join(kitRepoDir, 'templates', target.templateName);
 
     let contentToUse = target.fallbackContent;
     if (fs.existsSync(templatePath)) {
@@ -70,20 +72,4 @@ export function exportIDERules(targetDir: string = repoDir, checkOnly: boolean =
   }
 
   return allValid;
-}
-
-const args = process.argv.slice(2);
-const checkOnly = args.includes('--check');
-const targetArg = args.find(a => !a.startsWith('--'));
-const targetDir = targetArg ? path.resolve(process.cwd(), targetArg) : repoDir;
-
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1].endsWith('export_ide_rules.ts')) {
-  console.log(`=== Multi-IDE Rule Synchronizer (${checkOnly ? 'Check' : 'Export'}) ===`);
-  const success = exportIDERules(targetDir, checkOnly);
-  if (!success && checkOnly) {
-    console.error('Multi-IDE rule check FAILED.');
-    process.exit(1);
-  } else if (checkOnly) {
-    console.log('✅ Multi-IDE rule check PASSED.');
-  }
 }

@@ -89,15 +89,17 @@ sequenceDiagram
 ## Quick start
 
 ```bash
-git clone https://github.com/mzworthington/agent-lifecycle-kit.git
-cd agent-lifecycle-kit && ./install.sh
+# Put kit on your PATH (macOS / Linux; needs git and Node 22+)
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
+
+# Bootstrap the repo you are in
+kit init . --mcp default --hook
 
 # Prove agent tool-routing locally (offline scripted driver)
 kit eval ci --threshold-routing 95 --model scripted --out out/reports
-
-# Bootstrap an app repo with Kit standards + MCP profile
-kit init ./my-app --mcp collab --hook
 ```
+
+Already cloned this repo? Run `./install.sh` from the checkout instead.
 
 | Command | Purpose |
 | :--- | :--- |
@@ -106,7 +108,11 @@ kit init ./my-app --mcp collab --hook
 | `kit init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
 | `kit mcp <profile>` | Compose MCP profiles |
 | `kit audit` | Security & supply-chain audit |
+| `kit validate` / `kit verify` | Eval schema + skills layout |
 | `kit export-rules` | Sync `AGENTS.md` → IDE entry points |
+| `kit sync` | Install upstream skills from the lockfile |
+| `kit check` | Local quality gate (audit, evals, EDD CI, context budget) |
+| `kit measure-context` | Always-on context budget |
 
 ---
 
@@ -120,6 +126,25 @@ Start with the path that matches what you’re trying to do:
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
 
 Site: [eval-driven-development.dev](https://eval-driven-development.dev/)
+
+---
+
+## This checkout
+
+App repos only need `kit` on PATH. This table is for people changing Kit itself:
+
+| Path | Role |
+|------|------|
+| `bin/kit`, `bin/kit.ts` | CLI on PATH and the argv router |
+| `kit/src/` | Implementation and unit tests |
+| `evals/` | Skill-trigger JSON suites and EDD YAML/JSONL |
+| `skills/`, `mcps/` | Lifecycle skills and MCP catalog |
+
+```bash
+pnpm test          # kit/src unit tests + kit-knowledge
+pnpm typecheck
+pnpm check         # tests, then kit check (audit, evals, EDD CI, context budget)
+```
 
 ---
 

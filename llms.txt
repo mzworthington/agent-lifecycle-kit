@@ -7,11 +7,18 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 
 ## Start here
 - [Home](https://eval-driven-development.dev/)
+- [Install](https://eval-driven-development.dev/#install)
 - [EDD guide](https://eval-driven-development.dev/#guide)
 - [Lifecycle](https://eval-driven-development.dev/#lifecycle)
 - [Markdown guide](https://eval-driven-development.dev/docs/edd.md)
 - [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
+
+## Install
+```
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
+kit init . --mcp default --hook
+```
 
 ## Commands
 ```

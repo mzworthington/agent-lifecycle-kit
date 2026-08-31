@@ -35,10 +35,14 @@ tools:
 
 `agent-kit` is an alias of `kit`.
 
+## IDEs vs live keys
+
+Cursor and GitHub Copilot already load Kit via `.cursorrules` and `.github/copilot-instructions.md`. Run evals with `--model scripted`; no provider key. Live evals POST to an OpenAI-compatible `/chat/completions` and do **not** call Cursor Chat or Copilot Chat. Key order, nightly vs PR, and a local live example: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).
+
 ## CI
 
-- **Scripted gate:** [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) and `pnpm eval:edd` use the keyword driver. Cases tagged `requires-live` are skipped so paraphrases do not fail CI.
-- **Live nightly:** [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) runs on a schedule when `KIT_EVAL_API_KEY` is set and `KIT_EVAL_MODEL` is a real provider model. That job includes `requires-live` rows.
+- **Scripted gate:** [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) and `kit eval ci` / `kit check` use the keyword driver. Cases tagged `requires-live` are skipped so paraphrases do not fail CI. PR jobs may inject provider secrets but still default `KIT_EVAL_MODEL` to `scripted`.
+- **Live nightly:** [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) runs on a schedule when `KIT_EVAL_API_KEY` is set and `KIT_EVAL_MODEL` is a real provider model. That job includes `requires-live` rows. Missing `KIT_EVAL_API_KEY` skips the job; it does not fall through to `OPENAI_API_KEY`.
 - **Threshold gating:** `--threshold-routing 95` blocks merges when routing/schema extraction fails more than 5% of routing-tagged cases.
 - **Artifacts:** Reports upload with `if: always()` (`out/reports/eval-report.md`, `edd-report.md` / `.json`).
 

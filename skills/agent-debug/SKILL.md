@@ -46,7 +46,7 @@ You fix **broken behavior** with a short, evidence-first loop. Do **not** open t
 
 Procedure: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 Board template: [templates/debug-board.md](../../templates/debug-board.md).
-Tooling: [scripts/init-debug-board.sh](../../scripts/init-debug-board.sh), [scripts/debug-ci-failed.sh](../../scripts/debug-ci-failed.sh).
+Tooling: `kit debug-board`, `kit debug-ci`.
 
 ## When to run
 
@@ -82,7 +82,7 @@ Classify before deep code walks:
 |-------|------------|
 | **UI / layout / empty canvas** | Label user screenshots (before/after); load same diagram; visual repro |
 | **Live catalog / published data** | Fetch live revision artifacts; count nodes in the **named** entity |
-| **CI / workflow / docs-media** | `scripts/debug-ci-failed.sh` → classify flake vs config drift vs tool/auth |
+| **CI / workflow / docs-media** | `kit debug-ci` → classify flake vs config drift vs tool/auth |
 | **Fetch / network** | One failing URL + status vs `TypeError`; recent diff on that path |
 | **Already shipped?** | `git log` / PR search for the capability before implementing |
 
@@ -91,7 +91,7 @@ Normalize vocabulary once (“packages” vs “plugins”, “caps” vs ChaosS
 Scaffold a board:
 
 ```bash
-~/.agents/scripts/init-debug-board.sh <project> "<short title>"
+kit debug-board <project> "<short title>"
 ```
 
 ### 2. Reproduce before edit
@@ -149,8 +149,8 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 
 | Need | Tool |
 |------|------|
-| Init board | `scripts/init-debug-board.sh` |
-| Failed Actions logs | `scripts/debug-ci-failed.sh` ([gh](https://cli.github.com/)) |
+| Init board | `kit debug-board` |
+| Failed Actions logs | `kit debug-ci` ([gh](https://cli.github.com/)) |
 | Prior cloud-agent context | `cursor-cloud` MCP: `list-cloud-agents` → `batch-fetch-details` (transcripts via subagents) |
 | Instrumented deep dive | Cursor **debug** subagent / Debug mode (hypothesis + runtime logs) |
 | UI verify | computerUse / browser / RecordScreen — required for visual bugs |

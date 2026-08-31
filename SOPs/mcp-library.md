@@ -80,37 +80,37 @@ See [SOPs/context-budget.md](./context-budget.md).
 
 ```bash
 # Preview
-./scripts/compose-mcp.sh default
+kit mcp default
 
 # Global Cursor config (backup written if file exists)
-./scripts/compose-mcp.sh default --install
+kit mcp default --install
 
 # Collab tools (Linear OAuth, Notion OAuth, Slack env tokens)
-./scripts/compose-mcp.sh collab --install
+kit mcp collab --install
 
 # Ops / incident (Sentry OAuth + Slack)
-./scripts/compose-mcp.sh ops --install
+kit mcp ops --install
 
 # Security audit (Semgrep)
-./scripts/compose-mcp.sh security -o .cursor/mcp.security.json
+kit mcp security -o .cursor/mcp.security.json
 
 # Design / payments (opt-in; tokens or OAuth)
-./scripts/compose-mcp.sh design -o .cursor/mcp.design.json
-./scripts/compose-mcp.sh payments -o .cursor/mcp.payments.json
+kit mcp design -o .cursor/mcp.design.json
+kit mcp payments -o .cursor/mcp.payments.json
 
 # Personal / sensitive (Bitwarden, LinkedIn, Polyglot, Obsidian) — machine only
-./scripts/compose-mcp.sh personal --install
+kit mcp personal --install
 
 # Home lab (Raspberry Pi over SSH) — machine only
-./scripts/compose-mcp.sh lab --install
+kit mcp lab --install
 
 # Project config (Next + Chrome DevTools + Playwright + read-only Postgres)
 mkdir -p .cursor
-./scripts/compose-mcp.sh project-example -o .cursor/mcp.json
-./scripts/compose-mcp.sh cloud -o .cursor/mcp.cloud.json   # optional merge by hand
+kit mcp project-example -o .cursor/mcp.json
+kit mcp cloud -o .cursor/mcp.cloud.json   # optional merge by hand
 ```
 
-`./install.sh` runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, and `cloud` explicitly.
+The installer (`curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash`, or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, and `cloud` explicitly.
 
 ## 4. Verify in Cursor
 

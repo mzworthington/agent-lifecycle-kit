@@ -38,32 +38,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # H1: Type-check TypeScript (annotations are decorative without this)
       - name: TypeScript type-check
-        run: pnpm tsc --noEmit
+        run: pnpm typecheck
 
-      - name: Audit Skill Security & Secrets
-        run: ./scripts/scan-skill-security.sh
+      - name: Unit tests
+        run: pnpm test
 
-      - name: Run Evals Schema & Trigger Validation
-        run: ./scripts/validate-evals.sh
-
-      - name: Verify Skills Directory Layout
-        run: ./scripts/verify-skills-layout.sh
-
-      - name: Verify Multi-IDE Rules Sync
-        run: ./scripts/export-ide-rules.sh --check
-
-      - name: Run Live Skill Trigger Evals
-        run: ./scripts/run-evals.sh
-
-      - name: Run EDD harness unit tests
-        run: pnpm test:edd
-
-      - name: Run EDD CI gate (scripted)
-        run: |
-          mkdir -p out/reports
-          pnpm eval:edd
+      - name: Kit quality gate
+        run: pnpm kit check
 
       - name: Upload EDD reports
         if: always()
@@ -74,13 +56,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Test MCP Profile Composition
-        run: ./scripts/compose-mcp.sh default
+        run: pnpm kit mcp default
 
       - name: Test kit CLI Executable
-        run: |
-          pnpm kit audit
-          pnpm kit validate
-          pnpm kit eval
-          pnpm kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
-          pnpm kit eval run --suite evals/edd/kit_knowledge.yaml --model scripted
-          pnpm kit metrics
+        run: pnpm kit metrics

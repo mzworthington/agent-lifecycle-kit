@@ -45,7 +45,7 @@ For each golden prompt: note expected route, actual route an agent took (or woul
 After prompt or MCP tool schema changes:
 
 ```bash
-pnpm test:edd
+pnpm test
 pnpm kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 pnpm kit eval report --format md --out out/reports
 ```

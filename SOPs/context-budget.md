@@ -36,7 +36,7 @@ Keep always-on agent context small. Load philosophy, SOPs, and skills **on deman
 ## Measure
 
 ```bash
-./scripts/measure-context-budget.sh
+pnpm kit measure-context
 ```
 
 Reports character/token estimates for always-on surfaces and flags when over budget. Re-run after editing `AGENTS.md` or project handshake templates.

@@ -1,0 +1,100 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { describe, it } from 'node:test';
+import { runEvals } from './run_evals.js';
+
+function writeSkill(root: string, name: string, triggers: string[]): void {
+  const dir = path.join(root, 'skills', name);
+  fs.mkdirSync(dir, { recursive: true });
+  const triggerYaml = triggers.map((t) => `  - ${t}`).join('\n');
+  fs.writeFileSync(
+    path.join(dir, 'SKILL.md'),
+    `---\nname: ${name}\ndescription: test\ntriggers:\n${triggerYaml}\n---\n# ${name}\n`,
+    'utf8'
+  );
+}
+
+describe('runEvals', () => {
+  it('passes when the target skill exists and the prompt has no forbidden patterns', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    writeSkill(root, 'agent-tdd', ['tdd']);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'ok.json'),
+      JSON.stringify({
+        suite: 'ok',
+        test_cases: [
+          {
+            id: 'EVAL-TDD-001',
+            name: 'green',
+            target_skill: 'agent-tdd',
+            prompt: 'write a failing test first',
+            assertions: { forbidden_patterns: [': any'] }
+          }
+        ]
+      }),
+      'utf8'
+    );
+    assert.equal(runEvals(root), true);
+  });
+
+  it('fails when the target skill is missing or has no triggers', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    writeSkill(root, 'agent-empty', []);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'bad.json'),
+      JSON.stringify({
+        suite: 'bad',
+        test_cases: [
+          {
+            id: 'EVAL-MISS-001',
+            name: 'missing',
+            target_skill: 'agent-nope',
+            prompt: 'hello',
+            assertions: {}
+          },
+          {
+            id: 'EVAL-EMPTY-001',
+            name: 'empty triggers',
+            target_skill: 'agent-empty',
+            prompt: 'hello',
+            assertions: {}
+          }
+        ]
+      }),
+      'utf8'
+    );
+    assert.equal(runEvals(root), false);
+  });
+
+  it('fails when the prompt contains a forbidden pattern', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    writeSkill(root, 'agent-tdd', ['tdd']);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'forbid.json'),
+      JSON.stringify({
+        suite: 'forbid',
+        test_cases: [
+          {
+            id: 'EVAL-TDD-001',
+            name: 'any',
+            target_skill: 'agent-tdd',
+            prompt: 'please use : any here',
+            assertions: { forbidden_patterns: [': any'] }
+          }
+        ]
+      }),
+      'utf8'
+    );
+    assert.equal(runEvals(root), false);
+  });
+
+  it('passes with zero suites', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    assert.equal(runEvals(root), true);
+  });
+});

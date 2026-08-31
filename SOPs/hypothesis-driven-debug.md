@@ -104,9 +104,9 @@ State merge/PR status in the user-facing summary without waiting to be asked. PR
 
 ```bash
 # Latest failed run logs (repo root)
-~/.agents/scripts/debug-ci-failed.sh
+kit debug-ci
 # Or a specific run:
-~/.agents/scripts/debug-ci-failed.sh --run <run-id>
+kit debug-ci --run <run-id>
 ```
 
 When Actions cannot be dispatched (403):

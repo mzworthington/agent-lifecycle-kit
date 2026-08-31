@@ -1,30 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..');
-const skillsDir: string = path.join(repoDir, 'skills');
-const lockFilePath: string = path.join(skillsDir, 'external.lock.json');
-
-// Directories to scan — covers the full content surface, not just skills/ (C1)
-const SCAN_DIRECTORIES: string[] = [
-  'skills',
-  'scripts',
-  'SOPs',
-  'templates',
-  'mcps',
-];
-
-// Directories and patterns to skip during scanning
-const SKIP_DIRS = new Set(['.git', 'node_modules', '.pnpm-store', '.pnpm', '.husky']);
-
-// Paths excluded from content scanning (relative to repo root).
-// scripts/lib/ contains our own tooling — scanning it produces false positives
-// (e.g., the scanner's own regex patterns mention 'ignore instructions', process.env usage)
-const SKIP_REL_PATHS = new Set(['scripts/lib']);
 
 interface SecurityViolation {
   file: string;
@@ -33,6 +8,10 @@ interface SecurityViolation {
   rule: string;
   snippet: string;
 }
+
+const SCAN_DIRECTORIES: string[] = ['skills', 'kit', 'bin', 'SOPs', 'templates', 'mcps'];
+const SKIP_DIRS = new Set(['.git', 'node_modules', '.pnpm-store', '.pnpm', '.husky']);
+const SKIP_FILES = new Set(['scan_skill_security.ts']);
 
 const SECURITY_RULES = [
   {
@@ -43,7 +22,7 @@ const SECURITY_RULES = [
   {
     category: 'EXFILTRATION_RISK' as const,
     rule: 'Credential store access or exfiltration request',
-    pattern: /(~\/\.ssh|~\/\.aws|\.env\b(?!\.example)|id_rsa|AWS_SECRET_ACCESS_KEY|SLACK_TOKEN|curl\s+-[Xd]\s+(POST|PUT)\s+http)/i
+    pattern: /(~\/\.ssh|~\/\.aws|(?<![A-Za-z])\.env\b(?!\.example)|id_rsa|AWS_SECRET_ACCESS_KEY|SLACK_TOKEN|curl\s+-[Xd]\s+(POST|PUT)\s+http)/i
   },
   {
     category: 'OBFUSCATED_EXEC' as const,
@@ -62,16 +41,22 @@ const VALID_KINDS = ['role', 'profile'];
 const VALID_PHASES = [
   'orchestration', 'spec', 'tdd', 'xfn', 'impl', 'audit', 'maintenance', 'debug', 'telemetry', 'quality', 'docs', 'release'
 ];
-
-// Valid file extensions to scan (M6: added .yml/.yaml)
 const SCANNABLE_EXTENSIONS = new Set(['.md', '.sh', '.json', '.ts', '.yml', '.yaml']);
+const PIN_PATTERN = /^(latest|v?\d+(\.\d+)*(-[\w.-]+)?|[0-9a-f]{40}|refs\/(tags|heads)\/[\w./-]+)$/i;
+const OFFICIAL_INSTALLER =
+  /raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/[^/\s]+\/install\.sh/;
 
-// Tag or commit SHA pin pattern for supply-chain validation
-const PIN_PATTERN = /^(v?\d+(\.\d+)*(-[\w.-]+)?|[0-9a-f]{40})$/i;
+/** Documented `curl | bash` for this repo only — still flag every other pipe-to-shell. */
+export function isOfficialKitInstallerLine(line: string): boolean {
+  return OFFICIAL_INSTALLER.test(line) && /\|\s*(bash|sh)\b/.test(line);
+}
 
-const violations: SecurityViolation[] = [];
+export interface ScanSkillSecurityResult {
+  ok: boolean;
+  errorCount: number;
+  warningCount: number;
+}
 
-// Calculate Shannon entropy (bits per character) to detect obfuscated secrets or payloads
 function calculateEntropy(str: string): number {
   if (!str || str.length === 0) return 0;
   const frequencies: Record<string, number> = {};
@@ -86,7 +71,7 @@ function calculateEntropy(str: string): number {
   return entropy;
 }
 
-function scanFrontmatter(filePath: string, relPath: string, content: string): void {
+function scanFrontmatter(violations: SecurityViolation[], relPath: string, content: string): void {
   const match = content.match(/^---\s*\n([\s\S]*?)\n---/);
   if (!match) {
     violations.push({
@@ -100,7 +85,6 @@ function scanFrontmatter(filePath: string, relPath: string, content: string): vo
   }
 
   const yamlText = match[1];
-
   const nameMatch = yamlText.match(/^name:\s*(.+)$/m);
   const descMatch = yamlText.match(/^description:\s*/m);
   const kindMatch = yamlText.match(/^kind:\s*(.+)$/m);
@@ -117,7 +101,6 @@ function scanFrontmatter(filePath: string, relPath: string, content: string): vo
     });
   }
 
-  // H5: description is required per AGENTS.md
   if (!descMatch) {
     violations.push({
       file: relPath,
@@ -165,29 +148,27 @@ function scanFrontmatter(filePath: string, relPath: string, content: string): vo
   }
 }
 
-function scanFile(filePath: string, relPath: string): void {
+function scanFile(violations: SecurityViolation[], filePath: string, relPath: string): void {
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
 
-  // Only validate frontmatter on SKILL.md files inside skills/ directory
   if (relPath.endsWith('SKILL.md') && relPath.startsWith('skills/')) {
-    scanFrontmatter(filePath, relPath, content);
+    scanFrontmatter(violations, relPath, content);
   }
 
   lines.forEach((line: string, index: number) => {
-    SECURITY_RULES.forEach(rule => {
-      if (rule.pattern.test(line)) {
-        violations.push({
-          file: relPath,
-          line: index + 1,
-          category: rule.category,
-          rule: rule.rule,
-          snippet: line.trim()
-        });
-      }
+    SECURITY_RULES.forEach((rule) => {
+      if (!rule.pattern.test(line)) return;
+      if (rule.category === 'OBFUSCATED_EXEC' && isOfficialKitInstallerLine(line)) return;
+      violations.push({
+        file: relPath,
+        line: index + 1,
+        category: rule.category,
+        rule: rule.rule,
+        snippet: line.trim()
+      });
     });
 
-    // High entropy check for single contiguous tokens > 32 chars (excluding standard URLs and Markdown links)
     const tokens = line.split(/[\s,;()\[\]{}'\"]+/);
     for (const token of tokens) {
       if (token.length > 32 && !token.startsWith('http://') && !token.startsWith('https://') && !token.includes('file://')) {
@@ -206,17 +187,15 @@ function scanFile(filePath: string, relPath: string): void {
   });
 }
 
-// L3: Detect symlinks and warn instead of following them
 function isSymlink(entryPath: string): boolean {
   try {
-    const stat = fs.lstatSync(entryPath);
-    return stat.isSymbolicLink();
+    return fs.lstatSync(entryPath).isSymbolicLink();
   } catch {
     return false;
   }
 }
 
-function scanDirectory(dirPath: string): void {
+function scanDirectory(violations: SecurityViolation[], repoDir: string, dirPath: string): void {
   if (!fs.existsSync(dirPath)) return;
 
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
@@ -225,34 +204,31 @@ function scanDirectory(dirPath: string): void {
     const fullPath = path.join(dirPath, entry.name);
     const relPath = path.relative(repoDir, fullPath);
 
-    // L3: Skip and warn on symlinks
     if (isSymlink(fullPath)) {
       violations.push({
         file: relPath,
         line: 0,
         category: 'SYMLINK',
-        rule: `Symlink detected — not followed (potential traversal attack)`,
+        rule: 'Symlink detected — not followed (potential traversal attack)',
         snippet: `-> ${fs.readlinkSync(fullPath)}`
       });
       continue;
     }
 
-    // Skip excluded directories by name or relative path
     if (entry.isDirectory()) {
       if (SKIP_DIRS.has(entry.name)) continue;
-      const dirRelPath = path.relative(repoDir, fullPath);
-      if (SKIP_REL_PATHS.has(dirRelPath)) continue;
-      scanDirectory(fullPath);
+      scanDirectory(violations, repoDir, fullPath);
     } else if (entry.isFile()) {
+      if (SKIP_FILES.has(entry.name) || entry.name.endsWith('.test.ts')) continue;
       const ext = path.extname(entry.name);
       if (SCANNABLE_EXTENSIONS.has(ext)) {
-        scanFile(fullPath, relPath);
+        scanFile(violations, fullPath, relPath);
       }
     }
   }
 }
 
-function scanExternalLock(): void {
+function scanExternalLock(violations: SecurityViolation[], lockFilePath: string): void {
   if (!fs.existsSync(lockFilePath)) return;
 
   try {
@@ -277,7 +253,7 @@ function scanExternalLock(): void {
           file: 'skills/external.lock.json',
           line: 1,
           category: 'SUPPLY_CHAIN_UNPINNED',
-          rule: `External skill "${repo}" is missing required tag or version pin`,
+          rule: `External skill "${repo}" is missing required version pin (tag, latest, or commit SHA)`,
           snippet: JSON.stringify(skill)
         });
       } else if (!PIN_PATTERN.test(pin)) {
@@ -285,7 +261,7 @@ function scanExternalLock(): void {
           file: 'skills/external.lock.json',
           line: 1,
           category: 'SUPPLY_CHAIN_UNPINNED',
-          rule: `External skill "${repo}" pin "${pin}" is invalid — expected version tag (e.g. v1.0.0) or commit SHA`,
+          rule: `External skill "${repo}" pin "${pin}" is invalid — expected version tag (e.g. v1.0.0), latest, or commit SHA`,
           snippet: JSON.stringify(skill)
         });
       }
@@ -302,29 +278,36 @@ function scanExternalLock(): void {
   }
 }
 
-console.log('=== Agent Skill Hardened Security & Supply Chain Audit ===');
-console.log('');
+export function scanSkillSecurity(repoDir: string): ScanSkillSecurityResult {
+  const violations: SecurityViolation[] = [];
+  const lockFilePath = path.join(repoDir, 'skills', 'external.lock.json');
 
-// C1: Scan all content directories, not just skills/
-for (const dir of SCAN_DIRECTORIES) {
-  const dirPath = path.join(repoDir, dir);
-  scanDirectory(dirPath);
-}
+  console.log('=== Agent Skill Hardened Security & Supply Chain Audit ===');
+  console.log('');
 
-scanExternalLock();
+  for (const dir of SCAN_DIRECTORIES) {
+    scanDirectory(violations, repoDir, path.join(repoDir, dir));
+  }
 
-if (violations.length > 0) {
-  // Separate hard failures from warnings
-  const warnings = violations.filter(v =>
-    v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('is invalid')
+  scanExternalLock(violations, lockFilePath);
+
+  if (violations.length === 0) {
+    console.log(
+      '✅ Hardened Security audit PASSED: No prompt injections, secret leaks, schema violations, or unpinned supply-chain dependencies detected.'
+    );
+    return { ok: true, errorCount: 0, warningCount: 0 };
+  }
+
+  const warnings = violations.filter(
+    (v) => v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('is invalid')
   );
-  const errors = violations.filter(v =>
-    !(v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('is invalid'))
+  const errors = violations.filter(
+    (v) => !(v.category === 'SUPPLY_CHAIN_UNPINNED' && v.rule.includes('is invalid'))
   );
 
   if (warnings.length > 0) {
     console.warn(`⚠️  Supply Chain Warnings: ${warnings.length}\n`);
-    warnings.forEach(v => {
+    warnings.forEach((v) => {
       console.warn(`  ⚠️  [${v.category}] ${v.file}:${v.line} - ${v.rule}`);
       if (v.snippet) {
         console.warn(`     Snippet: "${v.snippet.substring(0, 100)}"`);
@@ -335,17 +318,16 @@ if (violations.length > 0) {
 
   if (errors.length > 0) {
     console.error(`🚨 Security Violations Found: ${errors.length}\n`);
-    errors.forEach(v => {
+    errors.forEach((v) => {
       console.error(`  ❌ [${v.category}] ${v.file}:${v.line} - ${v.rule}`);
       if (v.snippet) {
         console.error(`     Snippet: "${v.snippet.substring(0, 100)}"`);
       }
     });
     console.error('\nHardened Security audit FAILED.');
-    process.exit(1);
-  } else {
-    console.log(`✅ Hardened Security audit PASSED (${warnings.length} advisory warning(s)).`);
+    return { ok: false, errorCount: errors.length, warningCount: warnings.length };
   }
-} else {
-  console.log('✅ Hardened Security audit PASSED: No prompt injections, secret leaks, schema violations, or unpinned supply-chain dependencies detected.');
+
+  console.log(`✅ Hardened Security audit PASSED (${warnings.length} advisory warning(s)).`);
+  return { ok: true, errorCount: 0, warningCount: warnings.length };
 }

@@ -1,12 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { resolveRepoDir } from './paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoDir: string = process.env.REPO_DIR || path.resolve(__dirname, '../..');
-const evalsDir: string = path.join(repoDir, 'evals');
-const skillsDir: string = path.join(repoDir, 'skills');
+const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
 interface TestCase {
   id: string;
@@ -33,7 +29,7 @@ interface SkillMeta {
   description: string;
 }
 
-function loadSkillsMeta(): Map<string, SkillMeta> {
+function loadSkillsMeta(skillsDir: string): Map<string, SkillMeta> {
   const map = new Map<string, SkillMeta>();
   if (!fs.existsSync(skillsDir)) return map;
 
@@ -70,7 +66,7 @@ function loadSkillsMeta(): Map<string, SkillMeta> {
   return map;
 }
 
-function findEvalSuites(): string[] {
+function findEvalSuites(evalsDir: string, skillsDir: string): string[] {
   const files: string[] = [];
   const suitesDir = path.join(evalsDir, 'suites');
 
@@ -94,19 +90,22 @@ function findEvalSuites(): string[] {
   return files;
 }
 
-export function runEvals(): boolean {
+export function runEvals(rootDir: string = defaultRepoDir): boolean {
+  const evalsDir = path.join(rootDir, 'evals');
+  const skillsDir = path.join(rootDir, 'skills');
+
   console.log('=== Agent Lifecycle Kit - Live Trigger Evaluation Harness ===\n');
 
-  const skillsMap = loadSkillsMeta();
+  const skillsMap = loadSkillsMeta(skillsDir);
   console.log(`Loaded ${skillsMap.size} kit skills from skills/\n`);
 
-  const suiteFiles = findEvalSuites();
+  const suiteFiles = findEvalSuites(evalsDir, skillsDir);
   let totalCases = 0;
   let passedCases = 0;
   let failedCases = 0;
 
   for (const suiteFile of suiteFiles) {
-    const relPath = path.relative(repoDir, suiteFile);
+    const relPath = path.relative(rootDir, suiteFile);
     try {
       const raw = fs.readFileSync(suiteFile, 'utf8');
       const suite: EvalSuite = JSON.parse(raw);
@@ -169,9 +168,4 @@ export function runEvals(): boolean {
 
   console.log('✅ All live trigger evals passed successfully.');
   return true;
-}
-
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1].endsWith('run_evals.ts')) {
-  const ok = runEvals();
-  if (!ok) process.exit(1);
 }

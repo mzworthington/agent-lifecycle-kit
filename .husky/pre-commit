@@ -7,8 +7,8 @@ REPO_DIR="$(git rev-parse --show-toplevel)"
 
 echo "=== Pre-Commit Quality & Security Gate ==="
 
-"${REPO_DIR}/scripts/scan-skill-security.sh"
-"${REPO_DIR}/scripts/validate-evals.sh"
-"${REPO_DIR}/scripts/verify-skills-layout.sh"
+"${REPO_DIR}/bin/kit" audit
+"${REPO_DIR}/bin/kit" validate
+"${REPO_DIR}/bin/kit" verify
 
 echo "✅ Pre-commit quality gate PASSED."
