@@ -7,6 +7,13 @@ metrics:
     expected: "read_architecture_yaml"
   - type: "schema_match"
     strict: true
+  - type: "argument_correctness"
+  - type: "task_completion"
+  - type: "criteria_judge"
+    threshold: 1.0
+    criteria:
+      - "Response must reflect the tool output"
+      - "Response must not invent components absent from tool output"
   - type: "llm_as_judge"
 mocks:
   - tool: "read_architecture_yaml"

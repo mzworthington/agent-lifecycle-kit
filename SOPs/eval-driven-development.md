@@ -20,7 +20,7 @@ tools:
 
 ## Loop (red → green → refactor)
 
-1. **Red — Define intent:** Add a JSONL case (`id`, `prompt`, optional `history` / `tags` / `expect`) and point a YAML suite at it with metrics (`tool_selection`, `schema_match`, `llm_as_judge`, `self_correction`, `terminal_fallback`).
+1. **Red — Define intent:** Add a JSONL case (`id`, `prompt`, optional `history` / `tags` / `expect`) and point a YAML suite at it with metrics (`tool_selection`, `schema_match`, `argument_correctness`, `task_completion`, `criteria_judge`, `llm_as_judge`, `self_correction`, `terminal_fallback`).
 2. **Green — Implement interface:** Register the tool contract (MCP JSON under `evals/edd/tools/` or suite `mcp_tools`) and system prompt. Run `kit eval run --suite … --model scripted` (or a live model).
 3. **Refactor — Refine context:** Iterate tool `description` / parameter hints / system prompt until routing and schema assertions pass without hallucinated parameters.
 

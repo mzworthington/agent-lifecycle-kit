@@ -3,7 +3,7 @@ import path from 'path';
 import { parse as parseYaml } from 'yaml';
 import { AgentClient, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 import { loadDataset } from './dataset.js';
-import { runLlmJudge } from './judge.js';
+import { runCriteriaJudge, runLlmJudge, runTaskCompletionJudge } from './judge.js';
 import {
   EvalConfigSchema,
   type AgentResponse,
@@ -95,6 +95,45 @@ function buildFailureTrace(input: {
       llmOutput: input.response.content
     };
   }
+  if (failureText.includes('argument:')) {
+    return {
+      diagnosis:
+        'Argument Correctness Failure. Arguments were structurally usable but did not match the expected meaning for this intent.',
+      suggestedFix:
+        'Tighten tool parameter descriptions and examples so the agent extracts the correct identifiers and values from the user prompt.',
+      expectedTool,
+      actualTool,
+      expectedArguments,
+      actualArguments,
+      llmOutput: input.response.content
+    };
+  }
+  if (failureText.includes('completion:')) {
+    return {
+      diagnosis:
+        'Task Completion Failure. The agent did not achieve the stated user goal for this case.',
+      suggestedFix:
+        'Clarify the goal in the system prompt and eval expectations; ensure the agent finishes the workflow rather than stopping after a related tool call.',
+      expectedTool,
+      actualTool,
+      expectedArguments,
+      actualArguments,
+      llmOutput: input.response.content
+    };
+  }
+  if (failureText.includes('criteria:')) {
+    return {
+      diagnosis:
+        'Criteria Judge Failure. One or more written suite criteria were not satisfied.',
+      suggestedFix:
+        'Adjust prompts or tool contracts until each listed criterion passes at the configured threshold; inspect per-criterion reasons in the failure text.',
+      expectedTool,
+      actualTool,
+      expectedArguments,
+      actualArguments,
+      llmOutput: input.response.content
+    };
+  }
   return {
     diagnosis: failureText,
     suggestedFix: 'Inspect the prompt, tool schema, and system instructions for this case.',
@@ -104,6 +143,22 @@ function buildFailureTrace(input: {
     actualArguments,
     llmOutput: input.response.content
   };
+}
+
+function containsExpectedArgs(
+  parsed: Record<string, unknown>,
+  expected: Record<string, unknown>,
+  label: string
+): string[] {
+  const failures: string[] = [];
+  for (const [key, value] of Object.entries(expected)) {
+    if (parsed[key] !== value) {
+      failures.push(
+        `${label} expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
+      );
+    }
+  }
+  return failures;
 }
 
 export class EvalRunner {
@@ -377,16 +432,6 @@ export class EvalRunner {
                 }
               }
             }
-            if (expected.arguments_contains) {
-              for (const [key, value] of Object.entries(expected.arguments_contains)) {
-                if (parsed[key] !== value) {
-                  failures.push(
-                    `schema: call[${i}] expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
-                  );
-                  ok = false;
-                }
-              }
-            }
           }
           schemaOk = ok;
           continue;
@@ -419,16 +464,6 @@ export class EvalRunner {
             }
           }
         }
-        if (testCase.expect?.arguments_contains) {
-          for (const [key, value] of Object.entries(testCase.expect.arguments_contains)) {
-            if (parsed[key] !== value) {
-              failures.push(
-                `schema: expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
-              );
-              ok = false;
-            }
-          }
-        }
         schemaOk = ok;
       }
 
@@ -455,6 +490,101 @@ export class EvalRunner {
         }
         if (response.consecutiveToolFailures < maxRetries && !response.haltedAutonomousExecution) {
           failures.push(`terminal_fallback: expected >= ${maxRetries} consecutive failures`);
+        }
+      }
+
+      if (metric.type === 'argument_correctness') {
+        if (testCase.expect?.no_tool) {
+          continue;
+        }
+
+        if (testCase.expect?.tools?.length) {
+          for (let i = 0; i < testCase.expect.tools.length; i++) {
+            const expected = testCase.expect.tools[i];
+            const call = response.tool_calls?.[i];
+            if (!call) {
+              failures.push(`argument: missing tool call at index ${i}`);
+              continue;
+            }
+            if (!expected.arguments_contains) continue;
+            const parsed = parseArgs(call.arguments);
+            if (!parsed) {
+              failures.push(`argument: call[${i}] arguments are not valid JSON`);
+              continue;
+            }
+            failures.push(
+              ...containsExpectedArgs(parsed, expected.arguments_contains, `argument: call[${i}]`)
+            );
+          }
+          continue;
+        }
+
+        const expectedArgs = testCase.expect?.arguments_contains;
+        if (!expectedArgs) {
+          continue;
+        }
+        const call = response.tool_calls?.[0];
+        if (!call) {
+          failures.push('argument: no tool call to validate');
+          continue;
+        }
+        const parsed = parseArgs(call.arguments);
+        if (!parsed) {
+          failures.push('argument: tool arguments are not valid JSON');
+          continue;
+        }
+        failures.push(...containsExpectedArgs(parsed, expectedArgs, 'argument:'));
+      }
+
+      if (metric.type === 'task_completion') {
+        const toolOutput =
+          testCase.tool_output ??
+          config.mocks?.find((m) => m.tool === (response.tool_calls?.[0]?.name ?? ''))?.response ??
+          null;
+        const verdict = await runTaskCompletionJudge({
+          prompt: testCase.prompt,
+          goal: testCase.expect?.goal ?? metric.expected,
+          expectTool: testCase.expect?.tool,
+          expectTools: testCase.expect?.tools?.map((t) => t.name),
+          noTool: testCase.expect?.no_tool === true,
+          toolCalls: response.tool_calls ?? [],
+          toolOutput,
+          agentResponse: response.content,
+          model: this.judgeModel ?? config.judge_model ?? this.model,
+          apiKey: this.apiKey,
+          baseUrl: this.baseUrl
+        });
+        if (verdict.score !== 'PASS') {
+          failures.push(`completion: ${verdict.reasoning || 'task_completion failed'}`);
+        }
+      }
+
+      if (metric.type === 'criteria_judge') {
+        if (testCase.expect?.no_tool) {
+          continue;
+        }
+        const toolOutput =
+          testCase.tool_output ??
+          config.mocks?.find((m) => m.tool === (response.tool_calls?.[0]?.name ?? ''))?.response ??
+          null;
+        const verdict = await runCriteriaJudge({
+          prompt: testCase.prompt,
+          toolOutput,
+          agentResponse: response.content,
+          toolCalls: response.tool_calls,
+          criteria: metric.criteria ?? [],
+          threshold: metric.threshold,
+          model: this.judgeModel ?? config.judge_model ?? this.model,
+          apiKey: this.apiKey,
+          baseUrl: this.baseUrl
+        });
+        if (!verdict.passed) {
+          const failed = verdict.results.filter((r) => !r.pass);
+          const detail =
+            failed.length > 0
+              ? failed.map((r) => `${r.criterion} (${r.reason})`).join('; ')
+              : verdict.reasoning;
+          failures.push(`criteria: ${detail}`);
         }
       }
 

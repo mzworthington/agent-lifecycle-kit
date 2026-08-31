@@ -46,7 +46,10 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 | Type | Asserts |
 |------|---------|
 | `tool_selection` | Correct tool, `expect.no_tool`, or ordered `expect.tools[]` |
-| `schema_match` | Valid JSON args (optional key checks per call) |
+| `schema_match` | Valid JSON object args (type/shape; not value meaning) |
+| `argument_correctness` | `expect.arguments_contains` / per-call args match intent meaning |
+| `task_completion` | User goal achieved (`expect.goal` or expected tool plan); scripted heuristic or live judge |
+| `criteria_judge` | Written suite `criteria` + `threshold` (0–1); per-criterion reasons |
 | `llm_as_judge` | Semantic accuracy / hallucination / tone (skipped when `expect.no_tool`) |
 | `self_correction` | Param updates after injected errors |
 | `terminal_fallback` | Circuit breaker stops endless retries |

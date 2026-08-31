@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { EvalRunner } from './runner.js';
 import { loadDataset, productionTraceToJsonl } from './dataset.js';
 import { detectRoutingDrift, shouldShadowEval } from './otel.js';
-import { localJudge } from './judge.js';
+import { localJudge, localCriteriaJudge } from './judge.js';
 import { generateReport } from './telemetry.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -219,8 +219,8 @@ metrics:
   - type: "tool_selection"
   - type: "schema_match"
     strict: true
-`
-    );
+  - type: "argument_correctness"
+`    );
     const runner = new EvalRunner({
       model: 'scripted',
       driver: async () => ({
@@ -274,5 +274,186 @@ metrics:
     assert.ok(parsed.tags.includes('prod-derived'));
     assert.ok(parsed.tags.includes('circuit_breaker'));
     assert.equal(parsed.expect?.no_tool, true);
+  });
+
+  it('fails argument_correctness when schema-valid args have wrong values', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-arg-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'arg-01',
+        prompt: 'Show payment architecture',
+        tags: ['routing'],
+        expect: {
+          tool: 'read_architecture_yaml',
+          arguments_contains: { componentId: 'payment-api' }
+        }
+      })}\n`
+    );
+    fs.writeFileSync(
+      path.join(dir, 'suite.yaml'),
+      `name: "Argument correctness"
+dataset: "cases.jsonl"
+metrics:
+  - type: "schema_match"
+    strict: true
+  - type: "argument_correctness"
+`
+    );
+    const runner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => ({
+        content: 'Looked up billing.',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'billing-api' } }],
+        usage: { promptTokens: 5, completionTokens: 5, totalTokens: 10 }
+      })
+    });
+    const report = await runner.runSuite(path.join(dir, 'suite.yaml'));
+    assert.equal(report.failed, 1);
+    assert.equal(report.results[0]?.schemaOk, true);
+    assert.ok(report.results[0]?.failures.some((f) => f.startsWith('argument:')));
+  });
+
+  it('passes argument_correctness when argument meaning matches', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-arg-ok-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'arg-02',
+        prompt: 'Show payment architecture',
+        expect: {
+          tool: 'read_architecture_yaml',
+          arguments_contains: { componentId: 'payment-api' }
+        }
+      })}\n`
+    );
+    fs.writeFileSync(
+      path.join(dir, 'suite.yaml'),
+      `name: "Argument ok"
+dataset: "cases.jsonl"
+metrics:
+  - type: "argument_correctness"
+`
+    );
+    const runner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => ({
+        content: 'payment-api architecture',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+        usage: { promptTokens: 5, completionTokens: 5, totalTokens: 10 }
+      })
+    });
+    const report = await runner.runSuite(path.join(dir, 'suite.yaml'));
+    assert.equal(report.failed, 0, report.results[0]?.failures.join(','));
+  });
+
+  it('scores task_completion from expected tool outcome', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-task-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'task-01',
+        prompt: 'Pull payment C4',
+        expect: { tool: 'read_architecture_yaml', goal: 'Retrieve payment architecture' }
+      })}\n${JSON.stringify({
+        id: 'task-02',
+        prompt: 'Pull payment C4',
+        expect: { tool: 'read_architecture_yaml', goal: 'Retrieve payment architecture' }
+      })}\n`
+    );
+    fs.writeFileSync(
+      path.join(dir, 'suite.yaml'),
+      `name: "Task completion"
+dataset: "cases.jsonl"
+metrics:
+  - type: "task_completion"
+`
+    );
+    let n = 0;
+    const runner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => {
+        n += 1;
+        if (n === 1) {
+          return {
+            content: 'Here is payment-api.',
+            tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+            usage: { promptTokens: 5, completionTokens: 5, totalTokens: 10 }
+          };
+        }
+        return {
+          content: 'I asked a related system.',
+          tool_calls: [{ name: 'search_kit', arguments: { query: 'payment' } }],
+          usage: { promptTokens: 5, completionTokens: 5, totalTokens: 10 }
+        };
+      }
+    });
+    const report = await runner.runSuite(path.join(dir, 'suite.yaml'));
+    assert.equal(report.results[0]?.passed, true, report.results[0]?.failures.join(','));
+    assert.equal(report.results[1]?.passed, false);
+    assert.ok(report.results[1]?.failures.some((f) => f.startsWith('completion:')));
+  });
+
+  it('scores criteria_judge with threshold and per-criterion reasons', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-crit-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'crit-01',
+        prompt: 'Summarize architecture',
+        tool_output: { component: 'payment-api' },
+        expect: { tool: 'read_architecture_yaml' }
+      })}\n`
+    );
+    fs.writeFileSync(
+      path.join(dir, 'suite.yaml'),
+      `name: "Criteria"
+dataset: "cases.jsonl"
+metrics:
+  - type: "criteria_judge"
+    threshold: 1.0
+    criteria:
+      - "Response must reflect the tool output"
+      - "Response must not invent components absent from tool output"
+`
+    );
+    const passRunner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => ({
+        content: 'payment-api talks to payment-db per architecture.',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+        usage: { promptTokens: 5, completionTokens: 5, totalTokens: 10 }
+      })
+    });
+    const passReport = await passRunner.runSuite(path.join(dir, 'suite.yaml'));
+    assert.equal(passReport.failed, 0, passReport.results[0]?.failures.join(','));
+
+    const failRunner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => ({
+        content: 'payment-api talks to the legacy-monolith and redis cluster',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+        usage: { promptTokens: 5, completionTokens: 5, totalTokens: 10 }
+      })
+    });
+    const failReport = await failRunner.runSuite(path.join(dir, 'suite.yaml'));
+    assert.equal(failReport.failed, 1);
+    assert.ok(failReport.results[0]?.failures.some((f) => f.startsWith('criteria:')));
+    assert.ok(failReport.results[0]?.failures[0]?.includes('invent'));
+  });
+
+  it('localCriteriaJudge respects threshold below 1', () => {
+    const verdict = localCriteriaJudge({
+      prompt: 'x',
+      toolOutput: { component: 'payment-api' },
+      agentResponse: 'payment-api architecture looks fine',
+      criteria: [
+        'Response must reflect the tool output',
+        'Response must not invent components absent from tool output'
+      ],
+      threshold: 0.5
+    });
+    assert.equal(verdict.passed, true);
+    assert.ok(verdict.score >= 0.5);
   });
 });

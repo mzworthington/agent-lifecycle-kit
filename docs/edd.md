@@ -79,7 +79,8 @@ That value is sent as `Authorization: Bearer …` to an **OpenAI-compatible** `{
 The same key is reused for:
 
 - **Agent:** given this prompt and these tools, which call do you make?
-- **Judge:** optional second completion for `llm_as_judge` (falls back to a local heuristic when the model is scripted or no key is set)
+- **Judge:** optional second completion for `llm_as_judge` / `criteria_judge` / live `task_completion` (falls back to a local heuristic when the model is scripted or no key is set)
+- **Phase 1 outcome metrics:** `argument_correctness` (value meaning via `expect.arguments_contains`), `task_completion` (`expect.goal` or expected tool plan), `criteria_judge` (suite `criteria` + `threshold`)
 
 Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K`. Local OpenAI-compatible servers (Ollama, OpenRouter, and similar) work by setting `KIT_EVAL_BASE_URL`.
 
