@@ -1,0 +1,29 @@
+{
+  "name": "agent.loop",
+  "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "spanId": "1122334455667788",
+  "startTimeUnixNano": "1725112800000000000",
+  "endTimeUnixNano": "1725112801840000000",
+  "attributes": {
+    "kit.suite": "prod",
+    "kit.case_id": "prod-halluc-01",
+    "kit.prompt": "Summarize the payment-api architecture for onboarding.",
+    "kit.tool_name": "read_architecture_yaml",
+    "kit.tool_payload": "[{\"name\":\"read_architecture_yaml\",\"arguments\":{\"componentId\":\"payment-api\"}}]",
+    "kit.routing_confidence": 0.62,
+    "kit.latency_ms": 1840,
+    "kit.tokens": 612,
+    "kit.passed": false
+  },
+  "tool_output": {
+    "component": "payment-api",
+    "depends_on": ["postgres", "stripe-gateway"]
+  },
+  "agent_response": "payment-api talks to the legacy-monolith and redis cluster for caching.",
+  "id": "prod-halluc-01",
+  "tags": ["prod-derived"],
+  "expect": {
+    "tool": "read_architecture_yaml",
+    "arguments_contains": { "componentId": "payment-api" }
+  }
+}

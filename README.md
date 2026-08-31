@@ -17,6 +17,7 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 | :--- | :--- |
 | Agent picked the wrong tool / made-up args | Write a JSONL case → `kit eval run --suite evals/edd/demo.yaml --model scripted` |
 | Gate a prompt or schema change | `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports` |
+| See prod OTel + shadow loop locally | `mise install && mise run edd:otel-demo` then `mise run edd:shadow-demo` |
 | Always-on rules are too fat | `kit measure-context` then `kit check` |
 | Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
 | Never installed kit | [Start here in 10 minutes](https://eval-driven-development.dev/#onboard) |
@@ -142,7 +143,8 @@ Start with the path that matches what you’re trying to do:
 2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) → [AGENTS.md](./AGENTS.md)
 3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
-5. **Operators** — [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
+5. **Prod feedback** — [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`mise run otelop` + `kit eval shadow`)
+6. **Operators** — [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 
 Site: [eval-driven-development.dev](https://eval-driven-development.dev/) (`#kit` for context/MCP/check; [docs/kit.md](https://eval-driven-development.dev/docs/kit.md))
 
@@ -157,6 +159,7 @@ App repos only need `kit` on PATH. This table is for people changing Kit itself:
 | `bin/kit`, `bin/kit.ts` | CLI on PATH and the argv router |
 | `kit/src/` | Implementation and unit tests |
 | `evals/` | Skill-trigger JSON suites and EDD YAML/JSONL |
+| `mise.toml` | otelop + EDD observability demo tasks |
 | `skills/`, `mcps/` | Lifecycle skills and MCP catalog |
 
 ```bash

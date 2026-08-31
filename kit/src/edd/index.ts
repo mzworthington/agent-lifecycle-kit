@@ -41,5 +41,14 @@ export {
   casesFromTraceFile,
   synthesizeFromSeeds
 } from './dataset-hygiene.js';
-export { emitAgentSpan, detectRoutingDrift, shouldShadowEval, type OtelEmitter } from './otel.js';
+export { emitAgentSpan, detectRoutingDrift, shouldShadowEval, type OtelEmitter, type OtelSpan } from './otel.js';
+export {
+  normalizeProdTurn,
+  shadowEvalTurn,
+  shadowEvalTurns,
+  kitSpanToOtlpJson,
+  type ProdTurn,
+  type ShadowEvalResult,
+  type ShadowEvalOptions
+} from './shadow.js';
 export { watchTargets } from './watch.js';
