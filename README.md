@@ -144,6 +144,7 @@ App repos only need `kit` on PATH. This table is for people changing Kit itself:
 
 ```bash
 pnpm test          # kit/src unit tests + kit-knowledge
+pnpm test:ci       # same + Markdown report at out/reports/unit-test-report.md (CI Summary)
 pnpm typecheck     # also run by .husky/pre-commit
 pnpm check         # tests, then kit check (audit, evals, EDD CI, context budget)
 ```

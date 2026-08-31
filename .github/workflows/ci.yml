@@ -42,7 +42,7 @@ jobs:
         run: pnpm typecheck
 
       - name: Unit tests
-        run: pnpm test
+        run: pnpm test:ci
 
       - name: Kit quality gate
         run: pnpm kit check
@@ -69,6 +69,14 @@ jobs:
             echo "| MCP profile / kit metrics | Default MCP composition resolves; CLI metrics command runs |"
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f out/reports/unit-test-report.md ]; then
+            cat out/reports/unit-test-report.md >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "_No unit test report was produced._" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
           if [ -f out/reports/edd-report.json ]; then
             pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json --github-summary
