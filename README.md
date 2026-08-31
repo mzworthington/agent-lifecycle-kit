@@ -1,13 +1,29 @@
 # Kit (Agent Lifecycle Kit)
 
-**Ship AI agents you can prove.**
+**Test the tools your agents call.**
 
-When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit makes **Eval-Driven Development (EDD)** the sensible default for that work—TDD for tool-using agents—then wraps it in the lifecycle, architecture, and multi-IDE governance your team already needs.
+When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit ships **Eval-Driven Development (EDD)** — TDD for tool-using agents — plus the lifecycle, thin context budget, and MCP compose your team needs to run that loop every day.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
 [![Pages](https://img.shields.io/badge/Docs-eval--driven--development.dev-blue?style=for-the-badge&logo=github)](https://eval-driven-development.dev/)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
+
+---
+
+## What do I use this for today?
+
+| Job in front of you | Do this |
+| :--- | :--- |
+| Agent picked the wrong tool / made-up args | Write a JSONL case → `kit eval run --suite evals/edd/demo.yaml --model scripted` |
+| Gate a prompt or schema change | `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports` |
+| Always-on rules are too fat | `kit measure-context` then `kit check` |
+| Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
+| Never installed kit | [Start here in 10 minutes](https://eval-driven-development.dev/#onboard) |
+
+Tangible proof on the site: [before / after](https://eval-driven-development.dev/#proof) · [interactive demo](https://eval-driven-development.dev/#demo) · [today picker](https://eval-driven-development.dev/#today).
+
+Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after write-up](./evals/edd/examples/before-after.md)). Full regression: [architecture_routing](./evals/edd/architecture_routing.yaml).
 
 ---
 
@@ -20,8 +36,8 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 3. **Refactor** — Tighten descriptions and constraints; gate merges with `kit eval ci --threshold-routing 95`.
 
 ```bash
-kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
-kit eval ci --threshold-routing 95 --out out/reports
+kit eval run --suite evals/edd/demo.yaml --model scripted
+kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 kit eval report --format md --out out/reports
 ```
 
@@ -87,7 +103,7 @@ sequenceDiagram
 
 ---
 
-## Quick start
+## Start here in 10 minutes
 
 ```bash
 # Put kit on your PATH (macOS / Linux; needs git and Node 22+)
@@ -96,8 +112,9 @@ curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/m
 # Bootstrap the repo you are in
 kit init . --mcp default --hook
 
-# Prove agent tool-routing locally (offline scripted driver)
-kit eval ci --threshold-routing 95 --model scripted --out out/reports
+# Prove routing on the teaching suite (offline scripted driver)
+kit eval run --suite evals/edd/demo.yaml --model scripted
+kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 ```
 
 Already cloned this repo? Run `./install.sh` from the checkout instead.
@@ -121,7 +138,7 @@ Already cloned this repo? Run `./install.sh` from the checkout instead.
 
 Start with the path that matches what you’re trying to do:
 
-1. **Prove agents** — [EDD guide](./docs/edd.md) → [EDD SOP](./SOPs/eval-driven-development.md) → [suites](./evals/edd/README.md)
+1. **Prove agents (today)** — [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
 2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) → [AGENTS.md](./AGENTS.md)
 3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)

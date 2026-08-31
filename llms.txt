@@ -5,9 +5,21 @@
 ## What this site is
 Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`). The same kit also gates always-on context (`kit measure-context`), composes one MCP profile, and runs `kit check`.
 
+## What do I use this for today?
+- Wrong tool / made-up args → `kit eval run --suite evals/edd/demo.yaml --model scripted`
+- Gate a prompt or schema change → `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
+- Always-on context too fat → `kit measure-context` then `kit check`
+- Starting a product feature → lifecycle (grill → spec → TDD + XFN → audit → release)
+- Never installed → start here in 10 minutes: install → `kit init` → demo suite → CI bar
+
 ## Start here
-- [Home](https://eval-driven-development.dev/)
+- [Home / today picker](https://eval-driven-development.dev/#today)
+- [Before / after proof](https://eval-driven-development.dev/#proof)
+- [Failing-eval demo](https://eval-driven-development.dev/#demo)
+- [Start here in 10 minutes](https://eval-driven-development.dev/#onboard)
 - [Install](https://eval-driven-development.dev/#install)
+- [Demo suite](https://eval-driven-development.dev/evals/edd/demo.yaml)
+- [Before/after write-up](https://eval-driven-development.dev/evals/edd/examples/before-after.md)
 - [Kit tools](https://eval-driven-development.dev/#kit)
 - [Operator guide](https://eval-driven-development.dev/docs/kit.md)
 - [Context budget](https://eval-driven-development.dev/SOPs/context-budget.md)
@@ -15,6 +27,7 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 - [Lifecycle](https://eval-driven-development.dev/#lifecycle)
 - [Markdown EDD guide](https://eval-driven-development.dev/docs/edd.md)
 - [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
+- [Example report](https://eval-driven-development.dev/evals/edd/examples/eval-report.md)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
 
 ## Install
@@ -25,8 +38,8 @@ kit init . --mcp default --hook
 
 ## Commands
 ```
-kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
-kit eval ci --threshold-routing 95 --out out/reports
+kit eval run --suite evals/edd/demo.yaml --model scripted
+kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 kit eval report --format md --out out/reports
 kit measure-context
 kit check

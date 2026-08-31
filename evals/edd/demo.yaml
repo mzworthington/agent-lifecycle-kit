@@ -1,0 +1,25 @@
+# Demo: first-hour routing proof
+# Curated teaching suite for the public site / first session.
+# Full regression stays in architecture_routing.yaml.
+name: "Demo: wrong tool → gated eval"
+dataset: "demo.jsonl"
+mcp_tools:
+  - "tools/read_architecture_yaml.json"
+metrics:
+  - type: "tool_selection"
+    expected: "read_architecture_yaml"
+  - type: "schema_match"
+    strict: true
+  - type: "argument_correctness"
+  - type: "mcp_use"
+  - type: "task_completion"
+mocks:
+  - tool: "read_architecture_yaml"
+    response:
+      status: "success"
+      component: "payment-api"
+      containers:
+        - "payment-api"
+        - "payment-db"
+      relationships:
+        - "payment-api -> payment-db"
