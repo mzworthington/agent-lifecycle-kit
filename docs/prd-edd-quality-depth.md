@@ -5,7 +5,6 @@
 | **Status** | Draft for Design |
 | **Product** | Agent Lifecycle Kit — Eval-Driven Development |
 | **Audience** | Kit maintainers, consumer app teams shipping tool-using agents |
-| **Inspiration** | [DeepEval](https://github.com/confident-ai/deepeval) metrics and dataset patterns (not product surface) |
 | **Companion** | [EDD guide](./edd.md), [EDD SOP](../SOPs/eval-driven-development.md), [production telemetry SOP](../SOPs/edd-production-telemetry.md) |
 
 ## 1. Problem
