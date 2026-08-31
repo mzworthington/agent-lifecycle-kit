@@ -8,6 +8,8 @@ metrics:
     expected: "read_architecture_yaml"
   - type: "schema_match"
     strict: true
+  - type: "argument_correctness"
+  - type: "task_completion"
 mocks:
   - tool: "read_architecture_yaml"
     response:

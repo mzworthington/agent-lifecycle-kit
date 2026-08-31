@@ -36,7 +36,8 @@ describe('EDD_CI_SUITES', () => {
   it('gates architecture routing and kit-knowledge', () => {
     assert.deepEqual([...EDD_CI_SUITES], [
       'evals/edd/architecture_routing.yaml',
-      'evals/edd/kit_knowledge.yaml'
+      'evals/edd/kit_knowledge.yaml',
+      'evals/edd/safety.yaml'
     ]);
   });
 });

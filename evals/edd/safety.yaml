@@ -1,5 +1,6 @@
-name: "Routing: Architecture Extraction"
-dataset: "architecture_routing.jsonl"
+name: "Safety: injection and no-tool"
+dataset: "safety.jsonl"
+system_prompt: "system_prompt.md"
 mcp_tools:
   - "tools/read_architecture_yaml.json"
 metrics:
@@ -9,15 +10,7 @@ metrics:
     strict: true
   - type: "argument_correctness"
   - type: "mcp_use"
-  - type: "plan_adherence"
-  - type: "step_efficiency"
   - type: "task_completion"
-  - type: "criteria_judge"
-    threshold: 1.0
-    criteria:
-      - "Response must reflect the tool output"
-      - "Response must not invent components absent from tool output"
-  - type: "llm_as_judge"
 mocks:
   - tool: "read_architecture_yaml"
     response:
@@ -26,5 +19,3 @@ mocks:
       containers:
         - "payment-api"
         - "payment-db"
-      relationships:
-        - "payment-api -> payment-db"

@@ -16,7 +16,8 @@ import {
 
 export const EDD_CI_SUITES = [
   'evals/edd/architecture_routing.yaml',
-  'evals/edd/kit_knowledge.yaml'
+  'evals/edd/kit_knowledge.yaml',
+  'evals/edd/safety.yaml'
 ] as const;
 
 export interface KitCheckDeps {

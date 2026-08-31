@@ -1,6 +1,6 @@
 {
   "name": "search_kit",
-  "description": "Search kit philosophy, SOPs, skill heads, and docs. Returns short excerpts — not full files. Use for kit questions; never invent SOP or philosophy content.",
+  "description": "Search kit philosophy, SOPs, skill heads, and docs. Returns short excerpts - not full files. Use for kit questions; never invent SOP or philosophy content.",
   "inputSchema": {
     "type": "object",
     "required": ["query"],

@@ -3,20 +3,14 @@ import path from 'path';
 import { parse as parseYaml } from 'yaml';
 import { AgentClient, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 import { loadDataset } from './dataset.js';
-import { runLlmJudge } from './judge.js';
-import {
-  EvalConfigSchema,
-  type AgentResponse,
-  type EvalCase,
-  type EvalConfig,
-  type EvalMetric
-} from './schema.js';
+import { buildFailureTrace } from './failure-trace.js';
+import { runCaseAssertions } from './run-assertions.js';
+import { EvalConfigSchema, type EvalConfig } from './schema.js';
 import {
   buildSuiteReport,
   generateReport,
   printReportSummary,
   type CaseResult,
-  type FailureTrace,
   type SuiteReport
 } from './telemetry.js';
 import { emitAgentSpan, type OtelEmitter } from './otel.js';
@@ -36,74 +30,6 @@ export interface EvalRunnerOptions {
 function resolvePath(baseFile: string, maybeRelative: string): string {
   if (path.isAbsolute(maybeRelative)) return maybeRelative;
   return path.resolve(path.dirname(baseFile), maybeRelative);
-}
-
-function parseArgs(raw: string | Record<string, unknown>): Record<string, unknown> | null {
-  if (typeof raw === 'object' && raw !== null) return raw;
-  try {
-    return JSON.parse(raw) as Record<string, unknown>;
-  } catch {
-    return null;
-  }
-}
-
-function buildFailureTrace(input: {
-  testCase: EvalCase;
-  response: AgentResponse;
-  failures: string[];
-  metricExpectedTool?: string;
-}): FailureTrace | undefined {
-  if (!input.failures.length) return undefined;
-  const expectedTool =
-    input.testCase.expect?.no_tool === true
-      ? undefined
-      : (input.testCase.expect?.tool ?? input.metricExpectedTool);
-  const actualTool = input.response.tool_calls?.[0]?.name;
-  const actualArguments = input.response.tool_calls?.[0]
-    ? typeof input.response.tool_calls[0].arguments === 'string'
-      ? input.response.tool_calls[0].arguments
-      : JSON.stringify(input.response.tool_calls[0].arguments)
-    : undefined;
-  const expectedArguments = input.testCase.expect?.arguments_contains
-    ? JSON.stringify(input.testCase.expect.arguments_contains)
-    : undefined;
-
-  const failureText = input.failures.join('; ');
-  if (failureText.includes('routing:')) {
-    return {
-      diagnosis:
-        'Tool Selection Failure. The model refused to use the tool and hallucinated a generic answer, or selected the wrong tool.',
-      suggestedFix:
-        'Add a constraint to the system prompt instructing the agent to never guess architectural details and to always use the provided C4 tools.',
-      expectedTool,
-      actualTool,
-      llmOutput: input.response.content,
-      expectedArguments,
-      actualArguments
-    };
-  }
-  if (failureText.includes('schema:')) {
-    return {
-      diagnosis:
-        'Schema Violation. The tool only accepts the declared argument types, but the model produced incompatible JSON (e.g. an array for a string field).',
-      suggestedFix:
-        'Update the tool description to explicitly state that it can only be called for one component at a time, or update the tool\'s backend logic to accept arrays.',
-      expectedTool,
-      actualTool,
-      expectedArguments,
-      actualArguments,
-      llmOutput: input.response.content
-    };
-  }
-  return {
-    diagnosis: failureText,
-    suggestedFix: 'Inspect the prompt, tool schema, and system instructions for this case.',
-    expectedTool,
-    actualTool,
-    expectedArguments,
-    actualArguments,
-    llmOutput: input.response.content
-  };
 }
 
 export class EvalRunner {
@@ -149,9 +75,7 @@ export class EvalRunner {
       ? loaded.filter((c) => !(c.tags ?? []).includes('requires-live'))
       : loaded;
     if (skippedLive.length) {
-      console.log(
-        `Skipping ${skippedLive.length} requires-live case(s) (scripted driver).`
-      );
+      console.log(`Skipping ${skippedLive.length} requires-live case(s) (scripted driver).`);
     }
 
     const suitePromptPath = config.system_prompt
@@ -173,7 +97,7 @@ export class EvalRunner {
       baseUrl: this.baseUrl
     });
 
-    // Register MCP tool contracts when listed in the suite
+    const availableTools: string[] = [];
     if (config.mcp_tools?.length) {
       for (const toolPath of config.mcp_tools) {
         const abs = resolvePath(absoluteYaml, toolPath);
@@ -183,10 +107,12 @@ export class EvalRunner {
           inputSchema?: Record<string, unknown>;
         };
         agent.registerTool(contract);
+        availableTools.push(contract.name);
       }
     } else if (config.mocks?.length) {
       for (const mock of config.mocks) {
         agent.registerTool({ name: mock.tool, description: `Mocked tool ${mock.tool}` });
+        availableTools.push(mock.tool);
       }
     }
 
@@ -213,7 +139,18 @@ export class EvalRunner {
       const response = await agent.executePrompt(testCase.prompt);
       const latency = performance.now() - startTime;
 
-      const assertion = await this.runAssertions(response, config.metrics, testCase, config);
+      const assertion = await runCaseAssertions({
+        response,
+        metrics: config.metrics,
+        testCase,
+        config,
+        availableTools,
+        suiteYamlPath: absoluteYaml,
+        model: this.model,
+        judgeModel: this.judgeModel,
+        apiKey: this.apiKey,
+        baseUrl: this.baseUrl
+      });
 
       emitAgentSpan(this.otel, {
         suite: config.name,
@@ -227,6 +164,7 @@ export class EvalRunner {
       });
 
       const metricExpectedTool = config.metrics.find((m) => m.type === 'tool_selection')?.expected;
+      const stepIndex = [...assertion.stepFailures.keys()][0];
       results.push({
         id: testCase.id,
         prompt: testCase.prompt,
@@ -239,13 +177,15 @@ export class EvalRunner {
         hallucinated: assertion.hallucinated,
         routingOk: assertion.routingOk,
         schemaOk: assertion.schemaOk,
+        trajectory: assertion.trajectory,
         trace: assertion.passed
           ? undefined
           : buildFailureTrace({
               testCase,
               response,
               failures: assertion.failures,
-              metricExpectedTool
+              metricExpectedTool,
+              stepIndex
             })
       });
     }
@@ -274,213 +214,5 @@ export class EvalRunner {
 
   writeReports(format: 'md' | 'json', outDir: string): string[] {
     return generateReport(this.lastReports, { format, outDir });
-  }
-
-  private async runAssertions(
-    response: AgentResponse,
-    metrics: EvalMetric[],
-    testCase: EvalCase,
-    config: EvalConfig
-  ): Promise<{
-    passed: boolean;
-    failures: string[];
-    hallucinated?: boolean;
-    routingOk?: boolean;
-    schemaOk?: boolean;
-  }> {
-    const failures: string[] = [];
-    let hallucinated: boolean | undefined;
-    let routingOk: boolean | undefined;
-    let schemaOk: boolean | undefined;
-
-    for (const metric of metrics) {
-      if (metric.type === 'tool_selection') {
-        if (testCase.expect?.no_tool) {
-          const selected = response.tool_calls?.[0]?.name;
-          routingOk = !selected;
-          if (selected) {
-            failures.push(`routing: expected no tool, got ${selected}`);
-          }
-          continue;
-        }
-
-        if (testCase.expect?.tools?.length) {
-          const expected = testCase.expect.tools;
-          const calls = response.tool_calls ?? [];
-          routingOk = true;
-          if (calls.length < expected.length) {
-            routingOk = false;
-            failures.push(
-              `routing: expected ${expected.length} tool call(s), got ${calls.length}`
-            );
-          }
-          for (let i = 0; i < expected.length; i++) {
-            const got = calls[i]?.name;
-            if (got !== expected[i].name) {
-              routingOk = false;
-              failures.push(
-                `routing: call[${i}] expected ${expected[i].name}, got ${got ?? '(none)'}`
-              );
-            }
-          }
-          continue;
-        }
-
-        const selected = response.tool_calls?.[0]?.name;
-        const expected = testCase.expect?.tool ?? metric.expected;
-
-        if (!expected) {
-          failures.push('routing: tool_selection metric missing expected tool');
-          routingOk = false;
-          continue;
-        }
-
-        routingOk = selected === expected;
-        if (!routingOk) {
-          failures.push(`routing: expected tool ${expected}, got ${selected ?? '(none)'}`);
-        }
-      }
-
-      if (metric.type === 'schema_match') {
-        if (testCase.expect?.no_tool) {
-          schemaOk = true;
-          continue;
-        }
-
-        if (testCase.expect?.tools?.length) {
-          let ok = true;
-          for (let i = 0; i < testCase.expect.tools.length; i++) {
-            const expected = testCase.expect.tools[i];
-            const call = response.tool_calls?.[i];
-            if (!call) {
-              failures.push(`schema: missing tool call at index ${i}`);
-              ok = false;
-              continue;
-            }
-            const parsed = parseArgs(call.arguments);
-            if (!parsed) {
-              failures.push(`schema: call[${i}] arguments are not valid JSON`);
-              ok = false;
-              continue;
-            }
-            if (metric.strict !== false) {
-              if (typeof parsed !== 'object' || Array.isArray(parsed)) {
-                failures.push(`schema: call[${i}] arguments must be a JSON object`);
-                ok = false;
-              }
-              for (const [key, value] of Object.entries(parsed)) {
-                if (Array.isArray(value)) {
-                  failures.push(
-                    `schema: call[${i}] expected ${key} to be a string, got array ${JSON.stringify(value)}`
-                  );
-                  ok = false;
-                }
-              }
-            }
-            if (expected.arguments_contains) {
-              for (const [key, value] of Object.entries(expected.arguments_contains)) {
-                if (parsed[key] !== value) {
-                  failures.push(
-                    `schema: call[${i}] expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
-                  );
-                  ok = false;
-                }
-              }
-            }
-          }
-          schemaOk = ok;
-          continue;
-        }
-
-        const call = response.tool_calls?.[0];
-        if (!call) {
-          failures.push('schema: no tool call to validate');
-          schemaOk = false;
-          continue;
-        }
-        const parsed = parseArgs(call.arguments);
-        if (!parsed) {
-          failures.push('schema: tool arguments are not valid JSON');
-          schemaOk = false;
-          continue;
-        }
-        let ok = true;
-        if (metric.strict !== false) {
-          if (typeof parsed !== 'object' || Array.isArray(parsed)) {
-            failures.push('schema: arguments must be a JSON object');
-            ok = false;
-          }
-          for (const [key, value] of Object.entries(parsed)) {
-            if (Array.isArray(value)) {
-              failures.push(
-                `schema: expected ${key} to be a string, got array ${JSON.stringify(value)}`
-              );
-              ok = false;
-            }
-          }
-        }
-        if (testCase.expect?.arguments_contains) {
-          for (const [key, value] of Object.entries(testCase.expect.arguments_contains)) {
-            if (parsed[key] !== value) {
-              failures.push(
-                `schema: expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
-              );
-              ok = false;
-            }
-          }
-        }
-        schemaOk = ok;
-      }
-
-      if (metric.type === 'self_correction') {
-        const call = response.tool_calls?.[0];
-        const parsed = call ? parseArgs(call.arguments) : null;
-        const hintOk =
-          parsed &&
-          (parsed.componentId === 'payment-api' ||
-            parsed.component === 'payment-api' ||
-            JSON.stringify(parsed).includes('payment-api'));
-        if (!hintOk) {
-          failures.push('self_correction: agent did not update parameters from error hint');
-        }
-      }
-
-      if (metric.type === 'terminal_fallback') {
-        const maxRetries = metric.max_retries ?? 2;
-        if (!response.haltedAutonomousExecution) {
-          failures.push('terminal_fallback: agent did not halt after consecutive failures');
-        }
-        if (response.tool_calls?.length) {
-          failures.push('terminal_fallback: agent continued issuing tool calls after breaker');
-        }
-        if (response.consecutiveToolFailures < maxRetries && !response.haltedAutonomousExecution) {
-          failures.push(`terminal_fallback: expected >= ${maxRetries} consecutive failures`);
-        }
-      }
-
-      if (metric.type === 'llm_as_judge') {
-        if (testCase.expect?.no_tool) {
-          continue;
-        }
-        const toolOutput =
-          testCase.tool_output ??
-          config.mocks?.find((m) => m.tool === (response.tool_calls?.[0]?.name ?? ''))?.response ??
-          null;
-        const verdict = await runLlmJudge({
-          prompt: testCase.prompt,
-          toolOutput,
-          agentResponse: response.content,
-          model: this.judgeModel ?? config.judge_model ?? this.model,
-          apiKey: this.apiKey,
-          baseUrl: this.baseUrl
-        });
-        hallucinated = verdict.hallucinated;
-        if (verdict.score !== 'PASS') {
-          failures.push(`semantic: ${verdict.reasoning || 'llm_as_judge failed'}`);
-        }
-      }
-    }
-
-    return { passed: failures.length === 0, failures, hallucinated, routingOk, schemaOk };
   }
 }

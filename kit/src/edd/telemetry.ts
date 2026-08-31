@@ -1,15 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import { diagnoseFailures, type FailureTrace } from './failure-trace.js';
+import { redactSecrets } from './redact.js';
+import type { TrajectoryStep } from './trajectory.js';
 
-export interface FailureTrace {
-  diagnosis: string;
-  suggestedFix: string;
-  expectedTool?: string;
-  actualTool?: string;
-  expectedArguments?: string;
-  actualArguments?: string;
-  llmOutput?: string;
-}
+export type { FailureTrace };
 
 export interface CaseResult {
   id: string;
@@ -25,6 +20,8 @@ export interface CaseResult {
   trace?: FailureTrace;
   schemaOk?: boolean;
   routingOk?: boolean;
+  /** Ordered agent steps for multi-step diagnosis. */
+  trajectory?: TrajectoryStep[];
 }
 
 export interface SuiteReport {
@@ -108,49 +105,24 @@ export function buildSuiteReport(input: {
 }
 
 function diagnoseFailure(result: CaseResult): FailureTrace {
-  if (result.trace) return result.trace;
-
-  const failureText = result.failures.join('; ');
-  if (failureText.includes('routing:')) {
+  if (result.trace) {
     return {
-      diagnosis:
-        'Tool Selection Failure. The model refused to use the expected tool or selected the wrong one.',
-      suggestedFix:
-        'Add a constraint to the system prompt instructing the agent to never guess architectural details and to always use the provided C4 / architecture tools.'
+      ...result.trace,
+      diagnosis: redactSecrets(result.trace.diagnosis),
+      suggestedFix: redactSecrets(result.trace.suggestedFix),
+      llmOutput: result.trace.llmOutput ? redactSecrets(result.trace.llmOutput) : undefined,
+      expectedArguments: result.trace.expectedArguments
+        ? redactSecrets(result.trace.expectedArguments)
+        : undefined,
+      actualArguments: result.trace.actualArguments
+        ? redactSecrets(result.trace.actualArguments)
+        : undefined
     };
   }
-  if (failureText.includes('schema:')) {
-    return {
-      diagnosis:
-        'Schema Violation. Tool arguments did not match the declared JSON schema (type or required fields).',
-      suggestedFix:
-        'Update the tool description to state it accepts one component at a time, or widen the backend schema if multi-intent prompts are supported.'
-    };
-  }
-  if (failureText.includes('semantic:') || result.hallucinated) {
-    return {
-      diagnosis: 'Semantic Failure. LLM-as-a-judge flagged hallucination or inaccurate synthesis.',
-      suggestedFix:
-        'Tighten the system prompt to ground answers strictly in tool output; re-run with a stronger judge model locally before CI.'
-    };
-  }
-  if (failureText.includes('self_correction')) {
-    return {
-      diagnosis: 'Self-Correction Failure. The agent did not update parameters from the error hint.',
-      suggestedFix:
-        'Instruct the agent to parse NotFound / validation hints and retry once with corrected arguments.'
-    };
-  }
-  if (failureText.includes('terminal_fallback')) {
-    return {
-      diagnosis: 'Terminal Fallback Failure. The agent did not halt after consecutive tool failures.',
-      suggestedFix:
-        'Enforce a circuit breaker in the system prompt: after N consecutive timeouts, stop retrying and report the constraint to the user.'
-    };
-  }
+  const base = diagnoseFailures(result.failures, result.hallucinated);
   return {
-    diagnosis: failureText || 'Assertion failure',
-    suggestedFix: 'Inspect the prompt, tool schema, and system instructions for this case.'
+    diagnosis: redactSecrets(base.diagnosis),
+    suggestedFix: redactSecrets(base.suggestedFix)
   };
 }
 
@@ -193,7 +165,7 @@ function renderSuiteMarkdown(report: SuiteReport): string {
       if (f.tags?.length) {
         lines.push(`**Tags:** ${f.tags.map((t) => `\`${t}\``).join(', ')}`);
       }
-      lines.push(`* **Prompt:** "${f.prompt}"`);
+      lines.push(`* **Prompt:** "${redactSecrets(f.prompt)}"`);
       if (trace.expectedTool !== undefined || f.failures.some((x) => x.includes('routing'))) {
         lines.push(`* **Expected Tool:** \`${trace.expectedTool ?? 'see diagnosis'}\``);
         lines.push(
@@ -207,12 +179,28 @@ function renderSuiteMarkdown(report: SuiteReport): string {
         lines.push(`* **Actual Arguments:** \`${trace.actualArguments ?? ''}\``);
       }
       if (trace.llmOutput) {
-        lines.push(`* **LLM Output:** "${trace.llmOutput}"`);
+        lines.push(`* **LLM Output:** "${redactSecrets(trace.llmOutput)}"`);
+      }
+      if (trace.stepIndex !== undefined) {
+        lines.push(`* **Failing Step:** \`${trace.stepIndex}\``);
+      }
+      if (f.trajectory?.length) {
+        lines.push('* **Trajectory:**');
+        for (const step of f.trajectory) {
+          const label =
+            step.kind === 'tool'
+              ? `tool ${step.toolName ?? '?'}`
+              : step.kind === 'halt'
+                ? 'halt'
+                : 'message';
+          const mark = step.failure ? 'FAIL' : 'ok';
+          lines.push(`  * step[${step.index}] ${label} (${mark})${step.failure ? ` - ${step.failure}` : ''}`);
+        }
       }
       lines.push(`* **Diagnosis:** ${trace.diagnosis}`);
       lines.push(`* **Suggested Fix:** ${trace.suggestedFix}`);
       if (f.failures.length) {
-        lines.push(`* **Raw Assertions:** ${f.failures.join('; ')}`);
+        lines.push(`* **Raw Assertions:** ${redactSecrets(f.failures.join('; '))}`);
       }
       lines.push('');
     }
@@ -283,6 +271,6 @@ export function printReportSummary(report: SuiteReport): void {
   console.log(`  Tokens: ${report.totalTokens} | Avg latency: ${report.avgLatencyMs.toFixed(1)}ms`);
   for (const r of report.results) {
     const mark = r.passed ? '✓' : '✗';
-    console.log(`  ${mark} ${r.id}${r.failures.length ? ` — ${r.failures.join('; ')}` : ''}`);
+    console.log(`  ${mark} ${r.id}${r.failures.length ? ` - ${r.failures.join('; ')}` : ''}`);
   }
 }

@@ -1,8 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+import readline from 'readline';
 import { EvalRunner } from './edd/runner.js';
 import { generateReport, type SuiteReport } from './edd/telemetry.js';
 import { watchTargets } from './edd/watch.js';
+import { loadDataset } from './edd/dataset.js';
+import {
+  casesFromTraceFile,
+  dedupeCases,
+  lintCases,
+  synthesizeFromSeeds
+} from './edd/dataset-hygiene.js';
+import type { EvalCase } from './edd/schema.js';
 
 export interface EddCliOptions {
   repoDir: string;
@@ -11,7 +20,7 @@ export interface EddCliOptions {
 
 function printEddHelp(): void {
   console.log(`
-🧪 Kit EDD (Eval-Driven Development) commands
+Kit EDD (Eval-Driven Development) commands
 
 Usage: kit eval <subcommand> [options]
        agent-kit eval <subcommand> [options]
@@ -21,6 +30,13 @@ Subcommands:
   watch    --suite <path> [--target <file-or-dir>] [--model <name>]
   report   --format <md|json> --out <dir> [--from <json-report>]
   ci       --suite <path> [--threshold-routing <pct>] [--model <name>] [--out <dir>]
+  dataset  lint|dedupe|synthesize|from-trace [options]
+
+Dataset options:
+  lint         --dataset <jsonl>
+  dedupe       --dataset <jsonl> [--out <jsonl>]
+  synthesize   --dataset <jsonl> --count <n> [--out <jsonl>]
+  from-trace   --trace <json> [--out <jsonl>]
 
 Notes:
   - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
@@ -136,7 +152,6 @@ async function cmdReport(repoDir: string, args: string[]): Promise<number> {
     const raw = JSON.parse(fs.readFileSync(abs, 'utf8')) as SuiteReport | SuiteReport[];
     reports = Array.isArray(raw) ? raw : [raw];
   } else {
-    // Re-run default suite to produce a fresh report artifact
     const runner = createRunner(repoDir, args);
     reports = await runner.runSuites([resolveEddSuite(repoDir, args)]);
   }
@@ -167,8 +182,104 @@ async function cmdCi(repoDir: string, args: string[]): Promise<number> {
     console.error(`EDD CI gate failed: ${report.failed} case(s) failed`);
     return 1;
   }
-  console.log('✅ EDD CI gate passed');
+  console.log('EDD CI gate passed');
   return 0;
+}
+
+async function readJsonlRows(filePath: string): Promise<Array<{ line: number; raw: unknown }>> {
+  const absolute = path.resolve(filePath);
+  const stream = fs.createReadStream(absolute, { encoding: 'utf8' });
+  const rl = readline.createInterface({ input: stream, crlfDelay: Infinity });
+  const rows: Array<{ line: number; raw: unknown }> = [];
+  let lineNo = 0;
+  for await (const line of rl) {
+    lineNo += 1;
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    rows.push({ line: lineNo, raw: JSON.parse(trimmed) });
+  }
+  return rows;
+}
+
+function writeJsonl(filePath: string, cases: EvalCase[]): void {
+  const abs = path.resolve(filePath);
+  fs.mkdirSync(path.dirname(abs), { recursive: true });
+  fs.writeFileSync(abs, cases.map((c) => JSON.stringify(c)).join('\n') + '\n', 'utf8');
+}
+
+async function cmdDataset(_repoDir: string, args: string[]): Promise<number> {
+  const action = args[0];
+  const rest = args.slice(1);
+  if (!action || action === 'help' || action === '--help') {
+    printEddHelp();
+    return action ? 0 : 1;
+  }
+
+  try {
+    if (action === 'lint') {
+      const dataset = getEddFlag(rest, '--dataset');
+      if (!dataset) throw new Error('dataset lint requires --dataset <jsonl>');
+      const rows = await readJsonlRows(dataset);
+      const issues = lintCases(rows);
+      if (!issues.length) {
+        console.log(`dataset lint: ok (${rows.length} cases)`);
+        return 0;
+      }
+      for (const issue of issues) {
+        console.error(`line ${issue.line}${issue.id ? ` id=${issue.id}` : ''}: ${issue.message}`);
+      }
+      return 1;
+    }
+
+    if (action === 'dedupe') {
+      const dataset = getEddFlag(rest, '--dataset');
+      if (!dataset) throw new Error('dataset dedupe requires --dataset <jsonl>');
+      const cases = await loadDataset(dataset);
+      const { kept, removed } = dedupeCases(cases);
+      const out = getEddFlag(rest, '--out') ?? dataset;
+      writeJsonl(out, kept);
+      console.log(`dataset dedupe: kept ${kept.length}, removed ${removed.length} -> ${out}`);
+      return 0;
+    }
+
+    if (action === 'synthesize') {
+      const dataset = getEddFlag(rest, '--dataset');
+      const count = getEddNumberFlag(rest, '--count', 1);
+      if (!dataset) throw new Error('dataset synthesize requires --dataset <jsonl>');
+      const seeds = await loadDataset(dataset);
+      const generated = synthesizeFromSeeds(seeds, count);
+      const out = getEddFlag(rest, '--out');
+      if (!out) throw new Error('dataset synthesize requires --out <jsonl>');
+      writeJsonl(out, generated);
+      console.log(`dataset synthesize: wrote ${generated.length} paraphrases -> ${out}`);
+      return 0;
+    }
+
+    if (action === 'from-trace') {
+      const tracePath = getEddFlag(rest, '--trace');
+      if (!tracePath) throw new Error('dataset from-trace requires --trace <json>');
+      const raw = JSON.parse(fs.readFileSync(path.resolve(tracePath), 'utf8')) as unknown;
+      const row = casesFromTraceFile(raw);
+      const out = getEddFlag(rest, '--out');
+      if (out) {
+        const abs = path.resolve(out);
+        fs.mkdirSync(path.dirname(abs), { recursive: true });
+        fs.appendFileSync(abs, `${JSON.stringify(row)}\n`, 'utf8');
+        console.log(`dataset from-trace: appended ${row.id} -> ${abs}`);
+      } else {
+        console.log(JSON.stringify(row));
+      }
+      return 0;
+    }
+
+    console.error(`Unknown dataset action: ${action}`);
+    printEddHelp();
+    return 1;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`dataset ${action}: ${msg}`);
+    return 1;
+  }
 }
 
 /**
@@ -198,8 +309,9 @@ export async function handleEddEvalCli(options: EddCliOptions): Promise<number |
       return cmdReport(repoDir, rest);
     case 'ci':
       return cmdCi(repoDir, rest);
+    case 'dataset':
+      return cmdDataset(repoDir, rest);
     default:
-      // Unknown token — not an EDD subcommand; let legacy `kit eval` run
       if (sub.endsWith('.yaml') || sub.endsWith('.yml') || sub === 'all') {
         return null;
       }

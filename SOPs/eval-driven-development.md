@@ -16,13 +16,13 @@ tools:
 ---
 # Standard Operating Procedure: Eval-Driven Development (EDD)
 
-**Default:** When changing agent prompts, MCP tool schemas, or routing behavior, use EDD—not ad-hoc playground checks. Companion: [docs/edd.md](../docs/edd.md), [evals/edd/README.md](../evals/edd/README.md).
+**Default:** When changing agent prompts, MCP tool schemas, or routing behavior, use EDD - not ad-hoc playground checks. Companion: [docs/edd.md](../docs/edd.md), [evals/edd/README.md](../evals/edd/README.md).
 
 ## Loop (red → green → refactor)
 
-1. **Red — Define intent:** Add a JSONL case (`id`, `prompt`, optional `history` / `tags` / `expect`) and point a YAML suite at it with metrics (`tool_selection`, `schema_match`, `llm_as_judge`, `self_correction`, `terminal_fallback`).
-2. **Green — Implement interface:** Register the tool contract (MCP JSON under `evals/edd/tools/` or suite `mcp_tools`) and system prompt. Run `kit eval run --suite … --model scripted` (or a live model).
-3. **Refactor — Refine context:** Iterate tool `description` / parameter hints / system prompt until routing and schema assertions pass without hallucinated parameters.
+1. **Red  -  Define intent:** Add a JSONL case (`id`, `prompt`, optional `history` / `tags` / `expect`) and point a YAML suite at it with metrics (`tool_selection`, `schema_match`, `argument_correctness`, `task_completion`, `criteria_judge`, `mcp_use`, `plan_adherence`, `step_efficiency`, `plugin`, `llm_as_judge`, `self_correction`, `terminal_fallback`).
+2. **Green  -  Implement interface:** Register the tool contract (MCP JSON under `evals/edd/tools/` or suite `mcp_tools`) and system prompt. Run `kit eval run --suite … --model scripted` (or a live model).
+3. **Refactor  -  Refine context:** Iterate tool `description` / parameter hints / system prompt until routing and schema assertions pass without hallucinated parameters.
 
 ## CLI
 
@@ -32,6 +32,7 @@ tools:
 | `kit eval watch --suite <path> --target <file>` | Re-run on prompt / tool schema changes |
 | `kit eval report --format md\|json --out <dir>` | Markdown or JSON cost/latency/failure report |
 | `kit eval ci --threshold-routing 95 --out out/reports` | Headless gate; fail if routing accuracy &lt; threshold |
+| `kit eval dataset lint\|dedupe\|synthesize\|from-trace` | Dataset hygiene (schema lint, dedupe, paraphrases, prod promote) |
 
 `agent-kit` is an alias of `kit`.
 

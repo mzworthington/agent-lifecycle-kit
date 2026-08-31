@@ -1,10 +1,33 @@
 import { z } from 'zod';
 
 export const EvalMetricSchema = z.object({
-  type: z.enum(['tool_selection', 'schema_match', 'llm_as_judge', 'self_correction', 'terminal_fallback']),
+  type: z.enum([
+    'tool_selection',
+    'schema_match',
+    'llm_as_judge',
+    'self_correction',
+    'terminal_fallback',
+    'argument_correctness',
+    'task_completion',
+    'criteria_judge',
+    'mcp_use',
+    'step_efficiency',
+    'plan_adherence',
+    'plugin'
+  ]),
   expected: z.string().optional(),
   strict: z.boolean().optional(),
-  max_retries: z.number().int().positive().optional()
+  max_retries: z.number().int().positive().optional(),
+  /** Written criteria for `criteria_judge` (suite-level). */
+  criteria: z.array(z.string().min(1)).optional(),
+  /** Fraction of criteria that must pass (0-1). Defaults to 1. */
+  threshold: z.number().min(0).max(1).optional(),
+  /** Max tool steps for `step_efficiency`. */
+  max_steps: z.number().int().nonnegative().optional(),
+  /** Module path for `type: plugin` (resolved relative to the suite YAML). */
+  module: z.string().min(1).optional(),
+  /** Optional allow-list override for `mcp_use` (defaults to registered MCP tools). */
+  allowed_tools: z.array(z.string().min(1)).optional()
 });
 
 export const EvalMockSchema = z
@@ -65,7 +88,9 @@ export const CaseExpectSchema = z.object({
   no_tool: z.boolean().optional(),
   arguments_contains: z.record(z.string(), z.unknown()).optional(),
   /** Ordered tool calls (multi-step). Takes precedence over `tool` when set. */
-  tools: z.array(ExpectedToolCallSchema).min(1).optional()
+  tools: z.array(ExpectedToolCallSchema).min(1).optional(),
+  /** User goal for `task_completion` (semantic outcome, not only tool name). */
+  goal: z.string().optional()
 });
 
 export const EvalCaseSchema = z.object({
