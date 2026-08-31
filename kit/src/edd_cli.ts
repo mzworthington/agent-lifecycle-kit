@@ -15,6 +15,7 @@ import {
   lintCases,
   synthesizeFromSeeds
 } from './edd/dataset-hygiene.js';
+import { normalizeProdTurn, shadowEvalTurns } from './edd/shadow.js';
 import type { EvalCase } from './edd/schema.js';
 
 export interface EddCliOptions {
@@ -34,6 +35,7 @@ Subcommands:
   watch    --suite <path> [--target <file-or-dir>] [--model <name>]
   report   --format <md|json> --out <dir> [--from <json-report>] [--github-summary]
   ci       --suite <path> [--threshold-routing <pct>] [--model <name>] [--out <dir>]
+  shadow   --infile <jsonl> [--sample <rate>] [--out <jsonl>] [--seed <n>]
   dataset  lint|dedupe|synthesize|from-trace [options]
 
 Dataset options:
@@ -42,12 +44,19 @@ Dataset options:
   synthesize   --dataset <jsonl> --count <n> [--out <jsonl>]
   from-trace   --trace <json> [--out <jsonl>]
 
+Shadow options:
+  --infile     NDJSON of prod turns or kit OTel spans (see evals/edd/examples/)
+  --sample     Fraction to judge (default 0.05)
+  --out        Append shadow_fail cases as JSONL (required to persist fails)
+  --seed       Deterministic RNG seed for sampling
+
 Notes:
   - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
   - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
   - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
   - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
+  - Local OTel UI: mise install && mise run otelop (otelop @ http://127.0.0.1:4319).
 `);
 }
 
@@ -240,6 +249,53 @@ function writeJsonl(filePath: string, cases: EvalCase[]): void {
   fs.writeFileSync(abs, cases.map((c) => JSON.stringify(c)).join('\n') + '\n', 'utf8');
 }
 
+/** Deterministic [0,1) RNG from a 32-bit seed (mulberry32). */
+export function mulberry32(seed: number): () => number {
+  let t = seed >>> 0;
+  return () => {
+    t = (t + 0x6d2b79f5) >>> 0;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+async function cmdShadow(_repoDir: string, args: string[]): Promise<number> {
+  const infile = getEddFlag(args, '--infile');
+  if (!infile) {
+    console.error('shadow requires --infile <jsonl>');
+    printEddHelp();
+    return 1;
+  }
+  const sample = getEddNumberFlag(args, '--sample', 0.05);
+  if (sample < 0 || sample > 1) {
+    console.error(`Invalid --sample ${sample}; expected 0..1`);
+    return 1;
+  }
+  const out = getEddFlag(args, '--out');
+  const seedRaw = getEddFlag(args, '--seed');
+  const rand = seedRaw !== undefined ? mulberry32(Number(seedRaw)) : Math.random;
+
+  const rows = await readJsonlRows(infile);
+  const turns = rows.map((r) => normalizeProdTurn(r.raw));
+  const { results, fails, sampled, failed } = shadowEvalTurns(turns, { sampleRate: sample, rand });
+
+  if (out && fails.length) {
+    const abs = path.resolve(out);
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.appendFileSync(abs, fails.map((c) => JSON.stringify(c)).join('\n') + '\n', 'utf8');
+    console.log(`shadow: appended ${fails.length} fail(s) -> ${abs}`);
+  }
+
+  console.log(
+    `shadow: turns=${turns.length} sampled=${sampled} failed=${failed} sampleRate=${sample}`
+  );
+  for (const r of results.filter((x) => x.sampled && x.passed === false)) {
+    console.log(`  FAIL ${r.id}: ${r.reasoning ?? 'judge failed'}`);
+  }
+  return failed > 0 ? 1 : 0;
+}
+
 async function cmdDataset(_repoDir: string, args: string[]): Promise<number> {
   const action = args[0];
   const rest = args.slice(1);
@@ -344,6 +400,8 @@ export async function handleEddEvalCli(options: EddCliOptions): Promise<number |
       return cmdCi(repoDir, rest);
     case 'dataset':
       return cmdDataset(repoDir, rest);
+    case 'shadow':
+      return cmdShadow(repoDir, rest);
     default:
       if (sub.endsWith('.yaml') || sub.endsWith('.yml') || sub === 'all') {
         return null;

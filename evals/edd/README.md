@@ -13,6 +13,8 @@ evals/edd/
 ├── examples/before-after.md
 ├── examples/eval-report.md
 ├── examples/prod-trace.json
+├── examples/otel-agent-loop.json   ← kit.* OTel span fixture
+├── examples/prod-turns.jsonl      ← shadow-eval NDJSON corpus
 ├── architecture_routing.yaml|.jsonl
 ├── architecture_self_correction.yaml|.jsonl
 ├── architecture_terminal.yaml|.jsonl
@@ -109,9 +111,22 @@ kit eval dataset lint --dataset evals/edd/architecture_routing.jsonl
 kit eval dataset dedupe --dataset path.jsonl --out path.deduped.jsonl
 kit eval dataset synthesize --dataset path.jsonl --count 2 --out path.syn.jsonl
 kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
 ```
 
 Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`.
+
+## Production telemetry (otelop)
+
+Local OTel UI via mise ([otelop](https://github.com/mashiro/otelop)):
+
+```bash
+mise install
+mise run edd:otel-demo          # start otelop + emit sample spans
+mise run edd:shadow-demo        # judge example prod turns → out/shadow-fails.jsonl
+```
+
+Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [examples/prod-turns.jsonl](./examples/prod-turns.jsonl). Procedure: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).
 
 ## Tags
 
