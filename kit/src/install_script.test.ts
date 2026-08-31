@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const installer = path.join(root, 'install.sh');
 
-function runInstaller(shell: string, args: string[]): ReturnType<typeof spawnSync> {
+function runInstaller(shell: string, args: string[]): SpawnSyncReturns<string> {
   return spawnSync(shell, [installer, ...args], { encoding: 'utf8' });
 }
 
