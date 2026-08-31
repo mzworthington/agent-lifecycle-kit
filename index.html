@@ -1315,15 +1315,56 @@
 
     .job-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      /* 6 tracks → 3 equal cards (span 2), or 2 equal on the bottom row (span 3) */
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 0.75rem;
       list-style: none;
       padding: 0;
-      margin: 0 0 1.25rem;
+      margin: 0 auto 1.25rem;
+      max-width: 72rem;
+    }
+
+    .job-grid > li {
+      grid-column: span 2;
+      min-width: 0;
+    }
+
+    /* Five jobs: bottom row is two equal cards, not a lonely orphan */
+    .job-grid > li:nth-child(4):nth-last-child(2),
+    .job-grid > li:nth-child(5):nth-last-child(1) {
+      grid-column: span 3;
+    }
+
+    @media (max-width: 900px) {
+      .job-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .job-grid > li,
+      .job-grid > li:nth-child(4):nth-last-child(2),
+      .job-grid > li:nth-child(5):nth-last-child(1) {
+        grid-column: auto;
+      }
+
+      /* Odd leftover fills the row instead of sitting alone at half width */
+      .job-grid > li:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .job-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .job-grid > li:last-child:nth-child(odd) {
+        grid-column: auto;
+      }
     }
 
     .job-btn {
       width: 100%;
+      height: 100%;
       text-align: left;
       cursor: pointer;
       background: var(--bg-card);
