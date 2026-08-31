@@ -58,6 +58,20 @@ describe('EDD CLI flag helpers', () => {
       shouldPublishGithubSummary([], { GITHUB_ACTIONS: 'true', GITHUB_STEP_SUMMARY: '/tmp/summary.md' }),
       true
     );
+    assert.equal(
+      shouldPublishGithubSummary(
+        [],
+        { GITHUB_ACTIONS: 'true', GITHUB_STEP_SUMMARY: '/tmp/summary.md', NODE_TEST_CONTEXT: 'child-v8' }
+      ),
+      false
+    );
+    assert.equal(
+      shouldPublishGithubSummary(
+        ['--github-summary'],
+        { GITHUB_STEP_SUMMARY: '/tmp/summary.md', NODE_TEST_CONTEXT: 'child-v8' }
+      ),
+      true
+    );
     assert.equal(shouldPublishGithubSummary([], {}), false);
   });
 

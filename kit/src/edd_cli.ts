@@ -68,6 +68,8 @@ export function shouldPublishGithubSummary(
 ): boolean {
   if (hasEddFlag(args, '--no-github-summary')) return false;
   if (hasEddFlag(args, '--github-summary')) return true;
+  // Avoid polluting the real Actions summary while node:test is running in CI.
+  if (env.NODE_TEST_CONTEXT) return false;
   return env.GITHUB_ACTIONS === 'true' && Boolean(env.GITHUB_STEP_SUMMARY);
 }
 
