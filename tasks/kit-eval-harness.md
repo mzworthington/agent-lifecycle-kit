@@ -39,6 +39,7 @@ For each golden prompt: note expected route, actual route an agent took (or woul
 - [ ] TDD vs adapter deep-dive distinction held for #6
 - [ ] XFN never assigned to `agent-tdd`
 - [ ] Failures become lessons under `~/.agents/lessons/<project>/` or kit PRs
+- [ ] Agent/tool/prompt misses become `prod-derived` EDD cases (`from-trace` or hand-authored) and `kit eval run` evidence — not lessons-only ([hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) §11)
 
 ## B. Eval-Driven Development (agent tools / MCP)
 

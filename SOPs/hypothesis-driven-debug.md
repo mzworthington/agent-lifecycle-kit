@@ -34,6 +34,7 @@ Fill before the first product-code edit (board: [templates/debug-board.md](../te
 | Evidence | screenshot(s), job URL, console/Network, YAML path |
 | Media labels | for each image: before \| after \| unrelated |
 | Recent change? | PR, deploy, catalog publish, dependency bump |
+| Agent/tool miss? | yes → plan EDD promote (§11) / no → EDD N/A |
 
 If the user omitted env or action, ask **once** with a tight list—or infer from artifacts and mark **inferred**.
 
@@ -97,6 +98,7 @@ Separate PRs (or ask before combining) when any two differ:
 | “Empty system fixed” | Named entity non-empty in **published** artifact or explicit republish TODO |
 | “Job fixed” | Failing step green locally or in Actions |
 | “On main” | `gh pr view` + compare squash tip to branch tip; open follow-up if tip diverged |
+| “Agent/tool miss fixed” | New or existing EDD case red→green; `kit eval run` (or `ci`) evidence |
 
 State merge/PR status in the user-facing summary without waiting to be asked. PR titles must follow [conventional-commits.md](./conventional-commits.md) (squash-and-merge uses the title on the default branch).
 
@@ -131,6 +133,7 @@ Prefer learning the prior RCA over rediscovering it.
 
 - `handover_debug.md` — phase `debug`, status COMPLETE only when proof gates pass
 - Append a lesson when the user corrected framing or the same anti-pattern repeated ([lessons/README.md](../lessons/README.md))
+- For agent/tool/prompt misses: record the EDD case id/path in the handover (or N/A with reason)
 
 ## 10. Orchestration routes
 
@@ -140,3 +143,19 @@ Prefer learning the prior RCA over rediscovering it.
 | UI/auth/SLO touched | + light XFN floor ([agent-orchestrator](../skills/agent-orchestrator/SKILL.md)) |
 | RCA needs new capability | `agent-debug` (COMPLETE with RCA) → `agent-orchestrator` |
 | Complexity-only cleanup | `agent-arch-drift` → `agent-prune` (not debug) |
+
+## 11. Promote agent misses to EDD (mandatory when applicable)
+
+When root cause is **wrong tool, bad args, prompt/schema drift, MCP misuse, or infinite retries** — including a miss that only exists in the **current IDE chat** — do not stop at a code fix or a prose lesson.
+
+| Step | Action |
+|------|--------|
+| 1. Capture | From conversation context (no user paste required), write a trace or JSONL row: `id`, `prompt`, `expect` / `history`, reason (`user_downvote` \| `shadow_fail` \| `unhandled_tool_exception` \| `circuit_breaker`) |
+| 2. Promote | `kit eval dataset from-trace --trace <file> --out evals/edd/<suite>.jsonl` **or** append a hand-authored case with tags `prod-derived` (+ reason tag) |
+| 3. Red | `kit eval run --suite evals/edd/<suite>.yaml --model scripted` fails on the new case (or prove an existing case already covers it) |
+| 4. Green | Fix prompt/schema/routing; re-run until green; prefer `kit eval ci --threshold-routing 95` when routing is involved |
+| 5. Lesson (optional) | If process/rules should change too, append a lesson with **Promote to** pointing at that suite/JSONL ([templates/lesson.md](../templates/lesson.md)) |
+
+Skip only when the bug is pure app/UI/CI with **no** agent-tool contract impact — mark the debug board **EDD case: N/A**.
+
+Procedure companions: [eval-driven-development.md](./eval-driven-development.md), [edd-production-telemetry.md](./edd-production-telemetry.md).

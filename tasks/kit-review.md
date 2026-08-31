@@ -36,8 +36,11 @@ For each entry, decide:
 | Catalog / XFN procedure | [SOPs/behavior-catalog-and-xfn.md](../SOPs/behavior-catalog-and-xfn.md) |
 | Repeatable procedure | [SOPs/](../SOPs/) or [tasks/](../tasks/) |
 | Stack-specific / XFN tooling | [skills/lang-*](../skills/) or [skills/framework-*](../skills/) |
-| Lifecycle behavior | [skills/agent-*](../skills/) (esp. tdd, xfn, arch-drift, telemetry) |
+| Lifecycle behavior | [skills/agent-*](../skills/) (esp. tdd, xfn, arch-drift, telemetry, **debug**) |
+| Agent routing / prompt / tool miss | [evals/edd/](../evals/edd/) JSONL + suite (tags `prod-derived`); see [hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) §11 |
 | Project quirk | App repo only |
+
+When a lesson’s **EDD case** field is set, confirm the JSONL row exists and `kit eval run` covers it before marking `promoted`.
 
 ## 3. Audit the shared kit
 

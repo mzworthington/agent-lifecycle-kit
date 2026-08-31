@@ -1,7 +1,7 @@
 {
   "suite": "agent-debug-co-located",
   "description": "Co-located evaluation benchmark for agent-debug hypothesis-driven RCA skill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-DBG-COLOCATED-001",
@@ -17,6 +17,34 @@
         "required_patterns": ["Hypothesis", "Evidence", "Root Cause"],
         "forbidden_patterns": ["guessing without logs"],
         "required_output_sections": ["Hypothesis Board", "Empirical Evidence & Logs", "Root Cause & Fix"]
+      }
+    },
+    {
+      "id": "EVAL-DBG-COLOCATED-002",
+      "name": "Promote agent miss to EDD case",
+      "description": "When RCA is wrong tool/prompt/schema in the current session, agent-debug must promote a prod-derived EDD case and run kit eval — not only a code regression or prose lesson.",
+      "target_skill": "agent-debug",
+      "prompt": "In this chat the agent called search_kit when the user asked for the architecture of payment-api. Debug the routing miss and make sure it cannot regress.",
+      "context": {
+        "active_phase": "debug",
+        "miss_type": "agent-tool"
+      },
+      "assertions": {
+        "required_triggers": ["root cause", "reproduce", "hypothesis"],
+        "required_patterns": [
+          "EDD",
+          "prod-derived",
+          "kit eval",
+          "from-trace"
+        ],
+        "forbidden_patterns": [
+          "ask the user to paste the prompt",
+          "copy and paste the prompt into JSONL"
+        ],
+        "required_output_sections": [
+          "Root Cause & Fix",
+          "EDD case"
+        ]
       }
     }
   ]
