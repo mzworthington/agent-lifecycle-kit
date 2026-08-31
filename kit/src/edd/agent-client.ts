@@ -133,7 +133,7 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     .reverse()
     .find((m) => m.role === 'tool' && (m.content ?? '').toLowerCase().includes('notfound'));
 
-  // Negative / conversational — no tool
+  // Negative / conversational - no tool
   if (
     prompt.includes('what does c4 stand for') ||
     prompt.includes('explain c4') ||
@@ -196,7 +196,7 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     const toolName = 'read_architecture_yaml';
     const mocksForTool = mocks.get(toolName) ?? [];
     const mock = mocksForTool[0];
-    // One component per call — prefer auth-service when both are mentioned (schema-03)
+    // One component per call - prefer auth-service when both are mentioned (schema-03)
     const componentId = prompt.includes('auth') ? 'auth-service' : 'payment-api';
     const args = { componentId };
     return {

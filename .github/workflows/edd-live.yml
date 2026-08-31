@@ -74,6 +74,11 @@ jobs:
             --model "${KIT_EVAL_MODEL}" \
             --threshold-routing 95 \
             --out out/reports
+          pnpm kit eval ci \
+            --suite evals/edd/safety.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
 
       - name: Upload EDD report artifacts
         if: always() && steps.creds.outputs.skip != 'true'

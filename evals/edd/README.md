@@ -63,6 +63,7 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 ```mermaid
 flowchart TB
   runner[EvalRunner]
+  assert[run-assertions]
   arg[argument-correctness]
   mcp[mcp-use / plan-metrics]
   synth[synthesize / dataset-hygiene]
@@ -70,12 +71,15 @@ flowchart TB
   pure[judge local heuristics]
   http[judge-provider HTTP adapter]
   plug[metric-plugin loader]
-  runner --> arg
-  runner --> mcp
-  runner --> orch
-  runner --> plug
+  trace[failure-trace + redact]
+  runner --> assert
+  assert --> arg
+  assert --> mcp
+  assert --> orch
+  assert --> plug
   orch --> pure
   orch --> http
+  runner --> trace
   cli[kit eval dataset] --> synth
 ```
 

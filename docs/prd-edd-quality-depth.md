@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Phases 1-4 implemented (outcomes, safety/synthetics, trajectory/MCP, plugins/dataset CLI) |
+| **Status** | Shipped (Phases 1-4) |
 | **Product** | Agent Lifecycle Kit - Eval-Driven Development |
 | **Audience** | Kit maintainers, consumer app teams shipping tool-using agents |
 | **Companion** | [EDD guide](./edd.md), [EDD SOP](../SOPs/eval-driven-development.md), [production telemetry SOP](../SOPs/edd-production-telemetry.md) |
@@ -399,13 +399,15 @@ Unknowns for Design/XFN to confirm: exact PR wall-clock budget for scripted suit
 | Production telemetry SOP | Trajectory field parity and promotion tags |
 | Public site / docs index | Link this PRD until delivery completes; then demote to “shipped” notes or archive |
 
-## 14. Open decisions (Design may resolve)
+## 14. Resolved decisions
 
-1. Criteria judge authoring: inline in the suite vs shared criteria files reused across suites.
-2. Whether `plan_adherence` and `step_efficiency` are separate metrics or one metric with modes.
-3. Plugin transport: in-process only vs also subprocess/CLI plugins for polyglot repos.
-4. How aggressively synthetic paraphrases are included in default nightly vs opt-in paths.
+| Decision | Resolution |
+|----------|------------|
+| Criteria judge authoring | Inline `criteria` on the suite metric (Phase 1). Shared criteria files deferred. |
+| Plan vs efficiency metrics | Separate `plan_adherence` and `step_efficiency` metrics. |
+| Plugin transport | In-process dynamic `import()` only (`type: plugin` + `module`). |
+| Synthetic paraphrases in nightly | Tagged `requires-live`; generated via `kit eval dataset synthesize` (opt-in output file). Nightly runs live suites including safety; does not auto-merge paraphrases into committed JSONL. |
 
 ---
 
-*End of PRD. Next phase: Design / XFN matrix finalization, then TDD short loop starting at Phase 1.*
+*PRD complete for Phases 1-4. Follow-ups: shared criteria files, subprocess plugins, richer live paraphrase corpora.*

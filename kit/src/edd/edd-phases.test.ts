@@ -178,6 +178,62 @@ metrics:
     assert.equal(code, 0);
   });
 
+  it('supports dataset synthesize, dedupe, and from-trace via CLI', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-ds2-'));
+    const dataset = path.join(dir, 'seed.jsonl');
+    fs.writeFileSync(
+      dataset,
+      `${JSON.stringify({ id: 's1', prompt: 'Show payment architecture.', tags: ['routing'], expect: { tool: 'read_architecture_yaml' } })}\n` +
+        `${JSON.stringify({ id: 's2', prompt: 'Show payment architecture.', tags: ['routing'], expect: { tool: 'read_architecture_yaml' } })}\n`
+    );
+    const synOut = path.join(dir, 'syn.jsonl');
+    assert.equal(
+      await handleEddEvalCli({
+        repoDir,
+        args: ['dataset', 'synthesize', '--dataset', dataset, '--count', '1', '--out', synOut]
+      }),
+      0
+    );
+    assert.ok(fs.existsSync(synOut));
+
+    const dedupeOut = path.join(dir, 'deduped.jsonl');
+    assert.equal(
+      await handleEddEvalCli({
+        repoDir,
+        args: ['dataset', 'dedupe', '--dataset', dataset, '--out', dedupeOut]
+      }),
+      0
+    );
+    const deduped = fs.readFileSync(dedupeOut, 'utf8').trim().split('\n');
+    assert.equal(deduped.length, 1);
+
+    const trace = path.join(dir, 'trace.json');
+    fs.writeFileSync(
+      trace,
+      JSON.stringify({
+        id: 't1',
+        prompt: 'retry',
+        reason: 'circuit_breaker',
+        expect: { no_tool: true }
+      })
+    );
+    const fromOut = path.join(dir, 'from.jsonl');
+    assert.equal(
+      await handleEddEvalCli({
+        repoDir,
+        args: ['dataset', 'from-trace', '--trace', trace, '--out', fromOut]
+      }),
+      0
+    );
+    assert.match(fs.readFileSync(fromOut, 'utf8'), /prod-derived/);
+  });
+
+  it('redacts credential-like strings in report text', async () => {
+    const { redactSecrets } = await import('./redact.js');
+    assert.match(redactSecrets('key sk-abc123456789 token'), /REDACTED_API_KEY/);
+    assert.match(redactSecrets('Authorization: Bearer abcdefghijklmnop'), /REDACTED_TOKEN/);
+  });
+
   it('attaches trajectory step failures in multi-step reports', async () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-traj-'));
     fs.writeFileSync(
