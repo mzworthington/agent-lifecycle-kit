@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Phase 1 in progress (outcomes and criteria) |
+| **Status** | Phases 1-4 implemented (outcomes, safety/synthetics, trajectory/MCP, plugins/dataset CLI) |
 | **Product** | Agent Lifecycle Kit - Eval-Driven Development |
 | **Audience** | Kit maintainers, consumer app teams shipping tool-using agents |
 | **Companion** | [EDD guide](./edd.md), [EDD SOP](../SOPs/eval-driven-development.md), [production telemetry SOP](../SOPs/edd-production-telemetry.md) |

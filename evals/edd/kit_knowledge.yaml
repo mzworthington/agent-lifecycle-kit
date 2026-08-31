@@ -11,6 +11,7 @@ metrics:
   - type: "schema_match"
     strict: true
   - type: "argument_correctness"
+  - type: "mcp_use"
   - type: "task_completion"
 mocks:
   - tool: "get_sop"

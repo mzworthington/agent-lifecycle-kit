@@ -9,6 +9,7 @@ export interface FailureTrace {
   expectedArguments?: string;
   actualArguments?: string;
   llmOutput?: string;
+  stepIndex?: number;
 }
 
 export interface CaseResult {
@@ -25,6 +26,8 @@ export interface CaseResult {
   trace?: FailureTrace;
   schemaOk?: boolean;
   routingOk?: boolean;
+  /** Ordered agent steps for multi-step diagnosis. */
+  trajectory?: import('./trajectory.js').TrajectoryStep[];
 }
 
 export interface SuiteReport {
@@ -209,6 +212,22 @@ function renderSuiteMarkdown(report: SuiteReport): string {
       if (trace.llmOutput) {
         lines.push(`* **LLM Output:** "${trace.llmOutput}"`);
       }
+      if (trace.stepIndex !== undefined) {
+        lines.push(`* **Failing Step:** \`${trace.stepIndex}\``);
+      }
+      if (f.trajectory?.length) {
+        lines.push('* **Trajectory:**');
+        for (const step of f.trajectory) {
+          const label =
+            step.kind === 'tool'
+              ? `tool ${step.toolName ?? '?'}`
+              : step.kind === 'halt'
+                ? 'halt'
+                : 'message';
+          const mark = step.failure ? 'FAIL' : 'ok';
+          lines.push(`  * step[${step.index}] ${label} (${mark})${step.failure ? ` - ${step.failure}` : ''}`);
+        }
+      }
       lines.push(`* **Diagnosis:** ${trace.diagnosis}`);
       lines.push(`* **Suggested Fix:** ${trace.suggestedFix}`);
       if (f.failures.length) {
@@ -283,6 +302,6 @@ export function printReportSummary(report: SuiteReport): void {
   console.log(`  Tokens: ${report.totalTokens} | Avg latency: ${report.avgLatencyMs.toFixed(1)}ms`);
   for (const r of report.results) {
     const mark = r.passed ? '✓' : '✗';
-    console.log(`  ${mark} ${r.id}${r.failures.length ? ` — ${r.failures.join('; ')}` : ''}`);
+    console.log(`  ${mark} ${r.id}${r.failures.length ? ` - ${r.failures.join('; ')}` : ''}`);
   }
 }

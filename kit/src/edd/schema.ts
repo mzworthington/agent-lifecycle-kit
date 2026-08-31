@@ -9,7 +9,11 @@ export const EvalMetricSchema = z.object({
     'terminal_fallback',
     'argument_correctness',
     'task_completion',
-    'criteria_judge'
+    'criteria_judge',
+    'mcp_use',
+    'step_efficiency',
+    'plan_adherence',
+    'plugin'
   ]),
   expected: z.string().optional(),
   strict: z.boolean().optional(),
@@ -17,7 +21,13 @@ export const EvalMetricSchema = z.object({
   /** Written criteria for `criteria_judge` (suite-level). */
   criteria: z.array(z.string().min(1)).optional(),
   /** Fraction of criteria that must pass (0-1). Defaults to 1. */
-  threshold: z.number().min(0).max(1).optional()
+  threshold: z.number().min(0).max(1).optional(),
+  /** Max tool steps for `step_efficiency`. */
+  max_steps: z.number().int().nonnegative().optional(),
+  /** Module path for `type: plugin` (resolved relative to the suite YAML). */
+  module: z.string().min(1).optional(),
+  /** Optional allow-list override for `mcp_use` (defaults to registered MCP tools). */
+  allowed_tools: z.array(z.string().min(1)).optional()
 });
 
 export const EvalMockSchema = z

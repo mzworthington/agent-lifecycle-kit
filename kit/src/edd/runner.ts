@@ -1,9 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+import { pathToFileURL } from 'node:url';
 import { parse as parseYaml } from 'yaml';
 import { AgentClient, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 import { loadDataset } from './dataset.js';
 import { evaluateArgumentCorrectness, parseToolArguments } from './argument-correctness.js';
+import { evaluateMcpUse } from './mcp-use.js';
+import { loadMetricPlugin } from './metric-plugin.js';
+import { evaluatePlanAdherence, evaluateStepEfficiency, resolveMaxSteps } from './plan-metrics.js';
 import { runCriteriaJudge, runLlmJudge, runTaskCompletionJudge } from './run-judges.js';
 import {
   EvalConfigSchema,
@@ -20,6 +24,7 @@ import {
   type FailureTrace,
   type SuiteReport
 } from './telemetry.js';
+import { buildTrajectory, type TrajectoryStep } from './trajectory.js';
 import { emitAgentSpan, type OtelEmitter } from './otel.js';
 
 export interface EvalRunnerOptions {
@@ -48,6 +53,7 @@ function buildFailureTrace(input: {
   response: AgentResponse;
   failures: string[];
   metricExpectedTool?: string;
+  stepIndex?: number;
 }): FailureTrace | undefined {
   if (!input.failures.length) return undefined;
   const expectedTool =
@@ -130,6 +136,52 @@ function buildFailureTrace(input: {
       llmOutput: input.response.content
     };
   }
+  if (failureText.includes('mcp:')) {
+    return {
+      diagnosis: 'MCP Use Failure. The agent used a tool outside the catalog or missed the expected MCP capability.',
+      suggestedFix:
+        'Register the needed MCP tool in the suite and tighten routing so only catalog tools are called.',
+      expectedTool,
+      actualTool,
+      expectedArguments,
+      actualArguments,
+      llmOutput: input.response.content,
+      stepIndex: input.stepIndex
+    };
+  }
+  if (failureText.includes('plan:')) {
+    return {
+      diagnosis: 'Plan Adherence Failure. The ordered tool plan diverged at a specific step.',
+      suggestedFix:
+        'Clarify multi-step instructions and expected tool order in the system prompt and eval expectations.',
+      expectedTool,
+      actualTool,
+      expectedArguments,
+      actualArguments,
+      llmOutput: input.response.content,
+      stepIndex: input.stepIndex
+    };
+  }
+  if (failureText.includes('efficiency:')) {
+    return {
+      diagnosis: 'Step Efficiency Failure. The agent took more tool steps than allowed.',
+      suggestedFix:
+        'Reduce retries and redundant lookups; set max_steps to the intended plan length.',
+      expectedTool,
+      actualTool,
+      llmOutput: input.response.content,
+      stepIndex: input.stepIndex
+    };
+  }
+  if (failureText.includes('plugin:')) {
+    return {
+      diagnosis: 'Plugin Metric Failure. A consumer metric plugin rejected the case.',
+      suggestedFix: 'Inspect the plugin reason and adjust prompts, tools, or the plugin threshold.',
+      expectedTool,
+      actualTool,
+      llmOutput: input.response.content
+    };
+  }
   return {
     diagnosis: failureText,
     suggestedFix: 'Inspect the prompt, tool schema, and system instructions for this case.',
@@ -137,7 +189,8 @@ function buildFailureTrace(input: {
     actualTool,
     expectedArguments,
     actualArguments,
-    llmOutput: input.response.content
+    llmOutput: input.response.content,
+    stepIndex: input.stepIndex
   };
 }
 
@@ -209,6 +262,7 @@ export class EvalRunner {
     });
 
     // Register MCP tool contracts when listed in the suite
+    const availableTools: string[] = [];
     if (config.mcp_tools?.length) {
       for (const toolPath of config.mcp_tools) {
         const abs = resolvePath(absoluteYaml, toolPath);
@@ -218,10 +272,12 @@ export class EvalRunner {
           inputSchema?: Record<string, unknown>;
         };
         agent.registerTool(contract);
+        availableTools.push(contract.name);
       }
     } else if (config.mocks?.length) {
       for (const mock of config.mocks) {
         agent.registerTool({ name: mock.tool, description: `Mocked tool ${mock.tool}` });
+        availableTools.push(mock.tool);
       }
     }
 
@@ -248,7 +304,10 @@ export class EvalRunner {
       const response = await agent.executePrompt(testCase.prompt);
       const latency = performance.now() - startTime;
 
-      const assertion = await this.runAssertions(response, config.metrics, testCase, config);
+      const assertion = await this.runAssertions(response, config.metrics, testCase, config, {
+        availableTools,
+        suiteYamlPath: absoluteYaml
+      });
 
       emitAgentSpan(this.otel, {
         suite: config.name,
@@ -262,6 +321,7 @@ export class EvalRunner {
       });
 
       const metricExpectedTool = config.metrics.find((m) => m.type === 'tool_selection')?.expected;
+      const stepIndex = [...assertion.stepFailures.keys()][0];
       results.push({
         id: testCase.id,
         prompt: testCase.prompt,
@@ -274,13 +334,15 @@ export class EvalRunner {
         hallucinated: assertion.hallucinated,
         routingOk: assertion.routingOk,
         schemaOk: assertion.schemaOk,
+        trajectory: assertion.trajectory,
         trace: assertion.passed
           ? undefined
           : buildFailureTrace({
               testCase,
               response,
               failures: assertion.failures,
-              metricExpectedTool
+              metricExpectedTool,
+              stepIndex
             })
       });
     }
@@ -315,18 +377,22 @@ export class EvalRunner {
     response: AgentResponse,
     metrics: EvalMetric[],
     testCase: EvalCase,
-    config: EvalConfig
+    config: EvalConfig,
+    ctx: { availableTools: string[]; suiteYamlPath: string }
   ): Promise<{
     passed: boolean;
     failures: string[];
     hallucinated?: boolean;
     routingOk?: boolean;
     schemaOk?: boolean;
+    trajectory: TrajectoryStep[];
+    stepFailures: Map<number, string>;
   }> {
     const failures: string[] = [];
     let hallucinated: boolean | undefined;
     let routingOk: boolean | undefined;
     let schemaOk: boolean | undefined;
+    const stepFailures = new Map<number, string>();
 
     for (const metric of metrics) {
       if (metric.type === 'tool_selection') {
@@ -385,7 +451,6 @@ export class EvalRunner {
         if (testCase.expect?.tools?.length) {
           let ok = true;
           for (let i = 0; i < testCase.expect.tools.length; i++) {
-            const expected = testCase.expect.tools[i];
             const call = response.tool_calls?.[i];
             if (!call) {
               failures.push(`schema: missing tool call at index ${i}`);
@@ -482,6 +547,51 @@ export class EvalRunner {
         );
       }
 
+      if (metric.type === 'mcp_use') {
+        const available = metric.allowed_tools?.length ? metric.allowed_tools : ctx.availableTools;
+        failures.push(
+          ...evaluateMcpUse({
+            toolCalls: response.tool_calls ?? [],
+            availableTools: available,
+            expectTool: testCase.expect?.tool,
+            expectTools: testCase.expect?.tools?.map((t) => t.name),
+            noTool: testCase.expect?.no_tool === true
+          })
+        );
+      }
+
+      if (metric.type === 'plan_adherence') {
+        const expectedPlan =
+          testCase.expect?.tools?.map((t) => t.name) ??
+          (testCase.expect?.tool ? [testCase.expect.tool] : []);
+        if (!expectedPlan.length || testCase.expect?.no_tool) {
+          continue;
+        }
+        const result = evaluatePlanAdherence({
+          toolCalls: response.tool_calls ?? [],
+          expectedPlan
+        });
+        for (const [idx, msg] of result.stepFailures) {
+          stepFailures.set(idx, msg);
+        }
+        failures.push(...result.failures);
+      }
+
+      if (metric.type === 'step_efficiency') {
+        const maxSteps = resolveMaxSteps({
+          maxSteps: metric.max_steps,
+          expectToolsLength: testCase.expect?.tools?.length,
+          noTool: testCase.expect?.no_tool === true
+        });
+        failures.push(
+          ...evaluateStepEfficiency({
+            toolCalls: response.tool_calls ?? [],
+            maxSteps,
+            haltedAutonomousExecution: response.haltedAutonomousExecution
+          })
+        );
+      }
+
       if (metric.type === 'task_completion') {
         const toolOutput =
           testCase.tool_output ??
@@ -555,8 +665,52 @@ export class EvalRunner {
           failures.push(`semantic: ${verdict.reasoning || 'llm_as_judge failed'}`);
         }
       }
+
+      if (metric.type === 'plugin') {
+        if (!metric.module) {
+          failures.push('plugin: metric missing module path');
+          continue;
+        }
+        const modulePath = resolvePath(ctx.suiteYamlPath, metric.module);
+        try {
+          const plugin = await loadMetricPlugin(pathToFileURL(modulePath).href);
+          const trajectoryPreview = buildTrajectory({
+            toolCalls: response.tool_calls ?? [],
+            content: response.content,
+            haltedAutonomousExecution: response.haltedAutonomousExecution,
+            stepFailures
+          });
+          const result = await plugin({
+            testCase,
+            response,
+            trajectory: trajectoryPreview,
+            availableTools: ctx.availableTools
+          });
+          if (!result.pass) {
+            failures.push(`plugin: ${result.reason || 'plugin metric failed'}`);
+          }
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err);
+          failures.push(`plugin: ${msg}`);
+        }
+      }
     }
 
-    return { passed: failures.length === 0, failures, hallucinated, routingOk, schemaOk };
+    const trajectory = buildTrajectory({
+      toolCalls: response.tool_calls ?? [],
+      content: response.content,
+      haltedAutonomousExecution: response.haltedAutonomousExecution,
+      stepFailures
+    });
+
+    return {
+      passed: failures.length === 0,
+      failures,
+      hallucinated,
+      routingOk,
+      schemaOk,
+      trajectory,
+      stepFailures
+    };
   }
 }

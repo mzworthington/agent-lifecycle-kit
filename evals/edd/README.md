@@ -50,6 +50,10 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 | `argument_correctness` | `expect.arguments_contains` / per-call args match intent meaning |
 | `task_completion` | User goal achieved (`expect.goal` or expected tool plan); scripted heuristic or live judge |
 | `criteria_judge` | Written suite `criteria` + `threshold` (0-1); per-criterion reasons |
+| `mcp_use` | Only catalog MCP tools; expected MCP capability when intent requires it |
+| `plan_adherence` | Ordered `expect.tools[]` / `expect.tool` matches trajectory steps |
+| `step_efficiency` | Tool step count <= `max_steps` (defaults to plan length or 1) |
+| `plugin` | Consumer module (`module: ./plugin.mjs`) receives case + trajectory |
 | `llm_as_judge` | Semantic accuracy / hallucination / tone (skipped when `expect.no_tool`) |
 | `self_correction` | Param updates after injected errors |
 | `terminal_fallback` | Circuit breaker stops endless retries |
@@ -60,16 +64,37 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 flowchart TB
   runner[EvalRunner]
   arg[argument-correctness]
+  mcp[mcp-use / plan-metrics]
+  synth[synthesize / dataset-hygiene]
   orch[run-judges]
   pure[judge local heuristics]
   http[judge-provider HTTP adapter]
+  plug[metric-plugin loader]
   runner --> arg
+  runner --> mcp
   runner --> orch
+  runner --> plug
   orch --> pure
   orch --> http
+  cli[kit eval dataset] --> synth
 ```
 
-Pure metric and judge logic stays inward. OpenAI-compatible HTTP lives only in `judge-provider`.
+Pure metric and judge logic stays inward. OpenAI-compatible HTTP and dynamic plugin imports live only in adapters.
+
+## Safety suite
+
+Gateable injection / no-tool suite: `evals/edd/safety.yaml` (included in `kit check` via `EDD_CI_SUITES`).
+
+## Dataset hygiene
+
+```bash
+kit eval dataset lint --dataset evals/edd/architecture_routing.jsonl
+kit eval dataset dedupe --dataset path.jsonl --out path.deduped.jsonl
+kit eval dataset synthesize --dataset path.jsonl --count 2 --out path.syn.jsonl
+kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+```
+
+Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`.
 
 ## Tags
 

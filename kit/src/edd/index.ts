@@ -13,5 +13,21 @@ export {
 export { runLlmJudge, runCriteriaJudge, runTaskCompletionJudge } from './run-judges.js';
 export { openAiCompatibleJudgeCompletion, type JudgeCompletionPort } from './judge-provider.js';
 export { evaluateArgumentCorrectness, parseToolArguments } from './argument-correctness.js';
+export { synthesizeParaphrases, synthesizeDataset } from './synthesize.js';
+export { buildTrajectory, annotatePlanStepFailures, type TrajectoryStep } from './trajectory.js';
+export { evaluateMcpUse } from './mcp-use.js';
+export { evaluatePlanAdherence, evaluateStepEfficiency, resolveMaxSteps } from './plan-metrics.js';
+export {
+  loadMetricPlugin,
+  type MetricPlugin,
+  type MetricPluginContext,
+  type MetricPluginResult
+} from './metric-plugin.js';
+export {
+  lintCases,
+  dedupeCases,
+  casesFromTraceFile,
+  synthesizeFromSeeds
+} from './dataset-hygiene.js';
 export { emitAgentSpan, detectRoutingDrift, shouldShadowEval, type OtelEmitter } from './otel.js';
 export { watchTargets } from './watch.js';
