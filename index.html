@@ -603,6 +603,8 @@
       font-family: var(--font-mono);
       font-size: 0.88em;
       color: var(--primary-light);
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     #guide {
@@ -1313,15 +1315,56 @@
 
     .job-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      /* 6 tracks → 3 equal cards (span 2), or 2 equal on the bottom row (span 3) */
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 0.75rem;
       list-style: none;
       padding: 0;
-      margin: 0 0 1.25rem;
+      margin: 0 auto 1.25rem;
+      max-width: 72rem;
+    }
+
+    .job-grid > li {
+      grid-column: span 2;
+      min-width: 0;
+    }
+
+    /* Five jobs: bottom row is two equal cards, not a lonely orphan */
+    .job-grid > li:nth-child(4):nth-last-child(2),
+    .job-grid > li:nth-child(5):nth-last-child(1) {
+      grid-column: span 3;
+    }
+
+    @media (max-width: 900px) {
+      .job-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .job-grid > li,
+      .job-grid > li:nth-child(4):nth-last-child(2),
+      .job-grid > li:nth-child(5):nth-last-child(1) {
+        grid-column: auto;
+      }
+
+      /* Odd leftover fills the row instead of sitting alone at half width */
+      .job-grid > li:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .job-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .job-grid > li:last-child:nth-child(odd) {
+        grid-column: auto;
+      }
     }
 
     .job-btn {
       width: 100%;
+      height: 100%;
       text-align: left;
       cursor: pointer;
       background: var(--bg-card);
@@ -1365,6 +1408,8 @@
       border-radius: 14px;
       padding: 1.35rem 1.4rem;
       min-height: 10rem;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .job-panel[hidden] {
@@ -1418,7 +1463,28 @@
     }
 
     .job-panel .job-cmd {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem 0.6rem;
       margin: 0 0 1rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .job-panel .job-cmd-label {
+      flex: 0 0 auto;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .job-panel .job-cmd-row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-width: 0;
+      flex: 1 1 12rem;
+      max-width: 100%;
     }
 
     .job-panel .job-cmd code,
@@ -1429,6 +1495,45 @@
       background: rgba(0, 0, 0, 0.35);
       padding: 0.15rem 0.4rem;
       border-radius: 4px;
+    }
+
+    .job-panel .job-cmd code {
+      display: block;
+      min-width: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .job-panel .job-cmd-copy {
+      flex: 0 0 auto;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      background: rgba(42, 157, 143, 0.16);
+      border: 1px solid var(--border-accent);
+      border-radius: 6px;
+      padding: 0.28rem 0.55rem;
+    }
+
+    .job-panel .job-cmd-copy:hover,
+    .job-panel .job-cmd-copy:focus-visible {
+      border-color: var(--primary-light);
+      outline: none;
+    }
+
+    .job-panel .job-cmd-copy[data-copied="true"] {
+      color: #a7f3d0;
+      border-color: rgba(167, 243, 208, 0.45);
+    }
+
+    .job-panel .cli-inline {
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     @keyframes today-in {
@@ -1918,7 +2023,13 @@
           <li><strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/demo.yaml --model scripted</code></li>
           <li><strong>Read the report</strong>, tighten the schema or prompt, re-run until green.</li>
         </ol>
-        <p class="job-cmd" id="job-panel-cmd">Start here: <code>kit eval run --suite evals/edd/demo.yaml --model scripted</code></p>
+        <p class="job-cmd" id="job-panel-cmd">
+          <span class="job-cmd-label">Start here:</span>
+          <span class="job-cmd-row">
+            <code id="job-panel-cmd-text" title="kit eval run --suite evals/edd/demo.yaml --model scripted">kit eval run --suite evals/edd/demo.yaml --model scripted</code>
+            <button type="button" class="job-cmd-copy" id="job-panel-cmd-copy" aria-label="Copy command" data-cmd="kit eval run --suite evals/edd/demo.yaml --model scripted">Copy</button>
+          </span>
+        </p>
         <ul class="job-actions" id="job-panel-actions">
           <li><a href="#proof">See before / after</a></li>
           <li><a href="#demo">Walk the failing-eval demo</a></li>
@@ -3111,8 +3222,54 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       const titleEl = document.getElementById('job-panel-title');
       const whyEl = document.getElementById('job-panel-why');
       const stepsEl = document.getElementById('job-panel-steps');
-      const cmdEl = document.getElementById('job-panel-cmd');
+      const cmdTextEl = document.getElementById('job-panel-cmd-text');
+      const cmdCopyBtn = document.getElementById('job-panel-cmd-copy');
       const actionsEl = document.getElementById('job-panel-actions');
+      let copyResetTimer = 0;
+
+      function setJobCommand(cmd) {
+        if (!cmdTextEl || !cmdCopyBtn) return;
+        cmdTextEl.textContent = cmd;
+        cmdTextEl.setAttribute('title', cmd);
+        cmdCopyBtn.dataset.cmd = cmd;
+        cmdCopyBtn.setAttribute('aria-label', `Copy command: ${cmd}`);
+        cmdCopyBtn.dataset.copied = 'false';
+        cmdCopyBtn.textContent = 'Copy';
+      }
+
+      async function copyJobCommand() {
+        if (!cmdCopyBtn) return;
+        const cmd = cmdCopyBtn.dataset.cmd || '';
+        if (!cmd) return;
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(cmd);
+          } else {
+            const ta = document.createElement('textarea');
+            ta.value = cmd;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+          }
+          cmdCopyBtn.dataset.copied = 'true';
+          cmdCopyBtn.textContent = 'Copied';
+          window.clearTimeout(copyResetTimer);
+          copyResetTimer = window.setTimeout(() => {
+            cmdCopyBtn.dataset.copied = 'false';
+            cmdCopyBtn.textContent = 'Copy';
+          }, 1600);
+        } catch (_) {
+          cmdCopyBtn.textContent = 'Copy failed';
+          window.clearTimeout(copyResetTimer);
+          copyResetTimer = window.setTimeout(() => {
+            cmdCopyBtn.textContent = 'Copy';
+          }, 1600);
+        }
+      }
 
       function render(jobId) {
         const job = jobs[jobId];
@@ -3127,10 +3284,16 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
         titleEl.textContent = job.title;
         whyEl.textContent = job.why;
         stepsEl.innerHTML = job.steps.map((s) => `<li>${s}</li>`).join('');
-        cmdEl.innerHTML = `Start here: <code>${job.cmd}</code>`;
+        setJobCommand(job.cmd);
         actionsEl.innerHTML = job.actions
           .map((a) => `<li><a href="${a.href}">${a.label}</a></li>`)
           .join('');
+      }
+
+      if (cmdCopyBtn) {
+        cmdCopyBtn.addEventListener('click', () => {
+          void copyJobCommand();
+        });
       }
 
       buttons.forEach((btn) => {
