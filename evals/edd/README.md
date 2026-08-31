@@ -15,6 +15,7 @@ evals/edd/
 ├── architecture_self_correction.yaml|.jsonl
 ├── architecture_terminal.yaml|.jsonl
 ├── kit_knowledge.yaml|.jsonl
+├── safety.yaml|.jsonl
 └── tools/*.json
 ```
 
@@ -35,6 +36,7 @@ Do not extend the scripted driver to pass `requires-live` cases. Add JSONL rows 
 kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
 kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
+kit eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
 kit eval report --format md --out out/reports
 kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 ```

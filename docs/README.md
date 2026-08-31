@@ -4,8 +4,7 @@ Markdown on this site is served as-is from GitHub Pages. The landing page at [ev
 
 | Doc | Who it is for |
 |-----|----------------|
-| [EDD guide](./edd.md) | Anyone proving agent tool calls (evals, CI, live keys) |
-| [PRD: EDD agent eval depth](./prd-edd-quality-depth.md) | Maintainers: shipped Phases 1-4 (outcomes, safety, trajectory/MCP, plugins/dataset) |
+| [EDD guide](./edd.md) | Anyone proving agent tool calls (evals, CI, live keys, dataset hygiene) |
 | [What kit gives you](./kit.md) | Operators: context budget, MCP profiles, quality gate, audit |
 
 Agent-facing procedures stay in [`SOPs/`](../SOPs/). Do not duplicate them here; link them.

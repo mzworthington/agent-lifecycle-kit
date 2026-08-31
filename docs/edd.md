@@ -25,9 +25,10 @@ flowchart LR
 |------------|---------|
 | **Context isolation** | Fresh context per case. No cross-test contamination. |
 | **Deterministic mocks** | Measure routing and extraction, not third-party latency. |
-| **Dual-layer asserts** | Strict schema match plus optional LLM-as-a-judge. |
-| **CI quality gates** | `kit eval ci --threshold-routing 95` blocks routing drift. |
-| **Closed-loop telemetry** | Production misses become `.jsonl` cases; shadow evals sample live traffic. |
+| **Dual-layer asserts** | Schema/shape plus argument meaning, task completion, criteria judge, optional LLM-as-a-judge. |
+| **CI quality gates** | `kit eval ci --threshold-routing 95` blocks routing drift; safety suite runs in `kit check`. |
+| **Closed-loop telemetry** | Production misses become `.jsonl` cases (`kit eval dataset from-trace`); shadow evals sample live traffic. |
+| **Dataset hygiene** | `kit eval dataset lint\|dedupe\|synthesize\|from-trace` keeps suites valid and scalable. |
 
 Bare `kit eval` still validates which Kit skill activates. `kit eval run|watch|report|ci` validates how an agent calls tools. Use EDD whenever you change prompts, tool schemas, or routing.
 
@@ -41,6 +42,7 @@ kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
 kit eval ci --threshold-routing 95 --out out/reports
 kit eval report --format md --out out/reports
 kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
+kit eval dataset lint --dataset evals/edd/architecture_routing.jsonl
 ```
 
 `agent-kit` is an alias for `kit`.
@@ -80,17 +82,28 @@ The same key is reused for:
 
 - **Agent:** given this prompt and these tools, which call do you make?
 - **Judge:** optional second completion for `llm_as_judge` / `criteria_judge` / live `task_completion` (falls back to a local heuristic when the model is scripted or no key is set)
-- **Phase 1 outcome metrics:** `argument_correctness` (value meaning via `expect.arguments_contains`), `task_completion` (`expect.goal` or expected tool plan), `criteria_judge` (suite `criteria` + `threshold`)
-- **Phase 2-4:** safety suite (`evals/edd/safety.yaml`), `kit eval dataset` hygiene, `mcp_use` / `plan_adherence` / `step_efficiency`, trajectory traces, `type: plugin` modules
 
 Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K`. Local OpenAI-compatible servers (Ollama, OpenRouter, and similar) work by setting `KIT_EVAL_BASE_URL`.
+
+## Metrics and suites
+
+Beyond tool selection and schema shape, suites can assert:
+
+| Area | Metrics / tooling |
+|------|-------------------|
+| Outcome quality | `argument_correctness`, `task_completion`, `criteria_judge` |
+| MCP / multi-step | `mcp_use`, `plan_adherence`, `step_efficiency`, trajectory traces in reports |
+| Safety | `evals/edd/safety.yaml` (injection + no-tool; in `kit check` and nightly live) |
+| Extensibility | `type: plugin` modules; `kit eval dataset lint\|dedupe\|synthesize\|from-trace` |
+
+Full metric table and harness layout: [evals/edd/README.md](../evals/edd/README.md).
 
 ### CI
 
 | Job | Key | Model | Purpose |
 |-----|-----|--------|---------|
-| PR [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) | secrets may be injected | defaults to `scripted` | Merge gate: harness + keyword routing |
-| Nightly [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | **requires** `KIT_EVAL_API_KEY` | repo variable `KIT_EVAL_MODEL` | Paraphrases, prompt-injection, multi-tool |
+| PR [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) | secrets may be injected | defaults to `scripted` | Merge gate: harness + keyword routing + safety |
+| Nightly [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | **requires** `KIT_EVAL_API_KEY` | repo variable `KIT_EVAL_MODEL` | Live paraphrases, prompt-injection, multi-tool, safety |
 | `pnpm check` / `kit check` | unused | hardcoded `scripted` | Same as the PR gate, locally |
 
 Nightly **skips the whole job** if `KIT_EVAL_API_KEY` is empty. It does not fall through to `OPENAI_API_KEY`.
