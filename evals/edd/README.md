@@ -24,7 +24,7 @@ evals/edd/
 | Driver | When | What it proves |
 |--------|------|----------------|
 | `scripted` (CI default) | `kit eval ci`, PR CI (`kit check`), Cursor / Copilot daily work | Harness, schema, keyword routing. **Not** a product LLM test. No API key. |
-| Live model | Nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) when `KIT_EVAL_API_KEY` is set | Paraphrases, prompt-injection, multi-tool sequences tagged `requires-live` |
+| Live model | Nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) when `KIT_EVAL_API_KEY` is set | Paraphrases, prompt-injection, multi-tool, and safety cases tagged `requires-live` |
 
 Cursor and GitHub Copilot are IDE hosts (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). They are **not** the live eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and a local live example: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
 
