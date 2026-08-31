@@ -46,7 +46,7 @@ const PIN_PATTERN = /^(latest|v?\d+(\.\d+)*(-[\w.-]+)?|[0-9a-f]{40}|refs\/(tags|
 const OFFICIAL_INSTALLER =
   /raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/[^/\s]+\/install\.sh/;
 
-/** Documented `curl | bash` for this repo only — still flag every other pipe-to-shell. */
+/** Documented `curl | sh` (or bash) for this repo only — still flag every other pipe-to-shell. */
 export function isOfficialKitInstallerLine(line: string): boolean {
   return OFFICIAL_INSTALLER.test(line) && /\|\s*(bash|sh)\b/.test(line);
 }

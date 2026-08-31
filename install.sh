@@ -1,13 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Bootstrap Agent Lifecycle Kit: clone or reuse a checkout, link ~/.agents, put kit on PATH.
-# Usage: curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
-# Prefer `| bash` (not `| sh`): this script needs bash features such as `pipefail`.
-if [ -z "${BASH_VERSION:-}" ]; then
-  echo "error: run this installer with bash, e.g.:" >&2
-  echo "  curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash" >&2
-  exit 1
-fi
-set -euo pipefail
+# Usage: curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+# POSIX sh (dash, busybox ash, macOS /bin/sh). Do not require bash.
+set -eu
 
 GITHUB_REPO="${KIT_GITHUB_REPO:-mzworthington/agent-lifecycle-kit}"
 KIT_DIR="${KIT_DIR:-}"
@@ -21,8 +16,8 @@ usage() {
 Agent Lifecycle Kit installer
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
-  curl -fsSL .../install.sh | bash -s -- [options]
+  curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+  curl -fsSL .../install.sh | sh -s -- [options]
   ./install.sh [options]     # from a kit checkout
 
 Puts kit on PATH (~/.local/bin), links ~/.agents, and installs the default MCP profile.
@@ -44,11 +39,11 @@ Environment:
 EOF
 }
 
-while [[ $# -gt 0 ]]; do
+while [ $# -gt 0 ]; do
   case "$1" in
     --dir)
       KIT_DIR="${2:-}"
-      if [[ -z "${KIT_DIR}" ]]; then
+      if [ -z "${KIT_DIR}" ]; then
         echo "error: --dir requires a path" >&2
         exit 1
       fi
@@ -56,7 +51,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     --ref)
       GIT_REF="${2:-}"
-      if [[ -z "${GIT_REF}" ]]; then
+      if [ -z "${GIT_REF}" ]; then
         echo "error: --ref requires a branch or tag" >&2
         exit 1
       fi
@@ -75,47 +70,48 @@ while [[ $# -gt 0 ]]; do
 done
 
 is_kit_checkout() {
-  local dir="$1"
-  [[ -f "${dir}/bin/kit.ts" && -f "${dir}/package.json" && -f "${dir}/AGENTS.md" ]]
+  _dir="$1"
+  [ -f "${_dir}/bin/kit.ts" ] && [ -f "${_dir}/package.json" ] && [ -f "${_dir}/AGENTS.md" ]
 }
 
+# Piped stdin (curl | sh): $0 is the shell name, not this file.
 resolve_self_dir() {
-  local source="${BASH_SOURCE[0]:-}"
-  if [[ -z "${source}" || "${source}" == "-" ]]; then
+  _source=$0
+  case "${_source}" in
+    - | sh | */sh | dash | */dash | bash | */bash | zsh | */zsh | ksh | */ksh) return 1 ;;
+  esac
+  if [ ! -f "${_source}" ]; then
     return 1
   fi
-  local dir
-  dir="$(cd "$(dirname "${source}")" 2>/dev/null && pwd)" || return 1
-  printf '%s\n' "${dir}"
+  _dir=$(CDPATH= cd -- "$(dirname -- "${_source}")" && pwd) || return 1
+  printf '%s\n' "${_dir}"
 }
 
 resolve_agents_checkout() {
-  local target="${HOME}/.agents"
-  if [[ ! -e "${target}" ]]; then
+  _target="${HOME}/.agents"
+  if [ ! -e "${_target}" ]; then
     return 1
   fi
-  local resolved
-  resolved="$(cd "${target}" 2>/dev/null && pwd)" || return 1
-  if is_kit_checkout "${resolved}"; then
-    printf '%s\n' "${resolved}"
+  _resolved=$(CDPATH= cd -- "${_target}" && pwd) || return 1
+  if is_kit_checkout "${_resolved}"; then
+    printf '%s\n' "${_resolved}"
     return 0
   fi
   return 1
 }
 
 need_cmd() {
-  local name="$1"
-  if ! command -v "${name}" >/dev/null 2>&1; then
-    echo "error: ${name} is required to install kit" >&2
+  _name="$1"
+  if ! command -v "${_name}" >/dev/null 2>&1; then
+    echo "error: ${_name} is required to install kit" >&2
     exit 1
   fi
 }
 
 ensure_node() {
   need_cmd node
-  local major
-  major="$(node -p 'process.versions.node.split(".")[0]')"
-  if [[ -z "${major}" || "${major}" -lt "${MIN_NODE_MAJOR}" ]]; then
+  _major=$(node -p 'process.versions.node.split(".")[0]')
+  if [ -z "${_major}" ] || [ "${_major}" -lt "${MIN_NODE_MAJOR}" ]; then
     echo "error: Node ${MIN_NODE_MAJOR}+ is required (found $(node -v))" >&2
     exit 1
   fi
@@ -136,86 +132,87 @@ ensure_pnpm() {
 }
 
 ensure_deps() {
-  local repo_dir="$1"
+  _repo_dir="$1"
   ensure_node
   ensure_pnpm
-  echo "Installing kit dependencies in ${repo_dir}"
-  (cd "${repo_dir}" && pnpm install)
+  echo "Installing kit dependencies in ${_repo_dir}"
+  (cd "${_repo_dir}" && pnpm install)
 }
 
 clone_or_update() {
-  local dest="$1"
-  local url="https://github.com/${GITHUB_REPO}.git"
-  if [[ -d "${dest}/.git" ]]; then
-    local origin
-    origin="$(git -C "${dest}" remote get-url origin 2>/dev/null || true)"
-    if [[ "${origin}" != *"${GITHUB_REPO}"* ]]; then
-      echo "error: ${dest} origin is ${origin:-unset}, expected ${GITHUB_REPO}" >&2
-      exit 1
-    fi
-    echo "Updating ${dest} (${GIT_REF})"
-    git -C "${dest}" fetch --depth 1 origin "${GIT_REF}"
-    git -C "${dest}" checkout -q "${GIT_REF}"
-    git -C "${dest}" pull --ff-only origin "${GIT_REF}"
+  _dest="$1"
+  _url="https://github.com/${GITHUB_REPO}.git"
+  if [ -d "${_dest}/.git" ]; then
+    _origin=$(git -C "${_dest}" remote get-url origin 2>/dev/null || true)
+    case "${_origin}" in
+      *"${GITHUB_REPO}"*) ;;
+      *)
+        echo "error: ${_dest} origin is ${_origin:-unset}, expected ${GITHUB_REPO}" >&2
+        exit 1
+        ;;
+    esac
+    echo "Updating ${_dest} (${GIT_REF})"
+    git -C "${_dest}" fetch --depth 1 origin "${GIT_REF}"
+    git -C "${_dest}" checkout -q "${GIT_REF}"
+    git -C "${_dest}" pull --ff-only origin "${GIT_REF}"
     return 0
   fi
-  if [[ -e "${dest}" ]]; then
-    echo "error: ${dest} exists and is not a kit git checkout. Pass --dir to pick another path." >&2
+  if [ -e "${_dest}" ]; then
+    echo "error: ${_dest} exists and is not a kit git checkout. Pass --dir to pick another path." >&2
     exit 1
   fi
-  mkdir -p "$(dirname "${dest}")"
-  echo "Cloning ${url} (${GIT_REF}) into ${dest}"
-  git clone --depth 1 --branch "${GIT_REF}" "${url}" "${dest}"
+  mkdir -p "$(dirname -- "${_dest}")"
+  echo "Cloning ${_url} (${GIT_REF}) into ${_dest}"
+  git clone --depth 1 --branch "${GIT_REF}" "${_url}" "${_dest}"
 }
 
 link_agents() {
-  local repo_dir="$1"
-  local target="${HOME}/.agents"
-  if [[ -L "${target}" ]]; then
-    local current
-    current="$(readlink "${target}")"
-    if [[ "${current}" == "${repo_dir}" ]]; then
-      echo "OK: ${target} already points to this checkout"
+  _repo_dir="$1"
+  _target="${HOME}/.agents"
+  if [ -L "${_target}" ]; then
+    _current=$(readlink "${_target}")
+    if [ "${_current}" = "${_repo_dir}" ]; then
+      echo "OK: ${_target} already points to this checkout"
       return 0
     fi
-    echo "WARN: ${target} is a symlink to ${current}"
-    echo "      Remove it first if you want to repoint to ${repo_dir}"
+    echo "WARN: ${_target} is a symlink to ${_current}"
+    echo "      Remove it first if you want to repoint to ${_repo_dir}"
     return 1
   fi
 
-  if [[ -e "${target}" && ! -L "${target}" ]]; then
-    echo "ERROR: ${target} exists and is not a symlink. Move or rename it first."
+  if [ -e "${_target}" ] && [ ! -L "${_target}" ]; then
+    echo "ERROR: ${_target} exists and is not a symlink. Move or rename it first."
     return 1
   fi
 
-  ln -s "${repo_dir}" "${target}"
-  echo "Linked ${target} -> ${repo_dir}"
+  ln -s "${_repo_dir}" "${_target}"
+  echo "Linked ${_target} -> ${_repo_dir}"
 }
 
 ensure_system_config() {
-  local repo_dir="$1"
-  if [[ ! -f "${repo_dir}/system/config.json" ]]; then
-    cp "${repo_dir}/system/config.example.json" "${repo_dir}/system/config.json"
+  _repo_dir="$1"
+  if [ ! -f "${_repo_dir}/system/config.json" ]; then
+    cp "${_repo_dir}/system/config.example.json" "${_repo_dir}/system/config.json"
     echo "Created system/config.json from example (edit project name as needed)"
   fi
 }
 
 install_mcp_profile() {
-  local repo_dir="$1"
-  if [[ "${INSTALL_MCP}" != "1" ]]; then
+  _repo_dir="$1"
+  if [ "${INSTALL_MCP}" != "1" ]; then
     echo "Skipping MCP install (INSTALL_MCP=${INSTALL_MCP})"
     return 0
   fi
 
-  local kit="${repo_dir}/bin/kit"
-  if [[ ! -x "${kit}" ]]; then
-    echo "WARN: ${kit} missing or not executable; skipping MCP install"
+  _kit="${_repo_dir}/bin/kit"
+  if [ ! -x "${_kit}" ]; then
+    echo "WARN: ${_kit} missing or not executable; skipping MCP install"
     return 0
   fi
 
   echo ""
   echo "Installing default MCP profile to ~/.cursor/mcp.json"
-  "${kit}" mcp default --install || {
+  "${_kit}" mcp default --install || {
     echo "WARN: MCP compose/install failed; continue and run kit mcp default --install"
     return 0
   }
@@ -229,64 +226,64 @@ install_mcp_profile() {
 }
 
 install_external_skills() {
-  local repo_dir="$1"
-  if [[ "${INSTALL_EXTERNAL_SKILLS}" != "1" ]]; then
+  _repo_dir="$1"
+  if [ "${INSTALL_EXTERNAL_SKILLS}" != "1" ]; then
     echo "Skipping external skills (set INSTALL_EXTERNAL_SKILLS=1 to sync Cloudflare/Vercel skills)"
     return 0
   fi
 
-  local kit="${repo_dir}/bin/kit"
-  if [[ ! -x "${kit}" ]]; then
-    echo "WARN: ${kit} missing or not executable; skipping external skills"
+  _kit="${_repo_dir}/bin/kit"
+  if [ ! -x "${_kit}" ]; then
+    echo "WARN: ${_kit} missing or not executable; skipping external skills"
     return 0
   fi
 
   echo ""
   echo "Syncing external skills from skills/external.lock.json"
-  "${kit}" sync --install || {
+  "${_kit}" sync --install || {
     echo "WARN: external skills sync failed; run kit sync --install manually"
     return 0
   }
 }
 
 export_ide_rules() {
-  local repo_dir="$1"
-  local kit="${repo_dir}/bin/kit"
-  if [[ -x "${kit}" ]]; then
+  _repo_dir="$1"
+  _kit="${_repo_dir}/bin/kit"
+  if [ -x "${_kit}" ]; then
     echo ""
     echo "Exporting Multi-IDE rules (CLAUDE.md, .windsurfrules, Copilot)..."
-    "${kit}" export-rules || true
+    "${_kit}" export-rules || true
   fi
 }
 
 install_cli_bin() {
-  local repo_dir="$1"
-  local target_bin="${HOME}/.local/bin"
-  if [[ ! -d "${target_bin}" && -d "${HOME}/bin" ]]; then
-    target_bin="${HOME}/bin"
+  _repo_dir="$1"
+  _target_bin="${HOME}/.local/bin"
+  if [ ! -d "${_target_bin}" ] && [ -d "${HOME}/bin" ]; then
+    _target_bin="${HOME}/bin"
   fi
-  mkdir -p "${target_bin}"
-  ln -sf "${repo_dir}/bin/kit" "${target_bin}/kit"
-  echo "Linked CLI: ${target_bin}/kit -> ${repo_dir}/bin/kit"
+  mkdir -p "${_target_bin}"
+  ln -sf "${_repo_dir}/bin/kit" "${_target_bin}/kit"
+  echo "Linked CLI: ${_target_bin}/kit -> ${_repo_dir}/bin/kit"
   case ":${PATH}:" in
-    *":${target_bin}:"*) ;;
+    *":${_target_bin}:"*) ;;
     *)
       echo ""
-      echo "Add ${target_bin} to PATH, then open a new shell:"
-      echo "  export PATH=\"${target_bin}:\$PATH\""
+      echo "Add ${_target_bin} to PATH, then open a new shell:"
+      echo "  export PATH=\"${_target_bin}:\$PATH\""
       ;;
   esac
 }
 
 bootstrap_checkout() {
-  local repo_dir="$1"
-  ensure_deps "${repo_dir}"
-  link_agents "${repo_dir}"
-  ensure_system_config "${repo_dir}"
-  export_ide_rules "${repo_dir}"
-  install_mcp_profile "${repo_dir}"
-  install_external_skills "${repo_dir}"
-  install_cli_bin "${repo_dir}"
+  _repo_dir="$1"
+  ensure_deps "${_repo_dir}"
+  link_agents "${_repo_dir}"
+  ensure_system_config "${_repo_dir}"
+  export_ide_rules "${_repo_dir}"
+  install_mcp_profile "${_repo_dir}"
+  install_external_skills "${_repo_dir}"
+  install_cli_bin "${_repo_dir}"
 
   echo ""
   echo "Agent Lifecycle Kit is ready."
@@ -296,9 +293,9 @@ bootstrap_checkout() {
   echo "External skills: INSTALL_EXTERNAL_SKILLS=1 ./install.sh  or  kit sync --install"
 }
 
-SELF_DIR="$(resolve_self_dir || true)"
+SELF_DIR=$(resolve_self_dir || true)
 
-if [[ -n "${SELF_DIR}" ]] && is_kit_checkout "${SELF_DIR}"; then
+if [ -n "${SELF_DIR}" ] && is_kit_checkout "${SELF_DIR}"; then
   bootstrap_checkout "${SELF_DIR}"
   exit 0
 fi
@@ -307,10 +304,10 @@ need_cmd git
 ensure_node
 
 DEST="${KIT_DIR}"
-if [[ -z "${DEST}" ]]; then
-  DEST="$(resolve_agents_checkout || true)"
+if [ -z "${DEST}" ]; then
+  DEST=$(resolve_agents_checkout || true)
 fi
-if [[ -z "${DEST}" ]]; then
+if [ -z "${DEST}" ]; then
   DEST="${HOME}/.local/share/agent-lifecycle-kit"
 fi
 
@@ -319,4 +316,4 @@ if ! is_kit_checkout "${DEST}"; then
   echo "error: ${DEST} is not a kit checkout after clone" >&2
   exit 1
 fi
-exec bash "${DEST}/install.sh"
+exec sh "${DEST}/install.sh"

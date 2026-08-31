@@ -34,7 +34,7 @@ Bare `kit eval` still validates which Kit skill activates. `kit eval run|watch|r
 ## Quick start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
 kit init . --mcp default --hook
 
 kit eval run --suite evals/edd/architecture_routing.yaml --model scripted

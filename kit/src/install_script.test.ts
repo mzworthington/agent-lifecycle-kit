@@ -7,26 +7,33 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const installer = path.join(root, 'install.sh');
 
+function runInstaller(shell: string, args: string[]): ReturnType<typeof spawnSync> {
+  return spawnSync(shell, [installer, ...args], { encoding: 'utf8' });
+}
+
 describe('install.sh', () => {
-  it('prints the curl | bash usage without cloning', () => {
-    const result = spawnSync('bash', [installer, '--help'], { encoding: 'utf8' });
+  it('prints the curl | sh usage without cloning', () => {
+    const result = runInstaller('sh', ['--help']);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /curl -fsSL https:\/\/raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/main\/install\.sh \| bash/);
+    assert.match(
+      result.stdout,
+      /curl -fsSL https:\/\/raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/main\/install\.sh \| sh/
+    );
     assert.match(result.stdout, /kit init \. --mcp default --hook/);
   });
 
   it('rejects unknown options and missing --dir values', () => {
-    const unknown = spawnSync('bash', [installer, '--bogus'], { encoding: 'utf8' });
+    const unknown = runInstaller('sh', ['--bogus']);
     assert.equal(unknown.status, 1);
     assert.match(unknown.stderr, /Unknown option/);
-    const missingDir = spawnSync('bash', [installer, '--dir'], { encoding: 'utf8' });
+    const missingDir = runInstaller('sh', ['--dir']);
     assert.equal(missingDir.status, 1);
     assert.match(missingDir.stderr, /--dir requires a path/);
   });
 
-  it('refuses to run under a non-bash shell', () => {
-    const result = spawnSync('zsh', [installer, '--help'], { encoding: 'utf8' });
-    assert.equal(result.status, 1);
-    assert.match(result.stderr, /run this installer with bash/);
+  it('runs under bash as well as sh', () => {
+    const result = runInstaller('bash', ['--help']);
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /\| sh/);
   });
 });

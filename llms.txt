@@ -19,7 +19,7 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 
 ## Install
 ```
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
 kit init . --mcp default --hook
 ```
 

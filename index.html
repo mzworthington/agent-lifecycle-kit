@@ -124,7 +124,7 @@
             "name": "How do I install kit?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "On macOS or Linux, run curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash then kit init . --mcp default --hook in the app repo. You need git and Node 22+."
+              "text": "On macOS or Linux, run curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh then kit init . --mcp default --hook in the app repo. You need git and Node 22+."
             }
           },
           {
@@ -1393,7 +1393,7 @@
       <figure class="cli-box">
         <figcaption>Install</figcaption>
         <pre class="cli-code"><code><span class="comment"># Put kit on your PATH</span>
-$ <span class="cmd">curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash</span>
+$ <span class="cmd">curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh</span>
 
 <span class="comment"># Bootstrap the repo you are in</span>
 $ <span class="cmd">kit init . --mcp default --hook</span></code></pre>
@@ -1459,7 +1459,7 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       <details>
         <summary>How do I install kit?</summary>
         <p>On macOS or Linux, run the installer, then bootstrap the app repo:</p>
-        <p><code>curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash</code></p>
+        <p><code>curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh</code></p>
         <p>Then <code>kit init . --mcp default --hook</code>. You need git and Node 22+. If <code>kit</code> is not found, add <code>~/.local/bin</code> to <code>PATH</code>.</p>
       </details>
       <details>

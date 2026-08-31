@@ -91,7 +91,7 @@ sequenceDiagram
 
 ```bash
 # Put kit on your PATH (macOS / Linux; needs git and Node 22+)
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
 
 # Bootstrap the repo you are in
 kit init . --mcp default --hook

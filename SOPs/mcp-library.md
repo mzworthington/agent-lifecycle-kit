@@ -110,7 +110,7 @@ kit mcp project-example -o .cursor/mcp.json
 kit mcp cloud -o .cursor/mcp.cloud.json   # optional merge by hand
 ```
 
-The installer (`curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash`, or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, and `cloud` explicitly.
+The installer (`curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh`, or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, and `cloud` explicitly.
 
 ## 4. Verify in Cursor
 

@@ -31,10 +31,13 @@ triggers:
 `;
 
 describe('isOfficialKitInstallerLine', () => {
-  it('allows the documented GitHub raw installer piped to bash', () => {
-    const line =
+  it('allows the documented GitHub raw installer piped to sh or bash', () => {
+    const sh =
+      'curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh';
+    const bash =
       'curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | bash';
-    assert.equal(isOfficialKitInstallerLine(line), true);
+    assert.equal(isOfficialKitInstallerLine(sh), true);
+    assert.equal(isOfficialKitInstallerLine(bash), true);
   });
 
   it('allows a tagged ref of the same installer', () => {
