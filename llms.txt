@@ -3,14 +3,17 @@
 > TDD for AI agents that call tools. Write evals, mock MCP schemas, assert routing, gate PRs, and turn production misses into the next case.
 
 ## What this site is
-Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`).
+Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`). The same kit also gates always-on context (`kit measure-context`), composes one MCP profile, and runs `kit check`.
 
 ## Start here
 - [Home](https://eval-driven-development.dev/)
 - [Install](https://eval-driven-development.dev/#install)
+- [Kit tools](https://eval-driven-development.dev/#kit)
+- [Operator guide](https://eval-driven-development.dev/docs/kit.md)
+- [Context budget](https://eval-driven-development.dev/SOPs/context-budget.md)
 - [EDD guide](https://eval-driven-development.dev/#guide)
 - [Lifecycle](https://eval-driven-development.dev/#lifecycle)
-- [Markdown guide](https://eval-driven-development.dev/docs/edd.md)
+- [Markdown EDD guide](https://eval-driven-development.dev/docs/edd.md)
 - [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
 
@@ -25,4 +28,7 @@ kit init . --mcp default --hook
 kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
 kit eval ci --threshold-routing 95 --out out/reports
 kit eval report --format md --out out/reports
+kit measure-context
+kit check
+kit mcp default --install
 ```

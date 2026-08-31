@@ -32,6 +32,8 @@ function lockRoot(skills = [{ id: 'cloudflare', repository: 'cloudflare/skills',
   return root;
 }
 
+const FAKE_CURSOR_SKILLS = '/tmp/cursor-user-skills';
+
 function capturingRunner(): { runner: CommandRunner; ran: string[][] } {
   const ran: string[][] = [];
   return {
@@ -39,6 +41,7 @@ function capturingRunner(): { runner: CommandRunner; ran: string[][] } {
     runner: {
       exists: () => true,
       skillAvailable: () => true,
+      userSkillsDir: () => FAKE_CURSOR_SKILLS,
       run: (bin, args) => {
         ran.push([bin, ...args]);
         return { status: 0 };
@@ -82,7 +85,38 @@ describe('syncExternalSkills', () => {
     assert.ok(ran[0]?.includes('--force'));
     ran.length = 0;
     assert.equal(syncExternalSkills(lockRoot(), ['--update', '--dry-run'], runner), 0);
-    assert.deepEqual(ran, [['gh', 'skill', 'update', '--dry-run', 'cloudflare']]);
+    assert.deepEqual(ran, [
+      ['gh', 'skill', 'update', '--dir', FAKE_CURSOR_SKILLS, '--dry-run', 'cloudflare']
+    ]);
+  });
+
+  it('updates only lockfile skill names in Cursor user scope, never --all', () => {
+    const { runner, ran } = capturingRunner();
+    const root = lockRoot([
+      { id: 'cloudflare', repository: 'cloudflare/skills', skill: 'skills/cloudflare', pin: 'latest' },
+      { id: 'wrangler', repository: 'cloudflare/skills', skill: 'skills/wrangler', pin: 'latest' }
+    ]);
+    assert.equal(syncExternalSkills(root, ['--update'], runner), 0);
+    assert.deepEqual(ran, [
+      ['gh', 'skill', 'update', '--dir', FAKE_CURSOR_SKILLS, 'cloudflare', 'wrangler']
+    ]);
+    assert.ok(!ran[0]?.includes('--all'));
+  });
+
+  it('defaults update --dir to ~/.cursor/skills when the runner omits userSkillsDir', () => {
+    const ran: string[][] = [];
+    const runner: CommandRunner = {
+      exists: () => true,
+      skillAvailable: () => true,
+      run: (bin, args) => {
+        ran.push([bin, ...args]);
+        return { status: 0 };
+      }
+    };
+    assert.equal(syncExternalSkills(lockRoot(), ['--update'], runner), 0);
+    assert.deepEqual(ran, [
+      ['gh', 'skill', 'update', '--dir', path.join(os.homedir(), '.cursor', 'skills'), 'cloudflare']
+    ]);
   });
 
   it('returns 0 for help and empty lockfiles', () => {

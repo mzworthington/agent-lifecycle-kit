@@ -126,7 +126,7 @@ Declare in [external.lock.json](./external.lock.json); install to Cursor **user*
 
 ```bash
 kit sync --install   # → ~/.cursor/skills
-kit sync --update    # pull upstream changes
+kit sync --update    # lockfile ids in ~/.cursor/skills only (not --all agents)
 ```
 
 Or during bootstrap: `INSTALL_EXTERNAL_SKILLS=1 ./install.sh`

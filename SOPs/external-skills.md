@@ -37,9 +37,11 @@ kit sync --install
 # Preview commands
 kit sync --dry-run
 
-# Pull upstream changes for already-installed skills
+# Pull upstream changes for lockfile skills in ~/.cursor/skills only
 kit sync --update
 ```
+
+`--update` refreshes lockfile skill names with `--dir ~/.cursor/skills`. It does **not** run `gh skill update --all`, which scans every agent host and the kit tree and warns on copies that were never installed via `gh skill`.
 
 Optional from bootstrap:
 

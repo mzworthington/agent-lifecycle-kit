@@ -46,6 +46,7 @@ EDD is the agent default. Around it, Kit standardizes how coding agents work acr
 | **Lifecycle skills** | Spec → TDD short loop → XFN → security → release via `agent-*` roles |
 | **One rules file** | `AGENTS.md` syncs to every IDE entry point |
 | **MCP catalog** | Composable profiles into `.cursor/mcp.json` ([mcps/](./mcps/)) |
+| **Context budget** | Always-on bootstrap under ~8KB; `kit measure-context` / `kit check` ([docs/kit.md](./docs/kit.md)) |
 | **Security audit** | Prompt injection, secrets, entropy, unpinned skills (`kit audit`) |
 
 ```mermaid
@@ -124,8 +125,9 @@ Start with the path that matches what you’re trying to do:
 2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) → [AGENTS.md](./AGENTS.md)
 3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
+5. **Operators** — [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 
-Site: [eval-driven-development.dev](https://eval-driven-development.dev/)
+Site: [eval-driven-development.dev](https://eval-driven-development.dev/) (`#kit` for context/MCP/check; [docs/kit.md](https://eval-driven-development.dev/docs/kit.md))
 
 ---
 
