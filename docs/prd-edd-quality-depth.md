@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | **Status** | Phase 1 in progress (outcomes and criteria) |
-| **Product** | Agent Lifecycle Kit — Eval-Driven Development |
+| **Product** | Agent Lifecycle Kit - Eval-Driven Development |
 | **Audience** | Kit maintainers, consumer app teams shipping tool-using agents |
 | **Companion** | [EDD guide](./edd.md), [EDD SOP](../SOPs/eval-driven-development.md), [production telemetry SOP](../SOPs/edd-production-telemetry.md) |
 
@@ -15,11 +15,11 @@ Teams either invent one-off judge prompts or reach for a general LLM-eval framew
 
 ## 2. Goals
 
-1. Make **agent outcome quality** first-class in EDD suites—completion, argument meaning, step discipline, MCP use—without abandoning deterministic scripted CI.
+1. Make **agent outcome quality** first-class in EDD suites - completion, argument meaning, step discipline, MCP use - without abandoning deterministic scripted CI.
 2. Scale **live** coverage with **synthetic paraphrases** of existing intents, especially attack and no-tool cases.
 3. Report **whole trajectories**, not only the last tool call, aligned with production traces.
 4. Let consumer repos **plug in** domain metrics (or an external judge library) while Kit remains the harness and merge gate.
-5. Keep Kit’s identity: coding-agent lifecycle + MCP contracts—not a general RAG/multimodal eval SaaS.
+5. Keep Kit’s identity: coding-agent lifecycle + MCP contracts - not a general RAG/multimodal eval SaaS.
 
 ## 3. Non-goals
 
@@ -96,9 +96,9 @@ Cross-context rule: production promotion must emit cases the harness can run wit
 
 **Aggregate roots (invariants):**
 
-- **Suite** — every metric listed must be interpretable for every case that is not explicitly skipped for that metric/driver.
-- **Eval case** — expectations are authoritative; paraphrases must not change expectations.
-- **Trajectory** — step order is part of the evidence; reporting must not collapse multi-step runs into a single anonymous call when ordered expectations exist.
+- **Suite** - every metric listed must be interpretable for every case that is not explicitly skipped for that metric/driver.
+- **Eval case** - expectations are authoritative; paraphrases must not change expectations.
+- **Trajectory** - step order is part of the evidence; reporting must not collapse multi-step runs into a single anonymous call when ordered expectations exist.
 
 ## 7. Success metrics
 
@@ -120,7 +120,7 @@ flowchart LR
   p3 --> p4[Phase 4 plugins and dataset CLI]
 ```
 
-### Phase 1 — Outcomes and criteria
+### Phase 1 - Outcomes and criteria
 
 **Ship:** criteria-based judge; `argument_correctness`; `task_completion`.
 
@@ -129,7 +129,7 @@ flowchart LR
 - Task completion can pass when the goal is met even if intermediate chatter differs, subject to suite rules.
 - Scripted driver: structural/deterministic parts still gate PRs; semantic metrics skip or use documented heuristics when no live model.
 
-### Phase 2 — Scale and attacks
+### Phase 2 - Scale and attacks
 
 **Ship:** synthetic paraphrase generation; first-class prompt-injection / no-tool safety suite with CI thresholds.
 
@@ -137,7 +137,7 @@ flowchart LR
 - Injection and “chatty question must not invent tools” intents are a named gateable suite, not only tags.
 - Nightly live runs prefer expanded paraphrase sets; PR stays scripted-first.
 
-### Phase 3 — Trajectory and MCP
+### Phase 3 - Trajectory and MCP
 
 **Ship:** trajectory-oriented reporting; `mcp_use`; `step_efficiency` / `plan_adherence`.
 
@@ -145,7 +145,7 @@ flowchart LR
 - MCP use asserts appropriate server/tool selection when multiple capabilities are offered.
 - Efficiency/adherence metrics flag needless loops and plan drift (including circuit-breaker / halt behavior already in the catalog).
 
-### Phase 4 — Plugins and dataset CLI
+### Phase 4 - Plugins and dataset CLI
 
 **Ship:** pluggable metrics; dataset hygiene commands (`lint`, `dedupe`, `from-trace`, `synthesize`).
 
@@ -366,7 +366,7 @@ Feature: Metric plugins and dataset hygiene
 | Critical journeys | **Apply (CLI)** | `kit eval run` / `ci` / `report` remain the operator journey; dataset hygiene commands must fail closed on invalid input. |
 | Reliability | **Apply** | Unknown metric types fail closed at suite load; plugin errors surface as metric failure, not harness crash. |
 
-Unknowns for Design/XFN to confirm: exact PR wall-clock budget for scripted suites after Phase 1–3 metric growth; redaction rules for argument values in uploaded CI artifacts.
+Unknowns for Design/XFN to confirm: exact PR wall-clock budget for scripted suites after Phase 1-3 metric growth; redaction rules for argument values in uploaded CI artifacts.
 
 ## 11. Behavior catalog notes (draft for Design)
 
@@ -385,7 +385,7 @@ Unknowns for Design/XFN to confirm: exact PR wall-clock budget for scripted suit
 
 ## 12. Technical constraints notice
 
-- Extends the existing EDD harness aggregate (cases, suites, metrics, drivers, reports)—not a parallel eval product.
+- Extends the existing EDD harness aggregate (cases, suites, metrics, drivers, reports) - not a parallel eval product.
 - Must preserve: scripted default for PR/`kit check`; live via provider key + OpenAI-compatible chat completions; production attribute parity for promote-to-case.
 - Metric growth must remain hexagonal: domain metric contracts inward; provider HTTP and plugin adapters outward.
 - Optional external eval library integration is an **adapter**, never a hard core dependency for the scripted gate.
@@ -395,7 +395,7 @@ Unknowns for Design/XFN to confirm: exact PR wall-clock budget for scripted suit
 | Artifact | Change |
 |----------|--------|
 | EDD guide | Document new metrics, criteria judge, trajectory reports, dataset commands, plugin hook |
-| EDD SOP | Red→green→refactor examples for Phases 1–2 |
+| EDD SOP | Red→green→refactor examples for Phases 1-2 |
 | Production telemetry SOP | Trajectory field parity and promotion tags |
 | Public site / docs index | Link this PRD until delivery completes; then demote to “shipped” notes or archive |
 

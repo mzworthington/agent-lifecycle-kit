@@ -6,9 +6,9 @@ EDD treats prompts and tool schemas as version-controlled, evaluated contracts. 
 
 ## The loop (same shape as TDD)
 
-1. **Red — Define intent.** JSONL cases and YAML metrics assert the tool (and arguments) you expect, and that chatty questions do not invent tool calls.
-2. **Green — Implement the interface.** Register the MCP/tool contract and minimal system instructions. Run until asserts pass.
-3. **Refactor — Refine context.** Iterate descriptions and constraints without breaking existing cases. Gate merges with `kit eval ci --threshold-routing 95`.
+1. **Red - Define intent.** JSONL cases and YAML metrics assert the tool (and arguments) you expect, and that chatty questions do not invent tool calls.
+2. **Green - Implement the interface.** Register the MCP/tool contract and minimal system instructions. Run until asserts pass.
+3. **Refactor - Refine context.** Iterate descriptions and constraints without breaking existing cases. Gate merges with `kit eval ci --threshold-routing 95`.
 
 ```mermaid
 flowchart LR

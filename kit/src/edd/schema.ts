@@ -16,7 +16,7 @@ export const EvalMetricSchema = z.object({
   max_retries: z.number().int().positive().optional(),
   /** Written criteria for `criteria_judge` (suite-level). */
   criteria: z.array(z.string().min(1)).optional(),
-  /** Fraction of criteria that must pass (0–1). Defaults to 1. */
+  /** Fraction of criteria that must pass (0-1). Defaults to 1. */
   threshold: z.number().min(0).max(1).optional()
 });
 

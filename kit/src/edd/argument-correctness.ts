@@ -1,0 +1,77 @@
+import type { AgentToolCall, EvalCase } from './schema.js';
+
+export function parseToolArguments(
+  raw: string | Record<string, unknown>
+): Record<string, unknown> | null {
+  if (typeof raw === 'object' && raw !== null) return raw;
+  try {
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+function containsExpectedArgs(
+  parsed: Record<string, unknown>,
+  expected: Record<string, unknown>,
+  label: string
+): string[] {
+  const failures: string[] = [];
+  for (const [key, value] of Object.entries(expected)) {
+    if (parsed[key] !== value) {
+      failures.push(
+        `${label} expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
+      );
+    }
+  }
+  return failures;
+}
+
+/**
+ * Pure `argument_correctness` metric: expected argument meaning, not JSON shape.
+ */
+export function evaluateArgumentCorrectness(input: {
+  testCase: EvalCase;
+  toolCalls: AgentToolCall[];
+}): string[] {
+  const { testCase, toolCalls } = input;
+  if (testCase.expect?.no_tool) {
+    return [];
+  }
+
+  if (testCase.expect?.tools?.length) {
+    const failures: string[] = [];
+    for (let i = 0; i < testCase.expect.tools.length; i++) {
+      const expected = testCase.expect.tools[i]!;
+      const call = toolCalls[i];
+      if (!call) {
+        failures.push(`argument: missing tool call at index ${i}`);
+        continue;
+      }
+      if (!expected.arguments_contains) continue;
+      const parsed = parseToolArguments(call.arguments);
+      if (!parsed) {
+        failures.push(`argument: call[${i}] arguments are not valid JSON`);
+        continue;
+      }
+      failures.push(
+        ...containsExpectedArgs(parsed, expected.arguments_contains, `argument: call[${i}]`)
+      );
+    }
+    return failures;
+  }
+
+  const expectedArgs = testCase.expect?.arguments_contains;
+  if (!expectedArgs) {
+    return [];
+  }
+  const call = toolCalls[0];
+  if (!call) {
+    return ['argument: no tool call to validate'];
+  }
+  const parsed = parseToolArguments(call.arguments);
+  if (!parsed) {
+    return ['argument: tool arguments are not valid JSON'];
+  }
+  return containsExpectedArgs(parsed, expectedArgs, 'argument:');
+}

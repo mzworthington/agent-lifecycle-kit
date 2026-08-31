@@ -3,7 +3,8 @@ import path from 'path';
 import { parse as parseYaml } from 'yaml';
 import { AgentClient, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 import { loadDataset } from './dataset.js';
-import { runCriteriaJudge, runLlmJudge, runTaskCompletionJudge } from './judge.js';
+import { evaluateArgumentCorrectness, parseToolArguments } from './argument-correctness.js';
+import { runCriteriaJudge, runLlmJudge, runTaskCompletionJudge } from './run-judges.js';
 import {
   EvalConfigSchema,
   type AgentResponse,
@@ -39,12 +40,7 @@ function resolvePath(baseFile: string, maybeRelative: string): string {
 }
 
 function parseArgs(raw: string | Record<string, unknown>): Record<string, unknown> | null {
-  if (typeof raw === 'object' && raw !== null) return raw;
-  try {
-    return JSON.parse(raw) as Record<string, unknown>;
-  } catch {
-    return null;
-  }
+  return parseToolArguments(raw);
 }
 
 function buildFailureTrace(input: {
@@ -143,22 +139,6 @@ function buildFailureTrace(input: {
     actualArguments,
     llmOutput: input.response.content
   };
-}
-
-function containsExpectedArgs(
-  parsed: Record<string, unknown>,
-  expected: Record<string, unknown>,
-  label: string
-): string[] {
-  const failures: string[] = [];
-  for (const [key, value] of Object.entries(expected)) {
-    if (parsed[key] !== value) {
-      failures.push(
-        `${label} expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
-      );
-    }
-  }
-  return failures;
 }
 
 export class EvalRunner {
@@ -494,46 +474,12 @@ export class EvalRunner {
       }
 
       if (metric.type === 'argument_correctness') {
-        if (testCase.expect?.no_tool) {
-          continue;
-        }
-
-        if (testCase.expect?.tools?.length) {
-          for (let i = 0; i < testCase.expect.tools.length; i++) {
-            const expected = testCase.expect.tools[i];
-            const call = response.tool_calls?.[i];
-            if (!call) {
-              failures.push(`argument: missing tool call at index ${i}`);
-              continue;
-            }
-            if (!expected.arguments_contains) continue;
-            const parsed = parseArgs(call.arguments);
-            if (!parsed) {
-              failures.push(`argument: call[${i}] arguments are not valid JSON`);
-              continue;
-            }
-            failures.push(
-              ...containsExpectedArgs(parsed, expected.arguments_contains, `argument: call[${i}]`)
-            );
-          }
-          continue;
-        }
-
-        const expectedArgs = testCase.expect?.arguments_contains;
-        if (!expectedArgs) {
-          continue;
-        }
-        const call = response.tool_calls?.[0];
-        if (!call) {
-          failures.push('argument: no tool call to validate');
-          continue;
-        }
-        const parsed = parseArgs(call.arguments);
-        if (!parsed) {
-          failures.push('argument: tool arguments are not valid JSON');
-          continue;
-        }
-        failures.push(...containsExpectedArgs(parsed, expectedArgs, 'argument:'));
+        failures.push(
+          ...evaluateArgumentCorrectness({
+            testCase,
+            toolCalls: response.tool_calls ?? []
+          })
+        );
       }
 
       if (metric.type === 'task_completion') {
