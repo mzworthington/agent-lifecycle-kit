@@ -24,6 +24,17 @@ describe('EDD EvalRunner', () => {
     assert.ok(report.routingAccuracy >= 95);
   });
 
+  it('passes first-hour demo suite with scripted model', async () => {
+    const runner = new EvalRunner({
+      model: 'scripted',
+      systemPromptPath: path.join(repoDir, 'evals/edd/system_prompt.md')
+    });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/demo.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => r.failures.join(',')).join(' | '));
+    assert.ok(report.routingAccuracy >= 95);
+    assert.ok(report.total >= 5);
+  });
+
   it('passes self-correction suite', async () => {
     const runner = new EvalRunner({ model: 'scripted' });
     const report = await runner.runSuite(

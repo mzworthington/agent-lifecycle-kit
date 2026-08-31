@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent Lifecycle Kit: test the tools your agents call</title>
   <meta name="description"
-    content="Write evals, mock tools, assert routing and schemas, then gate PRs at 95% routing accuracy. Eval-Driven Development from Agent Lifecycle Kit.">
+    content="Pick the job for today: fix wrong-tool routing, gate prompt changes at 95%, or run your first offline eval. Eval-Driven Development from Agent Lifecycle Kit.">
   <meta name="author" content="mzworthington">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#0c1017">
@@ -1701,6 +1701,109 @@
       }
     }
 
+
+    /* Before / after proof */
+    .proof {
+      margin: 0 0 3.5rem;
+    }
+
+    .proof > h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .proof > .proof-lead {
+      color: var(--text-muted);
+      margin: 0 auto 1.35rem;
+      max-width: 42rem;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .proof-prompt {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin: 0 auto 1.25rem;
+      max-width: 36rem;
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem;
+    }
+
+    .proof-col {
+      border-radius: 14px;
+      padding: 1.2rem 1.25rem;
+      border: 1px solid var(--border);
+      background: rgba(9, 13, 22, 0.55);
+    }
+
+    .proof-col.before {
+      border-color: rgba(240, 113, 120, 0.35);
+    }
+
+    .proof-col.after {
+      border-color: rgba(61, 186, 124, 0.4);
+    }
+
+    .proof-col h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.65rem;
+      color: #fff;
+    }
+
+    .proof-col.before h3 { color: #f07178; }
+    .proof-col.after h3 { color: var(--success); }
+
+    .proof-col dl {
+      margin: 0;
+    }
+
+    .proof-col dt {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.65rem;
+    }
+
+    .proof-col dt:first-child {
+      margin-top: 0;
+    }
+
+    .proof-col dd {
+      color: var(--text);
+      font-size: 0.92rem;
+      margin: 0.2rem 0 0;
+    }
+
+    .proof-col code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      color: var(--primary-light);
+    }
+
+    .proof-follow {
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .proof-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -1722,7 +1825,7 @@
         <ul>
           <li><a href="#today" class="nav-link">Today</a></li>
           <li><a href="#demo" class="nav-link">Demo</a></li>
-          <li><a href="#onboard" class="nav-link">First session</a></li>
+          <li><a href="#onboard" class="nav-link">10 minutes</a></li>
           <li><a href="#edd" class="nav-link">How EDD works</a></li>
           <li><a href="#kit" class="nav-link">Kit tools</a></li>
           <li><a href="#guide" class="nav-link">EDD guide</a></li>
@@ -1756,7 +1859,7 @@
         <ul class="hero-ctas">
           <li><a class="btn-cta btn-cta-primary" href="#today">What do I use this for today?</a></li>
           <li><a class="btn-cta btn-cta-ghost" href="#demo">See a failing eval</a></li>
-          <li><a class="btn-cta btn-cta-ghost" href="#onboard">First session</a></li>
+          <li><a class="btn-cta btn-cta-ghost" href="#onboard">Start in 10 minutes</a></li>
         </ul>
       </nav>
 
@@ -1812,21 +1915,64 @@
         <p class="job-why" id="job-panel-why">Capture the miss as a JSONL case, mock the tool, and assert routing until the agent stops guessing.</p>
         <ol id="job-panel-steps">
           <li><strong>Write the case</strong> for the prompt that failed (expected tool + args).</li>
-          <li><strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code></li>
+          <li><strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/demo.yaml --model scripted</code></li>
           <li><strong>Read the report</strong>, tighten the schema or prompt, re-run until green.</li>
         </ol>
-        <p class="job-cmd" id="job-panel-cmd">Start here: <code>kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code></p>
+        <p class="job-cmd" id="job-panel-cmd">Start here: <code>kit eval run --suite evals/edd/demo.yaml --model scripted</code></p>
         <ul class="job-actions" id="job-panel-actions">
+          <li><a href="#proof">See before / after</a></li>
           <li><a href="#demo">Walk the failing-eval demo</a></li>
-          <li><a href="./evals/edd/README.md">Suite layout</a></li>
-          <li><a href="#guide">EDD guide</a></li>
+          <li><a href="./evals/edd/demo.yaml">Demo suite</a></li>
         </ul>
       </div>
     </section>
 
+    </section>
+
+    <section id="proof" class="proof" aria-labelledby="proof-heading">
+      <h2 id="proof-heading">Before and after one miss</h2>
+      <p class="proof-lead">Same user prompt. Without a case file you get a confident guess. With EDD you get a failing assert, a report, and a merge gate.</p>
+      <p class="proof-prompt">“What is the database for the payment system?”</p>
+      <ul class="proof-grid">
+        <li class="proof-col before">
+          <h3>Before: eyeball the chat</h3>
+          <dl>
+            <dt>Agent</dt>
+            <dd>“Typically payment systems use PostgreSQL…”</dd>
+            <dt>Tool call</dt>
+            <dd>None</dd>
+            <dt>You ship</dt>
+            <dd>A hallucination that looks polite</dd>
+            <dt>How you notice</dt>
+            <dd>A human scrolls the transcript — or a customer does</dd>
+          </dl>
+        </li>
+        <li class="proof-col after">
+          <h3>After: demo eval suite</h3>
+          <dl>
+            <dt>Case</dt>
+            <dd><code>demo-edge</code> expects <code>read_architecture_yaml</code> + <code>payment-api</code></dd>
+            <dt>Red</dt>
+            <dd><code>FAIL tool_selection</code> — no tool, conversational reply</dd>
+            <dt>Green</dt>
+            <dd>Tighten prompt/schema; same case passes</dd>
+            <dt>Gate</dt>
+            <dd><code>kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95</code></dd>
+          </dl>
+        </li>
+      </ul>
+      <nav class="proof-follow" aria-label="Proof follow-ups">
+        <ul class="edd-links" style="justify-content:center">
+          <li><a href="#demo">Walk the interactive demo</a></li>
+          <li><a href="./evals/edd/examples/before-after.md">Full before/after write-up</a></li>
+          <li><a href="./evals/edd/demo.yaml">Demo suite</a></li>
+        </ul>
+      </nav>
+    </section>
+
     <section id="demo" class="demo" aria-labelledby="demo-heading">
       <h2 id="demo-heading">Demo: a miss becomes a failing eval</h2>
-      <p class="demo-lead">Real suite shape from <code>architecture_routing</code>. Step through red → report → fix → CI gate. No API key; scripted driver.</p>
+      <p class="demo-lead">Walkthrough of <code>demo-edge</code> from the <a href="./evals/edd/demo.yaml">demo suite</a>. Case → red → report → green → CI gate. Scripted driver; no API key.</p>
       <div class="demo-shell">
         <ul class="demo-tabs" role="tablist" aria-label="Eval demo steps">
           <li role="presentation"><button type="button" class="demo-tab" role="tab" id="demo-tab-0" aria-controls="demo-stage-0" aria-selected="true" data-step="0">1. Case</button></li>
@@ -1841,7 +1987,7 @@
             <h3>JSONL case that should call the tool</h3>
             <p>User asks for the payment database. Expect <code>read_architecture_yaml</code> with <code>payment-api</code> — not a chatty guess.</p>
             <pre class="demo-code" tabindex="0"><code>{
-  <span class="tok-key">"id"</span>: <span class="tok-str">"route-08"</span>,
+  <span class="tok-key">"id"</span>: <span class="tok-str">"demo-edge"</span>,
   <span class="tok-key">"prompt"</span>: <span class="tok-str">"What is the database for the payment system?"</span>,
   <span class="tok-key">"expect"</span>: {
     <span class="tok-key">"tool"</span>: <span class="tok-str">"read_architecture_yaml"</span>,
@@ -1852,19 +1998,19 @@
           <div class="demo-stage" role="tabpanel" id="demo-stage-1" aria-labelledby="demo-tab-1" data-step="1" hidden>
             <h3>Red: routing assert fails</h3>
             <p>Fresh context, mocked tool. The model answered in prose instead of calling the tool.</p>
-            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">$ kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</span>
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">$ kit eval run --suite evals/edd/demo.yaml --model scripted</span>
 
-<span class="tok-fail">FAIL</span> route-08  tool_selection
+<span class="tok-fail">FAIL</span> demo-edge  tool_selection
   expected: read_architecture_yaml
   actual:   <span class="tok-fail">(no tool)</span>
   note:     conversational reply guessed "PostgreSQL"
 
-<span class="tok-muted">Routing accuracy: 92.5% (37/40)</span></code></pre>
+<span class="tok-muted">Routing accuracy: below threshold</span></code></pre>
           </div>
           <div class="demo-stage" role="tabpanel" id="demo-stage-2" aria-labelledby="demo-tab-2" data-step="2" hidden>
             <h3>Report: diagnosis you can act on</h3>
             <p><code>kit eval report --format md</code> writes the failure trace into the PR, not a vibes summary.</p>
-            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">### Test ID: route-08</span>
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">### Test ID: demo-edge</span>
 Prompt: "What is the database for the payment system?"
 Expected: read_architecture_yaml
 Actual:   <span class="tok-fail">None (conversational)</span>
@@ -1878,15 +2024,15 @@ Suggested fix: System prompt must never guess architecture; always use C4 tools.
 Never invent components or databases.
 If the user asks about architecture, call read_architecture_yaml.
 
-<span class="tok-muted">$ kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</span>
-<span class="tok-ok">PASS</span> route-08  tool_selection + argument_correctness
-<span class="tok-muted">Routing accuracy: 95.0% (38/40)</span></code></pre>
+<span class="tok-muted">$ kit eval run --suite evals/edd/demo.yaml --model scripted</span>
+<span class="tok-ok">PASS</span> demo-edge  tool_selection + argument_correctness
+<span class="tok-muted">Routing accuracy: 100% (6/6)</span></code></pre>
           </div>
           <div class="demo-stage" role="tabpanel" id="demo-stage-4" aria-labelledby="demo-tab-4" data-step="4" hidden>
             <h3>Gate: block the merge below 95%</h3>
             <p>CI uses the same scripted driver offline. Live models are optional for nightly depth.</p>
-            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">$ kit eval ci --threshold-routing 95 --out out/reports</span>
-<span class="tok-ok">PASS</span> routing_accuracy 95.0% &gt;= 95
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">$ kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports</span>
+<span class="tok-ok">PASS</span> routing_accuracy 100% &gt;= 95
 <span class="tok-ok">PASS</span> schema_match 100%
 wrote out/reports/eval-report.md
 
@@ -1901,42 +2047,43 @@ $ kit eval dataset from-trace --trace path/to/trace.json --out evals/edd/prod.js
       </div>
       <nav aria-label="Demo follow-ups" style="margin-top:1rem">
         <ul class="edd-links">
-          <li><a href="./evals/edd/examples/eval-report.md">Full example report</a></li>
-          <li><a href="./evals/edd/architecture_routing.jsonl">Routing cases (JSONL)</a></li>
-          <li><a href="#onboard">Run this in your first session</a></li>
+          <li><a href="./evals/edd/demo.yaml">Demo suite</a></li>
+          <li><a href="./evals/edd/examples/before-after.md">Before / after</a></li>
+          <li><a href="./evals/edd/examples/eval-report.md">Example report</a></li>
+          <li><a href="#onboard">Start in 10 minutes</a></li>
         </ul>
       </nav>
     </section>
 
     <section id="onboard" class="onboard" aria-labelledby="onboard-heading">
-      <h2 id="onboard-heading">First session</h2>
-      <p class="onboard-lead">Four steps to a green local gate. macOS and Linux; needs git and Node 22+.</p>
+      <h2 id="onboard-heading">Start here in 10 minutes</h2>
+      <p class="onboard-lead">Four steps to tangible product proof. macOS and Linux; needs git and Node 22+. No API key.</p>
       <ol class="onboard-steps">
         <li>
           <div>
-            <h3>Install kit</h3>
+            <h3>Install kit (~2 min)</h3>
             <p>Links <code>~/.agents</code> and puts <code>kit</code> on your PATH via <code>~/.local/bin</code>.</p>
             <p class="step-meta">curl … | sh</p>
           </div>
         </li>
         <li>
           <div>
-            <h3>Bootstrap the repo you are in</h3>
-            <p><code>kit init . --mcp default --hook</code> writes the thin handshake, IDE pointers, and a default MCP profile.</p>
+            <h3>Bootstrap this checkout (~2 min)</h3>
+            <p><code>kit init . --mcp default --hook</code> writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? <code>./install.sh</code> is enough.</p>
             <p class="step-meta">kit init</p>
           </div>
         </li>
         <li>
           <div>
-            <h3>Run one EDD suite offline</h3>
-            <p><code>kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code> — no provider key.</p>
+            <h3>Run the demo suite (~3 min)</h3>
+            <p><code>kit eval run --suite evals/edd/demo.yaml --model scripted</code> — six teaching cases, offline.</p>
             <p class="step-meta">kit eval run</p>
           </div>
         </li>
         <li>
           <div>
-            <h3>Write the report and hold the bar</h3>
-            <p><code>kit eval ci --threshold-routing 95 --out out/reports</code> then <code>kit eval report --format md --out out/reports</code>. Wire that into PR CI when you are ready.</p>
+            <h3>Hold the 95% bar (~3 min)</h3>
+            <p><code>kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports</code> then <code>kit eval report --format md --out out/reports</code>. That report is the before/after you can paste into a PR.</p>
             <p class="step-meta">kit eval ci</p>
           </div>
         </li>
@@ -2000,11 +2147,11 @@ $ <span class="cmd">kit init . --mcp default --hook</span></code></pre>
       <h2 id="cli-heading">Run it locally</h2>
       <figure class="cli-box">
         <figcaption>kit eval</figcaption>
-        <pre class="cli-code"><code><span class="comment"># Works offline with the scripted driver. No API key.</span>
-$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/architecture_routing.yaml --model scripted</span>
+        <pre class="cli-code"><code><span class="comment"># First-hour demo suite (offline scripted driver). No API key.</span>
+$ <span class="cmd">kit eval run</span> <span class="arg">--suite evals/edd/demo.yaml --model scripted</span>
 
 <span class="comment"># Fail the PR if routing accuracy drops under 95%</span>
-$ <span class="cmd">kit eval ci</span> <span class="arg">--threshold-routing 95 --out out/reports</span>
+$ <span class="cmd">kit eval ci</span> <span class="arg">--suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports</span>
 
 <span class="comment"># Write a markdown failure report for the PR</span>
 $ <span class="cmd">kit eval report</span> <span class="arg">--format md --out out/reports</span></code></pre>
@@ -2044,9 +2191,9 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
 
     <section id="faq" class="faq" aria-labelledby="faq-heading">
       <h2 id="faq-heading">Common questions</h2>
-      <details open>
+      <details>
         <summary>What do I use this for today?</summary>
-        <p>Use the <a href="#today">job picker</a>. Common paths: write a failing routing eval when the agent guesses, gate prompt/schema PRs with <code>kit eval ci --threshold-routing 95</code>, shrink always-on rules with <code>kit measure-context</code>, or follow the feature lifecycle when the work is bigger than a prompt tweak.</p>
+        <p>Use the <a href="#today">job picker</a>. Common paths: write a failing routing eval when the agent guesses, gate prompt/schema PRs with <code>kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95</code>, shrink always-on rules with <code>kit measure-context</code>, or follow the feature lifecycle when the work is bigger than a prompt tweak. New here? <a href="#onboard">Start in 10 minutes</a>.</p>
       </details>
       <details>
         <summary>What is Eval-Driven Development?</summary>
@@ -2172,8 +2319,8 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       <div class="docs-content">
         <h2 id="docs-heading">What this kit is</h2>
         <p>Kit is for teams who already test code and need the same for agents that call tools.
-          Start with <a href="#today">what you need today</a>, walk the <a href="#demo">failing-eval demo</a>,
-          then run the <a href="#onboard">first session</a>. EDD is the center; context budget, one MCP profile,
+          Start with <a href="#today">what you need today</a>, walk the <a href="#proof">before / after</a> and <a href="#demo">demo</a>,
+          then <a href="#onboard">start here in 10 minutes</a>. EDD is the center; context budget, one MCP profile,
           and lifecycle skills keep the rest of the workflow coherent.</p>
         <h3>Start here</h3>
         <nav aria-label="Getting started">
@@ -2185,15 +2332,21 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
               </a>
             </li>
             <li>
-              <a href="#demo">
-                <span class="start-title">Failing-eval demo</span>
-                <span class="start-desc">Case → red → report → green → CI gate</span>
+              <a href="#onboard">
+                <span class="start-title">Start here in 10 minutes</span>
+                <span class="start-desc">Install, init, run the demo suite, hold the 95% bar</span>
               </a>
             </li>
             <li>
-              <a href="#onboard">
-                <span class="start-title">First session</span>
-                <span class="start-desc">Install, init, run one suite, hold the 95% bar</span>
+              <a href="#proof">
+                <span class="start-title">Before / after</span>
+                <span class="start-desc">Same prompt: chatty guess vs gated eval</span>
+              </a>
+            </li>
+            <li>
+              <a href="#demo">
+                <span class="start-title">Failing-eval demo</span>
+                <span class="start-desc">Case → red → report → green → CI gate</span>
               </a>
             </li>
             <li>
@@ -2241,7 +2394,7 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
   <footer>
     <p>Agent Lifecycle Kit is open source under the Unlicense (public domain).</p>
     <p>Built for people who ship agents that call tools.</p>
-    <p><a href="#today">What do I use this for today?</a> · <a href="#demo">Demo</a> · <a href="#onboard">First session</a> · <a href="#guide">EDD guide</a></p>
+    <p><a href="#today">What do I use this for today?</a> · <a href="#proof">Before / after</a> · <a href="#onboard">10 minutes</a> · <a href="#guide">EDD guide</a></p>
   </footer>
 
   <script>
@@ -2879,29 +3032,29 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
           why: 'Capture the miss as a JSONL case, mock the tool, and assert routing until the agent stops guessing.',
           steps: [
             '<strong>Write the case</strong> for the prompt that failed (expected tool + args).',
-            '<strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code>',
+            '<strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/demo.yaml --model scripted</code>',
             '<strong>Read the report</strong>, tighten the schema or prompt, re-run until green.'
           ],
-          cmd: 'kit eval run --suite evals/edd/architecture_routing.yaml --model scripted',
+          cmd: 'kit eval run --suite evals/edd/demo.yaml --model scripted',
           actions: [
+            { href: '#proof', label: 'See before / after' },
             { href: '#demo', label: 'Walk the failing-eval demo' },
-            { href: './evals/edd/README.md', label: 'Suite layout' },
-            { href: '#guide', label: 'EDD guide' }
+            { href: './evals/edd/demo.yaml', label: 'Demo suite' }
           ]
         },
         'ci-gate': {
           title: 'Gate a prompt or schema change',
           why: 'Treat the prompt and MCP schema like code under test. Fail the PR when routing accuracy drops.',
           steps: [
-            '<strong>Keep the suite next to the change</strong> (YAML metrics + JSONL cases).',
-            '<strong>Run</strong> <code class="cli-inline">kit eval ci --threshold-routing 95 --out out/reports</code>',
+            '<strong>Keep the suite next to the change</strong> (start from <code class="cli-inline">evals/edd/demo.yaml</code>).',
+            '<strong>Run</strong> <code class="cli-inline">kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports</code>',
             '<strong>Attach the markdown report</strong> with <code class="cli-inline">kit eval report --format md --out out/reports</code>.'
           ],
-          cmd: 'kit eval ci --threshold-routing 95 --out out/reports',
+          cmd: 'kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports',
           actions: [
-            { href: '#cli', label: 'Local commands' },
+            { href: '#proof', label: 'Before / after' },
             { href: './evals/edd/examples/eval-report.md', label: 'Example report' },
-            { href: '#onboard', label: 'First session' }
+            { href: '#onboard', label: '10-minute path' }
           ]
         },
         'context': {
@@ -2940,13 +3093,13 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
           steps: [
             '<strong>Install</strong> with the one-liner (git + Node 22+).',
             '<strong>Init</strong> <code class="cli-inline">kit init . --mcp default --hook</code>.',
-            '<strong>Prove routing</strong> with the scripted driver, then <code class="cli-inline">kit eval ci --threshold-routing 95</code>.'
+            '<strong>Prove routing</strong> with <code class="cli-inline">kit eval run --suite evals/edd/demo.yaml --model scripted</code>, then hold the 95% bar.'
           ],
           cmd: 'curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh',
           actions: [
-            { href: '#onboard', label: 'First session steps' },
+            { href: '#onboard', label: 'Start here in 10 minutes' },
             { href: '#install', label: 'Install commands' },
-            { href: '#demo', label: 'See what green looks like' }
+            { href: '#proof', label: 'See the before / after' }
           ]
         }
       };

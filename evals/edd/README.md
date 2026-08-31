@@ -9,6 +9,8 @@ evals/edd/
 ├── README.md
 ├── system_prompt.md
 ├── kit_knowledge_prompt.md
+├── demo.yaml|.jsonl          ← first-hour teaching suite
+├── examples/before-after.md
 ├── examples/eval-report.md
 ├── examples/prod-trace.json
 ├── architecture_routing.yaml|.jsonl
@@ -32,12 +34,21 @@ Do not extend the scripted driver to pass `requires-live` cases. Add JSONL rows 
 
 ## Quick start
 
+First-hour teaching suite (six cases, before/after story in [examples/before-after.md](./examples/before-after.md)):
+
+```bash
+kit eval run --suite evals/edd/demo.yaml --model scripted
+kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --model scripted --out out/reports
+kit eval report --format md --out out/reports
+```
+
+Full regression / CI suites:
+
 ```bash
 kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
 kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 kit eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
-kit eval report --format md --out out/reports
 kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 ```
 
