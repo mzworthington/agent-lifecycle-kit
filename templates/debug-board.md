@@ -4,7 +4,7 @@
 |-------|-------|
 | **Project** | `<project-name>` |
 | **Date** | YYYY-MM-DD |
-| **Class** | UI \| data \| CI \| fetch \| naming \| other |
+| **Class** | UI \| data \| CI \| fetch \| naming \| agent-tool \| other |
 | **Environment** | prod \| staging \| local \| CI (`workflow` / `job`) |
 | **Status** | intake \| reproducing \| hypothesizing \| fixing \| proving \| COMPLETE \| BLOCKED |
 
@@ -52,6 +52,7 @@ One sentence.
 
 - Minimal change:
 - Regression test path:
+- EDD case (agent/tool/prompt miss): path + id \| N/A
 - Out of scope (ask before doing):
 
 ## Proof
@@ -59,6 +60,7 @@ One sentence.
 | Gate | Status | Evidence |
 |------|--------|----------|
 | Regression green | | |
+| EDD case red→green (or N/A) | | |
 | UI / visual (if UI) | | |
 | Published / ops note | | |
 | CI step green | | |

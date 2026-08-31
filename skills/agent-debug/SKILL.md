@@ -120,8 +120,9 @@ Kill UI theories when artifacts contradict them. Kill product deep-dives when a 
 ### 4. Fix after root cause
 
 1. Write a **failing regression** closest to the bug (core/unit preferred; then slice; UI e2e only if needed) — [agent-tdd](../agent-tdd/SKILL.md) for the regression only.
-2. Minimal fix. No drive-by refactors. No second bug bolted on without asking.
-3. Split PRs when symptoms diverge (layout ≠ catalog wipe ≠ pipeline policy).
+2. When the miss is **agent routing, prompts, tool schemas, or MCP args** (this chat or a captured turn), also **promote an EDD case** before calling the fix done — see [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11. Do **not** wait for the user to paste; draft the case from context and run `kit eval`.
+3. Minimal fix. No drive-by refactors. No second bug bolted on without asking.
+4. Split PRs when symptoms diverge (layout ≠ catalog wipe ≠ pipeline policy).
 
 ### 5. Prove (Definition of Done)
 
@@ -131,6 +132,7 @@ Kill UI theories when artifacts contradict them. Kill product deep-dives when a 
 | Live catalog | Code fix **and** explicit republish/compose note (code ≠ published) |
 | CI job | Local or Actions green for the failing step; or BLOCKED with permission/tool gap |
 | Fetch | Repro path succeeds; errors are actionable if partial failure remains |
+| Agent / tool / prompt | Failing **EDD** case exists (or was already covered); `kit eval run` (or `ci`) green after the fix |
 
 Then run [agent-pre-commit](../agent-pre-commit/SKILL.md). For UI/auth/SLO touches, apply the orchestrator **light XFN floor**.
 
@@ -144,6 +146,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Ops follow-ups (republish, workflow_dispatch, tool install)
 - Whether a feature slice is still needed
 - PR link with a **conventional** title when a PR exists ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md))
+- EDD case path / id when the miss was agent/tool/prompt related (or N/A)
 
 ## Tooling map
 
@@ -171,5 +174,5 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 
 ## After debug
 
-- Optional lesson under `~/.agents/lessons/<project>/` when the user corrected framing or the same friction repeated
+- Optional lesson under `~/.agents/lessons/<project>/` when the user corrected framing or the same friction repeated — set **Promote to** to an `evals/edd/*.jsonl` (or suite) when the lesson is an agent-routing/prompt/tool miss ([templates/lesson.md](../../templates/lesson.md))
 - If RCA needs a new capability, hand off to `agent-orchestrator` with the debug board as intake

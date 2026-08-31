@@ -57,3 +57,7 @@ Under GitHub Actions, the same Markdown is folded into the job summary so green/
 ## Production bridge
 
 Live spans share eval field names (`emitAgentSpan`). Hard failures convert to JSONL via `productionTraceToJsonl` / `kit eval dataset from-trace`. Shadow sample + judge: `kit eval shadow --infile … --sample 0.05`. Local viewer: `mise run otelop` ([otelop](https://github.com/mashiro/otelop)). See [SOPs/edd-production-telemetry.md](./edd-production-telemetry.md).
+
+## IDE session → EDD (debug / lessons)
+
+When a miss appears in the **current** Cursor/Copilot thread (wrong tool, bad args, prompt/schema drift), [agent-debug](../skills/agent-debug/SKILL.md) must promote a case from context — no user paste required — then red/green with `kit eval` ([hypothesis-driven-debug.md](./hypothesis-driven-debug.md) §11). Lessons that capture the same friction set **EDD case** + optional **Promote to** `evals/edd/*.jsonl` ([templates/lesson.md](../templates/lesson.md)). Other IDE threads remain invisible until reopened or exported.
