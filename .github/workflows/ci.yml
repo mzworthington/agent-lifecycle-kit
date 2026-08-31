@@ -47,6 +47,35 @@ jobs:
       - name: Kit quality gate
         run: pnpm kit check
 
+      - name: Test MCP Profile Composition
+        run: pnpm kit mcp default
+
+      - name: Test kit CLI Executable
+        run: pnpm kit metrics
+
+      - name: Publish CI job summary
+        if: always()
+        run: |
+          {
+            echo "## Agent Lifecycle Kit CI"
+            echo ""
+            echo "This job is the merge gate for the kit itself — not a generic lint/test badge."
+            echo ""
+            echo "| Gate | What a green check means |"
+            echo "|------|--------------------------|"
+            echo "| actionlint | Workflow YAML is valid and Action-safe |"
+            echo "| typecheck / unit tests | TypeScript and Node harness tests pass |"
+            echo "| kit check | Skill security scan, layout, IDE rules export, skill-trigger evals, EDD routing ≥95% (architecture + kit-knowledge + safety), context budget |"
+            echo "| MCP profile / kit metrics | Default MCP composition resolves; CLI metrics command runs |"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f out/reports/edd-report.json ]; then
+            pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json --github-summary
+          else
+            echo "_No EDD report artifacts were produced (kit check may have failed earlier)._" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Upload EDD reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -54,9 +83,3 @@ jobs:
           name: edd-eval-reports-ci
           path: out/reports/
           if-no-files-found: warn
-
-      - name: Test MCP Profile Composition
-        run: pnpm kit mcp default
-
-      - name: Test kit CLI Executable
-        run: pnpm kit metrics

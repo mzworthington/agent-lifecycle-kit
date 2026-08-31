@@ -8,7 +8,7 @@ import { EvalRunner } from './runner.js';
 import { loadDataset, productionTraceToJsonl } from './dataset.js';
 import { detectRoutingDrift, shouldShadowEval } from './otel.js';
 import { localJudge, localCriteriaJudge } from './judge.js';
-import { generateReport } from './telemetry.js';
+import { generateReport, publishEvalReportToGithubSummary, renderGithubSummaryOverview } from './telemetry.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoDir = path.resolve(here, '../../..');
@@ -100,6 +100,39 @@ describe('EDD EvalRunner', () => {
     assert.match(md, /Routing Accuracy/);
     assert.match(md, /Schema Adherence/);
     assert.match(md, /Failure Traces/);
+  });
+
+  it('publishes an overview table to a GitHub step summary file', async () => {
+    const report = {
+      suite: 'Architecture Routing',
+      suitePath: '/tmp/suite.yaml',
+      model: 'scripted',
+      startedAt: '2026-08-31T00:00:00.000Z',
+      finishedAt: '2026-08-31T00:00:01.000Z',
+      total: 2,
+      passed: 2,
+      failed: 0,
+      routingAccuracy: 100,
+      schemaAdherence: 100,
+      hallucinationRate: 0,
+      totalTokens: 40,
+      avgLatencyMs: 12,
+      results: []
+    };
+    const overview = renderGithubSummaryOverview([report]);
+    assert.match(overview, /EDD overview/);
+    assert.match(overview, /Architecture Routing/);
+    assert.match(overview, /100\.0%/);
+
+    const summaryFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'gh-summary-')), 'summary.md');
+    const published = publishEvalReportToGithubSummary([report], '# Agent Eval Report: demo\n', {
+      GITHUB_STEP_SUMMARY: summaryFile
+    });
+    assert.equal(published, true);
+    const body = fs.readFileSync(summaryFile, 'utf8');
+    assert.match(body, /EDD overview/);
+    assert.match(body, /Full eval report/);
+    assert.match(body, /Agent Eval Report: demo/);
   });
 
   it('renders failure traces with diagnosis and suggested fix', () => {

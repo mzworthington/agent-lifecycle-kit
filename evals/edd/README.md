@@ -118,7 +118,10 @@ Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`.
 | `out/reports/eval-report.md` | Stable alias for PR review |
 | `out/reports/edd-report.md` | Same Markdown body |
 | `out/reports/edd-report.json` | Machine-readable results |
+| GitHub Actions job summary | Overview table + collapsible full report (`kit eval report --github-summary`) |
 
 Includes pass rate, tokens/latency, routing + schema adherence, and failure traces. Example: [examples/eval-report.md](./examples/eval-report.md).
+
+CI workflows (`.github/workflows/ci.yml`, `agent-evals.yml`, `edd-live.yml`) write a short “what this gate means” preamble plus the EDD overview into the run **Summary** tab.
 
 Live models (optional): `KIT_EVAL_API_KEY` first, then `OPENAI_API_KEY`, then `ANTHROPIC_API_KEY`. Optional `KIT_EVAL_BASE_URL` / `OPENAI_BASE_URL` (OpenAI-compatible `/chat/completions`; default `https://api.openai.com/v1`), `KIT_EVAL_TOKEN_USD_PER_1K`, `KIT_EVAL_MODEL`. Nightly CI only reads `KIT_EVAL_API_KEY`.

@@ -274,3 +274,43 @@ export function printReportSummary(report: SuiteReport): void {
     console.log(`  ${mark} ${r.id}${r.failures.length ? ` - ${r.failures.join('; ')}` : ''}`);
   }
 }
+
+/** Compact multi-suite table for GitHub Actions job summaries. */
+export function renderGithubSummaryOverview(reports: SuiteReport[]): string {
+  const lines: string[] = [
+    '## EDD overview',
+    '',
+    '| Suite | Pass rate | Routing | Schema | Tokens | Avg latency |',
+    '|-------|-----------|---------|--------|--------|-------------|'
+  ];
+  for (const report of reports) {
+    const passRate = report.total ? (report.passed / report.total) * 100 : 100;
+    lines.push(
+      `| ${report.suite} | ${passRate.toFixed(1)}% (${report.passed}/${report.total}) | ${report.routingAccuracy.toFixed(1)}% | ${report.schemaAdherence.toFixed(1)}% | ${report.totalTokens.toLocaleString()} | ${Math.round(report.avgLatencyMs)}ms |`
+    );
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+
+/**
+ * Append Markdown to `$GITHUB_STEP_SUMMARY` when running under Actions.
+ * Returns true when content was written.
+ */
+export function appendGithubStepSummary(markdown: string, env: NodeJS.ProcessEnv = process.env): boolean {
+  const summaryPath = env.GITHUB_STEP_SUMMARY;
+  if (!summaryPath) return false;
+  const body = markdown.endsWith('\n') ? markdown : `${markdown}\n`;
+  fs.appendFileSync(summaryPath, body, 'utf8');
+  return true;
+}
+
+/** Publish overview + full eval Markdown into the Actions job summary. */
+export function publishEvalReportToGithubSummary(
+  reports: SuiteReport[],
+  markdownBody: string,
+  env: NodeJS.ProcessEnv = process.env
+): boolean {
+  const chunk = `${renderGithubSummaryOverview(reports)}\n<details>\n<summary>Full eval report</summary>\n\n${markdownBody}\n</details>\n`;
+  return appendGithubStepSummary(chunk, env);
+}

@@ -9,7 +9,9 @@ import {
   getEddFlag,
   getEddNumberFlag,
   handleEddEvalCli,
-  resolveEddSuite
+  hasEddFlag,
+  resolveEddSuite,
+  shouldPublishGithubSummary
 } from './edd_cli.js';
 
 function writeMiniSuite(dir: string): string {
@@ -45,6 +47,18 @@ describe('EDD CLI flag helpers', () => {
     assert.equal(getEddNumberFlag(['--threshold-routing', '80'], '--threshold-routing', 95), 80);
     assert.equal(getEddNumberFlag([], '--threshold-routing', 95), 95);
     assert.throws(() => getEddNumberFlag(['--threshold-routing', 'nope'], '--threshold-routing', 95), /Invalid number/);
+    assert.equal(hasEddFlag(['--github-summary'], '--github-summary'), true);
+    assert.equal(hasEddFlag([], '--github-summary'), false);
+  });
+
+  it('decides when to publish a GitHub job summary', () => {
+    assert.equal(shouldPublishGithubSummary(['--github-summary'], {}), true);
+    assert.equal(shouldPublishGithubSummary(['--no-github-summary'], { GITHUB_ACTIONS: 'true' }), false);
+    assert.equal(
+      shouldPublishGithubSummary([], { GITHUB_ACTIONS: 'true', GITHUB_STEP_SUMMARY: '/tmp/summary.md' }),
+      true
+    );
+    assert.equal(shouldPublishGithubSummary([], {}), false);
   });
 
   it('resolves the default suite and watch targets', () => {
@@ -128,5 +142,57 @@ describe('handleEddEvalCli', () => {
     });
     assert.equal(code, 0);
     assert.equal(fs.existsSync(path.join(out, 'eval-report.md')), true);
+  });
+
+  it('publishes a report to GITHUB_STEP_SUMMARY when requested', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-edd-cli-'));
+    const from = path.join(dir, 'edd-report.json');
+    const summary = path.join(dir, 'step-summary.md');
+    fs.writeFileSync(
+      from,
+      JSON.stringify([
+        {
+          suite: 'Mini',
+          suitePath: '/tmp/suite.yaml',
+          model: 'scripted',
+          startedAt: '2026-08-31T00:00:00.000Z',
+          finishedAt: '2026-08-31T00:00:01.000Z',
+          total: 1,
+          passed: 1,
+          failed: 0,
+          routingAccuracy: 100,
+          schemaAdherence: 100,
+          hallucinationRate: 0,
+          totalTokens: 10,
+          avgLatencyMs: 1,
+          results: []
+        }
+      ]),
+      'utf8'
+    );
+    const prevSummary = process.env.GITHUB_STEP_SUMMARY;
+    process.env.GITHUB_STEP_SUMMARY = summary;
+    try {
+      const code = await handleEddEvalCli({
+        repoDir: dir,
+        args: [
+          'report',
+          '--from',
+          from,
+          '--format',
+          'md',
+          '--out',
+          path.join(dir, 'reports'),
+          '--github-summary'
+        ]
+      });
+      assert.equal(code, 0);
+      const body = fs.readFileSync(summary, 'utf8');
+      assert.match(body, /EDD overview/);
+      assert.match(body, /Mini/);
+    } finally {
+      if (prevSummary === undefined) delete process.env.GITHUB_STEP_SUMMARY;
+      else process.env.GITHUB_STEP_SUMMARY = prevSummary;
+    }
   });
 });

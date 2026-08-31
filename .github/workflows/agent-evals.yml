@@ -50,6 +50,7 @@ jobs:
         run: pnpm tsc --noEmit
 
       - name: Run Agent Evaluations (threshold gate)
+        id: edd
         env:
           # Optional live provider — defaults to scripted driver when unset
           KIT_EVAL_API_KEY: ${{ secrets.KIT_EVAL_API_KEY }}
@@ -70,7 +71,33 @@ jobs:
             --out out/reports
           pnpm kit eval run --suite evals/edd/architecture_self_correction.yaml --model scripted --out out/reports
           pnpm kit eval run --suite evals/edd/architecture_terminal.yaml --model scripted --out out/reports
-          pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json
+
+      - name: Publish EDD job summary
+        if: always()
+        run: |
+          {
+            echo "## Agent EDD Suite"
+            echo ""
+            echo "Path-filtered gate for EDD harness / suite changes. Green means routing and schema"
+            echo "assertions hold at ≥95% routing accuracy on the scripted driver (or the configured"
+            echo "\`KIT_EVAL_MODEL\`), plus self-correction and terminal-fallback suites."
+            echo ""
+            echo "| Suite | Role |"
+            echo "|-------|------|"
+            echo "| architecture_routing | Tool selection + schema match (threshold gate) |"
+            echo "| kit_knowledge | Kit-knowledge MCP routing (threshold gate) |"
+            echo "| architecture_self_correction | Recovery after a bad first tool call |"
+            echo "| architecture_terminal | Graceful stop when tools cannot help |"
+            echo ""
+            echo "Download the \`edd-eval-reports\` artifact for the raw Markdown/JSON."
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f out/reports/edd-report.json ]; then
+            pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json --github-summary
+          else
+            echo "_No EDD report JSON was produced._" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Upload EDD report artifacts
         if: always()

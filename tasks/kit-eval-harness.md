@@ -52,5 +52,5 @@ pnpm kit eval report --format md --out out/reports
 
 - [ ] Routing accuracy ≥ 95% on routing-tagged cases
 - [ ] Self-correction + terminal-fallback suites green
-- [ ] Markdown report attached / uploaded as CI artifact
+- [ ] Markdown report attached / uploaded as CI artifact (and published to the Actions job summary)
 - [ ] Prod failures converted to JSONL when applicable ([SOP](../SOPs/edd-production-telemetry.md))
