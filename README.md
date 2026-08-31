@@ -1,13 +1,27 @@
 # Kit (Agent Lifecycle Kit)
 
-**Ship AI agents you can prove.**
+**Test the tools your agents call.**
 
-When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit makes **Eval-Driven Development (EDD)** the sensible default for that work—TDD for tool-using agents—then wraps it in the lifecycle, architecture, and multi-IDE governance your team already needs.
+When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit ships **Eval-Driven Development (EDD)** — TDD for tool-using agents — plus the lifecycle, thin context budget, and MCP compose your team needs to run that loop every day.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
 [![Pages](https://img.shields.io/badge/Docs-eval--driven--development.dev-blue?style=for-the-badge&logo=github)](https://eval-driven-development.dev/)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
+
+---
+
+## What do I use this for today?
+
+| Job in front of you | Do this |
+| :--- | :--- |
+| Agent picked the wrong tool / made-up args | Write a JSONL case → `kit eval run --suite evals/edd/architecture_routing.yaml --model scripted` |
+| Gate a prompt or schema change | `kit eval ci --threshold-routing 95 --out out/reports` |
+| Always-on rules are too fat | `kit measure-context` then `kit check` |
+| Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
+| Never installed kit | [First session on the site](https://eval-driven-development.dev/#onboard) |
+
+Interactive picker + failing-eval demo: [eval-driven-development.dev](https://eval-driven-development.dev/#today).
 
 ---
 

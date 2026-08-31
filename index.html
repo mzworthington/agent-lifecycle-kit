@@ -105,6 +105,14 @@
         "mainEntity": [
           {
             "@type": "Question",
+            "name": "What do I use Agent Lifecycle Kit for today?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pick the job in front of you: fix wrong-tool routing with a JSONL eval, gate a prompt or schema change at 95% routing accuracy, shrink always-on context with kit measure-context, start a feature through the orchestrator lifecycle, or install kit and run your first offline suite."
+            }
+          },
+          {
+            "@type": "Question",
             "name": "What is Eval-Driven Development?",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -1280,6 +1288,419 @@
         height: 420px;
       }
     }
+
+    /* Today job picker */
+    .today {
+      margin: 0 0 3.5rem;
+      text-align: left;
+    }
+
+    .today > h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .today > .today-lead {
+      color: var(--text-muted);
+      margin: 0 auto 1.5rem;
+      max-width: 40rem;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .job-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem;
+    }
+
+    .job-btn {
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      color: var(--text);
+      font-family: var(--font-sans);
+      transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    }
+
+    .job-btn:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+    }
+
+    .job-btn[aria-pressed="true"] {
+      border-color: var(--primary-light);
+      background: rgba(42, 157, 143, 0.14);
+      box-shadow: 0 0 0 1px rgba(42, 157, 143, 0.25);
+    }
+
+    .job-btn .job-title {
+      display: block;
+      font-weight: 650;
+      font-size: 0.98rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .job-btn .job-blurb {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .job-panel {
+      background: rgba(9, 13, 22, 0.7);
+      border: 1px solid var(--border-accent);
+      border-radius: 14px;
+      padding: 1.35rem 1.4rem;
+      min-height: 10rem;
+    }
+
+    .job-panel[hidden] {
+      display: none;
+    }
+
+    .job-panel h3 {
+      font-size: 1.15rem;
+      color: #fff;
+      margin-bottom: 0.45rem;
+    }
+
+    .job-panel .job-why {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+    }
+
+    .job-panel ol {
+      margin: 0 0 1rem;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    .job-panel ol li {
+      margin-bottom: 0.45rem;
+    }
+
+    .job-panel ol strong {
+      color: var(--text);
+    }
+
+    .job-panel .job-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .job-panel .job-actions a {
+      color: var(--primary-light);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .job-panel .job-actions a:hover {
+      text-decoration: underline;
+    }
+
+    .job-panel .job-cmd {
+      margin: 0 0 1rem;
+    }
+
+    .job-panel .job-cmd code,
+    .job-panel .cli-inline {
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      color: var(--primary-light);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    @keyframes today-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .job-panel.is-active {
+      animation: today-in 0.28s ease-out;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .job-panel.is-active,
+      .demo-stage.is-active,
+      .demo-progress-fill {
+        animation: none;
+        transition: none;
+      }
+
+      .job-btn:hover,
+      .btn-cta:hover {
+        transform: none;
+      }
+    }
+
+    /* Interactive demo */
+    .demo {
+      margin: 0 0 3.5rem;
+    }
+
+    .demo > h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .demo > .demo-lead {
+      color: var(--text-muted);
+      margin: 0 auto 1.35rem;
+      max-width: 42rem;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .demo-shell {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .demo-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(9, 13, 22, 0.55);
+      list-style: none;
+      margin: 0;
+    }
+
+    .demo-tab {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0.45rem 0.75rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+
+    .demo-tab:hover {
+      color: var(--text);
+    }
+
+    .demo-tab[aria-selected="true"] {
+      color: #fff;
+      background: rgba(42, 157, 143, 0.2);
+      border-color: var(--border-accent);
+    }
+
+    .demo-progress {
+      height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .demo-progress-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      transition: width 0.35s ease;
+    }
+
+    .demo-body {
+      padding: 1.25rem 1.35rem 1.5rem;
+      min-height: 18rem;
+    }
+
+    .demo-stage[hidden] {
+      display: none;
+    }
+
+    .demo-stage.is-active {
+      animation: today-in 0.28s ease-out;
+    }
+
+    .demo-stage h3 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .demo-stage > p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+    }
+
+    .demo-code {
+      background: #060911;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
+
+    .demo-code .tok-key { color: var(--primary-light); }
+    .demo-code .tok-str { color: #e8c56b; }
+    .demo-code .tok-fail { color: #f07178; }
+    .demo-code .tok-ok { color: var(--success); }
+    .demo-code .tok-muted { color: var(--text-muted); }
+
+    .demo-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .demo-nav button {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .demo-nav button:hover:not(:disabled) {
+      border-color: var(--border-accent);
+      background: rgba(42, 157, 143, 0.2);
+    }
+
+    .demo-nav button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .demo-nav .demo-next {
+      background: rgba(42, 157, 143, 0.28);
+      border-color: var(--primary-light);
+      color: #fff;
+    }
+
+    /* First session onboarding */
+    .onboard {
+      margin: 0 0 3.5rem;
+    }
+
+    .onboard > h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      text-align: center;
+    }
+
+    .onboard > .onboard-lead {
+      color: var(--text-muted);
+      margin: 0 auto 1.5rem;
+      max-width: 40rem;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .onboard-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.5rem;
+      display: grid;
+      gap: 0.85rem;
+      counter-reset: onboard;
+    }
+
+    .onboard-steps > li {
+      counter-increment: onboard;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.9rem 1.1rem;
+      align-items: start;
+      background: rgba(9, 13, 22, 0.45);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.15rem;
+    }
+
+    .onboard-steps > li::before {
+      content: counter(onboard);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--primary-light);
+      background: rgba(42, 157, 143, 0.12);
+      border: 1px solid var(--border-accent);
+      border-radius: 999px;
+      width: 2rem;
+      height: 2rem;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .onboard-steps h3 {
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .onboard-steps p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    .onboard-steps code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      color: var(--primary-light);
+    }
+
+    .onboard-steps .step-meta {
+      grid-column: 2;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-top: 0.35rem;
+    }
+
+    @media (max-width: 640px) {
+      .demo-tabs {
+        flex-direction: column;
+      }
+
+      .demo-tab {
+        width: 100%;
+        text-align: left;
+      }
+    }
+
   </style>
 </head>
 
@@ -1299,12 +1720,12 @@
       </a>
       <nav id="site-nav" class="nav-links" aria-label="Page">
         <ul>
-          <li><a href="#install" class="nav-link">Install</a></li>
+          <li><a href="#today" class="nav-link">Today</a></li>
+          <li><a href="#demo" class="nav-link">Demo</a></li>
+          <li><a href="#onboard" class="nav-link">First session</a></li>
           <li><a href="#edd" class="nav-link">How EDD works</a></li>
           <li><a href="#kit" class="nav-link">Kit tools</a></li>
-          <li><a href="#lifecycle" class="nav-link">Lifecycle</a></li>
           <li><a href="#guide" class="nav-link">EDD guide</a></li>
-          <li><a href="#map" class="nav-link">Kit map</a></li>
         </ul>
       </nav>
       <a href="https://github.com/mzworthington/agent-lifecycle-kit" class="btn-github"
@@ -1333,9 +1754,9 @@
 
       <nav aria-label="Primary">
         <ul class="hero-ctas">
-          <li><a class="btn-cta btn-cta-primary" href="#install">Install kit</a></li>
-          <li><a class="btn-cta btn-cta-ghost" href="#edd">How EDD works</a></li>
-          <li><a class="btn-cta btn-cta-ghost" href="#guide">Read the EDD guide</a></li>
+          <li><a class="btn-cta btn-cta-primary" href="#today">What do I use this for today?</a></li>
+          <li><a class="btn-cta btn-cta-ghost" href="#demo">See a failing eval</a></li>
+          <li><a class="btn-cta btn-cta-ghost" href="#onboard">First session</a></li>
         </ul>
       </nav>
 
@@ -1346,6 +1767,193 @@
         <li><a href="./LICENSE"><img src="https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge"
             alt="Unlicense" width="140" height="28" loading="lazy"></a></li>
       </ul>
+    </section>
+
+    <section id="today" class="today" aria-labelledby="today-heading">
+      <h2 id="today-heading">What do I use this for today?</h2>
+      <p class="today-lead">Pick the job in front of you. Kit is a product you run, not a docs pile you browse.</p>
+      <div role="group" aria-label="Jobs you can do today">
+        <ul class="job-grid" id="job-grid">
+          <li>
+            <button type="button" class="job-btn" data-job="wrong-tool" aria-pressed="true">
+              <span class="job-title">Wrong tool or made-up args</span>
+              <span class="job-blurb">The agent guessed architecture, skipped the MCP tool, or invented parameters.</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="job-btn" data-job="ci-gate" aria-pressed="false">
+              <span class="job-title">Gate a prompt or schema change</span>
+              <span class="job-blurb">You changed system instructions or a tool contract and need a merge bar.</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="job-btn" data-job="context" aria-pressed="false">
+              <span class="job-title">Always-on context is too fat</span>
+              <span class="job-blurb">Rules dumps are eating the window. You want a budget you can fail CI on.</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="job-btn" data-job="feature" aria-pressed="false">
+              <span class="job-title">Starting a product feature</span>
+              <span class="job-blurb">Need the lifecycle path: grill → spec → TDD short loop → XFN → ship.</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="job-btn" data-job="first-hour" aria-pressed="false">
+              <span class="job-title">I have never installed kit</span>
+              <span class="job-blurb">Fresh machine. Get <code>kit</code> on PATH, bootstrap the repo, run one suite.</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div id="job-panel" class="job-panel is-active" data-active="wrong-tool" aria-live="polite">
+        <h3 id="job-panel-title">Wrong tool or made-up args</h3>
+        <p class="job-why" id="job-panel-why">Capture the miss as a JSONL case, mock the tool, and assert routing until the agent stops guessing.</p>
+        <ol id="job-panel-steps">
+          <li><strong>Write the case</strong> for the prompt that failed (expected tool + args).</li>
+          <li><strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code></li>
+          <li><strong>Read the report</strong>, tighten the schema or prompt, re-run until green.</li>
+        </ol>
+        <p class="job-cmd" id="job-panel-cmd">Start here: <code>kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code></p>
+        <ul class="job-actions" id="job-panel-actions">
+          <li><a href="#demo">Walk the failing-eval demo</a></li>
+          <li><a href="./evals/edd/README.md">Suite layout</a></li>
+          <li><a href="#guide">EDD guide</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="demo" class="demo" aria-labelledby="demo-heading">
+      <h2 id="demo-heading">Demo: a miss becomes a failing eval</h2>
+      <p class="demo-lead">Real suite shape from <code>architecture_routing</code>. Step through red → report → fix → CI gate. No API key; scripted driver.</p>
+      <div class="demo-shell">
+        <ul class="demo-tabs" role="tablist" aria-label="Eval demo steps">
+          <li role="presentation"><button type="button" class="demo-tab" role="tab" id="demo-tab-0" aria-controls="demo-stage-0" aria-selected="true" data-step="0">1. Case</button></li>
+          <li role="presentation"><button type="button" class="demo-tab" role="tab" id="demo-tab-1" aria-controls="demo-stage-1" aria-selected="false" data-step="1" tabindex="-1">2. Red</button></li>
+          <li role="presentation"><button type="button" class="demo-tab" role="tab" id="demo-tab-2" aria-controls="demo-stage-2" aria-selected="false" data-step="2" tabindex="-1">3. Report</button></li>
+          <li role="presentation"><button type="button" class="demo-tab" role="tab" id="demo-tab-3" aria-controls="demo-stage-3" aria-selected="false" data-step="3" tabindex="-1">4. Green</button></li>
+          <li role="presentation"><button type="button" class="demo-tab" role="tab" id="demo-tab-4" aria-controls="demo-stage-4" aria-selected="false" data-step="4" tabindex="-1">5. Gate</button></li>
+        </ul>
+        <div class="demo-progress" aria-hidden="true"><div class="demo-progress-fill" id="demo-progress-fill"></div></div>
+        <div class="demo-body">
+          <div class="demo-stage is-active" role="tabpanel" id="demo-stage-0" aria-labelledby="demo-tab-0" data-step="0">
+            <h3>JSONL case that should call the tool</h3>
+            <p>User asks for the payment database. Expect <code>read_architecture_yaml</code> with <code>payment-api</code> — not a chatty guess.</p>
+            <pre class="demo-code" tabindex="0"><code>{
+  <span class="tok-key">"id"</span>: <span class="tok-str">"route-08"</span>,
+  <span class="tok-key">"prompt"</span>: <span class="tok-str">"What is the database for the payment system?"</span>,
+  <span class="tok-key">"expect"</span>: {
+    <span class="tok-key">"tool"</span>: <span class="tok-str">"read_architecture_yaml"</span>,
+    <span class="tok-key">"arguments_contains"</span>: { <span class="tok-key">"componentId"</span>: <span class="tok-str">"payment-api"</span> }
+  }
+}</code></pre>
+          </div>
+          <div class="demo-stage" role="tabpanel" id="demo-stage-1" aria-labelledby="demo-tab-1" data-step="1" hidden>
+            <h3>Red: routing assert fails</h3>
+            <p>Fresh context, mocked tool. The model answered in prose instead of calling the tool.</p>
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">$ kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</span>
+
+<span class="tok-fail">FAIL</span> route-08  tool_selection
+  expected: read_architecture_yaml
+  actual:   <span class="tok-fail">(no tool)</span>
+  note:     conversational reply guessed "PostgreSQL"
+
+<span class="tok-muted">Routing accuracy: 92.5% (37/40)</span></code></pre>
+          </div>
+          <div class="demo-stage" role="tabpanel" id="demo-stage-2" aria-labelledby="demo-tab-2" data-step="2" hidden>
+            <h3>Report: diagnosis you can act on</h3>
+            <p><code>kit eval report --format md</code> writes the failure trace into the PR, not a vibes summary.</p>
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">### Test ID: route-08</span>
+Prompt: "What is the database for the payment system?"
+Expected: read_architecture_yaml
+Actual:   <span class="tok-fail">None (conversational)</span>
+Diagnosis: Tool selection failure — model refused the tool and hallucinated.
+Suggested fix: System prompt must never guess architecture; always use C4 tools.</code></pre>
+          </div>
+          <div class="demo-stage" role="tabpanel" id="demo-stage-3" aria-labelledby="demo-tab-3" data-step="3" hidden>
+            <h3>Green: tighten the contract, re-run</h3>
+            <p>Update the system prompt / tool description. Same case. Same mocks. Pass when routing sticks.</p>
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted"># system_prompt.md (excerpt)</span>
+Never invent components or databases.
+If the user asks about architecture, call read_architecture_yaml.
+
+<span class="tok-muted">$ kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</span>
+<span class="tok-ok">PASS</span> route-08  tool_selection + argument_correctness
+<span class="tok-muted">Routing accuracy: 95.0% (38/40)</span></code></pre>
+          </div>
+          <div class="demo-stage" role="tabpanel" id="demo-stage-4" aria-labelledby="demo-tab-4" data-step="4" hidden>
+            <h3>Gate: block the merge below 95%</h3>
+            <p>CI uses the same scripted driver offline. Live models are optional for nightly depth.</p>
+            <pre class="demo-code" tabindex="0"><code><span class="tok-muted">$ kit eval ci --threshold-routing 95 --out out/reports</span>
+<span class="tok-ok">PASS</span> routing_accuracy 95.0% &gt;= 95
+<span class="tok-ok">PASS</span> schema_match 100%
+wrote out/reports/eval-report.md
+
+<span class="tok-muted"># Optional closed loop after a prod miss</span>
+$ kit eval dataset from-trace --trace path/to/trace.json --out evals/edd/prod.jsonl</code></pre>
+          </div>
+          <div class="demo-nav">
+            <button type="button" id="demo-prev" disabled>Previous</button>
+            <button type="button" class="demo-next" id="demo-next">Next: Red</button>
+          </div>
+        </div>
+      </div>
+      <nav aria-label="Demo follow-ups" style="margin-top:1rem">
+        <ul class="edd-links">
+          <li><a href="./evals/edd/examples/eval-report.md">Full example report</a></li>
+          <li><a href="./evals/edd/architecture_routing.jsonl">Routing cases (JSONL)</a></li>
+          <li><a href="#onboard">Run this in your first session</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section id="onboard" class="onboard" aria-labelledby="onboard-heading">
+      <h2 id="onboard-heading">First session</h2>
+      <p class="onboard-lead">Four steps to a green local gate. macOS and Linux; needs git and Node 22+.</p>
+      <ol class="onboard-steps">
+        <li>
+          <div>
+            <h3>Install kit</h3>
+            <p>Links <code>~/.agents</code> and puts <code>kit</code> on your PATH via <code>~/.local/bin</code>.</p>
+            <p class="step-meta">curl … | sh</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Bootstrap the repo you are in</h3>
+            <p><code>kit init . --mcp default --hook</code> writes the thin handshake, IDE pointers, and a default MCP profile.</p>
+            <p class="step-meta">kit init</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Run one EDD suite offline</h3>
+            <p><code>kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code> — no provider key.</p>
+            <p class="step-meta">kit eval run</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Write the report and hold the bar</h3>
+            <p><code>kit eval ci --threshold-routing 95 --out out/reports</code> then <code>kit eval report --format md --out out/reports</code>. Wire that into PR CI when you are ready.</p>
+            <p class="step-meta">kit eval ci</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="install" aria-labelledby="install-heading">
+      <h2 id="install-heading">Install kit</h2>
+      <p class="install-note">Copy-paste for step 1 above. If <code>kit</code> is missing after install, add <code>~/.local/bin</code> to <code>PATH</code>.</p>
+      <figure class="cli-box">
+        <figcaption>Install</figcaption>
+        <pre class="cli-code"><code><span class="comment"># Put kit on your PATH</span>
+$ <span class="cmd">curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh</span>
+
+<span class="comment"># Bootstrap the repo you are in</span>
+$ <span class="cmd">kit init . --mcp default --hook</span></code></pre>
+      </figure>
     </section>
 
     <section id="edd" class="edd-spotlight" aria-labelledby="edd-heading">
@@ -1380,24 +1988,12 @@
       </figure>
       <nav aria-label="EDD resources">
         <ul class="edd-links">
+          <li><a href="#demo">See the demo</a></li>
           <li><a href="#guide">Read the EDD guide</a></li>
           <li><a href="./evals/edd/README.md">Suites and reports</a></li>
           <li><a href="./docs/edd.md">Markdown source</a></li>
         </ul>
       </nav>
-    </section>
-
-    <section id="install" aria-labelledby="install-heading">
-      <h2 id="install-heading">Install kit</h2>
-      <p class="install-note">macOS and Linux. Needs git and Node 22+. Links <code>~/.agents</code> and puts <code>kit</code> on your PATH via <code>~/.local/bin</code>.</p>
-      <figure class="cli-box">
-        <figcaption>Install</figcaption>
-        <pre class="cli-code"><code><span class="comment"># Put kit on your PATH</span>
-$ <span class="cmd">curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh</span>
-
-<span class="comment"># Bootstrap the repo you are in</span>
-$ <span class="cmd">kit init . --mcp default --hook</span></code></pre>
-      </figure>
     </section>
 
     <section id="cli" aria-labelledby="cli-heading">
@@ -1449,6 +2045,10 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
     <section id="faq" class="faq" aria-labelledby="faq-heading">
       <h2 id="faq-heading">Common questions</h2>
       <details open>
+        <summary>What do I use this for today?</summary>
+        <p>Use the <a href="#today">job picker</a>. Common paths: write a failing routing eval when the agent guesses, gate prompt/schema PRs with <code>kit eval ci --threshold-routing 95</code>, shrink always-on rules with <code>kit measure-context</code>, or follow the feature lifecycle when the work is bigger than a prompt tweak.</p>
+      </details>
+      <details>
         <summary>What is Eval-Driven Development?</summary>
         <p>EDD is TDD for agents that call tools. You write a failing eval for the tool and arguments you expect, implement the schema and prompt until it passes, then tighten until CI holds.</p>
       </details>
@@ -1572,11 +2172,30 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       <div class="docs-content">
         <h2 id="docs-heading">What this kit is</h2>
         <p>Kit is for teams who already test code and need the same for agents that call tools.
-          It centers <a href="#edd">Eval-Driven Development (EDD)</a>,
-          then keeps always-on context small, composes one MCP profile, and layers lifecycle skills so the rest of the workflow stays coherent.</p>
+          Start with <a href="#today">what you need today</a>, walk the <a href="#demo">failing-eval demo</a>,
+          then run the <a href="#onboard">first session</a>. EDD is the center; context budget, one MCP profile,
+          and lifecycle skills keep the rest of the workflow coherent.</p>
         <h3>Start here</h3>
         <nav aria-label="Getting started">
           <ul class="start-here">
+            <li>
+              <a href="#today">
+                <span class="start-title">What do I use this for today?</span>
+                <span class="start-desc">Pick the job in front of you and get the commands</span>
+              </a>
+            </li>
+            <li>
+              <a href="#demo">
+                <span class="start-title">Failing-eval demo</span>
+                <span class="start-desc">Case → red → report → green → CI gate</span>
+              </a>
+            </li>
+            <li>
+              <a href="#onboard">
+                <span class="start-title">First session</span>
+                <span class="start-desc">Install, init, run one suite, hold the 95% bar</span>
+              </a>
+            </li>
             <li>
               <a href="#guide">
                 <span class="start-title">EDD guide</span>
@@ -1593,18 +2212,6 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
               <a href="#lifecycle">
                 <span class="start-title">Lifecycle</span>
                 <span class="start-desc">How feature work moves through grilling, spec, TDD, XFN, audit, and release</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md">
-                <span class="start-title">Coding philosophy</span>
-                <span class="start-desc">Architecture and quality defaults agents should keep</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/AGENTS.md">
-                <span class="start-title">Agent bootstrap</span>
-                <span class="start-desc">How agents load the kit and pick a lifecycle role</span>
               </a>
             </li>
             <li>
@@ -1634,7 +2241,7 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
   <footer>
     <p>Agent Lifecycle Kit is open source under the Unlicense (public domain).</p>
     <p>Built for people who ship agents that call tools.</p>
-    <p><a href="#guide">Read the EDD guide</a> · <a href="#kit">Kit tools</a> · <a href="./docs/kit.md">Operator guide</a></p>
+    <p><a href="#today">What do I use this for today?</a> · <a href="#demo">Demo</a> · <a href="#onboard">First session</a> · <a href="#guide">EDD guide</a></p>
   </footer>
 
   <script>
@@ -2265,14 +2872,176 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       }
     }
 
+    function initTodayJobs() {
+      const jobs = {
+        'wrong-tool': {
+          title: 'Wrong tool or made-up args',
+          why: 'Capture the miss as a JSONL case, mock the tool, and assert routing until the agent stops guessing.',
+          steps: [
+            '<strong>Write the case</strong> for the prompt that failed (expected tool + args).',
+            '<strong>Run</strong> <code class="cli-inline">kit eval run --suite evals/edd/architecture_routing.yaml --model scripted</code>',
+            '<strong>Read the report</strong>, tighten the schema or prompt, re-run until green.'
+          ],
+          cmd: 'kit eval run --suite evals/edd/architecture_routing.yaml --model scripted',
+          actions: [
+            { href: '#demo', label: 'Walk the failing-eval demo' },
+            { href: './evals/edd/README.md', label: 'Suite layout' },
+            { href: '#guide', label: 'EDD guide' }
+          ]
+        },
+        'ci-gate': {
+          title: 'Gate a prompt or schema change',
+          why: 'Treat the prompt and MCP schema like code under test. Fail the PR when routing accuracy drops.',
+          steps: [
+            '<strong>Keep the suite next to the change</strong> (YAML metrics + JSONL cases).',
+            '<strong>Run</strong> <code class="cli-inline">kit eval ci --threshold-routing 95 --out out/reports</code>',
+            '<strong>Attach the markdown report</strong> with <code class="cli-inline">kit eval report --format md --out out/reports</code>.'
+          ],
+          cmd: 'kit eval ci --threshold-routing 95 --out out/reports',
+          actions: [
+            { href: '#cli', label: 'Local commands' },
+            { href: './evals/edd/examples/eval-report.md', label: 'Example report' },
+            { href: '#onboard', label: 'First session' }
+          ]
+        },
+        'context': {
+          title: 'Always-on context is too fat',
+          why: 'Thin bootstrap stays under about 8KB. Philosophy and SOPs load on demand; CI fails if the budget blows.',
+          steps: [
+            '<strong>Measure</strong> with <code class="cli-inline">kit measure-context</code>.',
+            '<strong>Compose one MCP profile</strong> so unused tool schemas stay out of the prompt.',
+            '<strong>Hold the bar</strong> with <code class="cli-inline">kit check</code> (includes the context budget).'
+          ],
+          cmd: 'kit measure-context && kit check',
+          actions: [
+            { href: '#kit', label: 'Kit tools' },
+            { href: './SOPs/context-budget.md', label: 'Context budget SOP' },
+            { href: './docs/kit.md', label: 'Operator guide' }
+          ]
+        },
+        'feature': {
+          title: 'Starting a product feature',
+          why: 'EDD proves tool calls. Feature work still routes through specialist roles so the catalog and XFN rows stay honest.',
+          steps: [
+            '<strong>Stress-test the idea</strong> (grilling) until the decision frontier is clear.',
+            '<strong>Spec</strong> acceptance criteria, then TDD short loop (gear 1 + gear 2). Use EDD when the change is a prompt or tool schema.',
+            '<strong>Green XFN apply rows</strong>, audit, then release with a conventional PR title.'
+          ],
+          cmd: 'Open the orchestrator skill and follow the phase table in AGENTS.md',
+          actions: [
+            { href: '#lifecycle', label: 'Feature lifecycle' },
+            { href: 'https://github.com/mzworthington/agent-lifecycle-kit/blob/main/skills/agent-orchestrator/SKILL.md', label: 'Orchestrator skill' },
+            { href: '#edd', label: 'How EDD fits' }
+          ]
+        },
+        'first-hour': {
+          title: 'I have never installed kit',
+          why: 'Get kit on PATH, bootstrap the repo, run one offline suite, then hold the 95% bar locally.',
+          steps: [
+            '<strong>Install</strong> with the one-liner (git + Node 22+).',
+            '<strong>Init</strong> <code class="cli-inline">kit init . --mcp default --hook</code>.',
+            '<strong>Prove routing</strong> with the scripted driver, then <code class="cli-inline">kit eval ci --threshold-routing 95</code>.'
+          ],
+          cmd: 'curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh',
+          actions: [
+            { href: '#onboard', label: 'First session steps' },
+            { href: '#install', label: 'Install commands' },
+            { href: '#demo', label: 'See what green looks like' }
+          ]
+        }
+      };
+
+      const buttons = Array.from(document.querySelectorAll('.job-btn[data-job]'));
+      const panel = document.getElementById('job-panel');
+      if (!buttons.length || !panel) return;
+
+      const titleEl = document.getElementById('job-panel-title');
+      const whyEl = document.getElementById('job-panel-why');
+      const stepsEl = document.getElementById('job-panel-steps');
+      const cmdEl = document.getElementById('job-panel-cmd');
+      const actionsEl = document.getElementById('job-panel-actions');
+
+      function render(jobId) {
+        const job = jobs[jobId];
+        if (!job) return;
+        buttons.forEach((btn) => {
+          btn.setAttribute('aria-pressed', String(btn.dataset.job === jobId));
+        });
+        panel.dataset.active = jobId;
+        panel.classList.remove('is-active');
+        void panel.offsetWidth;
+        panel.classList.add('is-active');
+        titleEl.textContent = job.title;
+        whyEl.textContent = job.why;
+        stepsEl.innerHTML = job.steps.map((s) => `<li>${s}</li>`).join('');
+        cmdEl.innerHTML = `Start here: <code>${job.cmd}</code>`;
+        actionsEl.innerHTML = job.actions
+          .map((a) => `<li><a href="${a.href}">${a.label}</a></li>`)
+          .join('');
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => render(btn.dataset.job));
+      });
+    }
+
+    function initEvalDemo() {
+      const tabs = Array.from(document.querySelectorAll('.demo-tab[data-step]'));
+      const stages = Array.from(document.querySelectorAll('.demo-stage[data-step]'));
+      const prev = document.getElementById('demo-prev');
+      const next = document.getElementById('demo-next');
+      const fill = document.getElementById('demo-progress-fill');
+      if (!tabs.length || !stages.length || !prev || !next || !fill) return;
+
+      const nextLabels = ['Next: Red', 'Next: Report', 'Next: Green', 'Next: Gate', 'Done'];
+      let step = 0;
+
+      function show(index) {
+        step = Math.max(0, Math.min(index, tabs.length - 1));
+        tabs.forEach((tab, i) => {
+          const selected = i === step;
+          tab.setAttribute('aria-selected', String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        stages.forEach((stage, i) => {
+          const active = i === step;
+          stage.hidden = !active;
+          stage.classList.toggle('is-active', active);
+        });
+        fill.style.width = `${((step + 1) / tabs.length) * 100}%`;
+        prev.disabled = step === 0;
+        next.disabled = step === tabs.length - 1;
+        next.textContent = nextLabels[step] || 'Next';
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => show(Number(tab.dataset.step)));
+        tab.addEventListener('keydown', (event) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          event.preventDefault();
+          const delta = event.key === 'ArrowRight' ? 1 : -1;
+          const target = Math.max(0, Math.min(step + delta, tabs.length - 1));
+          show(target);
+          tabs[target].focus();
+        });
+      });
+      prev.addEventListener('click', () => show(step - 1));
+      next.addEventListener('click', () => show(step + 1));
+      show(0);
+    }
+
     // Initialize D3 Constellation Engine
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
         initSiteNav();
+        initTodayJobs();
+        initEvalDemo();
         initHeroD3();
       });
     } else {
       initSiteNav();
+      initTodayJobs();
+      initEvalDemo();
       initHeroD3();
     }
 
