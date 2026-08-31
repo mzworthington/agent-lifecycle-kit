@@ -39,3 +39,22 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Publish deploy job summary
+        if: always()
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          {
+            echo "## Deploy GitHub Pages"
+            echo ""
+            echo "Publishes the kit docs site (landing + EDD guides) to GitHub Pages."
+            echo "Custom domain DNS is owned by [edge-dns](https://github.com/mzworthington/edge-dns)."
+            echo ""
+            if [ -n "${PAGE_URL}" ]; then
+              echo "- **Deployment URL:** ${PAGE_URL}"
+            fi
+            echo "- **Canonical site:** https://eval-driven-development.dev"
+            echo ""
+            echo "A green check means the Pages artifact uploaded and the environment deployment finished."
+          } >> "$GITHUB_STEP_SUMMARY"

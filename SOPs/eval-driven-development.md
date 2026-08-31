@@ -30,7 +30,7 @@ tools:
 |---------|---------|
 | `kit eval run --suite <path> --model <name>` | Execute one suite |
 | `kit eval watch --suite <path> --target <file>` | Re-run on prompt / tool schema changes |
-| `kit eval report --format md\|json --out <dir>` | Markdown or JSON cost/latency/failure report |
+| `kit eval report --format md\|json --out <dir> [--github-summary]` | Markdown or JSON cost/latency/failure report; optional Actions job summary |
 | `kit eval ci --threshold-routing 95 --out out/reports` | Headless gate; fail if routing accuracy &lt; threshold |
 | `kit eval dataset lint\|dedupe\|synthesize\|from-trace` | Dataset hygiene (schema lint, dedupe, paraphrases, prod promote) |
 
@@ -46,10 +46,13 @@ Cursor and GitHub Copilot already load Kit via `.cursorrules` and `.github/copil
 - **Live nightly:** [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) runs on a schedule when `KIT_EVAL_API_KEY` is set and `KIT_EVAL_MODEL` is a real provider model. That job includes `requires-live` rows. Missing `KIT_EVAL_API_KEY` skips the job; it does not fall through to `OPENAI_API_KEY`.
 - **Threshold gating:** `--threshold-routing 95` blocks merges when routing/schema extraction fails more than 5% of routing-tagged cases.
 - **Artifacts:** Reports upload with `if: always()` (`out/reports/eval-report.md`, `edd-report.md` / `.json`).
+- **Job summaries:** CI workflows publish an overview table plus the full Markdown report to `$GITHUB_STEP_SUMMARY` (via `kit eval report --github-summary`, or automatically when `GITHUB_ACTIONS=true`). Open the workflow run → Summary to read pass rate, routing/schema, and failure traces without downloading artifacts. Unit tests use `pnpm test:ci`, which also writes `out/reports/unit-test-report.md` into that Summary.
 
 ## Reports
 
 `kit eval report` emits overall pass rate, token/latency cost, routing + schema adherence, and **failure traces** (expected vs actual tool/args, diagnosis, suggested fix). Example: [evals/edd/examples/eval-report.md](../evals/edd/examples/eval-report.md).
+
+Under GitHub Actions, the same Markdown is folded into the job summary so green/red checks carry meaning (what gated, which suites, metrics).
 
 ## Production bridge
 

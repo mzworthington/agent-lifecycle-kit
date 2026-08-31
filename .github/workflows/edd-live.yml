@@ -27,6 +27,12 @@ jobs:
           if [ -z "${KIT_EVAL_API_KEY}" ]; then
             echo "KIT_EVAL_API_KEY is not set; skipping live-model EDD. Scripted CI remains the merge gate."
             echo "skip=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Nightly live-model EDD"
+              echo ""
+              echo "Skipped: \`KIT_EVAL_API_KEY\` is not configured."
+              echo "Scripted PR CI (\`kit check\` / Agent EDD Suite) remains the merge gate."
+            } >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           if [ -z "${KIT_EVAL_MODEL}" ]; then
@@ -79,6 +85,31 @@ jobs:
             --model "${KIT_EVAL_MODEL}" \
             --threshold-routing 95 \
             --out out/reports
+
+      - name: Publish live EDD job summary
+        if: always() && steps.creds.outputs.skip != 'true'
+        env:
+          KIT_EVAL_MODEL: ${{ vars.KIT_EVAL_MODEL }}
+        run: |
+          {
+            echo "## Nightly live-model EDD"
+            echo ""
+            echo "Proves paraphrase / prompt-injection / multi-tool cases tagged \`requires-live\`"
+            echo "against **\`${KIT_EVAL_MODEL}\`**. This is not the PR merge gate — scripted CI is."
+            echo ""
+            echo "| Suite | Live focus |"
+            echo "|-------|------------|"
+            echo "| architecture_routing | Real-model tool selection under paraphrase |"
+            echo "| kit_knowledge | Live kit-knowledge MCP routing |"
+            echo "| safety | Injection + no-tool refusal under a live model |"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f out/reports/edd-report.json ]; then
+            pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json --github-summary
+          else
+            echo "_No EDD report JSON was produced._" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Upload EDD report artifacts
         if: always() && steps.creds.outputs.skip != 'true'

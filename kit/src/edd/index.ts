@@ -2,7 +2,16 @@ export { EvalConfigSchema, EvalCaseSchema, type EvalConfig, type EvalCase } from
 export { AgentClient, scriptedDriver, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 export { EvalRunner, type EvalRunnerOptions } from './runner.js';
 export { loadDataset, streamDataset, productionTraceToJsonl } from './dataset.js';
-export { generateReport, buildSuiteReport, type SuiteReport, type CaseResult, type FailureTrace } from './telemetry.js';
+export {
+  generateReport,
+  buildSuiteReport,
+  renderGithubSummaryOverview,
+  appendGithubStepSummary,
+  publishEvalReportToGithubSummary,
+  type SuiteReport,
+  type CaseResult,
+  type FailureTrace
+} from './telemetry.js';
 export { buildFailureTrace, diagnoseFailures } from './failure-trace.js';
 export { redactSecrets } from './redact.js';
 export { runCaseAssertions } from './run-assertions.js';

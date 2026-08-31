@@ -2,7 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import { EvalRunner } from './edd/runner.js';
-import { generateReport, type SuiteReport } from './edd/telemetry.js';
+import {
+  generateReport,
+  publishEvalReportToGithubSummary,
+  type SuiteReport
+} from './edd/telemetry.js';
 import { watchTargets } from './edd/watch.js';
 import { loadDataset } from './edd/dataset.js';
 import {
@@ -28,7 +32,7 @@ Usage: kit eval <subcommand> [options]
 Subcommands:
   run      --suite <path> [--model <name>] [--tags a,b] [--out <dir>] [--format md|json]
   watch    --suite <path> [--target <file-or-dir>] [--model <name>]
-  report   --format <md|json> --out <dir> [--from <json-report>]
+  report   --format <md|json> --out <dir> [--from <json-report>] [--github-summary]
   ci       --suite <path> [--threshold-routing <pct>] [--model <name>] [--out <dir>]
   dataset  lint|dedupe|synthesize|from-trace [options]
 
@@ -42,6 +46,7 @@ Notes:
   - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
   - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
   - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
+  - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
 `);
 }
@@ -50,6 +55,22 @@ export function getEddFlag(args: string[], name: string): string | undefined {
   const idx = args.indexOf(name);
   if (idx === -1) return undefined;
   return args[idx + 1];
+}
+
+export function hasEddFlag(args: string[], name: string): boolean {
+  return args.includes(name);
+}
+
+/** Publish job summaries from `kit eval report` under Actions (or with --github-summary). */
+export function shouldPublishGithubSummary(
+  args: string[],
+  env: NodeJS.ProcessEnv = process.env
+): boolean {
+  if (hasEddFlag(args, '--no-github-summary')) return false;
+  if (hasEddFlag(args, '--github-summary')) return true;
+  // Avoid polluting the real Actions summary while node:test is running in CI.
+  if (env.NODE_TEST_CONTEXT) return false;
+  return env.GITHUB_ACTIONS === 'true' && Boolean(env.GITHUB_STEP_SUMMARY);
 }
 
 export function getEddNumberFlag(args: string[], name: string, fallback: number): number {
@@ -158,6 +179,18 @@ async function cmdReport(repoDir: string, args: string[]): Promise<number> {
 
   const written = generateReport(reports, { format, outDir });
   console.log(`Wrote Markdown/JSON evaluation report(s):\n${written.map((w) => `  - ${w}`).join('\n')}`);
+
+  if (format === 'md' && shouldPublishGithubSummary(args)) {
+    const mdPath = written.find((p) => p.endsWith('eval-report.md') || p.endsWith('edd-report.md'));
+    if (mdPath && fs.existsSync(mdPath)) {
+      const published = publishEvalReportToGithubSummary(reports, fs.readFileSync(mdPath, 'utf8'));
+      if (published) {
+        console.log('Published EDD report to GitHub Actions job summary');
+      } else if (hasEddFlag(args, '--github-summary')) {
+        console.warn('GITHUB_STEP_SUMMARY is unset; skipped job summary publish');
+      }
+    }
+  }
   return 0;
 }
 

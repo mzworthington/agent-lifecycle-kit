@@ -108,6 +108,8 @@ Full metric table and harness layout: [evals/edd/README.md](../evals/edd/README.
 
 Nightly **skips the whole job** if `KIT_EVAL_API_KEY` is empty. It does not fall through to `OPENAI_API_KEY`.
 
+Each of those workflows (plus the kit CI and Pages deploy jobs) publishes a **job summary**: what the gate means, then an EDD overview table and collapsible full report via `kit eval report --github-summary`.
+
 ### Local live run
 
 ```bash
