@@ -48,13 +48,14 @@ describe('composeMCP', () => {
     assert.equal(fs.readFileSync(path.join(root, backups[0]!), 'utf8'), '{"old":true}\n');
   });
 
-  it('installs into homedir/.cursor/mcp.json', () => {
+  it('installs into the Cursor config dir under homedir', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-'));
     const home = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-home-'));
+    const cursorDir = path.join(home, 'cursor-config');
     writeProfile(root, 'demo', ['alpha']);
     writeServer(root, 'alpha', { alpha: { command: 'npx' } });
-    composeMCP('demo', undefined, true, { repoDir: root, homedir: home, env: {} });
-    const installed = path.join(home, '.cursor', 'mcp.json');
+    composeMCP('demo', undefined, true, { repoDir: root, homedir: home, cursorDir, env: {} });
+    const installed = path.join(cursorDir, 'mcp.json');
     assert.equal(fs.existsSync(installed), true);
     const body = JSON.parse(fs.readFileSync(installed, 'utf8')) as { mcpServers: { alpha: unknown } };
     assert.ok(body.mcpServers.alpha);

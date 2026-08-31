@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { composeMCP } from './compose_mcp.js';
 import { exportIDERules } from './export_ide_rules.js';
-import { resolveRepoDir } from './paths.js';
+import { gitHooksDir, projectCursorDir, resolveRepoDir } from './paths.js';
 
 const defaultKitRepoDir: string = resolveRepoDir(import.meta.url);
 
@@ -13,6 +13,10 @@ export interface InitProjectOptions {
   installIDE: boolean;
   installHook: boolean;
   kitRepoDir?: string;
+  /** Override for tests; default is `<target>/.cursor`. */
+  cursorDir?: string;
+  /** Override for tests; default is `<target>/.git/hooks`. */
+  hooksDir?: string;
 }
 
 export function initProject(options: InitProjectOptions): void {
@@ -50,7 +54,7 @@ export function initProject(options: InitProjectOptions): void {
 
   // 3. Setup .cursor/mcp.json
   if (installMCP) {
-    const cursorDir = path.join(targetDir, '.cursor');
+    const cursorDir = options.cursorDir ?? projectCursorDir(targetDir);
     const mcpPath = path.join(cursorDir, 'mcp.json');
     if (!fs.existsSync(cursorDir)) {
       fs.mkdirSync(cursorDir, { recursive: true });
@@ -68,7 +72,7 @@ export function initProject(options: InitProjectOptions): void {
   if (installHook) {
     const gitDir = path.join(targetDir, '.git');
     if (fs.existsSync(gitDir)) {
-      const hooksDir = path.join(gitDir, 'hooks');
+      const hooksDir = options.hooksDir ?? gitHooksDir(gitDir);
       if (!fs.existsSync(hooksDir)) {
         fs.mkdirSync(hooksDir, { recursive: true });
       }

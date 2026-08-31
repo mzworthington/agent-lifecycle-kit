@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { backupExistingFile } from './backup_file.js';
-import { resolveRepoDir } from './paths.js';
+import { resolveRepoDir, userCursorDir } from './paths.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
@@ -20,6 +20,8 @@ export interface ComposeMcpOptions {
   repoDir?: string;
   homedir?: string;
   env?: NodeJS.ProcessEnv;
+  /** Override for tests; default is `~/.cursor`. */
+  cursorDir?: string;
 }
 
 export function composeMCP(
@@ -113,7 +115,7 @@ export function composeMCP(
     fs.writeFileSync(targetPath, resultJSON, 'utf8');
     console.log(`Composed profile '${profileName}' saved to ${targetPath}`);
   } else if (installGlobally) {
-    const cursorDir = path.join(homedir, '.cursor');
+    const cursorDir = options.cursorDir ?? userCursorDir(homedir);
     if (!fs.existsSync(cursorDir)) {
       fs.mkdirSync(cursorDir, { recursive: true });
     }

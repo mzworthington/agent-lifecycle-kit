@@ -56,16 +56,18 @@ describe('initProject', () => {
   it('exports IDE rules and composes MCP when requested', () => {
     const kit = kitRoot();
     const target = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-app-'));
+    const cursorDir = path.join(target, 'cursor-config');
     initProject({
       targetDir: target,
       mcpProfile: 'default',
       installMCP: true,
       installIDE: true,
       installHook: false,
-      kitRepoDir: kit
+      kitRepoDir: kit,
+      cursorDir
     });
     assert.equal(fs.existsSync(path.join(target, 'CLAUDE.md')), true);
-    const mcp = JSON.parse(fs.readFileSync(path.join(target, '.cursor', 'mcp.json'), 'utf8')) as {
+    const mcp = JSON.parse(fs.readFileSync(path.join(cursorDir, 'mcp.json'), 'utf8')) as {
       mcpServers: { alpha: unknown };
     };
     assert.ok(mcp.mcpServers.alpha);
@@ -75,15 +77,17 @@ describe('initProject', () => {
     const kit = kitRoot();
     const withGit = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-app-'));
     fs.mkdirSync(path.join(withGit, '.git'));
+    const hooksDir = path.join(withGit, 'hooks');
     initProject({
       targetDir: withGit,
       mcpProfile: 'default',
       installMCP: false,
       installIDE: false,
       installHook: true,
-      kitRepoDir: kit
+      kitRepoDir: kit,
+      hooksDir
     });
-    const hook = fs.readFileSync(path.join(withGit, '.git', 'hooks', 'pre-commit'), 'utf8');
+    const hook = fs.readFileSync(path.join(hooksDir, 'pre-commit'), 'utf8');
     assert.match(hook, /"\$KIT" audit/);
 
     const noGit = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-app-'));
@@ -93,9 +97,10 @@ describe('initProject', () => {
       installMCP: false,
       installIDE: false,
       installHook: true,
-      kitRepoDir: kit
+      kitRepoDir: kit,
+      hooksDir: path.join(noGit, 'hooks')
     });
-    assert.equal(fs.existsSync(path.join(noGit, '.git', 'hooks', 'pre-commit')), false);
+    assert.equal(fs.existsSync(path.join(noGit, 'hooks', 'pre-commit')), false);
   });
 
   it('writes fallback AGENTS.md when the template is missing', () => {

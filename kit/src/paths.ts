@@ -19,3 +19,15 @@ export function kitRootFrom(metaUrl: string): string {
 export function resolveRepoDir(metaUrl: string): string {
   return process.env.REPO_DIR || kitRootFrom(metaUrl);
 }
+
+export function userCursorDir(homedir: string): string {
+  return path.join(homedir, '.cursor');
+}
+
+export function projectCursorDir(targetDir: string): string {
+  return path.join(targetDir, '.cursor');
+}
+
+export function gitHooksDir(gitDir: string): string {
+  return path.join(gitDir, 'hooks');
+}
