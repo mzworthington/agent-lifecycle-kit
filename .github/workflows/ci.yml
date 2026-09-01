@@ -78,6 +78,37 @@ jobs:
             echo "" >> "$GITHUB_STEP_SUMMARY"
           fi
 
+          if [ -f out/reports/coverage.lcov ]; then
+            echo "## Unit test coverage" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "LCOV written to \`out/reports/coverage.lcov\` (report-only; no gate yet). Summary lines from the test run also appear in the job log under \"coverage report\"." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            # Pull the all-files summary line from the LCOV end marker context via a tiny node helper
+            node -e '
+              const fs = require("fs");
+              const lcov = fs.readFileSync("out/reports/coverage.lcov", "utf8");
+              let lf = 0, lh = 0, fnf = 0, fnh = 0, brf = 0, brh = 0;
+              for (const line of lcov.split("\n")) {
+                if (line.startsWith("LF:")) lf += Number(line.slice(3));
+                else if (line.startsWith("LH:")) lh += Number(line.slice(3));
+                else if (line.startsWith("FNF:")) fnf += Number(line.slice(4));
+                else if (line.startsWith("FNH:")) fnh += Number(line.slice(4));
+                else if (line.startsWith("BRF:")) brf += Number(line.slice(4));
+                else if (line.startsWith("BRH:")) brh += Number(line.slice(4));
+              }
+              const pct = (h, f) => (f === 0 ? 100 : (100 * h) / f);
+              console.log(`lines: ${pct(lh, lf).toFixed(2)}% (${lh}/${lf})`);
+              console.log(`functions: ${pct(fnh, fnf).toFixed(2)}% (${fnh}/${fnf})`);
+              console.log(`branches: ${pct(brh, brf).toFixed(2)}% (${brh}/${brf})`);
+            ' >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "_No coverage.lcov was produced._" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           if [ -f out/reports/edd-report.json ]; then
             pnpm kit eval report --format md --out out/reports --from out/reports/edd-report.json --github-summary
           else

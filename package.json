@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "kit": "node --import tsx/esm bin/kit.ts",
     "test": "node --import tsx/esm --test 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts",
-    "test:ci": "mkdir -p out/reports && node --import tsx/esm --test --test-reporter=spec --test-reporter=./kit/src/github_test_reporter.mjs --test-reporter-destination=stdout --test-reporter-destination=out/reports/unit-test-report.md 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts",
+    "test:ci": "mkdir -p out/reports && node --import tsx/esm --test --experimental-test-coverage --test-reporter=spec --test-reporter=./kit/src/github_test_reporter.mjs --test-reporter=lcov --test-reporter-destination=stdout --test-reporter-destination=out/reports/unit-test-report.md --test-reporter-destination=out/reports/coverage.lcov 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts",
     "check": "pnpm test && pnpm kit check"
   },
   "devDependencies": {
