@@ -54,7 +54,7 @@ const STACK_SUITE = 'stack-profiles.json';
 
 function loadSchemaValidator(schemaPath: string): ValidateFunction | null {
   if (!fs.existsSync(schemaPath)) {
-    console.warn(`  ⚠️ Schema file not found at ${schemaPath} — falling back to structural checks only`);
+    console.warn(`  ⚠️ Schema file not found at ${schemaPath} - falling back to structural checks only`);
     return null;
   }
 
@@ -64,7 +64,7 @@ function loadSchemaValidator(schemaPath: string): ValidateFunction | null {
     return ajv.compile(schema);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    console.warn(`  ⚠️ Failed to compile schema: ${message} — falling back to structural checks only`);
+    console.warn(`  ⚠️ Failed to compile schema: ${message} - falling back to structural checks only`);
     return null;
   }
 }

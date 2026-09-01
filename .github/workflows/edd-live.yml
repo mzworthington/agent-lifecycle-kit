@@ -3,7 +3,7 @@ name: Nightly live-model EDD
 # Scripted CI proves the harness. This job runs paraphrase / prompt-injection /
 # multi-tool cases tagged `requires-live` against a real model.
 #
-# Do not use `secrets` in job-level `if:` — that context is not available there
+# Do not use `secrets` in job-level `if:` - that context is not available there
 # and GitHub rejects the workflow file (red X on the introducing commit).
 on:
   schedule:
@@ -100,7 +100,7 @@ jobs:
             echo "## Nightly live-model EDD"
             echo ""
             echo "Proves paraphrase / prompt-injection / multi-tool cases tagged \`requires-live\`"
-            echo "against **\`${KIT_EVAL_MODEL}\`**. This is not the PR merge gate — Verify (\`kit check\`) is."
+            echo "against **\`${KIT_EVAL_MODEL}\`**. This is not the PR merge gate - Verify (\`kit check\`) is."
             echo ""
             echo "| Suite | Live focus |"
             echo "|-------|------------|"

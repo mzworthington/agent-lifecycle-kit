@@ -4,7 +4,7 @@ import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-const repoDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const repoDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 describe('husky pre-commit', () => {
   it('runs TypeScript typecheck so tsc failures cannot skip the hook', () => {

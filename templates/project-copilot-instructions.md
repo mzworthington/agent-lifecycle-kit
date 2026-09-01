@@ -1,4 +1,4 @@
-# GitHub Copilot Workspace Instructions — Agent Lifecycle Kit
+# GitHub Copilot Workspace Instructions - Agent Lifecycle Kit
 
 Standards and lifecycle agents live in `~/.agents`.
-Read `~/.agents/AGENTS.md` (thin index) before starting work — do not bulk-load philosophy or SOPs. Prefer kit-knowledge / memory MCP for chunks and durable facts. **EDD is the sensible default** for prompts, MCP tools, and agent routing (`~/.agents/docs/edd.md`). Align on hexagonal boundaries, TDD short-loop execution, and XFN quality requirements.
+Read `~/.agents/AGENTS.md` (thin index) before starting work. Do not bulk-load philosophy or SOPs. Prefer kit-knowledge / memory MCP for chunks and durable facts. Use EDD for prompts, MCP tools, and agent routing (`~/.agents/docs/edd.md`). Align on hexagonal boundaries, TDD short-loop execution, and XFN quality requirements.

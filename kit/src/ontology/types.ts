@@ -1,4 +1,4 @@
-/** Kit ontology metamodel — pure types (no I/O). */
+/** Kit ontology metamodel - pure types (no I/O). */
 
 export const KIT_ENTITY_TYPES = [
   'Phase',

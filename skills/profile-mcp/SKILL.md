@@ -31,7 +31,7 @@ This profile defines technical standards for building and operating Model Contex
 
 2. **Transport & Server Lifecycle**:
    - Support standard `stdio` transport for CLI/IDE integrations and `SSE` (Server-Sent Events) for remote network services.
-   - Ensure clean process lifecycle management—handle `SIGINT` / `SIGTERM` signals and clean up child processes or connections gracefully.
+   - Ensure clean process lifecycle management - handle `SIGINT` / `SIGTERM` signals and clean up child processes or connections gracefully.
 
 3. **Response Formatting & Error Handling**:
    - Format successful tool responses using structured content blocks (`{ type: "text", text: "..." }`).

@@ -46,7 +46,7 @@ const PIN_PATTERN = /^(latest|v?\d+(\.\d+)*(-[\w.-]+)?|[0-9a-f]{40}|refs\/(tags|
 const OFFICIAL_INSTALLER =
   /raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/[^/\s]+\/install\.sh/;
 
-/** Documented `curl | sh` (or bash) for this repo only — still flag every other pipe-to-shell. */
+/** Documented `curl | sh` (or bash) for this repo only - still flag every other pipe-to-shell. */
 export function isOfficialKitInstallerLine(line: string): boolean {
   return OFFICIAL_INSTALLER.test(line) && /\|\s*(bash|sh)\b/.test(line);
 }
@@ -209,7 +209,7 @@ function scanDirectory(violations: SecurityViolation[], repoDir: string, dirPath
         file: relPath,
         line: 0,
         category: 'SYMLINK',
-        rule: 'Symlink detected — not followed (potential traversal attack)',
+        rule: 'Symlink detected - not followed (potential traversal attack)',
         snippet: `-> ${fs.readlinkSync(fullPath)}`
       });
       continue;
@@ -261,7 +261,7 @@ function scanExternalLock(violations: SecurityViolation[], lockFilePath: string)
           file: 'skills/external.lock.json',
           line: 1,
           category: 'SUPPLY_CHAIN_UNPINNED',
-          rule: `External skill "${repo}" pin "${pin}" is invalid — expected version tag (e.g. v1.0.0), latest, or commit SHA`,
+          rule: `External skill "${repo}" pin "${pin}" is invalid - expected version tag (e.g. v1.0.0), latest, or commit SHA`,
           snippet: JSON.stringify(skill)
         });
       }

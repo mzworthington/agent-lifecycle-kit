@@ -41,16 +41,16 @@ pulumi/
 └── policy/              # CrossGuard policy packs
 ```
 
-- **One stack per environment** (`dev`, `staging`, `prod`) — never share stack between envs.
+- **One stack per environment** (`dev`, `staging`, `prod`) - never share stack between envs.
 - **ComponentResource** for every reusable boundary (e.g. `SecureBucket`, `WorkloadServiceAccount`, `PrivateService`).
 - Program entry wires components; avoid 500-line `index` files.
 
 ## 2. Configuration and secrets
 
 - Stack config for non-secret env settings (`pulumi config set aws:region`).
-- Secrets via `pulumi config set --secret` or **Pulumi ESC** / cloud secret backends — never in source code.
+- Secrets via `pulumi config set --secret` or **Pulumi ESC** / cloud secret backends - never in source code.
 - Typed config accessors with validation (Zod in TS, pydantic in Python) at program startup.
-- Export only outputs downstream stacks need — treat exports as public API.
+- Export only outputs downstream stacks need - treat exports as public API.
 
 ```typescript
 const config = new pulumi.Config();
@@ -63,21 +63,21 @@ if (!["dev", "staging", "prod"].includes(environment)) {
 ## 3. State and backends
 
 - Pulumi Cloud or self-managed object-store backend with encryption and access restricted to deploy roles.
-- Stack references (`StackReference`) for platform → workload dependencies — same pattern as Terraform remote state.
+- Stack references (`StackReference`) for platform → workload dependencies - same pattern as Terraform remote state.
 - Protect prod resources: `protect: true` on stateful resources (databases, KMS, log archives).
 
 ## 4. Identity and least privilege
 
-- Deploy role via OIDC to cloud provider — no long-lived keys in CI or `Pulumi.yaml`.
+- Deploy role via OIDC to cloud provider - no long-lived keys in CI or `Pulumi.yaml`.
 - Runtime identities created in program: per-service accounts with scoped IAM/RBAC attached in the same ComponentResource.
-- IAM policy documents generated from structured data — avoid string-built JSON policies.
+- IAM policy documents generated from structured data - avoid string-built JSON policies.
 - Separate ESC environments or stack config for plan vs apply credentials when org policy requires.
 
 ## 5. ComponentResource pattern
 
 - Constructor registers all child resources with `super(type, name, args, opts)`.
 - Inputs as interface/typed args; outputs as class properties for stack consumers.
-- Default secure options inside component (encryption on, public access blocked) — opt-out requires explicit arg + comment.
+- Default secure options inside component (encryption on, public access blocked) - opt-out requires explicit arg + comment.
 
 ```typescript
 export class SecureBucket extends pulumi.ComponentResource {

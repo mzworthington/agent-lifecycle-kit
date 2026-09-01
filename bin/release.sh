@@ -139,7 +139,7 @@ cmd_detect() {
 cmd_notes() {
   local since="${1:-}"
   local until="${2:-HEAD}"
-  node --import tsx/esm "$ROOT/kit/src/release_notes.ts" "$since" "$until"
+  node --import tsx/esm "$ROOT/kit/src/release/release_notes.ts" "$since" "$until"
 }
 
 cmd_publish() {

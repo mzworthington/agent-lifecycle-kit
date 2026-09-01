@@ -1,6 +1,6 @@
 # Bitwarden MCP
 
-Official `@bitwarden/mcp-server` — vault access through the local Bitwarden CLI (zero-knowledge; credentials stay on the machine).
+Official `@bitwarden/mcp-server` - vault access through the local Bitwarden CLI (zero-knowledge; credentials stay on the machine).
 
 ## Auth
 

@@ -30,5 +30,7 @@ No company or cloud vendor is special-cased in the generator.
 
 ```bash
 kit ontology check      # live-derived referential integrity
-kit ontology generate   # optional dump to sync/ (gitignored)
+kit ontology generate   # dump gitignored sync/ cache, homepage JSON, and compiled graph_view runtime
 ```
+
+The public site loads `assets/ontology-index.json` and `assets/ontology-graph.js` (written at generate / Pages deploy, not committed). Filter, labels, and ring layout live in [`kit/src/ontology/graph_view.ts`](../kit/src/ontology/graph_view.ts); `assets/ontology-map.js` is the D3 adapter.

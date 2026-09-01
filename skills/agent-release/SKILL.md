@@ -30,7 +30,7 @@ Follow [SOPs/release.md](../../SOPs/release.md) and [SOPs/conventional-commits.m
 
 ## Checklist
 
-1. Prior phase DoDs satisfied (or BLOCKED with owners)—especially XFN **apply** greens.
+1. Prior phase DoDs satisfied (or BLOCKED with owners) - especially XFN **apply** greens.
 2. PR title is conventional (`feat:`, `fix:`, …); squash-and-merge uses it on the default branch.
 3. Changelog / release notes summarize user-visible behavior and migrations.
 4. Feature flags and rollback notes recorded when relevant.

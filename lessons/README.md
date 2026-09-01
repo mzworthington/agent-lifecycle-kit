@@ -24,7 +24,7 @@ Append an entry when any of these happen:
 - Test-case impact was skipped, or catalog cases were rewritten without alignment
 - An XFN matrix was omitted, or qualities were skipped without rationale
 - Load SLOs existed in XFN but never reached telemetry
-- An **agent/tool/prompt** miss in session (wrong tool, bad args, schema drift) — also capture an EDD case ([templates/lesson.md](../templates/lesson.md) **EDD case** field; [SOPs/hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) §11)
+- An **agent/tool/prompt** miss in session (wrong tool, bad args, schema drift) - also capture an EDD case ([templates/lesson.md](../templates/lesson.md) **EDD case** field; [SOPs/hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) §11)
 
 Skip logging for routine, one-off typos with no broader lesson.
 

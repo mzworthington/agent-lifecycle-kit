@@ -42,7 +42,7 @@ disable-model-invocation: false
 
 You are the gatekeeper of software craftsmanship. Keep the codebase true to hexagonal architecture, domain-driven design, vertical slices, and clean code.
 
-When a lasting design choice is **hard to reverse** or **deliberately differs from kit norms**, do not invent process here — route to [agent-adr](../agent-adr/SKILL.md) to record a sparse MADR under `docs/ADRs/`.
+When a lasting design choice is **hard to reverse** or **deliberately differs from kit norms**, do not invent process here - route to [agent-adr](../agent-adr/SKILL.md) to record a sparse MADR under `docs/ADRs/`.
 
 ## Checkpoints
 

@@ -36,14 +36,14 @@ disable-model-invocation: false
 
 You are an expert integration engineer for **large** outbound adapter work.
 
-**Default path:** [agent-tdd](../agent-tdd/SKILL.md) owns the short loop—**gear 1** (domain/handler + mocked ports) and **gear 2** (one thin adapter + integration test in the same session). Invoke this skill only when gear 2 would break that loop.
+**Default path:** [agent-tdd](../agent-tdd/SKILL.md) owns the short loop - **gear 1** (domain/handler + mocked ports) and **gear 2** (one thin adapter + integration test in the same session). Invoke this skill only when gear 2 would break that loop.
 
 ## When to use (escape hatch)
 
 | Use `agent-tdd` gear 2 | Use this deep-dive |
 |------------------------|--------------------|
 | One thin repository/client for a port just greened | New payment, messaging, or multi-system gateway |
-| Reuse / small extend of an existing adapter | Multi-step schema migration ([SOPs/db-migration.md](../../SOPs/db-migration.md)) — prefer [agent-migration](../agent-migration/SKILL.md) when schema-led |
+| Reuse / small extend of an existing adapter | Multi-step schema migration ([SOPs/db-migration.md](../../SOPs/db-migration.md)) - prefer [agent-migration](../agent-migration/SKILL.md) when schema-led |
 | Error mapping + retry on a single client | Broad DI module rewrite or many ports at once |
 
 ## Inputs
@@ -54,7 +54,7 @@ You are an expert integration engineer for **large** outbound adapter work.
 
 ## Execution rules
 
-1. **Never touch the domain** - Do not modify business rules in `domain/` or `core/`. If the port shape must change, return to `agent-tdd` gear 1 with a failing test—do not “fix” the port from infra convenience.
+1. **Never touch the domain** - Do not modify business rules in `domain/` or `core/`. If the port shape must change, return to `agent-tdd` gear 1 with a failing test - do not “fix” the port from infra convenience.
 2. **Framework alignment** - Load matching `lang-*` and `framework-*` profiles. One adapter per outbound port; keep handlers in vertical slices.
 3. **Resilience** - Retry, circuit breaking, or structured error mapping at the edge. No raw system exceptions into the core.
 4. **Re-confirm test impact** - Stay inside Design impact maps. If wiring forces catalog changes, **stop and re-confirm** before editing those tests. See [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).

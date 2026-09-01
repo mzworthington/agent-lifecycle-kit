@@ -16,4 +16,4 @@ Point at a **local or read-replica** URL. Do not point agents at writable produc
 - Verifying query shapes during TDD / XFN data checks
 - Audit of stored data shapes without ad-hoc psql sessions
 
-Keep this in project profiles only — connection strings are environment-specific.
+Keep this in project profiles only - connection strings are environment-specific.

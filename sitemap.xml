@@ -18,6 +18,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://eval-driven-development.dev/docs/today-jobs.md</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://eval-driven-development.dev/docs/kit.md</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>

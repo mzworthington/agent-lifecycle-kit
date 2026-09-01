@@ -16,7 +16,7 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
 | Committing / opening a PR | `SOPs/conventional-commits.md` |
 | SOP / handover lookup | kit-knowledge MCP when installed |
-| Durable project facts | memory MCP (glossary, SLOs, prefs — never secrets) |
+| Durable project facts | memory MCP (glossary, SLOs, prefs - never secrets) |
 
 For **bugs / failed jobs / live symptoms**, use `agent-debug` (reproduce → hypothesis board → proof). Do not open the full feature lifecycle unless RCA needs a new capability.
 

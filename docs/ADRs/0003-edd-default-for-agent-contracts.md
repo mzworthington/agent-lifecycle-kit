@@ -18,9 +18,9 @@ LLM tool calling fails probabilistically (wrong tool, hallucinated args, retry l
 
 ## Considered Options
 
-* **Option A** — Prompt review via human PR comments only
-* **Option B** — Eval-Driven Development (EDD) as the default for agentic contract changes
-* **Option C** — Optional evals, never blocking CI
+* **Option A:** Prompt review via human PR comments only
+* **Option B:** Eval-Driven Development (EDD) as the default for agentic contract changes
+* **Option C:** Optional evals, never blocking CI
 
 ## Decision Outcome
 
@@ -47,5 +47,5 @@ sequenceDiagram
 
 ## Links
 
-* Related ADRs: [0001](./0001-hexagonal-ddd-vertical-slices-default.md)
+* Related ADRs: [0001](./0001-hexagonal-ddd-vertical-slices-default.md), [0004](./0004-thin-bootstrap-kit-knowledge-one-mcp-profile.md)
 * Docs: [docs/edd.md](../edd.md)

@@ -13,4 +13,4 @@ Requires Next.js 16+ (built-in MCP endpoint).
 - Debugging App Router / RSC issues while implementing
 - Inspecting live routes and runtime errors during TDD/XFN
 
-Project-scoped (`devtools` or `project-example`) — useless without a local Next app.
+Project-scoped (`devtools` or `project-example`) - useless without a local Next app.

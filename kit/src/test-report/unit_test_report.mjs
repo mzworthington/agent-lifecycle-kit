@@ -18,7 +18,7 @@ export function relativizeTestFile(file, cwd = process.cwd()) {
  */
 export function outcomeFromTestEvent(event) {
   const { type, data } = event;
-  // Suites roll up children — only count leaf tests in the report.
+  // Suites roll up children - only count leaf tests in the report.
   if (data.details?.type === 'suite') return null;
   if (data.skip || type === 'test:skip') return 'skip';
   if (data.todo || type === 'test:todo') return 'todo';
@@ -65,7 +65,7 @@ export function renderUnitTestReportMarkdown(cases, options = {}) {
   const lines = [
     `## ${title}`,
     '',
-    `**Result:** ${status} — ${stats.passed} passed, ${stats.failed} failed, ${stats.skipped} skipped, ${stats.todo} todo (${stats.total} total, ${stats.durationMs.toFixed(0)}ms)`,
+    `**Result:** ${status} - ${stats.passed} passed, ${stats.failed} failed, ${stats.skipped} skipped, ${stats.todo} todo (${stats.total} total, ${stats.durationMs.toFixed(0)}ms)`,
     '',
     'Node built-in test runner (`node:test`) covering kit unit tests and kit-knowledge MCP tests.',
     ''

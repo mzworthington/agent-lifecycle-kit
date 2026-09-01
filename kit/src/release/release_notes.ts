@@ -4,8 +4,9 @@
  * conventional-commit type for a single tag range and never emits [unreleased].
  */
 import { execFileSync } from 'node:child_process';
-import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { kitRootFrom } from '../shared/paths.js';
 
 export type CliffCommit = {
   message: string;
@@ -67,7 +68,7 @@ export function formatBullet(commit: CliffCommit): string {
 
 /**
  * Build git-cliff RANGE argument.
- * First release (empty since): until-ref alone (caller should resolve to a SHA —
+ * First release (empty since): until-ref alone (caller should resolve to a SHA;
  * bare tags like `v1.0.0` fail cliff's OID parser).
  * Subsequent: since..until.
  */
@@ -94,7 +95,7 @@ export function resolveCliffRange(
   options: { root?: string } = {},
 ): string {
   const root =
-    options.root ?? dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+    options.root ?? kitRootFrom(import.meta.url);
   const endSha = gitRevParse(until.trim() || 'HEAD', root);
   if (since && since.trim()) {
     const startSha = gitRevParse(since.trim(), root);
@@ -148,7 +149,7 @@ export function loadCliffJson(
   options: { root?: string; cliffBin?: string; cliffConfig?: string } = {},
 ): CliffRelease[] {
   const root =
-    options.root ?? dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+    options.root ?? kitRootFrom(import.meta.url);
   const cliffBin = options.cliffBin ?? join(root, 'node_modules/.bin/git-cliff');
   const cliffConfig = options.cliffConfig ?? join(root, 'cliff.toml');
   const raw = execFileSync(cliffBin, ['-c', cliffConfig, '-x', '--', range], {

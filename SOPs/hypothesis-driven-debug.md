@@ -36,7 +36,7 @@ Fill before the first product-code edit (board: [templates/debug-board.md](../te
 | Recent change? | PR, deploy, catalog publish, dependency bump |
 | Agent/tool miss? | yes → plan EDD promote (§11) / no → EDD N/A |
 
-If the user omitted env or action, ask **once** with a tight list—or infer from artifacts and mark **inferred**.
+If the user omitted env or action, ask **once** with a tight list, or infer from artifacts and mark **inferred**.
 
 ## 2. Triage classes
 
@@ -125,13 +125,13 @@ For recurring symptoms, use `cursor-cloud` MCP when available:
 
 1. `list-cloud-agents` (filter by name/recency)
 2. `batch-fetch-details` with `includeTranscripts` / `includeDiffMetadata`
-3. Summarize via subagents — do not load huge transcripts inline
+3. Summarize via subagents - do not load huge transcripts inline
 
 Prefer learning the prior RCA over rediscovering it.
 
 ## 9. Handover & lessons
 
-- `handover_debug.md` — phase `debug`, status COMPLETE only when proof gates pass
+- `handover_debug.md` - phase `debug`, status COMPLETE only when proof gates pass
 - Append a lesson when the user corrected framing or the same anti-pattern repeated ([lessons/README.md](../lessons/README.md))
 - For agent/tool/prompt misses: record the EDD case id/path in the handover (or N/A with reason)
 
@@ -146,7 +146,7 @@ Prefer learning the prior RCA over rediscovering it.
 
 ## 11. Promote agent misses to EDD (mandatory when applicable)
 
-When root cause is **wrong tool, bad args, prompt/schema drift, MCP misuse, or infinite retries** — including a miss that only exists in the **current IDE chat** — do not stop at a code fix or a prose lesson.
+When root cause is **wrong tool, bad args, prompt/schema drift, MCP misuse, or infinite retries** - including a miss that only exists in the **current IDE chat** - do not stop at a code fix or a prose lesson.
 
 | Step | Action |
 |------|--------|
@@ -156,6 +156,6 @@ When root cause is **wrong tool, bad args, prompt/schema drift, MCP misuse, or i
 | 4. Green | Fix prompt/schema/routing; re-run until green; prefer `kit eval ci --threshold-routing 95` when routing is involved |
 | 5. Lesson (optional) | If process/rules should change too, append a lesson with **Promote to** pointing at that suite/JSONL ([templates/lesson.md](../templates/lesson.md)) |
 
-Skip only when the bug is pure app/UI/CI with **no** agent-tool contract impact — mark the debug board **EDD case: N/A**.
+Skip only when the bug is pure app/UI/CI with **no** agent-tool contract impact - mark the debug board **EDD case: N/A**.
 
 Procedure companions: [eval-driven-development.md](./eval-driven-development.md), [edd-production-telemetry.md](./edd-production-telemetry.md).

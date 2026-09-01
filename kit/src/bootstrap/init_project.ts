@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { composeMCP } from './compose_mcp.js';
 import { exportIDERules } from './export_ide_rules.js';
-import { gitHooksDir, projectCursorDir, resolveRepoDir } from './paths.js';
+import { gitHooksDir, projectCursorDir, resolveRepoDir } from '../shared/paths.js';
 
 const defaultKitRepoDir: string = resolveRepoDir(import.meta.url);
 

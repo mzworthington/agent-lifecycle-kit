@@ -15,7 +15,7 @@ import {
   type CliffRelease,
 } from './release_notes.js';
 
-const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 function releaseWith(commits: CliffRelease['commits']): CliffRelease[] {
   return [{ version: null, commits }];

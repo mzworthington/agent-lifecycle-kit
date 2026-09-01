@@ -13,7 +13,15 @@ on:
       - 'index.html'
       - '404.html'
       - 'assets/**'
+      - 'ontology/**'
+      - 'kit/src/ontology/**'
+      - 'skills/**'
+      - 'SOPs/**'
+      - 'mcps/catalog.json'
+      - 'evals/**'
+      - 'CODING_PHILOSOPHY.md'
       - 'docs/**'
+      - 'kit/src/site/**'
       - 'llms.txt'
       - 'robots.txt'
       - 'sitemap.xml'
@@ -41,13 +49,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Derive ontology index for the homepage
+        run: pnpm kit ontology generate
+
+      - name: Assemble public Pages tree
+        run: pnpm kit site assemble
+
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'site'
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -61,7 +89,7 @@ jobs:
           {
             echo "## Deploy GitHub Pages"
             echo ""
-            echo "Publishes the kit docs site (landing + EDD guides) to GitHub Pages."
+            echo "Publishes a curated Pages tree (landing, public Markdown, assets) - not the whole repo."
             echo "Runs on docs-site path changes only (or \`workflow_dispatch\`)."
             echo "Custom domain DNS is owned by [edge-dns](https://github.com/mzworthington/edge-dns)."
             echo ""

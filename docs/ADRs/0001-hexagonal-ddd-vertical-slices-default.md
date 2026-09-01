@@ -19,9 +19,9 @@ Agent Lifecycle Kit steers product teams (and coding agents) toward a single arc
 
 ## Considered Options
 
-* **Option A** — Mandate hexagonal + DDD + vertical slices for all code always
-* **Option B** — Soft guidance only; no default stack
-* **Option C** — Default stack for product codebases, with explicit applicability and ADR opt-out
+* **Option A:** Mandate hexagonal + DDD + vertical slices for all code always
+* **Option B:** Soft guidance only; no default stack
+* **Option C:** Default stack for product codebases, with explicit applicability and ADR opt-out
 
 ## Decision Outcome
 

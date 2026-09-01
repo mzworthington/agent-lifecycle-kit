@@ -18,4 +18,4 @@ First run typically opens a browser OAuth flow. Alternatively set `LINKEDIN_ACCE
 - Drafting or publishing professional posts from agent sessions
 - Reading profile context for content work
 
-Keep in the `personal` profile only — not team defaults. Review posts before publish.
+Keep in the `personal` profile only - not team defaults. Review posts before publish.

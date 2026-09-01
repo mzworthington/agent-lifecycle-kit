@@ -2,7 +2,7 @@
 
 **Test the tools your agents call.**
 
-When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit ships **Eval-Driven Development (EDD)** — TDD for tool-using agents — plus the lifecycle, thin context budget, and MCP compose your team needs to run that loop every day.
+When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wrong tool, hallucinated args, endless retries. Kit ships **Eval-Driven Development (EDD)**: TDD for tool-using agents, plus the lifecycle, thin context budget, and MCP compose your team needs to run that loop every day.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
@@ -32,9 +32,9 @@ Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after writ
 
 **EDD is TDD for agents.** Treat prompts and tool schemas as version-controlled contracts:
 
-1. **Red** — Write a failing eval (JSONL intent + YAML metrics) for the routing or schema you care about.
-2. **Green** — Register the MCP/tool contract and system prompt; run until asserts pass.
-3. **Refactor** — Tighten descriptions and constraints; gate merges with `kit eval ci --threshold-routing 95`.
+1. **Red:** Write a failing eval (JSONL intent + YAML metrics) for the routing or schema you care about.
+2. **Green:** Register the MCP/tool contract and system prompt; run until asserts pass.
+3. **Refactor:** Tighten descriptions and constraints; gate merges with `kit eval ci --threshold-routing 95`.
 
 ```bash
 kit eval run --suite evals/edd/demo.yaml --model scripted
@@ -55,7 +55,7 @@ Context isolation · mocked tools · schema match + LLM-as-a-judge · CI gates �
 
 ## What else Kit gives you
 
-EDD is the agent default. Around it, Kit standardizes coding-agent workflow. **Cursor is the reference host** for progressive skills and MCP compose; Claude Code, Gemini CLI, Windsurf, and Copilot get the same canonical `AGENTS.md` via thin entry stubs (`kit export-rules`)—not equal skill/MCP discovery depth.
+EDD is the agent default. Around it, Kit standardizes coding-agent workflow. **Cursor is the reference host** for progressive skills and MCP compose. Claude Code, Gemini CLI, Windsurf, and Copilot get the same canonical `AGENTS.md` via thin entry stubs (`kit export-rules`), not equal skill/MCP discovery depth.
 
 | Pillar | Outcome |
 | :--- | :--- |
@@ -106,7 +106,7 @@ sequenceDiagram
 
 ## Start here in 10 minutes
 
-**Preferred — verify the installer checksum, then run:**
+**Preferred:** verify the installer checksum, then run:
 
 ```bash
 # macOS / Linux; needs git, Node 22+, and sha256sum (coreutils)
@@ -130,7 +130,7 @@ Already cloned this repo? Run `./install.sh` from the checkout instead. Regenera
 
 | Command | Purpose |
 | :--- | :--- |
-| `kit eval run\|watch\|report\|ci` | **EDD harness** — agent tool routing & schemas |
+| `kit eval run\|watch\|report\|ci` | **EDD harness:** agent tool routing and schemas |
 | `kit eval` | Skill-trigger harness (which specialist activates) |
 | `kit init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
 | `kit mcp <profile>` | Compose MCP profiles |
@@ -147,12 +147,12 @@ Already cloned this repo? Run `./install.sh` from the checkout instead. Regenera
 
 Start with the path that matches what you’re trying to do:
 
-1. **Prove agents (today)** — [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
-2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) (incl. applicability) → [ADRs](./docs/ADRs/README.md) → [AGENTS.md](./AGENTS.md)
-3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
-4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
-5. **Prod feedback** — [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`kit eval shadow` + `from-trace`)
-6. **Operators** — [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
+1. **Prove agents (today):** [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
+2. **Architecture and bootstrap:** [Coding philosophy](./CODING_PHILOSOPHY.md) (incl. applicability) → [ADRs](./docs/ADRs/README.md) → [AGENTS.md](./AGENTS.md)
+3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
+4. **Quality loops:** [Behavior catalog and XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
+5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`kit eval shadow` + `from-trace`)
+6. **Operators:** [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 
 Site: [eval-driven-development.dev](https://eval-driven-development.dev/) (`#kit` for context/MCP/check; [docs/kit.md](https://eval-driven-development.dev/docs/kit.md))
 
@@ -164,8 +164,9 @@ App repos only need `kit` on PATH. This table is for people changing Kit itself:
 
 | Path | Role |
 |------|------|
-| `bin/kit`, `bin/kit.ts` | CLI on PATH and the argv router |
-| `kit/src/` | Implementation and unit tests |
+| `bin/kit`, `bin/kit.ts` | CLI on PATH (parse → run) |
+| `kit/src/cli/` | Argv parser, help, and command dispatch |
+| `kit/src/` | Implementation and unit tests, grouped by area (`bootstrap/`, `edd/`, `ontology/`, …) |
 | `evals/` | Skill-trigger JSON suites and EDD YAML/JSONL |
 | `skills/`, `mcps/` | Lifecycle skills and MCP catalog |
 

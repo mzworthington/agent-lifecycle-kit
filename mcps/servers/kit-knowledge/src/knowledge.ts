@@ -1,6 +1,6 @@
 /**
  * Kit-knowledge retrieval helpers (pure). Used by the MCP server and unit tests.
- * Returns chunks — never dump entire philosophy/SOP trees into the model context.
+ * Returns chunks - never dump entire philosophy/SOP trees into the model context.
  */
 
 import fs from "node:fs";
@@ -216,7 +216,7 @@ export function listKitIndex(kitRoot: string): string {
     }
   }
   lines.push("");
-  lines.push("Use get_philosophy_section, get_sop, get_handover, or search_kit — do not bulk-read.");
+  lines.push("Use get_philosophy_section, get_sop, get_handover, or search_kit - do not bulk-read.");
   return lines.join("\n");
 }
 

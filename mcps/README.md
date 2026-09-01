@@ -116,8 +116,8 @@ Follow [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 
 ### Discipline
 
-1. Lifecycle agents declare preferred MCP ids in skill frontmatter (`mcp:`). Prefer those servers when a catalog entry’s `phases` / `triggers` match — and only if that server is in the **installed** profile.
-2. Prefer the smallest useful set of servers — more tools ≠ better agent behavior.
+1. Lifecycle agents declare preferred MCP ids in skill frontmatter (`mcp:`). Prefer those servers when a catalog entry’s `phases` / `triggers` match - and only if that server is in the **installed** profile.
+2. Prefer the smallest useful set of servers - more tools ≠ better agent behavior.
 3. Never load `personal` servers into shared project configs.
 4. Do not use MCP to host skill bodies; skills stay progressive-disclosure via Cursor discovery.
 5. Context budget: [SOPs/context-budget.md](../SOPs/context-budget.md).

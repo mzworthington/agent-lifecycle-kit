@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { handleEddEvalCli, mulberry32 } from '../edd_cli.js';
+import { handleEddEvalCli, mulberry32 } from './edd_cli.js';
 import { emitAgentSpan, type OtelSpan } from './otel.js';
 import {
   kitSpanToOtlpJson,

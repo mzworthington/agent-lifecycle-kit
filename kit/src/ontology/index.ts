@@ -17,13 +17,40 @@ export { loadOntologySchema, schemaPath, indexPath } from './schema.js';
 export {
   generateOntologyIndex,
   writeOntologyIndex,
+  writeSiteOntologyIndex,
   loadOntologyIndex,
   resolveOntologyIndex,
   ontologyCachePath,
+  siteOntologyIndexPath,
+  ontologyGraphRuntimePath,
+  emitOntologyMapRuntime,
   serializeOntologyIndex,
   getEntity,
   getRelated
 } from './generate.js';
+export {
+  DEFAULT_ONTOLOGY_TYPES,
+  HOMEPAGE_EXCLUDED_TYPES,
+  HOMEPAGE_TYPE_FILTERS,
+  graphLayoutNodes,
+  entityLabel,
+  entitySourceUrl,
+  filterOntologyGraph,
+  neighborhoodIds,
+  hexagonPath,
+  layoutTargets,
+  linkStrokeOpacity,
+  ontologyFocusHash,
+  ontologyLabelVisible,
+  parseOntologyHash,
+  relatedEdges,
+  shortLabel,
+  skillBand,
+  straightLinkPath,
+  toHomepageIndex,
+  typeRadius,
+  TYPE_COLOR
+} from './graph_view.js';
 export { checkOntology, regenerateOntologyIndex, type OntologyCheckResult } from './validate.js';
 export {
   validateMemoryEntityWrites,

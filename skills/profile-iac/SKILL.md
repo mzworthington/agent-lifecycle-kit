@@ -23,21 +23,21 @@ tools:
   - shell
 disable-model-invocation: false
 ---
-# Infrastructure as Code — Secure Foundations
+# Infrastructure as Code - Secure Foundations
 
 Apply these rules for **all** IaC tools and clouds. Stack-specific delivery lives in [framework-terraform](../framework-terraform/SKILL.md) or [framework-pulumi](../framework-pulumi/SKILL.md).
 
 ## Cloud Adoption Framework alignment
 
-Map every change to CAF phases (Azure CAF, AWS CAF, or Google CAF — same pillars):
+Map every change to CAF phases (Azure CAF, AWS CAF, or Google CAF - same pillars):
 
 | Phase | IaC mandate |
 |-------|-------------|
 | **Strategy** | Tag for cost center, environment, data classification, and owner. No orphan resources without business context. |
-| **Ready** | Landing-zone primitives first (identity, network, logging, backup). Workload modules consume shared platform outputs — do not re-create platform guardrails per app. |
+| **Ready** | Landing-zone primitives first (identity, network, logging, backup). Workload modules consume shared platform outputs - do not re-create platform guardrails per app. |
 | **Adopt** | All durable infra via IaC and CI pipelines. No console-only production changes; drift is detected and remediated. |
 | **Govern** | Policy-as-code in CI (deny public exposure, require encryption, block `*` admin). Prod apply requires review gate. |
-| **Manage** | Observability, backup, and patch hooks provisioned with the resource — not bolted on later. |
+| **Manage** | Observability, backup, and patch hooks provisioned with the resource - not bolted on later. |
 
 Align with **Well-Architected** pillars: security and reliability first; operational excellence via automation; cost and performance via right-sizing and autoscaling defaults.
 
@@ -63,7 +63,7 @@ Align with **Well-Architected** pillars: security and reliability first; operati
 - **Composable modules** - Small modules with clear inputs/outputs. One concern per module (e.g. `vpc-subnet`, `kms-key`, `service-account`).
 - **Environment isolation** - Separate state files or stacks per environment. No shared state between dev and prod.
 - **Blast radius** - Split state by domain (network, data, compute) when teams or blast-radius boundaries warrant it.
-- **Outputs as contracts** - Platform teams publish outputs; workload teams consume via remote state or stack references — not copy-paste.
+- **Outputs as contracts** - Platform teams publish outputs; workload teams consume via remote state or stack references - not copy-paste.
 
 ## Testing defaults
 

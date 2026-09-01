@@ -1,4 +1,4 @@
-import { generateOntologyIndex, writeOntologyIndex } from './generate.js';
+import { generateOntologyIndex, writeSiteOntologyIndex } from './generate.js';
 import { loadOntologySchema } from './schema.js';
 import type { OntologyIndex } from './types.js';
 
@@ -80,9 +80,8 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
   };
 }
 
-/** Optional debug dump to sync/ontology-index.json (gitignored). */
-export function regenerateOntologyIndex(kitRoot: string): { path: string; changed: boolean } {
-  const prevPath = writeOntologyIndex(kitRoot);
-  // writeOntologyIndex always writes; treat as refreshed cache
-  return { path: prevPath, changed: true };
+/** Optional debug dump to sync/ and assets/ (both gitignored). */
+export function regenerateOntologyIndex(kitRoot: string): { path: string; sitePath: string; changed: boolean } {
+  const { cachePath, sitePath } = writeSiteOntologyIndex(kitRoot);
+  return { path: cachePath, sitePath, changed: true };
 }

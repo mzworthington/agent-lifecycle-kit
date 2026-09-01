@@ -1,5 +1,5 @@
 ---
-title: Context budget — always-on vs on-demand
+title: Context budget - always-on vs on-demand
 kind: sop
 triggers:
   - context budget

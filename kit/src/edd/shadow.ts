@@ -27,7 +27,7 @@ export interface ShadowEvalResult {
   passed?: boolean;
   hallucinated?: boolean;
   reasoning?: string;
-  /** Present when sampled and judge failed — ready to append to a dataset. */
+  /** Present when sampled and judge failed - ready to append to a dataset. */
   jsonl?: string;
   case?: EvalCase;
 }

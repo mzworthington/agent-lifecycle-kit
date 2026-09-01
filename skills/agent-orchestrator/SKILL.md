@@ -60,7 +60,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Squash-and-merge makes the PR title the commit on the default branch.
 
-**Memory MCP (DoD):** After **spec** and **xfn** handovers, store durable facts (glossary terms, agreed SLOs, project preferences) via the catalogued **memory** server — or record explicit N/A in the handover Memory table. Never store secrets. Later sessions should recall XFN thresholds and ubiquitous language from memory before re-asking.
+**Memory MCP (DoD):** After **spec** and **xfn** handovers, store durable facts (glossary terms, agreed SLOs, project preferences) via the catalogued **memory** server - or record explicit N/A in the handover Memory table. Never store secrets. Later sessions should recall XFN thresholds and ubiquitous language from memory before re-asking.
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
@@ -70,9 +70,9 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 |-------|-------|
 | Idea / plan stress-testing | [agent-grilling](../agent-grilling/SKILL.md) (primitive) / [agent-grill-me](../agent-grill-me/SKILL.md) (stateless) |
 | Specification | [agent-spec](../agent-spec/SKILL.md) |
-| TDD short loop | [agent-tdd](../agent-tdd/SKILL.md) — gear 1 domain/handlers + gear 2 thin adapters |
+| TDD short loop | [agent-tdd](../agent-tdd/SKILL.md) - gear 1 domain/handlers + gear 2 thin adapters |
 | Cross-functional quality | [agent-xfn](../agent-xfn/SKILL.md) |
-| Adapter deep-dive (optional) | [agent-adapter](../agent-adapter/SKILL.md) — only when gear 2 is too large |
+| Adapter deep-dive (optional) | [agent-adapter](../agent-adapter/SKILL.md) - only when gear 2 is too large |
 | Schema migration | [agent-migration](../agent-migration/SKILL.md) |
 | API contracts | [agent-api-contract](../agent-api-contract/SKILL.md) |
 | UI delivery | [agent-ui](../agent-ui/SKILL.md) |
@@ -84,7 +84,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 | Cloudflare analytics / RUM | [agent-cloudflare-ops](../agent-cloudflare-ops/SKILL.md) |
 | Security audit | [agent-security](../agent-security/SKILL.md) |
 | Architecture audit | [agent-arch-drift](../agent-arch-drift/SKILL.md) |
-| Architecture decisions | [agent-adr](../agent-adr/SKILL.md) — sparse MADR in `docs/ADRs/` |
+| Architecture decisions | [agent-adr](../agent-adr/SKILL.md) - sparse MADR in `docs/ADRs/` |
 | Dead-code & complexity pruning | [agent-prune](../agent-prune/SKILL.md) |
 | Debugging / RCA | [agent-debug](../agent-debug/SKILL.md) |
 | Telemetry | [agent-telemetry](../agent-telemetry/SKILL.md) |
@@ -176,4 +176,4 @@ sequenceDiagram
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
 8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`.
 9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
-10. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) — do not leave them as prose-only lessons.
+10. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) - do not leave them as prose-only lessons.

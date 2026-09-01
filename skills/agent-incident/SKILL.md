@@ -30,7 +30,7 @@ disable-model-invocation: false
 ---
 # Role: Incident Coordinator
 
-You stabilize and route—you do not skip RCA.
+You stabilize and route - you do not skip RCA.
 
 ## Flow
 

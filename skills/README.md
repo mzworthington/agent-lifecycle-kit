@@ -63,8 +63,8 @@ Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [co
 | [lang-hcl](./lang-hcl/SKILL.md) | [framework-terraform](./framework-terraform/SKILL.md) |
 | [lang-typescript](./lang-typescript/SKILL.md) | [framework-next](./framework-next/SKILL.md), [framework-react](./framework-react/SKILL.md), [framework-express](./framework-express/SKILL.md), [framework-nuxt](./framework-nuxt/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
 | [lang-python](./lang-python/SKILL.md) | [framework-fastapi](./framework-fastapi/SKILL.md) |
-| [lang-rust](./lang-rust/SKILL.md) | — |
-| [lang-go](./lang-go/SKILL.md) | — |
+| [lang-rust](./lang-rust/SKILL.md) | - |
+| [lang-go](./lang-go/SKILL.md) | - |
 | [lang-java](./lang-java/SKILL.md) | [framework-springboot](./framework-springboot/SKILL.md), [framework-quarkus](./framework-quarkus/SKILL.md) |
 | [lang-csharp](./lang-csharp/SKILL.md) | [framework-dotnet](./framework-dotnet/SKILL.md) |
 
@@ -87,7 +87,7 @@ tools: []                     # optional CLI/tool hints for the agent
 
 **Skill length budget:** Prefer role `SKILL.md` bodies under ~150 lines; put long procedures in [SOPs/](../SOPs/). Enforce during [kit-review](../tasks/kit-review.md).
 
-**Context budget:** Always-on bootstrap stays thin ([AGENTS.md](../AGENTS.md)); load SOPs/philosophy via file read or **kit-knowledge** MCP. See [SOPs/context-budget.md](../SOPs/context-budget.md). Match installed MCP profile to skill `mcp:` frontmatter — one profile per session.
+**Context budget:** Always-on bootstrap stays thin ([AGENTS.md](../AGENTS.md)); load SOPs/philosophy via file read or **kit-knowledge** MCP. See [SOPs/context-budget.md](../SOPs/context-budget.md). Match installed MCP profile to skill `mcp:` frontmatter - one profile per session.
 
 **Discoverability:** Prefer `disable-model-invocation: false` so specialists can be selected when users `@` them; the orchestrator still owns multi-phase routing.
 
@@ -104,14 +104,14 @@ tools: []                     # optional CLI/tool hints for the agent
 
 ## Kit vs external
 
-Two ownership models — do not mix them in git.
+Two ownership models - do not mix them in git.
 
 | Kind | Committed in this repo? | Location | Update path |
 |------|-------------------------|----------|-------------|
 | **Kit-authored** | Yes | `skills/agent-*`, `skills/profile-*`, `skills/lang-*`, `skills/framework-*` | PRs in this repo |
 | **Upstream / official** | No (lockfile only) | `~/.cursor/skills` via `gh skill` | [external.lock.json](./external.lock.json) + sync script |
 
-**When to prefer kit profile vs upstream skill:** Use kit `lang-*` / `framework-*` for hexagonal/DDD/vertical-slice rules. Use upstream skills (Cloudflare, Vercel React, Stripe, …) for vendor-specific APIs and platform idioms. If both apply, kit architecture wins on structure; upstream wins on vendor API details—do not duplicate long vendor guides into kit skills.
+**When to prefer kit profile vs upstream skill:** Use kit `lang-*` / `framework-*` for hexagonal/DDD/vertical-slice rules. Use upstream skills (Cloudflare, Vercel React, Stripe, …) for vendor-specific APIs and platform idioms. If both apply, kit architecture wins on structure; upstream wins on vendor API details - do not duplicate long vendor guides into kit skills.
 
 **Why:** Upstream skills are large, change often, and carry their own licenses. Vendoring them into `skills/` bloats the repo, blocks clean upgrades, and blurs ownership with lifecycle roles.
 
@@ -139,7 +139,7 @@ Defaults include Cloudflare platform skills (`cloudflare/skills`) and Vercel `re
 `gh skill` or Cursor sometimes writes into the kit tree when `~/.agents` is symlinked here. Remove them from `skills/` (they are gitignored) and reinstall:
 
 ```bash
-rm -rf skills/cloudflare skills/wrangler   # example — only non-kit dirs
+rm -rf skills/cloudflare skills/wrangler   # example - only non-kit dirs
 kit sync --install
 kit verify
 ```

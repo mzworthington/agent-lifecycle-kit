@@ -86,9 +86,9 @@ function usage(): void {
 
 Skills install to Cursor user scope (~/.cursor/skills) so they stay outside
 this kit's git tree. \`kit sync --update\` only refreshes lockfile ids in that
-directory — it does not scan kit-authored skills or other agent hosts.
-Lockfile pins are git version tags or \`latest\` (tagged release, then HEAD)
-— not commit SHAs. Upgrade path: edit the lockfile, re-run --install, or
+directory. It does not scan kit-authored skills or other agent hosts.
+Lockfile pins are git version tags or \`latest\` (tagged release, then HEAD),
+not commit SHAs. Upgrade path: edit the lockfile, re-run --install, or
 run --update to pull upstream changes.
 
 Requires: gh CLI v2.90+ with \`gh skill\` (preview).`);

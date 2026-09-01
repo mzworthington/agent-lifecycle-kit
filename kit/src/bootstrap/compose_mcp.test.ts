@@ -6,7 +6,7 @@ import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { composeMCP } from './compose_mcp.js';
 
-const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 function writeServer(
   root: string,

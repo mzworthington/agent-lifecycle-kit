@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * kit-knowledge MCP — on-demand chunks from the agent lifecycle kit.
+ * kit-knowledge MCP - on-demand chunks from the agent lifecycle kit.
  * Stdio JSON-RPC (newline-delimited), no extra runtime deps beyond Node.
  */
 
@@ -33,7 +33,7 @@ const TOOLS = [
   {
     name: "search_kit",
     description:
-      "Search kit philosophy, SOPs, skill heads, and docs. Returns short excerpts — not full files.",
+      "Search kit philosophy, SOPs, skill heads, and docs. Returns short excerpts - not full files.",
     inputSchema: {
       type: "object",
       properties: {
@@ -245,7 +245,7 @@ function handle(
   const id = msg.id;
   const params = (msg.params ?? {}) as Record<string, unknown>;
 
-  // Notifications have no id — acknowledge by silence
+  // Notifications have no id - acknowledge by silence
   if (id === undefined && method?.startsWith("notifications/")) {
     return null;
   }

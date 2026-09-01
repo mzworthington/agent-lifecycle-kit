@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Typed memory MCP — same JSONL graph format as @modelcontextprotocol/server-memory,
+ * Typed memory MCP - same JSONL graph format as @modelcontextprotocol/server-memory,
  * with create_entities rejected when entityType is outside the kit ontology allowlist.
  * Catalog id remains `memory`.
  */

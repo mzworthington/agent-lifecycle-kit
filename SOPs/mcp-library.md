@@ -1,5 +1,5 @@
 ---
-title: MCP library — add, compose, and install
+title: MCP library - add, compose, and install
 kind: sop
 triggers:
   - MCP
@@ -35,7 +35,7 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 ### Profile discipline (token / attention budget)
 
 1. **One profile per session.** Compose a single named profile into `mcp.json`. Do not merge collab + devtools + ops + personal into one global file.
-2. **Match skill `mcp:` frontmatter.** If `agent-xfn` lists `playwright`, use `devtools` or a project profile that includes it — do not enable every catalog server “just in case.”
+2. **Match skill `mcp:` frontmatter.** If `agent-xfn` lists `playwright`, use `devtools` or a project profile that includes it - do not enable every catalog server “just in case.”
 3. **Skills ≠ MCP.** Role behavior stays in `skills/`. MCP is for live systems, vendor docs, memory, and kit chunk retrieval (`kit-knowledge`).
 4. Prefer a **small** enabled set. Extra MCP tools compete for attention and inflate tool-schema tokens. Never commit vault sessions or compose `personal` into shared app repos.
 
@@ -74,7 +74,7 @@ See [SOPs/context-budget.md](./context-budget.md).
 **Rules**
 
 - Never commit real tokens; only `${env:NAME}` / OAuth placeholders.
-- `mcp` object keys become Cursor `mcpServers` keys — keep them stable and unique.
+- `mcp` object keys become Cursor `mcpServers` keys - keep them stable and unique.
 - Prefer official or well-known packages; note the homepage for audit.
 
 ## 3. Compose and install
@@ -99,10 +99,10 @@ kit mcp security -o .cursor/mcp.security.json
 kit mcp design -o .cursor/mcp.design.json
 kit mcp payments -o .cursor/mcp.payments.json
 
-# Personal / sensitive (Bitwarden, LinkedIn, Polyglot, Obsidian) — machine only
+# Personal / sensitive (Bitwarden, LinkedIn, Polyglot, Obsidian) - machine only
 kit mcp personal --install
 
-# Home lab (Raspberry Pi over SSH) — machine only
+# Home lab (Raspberry Pi over SSH) - machine only
 kit mcp lab --install
 
 # Project config (Next + Chrome DevTools + Playwright + read-only Postgres)

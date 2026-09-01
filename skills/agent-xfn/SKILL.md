@@ -76,14 +76,14 @@ Complete and align before changing production code for XFN reasons.
 | Quality | Apply when | Skip when |
 |---------|------------|-----------|
 | Browser E2E | User-visible journey or critical path | Pure domain/API with no UI and covered by slice/API tests |
-| Accessibility | Any UI surface (pages, forms, dialogs, navigation). Assert landmarks, heading order, and native controls—not `div`+ARIA | No UI change |
+| Accessibility | Any UI surface (pages, forms, dialogs, navigation). Assert landmarks, heading order, and native controls - not `div`+ARIA | No UI change |
 | Security tests | Authn/authz, sensitive data, trust boundaries, new inputs | No security-relevant surface (still note skip) |
 | Load / performance | Latency SLOs, high traffic, bulk/import, public spikes | No performance risk or SLO in spec |
 
 2. **Impact map** - For each applicable suite: **keep / extend / rewrite / retire / add**.
 3. **Thresholds** - Measurable targets (e.g. WCAG 2.2 AA, p95 under 200ms, 100 RPS, unauthenticated access denied). Copy load SLOs into Context for `agent-telemetry`.
 4. **Stubs / specs** - Add failing or skipped-with-TODO suite skeletons and file paths for every **apply** row. Prefer profile defaults; propose new dependencies only with alignment.
-5. **Align & handover** - Record matrix + impact in `handover_xfn.md`. Plan DoD can be COMPLETE while browser/load await wiring; note **Green pending: post-impl** when applicable. Set **Next agent** to `agent-tdd` (short loop) — or `agent-adapter` only for deep-dive — or back here for green after wiring.
+5. **Align & handover** - Record matrix + impact in `handover_xfn.md`. Plan DoD can be COMPLETE while browser/load await wiring; note **Green pending: post-impl** when applicable. Set **Next agent** to `agent-tdd` (short loop) - or `agent-adapter` only for deep-dive - or back here for green after wiring.
 
 ## Post-wiring green
 

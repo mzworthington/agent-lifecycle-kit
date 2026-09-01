@@ -1,5 +1,5 @@
 /**
- * Node.js custom test reporter — emits Markdown for CI job summaries.
+ * Node.js custom test reporter - emits Markdown for CI job summaries.
  * Plain ESM so `node --test --test-reporter=...` can load it without tsx.
  */
 import {

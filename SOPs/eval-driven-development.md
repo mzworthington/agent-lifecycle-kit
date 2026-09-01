@@ -60,4 +60,4 @@ Live spans share eval field names (`emitAgentSpan`). Hard failures convert to JS
 
 ## IDE session → EDD (debug / lessons)
 
-When a miss appears in the **current** Cursor/Copilot thread (wrong tool, bad args, prompt/schema drift), [agent-debug](../skills/agent-debug/SKILL.md) must promote a case from context — no user paste required — then red/green with `kit eval` ([hypothesis-driven-debug.md](./hypothesis-driven-debug.md) §11). Lessons that capture the same friction set **EDD case** + optional **Promote to** `evals/edd/*.jsonl` ([templates/lesson.md](../templates/lesson.md)). Other IDE threads remain invisible until reopened or exported.
+When a miss appears in the **current** Cursor/Copilot thread (wrong tool, bad args, prompt/schema drift), [agent-debug](../skills/agent-debug/SKILL.md) must promote a case from context (no user paste required), then red/green with `kit eval` ([hypothesis-driven-debug.md](./hypothesis-driven-debug.md) §11). Lessons that capture the same friction set **EDD case** + optional **Promote to** `evals/edd/*.jsonl` ([templates/lesson.md](../templates/lesson.md)). Other IDE threads remain invisible until reopened or exported.

@@ -15,8 +15,9 @@
     "changelog": "node bin/changelog-render.mjs",
     "release:detect": "bash bin/release.sh detect",
     "test": "node --import tsx/esm --test 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts mcps/servers/memory/src/memory.test.ts",
-    "test:ci": "mkdir -p out/reports && node --import tsx/esm --test --test-reporter=spec --test-reporter=./kit/src/github_test_reporter.mjs --test-reporter-destination=stdout --test-reporter-destination=out/reports/unit-test-report.md 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts mcps/servers/memory/src/memory.test.ts",
-    "check": "pnpm test && pnpm kit check"
+    "test:ci": "mkdir -p out/reports && node --import tsx/esm --test --test-reporter=spec --test-reporter=./kit/src/test-report/github_test_reporter.mjs --test-reporter-destination=stdout --test-reporter-destination=out/reports/unit-test-report.md 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts mcps/servers/memory/src/memory.test.ts",
+    "check": "pnpm test && pnpm kit check",
+    "site:assemble": "pnpm kit site assemble"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",

@@ -1,6 +1,6 @@
 # Obsidian MCP
 
-`obsidian-mcp-server` — search, read, and surgically edit notes through Obsidian’s [Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) plugin.
+`obsidian-mcp-server` - search, read, and surgically edit notes through Obsidian’s [Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) plugin.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ Obsidian must be running with the plugin active for tools to work.
 - Writing handover / decision notes back into Obsidian
 - Searching tags and daily notes during spec/impl
 
-Keep in the `personal` profile — vaults are machine-local and often private.
+Keep in the `personal` profile - vaults are machine-local and often private.
 
 ## Safer defaults
 

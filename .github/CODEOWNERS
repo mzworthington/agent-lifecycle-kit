@@ -1,4 +1,4 @@
-# Ownership rules for sensitive paths — require explicit review.
+# Ownership rules for sensitive paths - require explicit review.
 # See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # CI / GitHub Actions

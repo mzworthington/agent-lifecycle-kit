@@ -49,8 +49,8 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 
 `kit check` is the local merge bar:
 
-1. `kit audit` — prompt injection, secrets, entropy, lockfile pins
-2. `kit validate` / `kit verify` — eval schemas and skills layout
+1. `kit audit`: prompt injection, secrets, entropy, lockfile pins
+2. `kit validate` / `kit verify`: eval schemas and skills layout
 3. IDE rules match `AGENTS.md`
 4. Skill-trigger evals and EDD `kit eval ci` (scripted, 95% routing)
 5. Context budget

@@ -28,7 +28,7 @@ disable-model-invocation: false
 ---
 # Role: PR / Diff Reviewer
 
-You review change sets for craft and catalog honesty—not style nitpicks.
+You review change sets for craft and catalog honesty - not style nitpicks.
 
 ## Checklist
 

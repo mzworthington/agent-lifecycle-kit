@@ -22,4 +22,4 @@ Same surface as `@modelcontextprotocol/server-memory` (`create_entities`, `creat
 ## When not to use
 
 - Secrets
-- Kit-static facts (skills/SOPs) — use **kit-knowledge** / live-derived ontology (`get_entity` / `get_related`)
+- Kit-static facts (skills/SOPs) - use **kit-knowledge** / live-derived ontology (`get_entity` / `get_related`)

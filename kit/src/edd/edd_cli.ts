@@ -1,22 +1,23 @@
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
-import { EvalRunner } from './edd/runner.js';
+import { EvalRunner } from './runner.js';
 import {
   generateReport,
   publishEvalReportToGithubSummary,
   type SuiteReport
-} from './edd/telemetry.js';
-import { watchTargets } from './edd/watch.js';
-import { loadDataset } from './edd/dataset.js';
+} from './telemetry.js';
+import { watchTargets } from './watch.js';
+import { loadDataset } from './dataset.js';
 import {
   casesFromTraceFile,
   dedupeCases,
   lintCases,
   synthesizeFromSeeds
-} from './edd/dataset-hygiene.js';
-import { normalizeProdTurn, shadowEvalTurns } from './edd/shadow.js';
-import type { EvalCase } from './edd/schema.js';
+} from './dataset-hygiene.js';
+import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
+import type { EvalCase } from './schema.js';
+import { flagValue, hasFlag } from '../cli/flags.js';
 
 export interface EddCliOptions {
   repoDir: string;
@@ -60,13 +61,11 @@ Notes:
 }
 
 export function getEddFlag(args: string[], name: string): string | undefined {
-  const idx = args.indexOf(name);
-  if (idx === -1) return undefined;
-  return args[idx + 1];
+  return flagValue(args, name);
 }
 
 export function hasEddFlag(args: string[], name: string): boolean {
-  return args.includes(name);
+  return hasFlag(args, name);
 }
 
 /** Publish job summaries from `kit eval report` under Actions (or with --github-summary). */

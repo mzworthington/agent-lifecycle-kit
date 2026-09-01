@@ -2,7 +2,7 @@
 
 Official remote Workers Observability MCP at `https://observability.mcp.cloudflare.com/mcp` (OAuth).
 
-Typed tools for Worker logs and metrics — complementary to the Code Mode API server (`cloudflare`), which lists/mutates account resources.
+Typed tools for Worker logs and metrics - complementary to the Code Mode API server (`cloudflare`), which lists/mutates account resources.
 
 ## Auth
 

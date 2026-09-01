@@ -1,5 +1,5 @@
 ---
-title: Complexity hotspots — detect, backlog, reduce
+title: Complexity hotspots - detect, backlog, reduce
 kind: sop
 triggers:
   - complexity
@@ -68,7 +68,7 @@ During [agent-arch-drift](../skills/agent-arch-drift/SKILL.md) reviews or when t
 
 Route execution to `agent-prune` when rows are `ready`.
 
-## 4. Reduction (prune — complexity track)
+## 4. Reduction (prune - complexity track)
 
 [agent-prune](../skills/agent-prune/SKILL.md) complexity track:
 

@@ -1,5 +1,5 @@
 ---
-title: Cloudflare analytics ops — diagnose and remediate RUM
+title: Cloudflare analytics ops - diagnose and remediate RUM
 kind: sop
 triggers:
   - Cloudflare analytics
@@ -16,14 +16,14 @@ tools:
 
 Use with [agent-cloudflare-ops](../skills/agent-cloudflare-ops/SKILL.md) and the `cloudflare-ops` MCP profile. Do **not** guess live account state.
 
-Install once per session: `kit mcp cloudflare-ops --install` (OAuth on first Cloudflare tool use). One profile only — do not stack `cloud` + `ops`.
+Install once per session: `kit mcp cloudflare-ops --install` (OAuth on first Cloudflare tool use). One profile only - do not stack `cloud` + `ops`.
 
 ## Architecture (two modes)
 
 | Mode | Where | Beacon | Ingest |
 |------|--------|--------|--------|
-| **Cloudflare Pages** (proxied) | Product `infra/cloudflare` `WebAnalyticsSite` | `autoInstall: true` — Cloudflare injects the snippet | `cloudflareinsights.com` |
-| **GitHub Pages** (grey-cloud DNS) | `edge-dns` when `githubPages` is set | First-party Worker on `insights.<zone>` serving `beacon.min.js`; product HTML embeds `webAnalyticsSnippet` | **Must stay** on `cloudflareinsights.com` — Worker-proxied `send.to` 404s |
+| **Cloudflare Pages** (proxied) | Product `infra/cloudflare` `WebAnalyticsSite` | `autoInstall: true` - Cloudflare injects the snippet | `cloudflareinsights.com` |
+| **GitHub Pages** (grey-cloud DNS) | `edge-dns` when `githubPages` is set | First-party Worker on `insights.<zone>` serving `beacon.min.js`; product HTML embeds `webAnalyticsSnippet` | **Must stay** on `cloudflareinsights.com` - Worker-proxied `send.to` 404s |
 
 Discover expected sites from `edge-dns` `zones.yaml` plus each product’s `infra/cloudflare` stack. Do not hard-code a fleet list in this kit.
 
@@ -48,12 +48,12 @@ flowchart TD
   fix --> prove[Re-query MCP + re-probe]
 ```
 
-1. **Inventory** — `execute` RUM site list. Diff against Pulumi `WebAnalyticsSite` / `githubPages` origins. Flag duplicates (dashboard site vs stack site).
-2. **Probe** — `GET https://insights.<zone>/beacon.min.js` (GitHub Pages mode) must be 200. Product HTML must contain the snippet **before** `</body>`. Pages auto-install sites should not also embed a stale first-party snippet.
-3. **Logs** — For `insights.*` Workers, query observability (errors, 404s on `/beacon.min.js`).
-4. **Hypotheses** — Keep ≤5. Cheap probes first (HTTP status, snippet present, `autoInstall` vs grey-cloud).
-5. **Fix in the owning repo** — Pulumi for sites/Workers/DNS; product HTML for snippets. See ownership below.
-6. **Prove** — Re-list RUM sites, re-probe URLs, re-query logs. Unit tests alone are not proof for a live beacon.
+1. **Inventory** - `execute` RUM site list. Diff against Pulumi `WebAnalyticsSite` / `githubPages` origins. Flag duplicates (dashboard site vs stack site).
+2. **Probe** - `GET https://insights.<zone>/beacon.min.js` (GitHub Pages mode) must be 200. Product HTML must contain the snippet **before** `</body>`. Pages auto-install sites should not also embed a stale first-party snippet.
+3. **Logs** - For `insights.*` Workers, query observability (errors, 404s on `/beacon.min.js`).
+4. **Hypotheses** - Keep ≤5. Cheap probes first (HTTP status, snippet present, `autoInstall` vs grey-cloud).
+5. **Fix in the owning repo** - Pulumi for sites/Workers/DNS; product HTML for snippets. See ownership below.
+6. **Prove** - Re-list RUM sites, re-probe URLs, re-query logs. Unit tests alone are not proof for a live beacon.
 
 ## Common failures
 

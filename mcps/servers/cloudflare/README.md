@@ -2,7 +2,7 @@
 
 Official remote Cloudflare API MCP at `https://mcp.cloudflare.com/mcp`. Three tools, ~1k tokens of schema: `search` (find endpoints), `execute` (call `cloudflare.request()`), `docs` (developer docs).
 
-Do **not** disable Code Mode (`?codemode=false`) in kit profiles — that registers ~2,500 tools and blows the context budget.
+Do **not** disable Code Mode (`?codemode=false`) in kit profiles - that registers ~2,500 tools and blows the context budget.
 
 Workers logs live on the sibling server [cloudflare-observability](../cloudflare-observability/README.md).
 

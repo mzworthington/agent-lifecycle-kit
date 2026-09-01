@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { backupExistingFile } from './backup_file.js';
-import { resolveRepoDir, userCursorDir } from './paths.js';
+import { backupExistingFile } from '../shared/backup_file.js';
+import { resolveRepoDir, userCursorDir } from '../shared/paths.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 

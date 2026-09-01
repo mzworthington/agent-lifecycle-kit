@@ -18,9 +18,9 @@ The kit is meant to be copied into many agent and product repos. A restrictive l
 
 ## Considered Options
 
-* **Option A** — MIT / Apache-2.0
-* **Option B** — Unlicense (public domain dedication)
-* **Option C** — Proprietary / source-available
+* **Option A:** MIT / Apache-2.0
+* **Option B:** Unlicense (public domain dedication)
+* **Option C:** Proprietary / source-available
 
 ## Decision Outcome
 
@@ -42,5 +42,5 @@ flowchart LR
 
 ## Links
 
-* Related ADRs: —
+* Related ADRs: none
 * License file: [LICENSE](../../LICENSE)

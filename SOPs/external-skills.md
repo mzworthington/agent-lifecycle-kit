@@ -1,5 +1,5 @@
 ---
-title: External skills — install and keep up to date
+title: External skills - install and keep up to date
 kind: sop
 triggers:
   - external skills
@@ -65,7 +65,7 @@ INSTALL_EXTERNAL_SKILLS=1 ./install.sh
 }
 ```
 
-Prefer a published version tag (`"pin": "v1.2.0"`). Use `"pin": "latest"` when the repo has no semver tags — `gh skill` then installs the latest GitHub release, else default-branch HEAD. Do not pin commit SHAs unless you are freezing a specific commit. Version tags are passed as `refs/tags/…` so they are not mistaken for SHAs. Tag pins are skipped by `gh skill update` until you change or drop them.
+Prefer a published version tag (`"pin": "v1.2.0"`). Use `"pin": "latest"` when the repo has no semver tags - `gh skill` then installs the latest GitHub release, else default-branch HEAD. Do not pin commit SHAs unless you are freezing a specific commit. Version tags are passed as `refs/tags/…` so they are not mistaken for SHAs. Tag pins are skipped by `gh skill update` until you change or drop them.
 
 4. Run `kit sync --install --force`.
 

@@ -8,7 +8,7 @@
       "name": "Incident Coordination Trigger",
       "description": "Ensures production outage / Sev prompts activate incident coordination rather than jumping straight to code edits.",
       "target_skill": "agent-incident",
-      "prompt": "Production is down — Sev-1 outage. Coordinate the incident: stabilize, gather signals, then hand off to RCA.",
+      "prompt": "Production is down - Sev-1 outage. Coordinate the incident: stabilize, gather signals, then hand off to RCA.",
       "context": {
         "active_phase": "debug"
       },

@@ -56,6 +56,9 @@ describe('generateOntologyIndex', () => {
     assert.ok(getEntity(index, 'sop:conventional-commits'));
     assert.ok(getEntity(index, 'mcp:kit-knowledge'));
     assert.ok(getEntity(index, 'philosophy:8'));
+    const p8 = getEntity(index, 'philosophy:8');
+    assert.equal(p8?.name, 'Interaction Mandate');
+    assert.equal(p8?.attrs?.section, '8');
     assert.ok(getEntity(index, 'doc:edd'));
     assert.ok(getEntity(index, 'phase:tdd'));
   });

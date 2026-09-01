@@ -79,9 +79,9 @@ describe('EDD CLI flag helpers', () => {
     const repo = '/tmp/kit';
     const defaultSuite = defaultEddSuite(repo);
     assert.equal(defaultSuite, path.join(repo, 'evals', 'edd', 'architecture_routing.yaml'));
-    const targets = eddWatchTargets(repo, ['--target', 'kit/src/edd_cli.ts']);
+    const targets = eddWatchTargets(repo, ['--target', 'kit/src/edd/edd_cli.ts']);
     assert.ok(targets.includes(path.resolve(process.cwd(), defaultSuite)));
-    assert.ok(targets.includes('kit/src/edd_cli.ts'));
+    assert.ok(targets.includes('kit/src/edd/edd_cli.ts'));
     assert.ok(targets.includes(path.join(repo, 'evals', 'edd')));
   });
 

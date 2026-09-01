@@ -1,6 +1,6 @@
 # Chrome DevTools MCP
 
-Official `chrome-devtools-mcp` — control and inspect a live Chrome instance (automation, console/network, performance).
+Official `chrome-devtools-mcp` - control and inspect a live Chrome instance (automation, console/network, performance).
 
 ## Auth
 
@@ -14,4 +14,4 @@ Optional: attach to an existing debuggable Chrome with `--browser-url=http://127
 - Performance traces and console/network inspection
 - Heavier browser work than Playwright smoke checks
 
-Prefer `devtools` or project profiles — not the global default.
+Prefer `devtools` or project profiles - not the global default.

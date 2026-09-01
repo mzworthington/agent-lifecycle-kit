@@ -15,7 +15,7 @@ lessons/*
 # Machine-specific overrides (copy from config.example.json)
 system/config.json
 
-# gh skill provenance lock written when scanning project scope — do not commit
+# gh skill provenance lock written when scanning project scope - do not commit
 .skill-lock.json
 
 # Upstream Agent Skills (install via `kit sync` → ~/.cursor/skills)
@@ -39,6 +39,9 @@ credentials.json
 node_modules/
 .pnpm-store/
 
+# Public GitHub Pages assemble output
+site/
+
 # EDD / eval report artifacts
 out/
 
@@ -47,3 +50,5 @@ out/
 *.swp
 *.swo
 ontology/index.json
+assets/ontology-index.json
+assets/ontology-graph.js

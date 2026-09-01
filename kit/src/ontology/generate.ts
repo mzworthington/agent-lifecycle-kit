@@ -1,7 +1,11 @@
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { stripTypeScriptTypes } from 'node:module';
 import { parse as parseYaml } from 'yaml';
 import { loadOntologySchema } from './schema.js';
+import { toHomepageIndex } from './graph_view.js';
 import {
   entityId,
   type OntologyEdge,
@@ -78,15 +82,34 @@ function addEdge(
   edges.push({ from, relation, to });
 }
 
-export function generateOntologyIndex(kitRoot: string): OntologyIndex {
+export interface GenerateOntologyOptions {
+  /** Skip gitignored paths so the index matches a CI checkout. */
+  committedOnly?: boolean;
+}
+
+/** True when `git check-ignore` would exclude the kit-relative path. */
+export function isGitIgnored(kitRoot: string, relPath: string): boolean {
+  const result = spawnSync('git', ['-C', kitRoot, 'check-ignore', '-q', '--', relPath], {
+    stdio: 'ignore'
+  });
+  return result.status === 0;
+}
+
+export function generateOntologyIndex(
+  kitRoot: string,
+  opts: GenerateOntologyOptions = {}
+): OntologyIndex {
   const schema = loadOntologySchema(kitRoot);
   const entities: OntologyEntity[] = [];
   const edges: OntologyEdge[] = [];
   const seenEdges = new Set<string>();
   const entityIds = new Set<string>();
+  const skipIgnored = (relPath: string | undefined): boolean =>
+    Boolean(opts.committedOnly && relPath && isGitIgnored(kitRoot, relPath));
 
   const pushEntity = (entity: OntologyEntity) => {
     if (entityIds.has(entity.id)) return;
+    if (skipIgnored(entity.path)) return;
     entityIds.add(entity.id);
     entities.push(entity);
   };
@@ -111,14 +134,14 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
     }
   }
 
-  // Philosophy
+  // Philosophy - id stays philosophy:<n> (kit-knowledge); name is the heading
   for (const s of listPhilosophySections(kitRoot)) {
     pushEntity({
       id: entityId('PhilosophySection', s.id),
       type: 'PhilosophySection',
-      name: s.id,
+      name: s.title,
       path: 'CODING_PHILOSOPHY.md',
-      attrs: { title: s.title }
+      attrs: { section: s.id, title: s.title }
     });
   }
 
@@ -204,13 +227,14 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
   if (fs.existsSync(skillsDir)) {
     for (const name of fs.readdirSync(skillsDir).sort()) {
       const skillPath = path.join(skillsDir, name, 'SKILL.md');
+      const rel = path.join('skills', name, 'SKILL.md');
+      if (skipIgnored(rel)) continue;
       const body = safeRead(skillPath);
       if (!body) continue;
       const fm = parseFrontmatter(body) ?? {};
       const phase = typeof fm.phase === 'string' ? fm.phase : undefined;
       const dependsOn = asStringArray(fm['depends-on']);
       const mcp = asStringArray(fm.mcp);
-      const rel = path.join('skills', name, 'SKILL.md');
       pushEntity({
         id: entityId('Skill', name),
         type: 'Skill',
@@ -256,13 +280,14 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
     }
   }
 
-  // Eval suites — index entities; gates only from explicit suite metadata or skill-local path
+  // Eval suites - index entities; gates only from explicit suite metadata or skill-local path
   const eddDir = path.join(kitRoot, 'evals', 'edd');
   if (fs.existsSync(eddDir)) {
     for (const f of fs.readdirSync(eddDir).sort()) {
       if (!f.endsWith('.yaml') && !f.endsWith('.yml')) continue;
       const stem = f.replace(/\.ya?ml$/, '');
       const rel = path.join('evals', 'edd', f);
+      if (skipIgnored(rel)) continue;
       const body = safeRead(path.join(kitRoot, rel)) ?? '';
       pushEntity({
         id: entityId('EvalSuite', stem),
@@ -291,7 +316,7 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
     }
   }
 
-  // Skill-local evals (path-derived — portable for any skill name)
+  // Skill-local evals (path-derived - portable for any skill name)
   if (fs.existsSync(skillsDir)) {
     for (const name of fs.readdirSync(skillsDir).sort()) {
       const evalPath = path.join(skillsDir, name, 'evals', 'eval.json');
@@ -313,8 +338,8 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
     }
   }
 
-  // Handovers under kit handover/ and optional ~/.agents not scanned at generate time for portability —
-  // index kit-local handover/<project>/ only.
+  // Handovers under kit handover/ and optional ~/.agents not scanned at generate time for portability.
+  // Index kit-local handover/<project>/ only.
   const handoverRoot = path.join(kitRoot, 'handover');
   if (fs.existsSync(handoverRoot)) {
     for (const project of fs.readdirSync(handoverRoot).sort()) {
@@ -322,13 +347,15 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
       if (!fs.statSync(dir).isDirectory()) continue;
       for (const f of fs.readdirSync(dir).sort()) {
         if (!f.startsWith('handover_') || !f.endsWith('.md')) continue;
+        const rel = path.join('handover', project, f);
+        if (skipIgnored(rel)) continue;
         const phase = f.replace(/^handover_/, '').replace(/\.md$/, '');
         const idName = `${project}/${phase}`;
         pushEntity({
           id: entityId('Handover', idName),
           type: 'Handover',
           name: idName,
-          path: path.join('handover', project, f),
+          path: rel,
           attrs: { project, phase }
         });
         if (schema.phaseOrder.includes(phase) || phase === 'grilling') {
@@ -344,7 +371,7 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
     }
   }
 
-  // Drop edges whose endpoints are missing (dangling skill depends-on still emitted above —
+  // Drop edges whose endpoints are missing (dangling skill depends-on still emitted above;
   // referential check will fail them intentionally).
   const keptEdges = edges.filter((e) => entityIds.has(e.from) && entityIds.has(e.to));
   edges.length = 0;
@@ -370,6 +397,32 @@ export function serializeOntologyIndex(index: OntologyIndex): string {
 /** Runtime cache path (gitignored under sync/). */
 export function ontologyCachePath(kitRoot: string): string {
   return path.join(kitRoot, 'sync', 'ontology-index.json');
+}
+
+/** Homepage copy of the derived index (gitignored; written at generate / Pages deploy). */
+export function siteOntologyIndexPath(kitRoot: string): string {
+  return path.join(kitRoot, 'assets', 'ontology-index.json');
+}
+
+/** Compiled graph_view.ts for the homepage D3 adapter (gitignored). */
+export function ontologyGraphRuntimePath(kitRoot: string): string {
+  return path.join(kitRoot, 'assets', 'ontology-graph.js');
+}
+
+export function emitOntologyMapRuntime(kitRoot: string): string {
+  const srcPath = fileURLToPath(new URL('./graph_view.ts', import.meta.url));
+  const src = fs.readFileSync(srcPath, 'utf8');
+  // TypeScript 7's package root is version-only; Node's type strip is enough
+  // for graph_view.ts (type-only imports + annotations, no enums/namespaces).
+  const outputText = stripTypeScriptTypes(src, { mode: 'strip' });
+  const out = ontologyGraphRuntimePath(kitRoot);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(
+    out,
+    `/* generated from kit/src/ontology/graph_view.ts - do not edit */\n${outputText}`,
+    'utf8'
+  );
+  return out;
 }
 
 /**
@@ -447,7 +500,20 @@ export function writeOntologyIndex(
   return out;
 }
 
-/** @deprecated Prefer resolveOntologyIndex — always derived. */
+/** Sync cache plus the GitHub Pages asset. Neither file is source of truth. */
+export function writeSiteOntologyIndex(
+  kitRoot: string,
+  index: OntologyIndex = generateOntologyIndex(kitRoot)
+): { cachePath: string; sitePath: string } {
+  const cachePath = writeOntologyIndex(kitRoot, index);
+  const sitePath = siteOntologyIndexPath(kitRoot);
+  fs.mkdirSync(path.dirname(sitePath), { recursive: true });
+  fs.writeFileSync(sitePath, serializeOntologyIndex(toHomepageIndex(index)), 'utf8');
+  emitOntologyMapRuntime(kitRoot);
+  return { cachePath, sitePath };
+}
+
+/** @deprecated Prefer resolveOntologyIndex - always derived. */
 export function loadOntologyIndex(kitRoot: string): OntologyIndex {
   return resolveOntologyIndex(kitRoot);
 }

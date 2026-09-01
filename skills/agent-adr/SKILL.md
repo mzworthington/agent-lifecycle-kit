@@ -6,7 +6,7 @@ description: >-
   Builds on agent-arch-drift for hexagonal/DDD/slice fit; includes a simple
   Mermaid diagram of the chosen shape (never ASCII art). Use when recording
   architecture decisions, ADR, MADR, trade-offs, or irreversible design choices
-  — not for routine implementation details.
+  - not for routine implementation details.
 kind: role
 phase: audit
 triggers:
@@ -29,7 +29,7 @@ disable-model-invocation: false
 
 You document **sparse**, high-signal ADRs in the project repo using a simplified [MADR](https://adr.github.io/madr/) shape. Prefer not writing an ADR.
 
-Build on [agent-arch-drift](../agent-arch-drift/SKILL.md): the decision must still respect hexagonal boundaries, DDD, vertical slices, and minimal change — or the ADR must explicitly justify a deliberate exception.
+Build on [agent-arch-drift](../agent-arch-drift/SKILL.md): the decision must still respect hexagonal boundaries, DDD, vertical slices, and minimal change - or the ADR must explicitly justify a deliberate exception.
 
 ## When to write an ADR (gate)
 
@@ -41,7 +41,7 @@ Write **at most one** ADR per decision, and **only if at least one** is true:
 
 **Do not** write an ADR for: library version bumps, local refactors, naming bikesheds, UI copy, one-off bug fixes, or choices already obvious from the code/tests.
 
-If the gate fails, say so briefly and stop — do not create a file.
+If the gate fails, say so briefly and stop - do not create a file.
 
 ## Location and naming
 
@@ -65,14 +65,14 @@ Template: [templates/adr.md](../../templates/adr.md).
 2. **Inventory** related code, prior ADRs in `docs/ADRs/`, and arch-drift concerns (ports, aggregates, slice ownership).
 3. **List 2–4 real options** (including “status quo” when relevant). Reject strawmen.
 4. **Choose** with justification tied to drivers (reversibility, boundaries, operability, security, team norms).
-5. **Write** the ADR from the template. Include **one** Mermaid diagram that shows the chosen structure (context map, request flow, or component boundary) — not decorative charts and never ASCII art.
+5. **Write** the ADR from the template. Include **one** Mermaid diagram that shows the chosen structure (context map, request flow, or component boundary) - not decorative charts and never ASCII art.
 6. **Link** from handover or PR description when this decision unblocks impl/audit.
 
 ## Content rules
 
 - Keep the body short: context → options → outcome → consequences.
 - Status is usually `Accepted` at write time; use `Proposed` only when waiting on a human.
-- **Mermaid only for diagrams** — prefer `flowchart` or `C4Context`-style simplicity; label ports/adapters in ubiquitous language. Never use ASCII/box-drawing art for architecture sketches; convert any ASCII diagram you encounter while editing an ADR.
+- **Mermaid only for diagrams** - prefer `flowchart` or `C4Context`-style simplicity; label ports/adapters in ubiquitous language. Never use ASCII/box-drawing art for architecture sketches; convert any ASCII diagram you encounter while editing an ADR.
 - No secrets, tokens, or environment-specific hostnames.
 - If the decision **violates** hexagonal/DDD/slice norms, state that under Consequences and what mitigates drift (anti-corruption layer, follow-up ADR, etc.).
 

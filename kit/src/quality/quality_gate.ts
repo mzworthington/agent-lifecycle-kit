@@ -1,21 +1,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { exportIDERules } from './export_ide_rules.js';
-import { runEvals } from './run_evals.js';
-import { handleEddEvalCli, type EddCliOptions } from './edd_cli.js';
-import { scanSkillSecurity, type ScanSkillSecurityResult } from './scan_skill_security.js';
-import { validateEvals, type ValidateEvalsResult } from './validate_evals.js';
+import { exportIDERules } from '../bootstrap/export_ide_rules.js';
+import { runEvals } from '../edd/run_evals.js';
+import { handleEddEvalCli, type EddCliOptions } from '../edd/edd_cli.js';
+import { scanSkillSecurity, type ScanSkillSecurityResult } from '../skills/scan_skill_security.js';
+import { validateEvals, type ValidateEvalsResult } from '../edd/validate_evals.js';
 import {
   verifySkillsLayout,
   printSkillsLayoutResult,
   type SkillsLayoutResult
-} from './verify_skills_layout.js';
+} from '../skills/verify_skills_layout.js';
 import {
   measureContextBudget,
   printContextBudget,
   type ContextBudgetResult
 } from './measure_context_budget.js';
-import { checkOntology, type OntologyCheckResult } from './ontology/index.js';
+import { checkOntology, type OntologyCheckResult } from '../ontology/index.js';
 
 /** Default EDD suites for this kit. Forks may delete vendor-specific suites; missing files are skipped. */
 export const EDD_CI_SUITES = [

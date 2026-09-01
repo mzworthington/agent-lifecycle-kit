@@ -30,7 +30,7 @@ Follow [SOPs/api-contracts.md](../../SOPs/api-contracts.md).
 
 ## Rules
 
-1. Treat the contract as a **port** at the edge—not the domain model.
+1. Treat the contract as a **port** at the edge - not the domain model.
 2. Prefer additive, versioned changes; breaking changes need explicit migration notes and consumer impact.
 3. Align Gherkin / slice tests with request/response examples in the spec.
 4. Generate or update contract artifacts in the repo’s existing toolchain (OpenAPI file, Spectral, Pact, etc.).

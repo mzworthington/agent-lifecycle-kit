@@ -1,6 +1,6 @@
 # Polyglot MCP
 
-Infinum `@infinum/polyglot-mcp` — fetch project translations and create keys/values across locales.
+Infinum `@infinum/polyglot-mcp` - fetch project translations and create keys/values across locales.
 
 ## Auth
 

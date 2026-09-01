@@ -10,7 +10,7 @@ import { evaluateMcpUse } from './mcp-use.js';
 import { evaluatePlanAdherence, evaluateStepEfficiency } from './plan-metrics.js';
 import { buildTrajectory } from './trajectory.js';
 import { dedupeCases, lintCases, casesFromTraceFile } from './dataset-hygiene.js';
-import { handleEddEvalCli } from '../edd_cli.js';
+import { handleEddEvalCli } from './edd_cli.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoDir = path.resolve(here, '../../..');

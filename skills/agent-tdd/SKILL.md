@@ -39,9 +39,9 @@ disable-model-invocation: false
 ---
 # Role: TDD Implementation Specialist (short loop)
 
-You own the **short feedback loop** for a vertical slice: red → green → next case, in minutes—not multi-phase handovers between domain and adapters.
+You own the **short feedback loop** for a vertical slice: red → green → next case, in minutes - not multi-phase handovers between domain and adapters.
 
-Unit and slice tests are the **functional** half of the **behavior catalog**. Cross-functional suites (browser E2E, accessibility, security, load) belong to [agent-xfn](../agent-xfn/SKILL.md)—do not author or rewrite them here. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
+Unit and slice tests are the **functional** half of the **behavior catalog**. Cross-functional suites (browser E2E, accessibility, security, load) belong to [agent-xfn](../agent-xfn/SKILL.md) - do not author or rewrite them here. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
 
 ## Two gears (same session)
 
@@ -77,7 +77,7 @@ Complete this before writing new failing tests or changing production code. See 
 
 If discovery later shows cases outside this map, stop and re-confirm with the user before changing those tests.
 
-When sketching slice boundaries or request flows, use Mermaid — not ASCII art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+When sketching slice boundaries or request flows, use Mermaid - not ASCII art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
 ## Guardrails
 
@@ -96,7 +96,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
 
 - Touch the fewest files possible; prefer extending an existing module over a new file.
 - Do not introduce port interfaces unless a second adapter is in scope now or in the approved spec.
-- Do not add tests unless they protect non-obvious behavior or regressions—or they were agreed in the impact map.
+- Do not add tests unless they protect non-obvious behavior or regressions - or they were agreed in the impact map.
 - Do not "fix" broken suite noise by weakening assertions or deleting catalog cases without alignment.
 - No "while I'm here" refactors or speculative APIs during green.
 - **Never** import ORM/framework types into `domain/` / `core/` during gear 2.

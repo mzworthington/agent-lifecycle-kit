@@ -3,7 +3,7 @@
 **Status:** refreshed 2026-09-01 (supersedes the Aug 30 draft on PR #22).  
 **Open actions:** [kit-review-backlog.md](./kit-review-backlog.md)
 
-**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline and primarily run agents in Cursor (or another host that loads `AGENTS.md` + progressive skills). Still **not model-agnostic in the strong sense**—content is mostly portable markdown; discovery, MCP install, skill format, and the live EDD driver remain Cursor- and OpenAI-compatible-shaped. Claims are more honest than on Aug 30, but multi-IDE and skill-trigger eval wording can still oversell.
+**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline and primarily run agents in Cursor (or another host that loads `AGENTS.md` + progressive skills). Still **not model-agnostic in the strong sense**: content is mostly portable markdown; discovery, MCP install, skill format, and the live EDD driver remain Cursor- and OpenAI-compatible-shaped. Claims are more honest than on Aug 30, but multi-IDE and skill-trigger eval wording can still oversell.
 
 ---
 
@@ -23,12 +23,12 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 
 ## What still holds (strengths)
 
-1. **Context budget as design** — thin `AGENTS.md`, on-demand loads, one MCP profile, `kit measure-context` / `kit check`.
-2. **Lifecycle taxonomy** — phase → skill routing, handovers, tests-as-catalog, orchestrator + specialists.
-3. **EDD shape** — YAML metrics + JSONL cases, scripted merge gate, optional live path, shadow/prod→JSONL story ([docs/edd.md](./edd.md)).
-4. **Architecture floor** — explicit defaults with documented applicability/opt-out (landed after the Aug 30 draft).
-5. **Supply-chain hygiene** — layout verify, lockfile, audit, secrets-out-of-repo MCP fragments.
-6. **Portable content layer** — philosophy/SOPs/role prose travel; runtime discovery does not.
+1. **Context budget as design:** thin `AGENTS.md`, on-demand loads, one MCP profile, `kit measure-context` / `kit check`.
+2. **Lifecycle taxonomy:** phase → skill routing, handovers, tests-as-catalog, orchestrator + specialists.
+3. **EDD shape:** YAML metrics + JSONL cases, scripted merge gate, optional live path, shadow/prod→JSONL story ([docs/edd.md](./edd.md)).
+4. **Architecture floor:** explicit defaults with documented applicability/opt-out (landed after the Aug 30 draft).
+5. **Supply-chain hygiene:** layout verify, lockfile, audit, secrets-out-of-repo MCP fragments.
+6. **Portable content layer:** philosophy/SOPs/role prose travel; runtime discovery does not.
 
 ---
 
@@ -36,14 +36,14 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 
 | Finding (Aug 30) | Status now |
 |------------------|------------|
-| Architecture invariants feel non-optional | **Improved** — applicability & opt-out + seed ADRs (#36) |
-| Closed-loop / live EDD aspirational | **Improved** — deeper EDD suites, shadow path, nightly `edd-live.yml` (still skips without `KIT_EVAL_API_KEY`) |
-| Default CI is scripted keyword driver | **Still true** — intentional merge gate; docs now say so clearly |
-| Skill-trigger evals are theater | **Still true** — `kit/src/run_evals.ts` does not invoke a model or assert `required_patterns` / `required_output_sections` |
-| Multi-IDE peer-depth oversold | **Still mostly true** — README still lists many hosts; MCP/skills remain Cursor-first |
-| Skill length budget slipping | **Still true** — `agent-prune` / `agent-orchestrator` / `agent-debug` / `agent-copy` over ~150 lines |
-| Thin stack profiles | **Still true** — several `framework-*` / `lang-*` skills ~38–48 lines |
-| Process weight | **Still true** — shortcuts exist; default narrative is multi-phase |
+| Architecture invariants feel non-optional | **Improved:** applicability and opt-out + seed ADRs (#36) |
+| Closed-loop / live EDD aspirational | **Improved:** deeper EDD suites, shadow path, nightly `edd-live.yml` (still skips without `KIT_EVAL_API_KEY`) |
+| Default CI is scripted keyword driver | **Still true:** intentional merge gate; docs now say so clearly |
+| Skill-trigger evals are theater | **Still true:** `kit/src/edd/run_evals.ts` does not invoke a model or assert `required_patterns` / `required_output_sections` |
+| Multi-IDE peer-depth oversold | **Still mostly true:** README still lists many hosts; MCP/skills remain Cursor-first |
+| Skill length budget slipping | **Still true:** `agent-prune` / `agent-orchestrator` / `agent-debug` / `agent-copy` over ~150 lines |
+| Thin stack profiles | **Still true:** several `framework-*` / `lang-*` skills ~38–48 lines |
+| Process weight | **Still true:** shortcuts exist; default narrative is multi-phase |
 
 ---
 
@@ -82,4 +82,4 @@ Tracked in [kit-review-backlog.md](./kit-review-backlog.md). Top three:
 
 ---
 
-*Review stance: product/architecture assessment of the kit as shipped on `main`, not a PR diff review. Evidence from `AGENTS.md`, `README.md`, `docs/edd.md`, `kit/src/run_evals.ts`, MCP/install paths, skill line counts, and post–Aug 30 merges (#23–#43).*
+*Review stance: product/architecture assessment of the kit as shipped on `main`, not a PR diff review. Evidence from `AGENTS.md`, `README.md`, `docs/edd.md`, `kit/src/edd/run_evals.ts`, MCP/install paths, skill line counts, and post–Aug 30 merges (#23–#43).*

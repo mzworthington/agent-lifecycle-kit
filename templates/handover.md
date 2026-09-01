@@ -47,7 +47,7 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 
 | Phase | Minimum to mark COMPLETE |
 |-------|--------------------------|
-| **spec** | Gherkin scenarios; draft XFN criteria (or explicit unknowns); draft catalog notes; **memory MCP** updated with glossary terms (or explicit N/A — no new durable terms) |
+| **spec** | Gherkin scenarios; draft XFN criteria (or explicit unknowns); draft catalog notes; **memory MCP** updated with glossary terms (or explicit N/A - no new durable terms) |
 | **tdd** (design) | Functional impact table filled; every row Aligned = yes; first reds as needed; Next agent = `agent-xfn` (plan) |
 | **tdd** (short loop) | Gear 1 green (domain/handlers, mocked ports); gear 2 done or N/A (thin adapter + integration test, or reused existing); XFN fixtures noted; Next agent = `agent-xfn` (green) or `agent-adapter` only if deep-dive required |
 | **xfn** (plan) | Every matrix quality apply or skip + rationale; impact rows for apply qualities; suite paths or stubs; thresholds; SLOs noted for telemetry; Aligned = yes; **memory MCP** updated with agreed SLOs/thresholds (or explicit N/A) |
@@ -61,7 +61,7 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 
 ## Memory (required for spec / xfn when durable facts exist)
 
-Store durable facts for later sessions via the catalogued **memory** MCP — **never secrets**.
+Store durable facts for later sessions via the catalogued **memory** MCP - **never secrets**.
 
 | Field | Value |
 |-------|-------|

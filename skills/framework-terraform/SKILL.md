@@ -43,26 +43,26 @@ infra/
 ```
 
 - **Root modules** in `environments/<env>` wire modules and set backend + providers.
-- **Child modules** are reusable; no environment-specific logic inside shared modules — pass via variables.
+- **Child modules** are reusable; no environment-specific logic inside shared modules - pass via variables.
 - **Terragrunt** - Use for DRY backend/provider config; keep leaf modules Terraform-pure.
 
 ## 2. State and backends
 
 - Remote backend only (S3 + DynamoDB, GCS + locking, Azure Storage + blob lock).
 - Encrypt state at rest; block public access on state buckets.
-- One state per blast-radius boundary — never one monolithic state for entire org.
-- `terraform_remote_state` or stack outputs for cross-stack references — no duplicated resource definitions.
+- One state per blast-radius boundary - never one monolithic state for entire org.
+- `terraform_remote_state` or stack outputs for cross-stack references - no duplicated resource definitions.
 
 ## 3. CI/CD and identity
 
-- CI runs: `fmt -check`, `validate`, static analysis, `plan` — post plan artifact for review.
-- Apply uses **OIDC federation** to cloud IAM (GitHub Actions, GitLab, Azure DevOps) — no static cloud keys in CI.
+- CI runs: `fmt -check`, `validate`, static analysis, `plan` - post plan artifact for review.
+- Apply uses **OIDC federation** to cloud IAM (GitHub Actions, GitLab, Azure DevOps) - no static cloud keys in CI.
 - Separate pipeline roles: **plan** (read + plan) vs **apply** (write) with narrower apply role per environment.
 - Prod apply from protected branch with mandatory human approval on plan diff.
 
 ## 4. IAM and least privilege (Terraform-specific)
 
-- One IAM role per workload/service — no shared `PowerUser` attachments.
+- One IAM role per workload/service - no shared `PowerUser` attachments.
 - Use `aws_iam_role` + `aws_iam_role_policy` / inline policy documents with scoped ARNs.
 - Attach **permission boundaries** on human or broad roles where org requires.
 - For AWS: prefer IRSA / OIDC trust policies over instance profiles when on Kubernetes/ECS.
@@ -80,11 +80,11 @@ infra/
 
 - Semantic versioning for internal modules (`modules/networking?ref=v1.2.0`).
 - README per module: inputs, outputs, example, required IAM permissions.
-- No `terraform apply` from inside module directories in CI — only from environment roots.
+- No `terraform apply` from inside module directories in CI - only from environment roots.
 
 ## 7. Policy as code
 
-- **Checkov** or **tfsec** in CI — fail on CRITICAL/HIGH unless `checkov:skip` / exception with ticket ID in comment.
+- **Checkov** or **tfsec** in CI - fail on CRITICAL/HIGH unless `checkov:skip` / exception with ticket ID in comment.
 - Optional: **Sentinel** (Terraform Cloud) or **OPA** for org-wide guardrails (region allow-list, tag enforcement).
 - Rego/ Sentinel policies for: required tags, no `AdministratorAccess`, no unencrypted volumes.
 

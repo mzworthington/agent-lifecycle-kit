@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { resolveRepoDir } from './paths.js';
+import { resolveRepoDir } from '../shared/paths.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 

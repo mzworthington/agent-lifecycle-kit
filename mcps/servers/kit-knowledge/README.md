@@ -34,5 +34,5 @@ Requires Node 22+ and the kit checkout (with `tsx` available via the kit `node_m
 
 ## Risks
 
-- Tool schemas still occupy context; keep **kit-knowledge** in the lean `default` profile only — do not also stack unused heavy profiles.
+- Tool schemas still occupy context; keep **kit-knowledge** in the lean `default` profile only - do not also stack unused heavy profiles.
 - Path assumes `~/.agents` → kit clone. Set `KIT_ROOT` if the kit lives elsewhere.

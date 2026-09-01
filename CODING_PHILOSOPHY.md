@@ -95,10 +95,10 @@ Apply Robert C. Martin's craft principles inside every layer and slice.
 - **Single responsibility:** Functions and classes do one thing at one level of abstraction. Maximum three parameters; use a parameter object beyond that.
 - **Intention-revealing names:** Domain-driven names from ubiquitous language. No `data`, `info`, `manager`, or `helper` without a precise role.
 - **No dead code:** Delete unused abstractions. Do not build frameworks inside the product for one call site.
-- **Complexity hotspots:** When code is hard to change safely (high complexity, god modules, duplication), backlog and reduce via [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) — do not grow new layers to work around it.
+- **Complexity hotspots:** When code is hard to change safely (high complexity, god modules, duplication), backlog and reduce via [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) - do not grow new layers to work around it.
 - **Error handling:** Use domain-specific failures at the core; map to HTTP/CLI errors only in adapters. Fail fast with clear messages.
 - **Self-documenting code:** No inline comments except non-obvious workarounds. Public ports, endpoints, and boundaries require docstrings (JSDoc, Javadoc, XML docs) for API documentation generation.
-- **Explicit types:** Never use TypeScript `any`, `as any`, or `as unknown as`. Prefer `unknown` with narrowing, generics, or `satisfies`. Tests use typed fakes/`Partial<T>` — not `as any`. Vitest `expect.any(...)` matchers are not a type `any`. Enforce with `typescript/no-explicit-any`.
+- **Explicit types:** Never use TypeScript `any`, `as any`, or `as unknown as`. Prefer `unknown` with narrowing, generics, or `satisfies`. Tests use typed fakes/`Partial<T>` - not `as any`. Vitest `expect.any(...)` matchers are not a type `any`. Enforce with `typescript/no-explicit-any`.
 
 ### Minimal change (default)
 
@@ -154,7 +154,7 @@ Depending on the framework used, load the appropriate skill:
 
 Do not write implementation code before establishing behavioral or technical contracts.
 
-- **Eval-Driven Development (EDD) is the sensible default for agentic work:** When changing prompts, MCP tool schemas, or agent routing, write failing evals first (`kit eval run` / `ci`). Isolate context, mock tools, assert tool selection and JSON schemas, optionally LLM-as-a-judge, and gate merges on routing accuracy. Guide: [docs/edd.md](./docs/edd.md). Procedure: [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md).
+- **Eval-Driven Development (EDD) is the default for agentic work:** When changing prompts, MCP tool schemas, or agent routing, write failing evals first (`kit eval run` / `ci`). Isolate context, mock tools, assert tool selection and JSON schemas, optionally LLM-as-a-judge, and gate merges on routing accuracy. Guide: [docs/edd.md](./docs/edd.md). Procedure: [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md).
 - **Tests are the behavior catalog:** Unit, slice, and cross-functional suites (browser E2E, accessibility, security regression, load/performance) are the living inventory of features and the **source of truth for intended behavior**, above documentation, READMEs, and comments. When docs and tests disagree, trust the tests until stakeholders explicitly change the contract.
 - **Plan test impact before coding:** During design (TDD + XFN), inventory which existing cases the change will add, modify, or invalidate. Align with the user on that impact before implementation. Re-confirm during implementation whenever the work starts to affect cases not covered in the plan.
 - **Cross-functional requirements are tested, not assumed:** Spec captures measurable quality criteria; Design selects an XFN matrix (browser E2E, a11y, security tests, load) with apply/skip rationale; suites join the catalog. Procedure: [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md). Role: [agent-xfn](./skills/agent-xfn/SKILL.md).
@@ -194,7 +194,7 @@ Do not write implementation code before establishing behavioral or technical con
 - **Plain prose:** Do not use em dashes. Use a comma, colon, period, or hyphen with spaces (` - `) instead.
 - **Restrained formatting.** Use bold and backticks sparingly.
 - **No filler closings.** Do not end every response with offers to do more work the user did not ask for.
-- **Mermaid for diagrams.** Prefer Mermaid (`flowchart`, `sequenceDiagram`, `C4Context`, etc.) for architecture, sequence, flow, context-map, and component diagrams in specs, ADRs, handovers, READMEs, and replies. Do **not** create or maintain ASCII/box-drawing art diagrams — they are nearly impossible for humans to edit. When you touch a doc that still has ASCII diagrams, convert them to Mermaid. Simple indented directory/path listings in fenced `text` blocks are fine; they are not architecture diagrams.
+- **Mermaid for diagrams.** Prefer Mermaid (`flowchart`, `sequenceDiagram`, `C4Context`, etc.) for architecture, sequence, flow, context-map, and component diagrams in specs, ADRs, handovers, READMEs, and replies. Do **not** create or maintain ASCII/box-drawing art diagrams - they are nearly impossible for humans to edit. When you touch a doc that still has ASCII diagrams, convert them to Mermaid. Simple indented directory/path listings in fenced `text` blocks are fine; they are not architecture diagrams.
 - **Conventional commits and PR titles.** Use [Conventional Commits](https://www.conventionalcommits.org/) for every git commit **and** every pull request title (`feat: …`, `fix(scope): …`, `docs: …`). Repos squash-and-merge; the PR title is what lands on the default branch. Free-form PR titles break history and release tooling. Procedure: [SOPs/conventional-commits.md](./SOPs/conventional-commits.md).
 
 ### How to collaborate
