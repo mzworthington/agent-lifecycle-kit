@@ -55,13 +55,13 @@ Context isolation · mocked tools · schema match + LLM-as-a-judge · CI gates �
 
 ## What else Kit gives you
 
-EDD is the agent default. Around it, Kit standardizes how coding agents work across Cursor, Claude Code, Gemini CLI, Windsurf, and Copilot:
+EDD is the agent default. Around it, Kit standardizes coding-agent workflow. **Cursor is the reference host** for progressive skills and MCP compose; Claude Code, Gemini CLI, Windsurf, and Copilot get the same canonical `AGENTS.md` via thin entry stubs (`kit export-rules`)—not equal skill/MCP discovery depth.
 
 | Pillar | Outcome |
 | :--- | :--- |
-| **Architecture** | Hexagonal + DDD + vertical slices + clean code ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md)) |
+| **Architecture** | Hexagonal + DDD + vertical slices + clean code ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md); applicability/opt-out included) |
 | **Lifecycle skills** | Spec → TDD short loop → XFN → security → release via `agent-*` roles |
-| **One rules file** | `AGENTS.md` syncs to every IDE entry point |
+| **One rules file** | `AGENTS.md` syncs to IDE entry points (`kit export-rules`) |
 | **MCP catalog** | Composable profiles into `.cursor/mcp.json` ([mcps/](./mcps/)) |
 | **Context budget** | Always-on bootstrap under ~8KB; `kit measure-context` / `kit check` ([docs/kit.md](./docs/kit.md)) |
 | **Security audit** | Prompt injection, secrets, entropy, unpinned skills (`kit audit`) |
