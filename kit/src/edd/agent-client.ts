@@ -144,7 +144,76 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         routingConfidence: 0.9
       };
     }
+    if (prompt.includes('cloudflare analytics') || prompt.includes('cloudflare-analytics')) {
+      return {
+        content: 'Opening the cloudflare-analytics-ops SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'cloudflare-analytics-ops' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
     return scriptedNoTool('I am not sure which kit tool to use. Could you name an SOP or topic?', 0.4);
+  }
+
+  const hasCf =
+    names.has('execute') ||
+    names.has('query_worker_observability') ||
+    (names.has('search') && names.has('execute'));
+
+  if (hasCf && !hasArch) {
+    const rumListCode =
+      'async () => cloudflare.request({ method: "GET", path: `/accounts/${accountId}/rum/site_info/list` })';
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea')
+    ) {
+      return scriptedNoTool('That is outside Cloudflare ops. I can list RUM sites or Worker logs if you ask.');
+    }
+    if (
+      names.has('search') &&
+      (prompt.includes('endpoint') || prompt.includes('find the cloudflare api'))
+    ) {
+      return {
+        content: 'Searching the Cloudflare API spec for RUM site_info.',
+        tool_calls: [{ name: 'search', arguments: { code: 'rum site_info list' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    if (
+      names.has('query_worker_observability') &&
+      (prompt.includes('worker log') ||
+        prompt.includes('observability') ||
+        prompt.includes('insights beacon'))
+    ) {
+      return {
+        content: 'Querying Workers Observability for the insights beacon worker.',
+        tool_calls: [{ name: 'query_worker_observability', arguments: { view: 'events' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    if (
+      names.has('execute') &&
+      (prompt.includes('rum') || prompt.includes('web analytics') || prompt.includes('site_info'))
+    ) {
+      return {
+        content: 'Listing live Cloudflare Web Analytics / RUM sites.',
+        tool_calls: [{ name: 'execute', arguments: { code: rumListCode } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    return scriptedNoTool('I am not sure which Cloudflare tool to use. Ask for RUM sites, the site_info endpoint, or Worker logs.', 0.4);
   }
 
   const priorToolError = [...messages]

@@ -1,0 +1,15 @@
+{
+  "id": "cloudflare-observability",
+  "name": "Cloudflare Observability",
+  "summary": "Workers logs, metrics, and invocation search via Cloudflare Observability MCP (OAuth).",
+  "homepage": "https://github.com/cloudflare/mcp-server-cloudflare/tree/main/apps/workers-observability",
+  "transport": "http",
+  "phases": ["debug", "telemetry", "adapter"],
+  "triggers": ["Workers logs", "observability", "RUM beacon", "Worker analytics"],
+  "requiredEnv": [],
+  "mcp": {
+    "cloudflare-observability": {
+      "url": "https://observability.mcp.cloudflare.com/mcp"
+    }
+  }
+}

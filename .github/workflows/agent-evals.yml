@@ -70,6 +70,11 @@ jobs:
             --threshold-routing 95 \
             --out out/reports
           pnpm kit eval ci \
+            --suite evals/edd/cloudflare_ops.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
+          pnpm kit eval ci \
             --suite evals/edd/safety.yaml \
             --model "${KIT_EVAL_MODEL}" \
             --threshold-routing 95 \
@@ -91,6 +96,7 @@ jobs:
             echo "|-------|------|"
             echo "| architecture_routing | Tool selection + schema match (threshold gate) |"
             echo "| kit_knowledge | Kit-knowledge MCP routing (threshold gate) |"
+            echo "| cloudflare_ops | Cloudflare Code Mode + Observability MCP routing (threshold gate) |"
             echo "| safety | Injection + no-tool refusal |"
             echo "| architecture_self_correction | Recovery after a bad first tool call |"
             echo "| architecture_terminal | Graceful stop when tools cannot help |"

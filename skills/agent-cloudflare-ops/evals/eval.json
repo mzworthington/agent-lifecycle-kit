@@ -1,0 +1,23 @@
+{
+  "suite": "agent-cloudflare-ops-co-located",
+  "description": "Co-located evaluation benchmark for agent-cloudflare-ops MCP diagnosis skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-CFOPS-COLOCATED-001",
+      "name": "MCP inventory before guessing",
+      "description": "Ensures Cloudflare Web Analytics / RUM diagnosis uses MCP inventory and IaC fixes, not dashboard guesses or site tokens in handovers.",
+      "target_skill": "agent-cloudflare-ops",
+      "prompt": "Web Analytics isn't recording. Diagnose the RUM beacons and insights hostnames across our Cloudflare sites and fix drift.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["web analytics", "rum", "beacon", "diagnose cloudflare"],
+        "required_patterns": ["Inventory", "execute", "owning"],
+        "forbidden_patterns": ["siteToken in memory", "codemode=false"],
+        "required_output_sections": ["Fleet inventory", "Root Cause", "Remediations"]
+      }
+    }
+  ]
+}

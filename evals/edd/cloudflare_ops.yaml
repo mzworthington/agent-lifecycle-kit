@@ -1,0 +1,27 @@
+name: "Routing: Cloudflare ops MCP"
+dataset: "cloudflare_ops.jsonl"
+system_prompt: "cloudflare_ops_prompt.md"
+mcp_tools:
+  - "tools/search.json"
+  - "tools/execute.json"
+  - "tools/query_worker_observability.json"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+  - type: "argument_correctness"
+  - type: "mcp_use"
+  - type: "task_completion"
+mocks:
+  - tool: "execute"
+    response:
+      result:
+        - site_tag: "ea7ffeb012004862add795dccbb3c211"
+          host: "eval-driven-development.dev"
+  - tool: "search"
+    response:
+      paths:
+        - "/accounts/{account_id}/rum/site_info/list"
+  - tool: "query_worker_observability"
+    response:
+      events: []

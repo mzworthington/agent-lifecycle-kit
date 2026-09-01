@@ -42,10 +42,11 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-prune](./agent-prune/SKILL.md) | maintenance | Dead-code removal and complexity hotspot reduction in safe batches |
 | [agent-debug](./agent-debug/SKILL.md) | debug | Hypothesis-driven RCA for bugs, CI failures, live-site symptoms |
 | [agent-telemetry](./agent-telemetry/SKILL.md) | telemetry | Logging, tracing, metrics; XFN SLO mapping |
+| [agent-cloudflare-ops](./agent-cloudflare-ops/SKILL.md) | telemetry | Live Web Analytics / RUM / beacon diagnosis via Cloudflare MCP |
 | [agent-perf-opt](./agent-perf-opt/SKILL.md) | maintenance | Profiling memory leaks, CPU bottlenecks, SQL EXPLAIN ANALYZE |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
-Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md).
+Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md), [Cloudflare analytics ops](../SOPs/cloudflare-analytics-ops.md).
 
 ### TDD short loop (important)
 

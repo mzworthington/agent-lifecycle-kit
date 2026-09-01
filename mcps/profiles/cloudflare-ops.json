@@ -1,0 +1,11 @@
+{
+  "name": "cloudflare-ops",
+  "description": "Diagnose and remediate live Cloudflare analytics, Workers, and DNS. Code Mode API plus Workers Observability, with kit-knowledge and GitHub for IaC fixes. No Vercel.",
+  "servers": [
+    "kit-knowledge",
+    "github",
+    "memory",
+    "cloudflare",
+    "cloudflare-observability"
+  ]
+}

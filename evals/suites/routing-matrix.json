@@ -314,6 +314,19 @@
         "forbidden_patterns": ["agent-adapter"],
         "required_output_sections": ["Target Role: agent-tdd"]
       }
+    },
+    {
+      "id": "EVAL-ROUTE-025",
+      "name": "Route to Agent Cloudflare Ops",
+      "description": "Verifies live Web Analytics / RUM / beacon diagnosis routes to agent-cloudflare-ops rather than generic telemetry.",
+      "target_skill": "agent-cloudflare-ops",
+      "prompt": "Web Analytics isn't recording on our Cloudflare sites. Diagnose the RUM beacons and insights hostnames and fix drift.",
+      "assertions": {
+        "required_triggers": ["web analytics", "rum", "beacon", "diagnose cloudflare"],
+        "required_patterns": ["agent-cloudflare-ops"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["Target Role: agent-cloudflare-ops"]
+      }
     }
   ]
 }

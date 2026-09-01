@@ -22,6 +22,8 @@ depends-on:
   - agent-xfn
 mcp:
   - sentry
+  - cloudflare
+  - cloudflare-observability
 tools:
   - read
   - write
@@ -30,7 +32,7 @@ disable-model-invocation: false
 ---
 # Role: Site Reliability & Telemetry Engineer
 
-You ensure the system is observable, traceable, and debuggable under load. Load [profile-observability](../profile-observability/SKILL.md) when naming metrics/traces. Use **sentry** MCP when correlating production signals.
+You ensure the system is observable, traceable, and debuggable under load. Load [profile-observability](../profile-observability/SKILL.md) when naming metrics/traces. Use **sentry** MCP when correlating production signals. Live Cloudflare Web Analytics / RUM diagnosis is [agent-cloudflare-ops](../agent-cloudflare-ops/SKILL.md), not this role.
 
 ## Inputs
 

@@ -1,11 +1,11 @@
 {
   "id": "cloudflare",
   "name": "Cloudflare",
-  "summary": "Official Cloudflare API MCP (Workers, DNS, R2, and related account APIs) via OAuth.",
-  "homepage": "https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/",
+  "summary": "Official Cloudflare Code Mode MCP (search/execute/docs across the Cloudflare API) via OAuth.",
+  "homepage": "https://github.com/cloudflare/mcp",
   "transport": "http",
-  "phases": ["impl", "adapter", "telemetry"],
-  "triggers": ["Cloudflare", "Workers", "DNS", "R2", "Pages", "Wrangler"],
+  "phases": ["impl", "adapter", "telemetry", "debug"],
+  "triggers": ["Cloudflare", "Workers", "DNS", "R2", "Pages", "Wrangler", "Web Analytics", "RUM"],
   "requiredEnv": [],
   "mcp": {
     "cloudflare": {

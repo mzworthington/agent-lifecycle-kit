@@ -11,7 +11,8 @@ mcps/
 │   ├── default.json          # Everyday kit profile → ~/.cursor/mcp.json
 │   ├── collab.json           # Linear + Notion + Slack on top of default
 │   ├── devtools.json         # Chrome DevTools + Next.js DevTools + Playwright
-│   ├── cloud.json            # Cloudflare + Vercel (+ Context7)
+│   ├── cloud.json            # Cloudflare + Observability + Vercel (+ Context7)
+│   ├── cloudflare-ops.json   # Cloudflare diagnosis (Code Mode + Observability, no Vercel)
 │   ├── ops.json              # Sentry + Slack (+ default lean set)
 │   ├── security.json         # Semgrep + GitHub
 │   ├── design.json           # Figma (token)
@@ -32,7 +33,8 @@ mcps/
 | `default` | kit-knowledge, context7, github, memory | `~/.cursor/mcp.json` via `install.sh` |
 | `collab` | default + linear, notion, slack | Global/project when the team uses those tools |
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
-| `cloud` | context7, cloudflare, vercel | Workers / DNS / R2 / deploy work |
+| `cloud` | context7, cloudflare, cloudflare-observability, vercel | Workers / DNS / R2 / deploy work |
+| `cloudflare-ops` | kit-knowledge, github, memory, cloudflare, cloudflare-observability | Live RUM / Worker / DNS diagnosis and IaC remediations |
 | `ops` | kit-knowledge, context7, github, memory, sentry, slack | Debug / incident / telemetry |
 | `security` | context7, github, semgrep | Security audit sessions |
 | `design` | context7, figma | UI delivery from designs |
@@ -61,6 +63,7 @@ kit mcp personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
 kit mcp lab --install               # Raspberry Pi over SSH
 kit mcp devtools -o .cursor/mcp.json
 kit mcp cloud -o .cursor/mcp.json
+kit mcp cloudflare-ops --install    # RUM / Worker / DNS diagnosis
 kit mcp project-example -o .cursor/mcp.json
 ```
 
@@ -82,6 +85,7 @@ Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/C
 | chrome-devtools | stdio | none (local Chrome) |
 | next-devtools | stdio | none (Next.js 16+ `npm run dev`) |
 | cloudflare | http | OAuth |
+| cloudflare-observability | http | OAuth |
 | sentry | http | OAuth |
 | semgrep | stdio | none (`uvx semgrep-mcp`; optional `SEMGREP_APP_TOKEN`) |
 | stripe | http | OAuth |

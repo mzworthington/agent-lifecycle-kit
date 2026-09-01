@@ -370,6 +370,22 @@
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Empirical Performance Profiling", "Database Query Optimization"]
       }
+    },
+    {
+      "id": "EVAL-CFOPS-001",
+      "name": "Cloudflare Analytics MCP Diagnosis",
+      "description": "Verifies live Web Analytics / RUM diagnosis inventories via Cloudflare MCP and remediates in owning IaC rather than guessing dashboard state.",
+      "target_skill": "agent-cloudflare-ops",
+      "prompt": "Web Analytics isn't recording. Diagnose the RUM beacons and insights hostnames across our Cloudflare sites and fix drift.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["web analytics", "rum", "beacon", "diagnose cloudflare"],
+        "required_patterns": ["Inventory", "MCP", "owning"],
+        "forbidden_patterns": ["ASCII art", "siteToken in memory"],
+        "required_output_sections": ["Fleet inventory", "Root Cause", "Remediations"]
+      }
     }
   ]
 }

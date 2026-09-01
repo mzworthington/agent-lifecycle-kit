@@ -38,6 +38,7 @@ Extra MCP tools compete for attention and inflate tool-schema tokens. Compose **
 kit mcp default --install
 kit mcp collab --install
 kit mcp ops --install
+kit mcp cloudflare-ops --install
 ```
 
 Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + devtools + ops into one global `mcp.json`. Catalog: [mcps/README.md](../mcps/README.md). Procedure: [SOPs/mcp-library.md](../SOPs/mcp-library.md).

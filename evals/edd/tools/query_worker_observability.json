@@ -1,0 +1,19 @@
+{
+  "name": "query_worker_observability",
+  "description": "Query Workers Observability for events, metrics, or matching invocations. Confirm fields with observability_keys first unless they are already known. Use for insights beacon Worker errors and 404s.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["view"],
+    "properties": {
+      "view": {
+        "type": "string",
+        "description": "events | metrics | invocations"
+      },
+      "queryId": {
+        "type": "string",
+        "description": "Observability query id, e.g. workers-logs-events"
+      }
+    },
+    "additionalProperties": false
+  }
+}

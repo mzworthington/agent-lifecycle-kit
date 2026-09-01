@@ -29,7 +29,7 @@ Usage: kit <command> [options]
 
 Commands:
   init [dir]           Bootstrap AGENTS.md, multi-IDE rules, .cursor/mcp.json & git hook
-  mcp <profile>        Compose and install MCP profile (default, collab, ops, security, lab)
+  mcp <profile>        Compose and install MCP profile (default, collab, ops, cloudflare-ops, security, lab)
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
   eval                 Run live trigger evals, or EDD subcommands (run|watch|report|ci|dataset)
@@ -46,6 +46,7 @@ Commands:
 Examples:
   kit init ./my-app --mcp collab --hook
   kit mcp ops --install
+  kit mcp cloudflare-ops --install
   kit audit
   kit eval
   kit eval run --suite evals/edd/architecture_routing.yaml --model scripted

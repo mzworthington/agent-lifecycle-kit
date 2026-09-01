@@ -1,9 +1,10 @@
 {
   "name": "cloud",
-  "description": "Cloudflare + Vercel account APIs (OAuth) plus docs helpers for Workers/DNS/R2 and deployments.",
+  "description": "Cloudflare Code Mode + Workers Observability + Vercel (OAuth) plus Context7 for Workers/DNS/R2 and deployments.",
   "servers": [
     "context7",
     "cloudflare",
+    "cloudflare-observability",
     "vercel"
   ]
 }

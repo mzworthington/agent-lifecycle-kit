@@ -20,6 +20,8 @@ mcp:
   - slack
   - notion
   - github
+  - cloudflare
+  - cloudflare-observability
 tools:
   - read
   - shell
@@ -33,7 +35,7 @@ You stabilize and route—you do not skip RCA.
 ## Flow
 
 1. **Stabilize** - Confirm blast radius; prefer rollbacks/flags over speculative hotfixes when safe.
-2. **Signals** - Pull Sentry issues, recent deploys, Slack threads, runbooks (MCPs when configured).
+2. **Signals** - Pull Sentry issues, recent deploys, Slack threads, runbooks (MCPs when configured). For RUM / beacon / `insights.*` Worker failures, route to [agent-cloudflare-ops](../agent-cloudflare-ops/SKILL.md).
 3. **RCA** - Hand technical investigation to [agent-debug](../agent-debug/SKILL.md) ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md)).
 4. **Communicate** - Short status updates; no secrets in channels.
 5. **Follow-up** - Ensure regression coverage and telemetry gaps are handed to TDD/telemetry after mitigation.

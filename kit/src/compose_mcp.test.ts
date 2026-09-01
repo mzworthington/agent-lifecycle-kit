@@ -3,7 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { composeMCP } from './compose_mcp.js';
+
+const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 function writeServer(
   root: string,
@@ -105,5 +108,20 @@ describe('composeMCP', () => {
       () => composeMCP('demo', path.join(root, 'out.json'), false, { repoDir: root, env: {} }),
       /must contain a non-empty mcp object/
     );
+  });
+
+  it('composes the cloudflare-ops profile from the kit catalog', () => {
+    const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-cf-')), 'mcp.json');
+    composeMCP('cloudflare-ops', out, false, { repoDir: kitRoot, env: {} });
+    const body = JSON.parse(fs.readFileSync(out, 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(body.mcpServers.cloudflare?.url, 'https://mcp.cloudflare.com/mcp');
+    assert.equal(
+      body.mcpServers['cloudflare-observability']?.url,
+      'https://observability.mcp.cloudflare.com/mcp'
+    );
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.equal(body.mcpServers.vercel, undefined);
   });
 });

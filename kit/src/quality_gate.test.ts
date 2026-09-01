@@ -37,6 +37,7 @@ describe('EDD_CI_SUITES', () => {
     assert.deepEqual([...EDD_CI_SUITES], [
       'evals/edd/architecture_routing.yaml',
       'evals/edd/kit_knowledge.yaml',
+      'evals/edd/cloudflare_ops.yaml',
       'evals/edd/safety.yaml',
       'evals/edd/architecture_self_correction.yaml',
       'evals/edd/architecture_terminal.yaml'

@@ -55,7 +55,7 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 | **impl** (adapter deep-dive) | Large adapters wired without domain rule changes; stayed-within Design maps **or** revised maps re-aligned; fixtures needed by XFN noted |
 | **audit** | Security + arch findings recorded; catalog/XFN completeness checked (missing apply suites or silent rewrites = fail) |
 | **debug** | Root cause stated; debug board updated; reproduce + proof gates passed for the symptom class; regression test added when domain logic changed. See [SOPs/hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) |
-| **telemetry** | Instrumentation added; XFN load SLOs (if any) mapped to metrics/alerts or explicit N/A |
+| **telemetry** | Instrumentation added; XFN load SLOs (if any) mapped to metrics/alerts or explicit N/A. Cloudflare RUM/beacon diagnosis (`agent-cloudflare-ops`) inventories live vs IaC and proves HTTP/MCP evidence |
 | **release** | Prior phase DoDs satisfied; conventional PR title; catalog + matrix summary reported ([SOPs/release.md](../SOPs/release.md)) |
 | **maintenance** | Prune/complexity/migration batch complete; backlog rows updated; pre-commit green |
 

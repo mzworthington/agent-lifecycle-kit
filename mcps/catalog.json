@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -115,10 +115,20 @@
     {
       "id": "cloudflare",
       "name": "Cloudflare",
-      "summary": "Official Cloudflare API MCP (Workers, DNS, R2, and related account APIs) via OAuth.",
+      "summary": "Official Cloudflare Code Mode MCP (search/execute/docs across the Cloudflare API) via OAuth.",
       "transport": "http",
-      "phases": ["impl", "adapter", "telemetry"],
-      "triggers": ["Cloudflare", "Workers", "DNS", "R2", "Pages", "Wrangler"],
+      "phases": ["impl", "adapter", "telemetry", "debug"],
+      "triggers": ["Cloudflare", "Workers", "DNS", "R2", "Pages", "Wrangler", "Web Analytics", "RUM"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "cloudflare-observability",
+      "name": "Cloudflare Observability",
+      "summary": "Workers logs, metrics, and invocation search via Cloudflare Observability MCP (OAuth).",
+      "transport": "http",
+      "phases": ["debug", "telemetry", "adapter"],
+      "triggers": ["Workers logs", "observability", "RUM beacon", "Worker analytics"],
       "requiredEnv": [],
       "enabledByDefault": false
     },

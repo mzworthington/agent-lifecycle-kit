@@ -1,0 +1,19 @@
+{
+  "name": "execute",
+  "description": "Write JavaScript that calls cloudflare.request() against a discovered Cloudflare API path. Use for live account reads (RUM site list, Workers, DNS). Do not invent site tokens or mutate IaC-managed resources without user approval.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["code"],
+    "properties": {
+      "code": {
+        "type": "string",
+        "description": "JavaScript that calls cloudflare.request({ method, path, body? })"
+      },
+      "account_id": {
+        "type": "string",
+        "description": "Cloudflare account id when the token cannot auto-detect it"
+      }
+    },
+    "additionalProperties": false
+  }
+}

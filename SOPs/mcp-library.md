@@ -22,6 +22,7 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Linear / Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
 | Cloudflare / Vercel | `mcps/profiles/cloud.json` |
+| Cloudflare RUM / Worker / DNS diagnosis | `mcps/profiles/cloudflare-ops.json` |
 | Sentry / Slack ops | `mcps/profiles/ops.json` |
 | Semgrep security scans | `mcps/profiles/security.json` |
 | Figma design context | `mcps/profiles/design.json` |
@@ -108,9 +109,10 @@ kit mcp lab --install
 mkdir -p .cursor
 kit mcp project-example -o .cursor/mcp.json
 kit mcp cloud -o .cursor/mcp.cloud.json   # optional merge by hand
+kit mcp cloudflare-ops --install          # RUM / Worker diagnosis
 ```
 
-The installer (`curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh`, or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, and `cloud` explicitly.
+The installer (`curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh`, or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, and `cloudflare-ops` explicitly.
 
 ## 4. Verify in Cursor
 

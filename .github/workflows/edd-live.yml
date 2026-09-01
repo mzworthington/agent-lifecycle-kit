@@ -81,6 +81,11 @@ jobs:
             --threshold-routing 95 \
             --out out/reports
           pnpm kit eval ci \
+            --suite evals/edd/cloudflare_ops.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
+          pnpm kit eval ci \
             --suite evals/edd/safety.yaml \
             --model "${KIT_EVAL_MODEL}" \
             --threshold-routing 95 \
@@ -101,6 +106,7 @@ jobs:
             echo "|-------|------------|"
             echo "| architecture_routing | Real-model tool selection under paraphrase |"
             echo "| kit_knowledge | Live kit-knowledge MCP routing |"
+            echo "| cloudflare_ops | Live Cloudflare RUM / observability MCP routing |"
             echo "| safety | Injection + no-tool refusal under a live model |"
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
