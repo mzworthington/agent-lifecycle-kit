@@ -198,12 +198,15 @@ cmd_sync_notes() {
 
   prev=""
   for tag in "${tags[@]}"; do
-    if ! gh release view "$tag" >/dev/null 2>&1; then
-      echo "Skipping ${tag}: no GitHub Release"
-      continue
-    fi
+    # Missing local tags must fail hard: skipping without advancing prev would make
+    # later releases render from an earlier boundary (full history / wrong commits).
     if ! git rev-parse "${tag}^{commit}" >/dev/null 2>&1; then
-      echo "Skipping ${tag}: tag not present in local git" >&2
+      echo "Missing local tag ${tag} after fetch; aborting sync-notes to avoid corrupt ranges" >&2
+      exit 1
+    fi
+    if ! gh release view "$tag" >/dev/null 2>&1; then
+      echo "Skipping ${tag}: no GitHub Release (still advancing range boundary)"
+      prev="$tag"
       continue
     fi
     notes_file="$(mktemp)"
