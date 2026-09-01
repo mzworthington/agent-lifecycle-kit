@@ -21,6 +21,7 @@
 ### 🧰 Maintenance & Dependencies
 
 - *(edd)* Remove otelop demo shell, keep closed-loop kit spans (#30)
+- *(security)* SECURITY, CONTRIBUTING, Dependabot, and CodeQL (#37)
 
 ### 📚 Documentation
 
