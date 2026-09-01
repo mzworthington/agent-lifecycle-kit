@@ -1,7 +1,7 @@
 {
   "suite": "stack-profiles",
   "description": "Evaluation benchmarks for lang-* and framework-* stack profiles",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-LANG-TS-001",
@@ -257,6 +257,86 @@
         "required_patterns": ["handler"],
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Delivery Adapter", "Handler"]
+      }
+    },
+    {
+      "id": "EVAL-LANG-PYTHON-001",
+      "name": "Python Typing & Ports Profile",
+      "description": "Verifies typed Python, Protocol ports, and domain purity without ORM leakage.",
+      "target_skill": "lang-python",
+      "prompt": "Write a Python domain service with type hints, a Protocol port, and pytest coverage. Keep the ORM out of domain.",
+      "context": {
+        "detected_stack": ["Python"]
+      },
+      "assertions": {
+        "required_triggers": ["python", "type hints", "pytest"],
+        "required_patterns": ["Protocol", "def "],
+        "forbidden_patterns": ["SQLAlchemy"],
+        "required_output_sections": ["Type Hints", "Port Protocol"]
+      }
+    },
+    {
+      "id": "EVAL-LANG-GO-001",
+      "name": "Go Interfaces & Domain Purity Profile",
+      "description": "Verifies idiomatic Go with interfaces at the edge, table-driven tests, and context cancellation.",
+      "target_skill": "lang-go",
+      "prompt": "Implement a golang service with small interfaces at the boundary, go test table-driven cases, and context.Context cancellation.",
+      "context": {
+        "detected_stack": ["Go"]
+      },
+      "assertions": {
+        "required_triggers": ["golang", "go test"],
+        "required_patterns": ["interface", "func "],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Boundary Interface", "Domain Types"]
+      }
+    },
+    {
+      "id": "EVAL-FW-FASTAPI-001",
+      "name": "FastAPI Thin Route Adapter Profile",
+      "description": "Verifies FastAPI routers stay as adapters with Pydantic at the edge and Depends-injected ports.",
+      "target_skill": "framework-fastapi",
+      "prompt": "Create a FastAPI APIRouter with Pydantic v2 schemas, Depends-injected ports, and async route handlers.",
+      "context": {
+        "detected_stack": ["Python", "FastAPI"]
+      },
+      "assertions": {
+        "required_triggers": ["fastapi", "apirouter", "pydantic"],
+        "required_patterns": ["APIRouter", "Depends"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Route Adapter", "Pydantic Models"]
+      }
+    },
+    {
+      "id": "EVAL-PROF-API-001",
+      "name": "API Boundary & Idempotency Profile",
+      "description": "Verifies public HTTP/event APIs get versioning, idempotency, and a stable error envelope.",
+      "target_skill": "profile-api",
+      "prompt": "Design a REST API with API versioning, idempotency keys on POST, and a stable error envelope.",
+      "context": {
+        "detected_stack": ["HTTP API"]
+      },
+      "assertions": {
+        "required_triggers": ["rest api", "idempotency", "api versioning"],
+        "required_patterns": ["idempotency", "envelope"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Versioning", "Error Envelope"]
+      }
+    },
+    {
+      "id": "EVAL-PROF-OBS-001",
+      "name": "Observability Naming & SLO Mapping Profile",
+      "description": "Verifies metric/trace naming stays low-cardinality and alert thresholds match XFN SLOs.",
+      "target_skill": "profile-observability",
+      "prompt": "Apply the observability profile: OpenTelemetry tracing conventions, metrics naming, and SLO mapping for this backend.",
+      "context": {
+        "detected_stack": ["OpenTelemetry"]
+      },
+      "assertions": {
+        "required_triggers": ["observability profile", "metrics naming", "tracing conventions", "slo mapping", "opentelemetry"],
+        "required_patterns": ["cardinality", "SLO"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Metric Naming", "SLO Link"]
       }
     }
   ]

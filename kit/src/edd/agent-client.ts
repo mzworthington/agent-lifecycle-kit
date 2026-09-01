@@ -74,7 +74,12 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
   const lastUser = [...messages].reverse().find((m) => m.role === 'user');
   const prompt = (lastUser?.content ?? '').toLowerCase();
   const names = toolNames(tools);
-  const hasKit = names.has('search_kit') || names.has('get_sop') || names.has('get_philosophy_section');
+  const hasKit =
+    names.has('search_kit') ||
+    names.has('get_sop') ||
+    names.has('get_philosophy_section') ||
+    names.has('get_handover') ||
+    names.has('list_kit_index');
   const hasArch = names.has('read_architecture_yaml');
 
   if (hasKit && !hasArch) {
@@ -124,6 +129,19 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         consecutiveToolFailures: 0,
         haltedAutonomousExecution: false,
         routingConfidence: 0.88
+      };
+    }
+    if (names.has('get_handover') && prompt.includes('handover')) {
+      const phase = prompt.includes('xfn') ? 'xfn' : prompt.includes('spec') ? 'spec' : undefined;
+      const arguments_: Record<string, unknown> = { project: 'canvas' };
+      if (phase) arguments_.phase = phase;
+      return {
+        content: 'Opening the requested phase handover.',
+        tool_calls: [{ name: 'get_handover', arguments: arguments_ }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
       };
     }
     return scriptedNoTool('I am not sure which kit tool to use. Could you name an SOP or topic?', 0.4);

@@ -6,6 +6,7 @@ mcp_tools:
   - "tools/get_sop.json"
   - "tools/get_philosophy_section.json"
   - "tools/list_kit_index.json"
+  - "tools/get_handover.json"
 metrics:
   - type: "tool_selection"
   - type: "schema_match"
@@ -31,3 +32,8 @@ mocks:
     response:
       sops:
         - "conventional-commits"
+  - tool: "get_handover"
+    response:
+      path: "handover/canvas/handover_spec.md"
+      phase: "spec"
+      status: "COMPLETE"

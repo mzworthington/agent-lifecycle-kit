@@ -1,7 +1,7 @@
 {
   "suite": "routing-matrix",
   "description": "Evaluation benchmarks for cross-skill routing accuracy and specialist role activation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-ROUTE-001",
@@ -157,6 +157,162 @@
         "required_patterns": ["agent-review"],
         "forbidden_patterns": ["agent-spec"],
         "required_output_sections": ["Target Role: agent-review"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-013",
+      "name": "Route to Agent XFN",
+      "description": "Verifies Playwright / accessibility / load-test requests route to agent-xfn, never to agent-tdd.",
+      "target_skill": "agent-xfn",
+      "prompt": "Create the Playwright accessibility and load-test XFN matrix for the sharing modal.",
+      "assertions": {
+        "required_triggers": ["xfn", "playwright", "accessibility", "load test"],
+        "required_patterns": ["agent-xfn"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["Target Role: agent-xfn"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-014",
+      "name": "Route to Agent Migration",
+      "description": "Verifies online-safe column rename / expand-contract schema work routes to agent-migration, not a full feature lifecycle.",
+      "target_skill": "agent-migration",
+      "prompt": "Rename the orders.status column with an expand-contract migration so the schema change stays online-safe.",
+      "assertions": {
+        "required_triggers": ["migration", "expand contract", "schema change"],
+        "required_patterns": ["agent-migration"],
+        "forbidden_patterns": ["agent-orchestrator"],
+        "required_output_sections": ["Target Role: agent-migration"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-015",
+      "name": "Route Large Adapter Deep-Dive",
+      "description": "Verifies multi-step payment-gateway plus message-bus work routes to agent-adapter, not a thin TDD gear-2 pass.",
+      "target_skill": "agent-adapter",
+      "prompt": "This payment gateway needs an adapter deep dive with a message bus and a large infrastructure repository client.",
+      "assertions": {
+        "required_triggers": ["adapter deep dive", "payment gateway", "message bus", "repository"],
+        "required_patterns": ["agent-adapter"],
+        "forbidden_patterns": ["agent-spec"],
+        "required_output_sections": ["Target Role: agent-adapter"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-016",
+      "name": "Route to Agent Grilling",
+      "description": "Verifies design-tree / decision-frontier stress tests route to agent-grilling rather than grill-me.",
+      "target_skill": "agent-grilling",
+      "prompt": "Grill this plan with a design tree. Stress test the decision frontier before we write a spec.",
+      "assertions": {
+        "required_triggers": ["grilling", "design tree", "decision frontier", "stress test plan"],
+        "required_patterns": ["agent-grilling"],
+        "forbidden_patterns": ["grill-me"],
+        "required_output_sections": ["Target Role: agent-grilling"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-017",
+      "name": "Route to Agent Grill-Me",
+      "description": "Verifies stateless idea interviews route to agent-grill-me and stay file-free.",
+      "target_skill": "agent-grill-me",
+      "prompt": "Use grill-me to interview this idea and explore the idea without writing files.",
+      "assertions": {
+        "required_triggers": ["grill-me", "interview idea", "explore idea"],
+        "required_patterns": ["agent-grill-me"],
+        "forbidden_patterns": ["agent-spec"],
+        "required_output_sections": ["Target Role: agent-grill-me"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-018",
+      "name": "Route to Agent API Contract",
+      "description": "Verifies OpenAPI / consumer-driven contract evolution routes to agent-api-contract, not agent-spec.",
+      "target_skill": "agent-api-contract",
+      "prompt": "Evolve the OpenAPI contract and webhook contract with a consumer driven contract check before we change handlers.",
+      "assertions": {
+        "required_triggers": ["openapi", "api contract", "webhook contract", "consumer driven contract"],
+        "required_patterns": ["agent-api-contract"],
+        "forbidden_patterns": ["agent-spec"],
+        "required_output_sections": ["Target Role: agent-api-contract"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-019",
+      "name": "Route to Agent UI",
+      "description": "Verifies semantic HTML / landmark / heading-order delivery work routes to agent-ui.",
+      "target_skill": "agent-ui",
+      "prompt": "Fix the semantic HTML landmarks and heading order on this form page before we restyle it.",
+      "assertions": {
+        "required_triggers": ["semantic html", "landmarks", "heading order", "form"],
+        "required_patterns": ["agent-ui"],
+        "forbidden_patterns": ["agent-copy"],
+        "required_output_sections": ["Target Role: agent-ui"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-020",
+      "name": "Route to Agent Telemetry",
+      "description": "Verifies OpenTelemetry / SLO metric instrumentation routes to agent-telemetry rather than perf-opt.",
+      "target_skill": "agent-telemetry",
+      "prompt": "Add OpenTelemetry tracing, correlation id propagation, and SLO metrics for the share pipeline.",
+      "assertions": {
+        "required_triggers": ["opentelemetry", "tracing", "correlation id", "slo"],
+        "required_patterns": ["agent-telemetry"],
+        "forbidden_patterns": ["agent-perf-opt"],
+        "required_output_sections": ["Target Role: agent-telemetry"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-021",
+      "name": "Route to Agent ADR",
+      "description": "Verifies hard-to-reverse / off-norm architecture-decision requests route to agent-adr.",
+      "target_skill": "agent-adr",
+      "prompt": "Record an ADR using MADR for this irreversible architecture decision and why we chose object storage.",
+      "assertions": {
+        "required_triggers": ["adr", "madr", "architecture decision", "irreversible"],
+        "required_patterns": ["agent-adr"],
+        "forbidden_patterns": ["agent-arch-drift"],
+        "required_output_sections": ["Target Role: agent-adr"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-022",
+      "name": "Route to Agent Release",
+      "description": "Verifies ship / changelog / version-bump requests route to agent-release.",
+      "target_skill": "agent-release",
+      "prompt": "Ship the release: changelog, version bump, and prepare merge with a conventional PR title.",
+      "assertions": {
+        "required_triggers": ["release", "ship", "changelog", "version bump", "prepare merge"],
+        "required_patterns": ["agent-release"],
+        "forbidden_patterns": ["agent-docs"],
+        "required_output_sections": ["Target Role: agent-release"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-023",
+      "name": "Route to Agent Pre-Commit",
+      "description": "Verifies hook / lint / conventional-commit quality-gate requests route to agent-pre-commit.",
+      "target_skill": "agent-pre-commit",
+      "prompt": "Run the husky pre-commit quality gate, fix lint, and format the PR title as a conventional commit.",
+      "assertions": {
+        "required_triggers": ["pre-commit", "husky", "quality gate", "conventional commits", "PR title"],
+        "required_patterns": ["agent-pre-commit"],
+        "forbidden_patterns": ["agent-release"],
+        "required_output_sections": ["Target Role: agent-pre-commit"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-024",
+      "name": "Prefer TDD Gear 2 Over Adapter Deep-Dive",
+      "description": "Verifies wiring one thin adapter for a port just greened stays on agent-tdd, not agent-adapter.",
+      "target_skill": "agent-tdd",
+      "prompt": "Wire a thin Stripe client for the payment port interface we just greened in this TDD session.",
+      "assertions": {
+        "required_triggers": ["tdd", "port interface"],
+        "required_patterns": ["agent-tdd"],
+        "forbidden_patterns": ["agent-adapter"],
+        "required_output_sections": ["Target Role: agent-tdd"]
       }
     }
   ]

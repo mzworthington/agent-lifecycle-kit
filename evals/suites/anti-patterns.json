@@ -1,7 +1,7 @@
 {
   "suite": "anti-patterns",
   "description": "Evaluation benchmarks testing strict enforcement of negative guardrails and architectural anti-patterns",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-ANTI-001",
@@ -40,6 +40,32 @@
         "required_patterns": ["feat(workspace):", "Conventional Commit Subject"],
         "forbidden_patterns": ["WIP", "fixed bugs", "updated code"],
         "required_output_sections": ["Conventional Commit Subject & PR Title"]
+      }
+    },
+    {
+      "id": "EVAL-ANTI-004",
+      "name": "XFN Suites Are Not Owned By TDD",
+      "description": "Verifies Playwright / accessibility / load suites route to agent-xfn and are never treated as agent-tdd work.",
+      "target_skill": "agent-xfn",
+      "prompt": "Write the Playwright accessibility and load test suites for the sharing modal as part of the XFN matrix.",
+      "assertions": {
+        "required_triggers": ["xfn", "playwright", "accessibility", "load test"],
+        "required_patterns": ["agent-xfn", "XFN Quality Matrix"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["XFN Quality Matrix"]
+      }
+    },
+    {
+      "id": "EVAL-ANTI-005",
+      "name": "Thin Adapter Stays In TDD Short Loop",
+      "description": "Verifies one thin adapter for a port just greened stays on agent-tdd gear 2 rather than an adapter deep-dive.",
+      "target_skill": "agent-tdd",
+      "prompt": "Wire a thin Stripe client for the payment port interface we just greened in this TDD session.",
+      "assertions": {
+        "required_triggers": ["tdd", "port interface"],
+        "required_patterns": ["agent-tdd", "gear 2"],
+        "forbidden_patterns": ["agent-adapter"],
+        "required_output_sections": ["Red-Green-Refactor Plan"]
       }
     }
   ]

@@ -8,6 +8,8 @@ Kit evaluates two layers: **skill routing** (which specialist activates) and **a
 
 Together they guard: correct skill activation, architectural conformance, no prompt drift, and agent tool reliability above CI thresholds.
 
+`pnpm kit validate` also requires every `agent-*` skill to appear in `evals/suites/routing-matrix.json` and `lifecycle-roles.json`, and every `lang-*` / `framework-*` / `profile-*` skill to appear in `stack-profiles.json`. Co-located `skills/*/evals/eval.json` files are not a substitute for those cross-skill suites.
+
 ---
 
 ## Directory Structure
@@ -89,4 +91,4 @@ pnpm kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing
 pnpm kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 ```
 
-`kit eval ci` with the scripted driver runs architecture routing **and** kit-knowledge MCP suites in `kit check`. That path is what Cursor and Copilot users run; no provider API key. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml). Key order and IDE vs HTTP driver: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).
+`kit eval ci` with the scripted driver runs architecture routing, kit-knowledge MCP, safety, self-correction, and terminal-fallback suites in `kit check`. That path is what Cursor and Copilot users run; no provider API key. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml). Key order and IDE vs HTTP driver: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).

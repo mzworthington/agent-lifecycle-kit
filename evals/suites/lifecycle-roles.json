@@ -1,7 +1,7 @@
 {
   "suite": "lifecycle-roles",
   "description": "Evaluation benchmarks for agent-* specialist lifecycle roles",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-SPEC-001",
@@ -241,6 +241,134 @@
         "required_patterns": ["stateless"],
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Frontier", "Settled Choices"]
+      }
+    },
+    {
+      "id": "EVAL-ORCH-001",
+      "name": "Multi-Phase Lifecycle Orchestration",
+      "description": "Verifies end-to-end feature requests produce an ordered specialist handover plan without jumping to code.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Orchestrate the end-to-end development of a real-time presence awareness feature through all lifecycle phases.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": ["lifecycle", "multi-phase", "orchestrate"],
+        "required_patterns": ["agent-spec", "agent-tdd", "agent-xfn"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Phase Handover Plan", "Specialist Role Assignments"]
+      }
+    },
+    {
+      "id": "EVAL-GRILLING-001",
+      "name": "Design-Tree Grilling",
+      "description": "Verifies plan stress-tests map a design tree, compute the decision frontier, and wait for human confirmation.",
+      "target_skill": "agent-grilling",
+      "prompt": "Grill this plan with a design tree. Stress test the decision frontier before we write a spec.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["grilling", "design tree", "decision frontier", "stress test plan"],
+        "required_patterns": ["Frontier", "design tree"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Design Tree", "Decision Frontier", "Round"]
+      }
+    },
+    {
+      "id": "EVAL-COPY-001",
+      "name": "Human-Centric Copy Pass",
+      "description": "Verifies AI-sounding landing copy requests produce a practitioner rewrite and anti-pattern flags.",
+      "target_skill": "agent-copy",
+      "prompt": "The landing page copy sounds AI-generated. Humanize the wording and tighten brand voice without a redesign.",
+      "context": {
+        "active_phase": "impl"
+      },
+      "assertions": {
+        "required_triggers": ["humanize", "landing page copy", "sounds AI", "brand voice"],
+        "required_patterns": ["Voice Pillars", "Anti-patterns"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Voice Pillars", "Anti-patterns"]
+      }
+    },
+    {
+      "id": "EVAL-DOCS-001",
+      "name": "Docs Narrative With Copy Voice",
+      "description": "Verifies README/runbook rewrites stay catalog-accurate and load agent-copy for narrative voice.",
+      "target_skill": "agent-docs",
+      "prompt": "Rewrite the README lead and runbook documentation so the docs narrative does not sound like template marketing copy.",
+      "context": {
+        "active_phase": "release"
+      },
+      "assertions": {
+        "required_triggers": ["documentation", "readme", "runbook", "docs narrative"],
+        "required_patterns": ["agent-copy", "README"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["README", "Runbook"]
+      }
+    },
+    {
+      "id": "EVAL-MIG-001",
+      "name": "Expand-Contract Schema Migration",
+      "description": "Verifies column-rename work produces an expand/contract sequence and a verified rollback.",
+      "target_skill": "agent-migration",
+      "prompt": "Create an expand-contract migration to rename a column without downtime, including rollback.",
+      "context": {
+        "active_phase": "maintenance"
+      },
+      "assertions": {
+        "required_triggers": ["migration", "expand contract", "schema change"],
+        "required_patterns": ["expand", "contract", "rollback"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Expand/Contract Sequence", "Rollback"]
+      }
+    },
+    {
+      "id": "EVAL-CONTRACT-001",
+      "name": "API Contract Evolution",
+      "description": "Verifies OpenAPI/webhook contract changes stay additive, treat the contract as a port, and hand behavior to TDD.",
+      "target_skill": "agent-api-contract",
+      "prompt": "Evolve the OpenAPI contract specification to add backwards compatible webhook contract endpoints.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["openapi", "api contract", "webhook contract"],
+        "required_patterns": ["port", "additive", "agent-tdd"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Port Contract", "Consumer Impact"]
+      }
+    },
+    {
+      "id": "EVAL-UI-001",
+      "name": "Semantic HTML Delivery",
+      "description": "Verifies UI work leads with landmarks, heading order, and native controls rather than div+ARIA.",
+      "target_skill": "agent-ui",
+      "prompt": "Build an accessible form page with semantic HTML landmarks, heading order, and keyboard-focusable controls.",
+      "context": {
+        "active_phase": "impl"
+      },
+      "assertions": {
+        "required_triggers": ["ui", "semantic html", "landmarks", "heading order", "form", "a11y"],
+        "required_patterns": ["landmark", "heading"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Landmarks", "Heading outline"]
+      }
+    },
+    {
+      "id": "EVAL-PERF-001",
+      "name": "Empirical Performance Optimization",
+      "description": "Verifies latency and memory-leak work starts from profiling and EXPLAIN ANALYZE, not guesswork.",
+      "target_skill": "agent-perf-opt",
+      "prompt": "Profile the memory leak and run EXPLAIN ANALYZE for latency optimization on this database API.",
+      "context": {
+        "active_phase": "maintenance"
+      },
+      "assertions": {
+        "required_triggers": ["memory leak", "explain analyze", "latency optimization", "profiling"],
+        "required_patterns": ["p95", "EXPLAIN"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Empirical Performance Profiling", "Database Query Optimization"]
       }
     }
   ]
