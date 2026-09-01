@@ -41,6 +41,9 @@ jobs:
       - name: TypeScript type-check
         run: pnpm typecheck
 
+      - name: Lint (oxlint, no-explicit-any)
+        run: pnpm lint
+
       - name: Unit tests
         run: pnpm test:ci
 
@@ -64,7 +67,7 @@ jobs:
             echo "| Gate | What a green check means |"
             echo "|------|--------------------------|"
             echo "| actionlint | Workflow YAML is valid and Action-safe |"
-            echo "| typecheck / unit tests | TypeScript and Node harness tests pass |"
+            echo "| typecheck / lint / unit tests | TypeScript, oxlint (\`typescript/no-explicit-any\`), and Node harness tests pass |"
             echo "| kit check | Skill security scan, layout, IDE rules export, skill-trigger evals, EDD routing ≥95% (architecture + kit-knowledge + safety), context budget |"
             echo "| MCP profile / kit metrics | Default MCP composition resolves; CLI metrics command runs |"
             echo ""
