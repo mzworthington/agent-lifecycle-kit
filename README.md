@@ -170,11 +170,13 @@ App repos only need `kit` on PATH. This table is for people changing Kit itself:
 | `skills/`, `mcps/` | Lifecycle skills and MCP catalog |
 
 ```bash
-pnpm test          # kit/src unit tests + kit-knowledge
+pnpm install
+pnpm typecheck && pnpm test && pnpm kit check
 pnpm test:ci       # same + Markdown report at out/reports/unit-test-report.md (CI Summary)
-pnpm typecheck     # also run by .husky/pre-commit
 pnpm check         # tests, then kit check (audit, evals, EDD CI, context budget)
 ```
+
+Contributing: [CONTRIBUTING.md](./CONTRIBUTING.md). Security: [SECURITY.md](./SECURITY.md).
 
 ---
 
