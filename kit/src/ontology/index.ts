@@ -22,8 +22,6 @@ export {
   resolveOntologyIndex,
   ontologyCachePath,
   siteOntologyIndexPath,
-  ontologyGraphRuntimePath,
-  emitOntologyMapRuntime,
   serializeOntologyIndex,
   getEntity,
   getRelated

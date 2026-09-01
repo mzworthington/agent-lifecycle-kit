@@ -1,0 +1,153 @@
+import { buildDocsCatalog, type DocsPageMeta, findDocsPage } from './catalog.ts';
+
+const markdownModules = import.meta.glob(
+  [
+    '../../../docs/**/*.md',
+    '../../../SOPs/*.md',
+    '../../../evals/edd/**/*.md',
+    '../../../mcps/README.md',
+    '../../../ontology/README.md'
+  ],
+  { query: '?raw', eager: true, import: 'default' }
+) as Record<string, string>;
+
+export const DOCS_PAGES: DocsPageMeta[] = buildDocsCatalog(markdownModules);
+
+export const DOC_PATHS = new Set(DOCS_PAGES.map((page) => page.path));
+
+export function findPublishedPage(pathname: string): DocsPageMeta | undefined {
+  return findDocsPage(DOCS_PAGES, pathname);
+}
+
+export type DocsNavItem = {
+  label: string;
+  path: string;
+  matchPrefixes?: string[];
+};
+
+export type DocsSidebarSection = {
+  title: string;
+  items: DocsNavItem[];
+};
+
+export type DocsNeighbor = {
+  label: string;
+  path: string;
+};
+
+/** Header hubs. Chapter lists live in the sidebar. */
+export const SITE_NAV: DocsNavItem[] = [
+  { label: 'Start', path: '/docs/start', matchPrefixes: ['/docs/start', '/docs/jobs', '/docs/faq'] },
+  {
+    label: 'Guide',
+    path: '/docs',
+    matchPrefixes: [
+      '/docs/edd',
+      '/docs/kit',
+      '/docs/lifecycle',
+      '/docs/sops',
+      '/docs/ADRs',
+      '/docs/kit-value-and-model-agnostic-review',
+      '/docs/kit-review-backlog'
+    ]
+  },
+  { label: 'Evals', path: '/evals/edd', matchPrefixes: ['/evals'] },
+  { label: 'Map', path: '/docs/map', matchPrefixes: ['/docs/map', '/ontology'] }
+];
+
+const START_ITEMS: DocsNavItem[] = [
+  { label: 'Overview', path: '/docs' },
+  { label: 'Getting started', path: '/docs/start' },
+  { label: 'Jobs for today', path: '/docs/jobs' },
+  { label: 'Common questions', path: '/docs/faq' }
+];
+
+const PRACTICE_ITEMS: DocsNavItem[] = [
+  { label: 'EDD guide', path: '/docs/edd' },
+  { label: 'What kit gives you', path: '/docs/kit' },
+  { label: 'Feature lifecycle', path: '/docs/lifecycle' },
+  { label: 'Kit map', path: '/docs/map' }
+];
+
+const REFERENCE_CORE: DocsNavItem[] = [
+  { label: 'SOPs', path: '/docs/sops' },
+  { label: 'ADRs', path: '/docs/ADRs' },
+  { label: 'Eval suites', path: '/evals/edd' },
+  { label: 'MCP library', path: '/mcps' },
+  { label: 'Ontology notes', path: '/ontology' }
+];
+
+function pagesUnder(prefix: string): DocsPageMeta[] {
+  return DOCS_PAGES.filter(
+    (page) => page.path === prefix || page.path.startsWith(`${prefix}/`)
+  );
+}
+
+function toNav(pages: DocsPageMeta[]): DocsNavItem[] {
+  return pages.map((page) => ({ label: page.title, path: page.path }));
+}
+
+export function isDocsNavActive(location: string, item: DocsNavItem): boolean {
+  const path = location.replace(/\/$/, '') || '/';
+  if (path === item.path) return true;
+  if (item.matchPrefixes?.length) {
+    return item.matchPrefixes.some(
+      (prefix) => path === prefix || (prefix !== '/' && path.startsWith(`${prefix}/`))
+    );
+  }
+  if (item.path === '/') return false;
+  return path.startsWith(`${item.path}/`);
+}
+
+export function docsSidebar(location = ''): DocsSidebarSection[] {
+  const path = location.replace(/\/$/, '') || '/';
+  const sections: DocsSidebarSection[] = [
+    { title: 'Start', items: START_ITEMS },
+    { title: 'Practice', items: PRACTICE_ITEMS },
+    { title: 'Reference', items: REFERENCE_CORE }
+  ];
+
+  if (path.startsWith('/SOPs') || path === '/docs/sops') {
+    const sops = pagesUnder('/SOPs').filter((page) => page.path !== '/SOPs');
+    sections.push({ title: 'Procedures', items: toNav(sops) });
+  }
+  if (path.startsWith('/docs/ADRs')) {
+    const adrs = pagesUnder('/docs/ADRs').filter((page) => page.path !== '/docs/ADRs');
+    sections.push({ title: 'Decisions', items: toNav(adrs) });
+  }
+  if (path.startsWith('/evals')) {
+    const evals = pagesUnder('/evals').filter((page) => page.path !== '/evals/edd');
+    if (evals.length) sections.push({ title: 'Write-ups', items: toNav(evals) });
+  }
+
+  return sections.filter((section) => section.items.length > 0);
+}
+
+export function docsReadingOrder(pages: readonly DocsPageMeta[] = DOCS_PAGES): string[] {
+  const curated = [...START_ITEMS, ...PRACTICE_ITEMS, ...REFERENCE_CORE].map((item) => item.path);
+  const seen = new Set(curated);
+  const rest = pages
+    .map((page) => page.path)
+    .filter((path) => !seen.has(path))
+    .sort((a, b) => a.localeCompare(b));
+  return [...curated.filter((path) => pages.some((page) => page.path === path) || path === '/docs'), ...rest];
+}
+
+export function docsNeighbors(
+  path: string,
+  pages: readonly DocsPageMeta[] = DOCS_PAGES
+): { prev: DocsNeighbor | null; next: DocsNeighbor | null } {
+  const order = docsReadingOrder(pages).filter((item, index, all) => all.indexOf(item) === index);
+  const at = order.indexOf(path.replace(/\/$/, '') || '/');
+  if (at < 0) return { prev: null, next: null };
+  const labelFor = (itemPath: string) =>
+    pages.find((page) => page.path === itemPath)?.title ??
+    [...START_ITEMS, ...PRACTICE_ITEMS, ...REFERENCE_CORE].find((item) => item.path === itemPath)?.label ??
+    itemPath;
+  const prevPath = order[at - 1];
+  const nextPath = order[at + 1];
+  return {
+    prev: prevPath ? { path: prevPath, label: labelFor(prevPath) } : null,
+    next: nextPath ? { path: nextPath, label: labelFor(nextPath) } : null
+  };
+}

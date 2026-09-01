@@ -2,7 +2,7 @@
 
 Pick the job in front of you. Kit is a product you run, not a docs pile you browse.
 
-The landing page job picker at [eval-driven-development.dev](https://eval-driven-development.dev/#today) renders these sections. Each heading is `id | title`. The blockquote is the button blurb; the next paragraph is why; the numbered list is the steps; the fenced block is the start-here command; the links are the panel actions.
+Each heading is `id | title`. The homepage picker and this page share the same source.
 
 ## wrong-tool | Wrong tool or made-up args
 
@@ -18,9 +18,9 @@ Capture the miss as a JSONL case, mock the tool, and assert routing until the ag
 kit eval run --suite evals/edd/demo.yaml --model scripted
 ```
 
-- [See before / after](#proof)
-- [Walk the failing-eval demo](#demo)
-- [Demo suite](./evals/edd/demo.yaml)
+- [See before / after](/#proof)
+- [Walk the failing-eval demo](/#demo)
+- [Demo suite](/evals/edd/demo.yaml)
 
 ## ci-gate | Gate a prompt or schema change
 
@@ -36,9 +36,9 @@ Treat the prompt and MCP schema like code under test. Fail the PR when routing a
 kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 ```
 
-- [Before / after](#proof)
-- [Example report](./evals/edd/examples/eval-report.md)
-- [10-minute path](#onboard)
+- [Before / after](/#proof)
+- [Example report](/evals/edd/examples/eval-report)
+- [10-minute path](/docs/start)
 
 ## context | Always-on context is too fat
 
@@ -54,9 +54,9 @@ Thin bootstrap stays under about 8KB. Philosophy and SOPs load on demand; CI fai
 kit measure-context && kit check
 ```
 
-- [Kit tools](#kit)
-- [Context budget SOP](./SOPs/context-budget.md)
-- [Operator guide](./docs/kit.md)
+- [Context budget SOP](/SOPs/context-budget)
+- [MCP profiles](/SOPs/mcp-library)
+- [Operator guide](/docs/kit)
 
 ## feature | Starting a product feature
 
@@ -72,9 +72,9 @@ EDD proves tool calls. Feature work still routes through specialist roles so the
 Open the orchestrator skill and follow the phase table in AGENTS.md
 ```
 
-- [Feature lifecycle](#lifecycle)
+- [Feature lifecycle](/docs/lifecycle)
 - [Orchestrator skill](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/skills/agent-orchestrator/SKILL.md)
-- [How EDD fits](#edd)
+- [How EDD fits](/docs/edd)
 
 ## first-hour | I have never installed kit
 
@@ -90,6 +90,6 @@ Get kit on PATH, bootstrap the repo, run one offline suite, then hold the 95% ba
 curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
 ```
 
-- [Start here in 10 minutes](#onboard)
-- [Install commands](#install)
-- [See the before / after](#proof)
+- [Start here in 10 minutes](/docs/start)
+- [Install commands](/docs/start#install)
+- [See the before / after](/#proof)

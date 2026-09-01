@@ -13,22 +13,20 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 - Never installed → start here in 10 minutes: install → `kit init` → demo suite → CI bar
 
 ## Start here
-- [Home / today picker](https://eval-driven-development.dev/#today)
-- [Before / after proof](https://eval-driven-development.dev/#proof)
-- [Failing-eval demo](https://eval-driven-development.dev/#demo)
-- [Start here in 10 minutes](https://eval-driven-development.dev/#onboard)
-- [Install](https://eval-driven-development.dev/#install)
+- [Home](https://eval-driven-development.dev/)
+- [Getting started](https://eval-driven-development.dev/docs/start.md)
+- [Jobs for today](https://eval-driven-development.dev/docs/jobs.md)
+- [Common questions](https://eval-driven-development.dev/docs/faq.md)
+- [Docs overview](https://eval-driven-development.dev/docs/README.md)
+- [EDD guide](https://eval-driven-development.dev/docs/edd.md)
+- [Operator guide](https://eval-driven-development.dev/docs/kit.md)
+- [Feature lifecycle](https://eval-driven-development.dev/docs/lifecycle.md)
+- [Kit map](https://eval-driven-development.dev/docs/map.md)
+- [SOPs](https://eval-driven-development.dev/docs/sops.md)
 - [Demo suite](https://eval-driven-development.dev/evals/edd/demo.yaml)
 - [Before/after write-up](https://eval-driven-development.dev/evals/edd/examples/before-after.md)
-- [Kit tools](https://eval-driven-development.dev/#kit)
-- [Operator guide](https://eval-driven-development.dev/docs/kit.md)
-- [Context budget](https://eval-driven-development.dev/SOPs/context-budget.md)
-- [EDD guide](https://eval-driven-development.dev/#guide)
-- [Lifecycle](https://eval-driven-development.dev/#lifecycle)
-- [Markdown EDD guide](https://eval-driven-development.dev/docs/edd.md)
-- [Jobs for today](https://eval-driven-development.dev/docs/today-jobs.md)
 - [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
-- [Example report](https://eval-driven-development.dev/evals/edd/examples/eval-report.md)
+- [Job picker source](https://eval-driven-development.dev/docs/today-jobs.md)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
 
 ## Install

@@ -1,8 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { stripTypeScriptTypes } from 'node:module';
 import { parse as parseYaml } from 'yaml';
 import { loadOntologySchema } from './schema.js';
 import { toHomepageIndex } from './graph_view.js';
@@ -404,27 +402,6 @@ export function siteOntologyIndexPath(kitRoot: string): string {
   return path.join(kitRoot, 'assets', 'ontology-index.json');
 }
 
-/** Compiled graph_view.ts for the homepage D3 adapter (gitignored). */
-export function ontologyGraphRuntimePath(kitRoot: string): string {
-  return path.join(kitRoot, 'assets', 'ontology-graph.js');
-}
-
-export function emitOntologyMapRuntime(kitRoot: string): string {
-  const srcPath = fileURLToPath(new URL('./graph_view.ts', import.meta.url));
-  const src = fs.readFileSync(srcPath, 'utf8');
-  // TypeScript 7's package root is version-only; Node's type strip is enough
-  // for graph_view.ts (type-only imports + annotations, no enums/namespaces).
-  const outputText = stripTypeScriptTypes(src, { mode: 'strip' });
-  const out = ontologyGraphRuntimePath(kitRoot);
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(
-    out,
-    `/* generated from kit/src/ontology/graph_view.ts - do not edit */\n${outputText}`,
-    'utf8'
-  );
-  return out;
-}
-
 /**
  * Resolve the ontology index by generating from the live kit tree.
  * Optional short-lived cache under sync/ invalidated when schema or source dirs change.
@@ -509,7 +486,6 @@ export function writeSiteOntologyIndex(
   const sitePath = siteOntologyIndexPath(kitRoot);
   fs.mkdirSync(path.dirname(sitePath), { recursive: true });
   fs.writeFileSync(sitePath, serializeOntologyIndex(toHomepageIndex(index)), 'utf8');
-  emitOntologyMapRuntime(kitRoot);
   return { cachePath, sitePath };
 }
 

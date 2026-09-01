@@ -123,7 +123,7 @@ body {
 }
 
 /* Site banner */
-body > header {
+header {
   backdrop-filter: blur(16px);
   background: rgba(12, 16, 23, 0.88);
   border-bottom: 1px solid var(--border);
@@ -1217,7 +1217,7 @@ footer a:hover {
     --page-gutter: 1rem;
   }
 
-  body > header {
+  header {
     padding: 0.75rem 0;
   }
 

@@ -1,14 +1,21 @@
-/**
- * Landing-page "today" jobs. Source of truth is docs/today-jobs.md.
- * @typedef {{ id: string, title: string, blurb: string, why: string, steps: string[], cmd: string, actions: { label: string, href: string }[] }} TodayJob
- */
+export type TodayJobAction = {
+  label: string;
+  href: string;
+};
 
-/**
- * @param {string} md
- * @returns {TodayJob[]}
- */
-export function parseTodayJobsMarkdown(md) {
-  const jobs = [];
+export type TodayJob = {
+  id: string;
+  title: string;
+  blurb: string;
+  why: string;
+  steps: string[];
+  cmd: string;
+  actions: TodayJobAction[];
+};
+
+/** Landing-page "today" jobs. Source of truth is docs/today-jobs.md. */
+export function parseTodayJobsMarkdown(md: string): TodayJob[] {
+  const jobs: TodayJob[] = [];
   const parts = String(md).split(/^## /m).slice(1);
 
   for (const part of parts) {
@@ -36,26 +43,7 @@ export function parseTodayJobsMarkdown(md) {
   return jobs;
 }
 
-/**
- * @param {string} md
- * @param {string} [codeClass]
- * @returns {string}
- */
-export function renderJobInline(md, codeClass) {
-  const classAttr = codeClass ? ` class="${codeClass}"` : '';
-  return String(md)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/`([^`]+)`/g, `<code${classAttr}>$1</code>`)
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-}
-
-/**
- * @param {string} body
- * @returns {string}
- */
-function extractBlurb(body) {
+function extractBlurb(body: string): string {
   const match = body.match(/^>\s*.*(?:\n>\s*.*)*/m);
   if (!match) return '';
   return match[0]
@@ -65,13 +53,9 @@ function extractBlurb(body) {
     .trim();
 }
 
-/**
- * @param {string} body
- * @returns {string}
- */
-function extractWhy(body) {
+function extractWhy(body: string): string {
   const lines = body.split('\n');
-  const buf = [];
+  const buf: string[] = [];
   let inFence = false;
 
   for (const line of lines) {
@@ -99,12 +83,8 @@ function extractWhy(body) {
   return buf.join(' ');
 }
 
-/**
- * @param {string} body
- * @returns {string[]}
- */
-function extractSteps(body) {
-  const steps = [];
+function extractSteps(body: string): string[] {
+  const steps: string[] = [];
   for (const line of body.split('\n')) {
     const match = line.match(/^\s*\d+\.\s+(.+)/);
     if (match) steps.push(match[1].trim());
@@ -112,23 +92,15 @@ function extractSteps(body) {
   return steps;
 }
 
-/**
- * @param {string} body
- * @returns {string}
- */
-function extractCommand(body) {
+function extractCommand(body: string): string {
   const match = body.match(/```[^\n]*\n([\s\S]*?)```/);
   return match ? match[1].replace(/\n$/, '') : '';
 }
 
-/**
- * @param {string} body
- * @returns {{ label: string, href: string }[]}
- */
-function extractActions(body) {
-  const actions = [];
+function extractActions(body: string): TodayJobAction[] {
+  const actions: TodayJobAction[] = [];
   const re = /^\s*-\s+\[(.+?)\]\((.+?)\)\s*$/gm;
-  let match;
+  let match: RegExpExecArray | null;
   while ((match = re.exec(body)) !== null) {
     actions.push({ label: match[1], href: match[2] });
   }
