@@ -43,7 +43,7 @@ jobs:
 
       - name: Checkout Repository
         if: steps.creds.outputs.skip != 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install pnpm
         if: steps.creds.outputs.skip != 'true'
