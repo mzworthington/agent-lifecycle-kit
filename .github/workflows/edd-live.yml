@@ -119,7 +119,7 @@ jobs:
 
       - name: Upload EDD report artifacts
         if: always() && steps.creds.outputs.skip != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: edd-live-eval-reports
           path: out/reports/
