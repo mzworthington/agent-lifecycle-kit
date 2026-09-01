@@ -7,7 +7,6 @@ triggers:
   - routing drift
   - otel agent
   - prod to jsonl
-  - otelop
 tools:
   - read
   - write
@@ -15,39 +14,26 @@ tools:
 ---
 # Standard Operating Procedure: EDD Production Telemetry
 
-Local and CI evals protect predefined intents. Production is unpredictable. Close the EDD loop by using the **same attribute schema** for OTel spans and eval datasets - so yesterday's incident becomes tomorrow's passing case.
-
-## Local viewer (otelop via mise)
-
-Lightweight OSS UI: [otelop](https://github.com/mashiro/otelop) (single binary, DuckDB, OTLP in). Declared in root `mise.toml`.
-
-```bash
-# Install mise once: https://mise.jdx.dev/getting-started.html
-mise trust && mise install
-mise run otelop                    # UI http://127.0.0.1:4319 ; OTLP :4317/:4318
-mise run edd:emit-spans            # POST evals/edd/examples kit spans
-mise run edd:shadow-demo           # sample + judge example prod turns
-mise run otelop:stop
-```
-Or one shot: `mise run edd:otel-demo`.
-
-| Port | Role |
-|------|------|
-| `4317` | OTLP gRPC |
-| `4318` | OTLP HTTP (JSON or protobuf) |
-| `4319` | otelop browser UI |
-
-Retention defaults in mise tasks: **1d / 256MB** (demo-sized, not a warehouse).
+Local and CI evals protect predefined intents. Production is unpredictable. Close the EDD loop by using the **same attribute schema** for agent spans and eval datasets - so yesterday's incident becomes tomorrow's passing case.
 
 ## Mechanisms
 
-1. **Standardized trace emitting** - `emitAgentSpan` records prompt, routing confidence, JSON tool payload, latency, and tokens (`kit.*` attributes). Sample span: [evals/edd/examples/otel-agent-loop.json](../evals/edd/examples/otel-agent-loop.json). Convert to OTLP with `kitSpanToOtlpJson` or `mise run edd:emit-spans`.
+1. **Standardized span emitting** - `emitAgentSpan` records prompt, routing confidence, JSON tool payload, latency, and tokens (`kit.*` attributes). Sample span: [evals/edd/examples/otel-agent-loop.json](../evals/edd/examples/otel-agent-loop.json). Export to an OTLP collector with `kitSpanToOtlpJson` when you already run one.
 2. **Asynchronous shadow evals** - Do not judge every live prompt inline. Sample with `shouldShadowEval(0.05)` / `kit eval shadow --infile … --sample 0.05`. Example corpus: [evals/edd/examples/prod-turns.jsonl](../evals/edd/examples/prod-turns.jsonl).
 3. **Prod → JSONL** - On unhandled tool exceptions, circuit-breaker trips, user downvotes, or `shadow_fail`, use `productionTraceToJsonl` / `kit eval dataset from-trace`. Example input: [evals/edd/examples/prod-trace.json](../evals/edd/examples/prod-trace.json); catalog case `prod-cb-01` in `architecture_terminal.jsonl`.
 4. **Trajectory parity** - Multi-step failures should preserve ordered tool calls in history so `plan_adherence` / trajectory reports can name the failing step after promotion.
 5. **Routing drift detection** - Compare tool-share distributions with `detectRoutingDrift`. Alert when e.g. `read_architecture_yaml` drops from ~30% to ~2% traffic.
 
-## Dashboard signals (otelop / queries)
+## Try the closed loop locally
+
+```bash
+kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
+kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+```
+
+Fixtures: [examples/otel-agent-loop.json](../evals/edd/examples/otel-agent-loop.json), [examples/prod-turns.jsonl](../evals/edd/examples/prod-turns.jsonl), [examples/prod-trace.json](../evals/edd/examples/prod-trace.json).
+
+## Dashboard signals
 
 | Signal | Alert when | Where |
 |--------|------------|--------|
@@ -57,14 +43,13 @@ Retention defaults in mise tasks: **1d / 256MB** (demo-sized, not a warehouse).
 | Tool share drift | Absolute drop ≥ 20 pp | Aggregate `kit.tool_name` → `detectRoutingDrift` |
 | Safety suite | Scripted gate or nightly live fails | CI |
 
-Filter otelop traces by `service.name=kit-edd` and attributes `kit.case_id`, `kit.tool_name`, `kit.passed`.
+Filter production spans / turns by attributes `kit.case_id`, `kit.tool_name`, `kit.passed` (and `service.name=kit-edd` when using OTLP).
 
 ## Closed loop
 
 ```mermaid
 flowchart LR
-  prod[Prod agent.loop spans] --> otelop[otelop UI]
-  prod --> shadow[kit eval shadow]
+  prod[Prod agent.loop spans] --> shadow[kit eval shadow]
   shadow -->|shadow_fail| jsonl[evals JSONL]
   miss[Circuit breaker / downvote] --> fromTrace[from-trace]
   fromTrace --> jsonl

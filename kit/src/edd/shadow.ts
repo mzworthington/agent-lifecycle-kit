@@ -114,7 +114,7 @@ export function normalizeProdTurn(raw: unknown): ProdTurn {
   };
 }
 
-/** Convert a kit OtelSpan (or attributes bag) into OTLP/HTTP JSON for otelop. */
+/** Convert a kit OtelSpan (or attributes bag) into OTLP/HTTP JSON for any collector. */
 export function kitSpanToOtlpJson(span: OtelSpan, serviceName = 'kit-edd'): Record<string, unknown> {
   const attributes = Object.entries(span.attributes).map(([key, value]) => {
     if (typeof value === 'boolean') return { key, value: { boolValue: value } };
