@@ -1,0 +1,53 @@
+version: 1
+types:
+  - Phase
+  - Skill
+  - SOP
+  - Handover
+  - EvalSuite
+  - McpServer
+  - PhilosophySection
+  - Doc
+memoryEntityTypes:
+  - GlossaryTerm
+  - Slo
+  - Preference
+  - ProjectFact
+relations:
+  - name: loads
+    from: Skill
+    to: SOP
+  - name: uses
+    from: Skill
+    to: McpServer
+  - name: depends-on
+    from: Skill
+    to: Skill
+  - name: orders
+    from: Phase
+    to: Phase
+  - name: for
+    from: Handover
+    to: [Skill, Phase]
+  - name: gates
+    from: EvalSuite
+    to: [Skill, McpServer]
+  - name: implements
+    from: SOP
+    to: PhilosophySection
+  - name: references
+    from: [Skill, SOP]
+    to: Doc
+phaseOrder:
+  - grilling
+  - spec
+  - tdd
+  - xfn
+  - impl
+  - audit
+  - debug
+  - telemetry
+  - release
+  - maintenance
+  - quality
+  - orchestration

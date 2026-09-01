@@ -7,6 +7,8 @@ mcp_tools:
   - "tools/get_philosophy_section.json"
   - "tools/list_kit_index.json"
   - "tools/get_handover.json"
+  - "tools/get_entity.json"
+  - "tools/get_related.json"
 metrics:
   - type: "tool_selection"
   - type: "schema_match"
@@ -37,3 +39,20 @@ mocks:
       path: "handover/canvas/handover_spec.md"
       phase: "spec"
       status: "COMPLETE"
+  - tool: "get_entity"
+    response:
+      id: "skill:agent-tdd"
+      type: "Skill"
+      name: "agent-tdd"
+  - tool: "get_related"
+    response:
+      edges:
+        - from: "skill:agent-tdd"
+          relation: "uses"
+          to: "mcp:context7"
+        - from: "sop:conventional-commits"
+          relation: "implements"
+          to: "philosophy:8"
+        - from: "sop:eval-driven-development"
+          relation: "references"
+          to: "doc:edd"

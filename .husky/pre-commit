@@ -10,6 +10,7 @@ echo "=== Pre-Commit Quality & Security Gate ==="
 "${REPO_DIR}/bin/kit" audit
 "${REPO_DIR}/bin/kit" validate
 "${REPO_DIR}/bin/kit" verify
+"${REPO_DIR}/bin/kit" ontology check
 (cd "${REPO_DIR}" && pnpm typecheck)
 
 echo "✅ Pre-commit quality gate PASSED."

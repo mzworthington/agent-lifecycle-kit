@@ -7,6 +7,14 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
+import {
+  getEntity as ontologyGetEntity,
+  getRelated as ontologyGetRelated,
+  resolveOntologyIndex,
+  type OntologyEntity,
+  type OntologyIndex,
+  type RelationName,
+} from "../../../../kit/src/ontology/index.js";
 
 export type KitDocKind = "philosophy" | "sop" | "skill" | "handover" | "docs";
 
@@ -294,4 +302,29 @@ export function searchKit(kitRoot: string, query: string, limit = MAX_HITS): Kit
   return hits
     .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id))
     .slice(0, Math.max(1, Math.min(limit, 20)));
+}
+
+export function loadKitOntology(kitRoot: string): OntologyIndex {
+  return resolveOntologyIndex(kitRoot);
+}
+
+export function getKitEntity(
+  kitRoot: string,
+  id: string
+): OntologyEntity | null {
+  const index = resolveOntologyIndex(kitRoot);
+  return ontologyGetEntity(index, id);
+}
+
+export function getKitRelated(
+  kitRoot: string,
+  id: string,
+  relation?: string
+): ReturnType<typeof ontologyGetRelated> {
+  const index = resolveOntologyIndex(kitRoot);
+  return ontologyGetRelated(
+    index,
+    id,
+    relation ? (relation as RelationName) : undefined
+  );
 }
