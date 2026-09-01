@@ -56,7 +56,7 @@ Under GitHub Actions, the same Markdown is folded into the job summary so green/
 
 ## Production bridge
 
-Live spans share eval field names (`emitAgentSpan`). Hard failures convert to JSONL via `productionTraceToJsonl` / `kit eval dataset from-trace`. Shadow sample + judge: `kit eval shadow --infile … --sample 0.05`. Local viewer: `mise run otelop` ([otelop](https://github.com/mashiro/otelop)). See [SOPs/edd-production-telemetry.md](./edd-production-telemetry.md).
+Live spans share eval field names (`emitAgentSpan`). Hard failures convert to JSONL via `productionTraceToJsonl` / `kit eval dataset from-trace`. Shadow sample + judge: `kit eval shadow --infile … --sample 0.05`. See [SOPs/edd-production-telemetry.md](./edd-production-telemetry.md).
 
 ## IDE session → EDD (debug / lessons)
 

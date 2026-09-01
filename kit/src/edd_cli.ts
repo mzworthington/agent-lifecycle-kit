@@ -56,7 +56,6 @@ Notes:
   - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
   - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
-  - Local OTel UI: mise install && mise run otelop (otelop @ http://127.0.0.1:4319).
 `);
 }
 

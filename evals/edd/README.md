@@ -116,17 +116,16 @@ kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1
 
 Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`.
 
-## Production telemetry (otelop)
+## Production telemetry (closed loop)
 
-Local OTel UI via mise ([otelop](https://github.com/mashiro/otelop)):
+Promote production misses into the suite with the same `kit.*` fields as eval cases:
 
 ```bash
-mise install
-mise run edd:otel-demo          # start otelop + emit sample spans
-mise run edd:shadow-demo        # judge example prod turns → out/shadow-fails.jsonl
+kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
+kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
 ```
 
-Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [examples/prod-turns.jsonl](./examples/prod-turns.jsonl). Procedure: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).
+Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [examples/prod-turns.jsonl](./examples/prod-turns.jsonl), [examples/prod-trace.json](./examples/prod-trace.json). Procedure: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).
 
 ## Tags
 

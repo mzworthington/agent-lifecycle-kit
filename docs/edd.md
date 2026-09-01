@@ -27,7 +27,7 @@ flowchart LR
 | **Deterministic mocks** | Measure routing and extraction, not third-party latency. |
 | **Dual-layer asserts** | Schema/shape plus argument meaning, task completion, criteria judge, optional LLM-as-a-judge. |
 | **CI quality gates** | `kit eval ci --threshold-routing 95` blocks routing drift; safety suite runs in `kit check`. |
-| **Closed-loop telemetry** | Production misses become `.jsonl` cases (`kit eval dataset from-trace`); `kit eval shadow` samples live turns; local UI via `mise run otelop`. |
+| **Closed-loop telemetry** | Production misses become `.jsonl` cases (`kit eval dataset from-trace`); `kit eval shadow` samples live turns into the suite. |
 | **Dataset hygiene** | `kit eval dataset lint\|dedupe\|synthesize\|from-trace` keeps suites valid and scalable. |
 
 Bare `kit eval` still validates which Kit skill activates. `kit eval run|watch|report|ci` validates how an agent calls tools. Use EDD whenever you change prompts, tool schemas, or routing.
@@ -126,5 +126,5 @@ You should then see `requires-live` cases execute instead of “Skipping N requi
 |----------|---------|
 | [SOPs/eval-driven-development.md](../SOPs/eval-driven-development.md) | Day-to-day procedure |
 | [evals/edd/README.md](../evals/edd/README.md) | Suites, metrics, layout |
-| [SOPs/edd-production-telemetry.md](../SOPs/edd-production-telemetry.md) | otelop (mise), OTel fixtures, `kit eval shadow`, drift |
+| [SOPs/edd-production-telemetry.md](../SOPs/edd-production-telemetry.md) | `kit.*` spans, `kit eval shadow`, from-trace, drift |
 | [skills/agent-orchestrator/SKILL.md](../skills/agent-orchestrator/SKILL.md) | Feature lifecycle around EDD |
