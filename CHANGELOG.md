@@ -11,6 +11,7 @@
 - *(cloudflare)* Integrate Cloudflare operations into the agent lifecycle kit
 - Improve UX on index.html
 - *(release)* Wire git-cliff changelog and GitHub Releases (#32)
+- *(install)* Prefer SHA-256 verified install over curl|sh (#34)
 
 ### 🐛 Bug Fixes
 
@@ -20,6 +21,10 @@
 ### 🧰 Maintenance & Dependencies
 
 - *(edd)* Remove otelop demo shell, keep closed-loop kit spans (#30)
+
+### 📚 Documentation
+
+- *(philosophy)* Add applicability opt-out and seed kit ADRs (#36)
 
 ## 2026-08-31
 
