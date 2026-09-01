@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, rmSync, writeFileSync, cpSync, existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { describe, it } from 'node:test';
+import { after, describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {
   cliffCommitRange,
@@ -18,6 +21,38 @@ function releaseWith(commits: CliffRelease['commits']): CliffRelease[] {
   return [{ version: null, commits }];
 }
 
+/** Isolated repo with conventional commits + tags (CI checkouts often lack release tags). */
+function makeReleaseFixture(): { root: string; cliffBin: string; cliffConfig: string } {
+  const root = mkdtempSync(path.join(tmpdir(), 'alk-release-notes-'));
+  const run = (args: string[]) =>
+    execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+
+  run(['init']);
+  run(['config', 'user.email', 'test@example.com']);
+  run(['config', 'user.name', 'Release Notes Test']);
+
+  cpSync(path.join(kitRoot, 'cliff.toml'), path.join(root, 'cliff.toml'));
+
+  const writeAndCommit = (message: string, body = `${message}\n`) => {
+    writeFileSync(path.join(root, 'NOTES.md'), `${body}\n`, 'utf8');
+    run(['add', 'NOTES.md']);
+    run(['commit', '-m', message]);
+  };
+
+  writeAndCommit('feat: bootstrap kit');
+  writeAndCommit('feat(ci): add release pipeline');
+  writeAndCommit('chore(changelog): regenerate from conventional commits');
+  run(['tag', 'v1.0.0']);
+  writeAndCommit('feat(install): prefer SHA-256 verified install over curl|sh (#34)');
+  run(['tag', 'v1.1.0']);
+
+  return {
+    root,
+    cliffBin: path.join(kitRoot, 'node_modules/.bin/git-cliff'),
+    cliffConfig: path.join(root, 'cliff.toml'),
+  };
+}
+
 describe('cliffCommitRange', () => {
   it('uses until-ref alone for the first release (empty since)', () => {
     assert.equal(cliffCommitRange(undefined, 'v1.0.0'), 'v1.0.0');
@@ -31,10 +66,13 @@ describe('cliffCommitRange', () => {
 });
 
 describe('resolveCliffRange', () => {
+  const fixture = makeReleaseFixture();
+  after(() => rmSync(fixture.root, { recursive: true, force: true }));
+
   it('resolves tags to SHA ranges so git-cliff accepts them', () => {
-    const first = resolveCliffRange(undefined, 'v1.0.0', { root: kitRoot });
+    const first = resolveCliffRange(undefined, 'v1.0.0', { root: fixture.root });
     assert.match(first, /^[0-9a-f]{40}$/);
-    const next = resolveCliffRange('v1.0.0', 'v1.1.0', { root: kitRoot });
+    const next = resolveCliffRange('v1.0.0', 'v1.1.0', { root: fixture.root });
     assert.match(next, /^[0-9a-f]{40}\.\.[0-9a-f]{40}$/);
   });
 });
@@ -153,14 +191,27 @@ describe('renderReleaseNotes', () => {
 });
 
 describe('renderNotesForRange (git integration)', () => {
+  const fixture = makeReleaseFixture();
+  after(() => rmSync(fixture.root, { recursive: true, force: true }));
+
   it('renders version-scoped notes without [unreleased]', () => {
-    const v100 = renderNotesForRange(undefined, 'v1.0.0', { root: kitRoot });
-    const v110 = renderNotesForRange('v1.0.0', 'v1.1.0', { root: kitRoot });
+    assert.ok(existsSync(fixture.cliffBin), 'git-cliff binary must exist for integration test');
+    const opts = {
+      root: fixture.root,
+      cliffBin: fixture.cliffBin,
+      cliffConfig: fixture.cliffConfig,
+    };
+    const v100 = renderNotesForRange(undefined, 'v1.0.0', opts);
+    const v110 = renderNotesForRange('v1.0.0', 'v1.1.0', opts);
     assert.equal(v100.toLowerCase().includes('[unreleased]'), false);
     assert.equal(v110.toLowerCase().includes('[unreleased]'), false);
     assert.match(v100, /### 🚀 Features/);
+    assert.match(v100, /Bootstrap kit/);
+    assert.match(v100, /Add release pipeline/);
+    assert.equal(v100.includes('SHA-256'), false);
     assert.match(v110, /### 🚀 Features/);
     assert.match(v110, /SHA-256 verified install/i);
-    assert.ok(v110.length < v100.length / 2, 'v1.1.0 notes should be much smaller than v1.0.0');
+    assert.equal(v110.includes('Bootstrap kit'), false);
+    assert.equal(v110.includes('Add release pipeline'), false);
   });
 });

@@ -124,6 +124,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -154,7 +155,9 @@ jobs:
       - name: Sync release notes for all version tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bash bin/release.sh sync-notes
+        run: |
+          git fetch --tags --force
+          bash bin/release.sh sync-notes
 
       - name: Regenerate CHANGELOG.md
         run: pnpm changelog

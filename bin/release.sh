@@ -192,10 +192,18 @@ cmd_sync_notes() {
     return 0
   fi
 
+  # Ensure annotated/lightweight release tags exist locally (Promote checkout may lack them
+  # until fetch-tags; publish may have just created a new tag on the remote).
+  git fetch --tags --force 2>/dev/null || true
+
   prev=""
   for tag in "${tags[@]}"; do
     if ! gh release view "$tag" >/dev/null 2>&1; then
       echo "Skipping ${tag}: no GitHub Release"
+      continue
+    fi
+    if ! git rev-parse "${tag}^{commit}" >/dev/null 2>&1; then
+      echo "Skipping ${tag}: tag not present in local git" >&2
       continue
     fi
     notes_file="$(mktemp)"
