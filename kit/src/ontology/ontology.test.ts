@@ -11,7 +11,6 @@ import {
   getEntity,
   getRelated,
   loadOntologySchema,
-  regenerateOntologyIndex,
   validateMemoryEntityWrites
 } from './index.js';
 
@@ -74,10 +73,52 @@ describe('generateOntologyIndex', () => {
     const loads = getRelated(index, 'skill:agent-tdd', 'loads');
     assert.ok(loads.some((e) => e.to === 'sop:behavior-catalog-and-xfn'));
   });
+
+  it('does not invent vendor-specific eval gates from suite filenames', () => {
+    const index = generateOntologyIndex(kitRoot);
+    const cf = getRelated(index, 'eval:cloudflare_ops', 'gates');
+    assert.equal(cf.length, 0, 'cloudflare_ops must not hard-gate agent-cloudflare-ops by name');
+    const arch = getRelated(index, 'eval:architecture_routing', 'gates');
+    assert.equal(arch.length, 0, 'architecture_* must not hard-gate agent-arch-drift by name');
+  });
+
+  it('honors declarative ontology.gates in suite YAML', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-ontology-gates-'));
+    try {
+      fs.mkdirSync(path.join(tmp, 'ontology'), { recursive: true });
+      fs.copyFileSync(
+        path.join(kitRoot, 'ontology', 'schema.yaml'),
+        path.join(tmp, 'ontology', 'schema.yaml')
+      );
+      fs.writeFileSync(path.join(tmp, 'CODING_PHILOSOPHY.md'), '## 1. Hexagonal\n\nPorts.\n');
+      fs.mkdirSync(path.join(tmp, 'mcps'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmp, 'mcps', 'catalog.json'),
+        JSON.stringify({ servers: [{ id: 'memory', name: 'Memory' }] })
+      );
+      fs.mkdirSync(path.join(tmp, 'evals', 'edd'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmp, 'evals', 'edd', 'custom_suite.yaml'),
+        `name: custom
+dataset: x.jsonl
+metrics:
+  - type: tool_selection
+ontology:
+  gates:
+    - mcp:memory
+`
+      );
+      const index = generateOntologyIndex(tmp);
+      const gates = getRelated(index, 'eval:custom_suite', 'gates');
+      assert.ok(gates.some((e) => e.to === 'mcp:memory'));
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
 });
 
-describe('checkOntology / regenerate', () => {
-  it('detects drift then passes after regenerate in a temp copy of schema+minimal tree', () => {
+describe('checkOntology', () => {
+  it('passes on a minimal consistent tree without a committed index', () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-ontology-'));
     try {
       fs.mkdirSync(path.join(tmp, 'ontology'), { recursive: true });
@@ -113,13 +154,8 @@ See [SOP](../../SOPs/demo.md).
 `
       );
 
-      const before = checkOntology(tmp);
-      assert.equal(before.drift, true);
-
-      regenerateOntologyIndex(tmp);
-      const after = checkOntology(tmp);
-      assert.equal(after.drift, false);
-      assert.equal(after.ok, true);
+      const result = checkOntology(tmp);
+      assert.equal(result.ok, true);
       assert.equal(entityId('Skill', 'agent-demo'), 'skill:agent-demo');
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });

@@ -46,3 +46,4 @@ out/
 .DS_Store
 *.swp
 *.swo
+ontology/index.json

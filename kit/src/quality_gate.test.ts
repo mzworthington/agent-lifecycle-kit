@@ -28,10 +28,8 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
     edd: async () => 0,
     budget: () => okBudget,
     printBudget: () => undefined,
-    regenerateOntology: () => ({ path: 'ontology/index.json', changed: false }),
     ontologyCheck: () => ({
       ok: true,
-      drift: false,
       missingEndpoints: [],
       unknownSkillMcp: [],
       unknownDependsOn: [],
@@ -56,27 +54,48 @@ describe('EDD_CI_SUITES', () => {
 });
 
 describe('runKitCheck', () => {
-  it('returns 0 when every step passes and runs both EDD suites', async () => {
+  it('returns 0 when every step passes and runs all EDD suites', async () => {
     const suites: string[] = [];
-    const code = await runKitCheck('/kit', passingDeps({
-      edd: async (opts) => {
-        const suite = opts.args[opts.args.indexOf('--suite') + 1];
-        if (suite) suites.push(suite);
-        return 0;
-      }
-    }));
+    const code = await runKitCheck(
+      '/kit',
+      passingDeps({
+        edd: async (opts) => {
+          const suite = opts.args[opts.args.indexOf('--suite') + 1];
+          if (suite) suites.push(suite);
+          return 0;
+        }
+      })
+    );
     assert.equal(code, 0);
     assert.deepEqual(suites, [...EDD_CI_SUITES]);
   });
 
   it('stops at the first failing step', async () => {
-    assert.equal(await runKitCheck('/kit', passingDeps({ scan: () => ({ ok: false, errorCount: 1, warningCount: 0 }) })), 1);
+    assert.equal(
+      await runKitCheck('/kit', passingDeps({ scan: () => ({ ok: false, errorCount: 1, warningCount: 0 }) })),
+      1
+    );
     assert.equal(
       await runKitCheck('/kit', passingDeps({ validate: () => ({ ok: false, errors: 1, totalSuites: 1, totalTests: 0 }) })),
       1
     );
     assert.equal(
       await runKitCheck('/kit', passingDeps({ verifyLayout: () => ({ ok: false, invalid: ['cloudflare'] }) })),
+      1
+    );
+    assert.equal(
+      await runKitCheck(
+        '/kit',
+        passingDeps({
+          ontologyCheck: () => ({
+            ok: false,
+            missingEndpoints: [],
+            unknownSkillMcp: [],
+            unknownDependsOn: [],
+            messages: ['boom']
+          })
+        })
+      ),
       1
     );
     assert.equal(await runKitCheck('/kit', passingDeps({ exportRules: () => false })), 1);

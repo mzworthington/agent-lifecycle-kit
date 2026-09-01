@@ -256,60 +256,42 @@ export function generateOntologyIndex(kitRoot: string): OntologyIndex {
     }
   }
 
-  // Eval suites
+  // Eval suites — index entities; gates only from explicit suite metadata or skill-local path
   const eddDir = path.join(kitRoot, 'evals', 'edd');
   if (fs.existsSync(eddDir)) {
     for (const f of fs.readdirSync(eddDir).sort()) {
       if (!f.endsWith('.yaml') && !f.endsWith('.yml')) continue;
       const stem = f.replace(/\.ya?ml$/, '');
       const rel = path.join('evals', 'edd', f);
+      const body = safeRead(path.join(kitRoot, rel)) ?? '';
       pushEntity({
         id: entityId('EvalSuite', stem),
         type: 'EvalSuite',
         name: stem,
         path: rel
       });
-      // Heuristic gates: kit_knowledge → mcp:kit-knowledge; architecture_* → skills; memory → mcp:memory
-      if (stem.includes('kit_knowledge') || stem.includes('kit-knowledge')) {
-        addEdge(
-          edges,
-          seenEdges,
-          entityId('EvalSuite', stem),
-          'gates',
-          entityId('McpServer', 'kit-knowledge')
-        );
-      }
-      if (stem.includes('memory')) {
-        addEdge(
-          edges,
-          seenEdges,
-          entityId('EvalSuite', stem),
-          'gates',
-          entityId('McpServer', 'memory')
-        );
-      }
-      if (stem.includes('cloudflare')) {
-        addEdge(
-          edges,
-          seenEdges,
-          entityId('EvalSuite', stem),
-          'gates',
-          entityId('Skill', 'agent-cloudflare-ops')
-        );
-      }
-      if (stem.startsWith('architecture')) {
-        addEdge(
-          edges,
-          seenEdges,
-          entityId('EvalSuite', stem),
-          'gates',
-          entityId('Skill', 'agent-arch-drift')
-        );
+
+      // Optional declarative gates in suite YAML (no vendor/name heuristics):
+      // ontology:
+      //   gates: [mcp:kit-knowledge, skill:agent-tdd]
+      try {
+        const parsed = parseYaml(body) as Record<string, unknown> | null;
+        const ontologyMeta =
+          parsed && typeof parsed === 'object' && parsed.ontology && typeof parsed.ontology === 'object'
+            ? (parsed.ontology as Record<string, unknown>)
+            : null;
+        const gates = asStringArray(ontologyMeta?.gates);
+        for (const targetId of gates) {
+          if (!targetId.includes(':')) continue;
+          addEdge(edges, seenEdges, entityId('EvalSuite', stem), 'gates', targetId);
+        }
+      } catch {
+        // ignore malformed suite YAML for ontology purposes
       }
     }
   }
 
-  // Skill-local evals
+  // Skill-local evals (path-derived — portable for any skill name)
   if (fs.existsSync(skillsDir)) {
     for (const name of fs.readdirSync(skillsDir).sort()) {
       const evalPath = path.join(skillsDir, name, 'evals', 'eval.json');
@@ -385,28 +367,95 @@ export function serializeOntologyIndex(index: OntologyIndex): string {
   return `${JSON.stringify(index, null, 2)}\n`;
 }
 
-export function writeOntologyIndex(kitRoot: string, index: OntologyIndex = generateOntologyIndex(kitRoot)): string {
-  const out = path.join(kitRoot, 'ontology', 'index.json');
+/** Runtime cache path (gitignored under sync/). */
+export function ontologyCachePath(kitRoot: string): string {
+  return path.join(kitRoot, 'sync', 'ontology-index.json');
+}
+
+/**
+ * Resolve the ontology index by generating from the live kit tree.
+ * Optional short-lived cache under sync/ invalidated when schema or source dirs change.
+ */
+export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolean }): OntologyIndex {
+  const useCache = opts?.useCache !== false;
+  const cachePath = ontologyCachePath(kitRoot);
+  if (useCache && fs.existsSync(cachePath)) {
+    try {
+      const cacheStat = fs.statSync(cachePath);
+      if (cacheStat.mtimeMs >= latestOntologySourceMtime(kitRoot)) {
+        const raw = safeRead(cachePath);
+        if (raw) return JSON.parse(raw) as OntologyIndex;
+      }
+    } catch {
+      // fall through to regenerate
+    }
+  }
+  const index = generateOntologyIndex(kitRoot);
+  if (useCache) {
+    try {
+      fs.mkdirSync(path.dirname(cachePath), { recursive: true });
+      fs.writeFileSync(cachePath, serializeOntologyIndex(index), 'utf8');
+    } catch {
+      // cache is best-effort
+    }
+  }
+  return index;
+}
+
+function latestOntologySourceMtime(kitRoot: string): number {
+  const roots = [
+    path.join(kitRoot, 'ontology', 'schema.yaml'),
+    path.join(kitRoot, 'CODING_PHILOSOPHY.md'),
+    path.join(kitRoot, 'skills'),
+    path.join(kitRoot, 'SOPs'),
+    path.join(kitRoot, 'docs'),
+    path.join(kitRoot, 'mcps', 'catalog.json'),
+    path.join(kitRoot, 'evals', 'edd')
+  ];
+  let latest = 0;
+  const visit = (p: string) => {
+    try {
+      if (!fs.existsSync(p)) return;
+      const st = fs.statSync(p);
+      if (st.isFile()) {
+        latest = Math.max(latest, st.mtimeMs);
+        return;
+      }
+      if (st.isDirectory()) {
+        latest = Math.max(latest, st.mtimeMs);
+        for (const name of fs.readdirSync(p)) {
+          // Shallow enough for freshness; nested skill SKILL.md changes bump dir mtime on most FS
+          visit(path.join(p, name));
+        }
+      }
+    } catch {
+      // ignore
+    }
+  };
+  for (const r of roots) visit(r);
+  return latest;
+}
+
+/** Optional debug dump to sync/ (not committed). */
+export function writeOntologyIndex(
+  kitRoot: string,
+  index: OntologyIndex = generateOntologyIndex(kitRoot)
+): string {
+  const out = ontologyCachePath(kitRoot);
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, serializeOntologyIndex(index), 'utf8');
   return out;
 }
 
-export function loadOntologyIndex(kitRoot: string): OntologyIndex | null {
-  const p = path.join(kitRoot, 'ontology', 'index.json');
-  const raw = safeRead(p);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as OntologyIndex;
-  } catch {
-    return null;
-  }
+/** @deprecated Prefer resolveOntologyIndex — always derived. */
+export function loadOntologyIndex(kitRoot: string): OntologyIndex {
+  return resolveOntologyIndex(kitRoot);
 }
 
 export function getEntity(index: OntologyIndex, id: string): OntologyEntity | null {
   const needle = id.trim();
   return (
-    index.entities.find((e) => e.id === needle || e.id === needle || e.name === needle) ??
+    index.entities.find((e) => e.id === needle || e.name === needle) ??
     index.entities.find((e) => e.id.endsWith(`:${needle}`)) ??
     null
   );

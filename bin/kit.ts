@@ -47,8 +47,8 @@ Commands:
   debug-board <proj>   Scaffold a hypothesis-driven debug board
   debug-ci             Fetch failed GitHub Actions logs
   check                Run the local quality gate (audit, ontology, evals, EDD CI, context budget)
-  ontology generate    Regenerate ontology/index.json from schema + kit tree
-  ontology check       Fail on index drift or broken skill mcp/depends-on refs
+  ontology generate    Dump derived ontology index to sync/ (debug; not committed)
+  ontology check       Validate live-derived index (skill mcp/depends-on refs)
   memory lint          List legacy memory entities outside the ontology allowlist
   help                 Display this help menu
 
@@ -200,17 +200,13 @@ async function main(): Promise<void> {
       const sub = args[1];
       if (sub === 'generate') {
         const result = regenerateOntologyIndex(repoDir);
-        console.log(
-          result.changed
-            ? `Wrote ${result.path} (updated)`
-            : `Wrote ${result.path} (unchanged)`
-        );
+        console.log(`Wrote derived ontology cache (gitignored): ${result.path}`);
         process.exit(0);
       }
       if (sub === 'check') {
         const result = checkOntology(repoDir);
         for (const msg of result.messages) console.error(msg);
-        if (result.ok) console.log('✅ ontology check PASSED.');
+        if (result.ok) console.log('✅ ontology check PASSED (live-derived).');
         else console.error('ontology check FAILED.');
         process.exit(result.ok ? 0 : 1);
       }

@@ -64,6 +64,7 @@ export function schemaPath(kitRoot: string): string {
   return path.join(kitRoot, 'ontology', 'schema.yaml');
 }
 
+/** @deprecated Index is derived at runtime; cache lives under sync/. */
 export function indexPath(kitRoot: string): string {
-  return path.join(kitRoot, 'ontology', 'index.json');
+  return path.join(kitRoot, 'sync', 'ontology-index.json');
 }

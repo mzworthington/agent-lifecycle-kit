@@ -1,45 +1,35 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { generateOntologyIndex, loadOntologyIndex, serializeOntologyIndex } from './generate.js';
+import { generateOntologyIndex, writeOntologyIndex } from './generate.js';
 import { loadOntologySchema } from './schema.js';
 import type { OntologyIndex } from './types.js';
 
 export interface OntologyCheckResult {
   ok: boolean;
-  drift: boolean;
   missingEndpoints: Array<{ from: string; relation: string; to: string }>;
   unknownSkillMcp: Array<{ skill: string; mcp: string }>;
   unknownDependsOn: Array<{ skill: string; dep: string }>;
   messages: string[];
 }
 
-function normalizeJson(text: string): string {
-  try {
-    return `${JSON.stringify(JSON.parse(text), null, 2)}\n`;
-  } catch {
-    return text;
-  }
-}
-
+/**
+ * Validate a freshly generated ontology index (no committed snapshot / drift check).
+ * Fails on broken skill mcp: / depends-on refs.
+ */
 export function checkOntology(kitRoot: string): OntologyCheckResult {
   const messages: string[] = [];
-  const fresh = generateOntologyIndex(kitRoot);
-  const committed = loadOntologyIndex(kitRoot);
-  const expected = serializeOntologyIndex(fresh);
-
-  let drift = false;
-  if (!committed) {
-    drift = true;
-    messages.push('ontology/index.json is missing');
-  } else {
-    const onDisk = fs.readFileSync(path.join(kitRoot, 'ontology', 'index.json'), 'utf8');
-    if (normalizeJson(onDisk) !== expected) {
-      drift = true;
-      messages.push('ontology/index.json is out of date (run: kit ontology generate)');
-    }
+  let index: OntologyIndex;
+  try {
+    loadOntologySchema(kitRoot);
+    index = generateOntologyIndex(kitRoot);
+  } catch (err) {
+    return {
+      ok: false,
+      missingEndpoints: [],
+      unknownSkillMcp: [],
+      unknownDependsOn: [],
+      messages: [err instanceof Error ? err.message : String(err)]
+    };
   }
 
-  const index: OntologyIndex = fresh;
   const ids = new Set(index.entities.map((e) => e.id));
   const missingEndpoints: OntologyCheckResult['missingEndpoints'] = [];
   for (const e of index.edges) {
@@ -76,23 +66,13 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
     messages.push(`Skill ${m.skill} depends-on unknown skill:${m.dep}`);
   }
 
-  // Ensure schema loads
-  try {
-    loadOntologySchema(kitRoot);
-  } catch (err) {
-    messages.push(err instanceof Error ? err.message : String(err));
-  }
-
   const ok =
-    !drift &&
     missingEndpoints.length === 0 &&
     unknownSkillMcp.length === 0 &&
-    unknownDependsOn.length === 0 &&
-    !messages.some((msg) => msg.startsWith('Unknown'));
+    unknownDependsOn.length === 0;
 
   return {
     ok,
-    drift,
     missingEndpoints,
     unknownSkillMcp,
     unknownDependsOn,
@@ -100,12 +80,9 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
   };
 }
 
-/** Regenerate index and return whether the file content changed. */
+/** Optional debug dump to sync/ontology-index.json (gitignored). */
 export function regenerateOntologyIndex(kitRoot: string): { path: string; changed: boolean } {
-  const out = path.join(kitRoot, 'ontology', 'index.json');
-  const next = serializeOntologyIndex(generateOntologyIndex(kitRoot));
-  const prev = fs.existsSync(out) ? fs.readFileSync(out, 'utf8') : null;
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(out, next, 'utf8');
-  return { path: out, changed: prev !== next };
+  const prevPath = writeOntologyIndex(kitRoot);
+  // writeOntologyIndex always writes; treat as refreshed cache
+  return { path: prevPath, changed: true };
 }

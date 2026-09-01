@@ -18,6 +18,8 @@ export {
   generateOntologyIndex,
   writeOntologyIndex,
   loadOntologyIndex,
+  resolveOntologyIndex,
+  ontologyCachePath,
   serializeOntologyIndex,
   getEntity,
   getRelated

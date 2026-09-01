@@ -9,3 +9,7 @@ This directory holds session cache and index mappings dynamically managed by the
 - **Agent short-term memory** (`conversation-context.bin`): local caching of high-density prompts or active conversations to preserve context bounds.
 
 > **Note:** These files are automatically ignored in global and local `.gitignore` rules as they represent transient local caches.
+
+- **Ontology index cache** (`ontology-index.json`): live-derived kit graph used by kit-knowledge; regenerated on demand.
+
+- **Ontology index cache** (`ontology-index.json`): live-derived kit graph for kit-knowledge; regenerated on demand, not committed.

@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import {
   getEntity as ontologyGetEntity,
   getRelated as ontologyGetRelated,
-  loadOntologyIndex,
+  resolveOntologyIndex,
   type OntologyEntity,
   type OntologyIndex,
   type RelationName,
@@ -304,16 +304,15 @@ export function searchKit(kitRoot: string, query: string, limit = MAX_HITS): Kit
     .slice(0, Math.max(1, Math.min(limit, 20)));
 }
 
-export function loadKitOntology(kitRoot: string): OntologyIndex | null {
-  return loadOntologyIndex(kitRoot);
+export function loadKitOntology(kitRoot: string): OntologyIndex {
+  return resolveOntologyIndex(kitRoot);
 }
 
 export function getKitEntity(
   kitRoot: string,
   id: string
 ): OntologyEntity | null {
-  const index = loadOntologyIndex(kitRoot);
-  if (!index) return null;
+  const index = resolveOntologyIndex(kitRoot);
   return ontologyGetEntity(index, id);
 }
 
@@ -322,8 +321,7 @@ export function getKitRelated(
   id: string,
   relation?: string
 ): ReturnType<typeof ontologyGetRelated> {
-  const index = loadOntologyIndex(kitRoot);
-  if (!index) return [];
+  const index = resolveOntologyIndex(kitRoot);
   return ontologyGetRelated(
     index,
     id,
