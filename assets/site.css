@@ -1140,6 +1140,135 @@ body > header {
   color: var(--text-muted);
 }
 
+/* Rendered Markdown pages (kit site assemble) */
+.doc-main {
+  padding: 2.5rem var(--page-gutter) 4rem;
+}
+
+.doc-shell {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+.doc-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.doc-breadcrumb li + li::before {
+  content: '/';
+  margin-right: 0.4rem;
+  color: var(--border-accent);
+}
+
+.doc-breadcrumb a {
+  color: var(--primary-light);
+  text-decoration: none;
+}
+
+.doc-breadcrumb a:hover,
+.doc-breadcrumb a:focus {
+  text-decoration: underline;
+}
+
+.doc-article {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.doc-meta {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.doc-toc {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  background: rgba(12, 16, 23, 0.45);
+}
+
+.doc-toc h2 {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 0;
+  margin: 0 0 0.5rem;
+  padding: 0;
+}
+
+.doc-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.doc-toc li {
+  margin: 0.2rem 0;
+}
+
+.doc-toc .toc-depth-3 {
+  padding-left: 1rem;
+}
+
+.heading-anchor {
+  margin-left: 0.4rem;
+  opacity: 0;
+  text-decoration: none;
+  color: var(--text-muted);
+}
+
+.docs-content h1:hover .heading-anchor,
+.docs-content h2:hover .heading-anchor,
+.docs-content h3:hover .heading-anchor,
+.heading-anchor:focus {
+  opacity: 1;
+}
+
+.doc-article pre.mermaid {
+  background: rgba(12, 16, 23, 0.6);
+  text-align: center;
+}
+
+.sitemap-list {
+  list-style: none;
+  margin-left: 0;
+}
+
+.sitemap-list li {
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sitemap-url {
+  color: var(--text-muted);
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .doc-article {
+    padding: 1.5rem;
+  }
+
+  .sitemap-url {
+    display: block;
+    margin-left: 0;
+  }
+}
+
 footer {
   text-align: center;
   padding: 3rem 1rem;
