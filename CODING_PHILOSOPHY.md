@@ -11,6 +11,32 @@ Our default stack of practices (used together, not as pick-and-choose):
 | **Vertical Slice Architecture** | How features are organized and delivered end-to-end |
 | **Clean Code** | How individual units of code are written and named |
 
+### Applicability & opt-out
+
+The stack above is the **default for product codebases this kit is meant to steer** (multi-feature apps with a real domain, more than one delivery adapter, and an expected lifespan measured in years). It is **not** a universal law for every script or spike.
+
+**Usually apply the full stack when most of these are true:**
+
+- Team of roughly 2+ engineers (or agents acting as such) sharing the same codebase
+- Expected lifespan beyond a prototype / hack-week
+- Domain rules that can be wrong in subtle ways (money, authz, inventory, compliance, scheduling)
+- More than one driving or driven adapter (HTTP + CLI, UI + worker, DB + queue)
+
+**Prefer a lighter shape when most of these are true:**
+
+- Single-file tools, glue scripts, or throwaway spikes
+- Pure CRUD with negligible invariants and one adapter
+- Generated or vendor-owned code you do not own long-term
+
+**How to opt out of a pillar (documented exception):**
+
+1. Name the pillar you are skipping (e.g. full DDD aggregates, hexagonal ports for a one-shot script).
+2. Record **why** (lifespan, team size, domain simplicity) in the PR body or a short note in the module README.
+3. If the exception is hard to reverse or will become the new project norm, write a sparse ADR via [agent-adr](./skills/agent-adr/SKILL.md) under `docs/ADRs/` (see [docs/ADRs/README.md](./docs/ADRs/README.md)).
+4. Keep **clean code** and **minimal change** even when hexagonal/DDD/slices are scaled down - small code still needs clear names and no dead abstractions.
+
+Opting out is deliberate, not silent. Do not invent ports, aggregates, or slice folders "because the kit said so" on a throwaway CRUD page.
+
 ---
 
 ## 1. Hexagonal Architecture (Ports & Adapters)
