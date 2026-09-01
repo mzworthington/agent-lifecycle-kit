@@ -31,7 +31,7 @@ jobs:
               echo "## Nightly live-model EDD"
               echo ""
               echo "Skipped: \`KIT_EVAL_API_KEY\` is not configured."
-              echo "Scripted PR CI (\`kit check\` / Agent EDD Suite) remains the merge gate."
+              echo "Scripted PR CI (\`kit check\` in Verify) remains the merge gate."
             } >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
@@ -100,7 +100,7 @@ jobs:
             echo "## Nightly live-model EDD"
             echo ""
             echo "Proves paraphrase / prompt-injection / multi-tool cases tagged \`requires-live\`"
-            echo "against **\`${KIT_EVAL_MODEL}\`**. This is not the PR merge gate — scripted CI is."
+            echo "against **\`${KIT_EVAL_MODEL}\`**. This is not the PR merge gate — Verify (\`kit check\`) is."
             echo ""
             echo "| Suite | Live focus |"
             echo "|-------|------------|"

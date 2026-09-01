@@ -1,18 +1,22 @@
 name: Agent Lifecycle Kit CI
 
+# Verify (merge gate) → Promote (tag + changelog) on green main.
+# Side cadences stay separate: CodeQL, nightly live EDD, Pages (path-filtered).
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
-# C4: Restrict GITHUB_TOKEN to read-only by default
+# C4: Restrict GITHUB_TOKEN to read-only by default; Promote elevates contents: write.
 permissions:
   contents: read
 
 jobs:
-  validate:
-    name: Validate Skills & Evals
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
 
     steps:
@@ -63,20 +67,23 @@ jobs:
       - name: Test kit CLI Executable
         run: pnpm kit metrics
 
-      - name: Publish CI job summary
+      - name: Publish Verify job summary
         if: always()
         run: |
           {
-            echo "## Agent Lifecycle Kit CI"
+            echo "## Verify"
             echo ""
-            echo "This job is the merge gate for the kit itself — not a generic lint/test badge."
+            echo "Merge gate for the kit. Scripted EDD suites run inside \`kit check\`"
+            echo "(no separate Agent EDD Suite workflow)."
             echo ""
             echo "| Gate | What a green check means |"
             echo "|------|--------------------------|"
             echo "| actionlint | Workflow YAML is valid and Action-safe |"
             echo "| typecheck / unit tests | TypeScript and Node harness tests pass |"
-            echo "| kit check | Skill security scan, layout, IDE rules export, skill-trigger evals, EDD routing ≥95% (architecture + kit-knowledge + safety), context budget |"
+            echo "| kit check | Skill security scan, layout, IDE rules export, skill-trigger evals, EDD routing ≥95% (architecture + kit-knowledge + Cloudflare ops + safety + recovery), context budget |"
             echo "| MCP profile / kit metrics | Default MCP composition resolves; CLI metrics command runs |"
+            echo ""
+            echo "On \`main\`, a green Verify unlocks the **Promote** job (GitHub Release + changelog push)."
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -101,3 +108,82 @@ jobs:
           name: edd-eval-reports-ci
           path: out/reports/
           if-no-files-found: warn
+
+  promote:
+    name: Promote
+    needs: verify
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Detect release
+        id: detect
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash bin/release.sh detect
+
+      - name: Publish GitHub Release
+        if: steps.detect.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash bin/release.sh publish "${{ steps.detect.outputs.tag }}" "${{ steps.detect.outputs.since }}"
+
+      - name: Regenerate CHANGELOG.md
+        run: pnpm changelog
+
+      - name: Commit changelog if changed
+        run: |
+          if git diff --quiet -- CHANGELOG.md; then
+            echo "CHANGELOG.md already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore(changelog): regenerate from conventional commits"
+          git push origin HEAD
+
+      - name: Publish Promote job summary
+        if: always()
+        env:
+          RELEASE: ${{ steps.detect.outputs.release }}
+          TAG: ${{ steps.detect.outputs.tag }}
+          BUMP: ${{ steps.detect.outputs.bump }}
+        run: |
+          {
+            echo "## Promote"
+            echo ""
+            echo "Runs only after green **Verify** on \`main\` (or \`workflow_dispatch\`)."
+            echo "Cuts a GitHub Release from conventional commits, then regenerates"
+            echo "\`CHANGELOG.md\` and pushes when needed. Consumers pin with \`KIT_REF=vX.Y.Z\`."
+            echo ""
+            if [ "${RELEASE}" = "true" ]; then
+              echo "- **Released:** \`${TAG}\` (bump=\`${BUMP}\`)"
+            else
+              echo "- **No release cut** (docs/chore-only, or HEAD is a derived commit)."
+            fi
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"

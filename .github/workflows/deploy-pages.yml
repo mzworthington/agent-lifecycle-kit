@@ -2,10 +2,23 @@ name: Deploy GitHub Pages Documentation
 
 # Custom domain DNS (apex A/AAAA + www CNAME) is owned by edge-dns:
 # https://github.com/mzworthington/edge-dns/blob/main/docs/github-pages-origin.md
+#
+# Path-filtered so changelog/release bot commits and kit-only changes do not
+# redeploy the docs site. Manual dispatch still works.
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - '404.html'
+      - 'assets/**'
+      - 'docs/**'
+      - 'llms.txt'
+      - 'robots.txt'
+      - 'sitemap.xml'
+      - '.nojekyll'
+      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -49,6 +62,7 @@ jobs:
             echo "## Deploy GitHub Pages"
             echo ""
             echo "Publishes the kit docs site (landing + EDD guides) to GitHub Pages."
+            echo "Runs on docs-site path changes only (or \`workflow_dispatch\`)."
             echo "Custom domain DNS is owned by [edge-dns](https://github.com/mzworthington/edge-dns)."
             echo ""
             if [ -n "${PAGE_URL}" ]; then

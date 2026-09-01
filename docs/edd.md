@@ -102,13 +102,13 @@ Full metric table and harness layout: [evals/edd/README.md](../evals/edd/README.
 
 | Job | Key | Model | Purpose |
 |-----|-----|--------|---------|
-| PR [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) | secrets may be injected | defaults to `scripted` | Merge gate: harness + keyword routing + safety + recovery |
+| **Verify** in [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | unused | hardcoded `scripted` via `kit check` | Merge gate: harness + keyword routing + safety + recovery |
 | Nightly [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | **requires** `KIT_EVAL_API_KEY` | repo variable `KIT_EVAL_MODEL` | Live paraphrases, prompt-injection, multi-tool, safety |
-| `pnpm check` / `kit check` | unused | hardcoded `scripted` | Same as the PR gate, locally |
+| `pnpm check` / `kit check` | unused | hardcoded `scripted` | Same as Verify, locally |
 
 Nightly **skips the whole job** if `KIT_EVAL_API_KEY` is empty. It does not fall through to `OPENAI_API_KEY`.
 
-Each of those workflows (plus the kit CI and Pages deploy jobs) publishes a **job summary**: what the gate means, then an EDD overview table and collapsible full report via `kit eval report --github-summary`.
+Verify and the nightly live job (plus Pages deploy) publish a **job summary**: what the gate means, then an EDD overview table and collapsible full report via `kit eval report --github-summary`.
 
 ### Local live run
 

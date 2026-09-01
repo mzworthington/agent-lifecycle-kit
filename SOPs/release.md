@@ -32,7 +32,16 @@ artifacts are **GitHub Releases** (`vX.Y.Z` tags). Changelog generation uses
 
 ### Kit release automation
 
-On every push to `main`, [`.github/workflows/release.yml`](../.github/workflows/release.yml):
+Pipelines (keep these separate on purpose):
+
+| Pipeline | Workflow | When |
+|----------|----------|------|
+| **Verify → Promote** | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | PR / `main` / `workflow_dispatch` |
+| **Pages** | [`.github/workflows/deploy-pages.yml`](../.github/workflows/deploy-pages.yml) | Docs-site path changes on `main` |
+| **CodeQL** | [`.github/workflows/codeql.yml`](../.github/workflows/codeql.yml) | PR / `main` / weekly |
+| **Live EDD** | [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | Nightly schedule |
+
+After green **Verify** on `main`, the **Promote** job:
 
 1. **Detect** — `bin/release.sh detect` looks at conventional commits since the last `v*` tag.
    - `feat` → minor, `fix`/`perf`/`refactor` → patch, `!` / `BREAKING CHANGE` → major
