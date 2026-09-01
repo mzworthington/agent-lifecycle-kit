@@ -47,7 +47,7 @@ jobs:
 
       - name: Install pnpm
         if: steps.creds.outputs.skip != 'true'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 11
 
