@@ -124,6 +124,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -151,6 +152,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash bin/release.sh publish "${{ steps.detect.outputs.tag }}" "${{ steps.detect.outputs.since }}"
 
+      - name: Sync release notes for all version tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git fetch --tags --force
+          bash bin/release.sh sync-notes
+
       - name: Regenerate CHANGELOG.md
         run: pnpm changelog
 
@@ -177,7 +185,8 @@ jobs:
             echo "## Promote"
             echo ""
             echo "Runs only after green **Verify** on \`main\` (or \`workflow_dispatch\`)."
-            echo "Cuts a GitHub Release from conventional commits, then regenerates"
+            echo "Cuts a GitHub Release from conventional commits, syncs version-scoped"
+            echo "notes on all \`v*\` releases, then regenerates date-grouped"
             echo "\`CHANGELOG.md\` and pushes when needed. Consumers pin with \`KIT_REF=vX.Y.Z\`."
             echo ""
             if [ "${RELEASE}" = "true" ]; then
@@ -185,5 +194,6 @@ jobs:
             else
               echo "- **No release cut** (docs/chore-only, or HEAD is a derived commit)."
             fi
+            echo "- **Release notes:** synced for all existing \`vX.Y.Z\` tags"
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"

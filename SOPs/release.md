@@ -46,15 +46,19 @@ After green **Verify** on `main`, the **Promote** job:
 1. **Detect** — `bin/release.sh detect` looks at conventional commits since the last `v*` tag.
    - `feat` → minor, `fix`/`perf`/`refactor` → patch, `!` / `BREAKING CHANGE` → major
    - `docs` / `chore` / `ci` / `test` alone do **not** cut a release
-2. **Publish** — creates a GitHub Release with git-cliff notes (`bin/release.sh publish`)
-3. **Changelog** — regenerates `CHANGELOG.md` via `pnpm changelog` (`bin/changelog-render.mjs`) and commits `chore(changelog): …` when needed
+2. **Publish** — creates a GitHub Release with **version-scoped** notes (`bin/release.sh publish`): commits since the previous tag only, headed `## vX.Y.Z` (never `[unreleased]`)
+3. **Sync notes** — `bin/release.sh sync-notes` rewrites every existing `vX.Y.Z` GitHub Release body from `previous-tag..this-tag` (idempotent repair)
+4. **Changelog** — regenerates date-grouped `CHANGELOG.md` via `pnpm changelog` (`bin/changelog-render.mjs`) and commits `chore(changelog): …` when needed. CHANGELOG stays date-grouped; GitHub Release notes stay version-scoped.
 
 Local:
 
 ```bash
-pnpm changelog              # regenerate CHANGELOG.md
-pnpm release:detect         # print whether HEAD would release
-bash bin/release.sh notes   # preview notes
+pnpm changelog                         # regenerate date-grouped CHANGELOG.md
+pnpm release:detect                    # print whether HEAD would release
+bash bin/release.sh notes              # preview notes since last tag → HEAD
+bash bin/release.sh notes '' v1.0.0    # first-release range (beginning → tag)
+bash bin/release.sh notes v1.0.0 v1.1.0
+bash bin/release.sh sync-notes         # repair GitHub Release bodies (needs GH_TOKEN)
 ```
 
 Consumers pin installs with `KIT_REF=vX.Y.Z` (see `install.sh`).
