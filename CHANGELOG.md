@@ -28,6 +28,7 @@
 - *(edd)* Remove otelop demo shell, keep closed-loop kit spans (#30)
 - *(security)* SECURITY, CONTRIBUTING, Dependabot, and CodeQL (#37)
 - Fold promote into verify and drop redundant EDD workflow (#43)
+- Update package.json scripts and improve README clarity
 
 ### 📚 Documentation
 
