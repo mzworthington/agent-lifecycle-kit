@@ -17,6 +17,8 @@ Requires Node 22+ and the kit checkout (with `tsx` available via the kit `node_m
 | `get_philosophy_section` | One `CODING_PHILOSOPHY.md` section by id or title |
 | `get_sop` | One SOP by stem (truncated if very long) |
 | `get_handover` | Latest or named phase handover for a project |
+| `get_entity` | One ontology entity by id (`skill:…`, `sop:…`, `philosophy:…`, `doc:…`) |
+| `get_related` | Ontology edges from an entity (optional `relation` filter) |
 
 ## When to use
 

@@ -7,6 +7,8 @@
 import { createInterface } from "node:readline";
 import {
   getHandover,
+  getKitEntity,
+  getKitRelated,
   getPhilosophySection,
   getSop,
   listKitIndex,
@@ -91,6 +93,39 @@ const TOOLS = [
       additionalProperties: false,
     },
   },
+  {
+    name: "get_entity",
+    description:
+      "Return one ontology entity by id (e.g. skill:agent-tdd, sop:conventional-commits, philosophy:8, doc:edd).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        id: {
+          type: "string",
+          description: "Ontology id with prefix, e.g. skill:agent-tdd",
+        },
+      },
+      required: ["id"],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "get_related",
+    description:
+      "Return ontology edges from an entity (optional relation filter: loads, uses, depends-on, implements, references, …).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        id: { type: "string", description: "Source ontology id" },
+        relation: {
+          type: "string",
+          description: "Optional relation name filter",
+        },
+      },
+      required: ["id"],
+      additionalProperties: false,
+    },
+  },
 ] as const;
 
 function ok(id: unknown, result: unknown) {
@@ -167,6 +202,31 @@ function callTool(
           };
         }
         return textContent(`path: ${found.path}\n\n${found.body}`);
+      }
+      case "get_entity": {
+        const id = String(args.id ?? "");
+        const found = getKitEntity(kitRoot, id);
+        if (!found) {
+          return {
+            ...textContent(
+              `Entity not found: ${id}. Run kit ontology generate if index is missing.`
+            ),
+            isError: true,
+          };
+        }
+        return textContent(JSON.stringify(found, null, 2));
+      }
+      case "get_related": {
+        const id = String(args.id ?? "");
+        const relation =
+          typeof args.relation === "string" ? args.relation : undefined;
+        const related = getKitRelated(kitRoot, id, relation);
+        if (related.length === 0) {
+          return textContent(
+            `No related entities for ${id}${relation ? ` via ${relation}` : ""}.`
+          );
+        }
+        return textContent(JSON.stringify(related, null, 2));
       }
       default:
         return { ...textContent(`Unknown tool: ${name}`), isError: true };

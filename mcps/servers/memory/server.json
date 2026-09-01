@@ -1,17 +1,22 @@
 {
   "id": "memory",
   "name": "Memory",
-  "summary": "Local knowledge-graph memory for durable facts across agent sessions.",
-  "homepage": "https://www.npmjs.com/package/@modelcontextprotocol/server-memory",
+  "summary": "Typed local knowledge-graph memory (kit ontology allowlist on create).",
+  "homepage": "https://github.com/mzworthington/agent-lifecycle-kit/tree/main/mcps/servers/memory",
   "transport": "stdio",
   "phases": ["spec", "impl", "telemetry"],
-  "triggers": ["memory", "remember", "knowledge graph", "preferences"],
+  "triggers": ["memory", "remember", "knowledge graph", "preferences", "glossary", "SLO"],
   "requiredEnv": [],
   "mcp": {
     "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx/esm",
+        "${userHome}/.agents/mcps/servers/memory/src/server.ts"
+      ],
       "env": {
+        "KIT_ROOT": "${userHome}/.agents",
         "MEMORY_FILE_PATH": "${userHome}/.agents/sync/mcp-memory.jsonl"
       }
     }

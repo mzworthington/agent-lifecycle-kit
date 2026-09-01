@@ -35,10 +35,10 @@
     {
       "id": "memory",
       "name": "Memory",
-      "summary": "Local knowledge-graph memory for durable facts across agent sessions.",
+      "summary": "Typed local knowledge-graph memory; create_entities gated by kit ontology allowlist.",
       "transport": "stdio",
       "phases": ["spec", "impl", "telemetry"],
-      "triggers": ["memory", "remember", "knowledge graph", "preferences"],
+      "triggers": ["memory", "remember", "knowledge graph", "preferences", "glossary", "SLO"],
       "requiredEnv": [],
       "enabledByDefault": true
     },

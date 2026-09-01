@@ -13,10 +13,12 @@ import {
   printContextBudget,
   type ContextBudgetResult
 } from './measure_context_budget.js';
+import { checkOntology, regenerateOntologyIndex, type OntologyCheckResult } from './ontology/index.js';
 
 export const EDD_CI_SUITES = [
   'evals/edd/architecture_routing.yaml',
   'evals/edd/kit_knowledge.yaml',
+  'evals/edd/memory_ontology.yaml',
   'evals/edd/cloudflare_ops.yaml',
   'evals/edd/safety.yaml',
   'evals/edd/architecture_self_correction.yaml',
@@ -33,6 +35,8 @@ export interface KitCheckDeps {
   edd?: (options: EddCliOptions) => Promise<number | null>;
   budget?: (repoDir: string) => ContextBudgetResult;
   printBudget?: (result: ContextBudgetResult) => void;
+  regenerateOntology?: (repoDir: string) => { path: string; changed: boolean };
+  ontologyCheck?: (repoDir: string) => OntologyCheckResult;
 }
 
 export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Promise<number> {
@@ -45,6 +49,8 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
   const edd = deps.edd ?? handleEddEvalCli;
   const budget = deps.budget ?? measureContextBudget;
   const printBudget = deps.printBudget ?? printContextBudget;
+  const regenerateOntology = deps.regenerateOntology ?? regenerateOntologyIndex;
+  const ontologyCheck = deps.ontologyCheck ?? checkOntology;
 
   console.log('=== kit check ===');
   console.log('');
@@ -55,6 +61,20 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
   const layout = verifyLayout(repoDir);
   printLayout(layout);
   if (!layout.ok) return 1;
+
+  const regen = regenerateOntology(repoDir);
+  console.log(
+    regen.changed
+      ? `Ontology index regenerated (updated): ${regen.path}`
+      : `Ontology index up to date: ${regen.path}`
+  );
+  const ontology = ontologyCheck(repoDir);
+  if (!ontology.ok) {
+    for (const msg of ontology.messages) console.error(msg);
+    console.error('Ontology check FAILED.');
+    return 1;
+  }
+  console.log('✅ Ontology check PASSED.');
 
   const rulesOk = exportRules(repoDir, true);
   if (!rulesOk) {

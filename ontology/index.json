@@ -1,0 +1,3188 @@
+{
+  "version": 1,
+  "generatedFrom": "ontology/schema.yaml",
+  "entities": [
+    {
+      "id": "doc:edd",
+      "type": "Doc",
+      "name": "edd",
+      "path": "docs/edd.md"
+    },
+    {
+      "id": "doc:kit",
+      "type": "Doc",
+      "name": "kit",
+      "path": "docs/kit.md"
+    },
+    {
+      "id": "doc:kit-review-backlog",
+      "type": "Doc",
+      "name": "kit-review-backlog",
+      "path": "docs/kit-review-backlog.md"
+    },
+    {
+      "id": "doc:kit-value-and-model-agnostic-review",
+      "type": "Doc",
+      "name": "kit-value-and-model-agnostic-review",
+      "path": "docs/kit-value-and-model-agnostic-review.md"
+    },
+    {
+      "id": "doc:README",
+      "type": "Doc",
+      "name": "README",
+      "path": "docs/README.md"
+    },
+    {
+      "id": "eval:architecture_routing",
+      "type": "EvalSuite",
+      "name": "architecture_routing",
+      "path": "evals/edd/architecture_routing.yaml"
+    },
+    {
+      "id": "eval:architecture_self_correction",
+      "type": "EvalSuite",
+      "name": "architecture_self_correction",
+      "path": "evals/edd/architecture_self_correction.yaml"
+    },
+    {
+      "id": "eval:architecture_terminal",
+      "type": "EvalSuite",
+      "name": "architecture_terminal",
+      "path": "evals/edd/architecture_terminal.yaml"
+    },
+    {
+      "id": "eval:cloudflare_ops",
+      "type": "EvalSuite",
+      "name": "cloudflare_ops",
+      "path": "evals/edd/cloudflare_ops.yaml"
+    },
+    {
+      "id": "eval:demo",
+      "type": "EvalSuite",
+      "name": "demo",
+      "path": "evals/edd/demo.yaml"
+    },
+    {
+      "id": "eval:kit_knowledge",
+      "type": "EvalSuite",
+      "name": "kit_knowledge",
+      "path": "evals/edd/kit_knowledge.yaml"
+    },
+    {
+      "id": "eval:memory_ontology",
+      "type": "EvalSuite",
+      "name": "memory_ontology",
+      "path": "evals/edd/memory_ontology.yaml"
+    },
+    {
+      "id": "eval:safety",
+      "type": "EvalSuite",
+      "name": "safety",
+      "path": "evals/edd/safety.yaml"
+    },
+    {
+      "id": "eval:skill-agent-adapter",
+      "type": "EvalSuite",
+      "name": "skill-agent-adapter",
+      "path": "skills/agent-adapter/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-adr",
+      "type": "EvalSuite",
+      "name": "skill-agent-adr",
+      "path": "skills/agent-adr/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-api-contract",
+      "type": "EvalSuite",
+      "name": "skill-agent-api-contract",
+      "path": "skills/agent-api-contract/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-arch-drift",
+      "type": "EvalSuite",
+      "name": "skill-agent-arch-drift",
+      "path": "skills/agent-arch-drift/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-cloudflare-ops",
+      "type": "EvalSuite",
+      "name": "skill-agent-cloudflare-ops",
+      "path": "skills/agent-cloudflare-ops/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-copy",
+      "type": "EvalSuite",
+      "name": "skill-agent-copy",
+      "path": "skills/agent-copy/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-debug",
+      "type": "EvalSuite",
+      "name": "skill-agent-debug",
+      "path": "skills/agent-debug/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-docs",
+      "type": "EvalSuite",
+      "name": "skill-agent-docs",
+      "path": "skills/agent-docs/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-grill-me",
+      "type": "EvalSuite",
+      "name": "skill-agent-grill-me",
+      "path": "skills/agent-grill-me/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-grilling",
+      "type": "EvalSuite",
+      "name": "skill-agent-grilling",
+      "path": "skills/agent-grilling/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-incident",
+      "type": "EvalSuite",
+      "name": "skill-agent-incident",
+      "path": "skills/agent-incident/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-migration",
+      "type": "EvalSuite",
+      "name": "skill-agent-migration",
+      "path": "skills/agent-migration/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-orchestrator",
+      "type": "EvalSuite",
+      "name": "skill-agent-orchestrator",
+      "path": "skills/agent-orchestrator/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-perf-opt",
+      "type": "EvalSuite",
+      "name": "skill-agent-perf-opt",
+      "path": "skills/agent-perf-opt/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-pre-commit",
+      "type": "EvalSuite",
+      "name": "skill-agent-pre-commit",
+      "path": "skills/agent-pre-commit/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-prune",
+      "type": "EvalSuite",
+      "name": "skill-agent-prune",
+      "path": "skills/agent-prune/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-release",
+      "type": "EvalSuite",
+      "name": "skill-agent-release",
+      "path": "skills/agent-release/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-review",
+      "type": "EvalSuite",
+      "name": "skill-agent-review",
+      "path": "skills/agent-review/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-security",
+      "type": "EvalSuite",
+      "name": "skill-agent-security",
+      "path": "skills/agent-security/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-spec",
+      "type": "EvalSuite",
+      "name": "skill-agent-spec",
+      "path": "skills/agent-spec/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-tdd",
+      "type": "EvalSuite",
+      "name": "skill-agent-tdd",
+      "path": "skills/agent-tdd/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-telemetry",
+      "type": "EvalSuite",
+      "name": "skill-agent-telemetry",
+      "path": "skills/agent-telemetry/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-ui",
+      "type": "EvalSuite",
+      "name": "skill-agent-ui",
+      "path": "skills/agent-ui/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-agent-xfn",
+      "type": "EvalSuite",
+      "name": "skill-agent-xfn",
+      "path": "skills/agent-xfn/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-dotnet",
+      "type": "EvalSuite",
+      "name": "skill-framework-dotnet",
+      "path": "skills/framework-dotnet/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-express",
+      "type": "EvalSuite",
+      "name": "skill-framework-express",
+      "path": "skills/framework-express/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-fastapi",
+      "type": "EvalSuite",
+      "name": "skill-framework-fastapi",
+      "path": "skills/framework-fastapi/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-next",
+      "type": "EvalSuite",
+      "name": "skill-framework-next",
+      "path": "skills/framework-next/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-nuxt",
+      "type": "EvalSuite",
+      "name": "skill-framework-nuxt",
+      "path": "skills/framework-nuxt/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-pulumi",
+      "type": "EvalSuite",
+      "name": "skill-framework-pulumi",
+      "path": "skills/framework-pulumi/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-quarkus",
+      "type": "EvalSuite",
+      "name": "skill-framework-quarkus",
+      "path": "skills/framework-quarkus/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-react",
+      "type": "EvalSuite",
+      "name": "skill-framework-react",
+      "path": "skills/framework-react/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-springboot",
+      "type": "EvalSuite",
+      "name": "skill-framework-springboot",
+      "path": "skills/framework-springboot/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-framework-terraform",
+      "type": "EvalSuite",
+      "name": "skill-framework-terraform",
+      "path": "skills/framework-terraform/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-csharp",
+      "type": "EvalSuite",
+      "name": "skill-lang-csharp",
+      "path": "skills/lang-csharp/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-go",
+      "type": "EvalSuite",
+      "name": "skill-lang-go",
+      "path": "skills/lang-go/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-hcl",
+      "type": "EvalSuite",
+      "name": "skill-lang-hcl",
+      "path": "skills/lang-hcl/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-java",
+      "type": "EvalSuite",
+      "name": "skill-lang-java",
+      "path": "skills/lang-java/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-python",
+      "type": "EvalSuite",
+      "name": "skill-lang-python",
+      "path": "skills/lang-python/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-rust",
+      "type": "EvalSuite",
+      "name": "skill-lang-rust",
+      "path": "skills/lang-rust/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-lang-typescript",
+      "type": "EvalSuite",
+      "name": "skill-lang-typescript",
+      "path": "skills/lang-typescript/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-profile-api",
+      "type": "EvalSuite",
+      "name": "skill-profile-api",
+      "path": "skills/profile-api/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-profile-iac",
+      "type": "EvalSuite",
+      "name": "skill-profile-iac",
+      "path": "skills/profile-iac/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-profile-mcp",
+      "type": "EvalSuite",
+      "name": "skill-profile-mcp",
+      "path": "skills/profile-mcp/evals/eval.json"
+    },
+    {
+      "id": "eval:skill-profile-observability",
+      "type": "EvalSuite",
+      "name": "skill-profile-observability",
+      "path": "skills/profile-observability/evals/eval.json"
+    },
+    {
+      "id": "handover:agent-lifecycle-kit/grilling",
+      "type": "Handover",
+      "name": "agent-lifecycle-kit/grilling",
+      "path": "handover/agent-lifecycle-kit/handover_grilling.md",
+      "attrs": {
+        "project": "agent-lifecycle-kit",
+        "phase": "grilling"
+      }
+    },
+    {
+      "id": "handover:agent-lifecycle-kit/tdd",
+      "type": "Handover",
+      "name": "agent-lifecycle-kit/tdd",
+      "path": "handover/agent-lifecycle-kit/handover_tdd.md",
+      "attrs": {
+        "project": "agent-lifecycle-kit",
+        "phase": "tdd"
+      }
+    },
+    {
+      "id": "mcp:bitwarden",
+      "type": "McpServer",
+      "name": "bitwarden",
+      "path": "mcps/servers/bitwarden/server.json",
+      "attrs": {
+        "displayName": "Bitwarden"
+      }
+    },
+    {
+      "id": "mcp:chrome-devtools",
+      "type": "McpServer",
+      "name": "chrome-devtools",
+      "path": "mcps/servers/chrome-devtools/server.json",
+      "attrs": {
+        "displayName": "Chrome DevTools"
+      }
+    },
+    {
+      "id": "mcp:cloudflare",
+      "type": "McpServer",
+      "name": "cloudflare",
+      "path": "mcps/servers/cloudflare/server.json",
+      "attrs": {
+        "displayName": "Cloudflare"
+      }
+    },
+    {
+      "id": "mcp:cloudflare-observability",
+      "type": "McpServer",
+      "name": "cloudflare-observability",
+      "path": "mcps/servers/cloudflare-observability/server.json",
+      "attrs": {
+        "displayName": "Cloudflare Observability"
+      }
+    },
+    {
+      "id": "mcp:context7",
+      "type": "McpServer",
+      "name": "context7",
+      "path": "mcps/servers/context7/server.json",
+      "attrs": {
+        "displayName": "Context7"
+      }
+    },
+    {
+      "id": "mcp:figma",
+      "type": "McpServer",
+      "name": "figma",
+      "path": "mcps/servers/figma/server.json",
+      "attrs": {
+        "displayName": "Figma"
+      }
+    },
+    {
+      "id": "mcp:github",
+      "type": "McpServer",
+      "name": "github",
+      "path": "mcps/servers/github/server.json",
+      "attrs": {
+        "displayName": "GitHub"
+      }
+    },
+    {
+      "id": "mcp:kit-knowledge",
+      "type": "McpServer",
+      "name": "kit-knowledge",
+      "path": "mcps/servers/kit-knowledge/server.json",
+      "attrs": {
+        "displayName": "Kit Knowledge"
+      }
+    },
+    {
+      "id": "mcp:linear",
+      "type": "McpServer",
+      "name": "linear",
+      "path": "mcps/servers/linear/server.json",
+      "attrs": {
+        "displayName": "Linear"
+      }
+    },
+    {
+      "id": "mcp:linkedin",
+      "type": "McpServer",
+      "name": "linkedin",
+      "path": "mcps/servers/linkedin/server.json",
+      "attrs": {
+        "displayName": "LinkedIn"
+      }
+    },
+    {
+      "id": "mcp:memory",
+      "type": "McpServer",
+      "name": "memory",
+      "path": "mcps/servers/memory/server.json",
+      "attrs": {
+        "displayName": "Memory"
+      }
+    },
+    {
+      "id": "mcp:next-devtools",
+      "type": "McpServer",
+      "name": "next-devtools",
+      "path": "mcps/servers/next-devtools/server.json",
+      "attrs": {
+        "displayName": "Next.js DevTools"
+      }
+    },
+    {
+      "id": "mcp:notion",
+      "type": "McpServer",
+      "name": "notion",
+      "path": "mcps/servers/notion/server.json",
+      "attrs": {
+        "displayName": "Notion"
+      }
+    },
+    {
+      "id": "mcp:obsidian",
+      "type": "McpServer",
+      "name": "obsidian",
+      "path": "mcps/servers/obsidian/server.json",
+      "attrs": {
+        "displayName": "Obsidian"
+      }
+    },
+    {
+      "id": "mcp:playwright",
+      "type": "McpServer",
+      "name": "playwright",
+      "path": "mcps/servers/playwright/server.json",
+      "attrs": {
+        "displayName": "Playwright"
+      }
+    },
+    {
+      "id": "mcp:polyglot",
+      "type": "McpServer",
+      "name": "polyglot",
+      "path": "mcps/servers/polyglot/server.json",
+      "attrs": {
+        "displayName": "Polyglot"
+      }
+    },
+    {
+      "id": "mcp:postgres",
+      "type": "McpServer",
+      "name": "postgres",
+      "path": "mcps/servers/postgres/server.json",
+      "attrs": {
+        "displayName": "PostgreSQL"
+      }
+    },
+    {
+      "id": "mcp:raspberry-pi",
+      "type": "McpServer",
+      "name": "raspberry-pi",
+      "path": "mcps/servers/raspberry-pi/server.json",
+      "attrs": {
+        "displayName": "Raspberry Pi"
+      }
+    },
+    {
+      "id": "mcp:semgrep",
+      "type": "McpServer",
+      "name": "semgrep",
+      "path": "mcps/servers/semgrep/server.json",
+      "attrs": {
+        "displayName": "Semgrep"
+      }
+    },
+    {
+      "id": "mcp:sentry",
+      "type": "McpServer",
+      "name": "sentry",
+      "path": "mcps/servers/sentry/server.json",
+      "attrs": {
+        "displayName": "Sentry"
+      }
+    },
+    {
+      "id": "mcp:slack",
+      "type": "McpServer",
+      "name": "slack",
+      "path": "mcps/servers/slack/server.json",
+      "attrs": {
+        "displayName": "Slack"
+      }
+    },
+    {
+      "id": "mcp:stripe",
+      "type": "McpServer",
+      "name": "stripe",
+      "path": "mcps/servers/stripe/server.json",
+      "attrs": {
+        "displayName": "Stripe"
+      }
+    },
+    {
+      "id": "mcp:vercel",
+      "type": "McpServer",
+      "name": "vercel",
+      "path": "mcps/servers/vercel/server.json",
+      "attrs": {
+        "displayName": "Vercel"
+      }
+    },
+    {
+      "id": "phase:audit",
+      "type": "Phase",
+      "name": "audit",
+      "attrs": {
+        "order": 5
+      }
+    },
+    {
+      "id": "phase:debug",
+      "type": "Phase",
+      "name": "debug",
+      "attrs": {
+        "order": 6
+      }
+    },
+    {
+      "id": "phase:grilling",
+      "type": "Phase",
+      "name": "grilling",
+      "attrs": {
+        "order": 0
+      }
+    },
+    {
+      "id": "phase:impl",
+      "type": "Phase",
+      "name": "impl",
+      "attrs": {
+        "order": 4
+      }
+    },
+    {
+      "id": "phase:maintenance",
+      "type": "Phase",
+      "name": "maintenance",
+      "attrs": {
+        "order": 9
+      }
+    },
+    {
+      "id": "phase:orchestration",
+      "type": "Phase",
+      "name": "orchestration",
+      "attrs": {
+        "order": 11
+      }
+    },
+    {
+      "id": "phase:quality",
+      "type": "Phase",
+      "name": "quality",
+      "attrs": {
+        "order": 10
+      }
+    },
+    {
+      "id": "phase:release",
+      "type": "Phase",
+      "name": "release",
+      "attrs": {
+        "order": 8
+      }
+    },
+    {
+      "id": "phase:spec",
+      "type": "Phase",
+      "name": "spec",
+      "attrs": {
+        "order": 1
+      }
+    },
+    {
+      "id": "phase:tdd",
+      "type": "Phase",
+      "name": "tdd",
+      "attrs": {
+        "order": 2
+      }
+    },
+    {
+      "id": "phase:telemetry",
+      "type": "Phase",
+      "name": "telemetry",
+      "attrs": {
+        "order": 7
+      }
+    },
+    {
+      "id": "phase:xfn",
+      "type": "Phase",
+      "name": "xfn",
+      "attrs": {
+        "order": 3
+      }
+    },
+    {
+      "id": "philosophy:1",
+      "type": "PhilosophySection",
+      "name": "1",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Hexagonal Architecture (Ports & Adapters)"
+      }
+    },
+    {
+      "id": "philosophy:2",
+      "type": "PhilosophySection",
+      "name": "2",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Domain-Driven Design (DDD)"
+      }
+    },
+    {
+      "id": "philosophy:3",
+      "type": "PhilosophySection",
+      "name": "3",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Vertical Slice Architecture"
+      }
+    },
+    {
+      "id": "philosophy:4",
+      "type": "PhilosophySection",
+      "name": "4",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Clean Code"
+      }
+    },
+    {
+      "id": "philosophy:5",
+      "type": "PhilosophySection",
+      "name": "5",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Web & Backend Framework Gold Standards"
+      }
+    },
+    {
+      "id": "philosophy:6",
+      "type": "PhilosophySection",
+      "name": "6",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Methodology: TDD, BDD, EDD & Quality Guardrails"
+      }
+    },
+    {
+      "id": "philosophy:7",
+      "type": "PhilosophySection",
+      "name": "7",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Secure Code by Design"
+      }
+    },
+    {
+      "id": "philosophy:8",
+      "type": "PhilosophySection",
+      "name": "8",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Interaction Mandate"
+      }
+    },
+    {
+      "id": "philosophy:9",
+      "type": "PhilosophySection",
+      "name": "9",
+      "path": "CODING_PHILOSOPHY.md",
+      "attrs": {
+        "title": "Developer Tooling & Environment (Mise)"
+      }
+    },
+    {
+      "id": "skill:agent-adapter",
+      "type": "Skill",
+      "name": "agent-adapter",
+      "path": "skills/agent-adapter/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "impl",
+        "triggers": [
+          "adapter deep dive",
+          "large adapter",
+          "repository",
+          "infrastructure",
+          "prisma",
+          "spring data",
+          "ef core",
+          "payment gateway",
+          "message bus"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-xfn",
+          "agent-pre-commit"
+        ],
+        "mcp": [
+          "context7",
+          "postgres",
+          "stripe"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-adr",
+      "type": "Skill",
+      "name": "agent-adr",
+      "path": "skills/agent-adr/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "audit",
+        "triggers": [
+          "ADR",
+          "MADR",
+          "architecture decision",
+          "decision record",
+          "trade-off",
+          "irreversible",
+          "why we chose"
+        ],
+        "dependsOn": [
+          "agent-arch-drift"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-api-contract",
+      "type": "Skill",
+      "name": "agent-api-contract",
+      "path": "skills/agent-api-contract/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "spec",
+        "triggers": [
+          "openapi",
+          "asyncapi",
+          "api contract",
+          "swagger",
+          "webhook contract",
+          "consumer driven contract"
+        ],
+        "dependsOn": [
+          "agent-spec",
+          "agent-tdd"
+        ],
+        "mcp": [
+          "context7"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-arch-drift",
+      "type": "Skill",
+      "name": "agent-arch-drift",
+      "path": "skills/agent-arch-drift/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "audit",
+        "triggers": [
+          "architecture",
+          "hexagonal",
+          "boundary",
+          "solid",
+          "import violation",
+          "arch drift",
+          "ddd",
+          "anemic domain",
+          "vertical slice",
+          "bounded context",
+          "less code",
+          "smaller diff",
+          "over-engineering",
+          "behavior catalog",
+          "test impact",
+          "complexity",
+          "hotspot",
+          "cognitive complexity",
+          "simplify"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-xfn",
+          "agent-adr"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-cloudflare-ops",
+      "type": "Skill",
+      "name": "agent-cloudflare-ops",
+      "path": "skills/agent-cloudflare-ops/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "telemetry",
+        "triggers": [
+          "cloudflare analytics",
+          "web analytics",
+          "rum",
+          "beacon",
+          "insights hostname",
+          "rum site",
+          "cloudflare-ops",
+          "diagnose cloudflare",
+          "workers logs"
+        ],
+        "dependsOn": [
+          "agent-debug",
+          "agent-incident",
+          "agent-telemetry",
+          "profile-iac"
+        ],
+        "mcp": [
+          "cloudflare",
+          "cloudflare-observability",
+          "github",
+          "kit-knowledge",
+          "memory"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-copy",
+      "type": "Skill",
+      "name": "agent-copy",
+      "path": "skills/agent-copy/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "impl",
+        "triggers": [
+          "copy",
+          "copywriting",
+          "tone of voice",
+          "ux copy",
+          "microcopy",
+          "messaging",
+          "brand voice",
+          "content design",
+          "humanize",
+          "human-centric",
+          "sounds AI",
+          "AI-generated copy",
+          "landing page copy",
+          "marketing copy"
+        ],
+        "dependsOn": [
+          "agent-spec",
+          "agent-ui"
+        ],
+        "mcp": [
+          "memory"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-debug",
+      "type": "Skill",
+      "name": "agent-debug",
+      "path": "skills/agent-debug/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "debug",
+        "triggers": [
+          "bug",
+          "debug",
+          "broken",
+          "failed",
+          "failure",
+          "flake",
+          "reproduce",
+          "root cause",
+          "regression",
+          "CI failed",
+          "job failed",
+          "Failed to fetch",
+          "overlap",
+          "empty diagram",
+          "live site",
+          "hypothesis"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-pre-commit",
+          "agent-xfn"
+        ],
+        "mcp": [
+          "sentry",
+          "chrome-devtools",
+          "github",
+          "cloudflare",
+          "cloudflare-observability"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-docs",
+      "type": "Skill",
+      "name": "agent-docs",
+      "path": "skills/agent-docs/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "release",
+        "triggers": [
+          "documentation",
+          "readme",
+          "runbook",
+          "api docs",
+          "changelog notes",
+          "docs narrative"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-xfn",
+          "agent-copy"
+        ],
+        "mcp": [
+          "notion",
+          "memory"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-grill-me",
+      "type": "Skill",
+      "name": "agent-grill-me",
+      "path": "skills/agent-grill-me/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "spec",
+        "triggers": [
+          "grill-me",
+          "/grill-me",
+          "interview idea",
+          "explore idea",
+          "grill concept"
+        ],
+        "dependsOn": [
+          "agent-grilling"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-grilling",
+      "type": "Skill",
+      "name": "agent-grilling",
+      "path": "skills/agent-grilling/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "spec",
+        "triggers": [
+          "grilling",
+          "/grilling",
+          "grill",
+          "interview plan",
+          "stress test plan",
+          "design tree",
+          "decision frontier"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-incident",
+      "type": "Skill",
+      "name": "agent-incident",
+      "path": "skills/agent-incident/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "debug",
+        "triggers": [
+          "incident",
+          "outage",
+          "sev",
+          "production down",
+          "page"
+        ],
+        "dependsOn": [
+          "agent-debug",
+          "agent-telemetry"
+        ],
+        "mcp": [
+          "sentry",
+          "slack",
+          "notion",
+          "github",
+          "cloudflare",
+          "cloudflare-observability"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-migration",
+      "type": "Skill",
+      "name": "agent-migration",
+      "path": "skills/agent-migration/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "maintenance",
+        "triggers": [
+          "migration",
+          "schema change",
+          "flyway",
+          "prisma migrate",
+          "alembic",
+          "ef migration",
+          "expand contract"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-pre-commit"
+        ],
+        "mcp": [
+          "postgres",
+          "context7"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-orchestrator",
+      "type": "Skill",
+      "name": "agent-orchestrator",
+      "path": "skills/agent-orchestrator/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "orchestration",
+        "triggers": [
+          "new feature",
+          "lifecycle",
+          "handover",
+          "multi-phase",
+          "orchestrate"
+        ],
+        "dependsOn": [
+          "agent-grilling",
+          "agent-grill-me",
+          "agent-spec",
+          "agent-tdd",
+          "agent-xfn",
+          "agent-adapter",
+          "agent-review",
+          "agent-migration",
+          "agent-docs",
+          "agent-copy",
+          "agent-release",
+          "agent-api-contract",
+          "agent-ui",
+          "agent-incident",
+          "agent-cloudflare-ops",
+          "agent-security",
+          "agent-arch-drift",
+          "agent-adr",
+          "agent-prune",
+          "agent-debug",
+          "agent-telemetry",
+          "agent-pre-commit"
+        ],
+        "mcp": [
+          "memory",
+          "kit-knowledge",
+          "github",
+          "linear",
+          "notion"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-perf-opt",
+      "type": "Skill",
+      "name": "agent-perf-opt",
+      "path": "skills/agent-perf-opt/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "maintenance",
+        "triggers": [
+          "performance",
+          "perf",
+          "memory leak",
+          "explain analyze",
+          "latency optimization",
+          "profiling",
+          "cpu bottleneck"
+        ],
+        "dependsOn": [
+          "agent-debug",
+          "agent-telemetry"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-pre-commit",
+      "type": "Skill",
+      "name": "agent-pre-commit",
+      "path": "skills/agent-pre-commit/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "quality",
+        "triggers": [
+          "pre-commit",
+          "pre commit hook",
+          "husky",
+          "lint-staged",
+          "hook checks",
+          "fix lint",
+          "fix build",
+          "quality gate",
+          "conventional commits",
+          "PR title",
+          "commit message"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-prune",
+      "type": "Skill",
+      "name": "agent-prune",
+      "path": "skills/agent-prune/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "maintenance",
+        "triggers": [
+          "dead code",
+          "prune",
+          "remove unused",
+          "legacy redirect",
+          "orphan",
+          "stale reference",
+          "complexity",
+          "hotspot",
+          "simplify",
+          "cognitive complexity",
+          "refactor complexity"
+        ],
+        "dependsOn": [
+          "agent-arch-drift",
+          "agent-pre-commit"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:agent-release",
+      "type": "Skill",
+      "name": "agent-release",
+      "path": "skills/agent-release/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "release",
+        "triggers": [
+          "release",
+          "ship",
+          "changelog",
+          "version bump",
+          "prepare merge"
+        ],
+        "dependsOn": [
+          "agent-pre-commit",
+          "agent-docs",
+          "agent-xfn"
+        ],
+        "mcp": [
+          "github"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-review",
+      "type": "Skill",
+      "name": "agent-review",
+      "path": "skills/agent-review/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "audit",
+        "triggers": [
+          "pr review",
+          "pull request review",
+          "diff review",
+          "code review",
+          "change set"
+        ],
+        "dependsOn": [
+          "agent-arch-drift",
+          "agent-security",
+          "agent-xfn",
+          "agent-copy"
+        ],
+        "mcp": [
+          "github"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-security",
+      "type": "Skill",
+      "name": "agent-security",
+      "path": "skills/agent-security/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "audit",
+        "triggers": [
+          "security",
+          "owasp",
+          "vulnerability",
+          "injection",
+          "xss",
+          "auth",
+          "secrets"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-xfn"
+        ],
+        "mcp": [
+          "semgrep",
+          "github"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-spec",
+      "type": "Skill",
+      "name": "agent-spec",
+      "path": "skills/agent-spec/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "spec",
+        "triggers": [
+          "requirements",
+          "user story",
+          "gherkin",
+          "acceptance criteria",
+          "specification",
+          "ambiguity",
+          "bounded context",
+          "domain model",
+          "ddd",
+          "accessibility",
+          "performance",
+          "non functional"
+        ],
+        "dependsOn": [
+          "agent-grilling"
+        ],
+        "mcp": [
+          "linear",
+          "notion",
+          "github",
+          "memory",
+          "kit-knowledge"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-tdd",
+      "type": "Skill",
+      "name": "agent-tdd",
+      "path": "skills/agent-tdd/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "tdd",
+        "triggers": [
+          "tdd",
+          "test first",
+          "red green refactor",
+          "unit test",
+          "slice test",
+          "behavior catalog",
+          "test impact",
+          "port interface",
+          "contract",
+          "vertical slice",
+          "use case",
+          "implementation",
+          "green"
+        ],
+        "dependsOn": [
+          "agent-spec",
+          "agent-pre-commit",
+          "agent-adapter"
+        ],
+        "mcp": [
+          "context7",
+          "postgres",
+          "stripe"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-telemetry",
+      "type": "Skill",
+      "name": "agent-telemetry",
+      "path": "skills/agent-telemetry/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "telemetry",
+        "triggers": [
+          "logging",
+          "opentelemetry",
+          "otel",
+          "tracing",
+          "metrics",
+          "observability",
+          "correlation id",
+          "slo"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-xfn"
+        ],
+        "mcp": [
+          "sentry",
+          "cloudflare",
+          "cloudflare-observability"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-ui",
+      "type": "Skill",
+      "name": "agent-ui",
+      "path": "skills/agent-ui/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "impl",
+        "triggers": [
+          "ui",
+          "frontend",
+          "page",
+          "form",
+          "design system",
+          "client component",
+          "a11y",
+          "semantic html",
+          "landmarks",
+          "heading order"
+        ],
+        "dependsOn": [
+          "agent-tdd",
+          "agent-xfn",
+          "agent-copy"
+        ],
+        "mcp": [
+          "figma",
+          "playwright",
+          "chrome-devtools"
+        ]
+      }
+    },
+    {
+      "id": "skill:agent-xfn",
+      "type": "Skill",
+      "name": "agent-xfn",
+      "path": "skills/agent-xfn/SKILL.md",
+      "attrs": {
+        "kind": "role",
+        "phase": "xfn",
+        "triggers": [
+          "cross functional",
+          "xfn",
+          "nfr",
+          "non functional",
+          "browser e2e",
+          "e2e",
+          "playwright",
+          "cypress",
+          "accessibility",
+          "a11y",
+          "wcag",
+          "load test",
+          "performance test",
+          "security test",
+          "quality attributes"
+        ],
+        "dependsOn": [
+          "agent-spec",
+          "agent-tdd"
+        ],
+        "mcp": [
+          "playwright",
+          "chrome-devtools",
+          "next-devtools",
+          "memory",
+          "kit-knowledge"
+        ]
+      }
+    },
+    {
+      "id": "skill:framework-dotnet",
+      "type": "Skill",
+      "name": "framework-dotnet",
+      "path": "skills/framework-dotnet/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "dotnet",
+          ".net",
+          "aspnetcore",
+          "asp.net",
+          "ef core",
+          "entity framework",
+          "mediatr",
+          "xunit",
+          "webapplicationfactory"
+        ],
+        "dependsOn": [
+          "lang-csharp"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-express",
+      "type": "Skill",
+      "name": "framework-express",
+      "path": "skills/framework-express/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "triggers": [
+          "express",
+          "expressjs",
+          "express router",
+          "node express",
+          "express middleware"
+        ],
+        "dependsOn": [
+          "lang-typescript",
+          "profile-api"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-fastapi",
+      "type": "Skill",
+      "name": "framework-fastapi",
+      "path": "skills/framework-fastapi/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "fastapi",
+          "apirouter",
+          "uvicorn",
+          "starlette",
+          "pydantic"
+        ],
+        "dependsOn": [
+          "lang-python"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-next",
+      "type": "Skill",
+      "name": "framework-next",
+      "path": "skills/framework-next/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "next.js",
+          "nextjs",
+          "app router",
+          "rsc",
+          "server action"
+        ],
+        "dependsOn": [
+          "lang-typescript"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-nuxt",
+      "type": "Skill",
+      "name": "framework-nuxt",
+      "path": "skills/framework-nuxt/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "nuxt",
+          "nitro",
+          "usefetch",
+          "useasyncdata"
+        ],
+        "dependsOn": [
+          "lang-typescript"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-pulumi",
+      "type": "Skill",
+      "name": "framework-pulumi",
+      "path": "skills/framework-pulumi/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "pulumi",
+          "pulumi up",
+          "pulumi preview",
+          "component resource",
+          "crossguard",
+          "pulumi esc"
+        ],
+        "dependsOn": [
+          "profile-iac",
+          "lang-typescript"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-quarkus",
+      "type": "Skill",
+      "name": "framework-quarkus",
+      "path": "skills/framework-quarkus/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "quarkus",
+          "resteasy",
+          "panache",
+          "graalvm",
+          "native image"
+        ],
+        "dependsOn": [
+          "lang-java"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-react",
+      "type": "Skill",
+      "name": "framework-react",
+      "path": "skills/framework-react/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "triggers": [
+          "react",
+          "react19",
+          "hooks",
+          "vite react",
+          "react component",
+          "usecontext"
+        ],
+        "dependsOn": [
+          "lang-typescript"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-springboot",
+      "type": "Skill",
+      "name": "framework-springboot",
+      "path": "skills/framework-springboot/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "spring boot",
+          "spring",
+          "restcontroller",
+          "spring data jpa"
+        ],
+        "dependsOn": [
+          "lang-java"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:framework-terraform",
+      "type": "Skill",
+      "name": "framework-terraform",
+      "path": "skills/framework-terraform/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "terraform",
+          "terragrunt",
+          "tf plan",
+          "tf apply",
+          "remote state",
+          "terraform module"
+        ],
+        "dependsOn": [
+          "profile-iac",
+          "lang-hcl"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-csharp",
+      "type": "Skill",
+      "name": "lang-csharp",
+      "path": "skills/lang-csharp/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "csharp",
+          "c#",
+          "csproj",
+          "record"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-go",
+      "type": "Skill",
+      "name": "lang-go",
+      "path": "skills/lang-go/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "golang",
+          "go mod",
+          "go test"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-hcl",
+      "type": "Skill",
+      "name": "lang-hcl",
+      "path": "skills/lang-hcl/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "hcl",
+          "terraform hcl",
+          ".tf",
+          "tfvars",
+          "terraform expression"
+        ],
+        "dependsOn": [
+          "profile-iac"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-java",
+      "type": "Skill",
+      "name": "lang-java",
+      "path": "skills/lang-java/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "java",
+          "junit",
+          "maven",
+          "gradle",
+          "record"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-python",
+      "type": "Skill",
+      "name": "lang-python",
+      "path": "skills/lang-python/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "python",
+          "pytest",
+          "pydantic",
+          "poetry",
+          "uv",
+          "mypy",
+          "type hints"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-rust",
+      "type": "Skill",
+      "name": "lang-rust",
+      "path": "skills/lang-rust/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "triggers": [
+          "rust",
+          "cargo",
+          "rs",
+          "clippy",
+          "ownership",
+          "borrow checker"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:lang-typescript",
+      "type": "Skill",
+      "name": "lang-typescript",
+      "path": "skills/lang-typescript/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "typescript",
+          "node",
+          "tsx",
+          "vitest",
+          "jest",
+          "zod"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:profile-api",
+      "type": "Skill",
+      "name": "profile-api",
+      "path": "skills/profile-api/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "rest api",
+          "graphql",
+          "webhook",
+          "idempotency",
+          "api versioning"
+        ],
+        "dependsOn": [
+          "agent-api-contract"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:profile-iac",
+      "type": "Skill",
+      "name": "profile-iac",
+      "path": "skills/profile-iac/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "infrastructure as code",
+          "iac",
+          "landing zone",
+          "cloud provisioning",
+          "least privilege",
+          "policy as code",
+          "caf",
+          "well-architected"
+        ],
+        "dependsOn": [],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:profile-mcp",
+      "type": "Skill",
+      "name": "profile-mcp",
+      "path": "skills/profile-mcp/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "triggers": [
+          "mcp",
+          "model context protocol",
+          "mcp server",
+          "mcp tool",
+          "mcp transport",
+          "modelcontextprotocol"
+        ],
+        "dependsOn": [
+          "profile-api"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "skill:profile-observability",
+      "type": "Skill",
+      "name": "profile-observability",
+      "path": "skills/profile-observability/SKILL.md",
+      "attrs": {
+        "kind": "profile",
+        "phase": "stack",
+        "triggers": [
+          "observability profile",
+          "metrics naming",
+          "tracing conventions",
+          "slo mapping",
+          "opentelemetry"
+        ],
+        "dependsOn": [
+          "agent-telemetry"
+        ],
+        "mcp": []
+      }
+    },
+    {
+      "id": "sop:api-contracts",
+      "type": "SOP",
+      "name": "api-contracts",
+      "path": "SOPs/api-contracts.md"
+    },
+    {
+      "id": "sop:behavior-catalog-and-xfn",
+      "type": "SOP",
+      "name": "behavior-catalog-and-xfn",
+      "path": "SOPs/behavior-catalog-and-xfn.md"
+    },
+    {
+      "id": "sop:cloudflare-analytics-ops",
+      "type": "SOP",
+      "name": "cloudflare-analytics-ops",
+      "path": "SOPs/cloudflare-analytics-ops.md"
+    },
+    {
+      "id": "sop:complexity-hotspots",
+      "type": "SOP",
+      "name": "complexity-hotspots",
+      "path": "SOPs/complexity-hotspots.md"
+    },
+    {
+      "id": "sop:context-budget",
+      "type": "SOP",
+      "name": "context-budget",
+      "path": "SOPs/context-budget.md"
+    },
+    {
+      "id": "sop:conventional-commits",
+      "type": "SOP",
+      "name": "conventional-commits",
+      "path": "SOPs/conventional-commits.md"
+    },
+    {
+      "id": "sop:db-migration",
+      "type": "SOP",
+      "name": "db-migration",
+      "path": "SOPs/db-migration.md"
+    },
+    {
+      "id": "sop:edd-production-telemetry",
+      "type": "SOP",
+      "name": "edd-production-telemetry",
+      "path": "SOPs/edd-production-telemetry.md"
+    },
+    {
+      "id": "sop:eval-driven-development",
+      "type": "SOP",
+      "name": "eval-driven-development",
+      "path": "SOPs/eval-driven-development.md"
+    },
+    {
+      "id": "sop:external-skills",
+      "type": "SOP",
+      "name": "external-skills",
+      "path": "SOPs/external-skills.md"
+    },
+    {
+      "id": "sop:hypothesis-driven-debug",
+      "type": "SOP",
+      "name": "hypothesis-driven-debug",
+      "path": "SOPs/hypothesis-driven-debug.md"
+    },
+    {
+      "id": "sop:mcp-library",
+      "type": "SOP",
+      "name": "mcp-library",
+      "path": "SOPs/mcp-library.md"
+    },
+    {
+      "id": "sop:release",
+      "type": "SOP",
+      "name": "release",
+      "path": "SOPs/release.md"
+    }
+  ],
+  "edges": [
+    {
+      "from": "eval:architecture_routing",
+      "relation": "gates",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "eval:architecture_self_correction",
+      "relation": "gates",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "eval:architecture_terminal",
+      "relation": "gates",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "eval:cloudflare_ops",
+      "relation": "gates",
+      "to": "skill:agent-cloudflare-ops"
+    },
+    {
+      "from": "eval:kit_knowledge",
+      "relation": "gates",
+      "to": "mcp:kit-knowledge"
+    },
+    {
+      "from": "eval:memory_ontology",
+      "relation": "gates",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "eval:skill-agent-adapter",
+      "relation": "gates",
+      "to": "skill:agent-adapter"
+    },
+    {
+      "from": "eval:skill-agent-adr",
+      "relation": "gates",
+      "to": "skill:agent-adr"
+    },
+    {
+      "from": "eval:skill-agent-api-contract",
+      "relation": "gates",
+      "to": "skill:agent-api-contract"
+    },
+    {
+      "from": "eval:skill-agent-arch-drift",
+      "relation": "gates",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "eval:skill-agent-cloudflare-ops",
+      "relation": "gates",
+      "to": "skill:agent-cloudflare-ops"
+    },
+    {
+      "from": "eval:skill-agent-copy",
+      "relation": "gates",
+      "to": "skill:agent-copy"
+    },
+    {
+      "from": "eval:skill-agent-debug",
+      "relation": "gates",
+      "to": "skill:agent-debug"
+    },
+    {
+      "from": "eval:skill-agent-docs",
+      "relation": "gates",
+      "to": "skill:agent-docs"
+    },
+    {
+      "from": "eval:skill-agent-grill-me",
+      "relation": "gates",
+      "to": "skill:agent-grill-me"
+    },
+    {
+      "from": "eval:skill-agent-grilling",
+      "relation": "gates",
+      "to": "skill:agent-grilling"
+    },
+    {
+      "from": "eval:skill-agent-incident",
+      "relation": "gates",
+      "to": "skill:agent-incident"
+    },
+    {
+      "from": "eval:skill-agent-migration",
+      "relation": "gates",
+      "to": "skill:agent-migration"
+    },
+    {
+      "from": "eval:skill-agent-orchestrator",
+      "relation": "gates",
+      "to": "skill:agent-orchestrator"
+    },
+    {
+      "from": "eval:skill-agent-perf-opt",
+      "relation": "gates",
+      "to": "skill:agent-perf-opt"
+    },
+    {
+      "from": "eval:skill-agent-pre-commit",
+      "relation": "gates",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "eval:skill-agent-prune",
+      "relation": "gates",
+      "to": "skill:agent-prune"
+    },
+    {
+      "from": "eval:skill-agent-release",
+      "relation": "gates",
+      "to": "skill:agent-release"
+    },
+    {
+      "from": "eval:skill-agent-review",
+      "relation": "gates",
+      "to": "skill:agent-review"
+    },
+    {
+      "from": "eval:skill-agent-security",
+      "relation": "gates",
+      "to": "skill:agent-security"
+    },
+    {
+      "from": "eval:skill-agent-spec",
+      "relation": "gates",
+      "to": "skill:agent-spec"
+    },
+    {
+      "from": "eval:skill-agent-tdd",
+      "relation": "gates",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "eval:skill-agent-telemetry",
+      "relation": "gates",
+      "to": "skill:agent-telemetry"
+    },
+    {
+      "from": "eval:skill-agent-ui",
+      "relation": "gates",
+      "to": "skill:agent-ui"
+    },
+    {
+      "from": "eval:skill-agent-xfn",
+      "relation": "gates",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "eval:skill-framework-dotnet",
+      "relation": "gates",
+      "to": "skill:framework-dotnet"
+    },
+    {
+      "from": "eval:skill-framework-express",
+      "relation": "gates",
+      "to": "skill:framework-express"
+    },
+    {
+      "from": "eval:skill-framework-fastapi",
+      "relation": "gates",
+      "to": "skill:framework-fastapi"
+    },
+    {
+      "from": "eval:skill-framework-next",
+      "relation": "gates",
+      "to": "skill:framework-next"
+    },
+    {
+      "from": "eval:skill-framework-nuxt",
+      "relation": "gates",
+      "to": "skill:framework-nuxt"
+    },
+    {
+      "from": "eval:skill-framework-pulumi",
+      "relation": "gates",
+      "to": "skill:framework-pulumi"
+    },
+    {
+      "from": "eval:skill-framework-quarkus",
+      "relation": "gates",
+      "to": "skill:framework-quarkus"
+    },
+    {
+      "from": "eval:skill-framework-react",
+      "relation": "gates",
+      "to": "skill:framework-react"
+    },
+    {
+      "from": "eval:skill-framework-springboot",
+      "relation": "gates",
+      "to": "skill:framework-springboot"
+    },
+    {
+      "from": "eval:skill-framework-terraform",
+      "relation": "gates",
+      "to": "skill:framework-terraform"
+    },
+    {
+      "from": "eval:skill-lang-csharp",
+      "relation": "gates",
+      "to": "skill:lang-csharp"
+    },
+    {
+      "from": "eval:skill-lang-go",
+      "relation": "gates",
+      "to": "skill:lang-go"
+    },
+    {
+      "from": "eval:skill-lang-hcl",
+      "relation": "gates",
+      "to": "skill:lang-hcl"
+    },
+    {
+      "from": "eval:skill-lang-java",
+      "relation": "gates",
+      "to": "skill:lang-java"
+    },
+    {
+      "from": "eval:skill-lang-python",
+      "relation": "gates",
+      "to": "skill:lang-python"
+    },
+    {
+      "from": "eval:skill-lang-rust",
+      "relation": "gates",
+      "to": "skill:lang-rust"
+    },
+    {
+      "from": "eval:skill-lang-typescript",
+      "relation": "gates",
+      "to": "skill:lang-typescript"
+    },
+    {
+      "from": "eval:skill-profile-api",
+      "relation": "gates",
+      "to": "skill:profile-api"
+    },
+    {
+      "from": "eval:skill-profile-iac",
+      "relation": "gates",
+      "to": "skill:profile-iac"
+    },
+    {
+      "from": "eval:skill-profile-mcp",
+      "relation": "gates",
+      "to": "skill:profile-mcp"
+    },
+    {
+      "from": "eval:skill-profile-observability",
+      "relation": "gates",
+      "to": "skill:profile-observability"
+    },
+    {
+      "from": "handover:agent-lifecycle-kit/grilling",
+      "relation": "for",
+      "to": "phase:grilling"
+    },
+    {
+      "from": "handover:agent-lifecycle-kit/tdd",
+      "relation": "for",
+      "to": "phase:tdd"
+    },
+    {
+      "from": "phase:audit",
+      "relation": "orders",
+      "to": "phase:debug"
+    },
+    {
+      "from": "phase:debug",
+      "relation": "orders",
+      "to": "phase:telemetry"
+    },
+    {
+      "from": "phase:grilling",
+      "relation": "orders",
+      "to": "phase:spec"
+    },
+    {
+      "from": "phase:impl",
+      "relation": "orders",
+      "to": "phase:audit"
+    },
+    {
+      "from": "phase:maintenance",
+      "relation": "orders",
+      "to": "phase:quality"
+    },
+    {
+      "from": "phase:quality",
+      "relation": "orders",
+      "to": "phase:orchestration"
+    },
+    {
+      "from": "phase:release",
+      "relation": "orders",
+      "to": "phase:maintenance"
+    },
+    {
+      "from": "phase:spec",
+      "relation": "orders",
+      "to": "phase:tdd"
+    },
+    {
+      "from": "phase:tdd",
+      "relation": "orders",
+      "to": "phase:xfn"
+    },
+    {
+      "from": "phase:telemetry",
+      "relation": "orders",
+      "to": "phase:release"
+    },
+    {
+      "from": "phase:xfn",
+      "relation": "orders",
+      "to": "phase:impl"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "loads",
+      "to": "sop:behavior-catalog-and-xfn"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "loads",
+      "to": "sop:db-migration"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "uses",
+      "to": "mcp:context7"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "uses",
+      "to": "mcp:postgres"
+    },
+    {
+      "from": "skill:agent-adapter",
+      "relation": "uses",
+      "to": "mcp:stripe"
+    },
+    {
+      "from": "skill:agent-adr",
+      "relation": "depends-on",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "skill:agent-api-contract",
+      "relation": "depends-on",
+      "to": "skill:agent-spec"
+    },
+    {
+      "from": "skill:agent-api-contract",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-api-contract",
+      "relation": "loads",
+      "to": "sop:api-contracts"
+    },
+    {
+      "from": "skill:agent-api-contract",
+      "relation": "uses",
+      "to": "mcp:context7"
+    },
+    {
+      "from": "skill:agent-arch-drift",
+      "relation": "depends-on",
+      "to": "skill:agent-adr"
+    },
+    {
+      "from": "skill:agent-arch-drift",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-arch-drift",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-arch-drift",
+      "relation": "loads",
+      "to": "sop:behavior-catalog-and-xfn"
+    },
+    {
+      "from": "skill:agent-arch-drift",
+      "relation": "loads",
+      "to": "sop:complexity-hotspots"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "depends-on",
+      "to": "skill:agent-debug"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "depends-on",
+      "to": "skill:agent-incident"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "depends-on",
+      "to": "skill:agent-telemetry"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "depends-on",
+      "to": "skill:profile-iac"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "loads",
+      "to": "sop:cloudflare-analytics-ops"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "uses",
+      "to": "mcp:cloudflare"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "uses",
+      "to": "mcp:cloudflare-observability"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "uses",
+      "to": "mcp:kit-knowledge"
+    },
+    {
+      "from": "skill:agent-cloudflare-ops",
+      "relation": "uses",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "skill:agent-copy",
+      "relation": "depends-on",
+      "to": "skill:agent-spec"
+    },
+    {
+      "from": "skill:agent-copy",
+      "relation": "depends-on",
+      "to": "skill:agent-ui"
+    },
+    {
+      "from": "skill:agent-copy",
+      "relation": "uses",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "loads",
+      "to": "sop:conventional-commits"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "loads",
+      "to": "sop:hypothesis-driven-debug"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "uses",
+      "to": "mcp:chrome-devtools"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "uses",
+      "to": "mcp:cloudflare"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "uses",
+      "to": "mcp:cloudflare-observability"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-debug",
+      "relation": "uses",
+      "to": "mcp:sentry"
+    },
+    {
+      "from": "skill:agent-docs",
+      "relation": "depends-on",
+      "to": "skill:agent-copy"
+    },
+    {
+      "from": "skill:agent-docs",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-docs",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-docs",
+      "relation": "uses",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "skill:agent-docs",
+      "relation": "uses",
+      "to": "mcp:notion"
+    },
+    {
+      "from": "skill:agent-grill-me",
+      "relation": "depends-on",
+      "to": "skill:agent-grilling"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "depends-on",
+      "to": "skill:agent-debug"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "depends-on",
+      "to": "skill:agent-telemetry"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "loads",
+      "to": "sop:hypothesis-driven-debug"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "uses",
+      "to": "mcp:cloudflare"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "uses",
+      "to": "mcp:cloudflare-observability"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "uses",
+      "to": "mcp:notion"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "uses",
+      "to": "mcp:sentry"
+    },
+    {
+      "from": "skill:agent-incident",
+      "relation": "uses",
+      "to": "mcp:slack"
+    },
+    {
+      "from": "skill:agent-migration",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-migration",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-migration",
+      "relation": "loads",
+      "to": "sop:db-migration"
+    },
+    {
+      "from": "skill:agent-migration",
+      "relation": "uses",
+      "to": "mcp:context7"
+    },
+    {
+      "from": "skill:agent-migration",
+      "relation": "uses",
+      "to": "mcp:postgres"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-adapter"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-adr"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-api-contract"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-cloudflare-ops"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-copy"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-debug"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-docs"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-grill-me"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-grilling"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-incident"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-migration"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-prune"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-release"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-review"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-security"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-spec"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-telemetry"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-ui"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:api-contracts"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:behavior-catalog-and-xfn"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:complexity-hotspots"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:conventional-commits"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:eval-driven-development"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:hypothesis-driven-debug"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "loads",
+      "to": "sop:release"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "references",
+      "to": "doc:edd"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "uses",
+      "to": "mcp:kit-knowledge"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "uses",
+      "to": "mcp:linear"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "uses",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "skill:agent-orchestrator",
+      "relation": "uses",
+      "to": "mcp:notion"
+    },
+    {
+      "from": "skill:agent-perf-opt",
+      "relation": "depends-on",
+      "to": "skill:agent-debug"
+    },
+    {
+      "from": "skill:agent-perf-opt",
+      "relation": "depends-on",
+      "to": "skill:agent-telemetry"
+    },
+    {
+      "from": "skill:agent-pre-commit",
+      "relation": "loads",
+      "to": "sop:conventional-commits"
+    },
+    {
+      "from": "skill:agent-prune",
+      "relation": "depends-on",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "skill:agent-prune",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-prune",
+      "relation": "loads",
+      "to": "sop:complexity-hotspots"
+    },
+    {
+      "from": "skill:agent-release",
+      "relation": "depends-on",
+      "to": "skill:agent-docs"
+    },
+    {
+      "from": "skill:agent-release",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-release",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-release",
+      "relation": "loads",
+      "to": "sop:conventional-commits"
+    },
+    {
+      "from": "skill:agent-release",
+      "relation": "loads",
+      "to": "sop:release"
+    },
+    {
+      "from": "skill:agent-release",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-review",
+      "relation": "depends-on",
+      "to": "skill:agent-arch-drift"
+    },
+    {
+      "from": "skill:agent-review",
+      "relation": "depends-on",
+      "to": "skill:agent-copy"
+    },
+    {
+      "from": "skill:agent-review",
+      "relation": "depends-on",
+      "to": "skill:agent-security"
+    },
+    {
+      "from": "skill:agent-review",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-review",
+      "relation": "loads",
+      "to": "sop:conventional-commits"
+    },
+    {
+      "from": "skill:agent-review",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-security",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-security",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-security",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-security",
+      "relation": "uses",
+      "to": "mcp:semgrep"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "depends-on",
+      "to": "skill:agent-grilling"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "loads",
+      "to": "sop:behavior-catalog-and-xfn"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "uses",
+      "to": "mcp:github"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "uses",
+      "to": "mcp:kit-knowledge"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "uses",
+      "to": "mcp:linear"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "uses",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "skill:agent-spec",
+      "relation": "uses",
+      "to": "mcp:notion"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "depends-on",
+      "to": "skill:agent-adapter"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "depends-on",
+      "to": "skill:agent-pre-commit"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "depends-on",
+      "to": "skill:agent-spec"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "loads",
+      "to": "sop:behavior-catalog-and-xfn"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "uses",
+      "to": "mcp:context7"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "uses",
+      "to": "mcp:postgres"
+    },
+    {
+      "from": "skill:agent-tdd",
+      "relation": "uses",
+      "to": "mcp:stripe"
+    },
+    {
+      "from": "skill:agent-telemetry",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-telemetry",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-telemetry",
+      "relation": "uses",
+      "to": "mcp:cloudflare"
+    },
+    {
+      "from": "skill:agent-telemetry",
+      "relation": "uses",
+      "to": "mcp:cloudflare-observability"
+    },
+    {
+      "from": "skill:agent-telemetry",
+      "relation": "uses",
+      "to": "mcp:sentry"
+    },
+    {
+      "from": "skill:agent-ui",
+      "relation": "depends-on",
+      "to": "skill:agent-copy"
+    },
+    {
+      "from": "skill:agent-ui",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-ui",
+      "relation": "depends-on",
+      "to": "skill:agent-xfn"
+    },
+    {
+      "from": "skill:agent-ui",
+      "relation": "uses",
+      "to": "mcp:chrome-devtools"
+    },
+    {
+      "from": "skill:agent-ui",
+      "relation": "uses",
+      "to": "mcp:figma"
+    },
+    {
+      "from": "skill:agent-ui",
+      "relation": "uses",
+      "to": "mcp:playwright"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "depends-on",
+      "to": "skill:agent-spec"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "depends-on",
+      "to": "skill:agent-tdd"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "loads",
+      "to": "sop:behavior-catalog-and-xfn"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "uses",
+      "to": "mcp:chrome-devtools"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "uses",
+      "to": "mcp:kit-knowledge"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "uses",
+      "to": "mcp:memory"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "uses",
+      "to": "mcp:next-devtools"
+    },
+    {
+      "from": "skill:agent-xfn",
+      "relation": "uses",
+      "to": "mcp:playwright"
+    },
+    {
+      "from": "skill:framework-dotnet",
+      "relation": "depends-on",
+      "to": "skill:lang-csharp"
+    },
+    {
+      "from": "skill:framework-express",
+      "relation": "depends-on",
+      "to": "skill:lang-typescript"
+    },
+    {
+      "from": "skill:framework-express",
+      "relation": "depends-on",
+      "to": "skill:profile-api"
+    },
+    {
+      "from": "skill:framework-fastapi",
+      "relation": "depends-on",
+      "to": "skill:lang-python"
+    },
+    {
+      "from": "skill:framework-next",
+      "relation": "depends-on",
+      "to": "skill:lang-typescript"
+    },
+    {
+      "from": "skill:framework-nuxt",
+      "relation": "depends-on",
+      "to": "skill:lang-typescript"
+    },
+    {
+      "from": "skill:framework-pulumi",
+      "relation": "depends-on",
+      "to": "skill:lang-typescript"
+    },
+    {
+      "from": "skill:framework-pulumi",
+      "relation": "depends-on",
+      "to": "skill:profile-iac"
+    },
+    {
+      "from": "skill:framework-quarkus",
+      "relation": "depends-on",
+      "to": "skill:lang-java"
+    },
+    {
+      "from": "skill:framework-react",
+      "relation": "depends-on",
+      "to": "skill:lang-typescript"
+    },
+    {
+      "from": "skill:framework-springboot",
+      "relation": "depends-on",
+      "to": "skill:lang-java"
+    },
+    {
+      "from": "skill:framework-terraform",
+      "relation": "depends-on",
+      "to": "skill:lang-hcl"
+    },
+    {
+      "from": "skill:framework-terraform",
+      "relation": "depends-on",
+      "to": "skill:profile-iac"
+    },
+    {
+      "from": "skill:lang-hcl",
+      "relation": "depends-on",
+      "to": "skill:profile-iac"
+    },
+    {
+      "from": "skill:profile-api",
+      "relation": "depends-on",
+      "to": "skill:agent-api-contract"
+    },
+    {
+      "from": "skill:profile-api",
+      "relation": "loads",
+      "to": "sop:api-contracts"
+    },
+    {
+      "from": "skill:profile-mcp",
+      "relation": "depends-on",
+      "to": "skill:profile-api"
+    },
+    {
+      "from": "skill:profile-observability",
+      "relation": "depends-on",
+      "to": "skill:agent-telemetry"
+    },
+    {
+      "from": "sop:complexity-hotspots",
+      "relation": "implements",
+      "to": "philosophy:4"
+    },
+    {
+      "from": "sop:complexity-hotspots",
+      "relation": "implements",
+      "to": "philosophy:5"
+    },
+    {
+      "from": "sop:context-budget",
+      "relation": "references",
+      "to": "doc:kit"
+    },
+    {
+      "from": "sop:conventional-commits",
+      "relation": "implements",
+      "to": "philosophy:8"
+    },
+    {
+      "from": "sop:eval-driven-development",
+      "relation": "references",
+      "to": "doc:edd"
+    },
+    {
+      "from": "sop:hypothesis-driven-debug",
+      "relation": "implements",
+      "to": "philosophy:4"
+    }
+  ]
+}

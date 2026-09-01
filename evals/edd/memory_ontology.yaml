@@ -1,0 +1,17 @@
+name: "Routing: Memory ontology allowlist"
+dataset: "memory_ontology.jsonl"
+system_prompt: "memory_ontology_prompt.md"
+mcp_tools:
+  - "tools/create_entities.json"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: false
+  - type: "argument_correctness"
+  - type: "mcp_use"
+  - type: "task_completion"
+mocks:
+  - tool: "create_entities"
+    response:
+      rejected: true
+      reason: "unknown entityType"

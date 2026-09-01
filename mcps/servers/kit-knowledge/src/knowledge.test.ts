@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url";
 import {
   getPhilosophySection,
   getSop,
+  getKitEntity,
+  getKitRelated,
   listKitIndex,
   resolveKitRoot,
   searchKit,
@@ -67,5 +69,17 @@ describe("kit-knowledge", () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "kit-root-"));
     fs.writeFileSync(path.join(tmp, "AGENTS.md"), "# test\n");
     assert.equal(resolveKitRoot({ KIT_ROOT: tmp }), path.resolve(tmp));
+  });
+
+  it("get_entity and get_related read ontology index", () => {
+    const entity = getKitEntity(kitRoot, "skill:agent-tdd");
+    assert.ok(entity);
+    assert.equal(entity!.type, "Skill");
+    const related = getKitRelated(kitRoot, "skill:agent-tdd", "uses");
+    assert.ok(related.some((e) => e.to.startsWith("mcp:")));
+    const phil = getKitRelated(kitRoot, "sop:conventional-commits", "implements");
+    assert.ok(phil.some((e) => e.to.startsWith("philosophy:")));
+    const docs = getKitRelated(kitRoot, "sop:eval-driven-development", "references");
+    assert.ok(docs.some((e) => e.to.startsWith("doc:")));
   });
 });

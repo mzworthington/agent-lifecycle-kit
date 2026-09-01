@@ -1,0 +1,3 @@
+{"id": "mem-reject-01", "prompt": "Store a memory entity named rogue with entityType AlienType and observation hello.", "tags": ["happy-path", "routing"], "expect": {"tool": "create_entities", "arguments_contains": {"entities": [{"name": "rogue", "entityType": "AlienType", "observations": ["hello"]}]}}}
+{"id": "mem-allow-01", "prompt": "Remember glossary term EDD as GlossaryTerm with observation Eval-Driven Development.", "tags": ["happy-path", "routing"], "expect": {"tool": "create_entities", "arguments_contains": {"entities": [{"name": "EDD", "entityType": "GlossaryTerm", "observations": ["Eval-Driven Development"]}]}}}
+{"id": "mem-ignore-01", "prompt": "What is the weather in Oslo?", "tags": ["negative-test", "conversational"], "expect": {"no_tool": true}}

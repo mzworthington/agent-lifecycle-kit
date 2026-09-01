@@ -1,0 +1,23 @@
+{
+  "name": "create_entities",
+  "description": "Create entities in the knowledge graph. entityType must be GlossaryTerm, Slo, Preference, or ProjectFact.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["entities"],
+    "properties": {
+      "entities": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name", "entityType", "observations"],
+          "properties": {
+            "name": { "type": "string" },
+            "entityType": { "type": "string" },
+            "observations": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "get_entity",
+  "description": "Return one ontology entity by id (e.g. skill:agent-tdd, sop:conventional-commits, philosophy:8, doc:edd).",
+  "inputSchema": {
+    "type": "object",
+    "required": ["id"],
+    "properties": {
+      "id": { "type": "string", "description": "Ontology id with prefix" }
+    },
+    "additionalProperties": false
+  }
+}

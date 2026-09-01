@@ -28,15 +28,25 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
     edd: async () => 0,
     budget: () => okBudget,
     printBudget: () => undefined,
+    regenerateOntology: () => ({ path: 'ontology/index.json', changed: false }),
+    ontologyCheck: () => ({
+      ok: true,
+      drift: false,
+      missingEndpoints: [],
+      unknownSkillMcp: [],
+      unknownDependsOn: [],
+      messages: []
+    }),
     ...overrides
   };
 }
 
 describe('EDD_CI_SUITES', () => {
-  it('gates architecture routing, kit-knowledge, safety, and recovery suites', () => {
+  it('gates architecture routing, kit-knowledge, memory ontology, safety, and recovery suites', () => {
     assert.deepEqual([...EDD_CI_SUITES], [
       'evals/edd/architecture_routing.yaml',
       'evals/edd/kit_knowledge.yaml',
+      'evals/edd/memory_ontology.yaml',
       'evals/edd/cloudflare_ops.yaml',
       'evals/edd/safety.yaml',
       'evals/edd/architecture_self_correction.yaml',

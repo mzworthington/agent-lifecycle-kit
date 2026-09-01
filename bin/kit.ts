@@ -15,6 +15,12 @@ import { measureContextBudget, printContextBudget } from '../kit/src/measure_con
 import { initDebugBoardSession } from '../kit/src/init_debug_board.js';
 import { debugCiFailed } from '../kit/src/debug_ci_failed.js';
 import { runKitCheck } from '../kit/src/quality_gate.js';
+import {
+  checkOntology,
+  lintMemoryGraph,
+  regenerateOntologyIndex
+} from '../kit/src/ontology/index.js';
+import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,7 +46,10 @@ Commands:
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board
   debug-ci             Fetch failed GitHub Actions logs
-  check                Run the local quality gate (audit, evals, EDD CI, context budget)
+  check                Run the local quality gate (audit, ontology, evals, EDD CI, context budget)
+  ontology generate    Regenerate ontology/index.json from schema + kit tree
+  ontology check       Fail on index drift or broken skill mcp/depends-on refs
+  memory lint          List legacy memory entities outside the ontology allowlist
   help                 Display this help menu
 
 Examples:
@@ -52,6 +61,9 @@ Examples:
   kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
   kit eval ci --threshold-routing 95 --out out/reports
   kit eval report --format md --out out/reports
+  kit ontology generate
+  kit ontology check
+  kit memory lint
   kit export-rules
   kit metrics
   kit sync --install
@@ -183,6 +195,49 @@ async function main(): Promise<void> {
     case 'check':
       process.exit(await runKitCheck(repoDir));
       break;
+
+    case 'ontology': {
+      const sub = args[1];
+      if (sub === 'generate') {
+        const result = regenerateOntologyIndex(repoDir);
+        console.log(
+          result.changed
+            ? `Wrote ${result.path} (updated)`
+            : `Wrote ${result.path} (unchanged)`
+        );
+        process.exit(0);
+      }
+      if (sub === 'check') {
+        const result = checkOntology(repoDir);
+        for (const msg of result.messages) console.error(msg);
+        if (result.ok) console.log('✅ ontology check PASSED.');
+        else console.error('ontology check FAILED.');
+        process.exit(result.ok ? 0 : 1);
+      }
+      console.error('Usage: kit ontology <generate|check>');
+      process.exit(2);
+      break;
+    }
+
+    case 'memory': {
+      const sub = args[1];
+      if (sub === 'lint') {
+        const memoryPath =
+          process.env.MEMORY_FILE_PATH?.trim() ||
+          path.join(os.homedir(), '.agents', 'sync', 'mcp-memory.jsonl');
+        const result = lintMemoryGraph(repoDir, memoryPath);
+        for (const msg of result.messages) console.log(msg);
+        if (result.legacyUnknown.length > 0) {
+          for (const e of result.legacyUnknown) {
+            console.log(`- ${e.name} (${e.entityType})`);
+          }
+        }
+        process.exit(0);
+      }
+      console.error('Usage: kit memory lint');
+      process.exit(2);
+      break;
+    }
 
     case 'help':
     case '--help':

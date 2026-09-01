@@ -79,8 +79,64 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     names.has('get_sop') ||
     names.has('get_philosophy_section') ||
     names.has('get_handover') ||
-    names.has('list_kit_index');
+    names.has('list_kit_index') ||
+    names.has('get_entity') ||
+    names.has('get_related');
   const hasArch = names.has('read_architecture_yaml');
+  const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch;
+
+  if (hasMemoryOnly) {
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea')
+    ) {
+      return scriptedNoTool('That is outside memory. I can store glossary terms or SLOs if you ask.');
+    }
+    if (prompt.includes('alientype') || prompt.includes('alien')) {
+      return {
+        content: 'Attempting to store the requested entity (server may reject unknown types).',
+        tool_calls: [
+          {
+            name: 'create_entities',
+            arguments: {
+              entities: [
+                { name: 'rogue', entityType: 'AlienType', observations: ['hello'] }
+              ]
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    if (prompt.includes('glossary') || prompt.includes('edd') || prompt.includes('remember')) {
+      return {
+        content: 'Storing the glossary term via create_entities.',
+        tool_calls: [
+          {
+            name: 'create_entities',
+            arguments: {
+              entities: [
+                {
+                  name: 'EDD',
+                  entityType: 'GlossaryTerm',
+                  observations: ['Eval-Driven Development']
+                }
+              ]
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    return scriptedNoTool('I am not sure what to store. Name a GlossaryTerm, Slo, Preference, or ProjectFact.', 0.4);
+  }
 
   if (hasKit && !hasArch) {
     if (
@@ -90,6 +146,67 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       prompt.includes('sonnet')
     ) {
       return scriptedNoTool('That is outside the kit. I can search SOPs or philosophy if you ask about those.');
+    }
+    if (prompt.includes('ontology entity') || (prompt.includes('skill:agent-tdd') && prompt.includes('look up'))) {
+      return {
+        content: 'Fetching ontology entity skill:agent-tdd.',
+        tool_calls: [{ name: 'get_entity', arguments: { id: 'skill:agent-tdd' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('skill:agent-tdd') &&
+      (prompt.includes('use') || prompt.includes('mcp'))
+    ) {
+      return {
+        content: 'Looking up ontology uses edges for skill:agent-tdd.',
+        tool_calls: [
+          { name: 'get_related', arguments: { id: 'skill:agent-tdd', relation: 'uses' } }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('sop:conventional-commits') &&
+      prompt.includes('implement')
+    ) {
+      return {
+        content: 'Looking up ontology implements edges for conventional-commits.',
+        tool_calls: [
+          {
+            name: 'get_related',
+            arguments: { id: 'sop:conventional-commits', relation: 'implements' }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('sop:eval-driven-development') &&
+      prompt.includes('reference')
+    ) {
+      return {
+        content: 'Looking up ontology references edges for the EDD SOP.',
+        tool_calls: [
+          {
+            name: 'get_related',
+            arguments: { id: 'sop:eval-driven-development', relation: 'references' }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
     }
     if (prompt.includes('conventional-commit') || prompt.includes('conventional commit')) {
       return {

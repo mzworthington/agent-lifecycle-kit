@@ -18,9 +18,14 @@ function containsExpectedArgs(
 ): string[] {
   const failures: string[] = [];
   for (const [key, value] of Object.entries(expected)) {
-    if (parsed[key] !== value) {
+    const actual = parsed[key];
+    const match =
+      value !== null && typeof value === 'object'
+        ? JSON.stringify(actual) === JSON.stringify(value)
+        : actual === value;
+    if (!match) {
       failures.push(
-        `${label} expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(parsed[key])}`
+        `${label} expected ${key}=${JSON.stringify(value)}, got ${JSON.stringify(actual)}`
       );
     }
   }

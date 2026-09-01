@@ -1,0 +1,13 @@
+{
+  "name": "get_related",
+  "description": "Return ontology edges from an entity (optional relation filter: loads, uses, depends-on, implements, references).",
+  "inputSchema": {
+    "type": "object",
+    "required": ["id"],
+    "properties": {
+      "id": { "type": "string", "description": "Source ontology id" },
+      "relation": { "type": "string", "description": "Optional relation name filter" }
+    },
+    "additionalProperties": false
+  }
+}
