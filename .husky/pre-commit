@@ -11,5 +11,6 @@ echo "=== Pre-Commit Quality & Security Gate ==="
 "${REPO_DIR}/bin/kit" validate
 "${REPO_DIR}/bin/kit" verify
 (cd "${REPO_DIR}" && pnpm typecheck)
+(cd "${REPO_DIR}" && pnpm lint)
 
 echo "✅ Pre-commit quality gate PASSED."

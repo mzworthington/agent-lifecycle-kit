@@ -169,7 +169,7 @@ function scanFile(violations: SecurityViolation[], filePath: string, relPath: st
       });
     });
 
-    const tokens = line.split(/[\s,;()\[\]{}'\"]+/);
+    const tokens = line.split(/[\s,;()[\]{}'"]+/);
     for (const token of tokens) {
       if (token.length > 32 && !token.startsWith('http://') && !token.startsWith('https://') && !token.includes('file://')) {
         const entropy = calculateEntropy(token);
