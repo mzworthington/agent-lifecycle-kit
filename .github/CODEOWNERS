@@ -6,6 +6,9 @@
 
 # Security scanner, pre-commit, tooling scripts
 scripts/                   @mzworthington
+bin/                       @mzworthington
+install.sh                 @mzworthington
+install.sh.sha256          @mzworthington
 
 # Supply chain lockfile for external skills
 skills/external.lock.json  @mzworthington
@@ -13,4 +16,5 @@ skills/external.lock.json  @mzworthington
 # Core guardrails & bootstrap
 AGENTS.md                  @mzworthington
 CODING_PHILOSOPHY.md       @mzworthington
-install.sh                 @mzworthington
+SECURITY.md                @mzworthington
+CONTRIBUTING.md            @mzworthington
