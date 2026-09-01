@@ -13,12 +13,14 @@
 - *(release)* Wire git-cliff changelog and GitHub Releases (#32)
 - *(install)* Prefer SHA-256 verified install over curl|sh (#34)
 - *(ontology)* Typed kit index, knowledge getters, and memory allowlist (#47)
+- Ontology
 
 ### 🐛 Bug Fixes
 
 - Update analytics script source and configuration in 404.html and index.html
 - Remove unnecessary send parameter from analytics script in 404.html and index.html
 - *(release)* Version-scope GitHub release notes and sync tags (#45)
+- Track kit site assemble sources for Pages deploy (#48)
 
 ### 🧰 Maintenance & Dependencies
 
