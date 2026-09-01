@@ -6,10 +6,10 @@ Usage: kit <command> [options]
 
 Commands:
   init [dir]           Bootstrap AGENTS.md, multi-IDE rules, .cursor/mcp.json & git hook
-  mcp <profile>        Compose and install MCP profile (default, collab, ops, cloudflare-ops, security, lab)
+  mcp <profile>        Compose and install a named MCP profile from mcps/profiles/
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
-  eval                 Run live trigger evals, or EDD subcommands (run|watch|report|ci|dataset)
+  eval                 Run live trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
   export-rules [dir]   Export and sync AGENTS.md to CLAUDE.md, .windsurfrules & Copilot rules
   metrics              Display telemetry analytics summary for subagent phase handovers
   verify               Verify skills directory layout conventions
@@ -21,7 +21,7 @@ Commands:
   ontology generate    Dump derived ontology index to gitignored sync/ and assets/
   ontology check       Validate live-derived index (skill mcp/depends-on refs)
   memory lint          List legacy memory entities outside the ontology allowlist
-  site assemble        Copy web/dist plus public Markdown into site/ (optional --out)
+  site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)
   help                 Display this help menu
 
 Examples:

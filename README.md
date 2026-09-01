@@ -133,13 +133,13 @@ Already cloned this repo? Run `./install.sh` from the checkout instead. Regenera
 | `kit eval run\|watch\|report\|ci` | **EDD harness:** agent tool routing and schemas |
 | `kit eval` | Skill-trigger harness (which specialist activates) |
 | `kit init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
-| `kit mcp <profile>` | Compose MCP profiles |
+| `kit mcp <profile>` | Compose a named profile from `mcps/profiles/` |
 | `kit audit` | Security & supply-chain audit |
 | `kit validate` / `kit verify` | Eval schema + skills layout |
 | `kit export-rules` | Sync `AGENTS.md` → IDE entry points |
 | `kit sync` | Install upstream skills from the lockfile |
 | `kit check` | Local quality gate (audit, evals, EDD CI, context budget) |
-| `kit site assemble` | Copy `web/dist` plus public Markdown into `site/` |
+| `kit site assemble` | Copy `web/dist` plus public Markdown into `site/` (after `pnpm --dir web build`) |
 | `pnpm site:dev` | Vite docs app (Markdown in `docs/`) |
 
 ---

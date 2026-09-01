@@ -17,9 +17,7 @@
     "test": "node --import tsx/esm --test 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts mcps/servers/memory/src/memory.test.ts && pnpm --dir web test",
     "test:ci": "mkdir -p out/reports && node --import tsx/esm --test --test-reporter=spec --test-reporter=./kit/src/test-report/github_test_reporter.mjs --test-reporter-destination=stdout --test-reporter-destination=out/reports/unit-test-report.md 'kit/src/**/*.test.ts' mcps/servers/kit-knowledge/src/knowledge.test.ts mcps/servers/memory/src/memory.test.ts && pnpm --dir web test",
     "check": "pnpm test && pnpm kit check",
-    "site:dev": "pnpm --dir web dev",
-    "site:build": "pnpm --dir web build",
-    "site:assemble": "pnpm kit site assemble"
+    "site:dev": "pnpm --dir web dev"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
