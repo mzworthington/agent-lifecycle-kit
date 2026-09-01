@@ -17,6 +17,7 @@
 
 - Update analytics script source and configuration in 404.html and index.html
 - Remove unnecessary send parameter from analytics script in 404.html and index.html
+- *(release)* Version-scope GitHub release notes and sync tags (#45)
 
 ### 🧰 Maintenance & Dependencies
 
