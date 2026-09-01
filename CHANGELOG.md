@@ -10,6 +10,7 @@
 - *(lang-typescript)* Enforce strict typing rules and add anti-pattern evaluations
 - *(cloudflare)* Integrate Cloudflare operations into the agent lifecycle kit
 - Improve UX on index.html
+- *(release)* Wire git-cliff changelog and GitHub Releases (#32)
 
 ### 🐛 Bug Fixes
 
