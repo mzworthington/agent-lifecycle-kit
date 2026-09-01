@@ -140,7 +140,7 @@ Already cloned this repo? Run `./install.sh` from the checkout instead.
 Start with the path that matches what you’re trying to do:
 
 1. **Prove agents (today)** — [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
-2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) → [AGENTS.md](./AGENTS.md)
+2. **Architecture & bootstrap** — [Coding philosophy](./CODING_PHILOSOPHY.md) (incl. applicability) → [ADRs](./docs/ADRs/README.md) → [AGENTS.md](./AGENTS.md)
 3. **Skills & MCP** — [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Quality loops** — [Behavior catalog & XFN](./SOPs/behavior-catalog-and-xfn.md) → [Hypothesis-driven debug](./SOPs/hypothesis-driven-debug.md)
 5. **Prod feedback** — [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`kit eval shadow` + `from-trace`)
