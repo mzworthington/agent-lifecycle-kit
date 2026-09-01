@@ -14,6 +14,7 @@
 - *(install)* Prefer SHA-256 verified install over curl|sh (#34)
 - *(ontology)* Typed kit index, knowledge getters, and memory allowlist (#47)
 - Ontology
+- Migrate site to React
 
 ### 🐛 Bug Fixes
 
