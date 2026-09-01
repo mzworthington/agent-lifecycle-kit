@@ -13,6 +13,7 @@
   <meta name="color-scheme" content="dark">
   <link rel="canonical" href="https://eval-driven-development.dev/">
   <link rel="alternate" type="text/plain" title="llms.txt" href="https://eval-driven-development.dev/llms.txt">
+  <link rel="alternate" type="text/plain" title="llms-full.txt (every page in one file)" href="https://eval-driven-development.dev/llms-full.txt">
   <link rel="alternate" type="text/markdown" title="EDD guide (Markdown)" href="https://eval-driven-development.dev/docs/edd.md">
   <link rel="alternate" type="text/markdown" title="Kit operator guide (Markdown)" href="https://eval-driven-development.dev/docs/kit.md">
   <link rel="alternate" type="text/markdown" title="Jobs for today (Markdown)" href="https://eval-driven-development.dev/docs/today-jobs.md">
@@ -225,7 +226,7 @@
           <li><a href="#edd" class="nav-link">How EDD works</a></li>
           <li><a href="#kit" class="nav-link">Kit tools</a></li>
           <li><a href="#ontology" class="nav-link">Ontology</a></li>
-          <li><a href="#guide" class="nav-link">EDD guide</a></li>
+          <li><a href="/docs/" class="nav-link">Docs</a></li>
         </ul>
       </nav>
       <a href="https://github.com/mzworthington/agent-lifecycle-kit" class="btn-github"
@@ -358,7 +359,7 @@
       <nav class="proof-follow" aria-label="Proof follow-ups">
         <ul class="edd-links" style="justify-content:center">
           <li><a href="#demo">Walk the interactive demo</a></li>
-          <li><a href="./evals/edd/examples/before-after.md">Full before/after write-up</a></li>
+          <li><a href="/evals/edd/examples/before-after.html">Full before/after write-up</a></li>
           <li><a href="./evals/edd/demo.yaml">Demo suite</a></li>
         </ul>
       </nav>
@@ -442,8 +443,8 @@ $ kit eval dataset from-trace --trace path/to/trace.json --out evals/edd/prod.js
       <nav aria-label="Demo follow-ups" style="margin-top:1rem">
         <ul class="edd-links">
           <li><a href="./evals/edd/demo.yaml">Demo suite</a></li>
-          <li><a href="./evals/edd/examples/before-after.md">Before / after</a></li>
-          <li><a href="./evals/edd/examples/eval-report.md">Example report</a></li>
+          <li><a href="/evals/edd/examples/before-after.html">Before / after</a></li>
+          <li><a href="/evals/edd/examples/eval-report.html">Example report</a></li>
           <li><a href="#onboard">Start in 10 minutes</a></li>
         </ul>
       </nav>
@@ -531,8 +532,8 @@ $ <span class="cmd">kit init . --mcp default --hook</span></code></pre>
         <ul class="edd-links">
           <li><a href="#demo">See the demo</a></li>
           <li><a href="#guide">Read the EDD guide</a></li>
-          <li><a href="./evals/edd/README.md">Suites and reports</a></li>
-          <li><a href="./docs/edd.md">Markdown source</a></li>
+          <li><a href="/evals/edd/">Suites and reports</a></li>
+          <li><a href="/docs/edd.html">EDD guide</a></li>
         </ul>
       </nav>
     </section>
@@ -576,9 +577,9 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       </figure>
       <nav aria-label="Kit operator docs">
         <ul class="edd-links">
-          <li><a href="./docs/kit.md">Operator guide</a></li>
-          <li><a href="./SOPs/context-budget.md">Context budget SOP</a></li>
-          <li><a href="./mcps/README.md">MCP catalog</a></li>
+          <li><a href="/docs/kit.html">Operator guide</a></li>
+          <li><a href="/SOPs/context-budget.html">Context budget SOP</a></li>
+          <li><a href="/mcps/">MCP catalog</a></li>
         </ul>
       </nav>
     </section>
@@ -609,7 +610,7 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       </details>
       <details>
         <summary>Do I need an OpenAI key if I use Cursor or GitHub Copilot?</summary>
-        <p>No. Cursor and Copilot are IDE hosts: they load Kit skills and <code>AGENTS.md</code>. <code>kit eval</code> defaults to the scripted driver and does not call Cursor Chat or Copilot Chat. A provider key is only for optional live-model evals over an OpenAI-compatible HTTP API. Full flow: <a href="./docs/edd.md">EDD guide</a>.</p>
+        <p>No. Cursor and Copilot are IDE hosts: they load Kit skills and <code>AGENTS.md</code>. <code>kit eval</code> defaults to the scripted driver and does not call Cursor Chat or Copilot Chat. A provider key is only for optional live-model evals over an OpenAI-compatible HTTP API. Full flow: <a href="/docs/edd.html">EDD guide</a>.</p>
       </details>
       <details>
         <summary>What happens after a production miss?</summary>
@@ -617,7 +618,7 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       </details>
       <details>
         <summary>How does kit keep agent context small?</summary>
-        <p>Always-on files (<code>AGENTS.md</code>, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Run <code>kit measure-context</code> for the breakdown; <code>kit check</code> fails if that budget is exceeded. Compose one MCP profile per session so unused tool schemas stay out of the prompt. Full write-up: <a href="./docs/kit.md">operator guide</a>.</p>
+        <p>Always-on files (<code>AGENTS.md</code>, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Run <code>kit measure-context</code> for the breakdown; <code>kit check</code> fails if that budget is exceeded. Compose one MCP profile per session so unused tool schemas stay out of the prompt. Full write-up: <a href="/docs/kit.html">operator guide</a>.</p>
       </details>
     </section>
 
@@ -675,11 +676,11 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
           <li><strong>Green:</strong> Register the MCP contract and minimal system instructions. Run until asserts pass.</li>
           <li><strong>Refactor:</strong> Iterate descriptions and constraints without breaking existing cases. Gate merges with <code>kit eval ci --threshold-routing 95</code>.</li>
         </ol>
-        <p>The full guide loads below. If it does not, read <a href="./docs/edd.md">docs/edd.md</a>.</p>
+        <p>The full guide loads below. If it does not, read the <a href="/docs/edd.html">EDD guide</a>.</p>
       </div>
       <div id="doc-full"></div>
       <noscript>
-        <p>JavaScript is off. Open the <a href="./docs/edd.md">Markdown guide</a>.</p>
+        <p>JavaScript is off. Open the <a href="/docs/edd.html">EDD guide</a>.</p>
       </noscript>
     </article>
 
@@ -750,7 +751,7 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
               </a>
             </li>
             <li>
-              <a href="https://github.com/mzworthington/agent-lifecycle-kit/blob/main/SOPs/eval-driven-development.md">
+              <a href="/SOPs/eval-driven-development.html">
                 <span class="start-title">EDD SOP</span>
                 <span class="start-desc">Red → green → refactor for day-to-day agent work</span>
               </a>
@@ -774,9 +775,27 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
               </a>
             </li>
             <li>
-              <a href="./docs/kit.md">
+              <a href="/docs/kit.html">
                 <span class="start-title">Operator guide</span>
-                <span class="start-desc">Commands and what they measure, in Markdown</span>
+                <span class="start-desc">Commands and what they measure</span>
+              </a>
+            </li>
+            <li>
+              <a href="/docs/">
+                <span class="start-title">Docs index</span>
+                <span class="start-desc">Every guide, in HTML and Markdown at the same path</span>
+              </a>
+            </li>
+            <li>
+              <a href="/SOPs/">
+                <span class="start-title">SOPs</span>
+                <span class="start-desc">The procedures agents follow: evals, context budget, debug, release</span>
+              </a>
+            </li>
+            <li>
+              <a href="/sitemap.html">
+                <span class="start-title">All pages</span>
+                <span class="start-desc">One list of everything published here</span>
               </a>
             </li>
           </ul>
@@ -810,12 +829,24 @@ $ <span class="cmd">kit mcp default --install</span></code></pre>
       </div>
       <ol id="ontology-matches" class="ontology-matches" hidden></ol>
       <noscript>
-        <p>JavaScript is off. The metamodel is in <a href="./ontology/README.md">ontology/README.md</a>.</p>
+        <p>JavaScript is off. The metamodel is in the <a href="/ontology/">kit ontology docs</a>.</p>
       </noscript>
     </section>
   </main>
 
   <footer>
+    <nav aria-label="Site">
+      <p>
+        <a href="/docs/">Docs</a> ·
+        <a href="/SOPs/">SOPs</a> ·
+        <a href="/evals/edd/">Eval suites</a> ·
+        <a href="/ontology/">Ontology</a> ·
+        <a href="/mcps/">MCP catalog</a> ·
+        <a href="/sitemap.html">All pages</a> ·
+        <a href="/llms.txt">llms.txt</a> ·
+        <a href="https://github.com/mzworthington/agent-lifecycle-kit">GitHub</a>
+      </p>
+    </nav>
     <p>
       Made by
       <a href="https://mzworthington.co.uk" rel="noopener noreferrer">Matthew Z Worthington</a>

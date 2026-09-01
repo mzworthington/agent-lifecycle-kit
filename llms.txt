@@ -5,6 +5,8 @@
 ## What this site is
 Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`). The same kit also gates always-on context (`kit measure-context`), composes one MCP profile, and runs `kit check`.
 
+Every page exists twice: an HTML rendering for readers and search engines, and the Markdown source at the same path with a `.md` extension. Full corpus in one file: [llms-full.txt](https://eval-driven-development.dev/llms-full.txt).
+
 ## What do I use this for today?
 - Wrong tool / made-up args → `kit eval run --suite evals/edd/demo.yaml --model scripted`
 - Gate a prompt or schema change → `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
@@ -13,22 +15,35 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 - Never installed → start here in 10 minutes: install → `kit init` → demo suite → CI bar
 
 ## Start here
-- [Home / today picker](https://eval-driven-development.dev/#today)
-- [Before / after proof](https://eval-driven-development.dev/#proof)
-- [Failing-eval demo](https://eval-driven-development.dev/#demo)
-- [Start here in 10 minutes](https://eval-driven-development.dev/#onboard)
-- [Install](https://eval-driven-development.dev/#install)
-- [Demo suite](https://eval-driven-development.dev/evals/edd/demo.yaml)
-- [Before/after write-up](https://eval-driven-development.dev/evals/edd/examples/before-after.md)
-- [Kit tools](https://eval-driven-development.dev/#kit)
-- [Operator guide](https://eval-driven-development.dev/docs/kit.md)
-- [Context budget](https://eval-driven-development.dev/SOPs/context-budget.md)
-- [EDD guide](https://eval-driven-development.dev/#guide)
-- [Lifecycle](https://eval-driven-development.dev/#lifecycle)
-- [Markdown EDD guide](https://eval-driven-development.dev/docs/edd.md)
-- [Jobs for today](https://eval-driven-development.dev/docs/today-jobs.md)
-- [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
-- [Example report](https://eval-driven-development.dev/evals/edd/examples/eval-report.md)
+- [Home](https://eval-driven-development.dev/)
+- [Jobs for today](https://eval-driven-development.dev/docs/today-jobs.html)
+- [EDD guide](https://eval-driven-development.dev/docs/edd.html)
+- [Operator guide: what kit gives you](https://eval-driven-development.dev/docs/kit.html)
+- [Docs index](https://eval-driven-development.dev/docs/)
+- [All pages](https://eval-driven-development.dev/sitemap.html)
+
+## Procedures (SOPs)
+- [SOPs index](https://eval-driven-development.dev/SOPs/)
+- [Eval-driven development](https://eval-driven-development.dev/SOPs/eval-driven-development.html)
+- [Context budget](https://eval-driven-development.dev/SOPs/context-budget.html)
+- [Behavior catalog and XFN](https://eval-driven-development.dev/SOPs/behavior-catalog-and-xfn.html)
+- [Hypothesis-driven debug](https://eval-driven-development.dev/SOPs/hypothesis-driven-debug.html)
+- [EDD production telemetry](https://eval-driven-development.dev/SOPs/edd-production-telemetry.html)
+- [Search visibility](https://eval-driven-development.dev/SOPs/search-visibility.html)
+
+## Evals and architecture
+- [Eval suites](https://eval-driven-development.dev/evals/edd/)
+- [Demo suite (YAML)](https://eval-driven-development.dev/evals/edd/demo.yaml)
+- [Before / after write-up](https://eval-driven-development.dev/evals/edd/examples/before-after.html)
+- [Example report](https://eval-driven-development.dev/evals/edd/examples/eval-report.html)
+- [Architecture decisions](https://eval-driven-development.dev/docs/ADRs/)
+- [Kit ontology](https://eval-driven-development.dev/ontology/)
+- [MCP catalog](https://eval-driven-development.dev/mcps/)
+
+## Machine-readable
+- [Full text of every page](https://eval-driven-development.dev/llms-full.txt)
+- [XML sitemap](https://eval-driven-development.dev/sitemap.xml)
+- [robots.txt](https://eval-driven-development.dev/robots.txt)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
 
 ## Install
@@ -45,4 +60,5 @@ kit eval report --format md --out out/reports
 kit measure-context
 kit check
 kit mcp default --install
+kit site assemble
 ```
