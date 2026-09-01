@@ -167,6 +167,16 @@ describe('renderMarkdownBody', () => {
     assert.match(html, /<code class="language-bash">/);
   });
 
+  it('drops the leading H1 because the page shell already renders the title', () => {
+    const { html } = renderMarkdownBody(markdown, ctx);
+    assert.doesNotMatch(html, /<h1/);
+    assert.match(html, /Intro with a/);
+  });
+
+  it('keeps an H1 that is not the document title', () => {
+    assert.match(renderMarkdownBody('Intro.\n\n# Later heading\n', ctx).html, /<h1 id="later-heading">/);
+  });
+
   it('de-duplicates repeated heading slugs', () => {
     const { toc } = renderMarkdownBody('## Same\n\n## Same\n', ctx);
     assert.deepEqual(

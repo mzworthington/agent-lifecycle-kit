@@ -171,9 +171,14 @@ function upgradeMermaidBlocks(html: string): string {
   );
 }
 
+/** The page shell renders the title, so the source's own leading H1 would duplicate it. */
+export function dropLeadingHeading(markdown: string): string {
+  return markdown.replace(/^\s*#\s+.+(\r?\n|$)/, '');
+}
+
 export function renderMarkdownBody(markdown: string, ctx: LinkContext): RenderedBody {
   const { body } = stripFrontmatter(markdown);
-  const parsed = marked.parse(body, { gfm: true, async: false }) as string;
+  const parsed = marked.parse(dropLeadingHeading(body), { gfm: true, async: false }) as string;
   const linked = rewriteHrefs(parsed, ctx);
   const { html, toc } = addHeadingIds(linked);
   return { html: upgradeMermaidBlocks(wrapTables(html)).trim(), toc };

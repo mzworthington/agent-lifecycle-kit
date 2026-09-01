@@ -45,9 +45,15 @@ export function breadcrumbsFor(input: DocPageInput): Breadcrumb[] {
   return crumbs;
 }
 
-function pageTitle(input: DocPageInput): string {
-  const suffix = ` - ${SITE_NAME}`;
-  return input.title.includes(SITE_NAME) ? input.title : `${input.title}${suffix}`;
+/**
+ * `<title>` must be unique per page. Docs own the plain form; other sections carry
+ * their label, which both disambiguates (an EDD guide and an EDD SOP exist) and
+ * tells a searcher what kind of page they are about to open.
+ */
+export function pageTitle(input: DocPageInput): string {
+  if (input.title.includes(SITE_NAME)) return input.title;
+  const section = input.sectionLabel && input.sectionLabel !== 'Docs' ? ` - ${input.sectionLabel}` : '';
+  return `${input.title}${section} - ${SITE_NAME}`;
 }
 
 function jsonLd(input: DocPageInput, canonical: string, crumbs: Breadcrumb[]): string {

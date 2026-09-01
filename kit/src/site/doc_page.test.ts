@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { breadcrumbsFor, renderDocPage, type DocPageInput } from './doc_page.js';
+import { breadcrumbsFor, pageTitle, renderDocPage, type DocPageInput } from './doc_page.js';
 
 const base: DocPageInput = {
   outputRel: 'docs/edd.html',
@@ -36,6 +36,19 @@ describe('breadcrumbsFor', () => {
     assert.deepEqual(
       crumbs.map((c) => c.urlPath),
       ['/', '/docs/']
+    );
+  });
+});
+
+describe('pageTitle', () => {
+  it('leaves docs titles plain', () => {
+    assert.equal(pageTitle(base), 'Eval-Driven Development - Agent Lifecycle Kit');
+  });
+
+  it('adds the section so a guide and a SOP on the same topic do not collide', () => {
+    assert.equal(
+      pageTitle({ ...base, sectionLabel: 'SOPs', sectionUrlPath: '/SOPs/' }),
+      'Eval-Driven Development - SOPs - Agent Lifecycle Kit'
     );
   });
 });

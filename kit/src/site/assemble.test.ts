@@ -11,6 +11,7 @@ import {
   PAGES_SITE_HOST
 } from './assemble.js';
 import { extractLlmsLinks } from './llms.js';
+import { publicUrlPath } from './urls.js';
 import { kitRootFrom } from '../shared/paths.js';
 
 const kitRoot = kitRootFrom(import.meta.url);
@@ -183,7 +184,7 @@ describe('assemblePagesSite', () => {
       assert.match(edd, /<link rel="canonical" href="https:\/\/eval-driven-development\.dev\/docs\/edd\.html">/);
       assert.match(edd, /"@type": "TechArticle"/);
       assert.match(edd, /<meta property="article:modified_time" content="2026-09-01">/);
-      assert.match(read('SOPs/context-budget.html'), /<title>Context budget - Agent Lifecycle Kit<\/title>/);
+      assert.match(read('SOPs/context-budget.html'), /<title>Context budget - SOPs - Agent Lifecycle Kit<\/title>/);
     } finally {
       fixture.cleanup();
     }
@@ -277,6 +278,31 @@ describe('assemblePagesSite', () => {
       assert.ok(!files.some((f) => f.startsWith('skills/')));
       assert.ok(!files.includes('package.json'));
       assert.ok(!files.some((f) => f.startsWith('node_modules/')));
+    } finally {
+      fs.rmSync(dest, { recursive: true, force: true });
+    }
+  });
+
+  it('gives every rendered page one h1, a unique title, a description, and a self-canonical URL', () => {
+    const dest = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-seo-'));
+    try {
+      const result = assemblePagesSite({ kitRoot, dest });
+      const titles = new Map<string, string>();
+      for (const rel of result.renderedPages) {
+        const html = fs.readFileSync(path.join(dest, rel), 'utf8');
+        const canonical = `https://eval-driven-development.dev${publicUrlPath(rel)}`;
+        assert.equal((html.match(/<h1[ >]/g) ?? []).length, 1, `${rel} should have exactly one h1`);
+        assert.ok(html.includes(`<link rel="canonical" href="${canonical}">`), `${rel} canonical`);
+
+        const description = /<meta name="description" content="([^"]*)">/.exec(html)?.[1] ?? '';
+        assert.ok(description.length > 20, `${rel} description too thin: "${description}"`);
+
+        const title = /<title>([^<]*)<\/title>/.exec(html)?.[1] ?? '';
+        assert.ok(title.length > 0, `${rel} title`);
+        assert.equal(titles.get(title), undefined, `${title} is used by ${rel} and ${titles.get(title)}`);
+        titles.set(title, rel);
+      }
+      assert.ok(result.renderedPages.length > 25);
     } finally {
       fs.rmSync(dest, { recursive: true, force: true });
     }
