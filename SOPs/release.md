@@ -47,7 +47,7 @@ After green **Verify** on `main`, the **Promote** job:
    - `feat` → minor, `fix`/`perf`/`refactor` → patch, `!` / `BREAKING CHANGE` → major
    - `docs` / `chore` / `ci` / `test` alone do **not** cut a release
 2. **Publish** — creates a GitHub Release with **version-scoped** notes (`bin/release.sh publish`): commits since the previous tag only, headed `## vX.Y.Z` (never `[unreleased]`)
-3. **Sync notes** — `bin/release.sh sync-notes` rewrites every existing `vX.Y.Z` GitHub Release body from `previous-tag..this-tag` (idempotent repair)
+3. **Sync notes** — `bin/release.sh sync-notes` rewrites every existing `vX.Y.Z` GitHub Release body from `previous-tag..this-tag` (idempotent repair). Skipped releases (no GitHub Release) still advance the range boundary; missing local tags abort so later notes cannot inherit the wrong `since`.
 4. **Changelog** — regenerates date-grouped `CHANGELOG.md` via `pnpm changelog` (`bin/changelog-render.mjs`) and commits `chore(changelog): …` when needed. CHANGELOG stays date-grouped; GitHub Release notes stay version-scoped.
 
 Local:
