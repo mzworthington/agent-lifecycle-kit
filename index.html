@@ -211,9 +211,38 @@
       --primary-light: #4db6a9;
       --accent: #d4a017;
       --success: #3dba7c;
-      --font-sans: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+      --font-sans: 'IBM Plex Sans', 'IBM Plex Sans Fallback: Arial',
+        'IBM Plex Sans Fallback: Helvetica Neue', 'IBM Plex Sans Fallback: Roboto',
+        sans-serif;
       --page-width: 1200px;
       --page-gutter: 1.5rem;
+    }
+
+    /* Capsize-matched system faces so IBM Plex swap cannot reflow job cards (CLS). */
+    @font-face {
+      font-family: 'IBM Plex Sans Fallback: Arial';
+      src: local('Arial'), local('ArialMT');
+      ascent-override: 101.3184%;
+      descent-override: 27.183%;
+      line-gap-override: 0%;
+      size-adjust: 101.1663%;
+    }
+
+    @font-face {
+      font-family: 'IBM Plex Sans Fallback: Helvetica Neue';
+      src: local('Helvetica Neue'), local('HelveticaNeue');
+      ascent-override: 102.2727%;
+      descent-override: 27.439%;
+      line-gap-override: 0%;
+      size-adjust: 100.2222%;
+    }
+
+    @font-face {
+      font-family: 'IBM Plex Sans Fallback: Roboto';
+      src: local('Roboto Regular'), local('Roboto-Regular');
+      ascent-override: 101.0964%;
+      descent-override: 27.1234%;
+      size-adjust: 101.3884%;
     }
 
     * {
@@ -1347,6 +1376,8 @@
     }
 
     .job-btn {
+      display: flex;
+      flex-direction: column;
       width: 100%;
       height: 100%;
       text-align: left;
@@ -1384,6 +1415,8 @@
       font-size: 0.88rem;
       color: var(--text-muted);
       line-height: 1.45;
+      /* 3 lines: longest blurbs wrap here on a 320px viewport; keeps the card box from growing after first paint. */
+      min-height: calc(0.88rem * 1.45 * 3);
     }
 
     .job-panel {
