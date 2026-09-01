@@ -2,6 +2,8 @@
 
 Eval-Driven Development is how you prove tool calls. The rest of kit exists so that work does not inflate the prompt, mix MCP servers, or skip a gate.
 
+Independent assessment (value + model-/host-agnosticism) and open follow-ups: [kit-value-and-model-agnostic-review.md](./kit-value-and-model-agnostic-review.md), [kit-review-backlog.md](./kit-review-backlog.md).
+
 ## Always-on context
 
 Agents pay for every byte in the bootstrap. Kit keeps **always-on** files small and loads philosophy, SOPs, and skill bodies **on demand**.
