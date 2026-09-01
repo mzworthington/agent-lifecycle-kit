@@ -13,6 +13,10 @@ tools:
 
 Use with [agent-release](../skills/agent-release/SKILL.md).
 
+This kit ships as a **git checkout** (`install.sh` / `KIT_REF`), not npm. Versioned
+artifacts are **GitHub Releases** (`vX.Y.Z` tags). Changelog generation uses
+**git-cliff** (same stack as ArchLens).
+
 ## 1. Quality gates
 
 - [ ] Functional impact map aligned; no silent catalog rewrites
@@ -25,6 +29,26 @@ Use with [agent-release](../skills/agent-release/SKILL.md).
 - [ ] Conventional **PR title** ([conventional-commits.md](./conventional-commits.md)); squash-and-merge uses it on the default branch
 - [ ] Changelog / release notes: user-visible behavior, migrations, flags
 - [ ] Rollback: previous version / flag off / migration reverse notes
+
+### Kit release automation
+
+On every push to `main`, [`.github/workflows/release.yml`](../.github/workflows/release.yml):
+
+1. **Detect** — `bin/release.sh detect` looks at conventional commits since the last `v*` tag.
+   - `feat` → minor, `fix`/`perf`/`refactor` → patch, `!` / `BREAKING CHANGE` → major
+   - `docs` / `chore` / `ci` / `test` alone do **not** cut a release
+2. **Publish** — creates a GitHub Release with git-cliff notes (`bin/release.sh publish`)
+3. **Changelog** — regenerates `CHANGELOG.md` via `pnpm changelog` (`bin/changelog-render.mjs`) and commits `chore(changelog): …` when needed
+
+Local:
+
+```bash
+pnpm changelog              # regenerate CHANGELOG.md
+pnpm release:detect         # print whether HEAD would release
+bash bin/release.sh notes   # preview notes
+```
+
+Consumers pin installs with `KIT_REF=vX.Y.Z` (see `install.sh`).
 
 ## 3. Ops handoff
 
