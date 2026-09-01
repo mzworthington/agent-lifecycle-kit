@@ -39,7 +39,6 @@ const stubPublic = {
   'llms.txt': '# kit',
   'robots.txt': 'Allow: /',
   LICENSE: 'Unlicense',
-  'assets/og.jpg': 'img',
   'docs/edd.md': '# edd',
   'evals/edd/demo.yaml': 'name: demo',
   'SOPs/context-budget.md': '# budget',
@@ -49,11 +48,12 @@ const stubPublic = {
 };
 
 describe('PAGES_SITE_ENTRIES', () => {
-  it('allowlists public markdown and assets, not the Vite shell source', () => {
+  it('allowlists public markdown, not the Vite shell source', () => {
     assert.ok(PAGES_SITE_ENTRIES.includes('docs'));
     assert.ok(PAGES_SITE_ENTRIES.includes('evals/edd'));
     assert.ok(PAGES_SITE_ENTRIES.includes('SOPs'));
     assert.ok(PAGES_SITE_ENTRIES.includes('ontology'));
+    assert.ok(!PAGES_SITE_ENTRIES.includes('assets'));
     assert.ok(!PAGES_SITE_ENTRIES.includes('index.html'));
     assert.ok(!PAGES_SITE_ENTRIES.includes('skills'));
     assert.ok(!PAGES_SITE_ENTRIES.includes('node_modules'));
@@ -118,6 +118,8 @@ describe('landing page assets', () => {
     assert.match(html, /src="\/src\/main\.tsx"/);
     assert.match(html, /id="root"/);
     assert.equal(fs.existsSync(path.join(kitRoot, 'index.html')), false);
+    assert.ok(fs.existsSync(path.join(kitRoot, 'web/public/assets/kit_logo_256.webp')));
+    assert.equal(fs.existsSync(path.join(kitRoot, 'assets/kit_logo_256.webp')), false);
   });
 
   it('Pages workflow builds the Vite app then uploads site/', () => {

@@ -24,10 +24,7 @@ export function DocsShell({ children, layout = 'docs', wide = false }: Props) {
       <header className="site-header">
         <div className="nav-container">
           <Link href="/" className="brand">
-            <picture>
-              <source srcSet="/assets/kit_logo_256.webp" type="image/webp" />
-              <img src="/assets/kit_logo.png" alt="" width={36} height={36} />
-            </picture>
+            <img src="/assets/kit_logo_256.webp" alt="" width={36} height={36} />
             <span>Agent Lifecycle Kit</span>
           </Link>
           <nav id="site-nav" className={`nav-links${open ? ' is-open' : ''}`} aria-label="Site">

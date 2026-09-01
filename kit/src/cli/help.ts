@@ -18,7 +18,7 @@ Commands:
   debug-board <proj>   Scaffold a hypothesis-driven debug board
   debug-ci             Fetch failed GitHub Actions logs
   check                Run the local quality gate (audit, ontology, evals, EDD CI, context budget)
-  ontology generate    Dump derived ontology index to gitignored sync/ and assets/
+  ontology generate    Dump derived ontology index to gitignored sync/ and web/public/assets/
   ontology check       Validate live-derived index (skill mcp/depends-on refs)
   memory lint          List legacy memory entities outside the ontology allowlist
   site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)

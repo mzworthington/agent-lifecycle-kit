@@ -172,6 +172,7 @@ describe('writeSiteOntologyIndex', () => {
         false
       );
       assert.ok(getEntity(site, 'skill:agent-demo'));
+      assert.match(sitePath, /web\/public\/assets\/ontology-index\.json$/);
       assert.match(serializeOntologyIndex(site), /\n$/);
     });
   });

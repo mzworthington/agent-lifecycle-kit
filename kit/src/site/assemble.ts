@@ -14,7 +14,6 @@ export const PAGES_SITE_ENTRIES: readonly string[] = [
   'llms.txt',
   'robots.txt',
   'LICENSE',
-  'assets',
   'docs',
   'evals/edd',
   'SOPs',
