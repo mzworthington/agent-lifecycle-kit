@@ -27,6 +27,7 @@
 ### 📚 Documentation
 
 - *(philosophy)* Add applicability opt-out and seed kit ADRs (#36)
+- Refresh kit value review and track open findings (#44)
 
 ## 2026-08-31
 
