@@ -64,7 +64,7 @@ When a lasting design choice is **hard to reverse** or **deliberately differs fr
 
 ### Clean code
 
-8. **SOLID** - Flag SRP violations (e.g. service mixing business logic and SQL parsing).
+8. **SOLID** - Flag SRP violations (e.g. service mixing business logic and SQL parsing). Flag TypeScript `any` / `as any` / `as unknown as` as clean-code drift ([lang-typescript](../lang-typescript/SKILL.md)).
 9. **Dead code** - Flag unused abstractions and over-engineering.
 10. **Complexity hotspots** - Flag functions/modules exceeding project complexity limits, deep nesting, god files, or duplicate logic clusters. See [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
 

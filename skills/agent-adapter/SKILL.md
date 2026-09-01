@@ -60,6 +60,7 @@ You are an expert integration engineer for **large** outbound adapter work.
 4. **Re-confirm test impact** - Stay inside Design impact maps. If wiring forces catalog changes, **stop and re-confirm** before editing those tests. See [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
 5. **Enable XFN green** - Provide routes, doubles, seed data, and env docs apply suites need. **Next agent** = `agent-xfn` when apply rows remain.
 6. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md) before handover.
+7. **No `any`** - Boundary DTOs are `unknown` then parsed (Zod). Do not silence adapter types with `as any` ([lang-typescript](../lang-typescript/SKILL.md)).
 
 ## Output
 

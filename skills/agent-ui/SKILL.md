@@ -45,6 +45,7 @@ UI is a **delivery adapter**. Handlers/use cases stay outside the view ([CODING_
 5. Load matching `framework-*` profiles (Next, Nuxt, etc.). Use Figma MCP when designs are linked; Playwright/Chrome DevTools for verification—not for owning XFN suites.
 6. Landing or marketing surfaces that sound AI-written: hand wording to [agent-copy](../agent-copy/SKILL.md); keep chrome quiet (no emoji-as-heading, no fake "SYSTEM ONLINE" labels) when copy is being humanized.
 7. **Semantic HTML first** (native elements before ARIA). See below.
+8. **No `any`** in component props, event handlers, or UI test mocks ([lang-typescript](../lang-typescript/SKILL.md)).
 
 Write `~/.agents/handover/<project>/handover_ui.md` when used as a distinct step.
 

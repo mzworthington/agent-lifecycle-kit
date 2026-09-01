@@ -39,6 +39,7 @@ You review change sets for craft and catalog honesty—not style nitpicks.
 5. **Minimal change** - No speculative abstractions ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
 6. **Commits / PR title** - Conventional ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md)).
 7. **Public copy / docs voice** - If landing, README lead, marketing, or UI microcopy changed, check for AI-template tells (slogan stacks, "sensible default", fake systems chrome, emoji-as-heading) per [agent-copy](../agent-copy/SKILL.md).
+8. **No `any`** - TypeScript `: any`, `as any`, and `as unknown as` are **must-fix**. Replacements: `unknown` + narrowing, generics, `satisfies`, typed test fakes. Vitest `expect.any(...)` is allowed. See [lang-typescript](../lang-typescript/SKILL.md).
 
 ## Output
 

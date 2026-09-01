@@ -15,7 +15,7 @@
       "assertions": {
         "required_triggers": ["typescript", "node", "zod"],
         "required_patterns": ["readonly", "interface", "export type"],
-        "forbidden_patterns": [": any", "as unknown as"],
+        "forbidden_patterns": [": any", "as any", "as unknown as"],
         "required_output_sections": ["Type Definitions", "Domain Service Implementation"]
       }
     }

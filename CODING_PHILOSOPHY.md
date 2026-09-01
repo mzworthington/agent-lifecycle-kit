@@ -72,6 +72,7 @@ Apply Robert C. Martin's craft principles inside every layer and slice.
 - **Complexity hotspots:** When code is hard to change safely (high complexity, god modules, duplication), backlog and reduce via [SOPs/complexity-hotspots.md](./SOPs/complexity-hotspots.md) — do not grow new layers to work around it.
 - **Error handling:** Use domain-specific failures at the core; map to HTTP/CLI errors only in adapters. Fail fast with clear messages.
 - **Self-documenting code:** No inline comments except non-obvious workarounds. Public ports, endpoints, and boundaries require docstrings (JSDoc, Javadoc, XML docs) for API documentation generation.
+- **Explicit types:** Never use TypeScript `any`, `as any`, or `as unknown as`. Prefer `unknown` with narrowing, generics, or `satisfies`. Tests use typed fakes/`Partial<T>` — not `as any`. Vitest `expect.any(...)` matchers are not a type `any`. Enforce with `typescript/no-explicit-any`.
 
 ### Minimal change (default)
 

@@ -88,6 +88,7 @@ When sketching slice boundaries or request flows, use Mermaid — not ASCII art 
 5. **Vertical slice** - Co-locate handler, request/response types, and slice tests in one feature folder.
 6. **Deep-dive escape hatch** - If gear 2 grows beyond one thin adapter (new payment gateway, multi-step migration, complex DI graph), route to [agent-adapter](../agent-adapter/SKILL.md) without abandoning the port contract already greened in gear 1.
 7. Use stack tooling from matching `lang-*` / `framework-*` profiles. Prefer catalogued MCPs in frontmatter when schema/docs/billing apply.
+8. **No `any`** - Production and tests must not introduce TypeScript `any` / `as any`. Mock ports with typed fakes or `Partial<T>`. Vitest `expect.any(...)` matchers are allowed. Follow [lang-typescript](../lang-typescript/SKILL.md).
 
 ## Green phase constraints
 
@@ -99,6 +100,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
 - Do not "fix" broken suite noise by weakening assertions or deleting catalog cases without alignment.
 - No "while I'm here" refactors or speculative APIs during green.
 - **Never** import ORM/framework types into `domain/` / `core/` during gear 2.
+- **Never** add `: any`, `as any`, or `as unknown as` to make a test or adapter compile.
 
 ## Slice layout
 

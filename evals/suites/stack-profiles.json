@@ -1,7 +1,7 @@
 {
   "suite": "stack-profiles",
   "description": "Evaluation benchmarks for lang-* and framework-* stack profiles",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "test_cases": [
     {
       "id": "EVAL-LANG-TS-001",
@@ -15,7 +15,7 @@
       "assertions": {
         "required_triggers": ["typescript", "node", "zod"],
         "required_patterns": ["readonly", "interface", "export type"],
-        "forbidden_patterns": [": any", "as unknown as"],
+        "forbidden_patterns": [": any", "as any", "as unknown as"],
         "required_output_sections": ["Type Definitions", "Domain Service Implementation"]
       }
     },

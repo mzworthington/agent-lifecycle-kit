@@ -42,3 +42,6 @@ This profile defines architectural and implementation standards for client-side 
    - Use semantic HTML first: landmarks (`header`, `nav`, `main`, `article`, `section` with heading, `footer`, `figure`), one `h1`, no skipped heading levels, lists for lists, `button`/`a` for interaction. ARIA only when no native element exists.
    - Include ARIA attributes (`aria-label`, `aria-expanded`, `aria-describedby`) for interactive UI controls lacking default native semantics.
    - Enforce keyboard navigation support (`onKeyDown` paired with `onClick`).
+
+5. **Typing**:
+   - Follow [lang-typescript](../lang-typescript/SKILL.md): no `any` on props, mocks, store setters, or `nodeTypes`. Type React Flow / wouter test doubles with `ReactNode` and the component's real props.
