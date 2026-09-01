@@ -1,6 +1,7 @@
 #!/bin/sh
 # Bootstrap Agent Lifecycle Kit: clone or reuse a checkout, link ~/.agents, put kit on PATH.
-# Usage: curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+# Preferred: download install.sh + install.sh.sha256, verify, then run (see README).
+# Convenience (no verify): curl -fsSL .../install.sh | sh
 # POSIX sh (dash, busybox ash, macOS /bin/sh). Do not require bash.
 set -eu
 
@@ -15,10 +16,19 @@ usage() {
   cat <<'EOF'
 Agent Lifecycle Kit installer
 
-Usage:
+Preferred (verify SHA-256, then run):
+  BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+  curl -fsSL "$BASE/install.sh" -o install.sh
+  curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+  echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+  sh install.sh
+
+Convenience (no checksum):
   curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
   curl -fsSL .../install.sh | sh -s -- [options]
-  ./install.sh [options]     # from a kit checkout
+
+From a kit checkout:
+  ./install.sh [options]
 
 Puts kit on PATH (~/.local/bin), links ~/.agents, and installs the default MCP profile.
 

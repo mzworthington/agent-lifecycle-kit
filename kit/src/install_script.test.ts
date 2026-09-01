@@ -12,14 +12,28 @@ function runInstaller(shell: string, args: string[]): SpawnSyncReturns<string> {
 }
 
 describe('install.sh', () => {
-  it('prints the curl | sh usage without cloning', () => {
+  it('documents verified checksum install before curl | sh convenience', () => {
     const result = runInstaller('sh', ['--help']);
     assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /Preferred \(verify SHA-256/);
+    assert.match(result.stdout, /install\.sh\.sha256/);
+    assert.match(result.stdout, /sha256sum -c/);
     assert.match(
       result.stdout,
       /curl -fsSL https:\/\/raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/main\/install\.sh \| sh/
     );
     assert.match(result.stdout, /kit init \. --mcp default --hook/);
+  });
+
+  it('keeps install.sh.sha256 in sync with install.sh', () => {
+    const expected = spawnSync('sha256sum', [installer], { encoding: 'utf8' });
+    assert.equal(expected.status, 0, expected.stderr);
+    const digest = expected.stdout.trim().split(/\s+/)[0];
+    const recorded = spawnSync('cat', [path.join(root, 'install.sh.sha256')], {
+      encoding: 'utf8',
+    });
+    assert.equal(recorded.status, 0, recorded.stderr);
+    assert.equal(recorded.stdout.trim(), digest);
   });
 
   it('rejects unknown options and missing --dir values', () => {
