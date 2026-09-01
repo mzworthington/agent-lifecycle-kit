@@ -12,6 +12,7 @@
 - Improve UX on index.html
 - *(release)* Wire git-cliff changelog and GitHub Releases (#32)
 - *(install)* Prefer SHA-256 verified install over curl|sh (#34)
+- *(ontology)* Typed kit index, knowledge getters, and memory allowlist (#47)
 
 ### 🐛 Bug Fixes
 
