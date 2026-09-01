@@ -15,6 +15,7 @@
 - *(ontology)* Typed kit index, knowledge getters, and memory allowlist (#47)
 - Ontology
 - Migrate site to React
+- Add new asset images for the web application
 
 ### 🐛 Bug Fixes
 
