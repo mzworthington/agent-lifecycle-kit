@@ -21,7 +21,8 @@ Commands:
   ontology generate    Dump derived ontology index to gitignored sync/ and assets/
   ontology check       Validate live-derived index (skill mcp/depends-on refs)
   memory lint          List legacy memory entities outside the ontology allowlist
-  site assemble        Copy the public Pages allowlist into site/ (optional --out)
+  site assemble        Build the Pages tree in site/: copy the public allowlist,
+                       render Markdown to HTML, derive sitemap + llms-full (--out)
   help                 Display this help menu
 
 Examples:

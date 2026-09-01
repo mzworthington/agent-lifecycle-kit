@@ -160,6 +160,9 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       try {
         const result = assemblePagesSite({ kitRoot: repoDir, dest });
         console.log(`Wrote Pages tree: ${result.dest} (${result.fileCount} files)`);
+        console.log(
+          `Rendered ${result.renderedPages.length} Markdown docs to HTML; sitemap.xml lists ${result.sitemapUrls} URLs.`
+        );
         return 0;
       } catch (err: unknown) {
         console.error(`ERROR: ${errorMessage(err)}`);

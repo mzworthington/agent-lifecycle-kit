@@ -24,7 +24,6 @@ on:
       - 'kit/src/site/**'
       - 'llms.txt'
       - 'robots.txt'
-      - 'sitemap.xml'
       - '.nojekyll'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
@@ -89,7 +88,8 @@ jobs:
           {
             echo "## Deploy GitHub Pages"
             echo ""
-            echo "Publishes a curated Pages tree (landing, public Markdown, assets) - not the whole repo."
+            echo "Publishes a curated Pages tree (landing, public Markdown, rendered HTML docs, assets) - not the whole repo."
+            echo "\`sitemap.xml\`, \`sitemap.html\`, and \`llms-full.txt\` are derived from that tree at build time."
             echo "Runs on docs-site path changes only (or \`workflow_dispatch\`)."
             echo "Custom domain DNS is owned by [edge-dns](https://github.com/mzworthington/edge-dns)."
             echo ""
