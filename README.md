@@ -106,9 +106,15 @@ sequenceDiagram
 
 ## Start here in 10 minutes
 
+**Preferred — verify the installer checksum, then run:**
+
 ```bash
-# Put kit on your PATH (macOS / Linux; needs git and Node 22+)
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+# macOS / Linux; needs git, Node 22+, and sha256sum (coreutils)
+BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+curl -fsSL "$BASE/install.sh" -o install.sh
+curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+sh install.sh
 
 # Bootstrap the repo you are in
 kit init . --mcp default --hook
@@ -118,7 +124,9 @@ kit eval run --suite evals/edd/demo.yaml --model scripted
 kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 ```
 
-Already cloned this repo? Run `./install.sh` from the checkout instead.
+Convenience (no checksum): `curl -fsSL …/install.sh | sh` still works, but prefer the verified path above.
+
+Already cloned this repo? Run `./install.sh` from the checkout instead. Regenerate the committed hash with `./bin/write-install-checksum.sh` whenever you edit `install.sh`.
 
 | Command | Purpose |
 | :--- | :--- |
