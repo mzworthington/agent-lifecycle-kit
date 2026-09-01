@@ -26,7 +26,7 @@ Do not commit or push unless the user explicitly asks.
 | Debug / RCA | [agent-debug](./skills/agent-debug/SKILL.md) + [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
 | EDD (prompts, MCP tools, routing) | [docs/edd.md](./docs/edd.md) + [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
 | SOP / handover search | **kit-knowledge** MCP (`search_kit`, `get_sop`, `get_handover`, `get_entity`, `get_related`) |
-| Kit ontology | `ontology/schema.yaml` only (index derived at use time; `kit ontology check`) |
+| Kit ontology | `ontology/schema.yaml` only (index derived at use time; see `ontology/README.md`) |
 | Cross-session facts | **memory** MCP (typed allowlist: glossary/SLO/prefs/project facts — never secrets) |
 | Vendor/framework API docs | **context7** MCP |
 

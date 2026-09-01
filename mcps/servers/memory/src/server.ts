@@ -35,11 +35,13 @@ function memoryFilePath(): string {
   return path.join(os.homedir(), '.agents', 'sync', 'mcp-memory.jsonl');
 }
 
-const TOOLS = [
+function buildTools(allowlist: string[]) {
+  const allowed = allowlist.join(', ');
+  return [
   {
     name: 'create_entities',
     description:
-      'Create entities in the knowledge graph. entityType must be one of GlossaryTerm, Slo, Preference, ProjectFact (kit ontology allowlist).',
+      `Create entities in the knowledge graph. entityType must be one of: ${allowed} (from ontology/schema.yaml).`,
     inputSchema: {
       type: 'object',
       properties: {
@@ -178,6 +180,7 @@ const TOOLS = [
     }
   }
 ] as const;
+}
 
 function ok(id: unknown, result: unknown) {
   return { jsonrpc: '2.0', id, result };
@@ -279,9 +282,10 @@ async function handle(
       });
     case 'ping':
       return ok(id, {});
-    case 'tools/list':
-      return ok(id, { tools: TOOLS });
-    case 'tools/call': {
+    case 'tools/list': {
+      const allow = loadOntologySchema(kitRoot).memoryEntityTypes;
+      return ok(id, { tools: buildTools(allow) });
+    }    case 'tools/call': {
       const toolName = String(params.name ?? '');
       const args = (params.arguments ?? {}) as Record<string, unknown>;
       try {
