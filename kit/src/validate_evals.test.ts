@@ -132,4 +132,55 @@ describe('validateEvals', () => {
     assert.equal(result.ok, true);
     assert.equal(result.errors, 0);
   });
+
+  it('fails when an agent skill is missing from routing-matrix or lifecycle-roles', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-val-'));
+    fs.mkdirSync(path.join(root, 'evals'), { recursive: true });
+    fs.writeFileSync(path.join(root, 'evals', 'schema.json'), JSON.stringify(MIN_SCHEMA), 'utf8');
+    writeSkill(root, 'agent-tdd', ['tdd']);
+    writeSkill(root, 'agent-xfn', ['xfn']);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    const covered = {
+      suite: 'routing-matrix',
+      description: 'd',
+      version: '1.0.0',
+      test_cases: [validCase('EVAL-ROUTE-001', 'agent-tdd')]
+    };
+    fs.writeFileSync(path.join(root, 'evals', 'suites', 'routing-matrix.json'), JSON.stringify(covered), 'utf8');
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'lifecycle-roles.json'),
+      JSON.stringify({
+        suite: 'lifecycle-roles',
+        description: 'd',
+        version: '1.0.0',
+        test_cases: [validCase('EVAL-TDD-001', 'agent-tdd'), validCase('EVAL-XFN-001', 'agent-xfn')]
+      }),
+      'utf8'
+    );
+    const result = validateEvals(root);
+    assert.equal(result.ok, false);
+    assert.ok(result.errors >= 1);
+  });
+
+  it('fails when a stack profile is missing from stack-profiles', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-val-'));
+    fs.mkdirSync(path.join(root, 'evals'), { recursive: true });
+    fs.writeFileSync(path.join(root, 'evals', 'schema.json'), JSON.stringify(MIN_SCHEMA), 'utf8');
+    writeSkill(root, 'lang-python', ['python']);
+    writeSkill(root, 'lang-go', ['golang']);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'stack-profiles.json'),
+      JSON.stringify({
+        suite: 'stack-profiles',
+        description: 'd',
+        version: '1.0.0',
+        test_cases: [validCase('EVAL-LANG-PYTHON-001', 'lang-python')]
+      }),
+      'utf8'
+    );
+    const result = validateEvals(root);
+    assert.equal(result.ok, false);
+    assert.ok(result.errors >= 1);
+  });
 });

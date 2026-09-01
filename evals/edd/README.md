@@ -102,7 +102,7 @@ Pure metric and judge logic stays inward. OpenAI-compatible HTTP and dynamic plu
 
 ## Safety suite
 
-Gateable injection / no-tool suite: `evals/edd/safety.yaml` (included in `kit check` via `EDD_CI_SUITES`).
+Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, kit-knowledge, self-correction, and terminal-fallback via `EDD_CI_SUITES`.
 
 ## Dataset hygiene
 

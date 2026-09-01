@@ -48,6 +48,10 @@ export interface ValidateEvalsResult {
   totalTests: number;
 }
 
+const ROUTING_SUITE = 'routing-matrix.json';
+const LIFECYCLE_SUITE = 'lifecycle-roles.json';
+const STACK_SUITE = 'stack-profiles.json';
+
 function loadSchemaValidator(schemaPath: string): ValidateFunction | null {
   if (!fs.existsSync(schemaPath)) {
     console.warn(`  ⚠️ Schema file not found at ${schemaPath} — falling back to structural checks only`);
@@ -107,6 +111,44 @@ function findEvalFiles(repoDir: string): EvalFileInfo[] {
   return files;
 }
 
+function listSkillNames(skillsDir: string): string[] {
+  if (!fs.existsSync(skillsDir)) return [];
+  return fs.readdirSync(skillsDir).filter((name) => fs.existsSync(path.join(skillsDir, name, 'SKILL.md')));
+}
+
+function checkCentralSuiteCoverage(
+  skillsDir: string,
+  suitesDir: string,
+  suiteTargets: Map<string, Set<string>>
+): number {
+  let errors = 0;
+  const skills = listSkillNames(skillsDir);
+  const agentSkills = skills.filter((name) => name.startsWith('agent-'));
+  const stackSkills = skills.filter(
+    (name) => name.startsWith('lang-') || name.startsWith('framework-') || name.startsWith('profile-')
+  );
+
+  const checks: Array<{ file: string; skills: string[]; label: string }> = [
+    { file: ROUTING_SUITE, skills: agentSkills, label: 'routing-matrix' },
+    { file: LIFECYCLE_SUITE, skills: agentSkills, label: 'lifecycle-roles' },
+    { file: STACK_SUITE, skills: stackSkills, label: 'stack-profiles' }
+  ];
+
+  for (const check of checks) {
+    const absPath = path.join(suitesDir, check.file);
+    if (!fs.existsSync(absPath) || !suiteTargets.has(check.file)) continue;
+    const covered = suiteTargets.get(check.file) ?? new Set<string>();
+    for (const skill of check.skills) {
+      if (!covered.has(skill)) {
+        console.error(`  ❌ Skill ${skill} has no ${check.label} case`);
+        errors++;
+      }
+    }
+  }
+
+  return errors;
+}
+
 export function validateEvals(repoDir: string): ValidateEvalsResult {
   const skillsDir = path.join(repoDir, 'skills');
   const schemaPath = path.join(repoDir, 'evals', 'schema.json');
@@ -116,6 +158,7 @@ export function validateEvals(repoDir: string): ValidateEvalsResult {
   let totalSuites = 0;
   let totalTests = 0;
   let errors = 0;
+  const suiteTargets = new Map<string, Set<string>>();
 
   console.log('=== Agent Lifecycle Kit - Skill Evals Validation ===');
   console.log('');
@@ -149,6 +192,15 @@ export function validateEvals(repoDir: string): ValidateEvalsResult {
       continue;
     }
 
+    const suiteFileName = path.basename(fileInfo.absPath);
+    if (fileInfo.relPath.startsWith('evals/suites/') && Array.isArray(data.test_cases)) {
+      const targets = suiteTargets.get(suiteFileName) ?? new Set<string>();
+      for (const test of data.test_cases) {
+        if (test.target_skill) targets.add(test.target_skill);
+      }
+      suiteTargets.set(suiteFileName, targets);
+    }
+
     for (const test of data.test_cases) {
       totalTests++;
       const targetSkill = test.target_skill;
@@ -179,6 +231,8 @@ export function validateEvals(repoDir: string): ValidateEvalsResult {
 
     console.log(`  ✓ ${fileInfo.relPath} passed structure check (${data.test_cases.length} test cases)`);
   }
+
+  errors += checkCentralSuiteCoverage(skillsDir, path.join(repoDir, 'evals', 'suites'), suiteTargets);
 
   console.log('');
   console.log(`Validation Complete: ${totalSuites} suite(s), ${totalTests} test case(s) checked.`);

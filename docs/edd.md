@@ -102,7 +102,7 @@ Full metric table and harness layout: [evals/edd/README.md](../evals/edd/README.
 
 | Job | Key | Model | Purpose |
 |-----|-----|--------|---------|
-| PR [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) | secrets may be injected | defaults to `scripted` | Merge gate: harness + keyword routing + safety |
+| PR [`.github/workflows/agent-evals.yml`](../.github/workflows/agent-evals.yml) | secrets may be injected | defaults to `scripted` | Merge gate: harness + keyword routing + safety + recovery |
 | Nightly [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | **requires** `KIT_EVAL_API_KEY` | repo variable `KIT_EVAL_MODEL` | Live paraphrases, prompt-injection, multi-tool, safety |
 | `pnpm check` / `kit check` | unused | hardcoded `scripted` | Same as the PR gate, locally |
 

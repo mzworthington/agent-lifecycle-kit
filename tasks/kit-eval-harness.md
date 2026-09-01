@@ -22,16 +22,16 @@ For each golden prompt: note expected route, actual route an agent took (or woul
 
 ### Golden prompts
 
-| # | Prompt (summary) | Expect |
-|---|------------------|--------|
-| 1 | “Add feature X: new bounded context + API” | Full lifecycle: spec → tdd impact → xfn plan → **tdd short loop (gear 1+2)** → xfn green → audit → telemetry → release |
-| 2 | “CI failed / flake on main” | `agent-debug` → pre-commit; light XFN if UI/auth/SLO |
-| 3 | “Rename column on orders table safely” | `agent-migration` (expand/contract); not full feature lifecycle |
-| 4 | “Review this PR” | `agent-review` (boundaries + catalog/XFN) |
-| 5 | “One-line typo in copy” | Direct fix + light XFN floor; no spec handover |
-| 6 | “Wire Stripe for a port we just greened” | Prefer **tdd gear 2** same session; `agent-adapter` only if deep-dive |
-| 7 | “Production 500s spiking” | `agent-incident` → `agent-debug` (+ Sentry/Slack when configured) |
-| 8 | “Change MCP tool schema / system prompt for routing” | **EDD:** `kit eval run|ci` ([docs/edd.md](../docs/edd.md)); not vibes-only |
+| # | Prompt (summary) | Expect | Eval |
+|---|------------------|--------|------|
+| 1 | “Add feature X: new bounded context + API” | Full lifecycle: spec → tdd impact → xfn plan → **tdd short loop (gear 1+2)** → xfn green → audit → telemetry → release | EVAL-ROUTE-007 |
+| 2 | “CI failed / flake on main” | `agent-debug` → pre-commit; light XFN if UI/auth/SLO | EVAL-ROUTE-004 |
+| 3 | “Rename column on orders table safely” | `agent-migration` (expand/contract); not full feature lifecycle | EVAL-ROUTE-014 |
+| 4 | “Review this PR” | `agent-review` (boundaries + catalog/XFN) | EVAL-ROUTE-012 |
+| 5 | “One-line typo in copy” | Direct fix + light XFN floor; no spec handover | EVAL-ROUTE-009 |
+| 6 | “Wire Stripe for a port we just greened” | Prefer **tdd gear 2** same session; `agent-adapter` only if deep-dive | EVAL-ROUTE-024 / EVAL-ROUTE-015 |
+| 7 | “Production 500s spiking” | `agent-incident` → `agent-debug` (+ Sentry/Slack when configured) | EVAL-ROUTE-011 |
+| 8 | “Change MCP tool schema / system prompt for routing” | **EDD:** `kit eval run|ci` ([docs/edd.md](../docs/edd.md)); not vibes-only | `evals/edd/` |
 
 ### Pass criteria
 
@@ -52,6 +52,6 @@ pnpm kit eval report --format md --out out/reports
 ```
 
 - [ ] Routing accuracy ≥ 95% on routing-tagged cases
-- [ ] Self-correction + terminal-fallback suites green
+- [ ] Self-correction + terminal-fallback + safety suites green
 - [ ] Markdown report attached / uploaded as CI artifact (and published to the Actions job summary)
 - [ ] Prod failures converted to JSONL when applicable ([SOP](../SOPs/edd-production-telemetry.md))

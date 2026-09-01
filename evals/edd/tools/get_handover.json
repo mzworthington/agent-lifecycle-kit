@@ -1,0 +1,13 @@
+{
+  "name": "get_handover",
+  "description": "Return a phase handover from ~/.agents/handover/<project>/ (latest, or named phase). Use when the user asks for a prior spec/xfn/tdd handover instead of bulk-reading the handover folder.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["project"],
+    "properties": {
+      "project": { "type": "string", "description": "Project directory name" },
+      "phase": { "type": "string", "description": "Optional phase, e.g. spec or xfn" }
+    },
+    "additionalProperties": false
+  }
+}

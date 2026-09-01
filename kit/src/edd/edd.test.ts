@@ -286,7 +286,9 @@ metrics:
     const runner = new EvalRunner({ model: 'scripted' });
     const report = await runner.runSuite(path.join(repoDir, 'evals/edd/kit_knowledge.yaml'));
     assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.ok(report.results.some((r) => r.id === 'kit-handover-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-01'));
+    assert.ok(!report.results.some((r) => r.id === 'kit-live-02'));
   });
 
   it('loads a prod-derived circuit-breaker case', async () => {
