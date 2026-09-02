@@ -5,6 +5,7 @@
 ### 🚀 Features
 
 - Improve seo
+- Convert react to astro to build up and prove out new skills and mcps (#52)
 
 ### ⚙️ Refactoring & Performance
 
