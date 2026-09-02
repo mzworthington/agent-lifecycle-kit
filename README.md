@@ -8,6 +8,7 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
 [![Pages](https://img.shields.io/badge/Docs-eval--driven.dev-blue?style=for-the-badge&logo=github)](https://eval-driven.dev/)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
+[![Version](https://img.shields.io/github/v/release/mzworthington/agent-lifecycle-kit?style=for-the-badge&logo=github&label=Version)](https://github.com/mzworthington/agent-lifecycle-kit/releases)
 
 ---
 

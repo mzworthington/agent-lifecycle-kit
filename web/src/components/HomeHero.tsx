@@ -1,4 +1,5 @@
 import { HOME_BADGES, HOME_BRAND, HOME_EYEBROW, HOME_HEADLINE, HOME_LEDE } from '../landing/copy.ts';
+import { HomeCtas } from './HomeCtas';
 
 export function HomeHero() {
   return (
@@ -11,7 +12,7 @@ export function HomeHero() {
       <p className="hero-subtitle">{HOME_LEDE}</p>
       <ul className="badge-bar">
         {HOME_BADGES.map((badge) => (
-          <li key={badge.href}>
+          <li key={badge.alt}>
             <a href={badge.href} rel={badge.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
               <img
                 src={badge.src}
@@ -24,6 +25,7 @@ export function HomeHero() {
           </li>
         ))}
       </ul>
+      <HomeCtas />
     </section>
   );
 }
