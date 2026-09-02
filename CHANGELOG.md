@@ -18,6 +18,7 @@
 
 - Update theme colors and improve layout styles across components
 - *(edd)* Unify evaluation styles and enhance CLI integration
+- *(edd)* Streamline agent driver logic and improve evaluation style handling
 
 ### 🧰 Maintenance & Dependencies
 
