@@ -88,6 +88,23 @@ describe('EDD CLI flag helpers', () => {
   it('resolves --suite relative to cwd', () => {
     assert.equal(resolveEddSuite('/kit', ['--suite', 'foo.yaml']), path.resolve(process.cwd(), 'foo.yaml'));
   });
+
+  it('documents judge backends in help output', async () => {
+    const lines: string[] = [];
+    const original = console.log;
+    console.log = (...args: unknown[]) => {
+      lines.push(args.map(String).join(' '));
+    };
+    try {
+      assert.equal(await handleEddEvalCli({ repoDir: '/kit', args: ['help'] }), 0);
+    } finally {
+      console.log = original;
+    }
+    const text = lines.join('\n');
+    assert.match(text, /--judge <backend>/);
+    assert.match(text, /--judge-cli/);
+    assert.match(text, /--base-url/);
+  });
 });
 
 describe('handleEddEvalCli', () => {
