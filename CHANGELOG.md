@@ -19,6 +19,7 @@
 - Update theme colors and improve layout styles across components
 - *(edd)* Unify evaluation styles and enhance CLI integration
 - *(edd)* Streamline agent driver logic and improve evaluation style handling
+- Rename Agent Lifecycle Kit to Waykit across all files for consistency and clarity
 
 ### 🧰 Maintenance & Dependencies
 
