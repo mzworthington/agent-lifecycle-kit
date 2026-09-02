@@ -19,6 +19,7 @@ import {
   evalDriverKind,
   type EvalProgress
 } from './progress.js';
+import type { JudgeBackend, JudgeCompletionPort } from './judge-provider.js';
 
 export interface EvalRunnerOptions {
   model: string;
@@ -28,6 +29,10 @@ export interface EvalRunnerOptions {
   judgeModel?: string;
   apiKey?: string;
   baseUrl?: string;
+  /** Judge completion backend (http | cli | heuristic). */
+  judgeBackend?: JudgeBackend;
+  /** Override judge completion port (tests / custom adapters). */
+  complete?: JudgeCompletionPort;
   otel?: OtelEmitter;
   tags?: string[];
   progress?: EvalProgress;
@@ -46,6 +51,8 @@ export class EvalRunner {
   private judgeModel?: string;
   private apiKey?: string;
   private baseUrl?: string;
+  private judgeBackend?: JudgeBackend;
+  private complete?: JudgeCompletionPort;
   private otel?: OtelEmitter;
   private tags?: string[];
   private progress: EvalProgress;
@@ -59,6 +66,8 @@ export class EvalRunner {
     this.judgeModel = options.judgeModel;
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl;
+    this.judgeBackend = options.judgeBackend;
+    this.complete = options.complete;
     this.otel = options.otel;
     this.tags = options.tags;
     this.progress = options.progress ?? createConsoleEvalProgress();
@@ -173,7 +182,9 @@ export class EvalRunner {
           model: this.model,
           judgeModel: this.judgeModel,
           apiKey: this.apiKey,
-          baseUrl: this.baseUrl
+          baseUrl: this.baseUrl,
+          judgeBackend: this.judgeBackend,
+          complete: this.complete
         });
 
         emitAgentSpan(this.otel, {

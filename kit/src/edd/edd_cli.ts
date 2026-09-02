@@ -18,6 +18,12 @@ import {
 import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
 import type { EvalCase } from './schema.js';
 import { flagValue, hasFlag } from '../cli/flags.js';
+import {
+  resolveJudgeApiKey,
+  resolveJudgeBackend,
+  resolveJudgeCompletion,
+  type JudgeBackend
+} from './judge-provider.js';
 
 export interface EddCliOptions {
   repoDir: string;
@@ -39,6 +45,13 @@ Subcommands:
   shadow   --infile <jsonl> [--sample <rate>] [--out <jsonl>] [--seed <n>]
   dataset  lint|dedupe|synthesize|from-trace [options]
 
+Judge options (run / watch / report / ci):
+  --base-url <url>     OpenAI-compatible base (alias: --baseUrl). Local servers: http://localhost:11434/v1
+  --api-key <key>      Override KIT_EVAL_API_KEY / OPENAI_API_KEY (use "local" for Ollama)
+  --judge <backend>    http | cli | heuristic (default: infer from key/base-url/model)
+  --judge-cli <name>   When --judge cli: claude | cursor-agent | agy | antigravity | <binary>
+  --judge-model <name> Model id for judge calls (defaults to --model)
+
 Dataset options:
   lint         --dataset <jsonl>
   dedupe       --dataset <jsonl> [--out <jsonl>]
@@ -55,6 +68,8 @@ Notes:
   - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
   - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
   - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
+  - Local model servers (Ollama / LM Studio / vLLM): --base-url http://localhost:11434/v1 --model llama3.1 (no paid key).
+  - Local code-assistant judging: --judge cli --judge-cli claude (or cursor-agent / agy). Prefer HTTP for CI gates.
   - Live and scripted runs print per-case progress (agent then judges). A pause after "agent" means the HTTP provider has not returned.
   - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
@@ -113,12 +128,39 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
   const tags = tagsRaw ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean) : undefined;
   const systemPromptPath =
     getEddFlag(args, '--system-prompt') ?? path.join(repoDir, 'evals', 'edd', 'system_prompt.md');
+  const baseUrl =
+    getEddFlag(args, '--base-url') ??
+    getEddFlag(args, '--baseUrl') ??
+    process.env.KIT_EVAL_BASE_URL ??
+    process.env.OPENAI_BASE_URL;
+  const apiKeyFromEnv =
+    getEddFlag(args, '--api-key') ??
+    getEddFlag(args, '--apiKey') ??
+    process.env.KIT_EVAL_API_KEY ??
+    process.env.OPENAI_API_KEY ??
+    process.env.ANTHROPIC_API_KEY;
+  const judgeFlag = getEddFlag(args, '--judge');
+  const judgeCli = getEddFlag(args, '--judge-cli') ?? getEddFlag(args, '--judgeCli');
+  const judgeModel = getEddFlag(args, '--judge-model') ?? getEddFlag(args, '--judgeModel');
+  const resolveOpts = {
+    judge: judgeFlag,
+    judgeCli,
+    model: judgeModel ?? model,
+    apiKey: apiKeyFromEnv,
+    baseUrl
+  };
+  const judgeBackend: JudgeBackend = resolveJudgeBackend(resolveOpts);
+  const complete = resolveJudgeCompletion(resolveOpts);
+  const apiKey = resolveJudgeApiKey(apiKeyFromEnv, baseUrl, judgeBackend);
   return new EvalRunner({
     model,
     tags,
     systemPromptPath: fs.existsSync(systemPromptPath) ? systemPromptPath : undefined,
-    apiKey: process.env.KIT_EVAL_API_KEY ?? process.env.OPENAI_API_KEY ?? process.env.ANTHROPIC_API_KEY,
-    baseUrl: process.env.KIT_EVAL_BASE_URL ?? process.env.OPENAI_BASE_URL
+    judgeModel: judgeModel ?? undefined,
+    apiKey,
+    baseUrl,
+    judgeBackend,
+    complete
   });
 }
 

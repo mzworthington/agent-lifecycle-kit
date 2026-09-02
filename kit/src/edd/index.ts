@@ -31,7 +31,21 @@ export {
   useLocalJudgeModel
 } from './judge.js';
 export { runLlmJudge, runCriteriaJudge, runTaskCompletionJudge } from './run-judges.js';
-export { openAiCompatibleJudgeCompletion, type JudgeCompletionPort } from './judge-provider.js';
+export {
+  openAiCompatibleJudgeCompletion,
+  createCliJudgeCompletion,
+  claudeCodeJudgeCompletion,
+  cursorAgentJudgeCompletion,
+  antigravityJudgeCompletion,
+  parseJudgeCliStdout,
+  resolveJudgeBackend,
+  resolveJudgeCompletion,
+  resolveJudgeApiKey,
+  JUDGE_CLI_PRESETS,
+  type JudgeCompletionPort,
+  type JudgeBackend,
+  type JudgeCliPreset
+} from './judge-provider.js';
 export {
   ProviderHttpError,
   isRetryableProviderFailure,

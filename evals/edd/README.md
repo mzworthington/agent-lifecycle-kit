@@ -87,6 +87,7 @@ flowchart TB
   orch[run-judges]
   pure[judge local heuristics]
   http[judge-provider HTTP adapter]
+  cli[judge-provider CLI adapter]
   plug[metric-plugin loader]
   trace[failure-trace + redact]
   runner --> assert
@@ -96,11 +97,25 @@ flowchart TB
   assert --> plug
   orch --> pure
   orch --> http
+  orch --> cli
   runner --> trace
-  cli[kit eval dataset] --> synth
+  cli_cmd[kit eval dataset] --> synth
 ```
 
-Pure metric and judge logic stays inward. OpenAI-compatible HTTP and dynamic plugin imports live only in adapters.
+Pure metric and judge logic stays inward. OpenAI-compatible HTTP, headless assistant CLIs (`claude` / `cursor-agent` / `agy`), and dynamic plugin imports live only in adapters.
+
+### Judge backends
+
+| Backend | Flag | Use |
+|---------|------|-----|
+| HTTP | default with key/`--base-url`, or `--judge http` | CI providers and local OpenAI-compatible servers |
+| CLI | `--judge cli --judge-cli claude\|cursor-agent\|agy` | Local code-assistant judging (dev loop) |
+| Heuristic | scripted model, or `--judge heuristic` | Offline CI without an LLM |
+
+```bash
+kit eval run --suite evals/edd/architecture_routing.yaml --base-url http://localhost:11434/v1 --model llama3.1
+kit eval run --suite evals/edd/architecture_routing.yaml --model scripted --judge cli --judge-cli claude
+```
 
 ## Safety suite
 

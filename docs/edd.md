@@ -57,11 +57,15 @@ The live-eval key is a **different job**: call a real model over HTTP and ask wh
 flowchart TD
   start["kit eval run / ci"] --> model{"--model?"}
   model -->|"scripted or mock<br/>CI default"| scripted["Local keyword driver<br/>no HTTP, no key"]
-  model -->|"provider id<br/>e.g. gpt-4o-mini"| key{"KIT_EVAL_API_KEY or<br/>OPENAI_API_KEY set?"}
+  model -->|"provider id<br/>e.g. gpt-4o-mini"| key{"KIT_EVAL_API_KEY or<br/>OPENAI_API_KEY or --base-url?"}
   key -->|no| scripted
   key -->|yes| live["POST /chat/completions<br/>Bearer token"]
   live --> agent["Agent under test"]
-  live --> judge["LLM-as-judge when that metric is on"]
+  scripted --> judgePick{"--judge?"}
+  live --> judgePick
+  judgePick -->|heuristic / default scripted| heur["localJudge patterns"]
+  judgePick -->|http / base-url| httpJ["OpenAI-compatible judge"]
+  judgePick -->|cli| cliJ["claude / cursor-agent / agy"]
 ```
 
 `--model scripted` never spends, even if a key is in the environment. Cases tagged `requires-live` are skipped on the scripted driver.
@@ -81,9 +85,29 @@ That value is sent as `Authorization: Bearer …` to an **OpenAI-compatible** `{
 The same key is reused for:
 
 - **Agent:** given this prompt and these tools, which call do you make?
-- **Judge:** optional second completion for `llm_as_judge` / `criteria_judge` / live `task_completion` (falls back to a local heuristic when the model is scripted or no key is set)
+- **Judge:** optional second completion for `llm_as_judge` / `criteria_judge` / live `task_completion`
 
-Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K`. Local OpenAI-compatible servers (Ollama, OpenRouter, and similar) work by setting `KIT_EVAL_BASE_URL`.
+Judge backends (same `JudgeCompletionPort`):
+
+| Backend | When | How |
+|---------|------|-----|
+| **http** | API key, `--base-url`, or `--judge http` | OpenAI-compatible `POST …/chat/completions` (CI providers **or** local Ollama / LM Studio / vLLM) |
+| **cli** | `--judge cli` | Shell-out to `claude`, `cursor-agent`, or `agy` headless JSON mode (local/dev loop) |
+| **heuristic** | `scripted` / `mock` / `local`, or `--judge heuristic` | Deterministic pattern matching — weak substitute for real judgment |
+
+```bash
+# Local model server (no paid key)
+kit eval run --suite evals/edd/architecture_routing.yaml \
+  --base-url http://localhost:11434/v1 --model llama3.1
+
+# Local code assistant as judge (agent can stay scripted)
+kit eval run --suite evals/edd/architecture_routing.yaml \
+  --model scripted --judge cli --judge-cli claude
+```
+
+Prefer **http** for CI merge gates; **cli** for fast local iteration while writing evals (subscription rate limits and weaker structured-output guarantees).
+
+Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K`. Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
 
 ## Metrics and suites
 

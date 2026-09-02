@@ -11,6 +11,9 @@ import {
 } from './judge.js';
 import {
   openAiCompatibleJudgeCompletion,
+  resolveJudgeApiKey,
+  resolveJudgeBackend,
+  type JudgeBackend,
   type JudgeCompletionPort
 } from './judge-provider.js';
 import type { AgentToolCall } from './schema.js';
@@ -19,22 +22,40 @@ export interface JudgeRuntimeOptions {
   model: string;
   baseUrl?: string;
   apiKey?: string;
-  /** Defaults to the OpenAI-compatible HTTP adapter. */
+  /** Explicit backend; inferred when omitted. */
+  backend?: JudgeBackend;
+  /** Defaults to the OpenAI-compatible HTTP adapter when backend is http. */
   complete?: JudgeCompletionPort;
+}
+
+function shouldUseHeuristic(options: {
+  model: string;
+  apiKey?: string;
+  baseUrl?: string;
+  backend?: JudgeBackend;
+  complete?: JudgeCompletionPort;
+}): boolean {
+  if (options.complete) return false;
+  const backend = options.backend ?? resolveJudgeBackend(options);
+  if (backend === 'heuristic') return true;
+  if (backend === 'cli' || backend === 'http') return false;
+  return useLocalJudgeModel(options.model, resolveJudgeApiKey(options.apiKey, options.baseUrl, backend));
 }
 
 async function completeJudgeJson(
   options: JudgeRuntimeOptions,
   prompt: string
 ): Promise<Record<string, unknown>> {
-  if (!options.apiKey) {
+  const backend = options.backend ?? resolveJudgeBackend(options);
+  const apiKey = resolveJudgeApiKey(options.apiKey, options.baseUrl, backend);
+  const complete = options.complete ?? openAiCompatibleJudgeCompletion;
+  if (complete === openAiCompatibleJudgeCompletion && !apiKey && !options.baseUrl) {
     return {};
   }
-  const complete = options.complete ?? openAiCompatibleJudgeCompletion;
   return complete({
     model: options.model,
     baseUrl: options.baseUrl,
-    apiKey: options.apiKey,
+    apiKey,
     prompt
   });
 }
@@ -47,9 +68,10 @@ export async function runLlmJudge(input: {
   model: string;
   baseUrl?: string;
   apiKey?: string;
+  backend?: JudgeBackend;
   complete?: JudgeCompletionPort;
 }): Promise<JudgeVerdict> {
-  if (useLocalJudgeModel(input.model, input.apiKey)) {
+  if (shouldUseHeuristic(input)) {
     return localJudge(input);
   }
 
@@ -73,6 +95,7 @@ export async function runCriteriaJudge(input: {
   model: string;
   baseUrl?: string;
   apiKey?: string;
+  backend?: JudgeBackend;
   complete?: JudgeCompletionPort;
 }): Promise<CriteriaJudgeVerdict> {
   const threshold = input.threshold ?? 1;
@@ -85,7 +108,7 @@ export async function runCriteriaJudge(input: {
     };
   }
 
-  if (useLocalJudgeModel(input.model, input.apiKey)) {
+  if (shouldUseHeuristic(input)) {
     return localCriteriaJudge(input);
   }
 
@@ -131,9 +154,10 @@ export async function runTaskCompletionJudge(input: {
   model: string;
   baseUrl?: string;
   apiKey?: string;
+  backend?: JudgeBackend;
   complete?: JudgeCompletionPort;
 }): Promise<JudgeVerdict> {
-  if (useLocalJudgeModel(input.model, input.apiKey)) {
+  if (shouldUseHeuristic(input)) {
     return localTaskCompletion(input);
   }
 

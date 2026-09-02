@@ -5,6 +5,7 @@ import { evaluateMcpUse } from './mcp-use.js';
 import { loadMetricPlugin } from './metric-plugin.js';
 import { evaluatePlanAdherence, evaluateStepEfficiency, resolveMaxSteps } from './plan-metrics.js';
 import { resolveToolOutput } from './resolve-tool-output.js';
+import type { JudgeBackend, JudgeCompletionPort } from './judge-provider.js';
 import { runCriteriaJudge, runLlmJudge, runTaskCompletionJudge } from './run-judges.js';
 import type { AgentResponse, EvalCase, EvalConfig, EvalMetric } from './schema.js';
 import { buildTrajectory, type TrajectoryStep } from './trajectory.js';
@@ -30,6 +31,8 @@ export interface RunAssertionsInput {
   judgeModel?: string;
   apiKey?: string;
   baseUrl?: string;
+  judgeBackend?: JudgeBackend;
+  complete?: JudgeCompletionPort;
 }
 
 function resolvePath(baseFile: string, maybeRelative: string): string {
@@ -236,7 +239,9 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
           agentResponse: response.content,
           model: judgeModel(input, config),
           apiKey: input.apiKey,
-          baseUrl: input.baseUrl
+          baseUrl: input.baseUrl,
+          backend: input.judgeBackend,
+          complete: input.complete
         });
         if (verdict.score !== 'PASS') {
           failures.push(`completion: ${verdict.reasoning || 'task_completion failed'}`);
@@ -258,7 +263,9 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
           threshold: metric.threshold,
           model: judgeModel(input, config),
           apiKey: input.apiKey,
-          baseUrl: input.baseUrl
+          baseUrl: input.baseUrl,
+          backend: input.judgeBackend,
+          complete: input.complete
         });
         if (!verdict.passed) {
           const failed = verdict.results.filter((r) => !r.pass);
@@ -282,7 +289,9 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
           agentResponse: response.content,
           model: judgeModel(input, config),
           apiKey: input.apiKey,
-          baseUrl: input.baseUrl
+          baseUrl: input.baseUrl,
+          backend: input.judgeBackend,
+          complete: input.complete
         });
         hallucinated = verdict.hallucinated;
         if (verdict.score !== 'PASS') {
