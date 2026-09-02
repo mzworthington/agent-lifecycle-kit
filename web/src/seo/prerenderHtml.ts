@@ -28,6 +28,16 @@ function upsertCanonical(html: string, href: string): string {
   return html.replace(/<\/head>/i, `    ${tag}\n  </head>`);
 }
 
+function upsertAlternateMarkdown(html: string, href: string | undefined): string {
+  const re = /<link\s+rel="alternate"\s+type="text\/markdown"[^>]*>/i;
+  if (!href) {
+    return html.replace(re, '');
+  }
+  const tag = `<link rel="alternate" type="text/markdown" href="${escapeHtml(href)}" />`;
+  if (re.test(html)) return html.replace(re, tag);
+  return html.replace(/<\/head>/i, `    ${tag}\n  </head>`);
+}
+
 function stripJsonLdScripts(html: string): string {
   let result = '';
   let i = 0;
@@ -60,26 +70,45 @@ function stripJsonLdScripts(html: string): string {
 
 function upsertJsonLd(html: string, seo: PageSeo): string {
   const without = stripJsonLdScripts(html);
+  if (!seo.indexable) return without;
   const script = `<script type="application/ld+json">${JSON.stringify(buildJsonLdGraph(seo))}</script>`;
   return without.replace(/<\/head>/i, `    ${script}\n  </head>`);
 }
 
+function breadcrumbNav(seo: PageSeo): string {
+  if (seo.breadcrumbs.length < 2) return '';
+  const items = seo.breadcrumbs
+    .map((crumb) => `            <li><a href="${escapeHtml(crumb.path)}">${escapeHtml(crumb.name)}</a></li>`)
+    .join('\n');
+  return `        <nav aria-label="Breadcrumb">
+          <ol>
+${items}
+          </ol>
+        </nav>
+`;
+}
+
 function prerenderBody(seo: PageSeo, navLinks: Array<{ href: string; label: string }>): string {
   const links = navLinks
-    .map(
-      (link) =>
-        `        <li><a href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a></li>`
-    )
+    .map((link) => `            <li><a href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a></li>`)
     .join('\n');
-  return `      <main data-kit-prerender="1">
-        <h1>${escapeHtml(seo.headline)}</h1>
-        <p>${escapeHtml(seo.description)}</p>
-        <nav aria-label="Documentation">
+  const excerpt =
+    seo.excerpt && seo.excerpt !== seo.description
+      ? `        <p>${escapeHtml(seo.excerpt)}</p>\n`
+      : '';
+  return `      <a class="skip-link" href="#main">Skip to content</a>
+      <header>
+        <a href="/">Agent Lifecycle Kit</a>
+        <nav aria-label="Site">
           <ul>
 ${links}
           </ul>
         </nav>
-      </main>
+      </header>
+      <main id="main" data-kit-prerender="1">
+${breadcrumbNav(seo)}        <h1>${escapeHtml(seo.headline)}</h1>
+        <p>${escapeHtml(seo.description)}</p>
+${excerpt}      </main>
 `;
 }
 
@@ -91,11 +120,14 @@ export function injectPrerenderedPageHtml(
   let html = shellHtml;
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(seo.title)}</title>`);
   html = replaceMetaContent(html, 'name', 'description', seo.description);
+  html = replaceMetaContent(html, 'name', 'robots', seo.indexable ? 'index,follow' : 'noindex,nofollow');
   html = upsertCanonical(html, seo.canonicalUrl);
+  html = upsertAlternateMarkdown(html, seo.markdownUrl);
   html = replaceMetaContent(html, 'property', 'og:url', seo.canonicalUrl);
   html = replaceMetaContent(html, 'property', 'og:title', seo.title);
   html = replaceMetaContent(html, 'property', 'og:description', seo.description);
   html = replaceMetaContent(html, 'property', 'og:image', seo.ogImageUrl);
+  html = replaceMetaContent(html, 'name', 'twitter:url', seo.canonicalUrl);
   html = replaceMetaContent(html, 'name', 'twitter:title', seo.title);
   html = replaceMetaContent(html, 'name', 'twitter:description', seo.description);
   html = replaceMetaContent(html, 'name', 'twitter:image', seo.ogImageUrl);

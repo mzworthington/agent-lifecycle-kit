@@ -45,4 +45,4 @@ kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 kit eval report --format md --out out/reports
 ```
 
-Walk the same story in the browser: [eval-driven-development.dev/#demo](https://eval-driven-development.dev/#demo).
+Walk the same story in the browser: [eval-driven.dev/#demo](https://eval-driven.dev/#demo).

@@ -13,20 +13,19 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 - Never installed → start here in 10 minutes: install → `kit init` → demo suite → CI bar
 
 ## Start here
-- [Home](https://eval-driven-development.dev/)
-- [Getting started](https://eval-driven-development.dev/docs/start.md)
-- [Jobs for today](https://eval-driven-development.dev/docs/jobs.md)
-- [Common questions](https://eval-driven-development.dev/docs/faq.md)
-- [Docs overview](https://eval-driven-development.dev/docs/README.md)
-- [EDD guide](https://eval-driven-development.dev/docs/edd.md)
-- [Operator guide](https://eval-driven-development.dev/docs/kit.md)
-- [Feature lifecycle](https://eval-driven-development.dev/docs/lifecycle.md)
-- [Kit map](https://eval-driven-development.dev/docs/map.md)
-- [SOPs](https://eval-driven-development.dev/docs/sops.md)
-- [Demo suite](https://eval-driven-development.dev/evals/edd/demo.yaml)
-- [Before/after write-up](https://eval-driven-development.dev/evals/edd/examples/before-after.md)
-- [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
-- [Job picker source](https://eval-driven-development.dev/docs/today-jobs.md)
+- [Home](https://eval-driven.dev/)
+- [Getting started](https://eval-driven.dev/docs/start) ([markdown](https://eval-driven.dev/docs/start.md))
+- [Jobs for today](https://eval-driven.dev/docs/jobs) ([markdown](https://eval-driven.dev/docs/jobs.md))
+- [Common questions](https://eval-driven.dev/docs/faq) ([markdown](https://eval-driven.dev/docs/faq.md))
+- [Docs overview](https://eval-driven.dev/docs) ([markdown](https://eval-driven.dev/docs/README.md))
+- [EDD guide](https://eval-driven.dev/docs/edd) ([markdown](https://eval-driven.dev/docs/edd.md))
+- [Operator guide](https://eval-driven.dev/docs/kit) ([markdown](https://eval-driven.dev/docs/kit.md))
+- [Feature lifecycle](https://eval-driven.dev/docs/lifecycle) ([markdown](https://eval-driven.dev/docs/lifecycle.md))
+- [Kit map](https://eval-driven.dev/docs/map) ([markdown](https://eval-driven.dev/docs/map.md))
+- [SOPs](https://eval-driven.dev/docs/sops) ([markdown](https://eval-driven.dev/docs/sops.md))
+- [Demo suite](https://eval-driven.dev/evals/edd/demo.yaml)
+- [Before/after write-up](https://eval-driven.dev/evals/edd/examples/before-after) ([markdown](https://eval-driven.dev/evals/edd/examples/before-after.md))
+- [Eval suites](https://eval-driven.dev/evals/edd) ([markdown](https://eval-driven.dev/evals/edd/README.md))
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
 
 ## Install

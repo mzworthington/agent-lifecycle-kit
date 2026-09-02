@@ -3,7 +3,12 @@ import path from 'node:path';
 import type { Plugin } from 'vite';
 import { fileToRoute, shouldPublishMarkdown } from '../src/docs/catalog.ts';
 import { injectPrerenderedPageHtml } from '../src/seo/prerenderHtml.ts';
-import { buildSitemapXml, resolvePageSeo } from '../src/seo/siteSeo.ts';
+import {
+  buildSitemapXml,
+  listIndexableSeoPaths,
+  notFoundPageSeo,
+  resolvePageSeo
+} from '../src/seo/siteSeo.ts';
 
 function walkMarkdown(dir: string, acc: string[] = []): string[] {
   if (!fs.existsSync(dir)) return acc;
@@ -42,6 +47,16 @@ function outPathForRoute(outDir: string, routePath: string): string {
   return path.join(outDir, routePath.replace(/^\//, ''), 'index.html');
 }
 
+function crawlerNav(): Array<{ href: string; label: string }> {
+  return [
+    { href: '/', label: 'Home' },
+    { href: '/docs/start', label: 'Start' },
+    { href: '/docs', label: 'Guide' },
+    { href: '/evals/edd', label: 'Evals' },
+    { href: '/docs/map', label: 'Map' }
+  ];
+}
+
 export function emitSiteSeo(kitRoot: string): Plugin {
   let outDir = 'dist';
   let shouldEmit = false;
@@ -61,31 +76,34 @@ export function emitSiteSeo(kitRoot: string): Plugin {
       const shell = fs.readFileSync(indexPath, 'utf8');
       const published = listPublishedMarkdownFiles(kitRoot);
       const routes = ['/', ...published.map((entry) => fileToRoute(entry.file))];
-      const nav = [
-        { href: '/', label: 'Home' },
-        { href: '/docs/start', label: 'Start' },
-        { href: '/docs', label: 'Guide' },
-        { href: '/evals/edd', label: 'Evals' },
-        { href: '/docs/map', label: 'Map' }
-      ];
+      const nav = crawlerNav();
       const lastmod = new Date().toISOString().slice(0, 10);
-      fs.writeFileSync(path.join(outDir, 'sitemap.xml'), buildSitemapXml(routes, lastmod), 'utf8');
+      const indexable = listIndexableSeoPaths(routes);
+      fs.writeFileSync(path.join(outDir, 'sitemap.xml'), buildSitemapXml(indexable, lastmod), 'utf8');
 
-      const byRoute = new Map(published.map((entry) => [fileToRoute(entry.file), entry.markdown]));
+      const byRoute = new Map(published.map((entry) => [fileToRoute(entry.file), entry]));
       for (const routePath of routes) {
-        const markdown = routePath === '/' ? undefined : byRoute.get(routePath);
+        const entry = routePath === '/' ? undefined : byRoute.get(routePath);
         const heading =
-          markdown?.match(/^#\s+(.+)$/m)?.[1]?.trim() ||
+          entry?.markdown.match(/^#\s+(.+)$/m)?.[1]?.trim() ||
           routePath.split('/').filter(Boolean).pop() ||
           'Agent Lifecycle Kit';
-        const seo = resolvePageSeo(routePath, heading, markdown);
+        const seo = resolvePageSeo(routePath, {
+          headline: heading,
+          markdown: entry?.markdown,
+          file: entry?.file
+        });
         const html = injectPrerenderedPageHtml(shell, seo, nav);
         const target = outPathForRoute(outDir, routePath);
         fs.mkdirSync(path.dirname(target), { recursive: true });
         fs.writeFileSync(target, html, 'utf8');
       }
 
-      fs.copyFileSync(indexPath, path.join(outDir, '404.html'));
+      fs.writeFileSync(
+        path.join(outDir, '404.html'),
+        injectPrerenderedPageHtml(shell, notFoundPageSeo(), nav),
+        'utf8'
+      );
     }
   };
 }

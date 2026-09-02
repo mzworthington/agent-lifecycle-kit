@@ -557,29 +557,175 @@ header {
   margin: 0 0 3rem;
 }
 
-.ontology-intro {
+.ontology-chrome {
   max-width: var(--page-width);
   margin: 0 auto;
-  padding: 1.5rem var(--page-gutter) 0.75rem;
-  text-align: left;
+  padding: 1.15rem var(--page-gutter) 0.65rem;
 }
 
-.ontology-intro h2 {
+.ontology-heading {
   font-size: 1.55rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.65rem;
 }
 
-.ontology-intro p {
-  color: var(--text-muted);
-  max-width: 46rem;
+#ontology-clear {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.28rem 0.55rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
-.ontology-intro code {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.88em;
+.ontology-canvas-frame {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ontology-fs-toggle {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 3;
+  background: var(--primary);
+  border: 0;
+  color: #0c1017;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.ontology-fs-toggle[aria-pressed='true'] {
+  background: rgba(12, 16, 23, 0.88);
+  border: 1px solid var(--primary-light);
   color: var(--primary-light);
+}
+
+html.ontology-map-fullscreen,
+html.ontology-map-fullscreen body {
+  overflow: hidden;
+}
+
+.ontology-explorer--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+}
+
+.ontology-explorer--fullscreen .ontology-chrome {
+  max-width: none;
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(12, 16, 23, 0.96);
+  position: relative;
+}
+
+.ontology-explorer--fullscreen .ontology-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ontology-explorer--fullscreen .ontology-toolbar,
+.ontology-explorer--fullscreen .ontology-matches {
+  max-width: none;
+}
+
+.ontology-explorer--fullscreen .ontology-toolbar {
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+}
+
+.ontology-explorer--fullscreen .ontology-search {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 11rem;
+  flex: 0 1 15rem;
+}
+
+.ontology-explorer--fullscreen .ontology-search input {
+  padding: 0.28rem 0.5rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+.ontology-explorer--fullscreen .ontology-types {
+  gap: 0.25rem 0.55rem;
+  flex: 1 1 auto;
+}
+
+.ontology-explorer--fullscreen .ontology-types legend {
+  float: left;
+  width: auto;
+  margin-right: 0.45rem;
+}
+
+.ontology-explorer--fullscreen .ontology-stats {
+  font-size: 0.78rem;
+}
+
+.ontology-explorer--fullscreen .ontology-stage {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.ontology-explorer--fullscreen .ontology-canvas-frame {
+  height: 100%;
+  min-height: 0;
+}
+
+.ontology-explorer--fullscreen .hero-d3-wrapper {
+  height: 100%;
+  max-height: none;
+  min-height: 0;
+}
+
+.ontology-explorer--fullscreen #ontology-inspector {
+  max-height: none;
+}
+
+.ontology-explorer--fullscreen .ontology-matches:not([hidden]) {
+  position: absolute;
+  left: 0.75rem;
+  right: min(320px, 30%);
+  bottom: 0.75rem;
+  margin: 0;
+  padding: 0;
+  max-height: 28vh;
+  overflow: auto;
+  z-index: 2;
 }
 
 .ontology-toolbar {
@@ -590,6 +736,12 @@ header {
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
   align-items: end;
+}
+
+.ontology-chrome .ontology-toolbar {
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
 .ontology-search {
@@ -611,7 +763,6 @@ header {
   padding: 0.5rem 0.7rem;
   font: inherit;
   font-weight: 400;
-  color: var(--text);
 }
 
 .ontology-types {
@@ -642,16 +793,6 @@ header {
   color: var(--text-muted);
   font-size: 0.85rem;
   margin: 0;
-}
-
-#ontology-clear {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 0.4rem 0.7rem;
-  cursor: pointer;
-  font: inherit;
 }
 
 .ontology-stage {
@@ -759,6 +900,16 @@ header {
 
   .ontology-explorer .hero-d3-wrapper {
     height: 480px;
+  }
+
+  .ontology-explorer--fullscreen .hero-d3-wrapper {
+    height: 100%;
+    max-height: none;
+    min-height: 12rem;
+  }
+
+  .ontology-explorer--fullscreen #ontology-inspector {
+    max-height: 36vh;
   }
 }
 

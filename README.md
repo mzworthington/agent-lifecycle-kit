@@ -6,7 +6,7 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![EDD](https://img.shields.io/badge/EDD-Harness-blueviolet?style=for-the-badge&logo=target)](./docs/edd.md)
-[![Pages](https://img.shields.io/badge/Docs-eval--driven--development.dev-blue?style=for-the-badge&logo=github)](https://eval-driven-development.dev/)
+[![Pages](https://img.shields.io/badge/Docs-eval--driven.dev-blue?style=for-the-badge&logo=github)](https://eval-driven.dev/)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
 
 ---
@@ -20,9 +20,9 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 | Promote a prod miss into the suite | `kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl` |
 | Always-on rules are too fat | `kit measure-context` then `kit check` |
 | Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
-| Never installed kit | [Start here in 10 minutes](https://eval-driven-development.dev/docs/start) |
+| Never installed kit | [Start here in 10 minutes](https://eval-driven.dev/docs/start) |
 
-Tangible proof on the site: [before / after](https://eval-driven-development.dev/#proof) · [interactive demo](https://eval-driven-development.dev/#demo) · [jobs for today](https://eval-driven-development.dev/docs/jobs).
+Tangible proof on the site: [before / after](https://eval-driven.dev/#proof) · [interactive demo](https://eval-driven.dev/#demo) · [jobs for today](https://eval-driven.dev/docs/jobs).
 
 Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after write-up](./evals/edd/examples/before-after.md)). Full regression: [architecture_routing](./evals/edd/architecture_routing.yaml).
 
@@ -47,7 +47,7 @@ kit eval report --format md --out out/reports
 | **Why** | [docs/edd.md](./docs/edd.md) |
 | **How** | [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
 | **Suites** | [evals/edd/README.md](./evals/edd/README.md) |
-| **Site** | [eval-driven-development.dev](https://eval-driven-development.dev/) |
+| **Site** | [eval-driven.dev](https://eval-driven.dev/) |
 
 Context isolation · mocked tools · schema match + LLM-as-a-judge · CI gates · prod→JSONL closed loop.
 
@@ -155,7 +155,7 @@ Start with the path that matches what you’re trying to do:
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`kit eval shadow` + `from-trace`)
 6. **Operators:** [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 
-Site: [eval-driven-development.dev](https://eval-driven-development.dev/) — Markdown in `docs/`, Vite app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://eval-driven-development.dev/docs/kit) sit next to the raw [`.md` URLs](https://eval-driven-development.dev/docs/kit.md).
+Site: [eval-driven.dev](https://eval-driven.dev/) — Markdown in `docs/`, Vite app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://eval-driven.dev/docs/kit) sit next to the raw [`.md` URLs](https://eval-driven.dev/docs/kit.md).
 
 ---
 

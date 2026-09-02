@@ -48,6 +48,6 @@ Do not commit or push unless the user explicitly asks.
 
 Handovers: `~/.agents/handover/<project>/` ([templates/handover.md](./templates/handover.md)). Run pre-commit before marking a phase **COMPLETE** when hooks exist.
 
-Public site: GitHub Pages at [eval-driven-development.dev](https://eval-driven-development.dev) (Vite app in `web/`, Markdown in `docs/`; custom-domain DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
+Public site: GitHub Pages at [eval-driven.dev](https://eval-driven.dev) (Vite app in `web/`, Markdown in `docs/`; `eval-driven-development.dev` 301s there; custom-domain DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
 
 Taxonomy: [skills/README.md](./skills/README.md). MCP catalog: [mcps/README.md](./mcps/README.md). Context budget: [SOPs/context-budget.md](./SOPs/context-budget.md).

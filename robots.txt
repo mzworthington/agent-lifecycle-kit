@@ -1,11 +1,8 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-Disallow: /infra/
-Disallow: /bin/
-Disallow: /.github/
-Disallow: /node_modules/
-Disallow: /out/
+Allow: /llms.txt
+Allow: /sitemap.xml
 
 User-agent: GPTBot
 Allow: /
@@ -13,4 +10,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://eval-driven-development.dev/sitemap.xml
+Sitemap: https://eval-driven.dev/sitemap.xml

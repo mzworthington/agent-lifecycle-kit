@@ -200,6 +200,31 @@ body {
   color: #9ceee3;
 }
 
+.docs-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  list-style: none;
+  margin: 0 0 1.15rem;
+  padding: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.docs-breadcrumb li:not(:last-child)::after {
+  content: '/';
+  margin-left: 0.5rem;
+  color: var(--border-accent);
+}
+
+.docs-breadcrumb a {
+  color: var(--primary-light);
+}
+
+.docs-breadcrumb [aria-current='page'] {
+  color: var(--text);
+}
+
 .docs-panel {
   min-width: 0;
   background: rgba(12, 18, 28, 0.55);

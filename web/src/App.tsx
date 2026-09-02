@@ -1,8 +1,12 @@
-import { Route, Switch } from 'wouter';
+import { Route, Switch, useLocation } from 'wouter';
 import { DocsPage } from './pages/DocsPage';
 import { HomePage } from './pages/HomePage';
+import { usePageSeo } from './seo/usePageSeo.ts';
 
 export function App() {
+  const [location] = useLocation();
+  usePageSeo(location);
+
   return (
     <Switch>
       <Route path="/" component={HomePage} />

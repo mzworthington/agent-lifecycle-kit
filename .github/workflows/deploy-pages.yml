@@ -42,7 +42,7 @@ jobs:
     name: Deploy to GitHub Pages
     environment:
       name: github-pages
-      url: https://eval-driven-development.dev
+      url: https://eval-driven.dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -98,7 +98,7 @@ jobs:
             if [ -n "${PAGE_URL}" ]; then
               echo "- **Deployment URL:** ${PAGE_URL}"
             fi
-            echo "- **Canonical site:** https://eval-driven-development.dev"
+            echo "- **Canonical site:** https://eval-driven.dev"
             echo ""
             echo "A green check means the Pages artifact uploaded and the environment deployment finished."
           } >> "$GITHUB_STEP_SUMMARY"

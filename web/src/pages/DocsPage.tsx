@@ -3,6 +3,7 @@ import { DocsShell } from '../components/DocsShell';
 import { MarkdownView } from '../components/MarkdownView';
 import { docsNeighbors, findPublishedPage } from '../docs/pages';
 import { docsToc } from '../docs/outline';
+import { resolvePageSeo } from '../seo/siteSeo.ts';
 
 export function DocsPage() {
   const [location] = useLocation();
@@ -25,10 +26,33 @@ export function DocsPage() {
   const toc = docsToc(page.markdown).filter((item) => item.level === 2);
   const { prev, next } = docsNeighbors(page.path);
   const wide = page.path === '/docs/map';
+  const crumbs = resolvePageSeo(page.path, {
+    headline: page.title,
+    markdown: page.markdown,
+    file: page.file
+  }).breadcrumbs;
 
   return (
     <DocsShell wide={wide}>
       <article className={`docs-panel${wide ? ' docs-panel--wide' : ''}`}>
+        {crumbs.length > 1 ? (
+          <nav className="docs-breadcrumb" aria-label="Breadcrumb">
+            <ol>
+              {crumbs.map((crumb, index) => {
+                const last = index === crumbs.length - 1;
+                return (
+                  <li key={crumb.path}>
+                    {last ? (
+                      <span aria-current="page">{crumb.name}</span>
+                    ) : (
+                      <Link href={crumb.path}>{crumb.name}</Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </nav>
+        ) : null}
         <MarkdownView markdown={page.markdown} fromDir={page.dir} />
         {prev || next ? (
           <nav className="docs-pager" aria-label="Nearby pages">
