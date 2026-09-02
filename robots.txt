@@ -1,4 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
+# Canonical URLs are the rendered HTML pages. The Markdown sources beside them
+# stay open on purpose: agents and LLM crawlers read those directly.
+
 User-agent: *
 Allow: /
 Disallow: /infra/
@@ -7,10 +10,48 @@ Disallow: /.github/
 Disallow: /node_modules/
 Disallow: /out/
 
+# Search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Answer engines and model crawlers
 User-agent: GPTBot
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://eval-driven-development.dev/sitemap.xml

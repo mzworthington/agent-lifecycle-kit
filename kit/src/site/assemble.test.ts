@@ -5,6 +5,7 @@ import path from 'node:path';
 import { describe, it } from 'node:test';
 import {
   assemblePagesSite,
+  isVerificationFile,
   PAGES_SITE_ENTRIES,
   PAGES_SITE_HOST,
   VITE_DIST_REL
@@ -60,6 +61,16 @@ describe('PAGES_SITE_ENTRIES', () => {
   });
 });
 
+describe('isVerificationFile', () => {
+  it('recognises Search Console, Bing, and IndexNow ownership proofs', () => {
+    assert.ok(isVerificationFile('google1a2b3c4d5e6f.html'));
+    assert.ok(isVerificationFile('BingSiteAuth.xml'));
+    assert.ok(isVerificationFile('0123456789abcdef.txt'));
+    assert.ok(!isVerificationFile('llms.txt'));
+    assert.ok(!isVerificationFile('index.html'));
+  });
+});
+
 describe('assemblePagesSite', () => {
   it('copies the Vite dist plus allowlisted markdown and writes the Pages CNAME', () => {
     const src = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-src-'));
@@ -91,6 +102,25 @@ describe('assemblePagesSite', () => {
     try {
       writeTree(src, { 'docs/edd.md': '# edd' });
       assert.throws(() => assemblePagesSite({ kitRoot: src, dest }), /web\/dist/);
+    } finally {
+      fs.rmSync(src, { recursive: true, force: true });
+      fs.rmSync(dest, { recursive: true, force: true });
+    }
+  });
+
+  it('carries search-engine verification files onto the artifact', () => {
+    const src = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-verify-'));
+    const dest = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-dest-'));
+    try {
+      writeTree(src, {
+        ...stubPublic,
+        'google1a2b3c4d.html': 'google-site-verification',
+        'BingSiteAuth.xml': '<users><user>abc</user></users>'
+      });
+      assemblePagesSite({ kitRoot: src, dest });
+      const files = listRel(dest);
+      assert.ok(files.includes('google1a2b3c4d.html'));
+      assert.ok(files.includes('BingSiteAuth.xml'));
     } finally {
       fs.rmSync(src, { recursive: true, force: true });
       fs.rmSync(dest, { recursive: true, force: true });

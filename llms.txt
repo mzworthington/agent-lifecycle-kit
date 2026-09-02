@@ -27,7 +27,13 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 - [Before/after write-up](https://eval-driven-development.dev/evals/edd/examples/before-after.md)
 - [Eval suites](https://eval-driven-development.dev/evals/edd/README.md)
 - [Job picker source](https://eval-driven-development.dev/docs/today-jobs.md)
+- [Search visibility](https://eval-driven-development.dev/SOPs/search-visibility.md)
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
+
+## Machine-readable
+- [Full text of every page](https://eval-driven-development.dev/llms-full.txt)
+- [XML sitemap](https://eval-driven-development.dev/sitemap.xml)
+- [robots.txt](https://eval-driven-development.dev/robots.txt)
 
 ## Install
 ```

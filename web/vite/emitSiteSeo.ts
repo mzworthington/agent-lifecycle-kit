@@ -1,9 +1,12 @@
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin } from 'vite';
-import { fileToRoute, shouldPublishMarkdown } from '../src/docs/catalog.ts';
+import { fileToRoute, shouldPublishMarkdown, titleFromMarkdown } from '../src/docs/catalog.ts';
+import { parseGitLastModified, resolveLastmod } from '../src/seo/lastmod.ts';
+import { buildLlmsFull, type LlmsFullDoc } from '../src/seo/llmsFull.ts';
 import { injectPrerenderedPageHtml } from '../src/seo/prerenderHtml.ts';
-import { buildSitemapXml, resolvePageSeo } from '../src/seo/siteSeo.ts';
+import { buildSitemapXml, resolvePageSeo, SITE_ORIGIN } from '../src/seo/siteSeo.ts';
 
 function walkMarkdown(dir: string, acc: string[] = []): string[] {
   if (!fs.existsSync(dir)) return acc;
@@ -42,6 +45,22 @@ function outPathForRoute(outDir: string, routePath: string): string {
   return path.join(outDir, routePath.replace(/^\//, ''), 'index.html');
 }
 
+/** One `git log` pass for the whole repo; empty when git is unavailable (tarball builds). */
+function gitLastModifiedDates(kitRoot: string): Map<string, string> {
+  try {
+    return parseGitLastModified(
+      execFileSync('git', ['log', '--pretty=format:@%cs', '--name-only', '--no-merges'], {
+        cwd: kitRoot,
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'ignore']
+      })
+    );
+  } catch {
+    return new Map();
+  }
+}
+
 export function emitSiteSeo(kitRoot: string): Plugin {
   let outDir = 'dist';
   let shouldEmit = false;
@@ -68,23 +87,42 @@ export function emitSiteSeo(kitRoot: string): Plugin {
         { href: '/evals/edd', label: 'Evals' },
         { href: '/docs/map', label: 'Map' }
       ];
-      const lastmod = new Date().toISOString().slice(0, 10);
-      fs.writeFileSync(path.join(outDir, 'sitemap.xml'), buildSitemapXml(routes, lastmod), 'utf8');
+      const buildDate = new Date().toISOString().slice(0, 10);
+      const gitDates = gitLastModifiedDates(kitRoot);
+      const byRoute = new Map(published.map((entry) => [fileToRoute(entry.file), entry]));
+      const lastmodFor = (routePath: string): string => {
+        const file = byRoute.get(routePath)?.file;
+        return file ? resolveLastmod(file, gitDates, buildDate) : buildDate;
+      };
 
-      const byRoute = new Map(published.map((entry) => [fileToRoute(entry.file), entry.markdown]));
+      fs.writeFileSync(
+        path.join(outDir, 'sitemap.xml'),
+        buildSitemapXml(routes.map((routePath) => ({ path: routePath, lastmod: lastmodFor(routePath) }))),
+        'utf8'
+      );
+
+      const corpus: LlmsFullDoc[] = [];
       for (const routePath of routes) {
-        const markdown = routePath === '/' ? undefined : byRoute.get(routePath);
-        const heading =
-          markdown?.match(/^#\s+(.+)$/m)?.[1]?.trim() ||
-          routePath.split('/').filter(Boolean).pop() ||
-          'Agent Lifecycle Kit';
+        const entry = routePath === '/' ? undefined : byRoute.get(routePath);
+        const markdown = entry?.markdown;
+        const heading = markdown
+          ? titleFromMarkdown(markdown, routePath.split('/').filter(Boolean).pop() ?? 'Agent Lifecycle Kit')
+          : routePath.split('/').filter(Boolean).pop() || 'Agent Lifecycle Kit';
+        const lastmod = lastmodFor(routePath);
         const seo = resolvePageSeo(routePath, heading, markdown);
-        const html = injectPrerenderedPageHtml(shell, seo, nav);
+        const html = injectPrerenderedPageHtml(shell, seo, nav, {
+          lastmod,
+          markdownUrl: entry ? `${SITE_ORIGIN}/${entry.file}` : undefined
+        });
         const target = outPathForRoute(outDir, routePath);
         fs.mkdirSync(path.dirname(target), { recursive: true });
         fs.writeFileSync(target, html, 'utf8');
+        if (entry && markdown) {
+          corpus.push({ path: routePath, file: entry.file, title: heading, markdown });
+        }
       }
 
+      fs.writeFileSync(path.join(outDir, 'llms-full.txt'), buildLlmsFull(corpus), 'utf8');
       fs.copyFileSync(indexPath, path.join(outDir, '404.html'));
     }
   };
