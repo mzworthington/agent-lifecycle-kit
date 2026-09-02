@@ -35,7 +35,12 @@ Bare `kit eval` still validates which Kit skill activates. `kit eval run|watch|r
 ## Quick start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+# macOS / Linux; needs git, Node 22+, and sha256sum (coreutils)
+BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+curl -fsSL "$BASE/install.sh" -o install.sh
+curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+sh install.sh
 kit init . --mcp default --hook
 
 kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
@@ -45,11 +50,13 @@ kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 kit eval dataset lint --dataset evals/edd/architecture_routing.jsonl
 ```
 
+Convenience (no checksum): `curl -fsSL …/install.sh | sh`. Prefer the verified path above.
+
 `agent-kit` is an alias for `kit`.
 
 ## Cursor, Copilot, and API keys
 
-Cursor and GitHub Copilot are **IDE hosts**. They already get Kit skills and the same bootstrap (`AGENTS.md` → `.cursorrules` and `.github/copilot-instructions.md` via `kit export-rules` / `kit init`). Daily work and the merge gate use `--style local` (alias: `--model scripted`). You do **not** need an OpenAI (or any provider) API key for that.
+Cursor is the **reference host** for progressive skills and MCP compose. Copilot, Claude Code, Gemini CLI, and Windsurf get the same canonical `AGENTS.md` via thin stubs (`kit export-rules` / `kit init`), not equal skill or MCP discovery. Daily work and the merge gate use `--style local` (alias: `--model scripted`). You do **not** need an OpenAI (or any provider) API key for that.
 
 Each run has **one style** for both the agent under test and the judge:
 
@@ -57,7 +64,7 @@ Each run has **one style** for both the agent under test and the judge:
 |-------|------|-------|--------|
 | **local** | default, `--style local` | Keyword stub | Heuristic patterns |
 | **http** | `--style http --model <id>` plus key or `--base-url` | OpenAI-compatible `/chat/completions` | Same HTTP model |
-| **cli** | `--style cli --cli <binary> --model <id>` (`--cli` is required) | Headless CLI JSON | Same CLI and model |
+| **cli** | `--style cli --cli cursor-agent\|claude\|agy --model <id>` (`--cli` is required) | Headless CLI JSON | Same CLI and model |
 
 ```mermaid
 flowchart TD
@@ -105,7 +112,7 @@ noglob kit eval run --suite evals/edd/architecture_routing.yaml \
   --style cli --cli cursor-agent --model cursor-grok-4.6-medium
 ```
 
-Prefer **http** for CI merge gates; **cli** for fast local iteration while writing evals (subscription rate limits and weaker structured-output guarantees).
+PR Verify and `kit check` stay `--style local` (no key). When you run a live model, prefer **http** for the nightly job; **cli** is for local iteration (`cursor-agent`, `claude`, or `agy`). CLI runs hit subscription rate limits and have weaker structured-output guarantees.
 
 Optional: `KIT_EVAL_MODEL`. Rough USD uses `$0.003` per 1k tokens unless `KIT_EVAL_TOKEN_USD_PER_1K` is set (`0` disables). Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
 

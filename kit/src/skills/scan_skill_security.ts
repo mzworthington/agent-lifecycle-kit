@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { KIT_SKILL_DIR_PREFIX } from './verify_skills_layout.js';
 
 interface SecurityViolation {
   file: string;
@@ -217,6 +218,7 @@ function scanDirectory(violations: SecurityViolation[], repoDir: string, dirPath
 
     if (entry.isDirectory()) {
       if (SKIP_DIRS.has(entry.name)) continue;
+      if (path.dirname(relPath) === 'skills' && !KIT_SKILL_DIR_PREFIX.test(entry.name)) continue;
       scanDirectory(violations, repoDir, fullPath);
     } else if (entry.isFile()) {
       if (SKIP_FILES.has(entry.name) || entry.name.endsWith('.test.ts')) continue;

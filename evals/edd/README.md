@@ -33,9 +33,9 @@ One style per run for **both** agent and judge.
 |--------|------|----------------|
 | `local` (CI default) | `kit eval ci`, PR CI (`kit check`), `--model scripted` | Harness, schema, keyword routing. **Not** a product LLM test. No API key. |
 | `http` | `--style http --model <id>` with key or `--base-url`; nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) | Same model for routing and quality metrics. Includes `requires-live` cases. |
-| `cli` | `--style cli --cli cursor-agent --model <id>` (`--cli` is required) | Same CLI binary for agent and judge. |
+| `cli` | `--style cli --cli cursor-agent\|claude\|agy --model <id>` (`--cli` is required) | Same CLI binary for agent and judge. |
 
-Cursor and GitHub Copilot are IDE hosts (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). They are **not** the eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
+Cursor is the reference host for skills and MCP (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). Other IDEs get thin stubs, not equal discovery. None of them is the eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
 
 Do not extend the local keyword driver to pass `requires-live` cases. Add JSONL rows instead. Volume for live ranking lives in [goldens/](./goldens/README.md) — not in CI seeds.
 
@@ -118,7 +118,7 @@ Pure metric and judge logic stays inward. OpenAI-compatible HTTP, headless assis
 |--------|------|-----|
 | local | default / `--style local` | Keyword agent + heuristic judge. Offline CI. |
 | http | `--style http --model <id>` plus key or `--base-url` | Same OpenAI-compatible model for agent and judge |
-| cli | `--style cli --cli cursor-agent --model <id>` | Same headless CLI for agent and judge. Cursor installs `~/.local/bin/cursor-agent`. |
+| cli | `--style cli --cli cursor-agent\|claude\|agy --model <id>` | Same headless CLI for agent and judge. Cursor installs `~/.local/bin/cursor-agent`. |
 
 ```bash
 kit eval run --suite evals/edd/architecture_routing.yaml --style http --base-url http://localhost:11434/v1 --model llama3.1

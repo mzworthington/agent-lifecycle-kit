@@ -5,6 +5,8 @@
 ## What this site is
 Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`). The same kit also gates always-on context (`kit measure-context`), composes one MCP profile, and runs `kit check`.
 
+Cursor is the reference host for skills and MCP compose. Other IDEs get the same `AGENTS.md` via thin stubs (`kit export-rules`), not equal discovery depth. `kit eval` (no subcommand) is a skill-trigger / prompt-hygiene check: it does not call a model.
+
 ## What do I use this for today?
 - Wrong tool / made-up args → `kit eval run --suite evals/edd/demo.yaml --model scripted`
 - Gate a prompt or schema change → `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
@@ -31,16 +33,25 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 
 ## Install
 ```
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+curl -fsSL "$BASE/install.sh" -o install.sh
+curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+sh install.sh
 kit init . --mcp default --hook
 ```
+
+Convenience (no checksum): `curl -fsSL …/install.sh | sh`.
 
 ## Commands
 ```
 kit eval run --suite evals/edd/demo.yaml --model scripted
 kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 kit eval report --format md --out out/reports
+kit eval run --suite evals/edd/architecture_routing.yaml --style cli --cli cursor-agent --model cursor-grok-4.6-medium
 kit measure-context
 kit check
 kit mcp default --install
 ```
+
+`--style local` (alias `--model scripted`) is the PR merge gate. `--style http` is nightly live. `--style cli` uses `cursor-agent`, `claude`, or `agy`.

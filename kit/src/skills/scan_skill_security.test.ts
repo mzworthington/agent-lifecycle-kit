@@ -139,6 +139,23 @@ describe('scanSkillSecurity', () => {
     assert.equal(scanSkillSecurity(root).ok, false);
   });
 
+  it('skips non-kit skill dirs so upstream dumps do not fail kit frontmatter or curl|bash rules', () => {
+    const root = scanRoot();
+    writeSkill(root, 'agent-tdd', VALID_SKILL);
+    writeSkill(
+      root,
+      'hf-cli',
+      `---
+name: hf-cli
+description: Hugging Face Hub CLI
+---
+
+Install: \`curl -LsSf https://hf.co/cli/install.sh | bash -s\`.
+`
+    );
+    assert.equal(scanSkillSecurity(root).ok, true);
+  });
+
   it('does not scan its own rule file or *.test.ts', () => {
     const root = scanRoot();
     writeSkill(root, 'agent-tdd', VALID_SKILL);

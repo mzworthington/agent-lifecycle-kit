@@ -16,17 +16,25 @@ Each case starts from a fresh context. Tools are mocked, so you measure routing 
 
 On macOS or Linux, run the installer, then bootstrap the app repo:
 
-`curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh`
+Preferred (checksum):
 
-Then `kit init . --mcp default --hook`. You need git and Node 22+. If `kit` is not found, add `~/.local/bin` to `PATH`. Full steps: [Getting started](/docs/start).
+```bash
+BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+curl -fsSL "$BASE/install.sh" -o install.sh
+curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+sh install.sh
+```
+
+Then `kit init . --mcp default --hook`. You need git, Node 22+, and `sha256sum`. Convenience without a checksum: `curl -fsSL …/install.sh | sh`. If `kit` is not found, add `~/.local/bin` to `PATH`. Full steps: [Getting started](/docs/start).
 
 ## How do I run EDD in CI?
 
-Run `kit eval ci --threshold-routing 95 --out out/reports`. `--style local` works offline with no API key. `--style http` uses a live model when `KIT_EVAL_API_KEY` or `OPENAI_API_KEY` is set.
+Run `kit eval ci --threshold-routing 95 --out out/reports`. PR CI and `kit check` use `--style local` (offline, no API key). `--style http` is the nightly live job when `KIT_EVAL_API_KEY` is set. `--style cli --cli cursor-agent|claude|agy` is for local iteration with a headless assistant.
 
 ## Do I need an OpenAI key if I use Cursor or GitHub Copilot?
 
-No. Cursor and Copilot are IDE hosts: they load Kit skills and `AGENTS.md`. `kit eval` defaults to `--style local` and does not call Cursor Chat or Copilot Chat. A provider key is only for `--style http` over an OpenAI-compatible API. Full flow: [EDD guide](/docs/edd).
+No. **Cursor is the reference host** for progressive skills and MCP compose. Copilot, Claude Code, Gemini CLI, and Windsurf get the same canonical `AGENTS.md` via thin stubs (`kit export-rules` / `kit init`), not equal skill or MCP discovery. `kit eval` defaults to `--style local` and does not call Cursor Chat or Copilot Chat. `--style cli` shells out to `cursor-agent`, `claude`, or `agy`. A provider key is only for `--style http` over an OpenAI-compatible API. Full flow: [EDD guide](/docs/edd).
 
 ## What happens after a production miss?
 

@@ -94,7 +94,7 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
   const evalsDir = path.join(rootDir, 'evals');
   const skillsDir = path.join(rootDir, 'skills');
 
-  console.log('=== Agent Lifecycle Kit - Live Trigger Evaluation Harness ===\n');
+  console.log('=== Agent Lifecycle Kit - Skill-trigger harness (registration / prompt hygiene) ===\n');
 
   const skillsMap = loadSkillsMeta(skillsDir);
   console.log(`Loaded ${skillsMap.size} kit skills from skills/\n`);
@@ -162,10 +162,10 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
   console.log(`Passed: ${passedCases} | Failed: ${failedCases} | Accuracy: ${accuracy}%\n`);
 
   if (failedCases > 0) {
-    console.error('Live Trigger Evaluation FAILED.');
+    console.error('Skill-trigger evaluation FAILED.');
     return false;
   }
 
-  console.log('✅ All live trigger evals passed successfully.');
+  console.log('✅ All skill-trigger evals passed successfully.');
   return true;
 }

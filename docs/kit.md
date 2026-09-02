@@ -53,7 +53,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 2. `kit validate` / `kit verify`: eval schemas and skills layout
 3. `kit ontology check`: live-derived graph refs (`depends-on`, `mcp`)
 4. IDE rules match `AGENTS.md`
-5. Skill-trigger evals and EDD `kit eval ci` (scripted, 95% routing)
+5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `kit eval ci` (scripted, 95% routing)
 6. Context budget
 
 ```bash

@@ -9,7 +9,7 @@ Commands:
   mcp <profile>        Compose and install a named MCP profile from mcps/profiles/
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
-  eval                 Run live trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
+  eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
   export-rules [dir]   Export and sync AGENTS.md to CLAUDE.md, .windsurfrules & Copilot rules
   metrics              Display telemetry analytics summary for subagent phase handovers
   verify               Verify skills directory layout conventions

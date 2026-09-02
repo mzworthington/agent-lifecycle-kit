@@ -97,4 +97,27 @@ describe('runEvals', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
     assert.equal(runEvals(root), true);
   });
+
+  it('names the harness skill-trigger hygiene, not live routing', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    const lines: string[] = [];
+    const log = console.log;
+    const error = console.error;
+    console.log = (...args: unknown[]) => {
+      lines.push(args.map(String).join(' '));
+    };
+    console.error = (...args: unknown[]) => {
+      lines.push(args.map(String).join(' '));
+    };
+    try {
+      assert.equal(runEvals(root), true);
+    } finally {
+      console.log = log;
+      console.error = error;
+    }
+    const text = lines.join('\n');
+    assert.match(text, /Skill-trigger harness \(registration \/ prompt hygiene\)/);
+    assert.match(text, /All skill-trigger evals passed successfully/);
+    assert.doesNotMatch(text, /live trigger/i);
+  });
 });

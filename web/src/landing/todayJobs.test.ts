@@ -63,5 +63,9 @@ describe('docs/today-jobs.md', () => {
     expect(wrongTool.cmd).toBe('kit eval run --suite evals/edd/demo.yaml --model scripted');
     expect(wrongTool.actions[0]?.href).toBe('/#proof');
     expect(jobs.every((job) => job.cmd.length > 0 && job.actions.length === 3)).toBe(true);
+    const firstHour = jobs.find((job) => job.id === 'first-hour');
+    expect(firstHour?.cmd).toMatch(/install\.sh\.sha256/);
+    expect(firstHour?.cmd).toMatch(/sha256sum -c/);
+    expect(firstHour?.cmd).not.toMatch(/install\.sh \| sh/);
   });
 });

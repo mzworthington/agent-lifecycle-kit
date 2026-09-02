@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const ALLOWED = /^(agent|profile|lang|framework)-/;
+/** Committed kit skills only. Upstream vendors belong in ~/.cursor/skills. */
+export const KIT_SKILL_DIR_PREFIX = /^(agent|profile|lang|framework)-/;
 const SKIP = new Set(['README.md', 'external.lock.json']);
 
 export interface SkillsLayoutResult {
@@ -19,7 +20,7 @@ export function verifySkillsLayout(repoDir: string): SkillsLayoutResult {
 
   for (const base of fs.readdirSync(skillsDir)) {
     if (SKIP.has(base)) continue;
-    if (!ALLOWED.test(base)) {
+    if (!KIT_SKILL_DIR_PREFIX.test(base)) {
       invalid.push(base);
     }
   }

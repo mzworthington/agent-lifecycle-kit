@@ -1,6 +1,6 @@
 # Getting started
 
-Four steps to a failing eval you can paste into a PR. macOS and Linux; needs git and Node 22+. No API key.
+Four steps to a failing eval you can paste into a PR. macOS and Linux; needs git, Node 22+, and `sha256sum`. No API key.
 
 1. **Install kit (~2 min)** — Links `~/.agents` and puts `kit` on your PATH via `~/.local/bin`.
 2. **Bootstrap this checkout (~2 min)** — `kit init . --mcp default --hook` writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? `./install.sh` is enough.
@@ -12,9 +12,16 @@ Four steps to a failing eval you can paste into a PR. macOS and Linux; needs git
 If `kit` is missing after install, add `~/.local/bin` to `PATH`.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+# macOS / Linux; needs git, Node 22+, and sha256sum (coreutils)
+BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+curl -fsSL "$BASE/install.sh" -o install.sh
+curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+sh install.sh
 kit init . --mcp default --hook
 ```
+
+Convenience (no checksum): `curl -fsSL …/install.sh | sh` still works. Prefer the verified path above.
 
 ## Run it locally
 

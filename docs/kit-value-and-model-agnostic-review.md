@@ -3,7 +3,7 @@
 **Status:** refreshed 2026-09-01 (supersedes the Aug 30 draft on PR #22).  
 **Open actions:** [kit-review-backlog.md](./kit-review-backlog.md)
 
-**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline and primarily run agents in Cursor (or another host that loads `AGENTS.md` + progressive skills). Still **not model-agnostic in the strong sense**: content is mostly portable markdown; discovery, MCP install, skill format, and the live EDD driver remain Cursor- and OpenAI-compatible-shaped. Claims are more honest than on Aug 30, but multi-IDE and skill-trigger eval wording can still oversell.
+**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline and primarily run agents in Cursor (or another host that loads `AGENTS.md` + progressive skills). Still **not model-agnostic in the strong sense**: content is mostly portable markdown; discovery, MCP install, skill format, and the live EDD driver remain Cursor- and OpenAI-compatible-shaped. Public copy now names that split; skill-trigger evals still do not invoke a model.
 
 ---
 
@@ -40,7 +40,7 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 | Closed-loop / live EDD aspirational | **Improved:** deeper EDD suites, shadow path, nightly `edd-live.yml` (still skips without `KIT_EVAL_API_KEY`) |
 | Default CI is scripted keyword driver | **Still true:** intentional merge gate; docs now say so clearly |
 | Skill-trigger evals are theater | **Still true:** `kit/src/edd/run_evals.ts` does not invoke a model or assert `required_patterns` / `required_output_sections` |
-| Multi-IDE peer-depth oversold | **Still mostly true:** README still lists many hosts; MCP/skills remain Cursor-first |
+| Multi-IDE peer-depth oversold | **Improved:** README, FAQ, and `llms.txt` name Cursor as the reference host; stubs vs discovery is explicit |
 | Skill length budget slipping | **Still true:** `agent-prune` / `agent-orchestrator` / `agent-debug` / `agent-copy` over ~150 lines |
 | Thin stack profiles | **Still true:** several `framework-*` / `lang-*` skills ~38–48 lines |
 | Process weight | **Still true:** shortcuts exist; default narrative is multi-phase |
@@ -76,9 +76,9 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 
 Tracked in [kit-review-backlog.md](./kit-review-backlog.md). Top three:
 
-1. Make skill evals real **or** rename them (stop “live trigger” language for non-model checks).
-2. Narrow multi-IDE marketing to canonical `AGENTS.md` + thin stubs; Cursor owns discovery/MCP.
-3. Enforce role skill line budget; cut or deepen thin stack profiles.
+1. Make skill-trigger evals assert `required_patterns` / `required_output_sections` (copy already says they are registration / prompt hygiene, not a live model run).
+2. Enforce role skill line budget; cut or deepen thin stack profiles.
+3. Surface a shorter day-to-day path (debug + light XFN) without dropping the full lifecycle when the job is a product feature.
 
 ---
 

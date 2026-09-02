@@ -82,12 +82,16 @@ Open the orchestrator skill and follow the phase table in AGENTS.md
 
 Get kit on PATH, bootstrap the repo, run one offline suite, then hold the 95% bar locally.
 
-1. **Install** with the one-liner (git + Node 22+).
+1. **Install** with the verified checksum (git, Node 22+, `sha256sum`).
 2. **Init** `kit init . --mcp default --hook`.
 3. **Prove routing** with `kit eval run --suite evals/edd/demo.yaml --model scripted`, then hold the 95% bar.
 
 ```
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
+curl -fsSL "$BASE/install.sh" -o install.sh
+curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
+echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
+sh install.sh
 ```
 
 - [Start here in 10 minutes](/docs/start)
