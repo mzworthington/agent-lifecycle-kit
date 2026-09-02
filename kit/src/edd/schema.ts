@@ -56,8 +56,7 @@ export const EvalConfigSchema = z.object({
   /** Optional MCP tool schema files (JSON) to register contracts during the run. */
   mcp_tools: z.array(z.string()).optional(),
   /** Optional system prompt file, relative to the suite YAML. */
-  system_prompt: z.string().optional(),
-  judge_model: z.string().optional()
+  system_prompt: z.string().optional()
 });
 
 export type EvalConfig = z.infer<typeof EvalConfigSchema>;

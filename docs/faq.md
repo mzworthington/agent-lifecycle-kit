@@ -22,11 +22,11 @@ Then `kit init . --mcp default --hook`. You need git and Node 22+. If `kit` is n
 
 ## How do I run EDD in CI?
 
-Run `kit eval ci --threshold-routing 95 --out out/reports`. The scripted driver works offline with no API key. Live models can be used when `KIT_EVAL_API_KEY` or `OPENAI_API_KEY` is set.
+Run `kit eval ci --threshold-routing 95 --out out/reports`. `--style local` works offline with no API key. `--style http` uses a live model when `KIT_EVAL_API_KEY` or `OPENAI_API_KEY` is set.
 
 ## Do I need an OpenAI key if I use Cursor or GitHub Copilot?
 
-No. Cursor and Copilot are IDE hosts: they load Kit skills and `AGENTS.md`. `kit eval` defaults to the scripted driver and does not call Cursor Chat or Copilot Chat. A provider key is only for optional live-model evals over an OpenAI-compatible HTTP API. Full flow: [EDD guide](/docs/edd).
+No. Cursor and Copilot are IDE hosts: they load Kit skills and `AGENTS.md`. `kit eval` defaults to `--style local` and does not call Cursor Chat or Copilot Chat. A provider key is only for `--style http` over an OpenAI-compatible API. Full flow: [EDD guide](/docs/edd).
 
 ## What happens after a production miss?
 

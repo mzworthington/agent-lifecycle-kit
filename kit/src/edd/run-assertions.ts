@@ -28,7 +28,6 @@ export interface RunAssertionsInput {
   availableTools: string[];
   suiteYamlPath: string;
   model: string;
-  judgeModel?: string;
   apiKey?: string;
   baseUrl?: string;
   judgeBackend?: JudgeBackend;
@@ -57,10 +56,6 @@ function assertObjectArgs(
     }
   }
   return failures;
-}
-
-function judgeModel(input: RunAssertionsInput, config: EvalConfig): string {
-  return input.judgeModel ?? config.judge_model ?? input.model;
 }
 
 /** Application use-case: run all suite metrics for one case. */
@@ -233,11 +228,12 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
           goal: testCase.expect?.goal ?? metric.expected,
           expectTool: testCase.expect?.tool,
           expectTools: testCase.expect?.tools?.map((t) => t.name),
+          expectArguments: testCase.expect?.arguments_contains,
           noTool: testCase.expect?.no_tool === true,
           toolCalls: calls,
           toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
           agentResponse: response.content,
-          model: judgeModel(input, config),
+          model: input.model,
           apiKey: input.apiKey,
           baseUrl: input.baseUrl,
           backend: input.judgeBackend,
@@ -261,7 +257,7 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
           toolCalls: response.tool_calls,
           criteria: metric.criteria ?? [],
           threshold: metric.threshold,
-          model: judgeModel(input, config),
+          model: input.model,
           apiKey: input.apiKey,
           baseUrl: input.baseUrl,
           backend: input.judgeBackend,
@@ -287,7 +283,7 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
           prompt: testCase.prompt,
           toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
           agentResponse: response.content,
-          model: judgeModel(input, config),
+          model: input.model,
           apiKey: input.apiKey,
           baseUrl: input.baseUrl,
           backend: input.judgeBackend,

@@ -2,6 +2,13 @@ export { EvalConfigSchema, EvalCaseSchema, type EvalConfig, type EvalCase } from
 export { AgentClient, scriptedDriver, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 export { EvalRunner, type EvalRunnerOptions } from './runner.js';
 export {
+  resolveEvalRun,
+  judgeBackendForStyle,
+  isLocalModelId,
+  type EvalStyle,
+  type EvalRun
+} from './eval-style.js';
+export {
   createConsoleEvalProgress,
   evalDriverKind,
   formatCaseDone,
@@ -28,9 +35,17 @@ export {
   localCriteriaJudge,
   localTaskCompletion,
   JUDGE_PROMPT_TEMPLATE,
+  JUDGE_GRADING_RULES,
   useLocalJudgeModel
 } from './judge.js';
 export { runLlmJudge, runCriteriaJudge, runTaskCompletionJudge } from './run-judges.js';
+export {
+  createCliAgentDriver,
+  parseAgentCliStdout,
+  parseCliUsage,
+  resolveCliAgentDriver,
+  type AgentBackend
+} from './cli-agent.js';
 export {
   openAiCompatibleJudgeCompletion,
   createCliJudgeCompletion,
@@ -42,6 +57,7 @@ export {
   resolveJudgeCompletion,
   resolveJudgeApiKey,
   JUDGE_CLI_PRESETS,
+  resolveJudgeCliExecutable,
   type JudgeCompletionPort,
   type JudgeBackend,
   type JudgeCliPreset

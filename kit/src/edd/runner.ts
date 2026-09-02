@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { parse as parseYaml } from 'yaml';
-import { AgentClient, usesScriptedDriver, type AgentDriver } from './agent-client.js';
+import { AgentClient, scriptedDriver, type AgentDriver } from './agent-client.js';
 import { loadDataset } from './dataset.js';
+import { judgeBackendForStyle, resolveEvalRun, type EvalStyle } from './eval-style.js';
 import { buildFailureTrace } from './failure-trace.js';
 import { runCaseAssertions } from './run-assertions.js';
 import { EvalConfigSchema, type EvalConfig } from './schema.js';
@@ -14,24 +15,18 @@ import {
   type SuiteReport
 } from './telemetry.js';
 import { emitAgentSpan, type OtelEmitter } from './otel.js';
-import {
-  createConsoleEvalProgress,
-  evalDriverKind,
-  type EvalProgress
-} from './progress.js';
+import { createConsoleEvalProgress, type EvalProgress } from './progress.js';
 import type { JudgeBackend, JudgeCompletionPort } from './judge-provider.js';
 
 export interface EvalRunnerOptions {
   model: string;
+  style?: EvalStyle;
   driver?: AgentDriver;
   systemPrompt?: string;
   systemPromptPath?: string;
-  judgeModel?: string;
   apiKey?: string;
   baseUrl?: string;
-  /** Judge completion backend (http | cli | heuristic). */
   judgeBackend?: JudgeBackend;
-  /** Override judge completion port (tests / custom adapters). */
   complete?: JudgeCompletionPort;
   otel?: OtelEmitter;
   tags?: string[];
@@ -45,10 +40,10 @@ function resolvePath(baseFile: string, maybeRelative: string): string {
 
 export class EvalRunner {
   private model: string;
+  private style: EvalStyle;
   private driver?: AgentDriver;
   private systemPrompt?: string;
   private systemPromptPath?: string;
-  private judgeModel?: string;
   private apiKey?: string;
   private baseUrl?: string;
   private judgeBackend?: JudgeBackend;
@@ -60,13 +55,19 @@ export class EvalRunner {
 
   constructor(options: EvalRunnerOptions) {
     this.model = options.model;
+    this.style =
+      options.style ??
+      resolveEvalRun({
+        model: options.model,
+        apiKey: options.apiKey,
+        baseUrl: options.baseUrl
+      }).style;
     this.driver = options.driver;
     this.systemPrompt = options.systemPrompt;
     this.systemPromptPath = options.systemPromptPath;
-    this.judgeModel = options.judgeModel;
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl;
-    this.judgeBackend = options.judgeBackend;
+    this.judgeBackend = options.judgeBackend ?? judgeBackendForStyle(this.style);
     this.complete = options.complete;
     this.otel = options.otel;
     this.tags = options.tags;
@@ -83,7 +84,7 @@ export class EvalRunner {
     const fileContent = fs.readFileSync(absoluteYaml, 'utf8');
     const config: EvalConfig = EvalConfigSchema.parse(parseYaml(fileContent));
     const datasetPath = resolvePath(absoluteYaml, config.dataset);
-    const skipLive = !this.driver && usesScriptedDriver(this.model, this.apiKey);
+    const skipLive = this.style === 'local';
     const loaded = await loadDataset(datasetPath, this.tags);
     const skippedLive = skipLive
       ? loaded.filter((c) => (c.tags ?? []).includes('requires-live'))
@@ -92,15 +93,16 @@ export class EvalRunner {
       ? loaded.filter((c) => !(c.tags ?? []).includes('requires-live'))
       : loaded;
     if (skippedLive.length) {
-      console.log(`Skipping ${skippedLive.length} requires-live case(s) (scripted driver).`);
+      console.log(`Skipping ${skippedLive.length} requires-live case(s) (local style).`);
     }
 
     this.progress.onSuiteStart({
-      driver: evalDriverKind(this.model, this.apiKey),
+      driver: this.style,
       model: this.model,
       baseUrl: this.baseUrl ?? process.env.KIT_EVAL_BASE_URL ?? process.env.OPENAI_BASE_URL,
       caseCount: dataset.length,
-      skippedLive: skippedLive.length
+      skippedLive: skippedLive.length,
+      judgeBackend: this.judgeBackend
     });
 
     const suitePromptPath = config.system_prompt
@@ -116,7 +118,7 @@ export class EvalRunner {
 
     const agent = new AgentClient({
       model: this.model,
-      driver: this.driver,
+      driver: this.driver ?? (this.style === 'local' ? scriptedDriver : undefined),
       systemPrompt,
       apiKey: this.apiKey,
       baseUrl: this.baseUrl
@@ -180,7 +182,6 @@ export class EvalRunner {
           availableTools,
           suiteYamlPath: absoluteYaml,
           model: this.model,
-          judgeModel: this.judgeModel,
           apiKey: this.apiKey,
           baseUrl: this.baseUrl,
           judgeBackend: this.judgeBackend,

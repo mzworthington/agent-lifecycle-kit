@@ -9,6 +9,7 @@ import { loadDataset, productionTraceToJsonl } from './dataset.js';
 import { detectRoutingDrift, shouldShadowEval } from './otel.js';
 import { localJudge, localCriteriaJudge } from './judge.js';
 import { generateReport, publishEvalReportToGithubSummary, renderGithubSummaryOverview } from './telemetry.js';
+import { runCaseAssertions } from './run-assertions.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoDir = path.resolve(here, '../../..');
@@ -26,6 +27,39 @@ describe('EDD EvalRunner', () => {
     const report = await runner.runSuite(path.join(repoDir, 'evals/edd/architecture_routing.yaml'));
     assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => r.failures.join(',')).join(' | '));
     assert.ok(report.routingAccuracy >= 95);
+  });
+
+  it('scores quality metrics with the local heuristic (same style as the agent)', async () => {
+    const result = await runCaseAssertions({
+      model: 'scripted',
+      judgeBackend: 'heuristic',
+      availableTools: ['read_architecture_yaml'],
+      suiteYamlPath: path.join(repoDir, 'evals/edd/architecture_routing.yaml'),
+      config: {
+        name: 'Routing',
+        dataset: 'x.jsonl',
+        metrics: []
+      },
+      testCase: {
+        id: 'route-01',
+        prompt: 'Can you pull up the C4 model for the payment service?',
+        expect: { tool: 'read_architecture_yaml' }
+      },
+      metrics: [
+        { type: 'tool_selection', expected: 'read_architecture_yaml' },
+        { type: 'task_completion' },
+        { type: 'llm_as_judge' }
+      ],
+      response: {
+        content: 'Architecture for payment-api loaded successfully.',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+        usage: { promptTokens: 1, completionTokens: 1, totalTokens: 2 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false
+      }
+    });
+    assert.equal(result.passed, true, result.failures.join('; '));
+    assert.equal(result.routingOk, true);
   });
 
   it('passes first-hour demo suite with scripted model', async () => {
@@ -275,7 +309,7 @@ mocks:
     const report = await runner.runSuite(suite);
     assert.equal(report.failed, 0, report.results[0]?.failures.join('; '));
     assert.deepEqual(events, [
-      'suite:live:gemini-2.5-flash:1:https://example.test/v1/',
+      'suite:http:gemini-2.5-flash:1:https://example.test/v1/',
       'phase:agent:mini-01',
       'phase:judges:mini-01',
       'done:mini-01:true'
@@ -294,6 +328,47 @@ mocks:
     assert.ok(report.results.some((r) => r.id === 'inject-01'));
     assert.ok(!report.results.some((r) => r.id === 'schema-04'));
     assert.ok(!report.results.some((r) => (r.tags ?? []).includes('requires-live')));
+  });
+
+  it('runs requires-live cases when an injected agent driver is present', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-cli-agent-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'live-01',
+        prompt: 'lookup payment',
+        tags: ['requires-live'],
+        expect: { tool: 'read_architecture_yaml' }
+      })}\n`,
+      'utf8'
+    );
+    const suite = path.join(dir, 'suite.yaml');
+    fs.writeFileSync(
+      suite,
+      `name: "CliAgent"
+dataset: "cases.jsonl"
+metrics:
+  - type: "tool_selection"
+mocks:
+  - tool: "read_architecture_yaml"
+    response:
+      status: "success"
+      component: "payment-api"
+`
+    );
+    const runner = new EvalRunner({
+      model: 'cursor-grok-4.6-medium',
+      style: 'cli',
+      driver: async () => ({
+        content: 'loaded',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+        usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 }
+      })
+    });
+    const report = await runner.runSuite(suite);
+    assert.equal(report.total, 1);
+    assert.equal(report.results[0]?.id, 'live-01');
+    assert.equal(report.failed, 0, report.results[0]?.failures.join('; '));
   });
 
   it('excludes requires-live tags from loadDataset', async () => {

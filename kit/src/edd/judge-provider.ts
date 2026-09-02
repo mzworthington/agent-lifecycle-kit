@@ -1,8 +1,9 @@
-import { execFile as nodeExecFile } from 'node:child_process';
-import { promisify } from 'node:util';
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
-
-const execFileAsync = promisify(nodeExecFile);
 
 /**
  * Driven port: complete a judge prompt and return parsed JSON.
@@ -19,17 +20,48 @@ export type JudgeCompletionPort = (input: {
 export type JudgeBackend = 'http' | 'cli' | 'heuristic';
 
 /** Known local code-assistant CLIs with headless JSON mode. */
-export type JudgeCliPreset = 'claude' | 'cursor-agent' | 'agy' | 'antigravity';
+export type JudgeCliPreset = 'claude' | 'cursor-agent' | 'cursor' | 'agent' | 'agy' | 'antigravity';
 
 export type ExecFileFn = (
   file: string,
   args: string[],
-  options: { encoding: 'utf8'; maxBuffer: number; timeout: number }
+  options: {
+    encoding: 'utf8';
+    maxBuffer: number;
+    timeout: number;
+    onStdout?: (chunk: string) => void;
+  }
 ) => Promise<{ stdout: string; stderr: string }>;
 
-const defaultExecFile: ExecFileFn = async (file, args, options) => {
-  const result = await execFileAsync(file, args, options);
-  return { stdout: String(result.stdout), stderr: String(result.stderr) };
+/** Spawn a headless assistant CLI; capture stdout, inherit stderr, optionally tee stdout. */
+export const spawnCapturedCli: ExecFileFn = async (file, args, options) => {
+  return new Promise((resolve, reject) => {
+    const child = spawn(file, args, { stdio: ['ignore', 'pipe', 'inherit'] });
+    const chunks: Buffer[] = [];
+    child.stdout?.on('data', (chunk: Buffer | string) => {
+      const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+      chunks.push(buf);
+      options.onStdout?.(buf.toString('utf8'));
+    });
+    const timer = setTimeout(() => {
+      child.kill('SIGTERM');
+    }, options.timeout);
+    child.on('error', (err) => {
+      clearTimeout(timer);
+      reject(err);
+    });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      const stdout = Buffer.concat(chunks).toString('utf8');
+      if (code === 0) {
+        resolve({ stdout, stderr: '' });
+        return;
+      }
+      const err = new Error(`CLI exited ${code ?? 'null'}`) as NodeJS.ErrnoException;
+      if (code === null) err.code = 'ETIMEDOUT';
+      reject(err);
+    });
+  });
 };
 
 /**
@@ -141,23 +173,47 @@ function modelFlag(model: string): string[] {
   return ['--model', model];
 }
 
+/**
+ * Cursor Agent CLI. The editor wrapper (`cursor agent`) execs ~/.local/bin/cursor-agent.
+ * Docs sometimes say `agent`; the installed binary name is cursor-agent.
+ */
+const cursorAgentPreset: CliJudgePresetConfig = {
+  command: 'cursor-agent',
+  buildArgs: ({ prompt, model }) => [
+    '-p',
+    prompt,
+    '--output-format',
+    'json',
+    '--mode=ask',
+    ...modelFlag(model)
+  ]
+};
+
+const CURSOR_AGENT_COMMANDS = new Set(['cursor-agent', 'cursor', 'agent']);
+
+export function resolveJudgeCliExecutable(
+  command: string,
+  options: { homedir?: string; exists?: (filePath: string) => boolean } = {}
+): string {
+  if (!CURSOR_AGENT_COMMANDS.has(command)) return command;
+  const home = options.homedir ?? os.homedir();
+  const exists = options.exists ?? ((filePath) => fs.existsSync(filePath));
+  const localAgent = path.join(home, '.local', 'bin', 'cursor-agent');
+  if (exists(localAgent)) return localAgent;
+  const localAlias = path.join(home, '.local', 'bin', 'agent');
+  if (exists(localAlias)) return localAlias;
+  return 'cursor-agent';
+}
+
 /** Preset argv builders for known headless assistant CLIs. */
 export const JUDGE_CLI_PRESETS: Record<JudgeCliPreset, CliJudgePresetConfig> = {
   claude: {
     command: 'claude',
     buildArgs: ({ prompt, model }) => ['-p', prompt, '--output-format', 'json', ...modelFlag(model)]
   },
-  'cursor-agent': {
-    command: 'cursor-agent',
-    buildArgs: ({ prompt, model }) => [
-      '-p',
-      prompt,
-      '--trust',
-      '--output-format',
-      'json',
-      ...modelFlag(model)
-    ]
-  },
+  agent: cursorAgentPreset,
+  cursor: cursorAgentPreset,
+  'cursor-agent': cursorAgentPreset,
   agy: {
     command: 'agy',
     buildArgs: ({ prompt, model }) => ['-p', prompt, '--output-format', 'json', ...modelFlag(model)]
@@ -168,6 +224,21 @@ export const JUDGE_CLI_PRESETS: Record<JudgeCliPreset, CliJudgePresetConfig> = {
   }
 };
 
+export function isSpawnEnoent(err: unknown): boolean {
+  return Boolean(err && typeof err === 'object' && 'code' in err && err.code === 'ENOENT');
+}
+
+export function assistantCliMissingMessage(role: 'Judge' | 'Agent', command: string): string {
+  if (CURSOR_AGENT_COMMANDS.has(command) || command.endsWith(`${path.sep}cursor-agent`)) {
+    return (
+      `${role} CLI (cursor-agent) not found (ENOENT). ` +
+      'Install from https://cursor.com/install — binary is ~/.local/bin/cursor-agent ' +
+      `(also invoked as \`cursor agent\`). Put ~/.local/bin on PATH, then retry --cli cursor-agent.`
+    );
+  }
+  return `${role} CLI (${command}) not found on PATH (ENOENT). Install the CLI and ensure it is on PATH.`;
+}
+
 export interface CreateCliJudgeCompletionOptions {
   /** Preset name (`claude`, `cursor-agent`, `agy`) or a bare binary on PATH. */
   cli?: string;
@@ -177,6 +248,10 @@ export interface CreateCliJudgeCompletionOptions {
   execFile?: ExecFileFn;
   /** Soft timeout per judge call (ms). */
   timeoutMs?: number;
+  homedir?: string;
+  exists?: (filePath: string) => boolean;
+  /** Mirror child stdout while it is still captured for JSON parsing. */
+  onStdout?: (chunk: string) => void;
 }
 
 /**
@@ -186,7 +261,10 @@ export interface CreateCliJudgeCompletionOptions {
 export function createCliJudgeCompletion(options: CreateCliJudgeCompletionOptions = {}): JudgeCompletionPort {
   const presetKey = (options.cli ?? 'claude') as JudgeCliPreset;
   const preset = JUDGE_CLI_PRESETS[presetKey];
-  const command = options.command ?? preset?.command ?? (options.cli || 'claude');
+  const command = resolveJudgeCliExecutable(options.command ?? preset?.command ?? (options.cli || 'claude'), {
+    homedir: options.homedir,
+    exists: options.exists
+  });
   const buildArgs =
     options.buildArgs ??
     preset?.buildArgs ??
@@ -197,7 +275,7 @@ export function createCliJudgeCompletion(options: CreateCliJudgeCompletionOption
       'json',
       ...modelFlag(model)
     ]);
-  const execFile = options.execFile ?? defaultExecFile;
+  const execFile = options.execFile ?? spawnCapturedCli;
   const timeoutMs = options.timeoutMs ?? 120_000;
 
   return async (input) => {
@@ -206,10 +284,14 @@ export function createCliJudgeCompletion(options: CreateCliJudgeCompletionOption
       const { stdout } = await execFile(command, args, {
         encoding: 'utf8',
         maxBuffer: 8 * 1024 * 1024,
-        timeout: timeoutMs
+        timeout: timeoutMs,
+        onStdout: options.onStdout
       });
       return parseJudgeCliStdout(stdout);
     } catch (err) {
+      if (isSpawnEnoent(err)) {
+        throw new Error(assistantCliMissingMessage('Judge', command));
+      }
       const message = err instanceof Error ? err.message : String(err);
       throw new Error(`Judge CLI (${command}) failed: ${message}`);
     }
@@ -219,7 +301,7 @@ export function createCliJudgeCompletion(options: CreateCliJudgeCompletionOption
 /** Claude Code: `claude -p … --output-format json`. */
 export const claudeCodeJudgeCompletion: JudgeCompletionPort = createCliJudgeCompletion({ cli: 'claude' });
 
-/** Cursor Agent CLI: `cursor-agent -p --trust --output-format json`. */
+/** Cursor Agent CLI: `cursor-agent -p --output-format json --mode=ask`. */
 export const cursorAgentJudgeCompletion: JudgeCompletionPort = createCliJudgeCompletion({
   cli: 'cursor-agent'
 });
@@ -228,9 +310,11 @@ export const cursorAgentJudgeCompletion: JudgeCompletionPort = createCliJudgeCom
 export const antigravityJudgeCompletion: JudgeCompletionPort = createCliJudgeCompletion({ cli: 'agy' });
 
 export interface ResolveJudgeOptions {
-  /** Explicit backend; default is inferred from key/baseUrl/model. */
-  judge?: string;
-  /** CLI preset or binary when backend is `cli`. */
+  /** Explicit style; default is inferred from key/baseUrl/model. */
+  style?: string;
+  /** CLI preset or binary when style is `cli`. */
+  cli?: string;
+  /** @deprecated Use cli. */
   judgeCli?: string;
   model: string;
   apiKey?: string;
@@ -238,25 +322,23 @@ export interface ResolveJudgeOptions {
   /** Override port (tests / custom adapters). */
   complete?: JudgeCompletionPort;
   execFile?: ExecFileFn;
+  /** When set, tee judge CLI stdout (still parsed as JSON). */
+  onStdout?: (chunk: string) => void;
 }
 
 /**
- * Infer judge backend:
- * - explicit `--judge` wins
- * - scripted/mock/local models stay on heuristic unless overridden
- * - otherwise `http` when API key or base URL is present
+ * Infer judge backend from the run style. Agent and judge always share that style.
  */
 export function resolveJudgeBackend(options: ResolveJudgeOptions): JudgeBackend {
-  const explicit = options.judge?.trim().toLowerCase();
-  if (explicit === 'cli' || explicit === 'http' || explicit === 'heuristic') {
-    return explicit;
-  }
   if (options.complete) return 'http';
-  if (options.model === 'scripted' || options.model === 'mock' || options.model === 'local') {
-    return 'heuristic';
-  }
-  if (options.apiKey || options.baseUrl) return 'http';
-  return 'heuristic';
+  const run = resolveEvalRun({
+    style: options.style,
+    model: options.model,
+    apiKey: options.apiKey,
+    baseUrl: options.baseUrl,
+    cli: options.cli ?? options.judgeCli
+  });
+  return judgeBackendForStyle(run.style);
 }
 
 /** Resolve the concrete JudgeCompletionPort for the chosen backend (undefined for heuristic). */
@@ -266,8 +348,9 @@ export function resolveJudgeCompletion(options: ResolveJudgeOptions): JudgeCompl
   if (backend === 'heuristic') return undefined;
   if (backend === 'cli') {
     return createCliJudgeCompletion({
-      cli: options.judgeCli ?? 'claude',
-      execFile: options.execFile
+      cli: options.cli ?? options.judgeCli ?? 'claude',
+      execFile: options.execFile,
+      onStdout: options.onStdout
     });
   }
   return openAiCompatibleJudgeCompletion;

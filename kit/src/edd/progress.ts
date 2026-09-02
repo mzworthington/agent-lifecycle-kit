@@ -1,6 +1,7 @@
-import { usesScriptedDriver } from './agent-client.js';
+import { resolveEvalRun, type EvalStyle } from './eval-style.js';
+import type { JudgeBackend } from './judge-provider.js';
 
-export type EvalDriverKind = 'scripted' | 'live';
+export type EvalDriverKind = EvalStyle;
 export type EvalCasePhase = 'agent' | 'judges';
 
 export interface EvalSuiteStartInfo {
@@ -9,6 +10,7 @@ export interface EvalSuiteStartInfo {
   baseUrl?: string;
   caseCount: number;
   skippedLive: number;
+  judgeBackend?: JudgeBackend;
 }
 
 export interface EvalCaseStartInfo {
@@ -35,21 +37,26 @@ export interface EvalProgress {
 }
 
 export function evalDriverKind(model: string, apiKey?: string): EvalDriverKind {
-  return usesScriptedDriver(model, apiKey) ? 'scripted' : 'live';
+  return resolveEvalRun({ model, apiKey }).style;
 }
 
 export function formatSuiteStart(info: EvalSuiteStartInfo): string[] {
   const base =
-    info.driver === 'live' && info.baseUrl
+    info.driver === 'http' && info.baseUrl
       ? `  base=${info.baseUrl.replace(/\/$/, '')}`
       : '';
   const lines = [
-    `Eval driver: ${info.driver}  model=${info.model}${base}`,
+    `Eval style: ${info.driver}  model=${info.model}${base}`,
     `Cases: ${info.caseCount}${info.skippedLive ? ` (${info.skippedLive} requires-live skipped)` : ''}`
   ];
-  if (info.driver === 'live') {
+  if (info.driver === 'http') {
     lines.push(
-      'Progress: each case runs agent HTTP then optional judges; a pause after "agent" means the provider has not returned.'
+      'Progress: each case runs agent HTTP then judges on the same model; a pause after "agent" means the provider has not returned.'
+    );
+  }
+  if (info.driver === 'cli') {
+    lines.push(
+      'Progress: each case spawns the same CLI for agent then judges (stdout buffered until exit). A pause after "agent" or "judges" means that process is still running — first-run download, login, or a hung prompt. Default timeout 120s; CLI stderr is forwarded.'
     );
   }
   return lines;

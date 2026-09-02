@@ -101,9 +101,13 @@ describe('EDD CLI flag helpers', () => {
       console.log = original;
     }
     const text = lines.join('\n');
-    assert.match(text, /--judge <backend>/);
-    assert.match(text, /--judge-cli/);
+    assert.match(text, /--style <name>/);
+    assert.match(text, /--cli <name>/);
+    assert.match(text, /--cli-stdout/);
     assert.match(text, /--base-url/);
+    assert.doesNotMatch(text, /--judge-model/);
+    assert.doesNotMatch(text, /--agent </);
+    assert.doesNotMatch(text, /--judge </);
   });
 });
 

@@ -49,26 +49,34 @@ kit eval dataset lint --dataset evals/edd/architecture_routing.jsonl
 
 ## Cursor, Copilot, and API keys
 
-Cursor and GitHub Copilot are **IDE hosts**. They already get Kit skills and the same bootstrap (`AGENTS.md` → `.cursorrules` and `.github/copilot-instructions.md` via `kit export-rules` / `kit init`). Daily work and the merge gate use `--model scripted`. You do **not** need an OpenAI (or any provider) API key for that.
+Cursor and GitHub Copilot are **IDE hosts**. They already get Kit skills and the same bootstrap (`AGENTS.md` → `.cursorrules` and `.github/copilot-instructions.md` via `kit export-rules` / `kit init`). Daily work and the merge gate use `--style local` (alias: `--model scripted`). You do **not** need an OpenAI (or any provider) API key for that.
 
-The live-eval key is a **different job**: call a real model over HTTP and ask whether *that* model picks the right tool. Cursor Chat and Copilot Chat are not HTTP eval drivers. The harness cannot send cases into the model sitting in your editor.
+Each run has **one style** for both the agent under test and the judge:
+
+| Style | Flag | Agent | Judge |
+|-------|------|-------|--------|
+| **local** | default, `--style local` | Keyword stub | Heuristic patterns |
+| **http** | `--style http --model <id>` plus key or `--base-url` | OpenAI-compatible `/chat/completions` | Same HTTP model |
+| **cli** | `--style cli --cli cursor-agent --model <id>` | Headless CLI JSON | Same CLI and model |
 
 ```mermaid
 flowchart TD
-  start["kit eval run / ci"] --> model{"--model?"}
-  model -->|"scripted or mock<br/>CI default"| scripted["Local keyword driver<br/>no HTTP, no key"]
-  model -->|"provider id<br/>e.g. gpt-4o-mini"| key{"KIT_EVAL_API_KEY or<br/>OPENAI_API_KEY or --base-url?"}
-  key -->|no| scripted
-  key -->|yes| live["POST /chat/completions<br/>Bearer token"]
-  live --> agent["Agent under test"]
-  scripted --> judgePick{"--judge?"}
-  live --> judgePick
-  judgePick -->|heuristic / default scripted| heur["localJudge patterns"]
-  judgePick -->|http / base-url| httpJ["OpenAI-compatible judge"]
-  judgePick -->|cli| cliJ["claude / cursor-agent / agy"]
+  start["kit eval run / ci"] --> style{"--style?"}
+  style -->|local / default| local["Keyword agent + heuristic judge"]
+  style -->|http| http["Same model over HTTP for agent and judge"]
+  style -->|cli| cli["Same CLI binary for agent and judge"]
 ```
 
-`--model scripted` never spends, even if a key is in the environment. Cases tagged `requires-live` are skipped on the scripted driver.
+`--style local` never spends, even if a key is in the environment. Cases tagged `requires-live` are skipped on local. `--style http` and `--style cli` run them.
+
+### Cursor Agent CLI as the agent under test
+
+`cursor-agent` is not OpenAI `/chat/completions`. Kit prompts it in `--mode=ask` and expects a JSON envelope `{ "content": "…", "tool_calls": [{ "name": "<eval tool>", "arguments": {} }] }` using only registered eval tools. After a tool call, the harness fills `content` from the mock JSON (quality metrics grade that grounded text). Token totals come from the CLI JSON `usage` object when present (`inputTokens` / `input_tokens` / `prompt_tokens`); otherwise Kit estimates ~4 characters per token. Set `KIT_EVAL_TOKEN_USD_PER_1K` for a rough USD line on the suite summary. Judge calls use the same `--cli` and `--model`.
+
+```bash
+noglob kit eval run --suite evals/edd/architecture_routing.yaml \
+  --style cli --cli cursor-agent --model cursor-grok-4.6-medium
+```
 
 ### When a key is used
 
@@ -82,32 +90,24 @@ That value is sent as `Authorization: Bearer …` to an **OpenAI-compatible** `{
 
 `ANTHROPIC_API_KEY` is only useful if `KIT_EVAL_BASE_URL` points at a gateway that accepts Anthropic keys on the OpenAI request shape. Anthropic’s native Messages API is not this client.
 
-The same key is reused for:
+The same key and model are reused for:
 
 - **Agent:** given this prompt and these tools, which call do you make?
-- **Judge:** optional second completion for `llm_as_judge` / `criteria_judge` / live `task_completion`
-
-Judge backends (same `JudgeCompletionPort`):
-
-| Backend | When | How |
-|---------|------|-----|
-| **http** | API key, `--base-url`, or `--judge http` | OpenAI-compatible `POST …/chat/completions` (CI providers **or** local Ollama / LM Studio / vLLM) |
-| **cli** | `--judge cli` | Shell-out to `claude`, `cursor-agent`, or `agy` headless JSON mode (local/dev loop) |
-| **heuristic** | `scripted` / `mock` / `local`, or `--judge heuristic` | Deterministic pattern matching — weak substitute for real judgment |
+- **Judge:** second completion for `llm_as_judge` / `criteria_judge` / `task_completion`
 
 ```bash
 # Local model server (no paid key)
 kit eval run --suite evals/edd/architecture_routing.yaml \
-  --base-url http://localhost:11434/v1 --model llama3.1
+  --style http --base-url http://localhost:11434/v1 --model llama3.1
 
-# Local code assistant as judge (agent can stay scripted)
-kit eval run --suite evals/edd/architecture_routing.yaml \
-  --model scripted --judge cli --judge-cli claude
+# Cursor Agent CLI (agent and judge)
+noglob kit eval run --suite evals/edd/architecture_routing.yaml \
+  --style cli --cli cursor-agent --model cursor-grok-4.6-medium
 ```
 
 Prefer **http** for CI merge gates; **cli** for fast local iteration while writing evals (subscription rate limits and weaker structured-output guarantees).
 
-Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K`. Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
+Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K` (rough USD on the suite token total). Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
 
 ## Metrics and suites
 
@@ -126,9 +126,9 @@ Full metric table and harness layout: [evals/edd/README.md](../evals/edd/README.
 
 | Job | Key | Model | Purpose |
 |-----|-----|--------|---------|
-| **Verify** in [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | unused | hardcoded `scripted` via `kit check` | Merge gate: harness + keyword routing + safety + recovery |
-| Nightly [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | **requires** `KIT_EVAL_API_KEY` | repo variable `KIT_EVAL_MODEL` | Live paraphrases, prompt-injection, multi-tool, safety |
-| `pnpm check` / `kit check` | unused | hardcoded `scripted` | Same as Verify, locally |
+| **Verify** in [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | unused | `--style local` via `kit check` | Merge gate: harness + keyword routing + safety + recovery |
+| Nightly [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) | **requires** `KIT_EVAL_API_KEY` | repo variable `KIT_EVAL_MODEL` | HTTP paraphrases, prompt-injection, multi-tool, safety |
+| `pnpm check` / `kit check` | unused | `--style local` | Same as Verify, locally |
 
 Nightly **skips the whole job** if `KIT_EVAL_API_KEY` is empty. It does not fall through to `OPENAI_API_KEY`.
 
@@ -139,7 +139,7 @@ Verify and the nightly live job (plus Pages deploy) publish a **job summary**: w
 ```bash
 export KIT_EVAL_API_KEY='…'   # or OPENAI_API_KEY
 # optional: export KIT_EVAL_BASE_URL='https://api.openai.com/v1'
-kit eval run --suite evals/edd/architecture_routing.yaml --model gpt-4o-mini
+kit eval run --suite evals/edd/architecture_routing.yaml --style http --model gpt-4o-mini
 ```
 
 You should then see `requires-live` cases execute instead of “Skipping N requires-live case(s)”.

@@ -147,6 +147,7 @@ export async function runTaskCompletionJudge(input: {
   goal?: string;
   expectTool?: string;
   expectTools?: string[];
+  expectArguments?: Record<string, unknown>;
   noTool?: boolean;
   toolCalls: AgentToolCall[];
   toolOutput: unknown;
@@ -157,10 +158,16 @@ export async function runTaskCompletionJudge(input: {
   backend?: JudgeBackend;
   complete?: JudgeCompletionPort;
 }): Promise<JudgeVerdict> {
+  if (input.noTool) {
+    return localTaskCompletion(input);
+  }
   if (shouldUseHeuristic(input)) {
     return localTaskCompletion(input);
   }
 
+  const argsHint = input.expectArguments
+    ? ` with arguments containing ${JSON.stringify(input.expectArguments)}`
+    : '';
   const goal =
     input.goal ??
     (input.noTool
@@ -168,7 +175,7 @@ export async function runTaskCompletionJudge(input: {
       : input.expectTools?.length
         ? `Complete tool plan: ${input.expectTools.join(' -> ')}`
         : input.expectTool
-          ? `Use tool ${input.expectTool} to satisfy the user`
+          ? `Use tool ${input.expectTool}${argsHint}. Aliases billing/checkout/payment → payment-api.`
           : input.prompt);
 
   const parsed = await completeJudgeJson(

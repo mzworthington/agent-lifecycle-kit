@@ -18,9 +18,10 @@ import {
 import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
 import type { EvalCase } from './schema.js';
 import { flagValue, hasFlag } from '../cli/flags.js';
+import { resolveCliAgentDriver } from './cli-agent.js';
+import { resolveEvalRun } from './eval-style.js';
 import {
   resolveJudgeApiKey,
-  resolveJudgeBackend,
   resolveJudgeCompletion,
   type JudgeBackend
 } from './judge-provider.js';
@@ -45,12 +46,13 @@ Subcommands:
   shadow   --infile <jsonl> [--sample <rate>] [--out <jsonl>] [--seed <n>]
   dataset  lint|dedupe|synthesize|from-trace [options]
 
-Judge options (run / watch / report / ci):
+Agent / judge options (run / watch / report / ci):
+  --style <name>       local | http | cli  (default: infer; CI uses local)
+  --model <name>       One model for agent and judge (local ignores this)
+  --cli <name>         When --style cli: cursor-agent | claude | agy | <binary>
+  --cli-stdout         Tee CLI stdout to this terminal (still parsed as JSON)
   --base-url <url>     OpenAI-compatible base (alias: --baseUrl). Local servers: http://localhost:11434/v1
   --api-key <key>      Override KIT_EVAL_API_KEY / OPENAI_API_KEY (use "local" for Ollama)
-  --judge <backend>    http | cli | heuristic (default: infer from key/base-url/model)
-  --judge-cli <name>   When --judge cli: claude | cursor-agent | agy | antigravity | <binary>
-  --judge-model <name> Model id for judge calls (defaults to --model)
 
 Dataset options:
   lint         --dataset <jsonl>
@@ -65,12 +67,13 @@ Shadow options:
   --seed       Deterministic RNG seed for sampling
 
 Notes:
-  - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
-  - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
-  - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
-  - Local model servers (Ollama / LM Studio / vLLM): --base-url http://localhost:11434/v1 --model llama3.1 (no paid key).
-  - Local code-assistant judging: --judge cli --judge-cli claude (or cursor-agent / agy). Prefer HTTP for CI gates.
-  - Live and scripted runs print per-case progress (agent then judges). A pause after "agent" means the HTTP provider has not returned.
+  - Default style is local (keyword agent + heuristic judge). No API key. --model scripted is an alias.
+  - Cases tagged requires-live are skipped on local style; http and cli run them.
+  - Cursor as agent and judge: --style cli --cli cursor-agent --model cursor-grok-4.6-medium
+  - HTTP agent and judge: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --style http --model <provider-model>.
+  - Local model servers (Ollama / LM Studio / vLLM): --style http --base-url http://localhost:11434/v1 --model llama3.1
+  - One style per run. Agent and judge cannot be mixed.
+  - A pause after "agent"/"judges" with --style cli means the CLI is still running. --cli-stdout (or KIT_EVAL_CLI_STDOUT=1) prints stdout live.
   - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
 `);
@@ -139,24 +142,55 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
     process.env.KIT_EVAL_API_KEY ??
     process.env.OPENAI_API_KEY ??
     process.env.ANTHROPIC_API_KEY;
-  const judgeFlag = getEddFlag(args, '--judge');
-  const judgeCli = getEddFlag(args, '--judge-cli') ?? getEddFlag(args, '--judgeCli');
-  const judgeModel = getEddFlag(args, '--judge-model') ?? getEddFlag(args, '--judgeModel');
-  const resolveOpts = {
-    judge: judgeFlag,
-    judgeCli,
-    model: judgeModel ?? model,
+  if (getEddFlag(args, '--agent') || getEddFlag(args, '--judge')) {
+    throw new Error('--agent and --judge are removed. Pass --style local|http|cli once.');
+  }
+  const run = resolveEvalRun({
+    style: getEddFlag(args, '--style'),
+    model,
     apiKey: apiKeyFromEnv,
-    baseUrl
-  };
-  const judgeBackend: JudgeBackend = resolveJudgeBackend(resolveOpts);
-  const complete = resolveJudgeCompletion(resolveOpts);
+    baseUrl,
+    cli: getEddFlag(args, '--cli'),
+    agentCli: getEddFlag(args, '--agent-cli') ?? getEddFlag(args, '--agentCli'),
+    judgeCli: getEddFlag(args, '--judge-cli') ?? getEddFlag(args, '--judgeCli'),
+    judgeModel: getEddFlag(args, '--judge-model') ?? getEddFlag(args, '--judgeModel')
+  });
+  const cliStdout =
+    hasEddFlag(args, '--cli-stdout') ||
+    hasEddFlag(args, '--cliStdout') ||
+    hasEddFlag(args, '--agent-stdout') ||
+    hasEddFlag(args, '--judge-stdout') ||
+    process.env.KIT_EVAL_CLI_STDOUT === '1' ||
+    process.env.KIT_EVAL_AGENT_STDOUT === '1' ||
+    process.env.KIT_EVAL_JUDGE_STDOUT === '1';
+  const onStdout = cliStdout
+    ? (chunk: string) => {
+        process.stderr.write(chunk);
+      }
+    : undefined;
+  const driver = resolveCliAgentDriver({
+    style: run.style,
+    cli: run.cli,
+    model: run.model,
+    onStdout
+  });
+  const judgeBackend: JudgeBackend =
+    run.style === 'local' ? 'heuristic' : run.style;
+  const complete = resolveJudgeCompletion({
+    style: run.style,
+    cli: run.cli,
+    model: run.model,
+    apiKey: apiKeyFromEnv,
+    baseUrl,
+    onStdout
+  });
   const apiKey = resolveJudgeApiKey(apiKeyFromEnv, baseUrl, judgeBackend);
   return new EvalRunner({
-    model,
+    model: run.model,
+    style: run.style,
+    driver,
     tags,
     systemPromptPath: fs.existsSync(systemPromptPath) ? systemPromptPath : undefined,
-    judgeModel: judgeModel ?? undefined,
     apiKey,
     baseUrl,
     judgeBackend,

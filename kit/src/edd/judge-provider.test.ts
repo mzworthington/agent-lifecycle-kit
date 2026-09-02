@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { runLlmJudge, runCriteriaJudge } from './run-judges.js';
+import { runLlmJudge, runCriteriaJudge, runTaskCompletionJudge } from './run-judges.js';
 import {
   createCliJudgeCompletion,
   parseJudgeCliStdout,
@@ -47,10 +47,13 @@ describe('resolveJudgeBackend', () => {
     );
   });
 
-  it('honors explicit cli / http / heuristic', () => {
-    assert.equal(resolveJudgeBackend({ model: 'scripted', judge: 'cli' }), 'cli');
-    assert.equal(resolveJudgeBackend({ model: 'scripted', judge: 'http', baseUrl: 'http://x' }), 'http');
-    assert.equal(resolveJudgeBackend({ model: 'gpt-4o-mini', apiKey: 'k', judge: 'heuristic' }), 'heuristic');
+  it('honors explicit style', () => {
+    assert.equal(
+      resolveJudgeBackend({ model: 'cursor-grok-4.6-medium', style: 'cli' }),
+      'cli'
+    );
+    assert.equal(resolveJudgeBackend({ model: 'gpt-4o-mini', style: 'http', baseUrl: 'http://x' }), 'http');
+    assert.equal(resolveJudgeBackend({ model: 'scripted', style: 'local', apiKey: 'k' }), 'heuristic');
   });
 });
 
@@ -88,7 +91,26 @@ describe('createCliJudgeCompletion', () => {
     assert.deepEqual(calls[0]?.args.slice(0, 4), ['-p', 'grade this', '--output-format', 'json']);
   });
 
-  it('adds --trust for cursor-agent', async () => {
+  it('forwards child stdout chunks to onStdout while still parsing JSON', async () => {
+    const seen: string[] = [];
+    const execFile: ExecFileFn = async (_file, _args, options) => {
+      options.onStdout?.('live-chunk');
+      return { stdout: '{"score":"PASS","reasoning":"ok"}', stderr: '' };
+    };
+    const parsed = await createCliJudgeCompletion({
+      cli: 'claude',
+      execFile,
+      onStdout: (chunk) => seen.push(chunk)
+    })({
+      model: 'scripted',
+      prompt: 'x',
+      apiKey: 'cli'
+    });
+    assert.deepEqual(seen, ['live-chunk']);
+    assert.equal(parsed.score, 'PASS');
+  });
+
+  it('spawns cursor-agent for cursor aliases and prefers ~/.local/bin', async () => {
     const calls: Array<{ file: string; args: string[] }> = [];
     const execFile: ExecFileFn = async (file, args) => {
       calls.push({ file, args });
@@ -100,9 +122,36 @@ describe('createCliJudgeCompletion', () => {
       apiKey: 'cli'
     });
     assert.equal(calls[0]?.file, 'cursor-agent');
-    assert.ok(calls[0]?.args.includes('--trust'));
+    assert.ok(calls[0]?.args.includes('--mode=ask'));
     assert.ok(calls[0]?.args.includes('--model'));
     assert.ok(calls[0]?.args.includes('composer'));
+    await createCliJudgeCompletion({
+      cli: 'cursor',
+      execFile,
+      homedir: '/Users/me',
+      exists: (p) => p === '/Users/me/.local/bin/cursor-agent'
+    })({
+      model: 'scripted',
+      prompt: 'y',
+      apiKey: 'cli'
+    });
+    assert.equal(calls[1]?.file, '/Users/me/.local/bin/cursor-agent');
+  });
+
+  it('explains ENOENT with the cursor-agent install path', async () => {
+    const execFile: ExecFileFn = async () => {
+      const err = new Error('spawn cursor-agent ENOENT') as NodeJS.ErrnoException;
+      err.code = 'ENOENT';
+      throw err;
+    };
+    await assert.rejects(
+      createCliJudgeCompletion({ cli: 'cursor-agent', execFile })({
+        model: 'scripted',
+        prompt: 'x',
+        apiKey: 'cli'
+      }),
+      /cursor-agent[\s\S]*cursor\.com\/install[\s\S]*~\/\.local\/bin\/cursor-agent/
+    );
   });
 });
 
@@ -153,5 +202,21 @@ describe('runLlmJudge backends', () => {
     });
     assert.equal(verdict.passed, true);
     assert.equal(verdict.score, 1);
+  });
+
+  it('does not call a live judge for no_tool task completion', async () => {
+    const verdict = await runTaskCompletionJudge({
+      prompt: 'What is TDD?',
+      noTool: true,
+      toolCalls: [],
+      toolOutput: null,
+      agentResponse: 'C4 stands for context, containers, components, code.',
+      model: 'cursor-grok-4.6-medium',
+      backend: 'cli',
+      complete: async () => {
+        throw new Error('live judge must not run for no_tool');
+      }
+    });
+    assert.equal(verdict.score, 'PASS');
   });
 });

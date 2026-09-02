@@ -9,37 +9,49 @@ import {
 } from './progress.js';
 
 describe('EDD eval progress', () => {
-  it('labels scripted vs live from model and key', () => {
-    assert.equal(evalDriverKind('scripted'), 'scripted');
-    assert.equal(evalDriverKind('gemini-2.5-flash'), 'scripted');
-    assert.equal(evalDriverKind('gemini-2.5-flash', 'AIza'), 'live');
+  it('labels local vs http from model and key', () => {
+    assert.equal(evalDriverKind('scripted'), 'local');
+    assert.equal(evalDriverKind('gemini-2.5-flash'), 'local');
+    assert.equal(evalDriverKind('gemini-2.5-flash', 'AIza'), 'http');
   });
 
-  it('formats a live suite start with base URL and hang hint', () => {
+  it('formats an http suite start with base URL and hang hint', () => {
     const lines = formatSuiteStart({
-      driver: 'live',
+      driver: 'http',
       model: 'gemini-2.5-flash',
       baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/',
       caseCount: 12,
       skippedLive: 0
     });
-    assert.match(lines[0] ?? '', /Eval driver: live/);
+    assert.match(lines[0] ?? '', /Eval style: http/);
     assert.match(lines[0] ?? '', /model=gemini-2.5-flash/);
     assert.match(lines[0] ?? '', /base=https:\/\/generativelanguage.googleapis.com\/v1beta\/openai/);
     assert.equal(lines[1], 'Cases: 12');
     assert.match(lines[2] ?? '', /pause after "agent"/);
   });
 
-  it('formats scripted suite start without a hang hint', () => {
+  it('formats local suite start without a hang hint', () => {
     const lines = formatSuiteStart({
-      driver: 'scripted',
+      driver: 'local',
       model: 'scripted',
       caseCount: 9,
       skippedLive: 3
     });
-    assert.equal(lines[0], 'Eval driver: scripted  model=scripted');
+    assert.equal(lines[0], 'Eval style: local  model=scripted');
     assert.equal(lines[1], 'Cases: 9 (3 requires-live skipped)');
     assert.equal(lines.length, 2);
+  });
+
+  it('formats a CLI suite start with a hang hint for agent and judges', () => {
+    const lines = formatSuiteStart({
+      driver: 'cli',
+      model: 'cursor-grok-4.6-medium',
+      caseCount: 9,
+      skippedLive: 0
+    });
+    assert.equal(lines[0], 'Eval style: cli  model=cursor-grok-4.6-medium');
+    assert.match(lines[2] ?? '', /pause after "agent" or "judges"/);
+    assert.match(lines[2] ?? '', /same CLI/);
   });
 
   it('formats per-case phase and result lines', () => {
@@ -79,7 +91,7 @@ describe('EDD eval progress', () => {
     const lines: string[] = [];
     const progress = createConsoleEvalProgress((msg) => lines.push(msg));
     progress.onSuiteStart({
-      driver: 'scripted',
+      driver: 'local',
       model: 'scripted',
       caseCount: 1,
       skippedLive: 0
@@ -94,7 +106,7 @@ describe('EDD eval progress', () => {
       totalMs: 2
     });
     assert.deepEqual(lines, [
-      'Eval driver: scripted  model=scripted',
+      'Eval style: local  model=scripted',
       'Cases: 1',
       '  [1/1] mini-01  agent…',
       '  ✓ [1/1] mini-01  agent 1ms  total 2ms'

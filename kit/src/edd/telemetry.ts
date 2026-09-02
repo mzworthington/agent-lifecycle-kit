@@ -268,7 +268,9 @@ export function printReportSummary(report: SuiteReport): void {
   console.log(`  Passed: ${report.passed}/${report.total}`);
   console.log(`  Routing accuracy: ${report.routingAccuracy.toFixed(1)}%`);
   console.log(`  Schema adherence: ${report.schemaAdherence.toFixed(1)}%`);
-  console.log(`  Tokens: ${report.totalTokens} | Avg latency: ${report.avgLatencyMs.toFixed(1)}ms`);
+  const cost =
+    report.estimatedCostUsd !== undefined ? ` | approx. $${report.estimatedCostUsd.toFixed(4)}` : '';
+  console.log(`  Tokens: ${report.totalTokens} | Avg latency: ${report.avgLatencyMs.toFixed(1)}ms${cost}`);
   for (const r of report.results) {
     const mark = r.passed ? '✓' : '✗';
     console.log(`  ${mark} ${r.id}${r.failures.length ? ` - ${r.failures.join('; ')}` : ''}`);

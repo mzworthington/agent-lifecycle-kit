@@ -103,6 +103,8 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
         suite,
         '--threshold-routing',
         '95',
+        '--style',
+        'local',
         '--model',
         'scripted',
         '--out',

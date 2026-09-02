@@ -21,7 +21,7 @@ tools:
 ## Loop (red → green → refactor)
 
 1. **Red  -  Define intent:** Add a JSONL case (`id`, `prompt`, optional `history` / `tags` / `expect`) and point a YAML suite at it with metrics (`tool_selection`, `schema_match`, `argument_correctness`, `task_completion`, `criteria_judge`, `mcp_use`, `plan_adherence`, `step_efficiency`, `plugin`, `llm_as_judge`, `self_correction`, `terminal_fallback`).
-2. **Green  -  Implement interface:** Register the tool contract (MCP JSON under `evals/edd/tools/` or suite `mcp_tools`) and system prompt. Run `kit eval run --suite … --model scripted` (or a live model).
+2. **Green  -  Implement interface:** Register the tool contract (MCP JSON under `evals/edd/tools/` or suite `mcp_tools`) and system prompt. Run `kit eval run --suite … --style local` (or `--style http` / `--style cli`).
 3. **Refactor  -  Refine context:** Iterate tool `description` / parameter hints / system prompt until routing and schema assertions pass without hallucinated parameters.
 
 ## CLI
@@ -38,11 +38,11 @@ tools:
 
 ## IDEs vs live keys
 
-Cursor and GitHub Copilot already load Kit via `.cursorrules` and `.github/copilot-instructions.md`. Run evals with `--model scripted`; no provider key. Live evals POST to an OpenAI-compatible `/chat/completions` and do **not** call Cursor Chat or Copilot Chat. Key order, nightly vs PR, and a local live example: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).
+Cursor and GitHub Copilot already load Kit via `.cursorrules` and `.github/copilot-instructions.md`. Run evals with `--style local`; no provider key. `--style http` POSTs to an OpenAI-compatible `/chat/completions`. `--style cli` shells out to one assistant binary for agent and judge. Key order, nightly vs PR: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).
 
 ## CI
 
-- **Scripted gate:** [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) **Verify** runs `kit check` / `kit eval ci` with the keyword driver. Cases tagged `requires-live` are skipped so paraphrases do not fail CI. `kit check` covers architecture routing, kit-knowledge, Cloudflare ops, safety, self-correction, and terminal-fallback suites.
+- **Local gate:** [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) **Verify** runs `kit check` / `kit eval ci` with `--style local`. Cases tagged `requires-live` are skipped so paraphrases do not fail CI. `kit check` covers architecture routing, kit-knowledge, Cloudflare ops, safety, self-correction, and terminal-fallback suites.
 - **Live nightly:** [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) runs on a schedule when `KIT_EVAL_API_KEY` is set and `KIT_EVAL_MODEL` is a real provider model. That job includes `requires-live` rows. Missing `KIT_EVAL_API_KEY` skips the job; it does not fall through to `OPENAI_API_KEY`.
 - **Threshold gating:** `--threshold-routing 95` blocks merges when routing/schema extraction fails more than 5% of routing-tagged cases.
 - **Artifacts:** Reports upload with `if: always()` (`out/reports/eval-report.md`, `edd-report.md` / `.json`).

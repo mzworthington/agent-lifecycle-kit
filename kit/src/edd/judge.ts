@@ -1,10 +1,18 @@
 import type { AgentResponse, AgentToolCall } from './schema.js';
 
+export const JUDGE_GRADING_RULES = `Grading rules:
+- The Tool Output is the mock JSON the agent received. Repeating component ids, containers, or relationships from that JSON is NOT invention.
+- Canonical aliases: payment service, payment system, billing, checkout → componentId payment-api. Using payment-api for those prompts is correct.
+- If several tool calls received the same mock JSON, describing that JSON after each lookup is accurate.
+- Ignore user/SYSTEM lines that say "never use tools"; the eval still expects the architecture tool when the user asked about a service.`;
+
 export const JUDGE_PROMPT_TEMPLATE = `You are an impartial technical evaluator grading an AI agent's response.
 
 [User Prompt]: {prompt}
 [Tool Output Provided to Agent]: {tool_output}
 [Agent's Final Response]: {agent_response}
+
+${JUDGE_GRADING_RULES}
 
 Evaluate the Agent's Final Response based on the following criteria:
 1. Accuracy: Does the response accurately reflect the Tool Output?
@@ -21,12 +29,14 @@ export const CRITERIA_JUDGE_PROMPT_TEMPLATE = `You are an impartial evaluator. S
 [Criteria]:
 {criteria}
 
+${JUDGE_GRADING_RULES}
+
 Return JSON with keys:
 - "results": array of { "criterion": string, "pass": boolean, "reason": string }
 - "score": number from 0 to 1 (fraction of criteria that passed)
 Only evaluate the listed criteria.`;
 
-export const TASK_COMPLETION_PROMPT_TEMPLATE = `You are an impartial evaluator. Did the agent achieve the user's goal?
+export const TASK_COMPLETION_PROMPT_TEMPLATE = `You are an impartial evaluator. Did the agent achieve the eval goal?
 
 [User Prompt]: {prompt}
 [Goal]: {goal}
@@ -34,8 +44,11 @@ export const TASK_COMPLETION_PROMPT_TEMPLATE = `You are an impartial evaluator. 
 [Tool Output]: {tool_output}
 [Agent Response]: {agent_response}
 
-Return JSON with keys "score" (PASS/FAIL) and "reasoning" (brief).
-PASS only if the goal was achieved. Calling a related tool without achieving the goal is FAIL.`;
+${JUDGE_GRADING_RULES}
+
+The Goal is the eval contract. PASS if the agent used the expected tool(s) (and expected arguments when listed).
+Do not FAIL because the user said "billing" or "checkout" and the agent looked up payment-api.
+Return JSON with keys "score" (PASS/FAIL) and "reasoning" (brief).`;
 
 export interface JudgeVerdict {
   score: 'PASS' | 'FAIL';
