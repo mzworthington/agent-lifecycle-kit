@@ -6,6 +6,7 @@
 
 - Improve seo
 - Convert react to astro to build up and prove out new skills and mcps (#52)
+- Add static site build step and enhance documentation structure
 
 ### ⚙️ Refactoring & Performance
 
