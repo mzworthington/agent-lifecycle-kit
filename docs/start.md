@@ -31,4 +31,5 @@ The scripted driver works offline. A provider key is only for optional live-mode
 - [Jobs for today](/docs/jobs) if you already know the failure in front of you
 - [EDD guide](/docs/edd) for suites, CI, and production misses
 - [What kit gives you](/docs/kit) for context budget and MCP profiles
+- [Kit map](/docs/map) to browse skills and SOPs; [author it](/ontology) if you are changing the kit tree
 - [Common questions](/docs/faq)

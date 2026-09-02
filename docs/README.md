@@ -19,7 +19,8 @@ Public guides for Eval-Driven Development and Agent Lifecycle Kit. Markdown in t
 | [EDD guide](./edd.md) | Anyone proving agent tool calls |
 | [What kit gives you](./kit.md) | Context budget, MCP profiles, `kit check` |
 | [Feature lifecycle](./lifecycle.md) | Grill → spec → TDD → XFN → ship |
-| [Kit map](./map.md) | Interactive ontology of skills and SOPs |
+| [Kit map](./map.md) | Interactive graph of this kit’s skills and SOPs |
+| [Author the kit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
 
 ## Reference
 
@@ -29,6 +30,6 @@ Public guides for Eval-Driven Development and Agent Lifecycle Kit. Markdown in t
 | [ADRs](./ADRs/) | Hard-to-reverse kit decisions |
 | [Eval suites](../evals/edd/README.md) | YAML/JSONL layout and drivers |
 | [MCP library](../mcps/README.md) | Profiles and servers |
-| [Ontology notes](../ontology/README.md) | How the graph is derived |
+| [Ontology schema](../ontology/schema.yaml) | Metamodel (`phaseOrder`, types, memory allowlist) |
 
 Independent assessment: [kit value and model-agnostic review](./kit-value-and-model-agnostic-review.md), [review backlog](./kit-review-backlog.md).

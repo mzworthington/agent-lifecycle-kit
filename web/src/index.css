@@ -9,10 +9,15 @@ body {
 }
 
 .site {
+  --content-max: 86rem;
   position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.site--landing {
+  --content-max: 56rem;
 }
 
 .site-header {
@@ -27,9 +32,21 @@ body {
 
 .landing-shell {
   flex: 1;
-  width: min(56rem, calc(100% - 2 * var(--page-gutter)));
+  width: min(var(--content-max), calc(100% - 2 * var(--page-gutter)));
   margin: 0 auto;
   padding: 1.25rem 0 3.5rem;
+}
+
+.landing-page > * + * {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.landing-page .today,
+.landing-page .proof,
+.landing-page .demo,
+.landing-page .home-next {
+  margin-bottom: 0;
 }
 
 .landing-page .hero-eyebrow {
@@ -48,15 +65,15 @@ body {
 }
 
 .home-next {
-  margin: 0 0 2.5rem;
+  margin: 0;
 }
 
 .home-next h2 {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 0.85rem;
-  color: #fff;
+  color: var(--heading);
   text-align: left;
   text-wrap: balance;
 }
@@ -92,7 +109,7 @@ body {
 
 .home-next-title {
   font-weight: 600;
-  color: #fff;
+  color: var(--heading);
 }
 
 .home-next-body {
@@ -123,9 +140,9 @@ body {
   display: grid;
   grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
   gap: 2.25rem;
-  width: min(86rem, calc(100% - 2 * var(--page-gutter)));
+  width: min(var(--content-max), calc(100% - 2 * var(--page-gutter)));
   margin: 0 auto;
-  padding: 1.25rem var(--page-gutter) 3.5rem;
+  padding: 1.25rem 0 3.5rem;
 }
 
 .docs-shell > #main {
@@ -171,8 +188,9 @@ body {
 
 .docs-nav a {
   display: block;
-  padding: 0.28rem 0.45rem;
-  border-radius: var(--radius-sm);
+  padding: 0.28rem 0.45rem 0.28rem 0.6rem;
+  border-left: 2px solid transparent;
+  border-radius: 0;
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.875rem;
@@ -182,13 +200,13 @@ body {
 
 .docs-nav a:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
 }
 
 .docs-nav a.is-active,
 .docs-nav a[aria-current='page'] {
-  background: color-mix(in srgb, var(--primary) 12%, transparent);
-  color: var(--primary-light);
+  background: transparent;
+  color: var(--heading);
+  border-left-color: var(--primary);
 }
 
 .docs-breadcrumb ol {
@@ -252,23 +270,23 @@ body {
 
 .docs-prose h1 {
   font-size: clamp(1.65rem, 2.6vw, 2rem);
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.2;
   margin: 0 0 0.85rem;
-  color: #fff;
+  color: var(--heading);
   border: 0;
   padding: 0;
 }
 
 .docs-prose h2 {
   font-size: 1.2rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.02em;
   margin: 1.85rem 0 0.55rem;
   padding-bottom: 0;
   border-bottom: 0;
-  color: #fff;
+  color: var(--heading);
 }
 
 .docs-prose h3 {
@@ -392,8 +410,9 @@ body {
 
 .docs-toc a:hover,
 .docs-toc a:focus-visible {
-  color: var(--primary-light);
-  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  color: var(--heading);
+  background: transparent;
+  box-shadow: inset 2px 0 0 var(--primary);
 }
 
 .docs-pager {
@@ -435,13 +454,9 @@ body {
 
 .site-footer {
   margin-top: auto;
-  width: min(86rem, calc(100% - 2 * var(--page-gutter)));
+  width: min(var(--content-max), calc(100% - 2 * var(--page-gutter)));
   margin-left: auto;
   margin-right: auto;
-}
-
-.site--landing .site-footer {
-  width: min(56rem, calc(100% - 2 * var(--page-gutter)));
 }
 
 .site-footer nav ul {
@@ -475,10 +490,6 @@ body {
 .docs-mermaid {
   overflow-x: auto;
   margin: 1.15rem 0;
-}
-
-.landing-page .today {
-  margin: 0 0 2.25rem;
 }
 
 @media (max-width: 1100px) {
@@ -544,9 +555,9 @@ body {
   }
 
   .docs-mobile-nav a.is-active {
-    color: var(--primary-light);
-    border-color: var(--border-accent);
-    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--heading);
+    border-color: var(--primary);
+    background: transparent;
   }
 
   .docs-panel {

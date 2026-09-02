@@ -104,9 +104,9 @@ const PAGE_SEO: Record<string, SeoOverride> = {
       'Named MCP profiles for Agent Lifecycle Kit sessions: default, cloud, cloudflare-ops, and how to install one profile without stacking tools.'
   },
   '/ontology': {
-    headline: 'Ontology notes',
+    headline: 'Author the kit map',
     description:
-      'Live-derived kit ontology: skills, SOPs, evals, and allowed memory types, generated at use time rather than checked in as a second source of truth.'
+      'How to add skills, SOPs, and evals to the kit map: which files become nodes, how to regenerate the index, and why this is not a product architecture diagram.'
   }
 };
 

@@ -51,9 +51,10 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 
 1. `kit audit`: prompt injection, secrets, entropy, lockfile pins
 2. `kit validate` / `kit verify`: eval schemas and skills layout
-3. IDE rules match `AGENTS.md`
-4. Skill-trigger evals and EDD `kit eval ci` (scripted, 95% routing)
-5. Context budget
+3. `kit ontology check`: live-derived graph refs (`depends-on`, `mcp`)
+4. IDE rules match `AGENTS.md`
+5. Skill-trigger evals and EDD `kit eval ci` (scripted, 95% routing)
+6. Context budget
 
 ```bash
 kit check
@@ -68,10 +69,14 @@ kit sync --install
 | Command | What it measures or installs |
 |---------|------------------------------|
 | `kit measure-context` | Always-on bootstrap size vs 8KB |
-| `kit check` | Audit, evals, EDD CI, context budget |
+| `kit check` | Audit, ontology, evals, EDD CI, context budget |
+| `kit ontology check` | Live graph referential integrity |
+| `kit ontology generate` | Write gitignored index for kit-knowledge and the map |
 | `kit mcp <profile>` | One MCP profile into `mcp.json` |
 | `kit audit` | Skills and scripts supply-chain scan |
 | `kit eval ci` | Routing accuracy gate (EDD) |
 | `kit sync` | Upstream skills from the lockfile |
+
+The [kit map](./map.md) is that generated graph in the browser. Authoring (what becomes a node, what the map is not): [Author the kit map](/ontology).
 
 EDD loop, keys, and CI: [edd.md](./edd.md).

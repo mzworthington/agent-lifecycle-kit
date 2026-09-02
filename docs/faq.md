@@ -35,3 +35,7 @@ Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample
 ## How does kit keep agent context small?
 
 Always-on files (`AGENTS.md`, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Run `kit measure-context` for the breakdown; `kit check` fails if that budget is exceeded. Compose one MCP profile per session so unused tool schemas stay out of the prompt. Full write-up: [operator guide](/docs/kit).
+
+## How do I visualize our team's setup on the kit map?
+
+The [kit map](/docs/map) shows **this kit**: skills, SOPs, MCP servers, evals, and docs. It does not draw your product architecture. Add a skill or SOP in the kit checkout, then `kit ontology check` and `kit ontology generate`. Step-by-step: [Author the kit map](/ontology).

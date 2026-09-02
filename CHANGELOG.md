@@ -4,6 +4,7 @@
 
 ### 🚀 Features
 
+- *(docs)* Authoring guide for the kit map
 - Improve seo
 
 ### ⚙️ Refactoring & Performance

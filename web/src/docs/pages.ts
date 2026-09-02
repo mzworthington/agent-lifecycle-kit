@@ -66,15 +66,15 @@ const PRACTICE_ITEMS: DocsNavItem[] = [
   { label: 'EDD guide', path: '/docs/edd' },
   { label: 'What kit gives you', path: '/docs/kit' },
   { label: 'Feature lifecycle', path: '/docs/lifecycle' },
-  { label: 'Kit map', path: '/docs/map' }
+  { label: 'Kit map', path: '/docs/map' },
+  { label: 'Author the kit map', path: '/ontology' }
 ];
 
 const REFERENCE_CORE: DocsNavItem[] = [
   { label: 'SOPs', path: '/docs/sops' },
   { label: 'ADRs', path: '/docs/ADRs' },
   { label: 'Eval suites', path: '/evals/edd' },
-  { label: 'MCP library', path: '/mcps' },
-  { label: 'Ontology notes', path: '/ontology' }
+  { label: 'MCP library', path: '/mcps' }
 ];
 
 function pagesUnder(prefix: string): DocsPageMeta[] {

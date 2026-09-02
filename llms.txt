@@ -22,6 +22,7 @@ Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD
 - [Operator guide](https://eval-driven.dev/docs/kit) ([markdown](https://eval-driven.dev/docs/kit.md))
 - [Feature lifecycle](https://eval-driven.dev/docs/lifecycle) ([markdown](https://eval-driven.dev/docs/lifecycle.md))
 - [Kit map](https://eval-driven.dev/docs/map) ([markdown](https://eval-driven.dev/docs/map.md))
+- [Author the kit map](https://eval-driven.dev/ontology) ([markdown](https://eval-driven.dev/ontology/README.md))
 - [SOPs](https://eval-driven.dev/docs/sops) ([markdown](https://eval-driven.dev/docs/sops.md))
 - [Demo suite](https://eval-driven.dev/evals/edd/demo.yaml)
 - [Before/after write-up](https://eval-driven.dev/evals/edd/examples/before-after) ([markdown](https://eval-driven.dev/evals/edd/examples/before-after.md))

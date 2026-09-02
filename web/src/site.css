@@ -326,14 +326,14 @@ summary,
 }
 
 .edd-spotlight p strong {
-  color: #fff;
+  color: var(--heading);
 }
 
 .edd-spotlight h2 {
   font-size: 1.55rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .edd-spotlight > p {
@@ -384,7 +384,7 @@ summary,
 #install-heading,
 #cli-heading {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 0.75rem;
   text-align: left;
@@ -414,7 +414,7 @@ summary,
 
 .faq h2 {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 0.85rem;
   text-align: left;
@@ -431,7 +431,7 @@ summary,
 .faq summary {
   cursor: pointer;
   font-weight: 600;
-  color: #fff;
+  color: var(--heading);
 }
 
 .faq details p {
@@ -483,7 +483,7 @@ summary,
   font-size: 1.55rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .lifecycle > p {
@@ -556,7 +556,7 @@ summary,
 .map-figure figcaption {
   text-align: left;
   font-size: 1.05rem;
-  font-weight: 650;
+  font-weight: 600;
   padding: 1.15rem 0 0.6rem;
   color: var(--text);
   background: var(--bg);
@@ -585,7 +585,7 @@ summary,
 .ontology-heading {
   font-size: 1.55rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--heading);
   margin: 0 0 0.65rem;
 }
 
@@ -620,7 +620,7 @@ summary,
   cursor: pointer;
   font: inherit;
   font-size: 0.82rem;
-  font-weight: 650;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -1031,7 +1031,7 @@ html.ontology-map-fullscreen body {
 
 .pillars-heading {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 1rem;
   text-align: left;
@@ -1607,7 +1607,7 @@ footer a:hover {
 
 .job-panel h3 {
   font-size: 1.15rem;
-  color: #fff;
+  color: var(--heading);
   margin-bottom: 0.45rem;
 }
 
@@ -1754,10 +1754,10 @@ footer a:hover {
 
 .demo > h2 {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 0.4rem;
-  color: #fff;
+  color: var(--heading);
   text-align: left;
   text-wrap: balance;
 }
@@ -1840,7 +1840,7 @@ footer a:hover {
 
 .demo-stage h3 {
   font-size: 1.1rem;
-  color: #fff;
+  color: var(--heading);
   margin-bottom: 0.4rem;
 }
 
@@ -1910,10 +1910,10 @@ footer a:hover {
 
 .onboard > h2 {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 0.4rem;
-  color: #fff;
+  color: var(--heading);
   text-align: left;
 }
 
@@ -1962,7 +1962,7 @@ footer a:hover {
 
 .onboard-steps h3 {
   font-size: 1.05rem;
-  color: #fff;
+  color: var(--heading);
   margin-bottom: 0.25rem;
 }
 
@@ -2003,10 +2003,10 @@ footer a:hover {
 
 .proof > h2 {
   font-size: 1.25rem;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 0.4rem;
-  color: #fff;
+  color: var(--heading);
   text-align: left;
   text-wrap: balance;
 }
@@ -2054,7 +2054,7 @@ footer a:hover {
 .proof-col h3 {
   font-size: 1.05rem;
   margin-bottom: 0.65rem;
-  color: #fff;
+  color: var(--heading);
 }
 
 .proof-col.before h3 { color: var(--danger); }

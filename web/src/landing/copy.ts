@@ -46,6 +46,6 @@ export const HOME_BADGES = [
 export const HOME_NEXT = [
   { href: '/docs/start', title: 'Install kit in 10 minutes', body: 'One-liner, demo suite, 95% bar. No API key.' },
   { href: '/docs/edd', title: 'EDD guide', body: 'Evals, CI, live keys, and turning a miss into the next case.' },
-  { href: '/docs/map', title: 'Kit map', body: 'Skills, SOPs, and how they connect.' },
+  { href: '/docs/map', title: 'Kit map', body: 'This kit’s skills and SOPs, not your product architecture.' },
   { href: '/docs', title: 'Docs overview', body: 'Start, practice, and reference in one place.' }
 ];

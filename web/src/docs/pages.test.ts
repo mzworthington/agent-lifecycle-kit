@@ -17,6 +17,7 @@ describe('published markdown catalog', () => {
     expect(DOC_PATHS.has('/docs/ADRs/0006-vite-markdown-docs-site')).toBe(true);
     expect(findPublishedPage('/docs/home')).toBeUndefined();
     expect(findPublishedPage('/docs/edd')?.title).toMatch(/EDD|Eval/i);
+    expect(findPublishedPage('/ontology')?.title).toBe('Author the kit map');
   });
 });
 
@@ -35,6 +36,7 @@ describe('site information architecture', () => {
     expect(isDocsNavActive('/docs/start', guide)).toBe(false);
     expect(isDocsNavActive('/docs/start', start)).toBe(true);
     expect(isDocsNavActive('/docs/map', map)).toBe(true);
+    expect(isDocsNavActive('/ontology', map)).toBe(true);
     expect(isDocsNavActive('/docs/map', guide)).toBe(false);
   });
 
