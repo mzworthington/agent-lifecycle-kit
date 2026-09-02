@@ -29,6 +29,7 @@
 - Enhance kit map authoring guide and update related documentation
 - *(edd)* Update README and SOPs to clarify live goldens and CI seed usage
 - Clarify installation process and update terminology for skill-trigger evaluations
+- Update references from Agent Lifecycle Kit to Waykit, enhancing clarity and consistency across documentation
 
 ## 2026-09-01
 
