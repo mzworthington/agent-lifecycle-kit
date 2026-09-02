@@ -4,7 +4,6 @@
 
 ### 🚀 Features
 
-- *(docs)* Authoring guide for the kit map
 - Improve seo
 
 ### ⚙️ Refactoring & Performance
@@ -14,6 +13,10 @@
 ### 🧰 Maintenance & Dependencies
 
 - Update site URLs and improve SEO metadata
+
+### 📚 Documentation
+
+- Enhance kit map authoring guide and update related documentation
 
 ## 2026-09-01
 
