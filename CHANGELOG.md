@@ -10,6 +10,10 @@
 - Implement provider error handling and progress tracking in EDD evaluation
 - *(edd)* Add http/cli/heuristic judge completion backends (#53)
 
+### 🐛 Bug Fixes
+
+- *(edd)* Update CLI and evaluation run configurations
+
 ### ⚙️ Refactoring & Performance
 
 - Update theme colors and improve layout styles across components
