@@ -10,5 +10,6 @@ describe('husky pre-commit', () => {
   it('runs TypeScript typecheck so tsc failures cannot skip the hook', () => {
     const hook = fs.readFileSync(path.join(repoDir, '.husky/pre-commit'), 'utf8');
     assert.match(hook, /pnpm typecheck/);
+    assert.match(hook, /web" && pnpm typecheck/);
   });
 });

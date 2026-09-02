@@ -14,6 +14,8 @@
 - *(install)* Prefer SHA-256 verified install over curl|sh (#34)
 - *(ontology)* Typed kit index, knowledge getters, and memory allowlist (#47)
 - Ontology
+- Migrate site to React
+- Add new asset images for the web application
 
 ### 🐛 Bug Fixes
 
@@ -27,6 +29,7 @@
 - *(edd)* Remove otelop demo shell, keep closed-loop kit spans (#30)
 - *(security)* SECURITY, CONTRIBUTING, Dependabot, and CodeQL (#37)
 - Fold promote into verify and drop redundant EDD workflow (#43)
+- Update package.json scripts and improve README clarity
 
 ### 📚 Documentation
 

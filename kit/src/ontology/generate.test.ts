@@ -10,8 +10,7 @@ import {
   getRelated,
   isGitIgnored,
   serializeOntologyIndex,
-  writeSiteOntologyIndex,
-  ontologyGraphRuntimePath
+  writeSiteOntologyIndex
 } from './generate.js';
 import type { OntologyIndex } from './types.js';
 
@@ -173,12 +172,8 @@ describe('writeSiteOntologyIndex', () => {
         false
       );
       assert.ok(getEntity(site, 'skill:agent-demo'));
+      assert.match(sitePath, /web\/public\/assets\/ontology-index\.json$/);
       assert.match(serializeOntologyIndex(site), /\n$/);
-      const runtime = fs.readFileSync(ontologyGraphRuntimePath(root), 'utf8');
-      assert.match(runtime, /export function layoutTargets/);
-      assert.match(runtime, /export function filterOntologyGraph/);
-      assert.match(runtime, /export function hexagonPath/);
-      assert.doesNotMatch(runtime, /from '\.\/types\.js'/);
     });
   });
 });

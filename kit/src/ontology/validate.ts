@@ -80,7 +80,7 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
   };
 }
 
-/** Optional debug dump to sync/ and assets/ (both gitignored). */
+/** Optional debug dump to sync/ and web/public/assets/ (both gitignored). */
 export function regenerateOntologyIndex(kitRoot: string): { path: string; sitePath: string; changed: boolean } {
   const { cachePath, sitePath } = writeSiteOntologyIndex(kitRoot);
   return { path: cachePath, sitePath, changed: true };

@@ -1,27 +1,34 @@
-# Public docs
+# Docs overview
 
-The landing page at [eval-driven-development.dev](https://eval-driven-development.dev/) is the product pitch; these files are the stable URLs for people and agents.
+Public guides for Eval-Driven Development and Agent Lifecycle Kit. Markdown in this directory (plus `SOPs/`, eval write-ups, and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on the SPA.
 
-Every page is published twice. `kit site assemble` renders each Markdown file to an HTML page beside it, so `/docs/edd.html` is the canonical, indexable URL and `/docs/edd.md` is the same content as plain Markdown for agents. Links between docs resolve to whichever form you are reading.
+`pnpm site:dev` runs the docs app. `pnpm --dir web build` then `kit site assemble` writes `site/`.
 
-| Doc | Who it is for |
-|-----|----------------|
-| [EDD guide](./edd.md) | Anyone proving agent tool calls (evals, CI, live keys, dataset hygiene) |
-| [Jobs for today](./today-jobs.md) | Landing job picker: the five paths on the homepage |
-| [What kit gives you](./kit.md) | Operators: context budget, MCP profiles, quality gate, audit |
-| [Architecture decisions](./ADRs/README.md) | Why the kit is shaped the way it is |
+## Start
 
-Agent-facing procedures stay in [`SOPs/`](../SOPs/README.md). Do not duplicate them here; link them.
+| Page | Who it is for |
+|------|----------------|
+| [Getting started](./start.md) | First install, demo suite, 95% bar |
+| [Jobs for today](./jobs.md) | Five concrete jobs, one command each |
+| [Common questions](./faq.md) | Install, keys, CI, context budget |
 
-## The published tree
+## Practice
 
-GitHub Pages serves a curated `site/` tree (`kit site assemble`), not the whole repo: landing HTML, `assets/`, this directory, `SOPs/`, linked eval/MCP/ontology Markdown, and the generated indexes below. Relative links such as [`../SOPs/context-budget.md`](../SOPs/context-budget.md) stay valid in that tree.
+| Page | Who it is for |
+|------|----------------|
+| [EDD guide](./edd.md) | Anyone proving agent tool calls |
+| [What kit gives you](./kit.md) | Context budget, MCP profiles, `kit check` |
+| [Feature lifecycle](./lifecycle.md) | Grill → spec → TDD → XFN → ship |
+| [Kit map](./map.md) | Interactive ontology of skills and SOPs |
 
-| Index | For |
-|-------|-----|
-| [All pages](https://eval-driven-development.dev/sitemap.html) | Readers and link-following crawlers |
-| [sitemap.xml](https://eval-driven-development.dev/sitemap.xml) | Search engines |
-| [llms.txt](https://eval-driven-development.dev/llms.txt) | Model crawlers: the short index |
-| [llms-full.txt](https://eval-driven-development.dev/llms-full.txt) | Model crawlers: every page in one file |
+## Reference
 
-Procedure for verification and indexing: [search visibility](../SOPs/search-visibility.md).
+| Page | Who it is for |
+|------|----------------|
+| [SOPs](./sops.md) | Agent-facing procedures |
+| [ADRs](./ADRs/) | Hard-to-reverse kit decisions |
+| [Eval suites](../evals/edd/README.md) | YAML/JSONL layout and drivers |
+| [MCP library](../mcps/README.md) | Profiles and servers |
+| [Ontology notes](../ontology/README.md) | How the graph is derived |
+
+Independent assessment: [kit value and model-agnostic review](./kit-value-and-model-agnostic-review.md), [review backlog](./kit-review-backlog.md).

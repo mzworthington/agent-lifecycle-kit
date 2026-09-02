@@ -20,9 +20,9 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 | Promote a prod miss into the suite | `kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl` |
 | Always-on rules are too fat | `kit measure-context` then `kit check` |
 | Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
-| Never installed kit | [Start here in 10 minutes](https://eval-driven-development.dev/#onboard) |
+| Never installed kit | [Start here in 10 minutes](https://eval-driven-development.dev/docs/start) |
 
-Tangible proof on the site: [before / after](https://eval-driven-development.dev/#proof) · [interactive demo](https://eval-driven-development.dev/#demo) · [today picker](https://eval-driven-development.dev/#today).
+Tangible proof on the site: [before / after](https://eval-driven-development.dev/#proof) · [interactive demo](https://eval-driven-development.dev/#demo) · [jobs for today](https://eval-driven-development.dev/docs/jobs).
 
 Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after write-up](./evals/edd/examples/before-after.md)). Full regression: [architecture_routing](./evals/edd/architecture_routing.yaml).
 
@@ -133,13 +133,14 @@ Already cloned this repo? Run `./install.sh` from the checkout instead. Regenera
 | `kit eval run\|watch\|report\|ci` | **EDD harness:** agent tool routing and schemas |
 | `kit eval` | Skill-trigger harness (which specialist activates) |
 | `kit init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
-| `kit mcp <profile>` | Compose MCP profiles |
+| `kit mcp <profile>` | Compose a named profile from `mcps/profiles/` |
 | `kit audit` | Security & supply-chain audit |
 | `kit validate` / `kit verify` | Eval schema + skills layout |
 | `kit export-rules` | Sync `AGENTS.md` → IDE entry points |
 | `kit sync` | Install upstream skills from the lockfile |
 | `kit check` | Local quality gate (audit, evals, EDD CI, context budget) |
-| `kit measure-context` | Always-on context budget |
+| `kit site assemble` | Copy `web/dist` plus public Markdown into `site/` (after `pnpm --dir web build`) |
+| `pnpm site:dev` | Vite docs app (Markdown in `docs/`) |
 
 ---
 
@@ -154,7 +155,7 @@ Start with the path that matches what you’re trying to do:
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`kit eval shadow` + `from-trace`)
 6. **Operators:** [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 
-Site: [eval-driven-development.dev](https://eval-driven-development.dev/) (`#kit` for context/MCP/check; [docs/kit.md](https://eval-driven-development.dev/docs/kit.md))
+Site: [eval-driven-development.dev](https://eval-driven-development.dev/) — Markdown in `docs/`, Vite app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://eval-driven-development.dev/docs/kit) sit next to the raw [`.md` URLs](https://eval-driven-development.dev/docs/kit.md).
 
 ---
 

@@ -10,8 +10,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'index.html'
-      - '404.html'
+      - 'web/**'
       - 'assets/**'
       - 'ontology/**'
       - 'kit/src/ontology/**'
@@ -51,7 +50,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 11
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -64,6 +63,9 @@ jobs:
 
       - name: Derive ontology index for the homepage
         run: pnpm kit ontology generate
+
+      - name: Build Markdown docs site
+        run: pnpm --dir web build
 
       - name: Assemble public Pages tree
         run: pnpm kit site assemble

@@ -39,6 +39,10 @@ credentials.json
 node_modules/
 .pnpm-store/
 
+# Vite docs app
+web/dist/
+web/node_modules/
+
 # Public GitHub Pages assemble output (repo root only; kit/src/site is source)
 /site/
 
@@ -51,4 +55,4 @@ out/
 *.swo
 ontology/index.json
 assets/ontology-index.json
-assets/ontology-graph.js
+web/public/assets/ontology-index.json
