@@ -113,7 +113,7 @@ kit mcp cloud -o .cursor/mcp.cloud.json   # optional merge by hand
 kit mcp cloudflare-ops --install          # RUM / Worker diagnosis
 ```
 
-The installer (verified checksum in [Getting started](../docs/start.md), convenience `curl | sh`, or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, and `cloudflare-ops` explicitly.
+The installer (`curl | sh` in [Getting started](../docs/start.md), or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, and `cloudflare-ops` explicitly.
 
 ## 4. Verify in Cursor
 

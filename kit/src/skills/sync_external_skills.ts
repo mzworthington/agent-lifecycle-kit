@@ -77,7 +77,7 @@ export function parseSyncArgs(args: string[]): SyncArgs {
 }
 
 function usage(): void {
-  console.log(`Usage: kit sync [--install|--update|--dry-run] [--force]
+  console.log(`Usage: wk sync [--install|--update|--dry-run] [--force]
 
   --install   Install skills from skills/external.lock.json (default)
   --update    Update lockfile skills in ~/.cursor/skills (not --all agents)
@@ -85,7 +85,7 @@ function usage(): void {
   --force     Pass --force to gh skill install (overwrite local copies)
 
 Skills install to Cursor user scope (~/.cursor/skills) so they stay outside
-this kit's git tree. \`kit sync --update\` only refreshes lockfile ids in that
+this kit's git tree. \`wk sync --update\` only refreshes lockfile ids in that
 directory. It does not scan kit-authored skills or other agent hosts.
 Lockfile pins are git version tags or \`latest\` (tagged release, then HEAD),
 not commit SHAs. Upgrade path: edit the lockfile, re-run --install, or

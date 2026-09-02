@@ -31,11 +31,11 @@ One style per run for **both** agent and judge.
 
 | Style | When | What it proves |
 |--------|------|----------------|
-| `local` (CI default) | `kit eval ci`, PR CI (`kit check`), `--model scripted` | Harness, schema, keyword routing. **Not** a product LLM test. No API key. |
+| `local` (CI default) | `wk eval ci`, PR CI (`wk check`), `--model scripted` | Harness, schema, keyword routing. **Not** a product LLM test. No API key. |
 | `http` | `--style http --model <id>` with key or `--base-url`; nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) | Same model for routing and quality metrics. Includes `requires-live` cases. |
 | `cli` | `--style cli --cli cursor-agent\|claude\|agy --model <id>` (`--cli` is required) | Same CLI binary for agent and judge. |
 
-Cursor is the reference host for skills and MCP (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). Other IDEs get thin stubs, not equal discovery. None of them is the eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
+Cursor is the reference host for skills and MCP (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). Other IDEs get thin stubs, not equal discovery. None of them is the eval driver: `wk eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
 
 Do not extend the local keyword driver to pass `requires-live` cases. Add JSONL rows instead. Volume for live ranking lives in [goldens/](./goldens/README.md) — not in CI seeds.
 
@@ -48,23 +48,23 @@ Architecture routing has a **CI seed** (`architecture_routing.jsonl`, unique int
 First-hour teaching suite (six cases, before/after story in [examples/before-after.md](./examples/before-after.md)):
 
 ```bash
-kit eval run --suite evals/edd/demo.yaml --model scripted
-kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --model scripted --out out/reports
-kit eval report --format md --out out/reports
+wk eval run --suite evals/edd/demo.yaml --model scripted
+wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval report --format md --out out/reports
 ```
 
 Full regression / CI suites:
 
 ```bash
-kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
-kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
-kit eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
-kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
-kit eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
-kit eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
+wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
+wk eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
+wk eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 ```
 
-`agent-kit` aliases `kit`.
+`kit` and `agent-kit` alias `wk`.
 
 ## Metrics
 
@@ -107,7 +107,7 @@ flowchart TB
   orch --> http
   orch --> cli
   runner --> trace
-  cli_cmd[kit eval dataset] --> synth
+  cli_cmd[wk eval dataset] --> synth
 ```
 
 Pure metric and judge logic stays inward. OpenAI-compatible HTTP, headless assistant CLIs (`claude` / `cursor-agent` / `agy`), and dynamic plugin imports live only in adapters.
@@ -121,8 +121,8 @@ Pure metric and judge logic stays inward. OpenAI-compatible HTTP, headless assis
 | cli | `--style cli --cli cursor-agent\|claude\|agy --model <id>` | Same headless CLI for agent and judge. Cursor installs `~/.local/bin/cursor-agent`. |
 
 ```bash
-kit eval run --suite evals/edd/architecture_routing.yaml --style http --base-url http://localhost:11434/v1 --model llama3.1
-noglob kit eval run --suite evals/edd/architecture_routing.yaml \
+wk eval run --suite evals/edd/architecture_routing.yaml --style http --base-url http://localhost:11434/v1 --model llama3.1
+noglob wk eval run --suite evals/edd/architecture_routing.yaml \
   --style cli --cli cursor-agent --model cursor-grok-4.6-medium
 ```
 
@@ -133,18 +133,18 @@ Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it
 ## Dataset hygiene
 
 ```bash
-kit eval dataset lint --dataset evals/edd/architecture_routing.jsonl
-kit eval dataset dedupe --dataset path.jsonl --out path.deduped.jsonl
-kit eval dataset synthesize --dataset path.jsonl --count 2 --out path.syn.jsonl
-kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
-kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
+wk eval dataset lint --dataset evals/edd/architecture_routing.jsonl
+wk eval dataset dedupe --dataset path.jsonl --out path.deduped.jsonl
+wk eval dataset synthesize --dataset path.jsonl --count 2 --out path.syn.jsonl
+wk eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
 ```
 
 Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`. Use them to **propose** wording, not to fill the golden. Lint goldens with:
 
 ```bash
-kit eval dataset lint --dataset evals/edd/goldens/architecture_routing.jsonl
-kit eval dataset lint --dataset evals/edd/goldens/architecture_routing.holdout.jsonl
+wk eval dataset lint --dataset evals/edd/goldens/architecture_routing.jsonl
+wk eval dataset lint --dataset evals/edd/goldens/architecture_routing.holdout.jsonl
 ```
 
 ## Production telemetry (closed loop)
@@ -152,8 +152,8 @@ kit eval dataset lint --dataset evals/edd/goldens/architecture_routing.holdout.j
 Promote production misses into the suite with the same `kit.*` fields as eval cases:
 
 ```bash
-kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
-kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
+wk eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
 ```
 
 Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [examples/prod-turns.jsonl](./examples/prod-turns.jsonl), [examples/prod-trace.json](./examples/prod-trace.json). Procedure: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).
@@ -177,7 +177,7 @@ Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [exa
 | `out/reports/eval-report.md` | Stable alias for PR review |
 | `out/reports/edd-report.md` | Same Markdown body |
 | `out/reports/edd-report.json` | Machine-readable results |
-| GitHub Actions job summary | Overview table + collapsible full report (`kit eval report --github-summary`) |
+| GitHub Actions job summary | Overview table + collapsible full report (`wk eval report --github-summary`) |
 
 Includes pass rate, tokens/latency, routing + schema adherence, and failure traces. Example: [examples/eval-report.md](./examples/eval-report.md).
 

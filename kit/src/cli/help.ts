@@ -1,8 +1,12 @@
-export const KIT_HELP = `
-🤖 Agent Lifecycle Kit CLI (kit)
+import { CLI_ALIASES, CLI_BIN } from './name.js';
 
-Usage: kit <command> [options]
-       agent-kit <command> [options]
+const aliasLine = CLI_ALIASES.map((name) => `       ${name} <command> [options]`).join('\n');
+
+export const KIT_HELP = `
+Waykit CLI (${CLI_BIN})
+
+Usage: ${CLI_BIN} <command> [options]
+${aliasLine}
 
 Commands:
   init [dir]           Bootstrap AGENTS.md, multi-IDE rules, .cursor/mcp.json & git hook
@@ -25,24 +29,24 @@ Commands:
   help                 Display this help menu
 
 Examples:
-  kit init ./my-app --mcp collab --hook
-  kit mcp ops --install
-  kit mcp astro --install
-  kit mcp cloudflare-ops --install
-  kit audit
-  kit eval
-  kit eval run --suite evals/edd/architecture_routing.yaml --model scripted
-  kit eval ci --threshold-routing 95 --out out/reports
-  kit eval report --format md --out out/reports
-  kit ontology generate
-  kit ontology check
-  kit memory lint
-  kit site assemble
-  kit export-rules
-  kit metrics
-  kit sync --install
-  kit debug-board archlens "initial load overlap"
-  kit check
+  ${CLI_BIN} init ./my-app --mcp collab --hook
+  ${CLI_BIN} mcp ops --install
+  ${CLI_BIN} mcp astro --install
+  ${CLI_BIN} mcp cloudflare-ops --install
+  ${CLI_BIN} audit
+  ${CLI_BIN} eval
+  ${CLI_BIN} eval run --suite evals/edd/architecture_routing.yaml --model scripted
+  ${CLI_BIN} eval ci --threshold-routing 95 --out out/reports
+  ${CLI_BIN} eval report --format md --out out/reports
+  ${CLI_BIN} ontology generate
+  ${CLI_BIN} ontology check
+  ${CLI_BIN} memory lint
+  ${CLI_BIN} site assemble
+  ${CLI_BIN} export-rules
+  ${CLI_BIN} metrics
+  ${CLI_BIN} sync --install
+  ${CLI_BIN} debug-board archlens "initial load overlap"
+  ${CLI_BIN} check
 `;
 
 export function printKitHelp(log: (msg: string) => void = console.log): void {

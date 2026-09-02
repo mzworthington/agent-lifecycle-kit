@@ -18,4 +18,4 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning or splitting a hot path |
 | [Cloudflare analytics ops](/SOPs/cloudflare-analytics-ops) | RUM / beacon diagnosis |
 
-Operator narrative: [What kit gives you](/docs/kit).
+Operator narrative: [What Waykit gives you](/docs/kit).

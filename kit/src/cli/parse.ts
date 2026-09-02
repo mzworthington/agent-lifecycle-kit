@@ -1,5 +1,6 @@
 import path from 'path';
 import { firstPositional, flagValue, hasFlag } from './flags.js';
+import { cliUsage } from './name.js';
 
 export interface ParseKitArgvOptions {
   cwd: string;
@@ -34,7 +35,7 @@ export type KitCommand =
   | { kind: 'memory-lint' }
   | { kind: 'site-assemble'; dest: string | undefined };
 
-const SITE_ASSEMBLE_USAGE = 'Usage: kit site assemble [--out <dir>]';
+const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
 
 export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitCommand {
   const command = argv[0];
@@ -105,7 +106,7 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
     case 'debug-board': {
       const project = rest[0];
       if (!project) {
-        return { kind: 'usage', message: 'Usage: kit debug-board <project> [title]' };
+        return { kind: 'usage', message: cliUsage('debug-board <project> [title]') };
       }
       return {
         kind: 'debug-board',
@@ -125,12 +126,12 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
       if (sub === 'generate' || sub === 'check') {
         return { kind: 'ontology', sub };
       }
-      return { kind: 'usage', message: 'Usage: kit ontology <generate|check>' };
+      return { kind: 'usage', message: cliUsage('ontology <generate|check>') };
     }
 
     case 'memory':
       if (rest[0] === 'lint') return { kind: 'memory-lint' };
-      return { kind: 'usage', message: 'Usage: kit memory lint' };
+      return { kind: 'usage', message: cliUsage('memory lint') };
 
     case 'site': {
       if (rest[0] !== 'assemble') {

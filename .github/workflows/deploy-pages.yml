@@ -41,7 +41,7 @@ jobs:
     name: Deploy to GitHub Pages
     environment:
       name: github-pages
-      url: https://eval-driven.dev
+      url: https://waykit.dev
     runs-on: ubuntu-latest
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
@@ -99,7 +99,7 @@ jobs:
             if [ -n "${PAGE_URL}" ]; then
               echo "- **Deployment URL:** ${PAGE_URL}"
             fi
-            echo "- **Canonical site:** https://eval-driven.dev"
+            echo "- **Canonical site:** https://waykit.dev"
             echo ""
             echo "A green check means the Pages artifact uploaded and the environment deployment finished."
           } >> "$GITHUB_STEP_SUMMARY"

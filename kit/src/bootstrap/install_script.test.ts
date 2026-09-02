@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
-import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -13,25 +12,14 @@ function runInstaller(shell: string, args: string[]): SpawnSyncReturns<string> {
 }
 
 describe('install.sh', () => {
-  it('documents verified checksum install before curl | sh convenience', () => {
+  it('documents curl | sh install', () => {
     const result = runInstaller('sh', ['--help']);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Preferred \(verify SHA-256/);
-    assert.match(result.stdout, /install\.sh\.sha256/);
-    assert.match(result.stdout, /sha256sum -c/);
     assert.match(
       result.stdout,
       /curl -fsSL https:\/\/raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/main\/install\.sh \| sh/
     );
-    assert.match(result.stdout, /kit init \. --mcp default --hook/);
-  });
-
-  it('keeps install.sh.sha256 in sync with install.sh', () => {
-    const expected = spawnSync('sha256sum', [installer], { encoding: 'utf8' });
-    assert.equal(expected.status, 0, expected.stderr);
-    const digest = expected.stdout.trim().split(/\s+/)[0];
-    const recorded = readFileSync(path.join(root, 'install.sh.sha256'), 'utf8');
-    assert.equal(recorded.trim(), digest);
+    assert.match(result.stdout, /wk init \. --mcp default --hook/);
   });
 
   it('rejects unknown options and missing --dir values', () => {

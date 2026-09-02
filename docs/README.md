@@ -1,26 +1,26 @@
 # Docs overview
 
-Public guides for Eval-Driven Development and Agent Lifecycle Kit. Markdown in this directory (plus `SOPs/`, eval write-ups, and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on client JavaScript.
+Public guides for Waykit: the software lifecycle for coding agents, the learning loops around it, the live kit graph, and the operator surfaces. Markdown in this directory (plus `SOPs/`, eval write-ups, and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on client JavaScript.
 
-`pnpm site:dev` runs the docs app. `pnpm --dir web build` then `kit site assemble` writes `site/`.
+`pnpm site:dev` runs the docs app. `pnpm --dir web build` then `wk site assemble` writes `site/`.
 
 ## Start
 
 | Page | Who it is for |
 |------|----------------|
-| [Getting started](./start.md) | First install, demo suite, 95% bar |
-| [Jobs for today](./jobs.md) | Five concrete jobs, one command each |
-| [Common questions](./faq.md) | Install, keys, CI, context budget |
+| [Getting started](./start.md) | First install, handshake, then the loops you need |
+| [Jobs for today](./jobs.md) | Six concrete jobs, one command each |
+| [Common questions](./faq.md) | Install, keys, context, how agents find an SOP, where EDD fits |
 
 ## Practice
 
 | Page | Who it is for |
 |------|----------------|
-| [EDD guide](./edd.md) | Anyone proving agent tool calls |
-| [What kit gives you](./kit.md) | Context budget, MCP profiles, `kit check` |
 | [Feature lifecycle](./lifecycle.md) | Grill → spec → TDD → XFN → ship |
-| [Kit map](./map.md) | Interactive graph of this kit’s skills and SOPs |
-| [Author the kit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
+| [What Waykit gives you](./kit.md) | Context budget, live kit graph, MCP profiles, `wk check` |
+| [Waykit map](./map.md) | Live graph of this kit (derived from files, not a second catalog) |
+| [Author the Waykit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
+| [EDD guide](./edd.md) | Anyone proving agent tool calls |
 
 ## Reference
 

@@ -46,26 +46,31 @@ kit eval run
 });
 
 describe('docs/today-jobs.md', () => {
-  it('is the source for the five landing-page jobs', () => {
+  it('is the source for the six landing-page jobs', () => {
     const jobs = parseTodayJobsMarkdown(todayMd);
     expect(jobs.map((job) => job.id)).toEqual([
+      'first-hour',
+      'feature',
+      'context',
       'wrong-tool',
       'ci-gate',
-      'context',
-      'feature',
-      'first-hour'
+      'kit-graph'
     ]);
-    const wrongTool = jobs[0]!;
-    expect(wrongTool.title).toBe('Wrong tool or made-up args');
-    expect(wrongTool.blurb).toMatch(/guessed architecture/);
-    expect(wrongTool.why).toMatch(/JSONL/);
-    expect(wrongTool.steps).toHaveLength(3);
-    expect(wrongTool.cmd).toBe('kit eval run --suite evals/edd/demo.yaml --model scripted');
-    expect(wrongTool.actions[0]?.href).toBe('/#proof');
+    const firstHour = jobs[0]!;
+    expect(firstHour.title).toBe('I have never installed Waykit');
+    expect(firstHour.blurb).toMatch(/fresh machine/i);
+    const feature = jobs.find((job) => job.id === 'feature')!;
+    expect(feature.title).toBe('Starting a product feature');
+    expect(feature.blurb).toMatch(/lifecycle path/);
     expect(jobs.every((job) => job.cmd.length > 0 && job.actions.length === 3)).toBe(true);
-    const firstHour = jobs.find((job) => job.id === 'first-hour');
-    expect(firstHour?.cmd).toMatch(/install\.sh\.sha256/);
-    expect(firstHour?.cmd).toMatch(/sha256sum -c/);
-    expect(firstHour?.cmd).not.toMatch(/install\.sh \| sh/);
+    const wrongTool = jobs.find((job) => job.id === 'wrong-tool')!;
+    expect(wrongTool.title).toBe('Wrong tool or made-up args');
+    expect(wrongTool.cmd).toBe('wk eval run --suite evals/edd/demo.yaml --model scripted');
+    const kitGraph = jobs.find((job) => job.id === 'kit-graph')!;
+    expect(kitGraph.title).toBe('I changed a skill or SOP');
+    expect(kitGraph.cmd).toBe('wk ontology check');
+    expect(firstHour.cmd).toBe(
+      'curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh'
+    );
   });
 });

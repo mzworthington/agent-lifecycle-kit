@@ -6,55 +6,72 @@ type MermaidApi = {
   render: (id: string, code: string) => Promise<{ svg: string }>;
 };
 
-let mermaidReady: Promise<MermaidApi> | undefined;
+const MERMAID_KEY = '__waykitMermaid';
+
+function mermaidSvgId(seed: string): string {
+  const safe = seed.replace(/[^a-zA-Z0-9]/g, '') || 'x';
+  return `mmd${safe}`;
+}
 
 async function getMermaid(): Promise<MermaidApi> {
-  mermaidReady ??= (async () => {
+  const slot = globalThis as typeof globalThis & { [MERMAID_KEY]?: Promise<MermaidApi> };
+  slot[MERMAID_KEY] ??= (async () => {
     const { default: mermaid } = await import('mermaid');
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'dark',
-      securityLevel: 'strict',
-      flowchart: { useMaxWidth: true, htmlLabels: true }
-    });
+    try {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        securityLevel: 'loose',
+        flowchart: { useMaxWidth: true, htmlLabels: false },
+        sequence: { useMaxWidth: true }
+      });
+    } catch {
+      // HMR may re-enter after mermaid already initialized.
+    }
     return mermaid;
   })();
-  return mermaidReady;
+  return slot[MERMAID_KEY];
 }
 
 type Props = { code: string };
 
 export function MermaidPreview({ code }: Props) {
-  const reactId = useId().replace(/:/g, '');
+  const reactId = mermaidSvgId(useId());
   const [svg, setSvg] = useState('');
   const [error, setError] = useState('');
   const [rendering, setRendering] = useState(false);
 
   useEffect(() => {
-    let active = true;
+    let cancelled = false;
+    let gen = 0;
     const run = async () => {
-      if (!code) return;
+      if (!code.trim()) return;
+      const my = ++gen;
       setRendering(true);
       setError('');
       try {
         const mermaid = await getMermaid();
-        if (!active) return;
-        const id = `mermaid-${reactId}-${Math.random().toString(36).slice(2, 9)}`;
+        if (cancelled || my !== gen) return;
+        const id = `${reactId}${Math.random().toString(36).slice(2, 8)}`;
         const { svg: rendered } = await queueMermaidRender(() => mermaid.render(id, code));
-        if (active) {
+        if (!cancelled && my === gen) {
           setSvg(rendered);
+          setError('');
           setRendering(false);
         }
-      } catch {
-        if (active) {
+      } catch (err) {
+        console.error(err);
+        if (!cancelled && my === gen) {
           setError('Could not render diagram.');
           setRendering(false);
         }
       }
     };
     void run();
+    document.addEventListener('astro:page-load', run);
     return () => {
-      active = false;
+      cancelled = true;
+      document.removeEventListener('astro:page-load', run);
     };
   }, [code, reactId]);
 

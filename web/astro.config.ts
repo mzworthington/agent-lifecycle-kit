@@ -7,8 +7,9 @@ import { kitPages } from './src/integrations/kitPages.ts';
 const webRoot = path.dirname(fileURLToPath(import.meta.url));
 const kitRoot = path.resolve(webRoot, '..');
 
+
 export default defineConfig({
-  site: 'https://eval-driven.dev',
+  site: 'https://waykit.dev',
   output: 'static',
   trailingSlash: 'ignore',
   integrations: [react(), kitPages(kitRoot)],

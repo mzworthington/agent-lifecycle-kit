@@ -88,7 +88,8 @@ describe('initProject', () => {
       hooksDir
     });
     const hook = fs.readFileSync(path.join(hooksDir, 'pre-commit'), 'utf8');
-    assert.match(hook, /"\$KIT" audit/);
+    assert.match(hook, /"\$WK" audit/);
+    assert.match(hook, /command -v wk/);
 
     const noGit = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-app-'));
     initProject({

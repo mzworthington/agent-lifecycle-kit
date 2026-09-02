@@ -28,6 +28,7 @@ describe('headingId', () => {
     expect(slugifyHeading('What kit gives you')).toBe('what-kit-gives-you');
     const used = new Map<string, number>();
     expect(headingId('Install kit', used)).toBe('install');
+    expect(headingId('Was this Kit or eval-driven.dev?', used)).toBe('rename');
     expect(headingId('Other', used)).toBe('other');
     expect(headingId('Other', used)).toBe('other-1');
   });

@@ -55,7 +55,7 @@ See [github-pages.md](github-pages.md) for `site`, trailing slashes, `404.html`,
 
 ## This kit's public site (`web/`)
 
-eval-driven.dev is the reference implementation:
+waykit.dev is the reference implementation:
 
 - Astro file routes in `web/src/pages`; React views in `web/src/views` or `web/src/components` (never under `pages/`).
 - Markdown catalog (`web/src/docs/pages.ts`) is **server-only**. Do not import it from islands. Pass page bodies, `docPaths`, and nav `{ path, title }` as props from `.astro` pages.

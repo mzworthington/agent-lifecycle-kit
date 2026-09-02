@@ -17,7 +17,7 @@ mocks:
     response:
       result:
         - site_tag: "ea7ffeb012004862add795dccbb3c211"
-          host: "eval-driven.dev"
+          host: "waykit.dev"
   - tool: "search"
     response:
       paths:

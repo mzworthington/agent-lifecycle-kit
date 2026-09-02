@@ -10,8 +10,8 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Architecture / new structure | `CODING_PHILOSOPHY.md` (or kit-knowledge `get_philosophy_section`) |
 | Feature lifecycle | `skills/agent-orchestrator` |
 | Bug / CI / live symptom | `skills/agent-debug` (+ hypothesis-driven-debug SOP) |
-| Cloudflare Web Analytics / RUM / beacon | `skills/agent-cloudflare-ops` (`kit mcp cloudflare-ops --install`) |
-| Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`kit eval run\|ci`) |
+| Cloudflare Web Analytics / RUM / beacon | `skills/agent-cloudflare-ops` (`wk mcp cloudflare-ops --install`) |
+| Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`wk eval run\|ci`) |
 | Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |
 | Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
 | Committing / opening a PR | `SOPs/conventional-commits.md` |

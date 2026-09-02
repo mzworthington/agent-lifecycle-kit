@@ -56,7 +56,7 @@ Prefer **tweaks over rewrites** when the structure is mostly good. Preserve mean
 | `AGENTS.md` phase table | UI/copy and docs/release rows point here for voice |
 | Orchestrator scope gate | Landing/marketing → `agent-copy`; docs narrative → `agent-docs` **and** `agent-copy` |
 | `agent-docs` / `agent-ui` `depends-on` | Docs and UI hand narrative/chrome voice work here |
-| Co-located + routing evals | `kit eval` / CI fail if triggers drift off the skill |
+| Co-located + routing evals | `wk eval` / CI fail if triggers drift off the skill |
 
 Coordinate visual chrome (emoji labels, neon status pills, gradient slogans) with [agent-ui](../agent-ui/SKILL.md). This skill owns the words; UI owns layout and styling.
 
@@ -70,7 +70,7 @@ Customize pillars and the tone matrix to the brand. When unset, use the practiti
 2. **Practitioner, not pitch deck:** Name the concrete failure or job. Prefer "wrong tool, made-up args" over "Ship AI agents you can prove."
 3. **Empathetic & Solution-Focused:** Frame feedback around user goals. Never blame the user for errors; give a recovery step.
 4. **Precise & Consistent:** Reuse domain terms across UI, tooltips, and docs. Do not invent parallel slogans for the same idea.
-5. **Action-Oriented:** CTAs start with a specific verb ("Run `kit eval ci`", "Read the guide") - not "Learn more" or "Get started" unless that is the only honest label.
+5. **Action-Oriented:** CTAs start with a specific verb ("Run `wk eval ci`", "Read the guide") - not "Learn more" or "Get started" unless that is the only honest label.
 
 ### Contextual Tone Matrix
 

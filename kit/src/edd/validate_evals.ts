@@ -160,7 +160,7 @@ export function validateEvals(repoDir: string): ValidateEvalsResult {
   let errors = 0;
   const suiteTargets = new Map<string, Set<string>>();
 
-  console.log('=== Agent Lifecycle Kit - Skill Evals Validation ===');
+  console.log('=== Waykit - Skill Evals Validation ===');
   console.log('');
 
   for (const fileInfo of evalFiles) {

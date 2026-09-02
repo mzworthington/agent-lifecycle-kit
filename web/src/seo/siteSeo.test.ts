@@ -27,16 +27,16 @@ const HUBS = [
 describe('siteSeo catalog', () => {
   it('resolves distinctive homepage metadata with the social share image', () => {
     const seo = resolvePageSeo('/');
-    expect(seo.title.toLowerCase()).toContain('agent lifecycle kit');
-    expect(seo.title.toLowerCase()).toMatch(/tools your agents call/);
+    expect(seo.title.toLowerCase()).toContain('waykit');
+    expect(seo.title.toLowerCase()).toMatch(/grill|lifecycle|spec/);
     expect(seo.description).toBe(HOME_LEDE);
     expect(seo.canonicalUrl).toBe(`${SITE_ORIGIN}/`);
     expect(seo.ogImageUrl).toBe(SITE_SOCIAL_IMAGE);
     expect(seo.indexable).toBe(true);
     expect(seo.ogType).toBe('website');
     expect(seo.softwareName).toBe(SITE_NAME);
-    expect(SITE_SHORT_NAME).toBe('Kit');
-    expect(SITE_NAME).toBe('Agent Lifecycle Kit');
+    expect(SITE_SHORT_NAME).toBe('waykit');
+    expect(SITE_NAME).toBe('Waykit');
     expect(SITE_MARK_SRC).toBe('/assets/kit-mark.svg');
   });
 

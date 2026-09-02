@@ -23,13 +23,13 @@ describe('published markdown catalog', () => {
     expect(DOC_PATHS.has('/docs/ADRs/0007-astro-static-docs-site')).toBe(true);
     expect(findPublishedPage('/docs/home')).toBeUndefined();
     expect(findPublishedPage('/docs/edd')?.title).toMatch(/EDD|Eval/i);
-    expect(findPublishedPage('/ontology')?.title).toBe('Author the kit map');
+    expect(findPublishedPage('/ontology')?.title).toBe('Author the Waykit map');
   });
 });
 
 describe('site information architecture', () => {
-  it('keeps header hubs to Start, Guide, Evals, and Map', () => {
-    expect(SITE_NAV.map((item) => item.label)).toEqual(['Start', 'Guide', 'Evals', 'Map']);
+  it('keeps header hubs to Start, Guide, and Map', () => {
+    expect(SITE_NAV.map((item) => item.label)).toEqual(['Start', 'Guide', 'Map']);
   });
 
   it('marks Guide for operator pages without stealing Start or Map', () => {

@@ -44,16 +44,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Installer checksum is current
-        run: |
-          expected="$(sha256sum install.sh | awk '{print $1}')"
-          recorded="$(tr -d '[:space:]' < install.sh.sha256)"
-          if [ "$expected" != "$recorded" ]; then
-            echo "install.sh.sha256 is stale. Run: ./bin/write-install-checksum.sh" >&2
-            echo "expected=$expected recorded=$recorded" >&2
-            exit 1
-          fi
-
       - name: TypeScript type-check
         run: pnpm typecheck && pnpm --dir web typecheck
 

@@ -1,57 +1,53 @@
-# Eval-Driven Development
+# Waykit
 
-> TDD for AI agents that call tools. Write evals, mock MCP schemas, assert routing, gate PRs, and turn production misses into the next case.
+> Software lifecycle for coding agents. Grill, spec, TDD, ship, then learn. Evals are one loop inside that path.
 
 ## What this site is
-Eval-Driven Development (EDD) is the same red → green → refactor loop as TDD, applied to prompts and tool schemas. The harness ships in Agent Lifecycle Kit (`kit eval run|ci|report`). The same kit also gates always-on context (`kit measure-context`), composes one MCP profile, and runs `kit check`.
+Waykit is the SDLC coding agents actually run: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release, plus learning loops so the next session is better than the last. Eval-Driven Development (EDD) is TDD for prompts and tool schemas. The harness is `wk eval run|ci|report`. The same CLI gates always-on context (`wk measure-context`), checks the live kit graph (`wk ontology check`), composes one MCP profile, and runs `wk check`.
 
-Cursor is the reference host for skills and MCP compose. Other IDEs get the same `AGENTS.md` via thin stubs (`kit export-rules`), not equal discovery depth. `kit eval` (no subcommand) is a skill-trigger / prompt-hygiene check: it does not call a model.
+Cursor is the reference host for skills and MCP compose. Other IDEs get the same `AGENTS.md` via thin stubs (`wk export-rules`), not equal discovery depth. `wk eval` (no subcommand) is a skill-trigger / prompt-hygiene check: it does not call a model. `kit` remains an alias of `wk`.
 
 ## What do I use this for today?
-- Wrong tool / made-up args → `kit eval run --suite evals/edd/demo.yaml --model scripted`
-- Gate a prompt or schema change → `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
-- Always-on context too fat → `kit measure-context` then `kit check`
 - Starting a product feature → lifecycle (grill → spec → TDD + XFN → audit → release)
-- Never installed → start here in 10 minutes: install → `kit init` → demo suite → CI bar
+- Never installed → `curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh` then `wk init . --mcp default --hook`
+- Always-on context too fat → `wk measure-context` then `wk check`
+- Wrong tool / made-up args → `wk eval run --suite evals/edd/demo.yaml --model scripted`
+- Gate a prompt or schema change → `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
+- Changed a skill or SOP → `wk ontology check` then the [Waykit map](https://waykit.dev/docs/map)
 
 ## Start here
-- [Home](https://eval-driven.dev/)
-- [Getting started](https://eval-driven.dev/docs/start) ([markdown](https://eval-driven.dev/docs/start.md))
-- [Jobs for today](https://eval-driven.dev/docs/jobs) ([markdown](https://eval-driven.dev/docs/jobs.md))
-- [Common questions](https://eval-driven.dev/docs/faq) ([markdown](https://eval-driven.dev/docs/faq.md))
-- [Docs overview](https://eval-driven.dev/docs) ([markdown](https://eval-driven.dev/docs/README.md))
-- [EDD guide](https://eval-driven.dev/docs/edd) ([markdown](https://eval-driven.dev/docs/edd.md))
-- [Operator guide](https://eval-driven.dev/docs/kit) ([markdown](https://eval-driven.dev/docs/kit.md))
-- [Feature lifecycle](https://eval-driven.dev/docs/lifecycle) ([markdown](https://eval-driven.dev/docs/lifecycle.md))
-- [Kit map](https://eval-driven.dev/docs/map) ([markdown](https://eval-driven.dev/docs/map.md))
-- [Author the kit map](https://eval-driven.dev/ontology) ([markdown](https://eval-driven.dev/ontology/README.md))
-- [SOPs](https://eval-driven.dev/docs/sops) ([markdown](https://eval-driven.dev/docs/sops.md))
-- [Demo suite](https://eval-driven.dev/evals/edd/demo.yaml)
-- [Before/after write-up](https://eval-driven.dev/evals/edd/examples/before-after) ([markdown](https://eval-driven.dev/evals/edd/examples/before-after.md))
-- [Eval suites](https://eval-driven.dev/evals/edd) ([markdown](https://eval-driven.dev/evals/edd/README.md))
+- [Home](https://waykit.dev/)
+- [Getting started](https://waykit.dev/docs/start) ([markdown](https://waykit.dev/docs/start.md))
+- [Jobs for today](https://waykit.dev/docs/jobs) ([markdown](https://waykit.dev/docs/jobs.md))
+- [Common questions](https://waykit.dev/docs/faq) ([markdown](https://waykit.dev/docs/faq.md))
+- [Docs overview](https://waykit.dev/docs) ([markdown](https://waykit.dev/docs/README.md))
+- [Feature lifecycle](https://waykit.dev/docs/lifecycle) ([markdown](https://waykit.dev/docs/lifecycle.md))
+- [EDD guide](https://waykit.dev/docs/edd) ([markdown](https://waykit.dev/docs/edd.md))
+- [Operator guide](https://waykit.dev/docs/kit) ([markdown](https://waykit.dev/docs/kit.md))
+- [Waykit map](https://waykit.dev/docs/map) ([markdown](https://waykit.dev/docs/map.md))
+- [Author the Waykit map](https://waykit.dev/ontology) ([markdown](https://waykit.dev/ontology/README.md))
+- [SOPs](https://waykit.dev/docs/sops) ([markdown](https://waykit.dev/docs/sops.md))
+- [Demo suite](https://waykit.dev/evals/edd/demo.yaml)
+- [Before/after write-up](https://waykit.dev/evals/edd/examples/before-after) ([markdown](https://waykit.dev/evals/edd/examples/before-after.md))
+- [Eval suites](https://waykit.dev/evals/edd) ([markdown](https://waykit.dev/evals/edd/README.md))
 - [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
 
 ## Install
 ```
-BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
-curl -fsSL "$BASE/install.sh" -o install.sh
-curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
-echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
-sh install.sh
-kit init . --mcp default --hook
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+wk init . --mcp default --hook
 ```
-
-Convenience (no checksum): `curl -fsSL …/install.sh | sh`.
 
 ## Commands
 ```
-kit eval run --suite evals/edd/demo.yaml --model scripted
-kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
-kit eval report --format md --out out/reports
-kit eval run --suite evals/edd/architecture_routing.yaml --style cli --cli cursor-agent --model cursor-grok-4.6-medium
-kit measure-context
-kit check
-kit mcp default --install
+wk eval run --suite evals/edd/demo.yaml --model scripted
+wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
+wk eval report --format md --out out/reports
+wk eval run --suite evals/edd/architecture_routing.yaml --style cli --cli cursor-agent --model cursor-grok-4.6-medium
+wk measure-context
+wk ontology check
+wk check
+wk mcp default --install
 ```
 
 `--style local` (alias `--model scripted`) is the PR merge gate. `--style http` is nightly live. `--style cli` uses `cursor-agent`, `claude`, or `agy`.

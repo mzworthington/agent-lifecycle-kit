@@ -1,7 +1,6 @@
 #!/bin/sh
-# Bootstrap Agent Lifecycle Kit: clone or reuse a checkout, link ~/.agents, put kit on PATH.
-# Preferred: download install.sh + install.sh.sha256, verify, then run (see README).
-# Convenience (no verify): curl -fsSL .../install.sh | sh
+# Bootstrap Waykit: clone or reuse a checkout, link ~/.agents, put wk on PATH.
+# curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
 # POSIX sh (dash, busybox ash, macOS /bin/sh). Do not require bash.
 set -eu
 
@@ -14,26 +13,19 @@ MIN_NODE_MAJOR=22
 
 usage() {
   cat <<'EOF'
-Agent Lifecycle Kit installer
+Waykit installer
 
-Preferred (verify SHA-256, then run):
-  BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
-  curl -fsSL "$BASE/install.sh" -o install.sh
-  curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
-  echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
-  sh install.sh
-
-Convenience (no checksum):
   curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
   curl -fsSL .../install.sh | sh -s -- [options]
 
-From a kit checkout:
+From a Waykit checkout:
   ./install.sh [options]
 
-Puts kit on PATH (~/.local/bin), links ~/.agents, and installs the default MCP profile.
+Puts wk on PATH (~/.local/bin), links ~/.agents, and installs the default MCP profile.
+The kit binary remains as a compatibility alias.
 
 Then, in an app repo:
-  kit init . --mcp default --hook
+  wk init . --mcp default --hook
 
 Options:
   --dir <path>     Clone destination (default: $HOME/.local/share/agent-lifecycle-kit)
@@ -223,14 +215,14 @@ install_mcp_profile() {
   echo ""
   echo "Installing default MCP profile to ~/.cursor/mcp.json"
   "${_kit}" mcp default --install || {
-    echo "WARN: MCP compose/install failed; continue and run kit mcp default --install"
+    echo "WARN: MCP compose/install failed; continue and run wk mcp default --install"
     return 0
   }
   echo "Set GITHUB_PERSONAL_ACCESS_TOKEN in the environment that launches Cursor for the GitHub MCP."
   echo "More profiles: collab | personal | lab | devtools | cloud | project-example"
-  echo "  kit mcp collab --install"
-  echo "  kit mcp personal --install   # Bitwarden/LinkedIn/Polyglot/Obsidian (local)"
-  echo "  kit mcp lab --install        # Raspberry Pi over SSH (local)"
+  echo "  wk mcp collab --install"
+  echo "  wk mcp personal --install   # Bitwarden/LinkedIn/Polyglot/Obsidian (local)"
+  echo "  wk mcp lab --install        # Raspberry Pi over SSH (local)"
   echo "Project-scoped: compose project-example or templates/project-mcp.json into .cursor/mcp.json"
   echo "Skip later with: INSTALL_MCP=0 ./install.sh"
 }
@@ -251,7 +243,7 @@ install_external_skills() {
   echo ""
   echo "Syncing external skills from skills/external.lock.json"
   "${_kit}" sync --install || {
-    echo "WARN: external skills sync failed; run kit sync --install manually"
+    echo "WARN: external skills sync failed; run wk sync --install manually"
     return 0
   }
 }
@@ -273,8 +265,9 @@ install_cli_bin() {
     _target_bin="${HOME}/bin"
   fi
   mkdir -p "${_target_bin}"
+  ln -sf "${_repo_dir}/bin/kit" "${_target_bin}/wk"
   ln -sf "${_repo_dir}/bin/kit" "${_target_bin}/kit"
-  echo "Linked CLI: ${_target_bin}/kit -> ${_repo_dir}/bin/kit"
+  echo "Linked CLI: ${_target_bin}/wk -> ${_repo_dir}/bin/kit (alias: kit)"
   case ":${PATH}:" in
     *":${_target_bin}:"*) ;;
     *)

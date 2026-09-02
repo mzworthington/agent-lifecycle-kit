@@ -1,16 +1,16 @@
-# Author the kit map
+# Author the Waykit map
 
-The [kit map](/docs/map) is a live graph of **this kit**: skills, SOPs, MCP servers, eval suites, philosophy sections, and public docs. You do not maintain a second catalog. Add or edit the files agents already load; regenerate; the map and kit-knowledge catch up.
+The [Waykit map](/docs/map) is a live graph of **this kit**: skills, SOPs, MCP servers, eval suites, philosophy sections, and public docs. You do not maintain a second catalog. Add or edit the files agents already load; `wk ontology check` fails dangling links; regenerate; the map and kit-knowledge catch up.
 
 This page is how to author that graph. Open the [interactive map](/docs/map) to browse it.
 
 ## This is not a product architecture diagram
 
-The map does **not** show your app’s services, Terraform, or org chart. `kit init` in a product repo does not create a team ontology.
+The map does **not** show your app’s services, Terraform, or org chart. `wk init` in a product repo does not create a team ontology.
 
 | You want | Use |
 |----------|-----|
-| See how kit skills, SOPs, and MCPs connect | [Kit map](/docs/map) |
+| See how kit skills, SOPs, and MCPs connect | [Waykit map](/docs/map) |
 | Change kit phases, skills, or evals and have the graph follow | This page |
 | Draw a product or org system | Your product’s own diagrams (for example ArchLens), not this generator |
 

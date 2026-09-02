@@ -30,7 +30,7 @@ describe.skipIf(!hasDist)('built HTML contract', () => {
     expect(home).toContain(`<title>${homeSeo.title}</title>`);
     expect(home).toContain(`href="${homeSeo.canonicalUrl}"`);
     expect(home).toContain('<h1');
-    expect(home).toContain('Agent Lifecycle Kit');
+    expect(home).toContain('Waykit');
     expect(home).toContain(homeSeo.description.slice(0, 32));
     expect(home).toContain(HOME_LEDE.slice(0, 24));
 

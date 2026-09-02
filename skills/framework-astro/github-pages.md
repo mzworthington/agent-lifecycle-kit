@@ -13,7 +13,7 @@ export default defineConfig({
 });
 ```
 
-- Custom domain: `site` is the canonical origin (this kit: `https://eval-driven.dev`).
+- Custom domain: `site` is the canonical origin (this kit: `https://waykit.dev`).
 - Project pages under `https://user.github.io/repo/` need `base: '/repo'`. Apex/custom domains use `base: '/'` (default).
 - Prefer directory output (`/path/index.html`). GitHub Pages serves `/path/` and redirects `/path` there. `trailingSlash: 'ignore'` is fine: do not force a slash in the address bar.
 

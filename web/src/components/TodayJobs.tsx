@@ -22,7 +22,7 @@ export function TodayJobs({ showHeading = false }: { showHeading?: boolean }) {
         <>
           <h2 id="today-heading">What do I use this for today?</h2>
           <p className="today-lead">
-            Pick the job in front of you. Kit is a product you run, not a docs pile you browse.
+            Pick the job in front of you. Waykit is a product you run, not a docs pile you browse.
           </p>
         </>
       ) : null}

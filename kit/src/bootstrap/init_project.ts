@@ -23,7 +23,7 @@ export function initProject(options: InitProjectOptions): void {
   const { targetDir, mcpProfile, installMCP, installIDE, installHook } = options;
   const kitRepoDir = options.kitRepoDir ?? defaultKitRepoDir;
 
-  console.log(`=== Agent Lifecycle Kit - Project Bootstrapper ===`);
+  console.log(`=== Waykit - Project Bootstrapper ===`);
   console.log(`Target directory: ${targetDir}`);
 
   if (!fs.existsSync(targetDir)) {
@@ -77,7 +77,7 @@ export function initProject(options: InitProjectOptions): void {
         fs.mkdirSync(hooksDir, { recursive: true });
       }
       const hookPath = path.join(hooksDir, 'pre-commit');
-      const hookScript = `#!/usr/bin/env bash\n# Pre-Commit Security & Quality Gate via Agent Lifecycle Kit\nset -e\nKIT="$HOME/.agents/bin/kit"\nif [ -x "$KIT" ]; then\n  "$KIT" audit\nelif command -v kit >/dev/null 2>&1; then\n  kit audit\nfi\n`;
+      const hookScript = `#!/usr/bin/env bash\n# Pre-Commit Security & Quality Gate via Waykit\nset -e\nWK="$HOME/.agents/bin/kit"\nif [ -x "$WK" ]; then\n  "$WK" audit\nelif command -v wk >/dev/null 2>&1; then\n  wk audit\nelif command -v kit >/dev/null 2>&1; then\n  kit audit\nfi\n`;
       fs.writeFileSync(hookPath, hookScript, { mode: 0o755 });
       console.log(`✅ Installed pre-commit hook to ${hookPath}`);
     } else {

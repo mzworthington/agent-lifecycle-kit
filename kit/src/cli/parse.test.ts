@@ -82,7 +82,7 @@ describe('parseKitArgv', () => {
   it('returns usage when site assemble --out has no value', () => {
     assert.deepEqual(parseKitArgv(['site', 'assemble', '--out'], opts), {
       kind: 'usage',
-      message: 'Usage: kit site assemble [--out <dir>]'
+      message: 'Usage: wk site assemble [--out <dir>]'
     });
   });
 

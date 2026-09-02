@@ -1,10 +1,11 @@
 export function HomeProof() {
   return (
     <section id="proof" className="proof" aria-labelledby="proof-heading">
-      <h2 id="proof-heading">Before and after one miss</h2>
+      <h2 id="proof-heading">One loop: a miss becomes a failing eval</h2>
       <p className="proof-lead">
-        Same user prompt. Without a case file you get a confident guess. With EDD you get a failing
-        assert, a report, and a merge gate.
+        Same user prompt. Without a case file you get a confident guess. With an eval you get a
+        failing assert, a report, and a merge gate. That is one learning loop inside the lifecycle,
+        not the whole product.
       </p>
       <p className="proof-prompt">“What is the database for the payment system?”</p>
       <ul className="proof-grid">
@@ -36,7 +37,7 @@ export function HomeProof() {
             <dd>Tighten prompt/schema; same case passes</dd>
             <dt>Gate</dt>
             <dd>
-              <code>kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95</code>
+              <code>wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95</code>
             </dd>
           </dl>
         </li>

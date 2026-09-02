@@ -1,49 +1,38 @@
 # Common questions
 
-## What do I use this for today?
+Need a job, not an objection? [Jobs for today](/docs/jobs). First install: [Getting started](/docs/start).
 
-Use the [job picker](/docs/jobs). Common paths: write a failing routing eval when the agent guesses, gate prompt/schema PRs with `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95`, shrink always-on rules with `kit measure-context`, or follow the [feature lifecycle](/docs/lifecycle) when the work is bigger than a prompt tweak. New here? [Start in 10 minutes](/docs/start).
+## What is Waykit?
 
-## What is Eval-Driven Development?
+Waykit is the software lifecycle for coding agents: grill, spec, TDD, quality, audit, release, plus learning loops so the next session is better than the last. Eval-driven development is one of those loops, when the change is a prompt or a tool contract. Feature path: [lifecycle](/docs/lifecycle).
 
-EDD is TDD for agents that call tools. You write a failing eval for the tool and arguments you expect, implement the schema and prompt until it passes, then tighten until CI holds.
-
-## How is EDD different from eyeballing prompts?
-
-Each case starts from a fresh context. Tools are mocked, so you measure routing and extraction rather than network luck. Asserts cover JSON schema match plus an optional LLM-as-a-judge. CI can block the merge when routing accuracy drops.
-
-## How do I install kit?
+## How do I install Waykit?
 
 On macOS or Linux, run the installer, then bootstrap the app repo:
 
-Preferred (checksum):
-
 ```bash
-BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
-curl -fsSL "$BASE/install.sh" -o install.sh
-curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
-echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
-sh install.sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+wk init . --mcp default --hook
 ```
 
-Then `kit init . --mcp default --hook`. You need git, Node 22+, and `sha256sum`. Convenience without a checksum: `curl -fsSL …/install.sh | sh`. If `kit` is not found, add `~/.local/bin` to `PATH`. Full steps: [Getting started](/docs/start).
+You need git and Node 22+. If `wk` is not found, add `~/.local/bin` to `PATH`. Full steps: [Getting started](/docs/start).
 
-## How do I run EDD in CI?
+## Do I need an API key?
 
-Run `kit eval ci --threshold-routing 95 --out out/reports`. PR CI and `kit check` use `--style local` (offline, no API key). `--style http` is the nightly live job when `KIT_EVAL_API_KEY` is set. `--style cli --cli cursor-agent|claude|agy` is for local iteration with a headless assistant.
+No. Install, `wk check`, and `wk eval` with `--style local` (the default) run offline. Cursor and Copilot load skills and `AGENTS.md`; they are not the eval runner. A provider key is only for `--style http` over an OpenAI-compatible API. `--style cli` shells out to `cursor-agent`, `claude`, or `agy`. Details: [EDD guide](/docs/edd).
 
-## Do I need an OpenAI key if I use Cursor or GitHub Copilot?
+## Why not dump everything into AGENTS.md?
 
-No. **Cursor is the reference host** for progressive skills and MCP compose. Copilot, Claude Code, Gemini CLI, and Windsurf get the same canonical `AGENTS.md` via thin stubs (`kit export-rules` / `kit init`), not equal skill or MCP discovery. `kit eval` defaults to `--style local` and does not call Cursor Chat or Copilot Chat. `--style cli` shells out to `cursor-agent`, `claude`, or `agy`. A provider key is only for `--style http` over an OpenAI-compatible API. Full flow: [EDD guide](/docs/edd).
+Agents pay for every byte in the bootstrap. Always-on files (`AGENTS.md`, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Compose **one MCP profile** per session (`wk mcp default --install`, or the id on the skill's `mcp:` frontmatter) so unused tool schemas stay out of the prompt. `wk measure-context` prints the breakdown; `wk check` fails if the budget is exceeded. Operator write-up: [What Waykit gives you](/docs/kit).
 
-## What happens after a production miss?
+## How does the agent find the right SOP?
 
-Turn the miss into a JSONL case and add it to the suite. Shadow evals can sample live traffic so the next failure is a test, not a surprise.
+The kit is a live graph: skills, SOPs, MCP servers, evals, and docs. You edit those files; `wk ontology check` fails dangling `depends-on` and `mcp:` links. Agents stay on the thin handshake, then kit-knowledge walks neighbors (`get_entity`, `get_related`) instead of dumping the tree. Browse it: [Waykit map](/docs/map). How to add a node: [Author the Waykit map](/ontology).
 
-## How does kit keep agent context small?
+## Where does EDD fit?
 
-Always-on files (`AGENTS.md`, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Run `kit measure-context` for the breakdown; `kit check` fails if that budget is exceeded. Compose one MCP profile per session so unused tool schemas stay out of the prompt. Full write-up: [operator guide](/docs/kit).
+Inside TDD, when the change is a prompt or a tool contract. You write a failing eval for the tool and arguments you expect, implement until it passes, then gate the merge with `wk eval ci --threshold-routing 95`. A production miss becomes a JSONL case in the same suite. How mocks, styles, and CI work: [EDD guide](/docs/edd).
 
-## How do I visualize our team's setup on the kit map?
+## Is the Waykit map my product architecture?
 
-The [kit map](/docs/map) shows **this kit**: skills, SOPs, MCP servers, evals, and docs. It does not draw your product architecture. Add a skill or SOP in the kit checkout, then `kit ontology check` and `kit ontology generate`. Step-by-step: [Author the kit map](/ontology).
+No. The [Waykit map](/docs/map) is **this kit**: skills, SOPs, MCP servers, evals, and docs. It does not draw your system. Add a skill or SOP in the kit checkout, then `wk ontology check` and `wk ontology generate`. Step-by-step: [Author the Waykit map](/ontology).

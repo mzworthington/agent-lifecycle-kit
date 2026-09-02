@@ -1,14 +1,14 @@
 import { HOME_HEADLINE, HOME_LEDE } from '../landing/copy.ts';
 
-export const SITE_ORIGIN = 'https://eval-driven.dev';
-export const SITE_NAME = 'Agent Lifecycle Kit';
-export const SITE_SHORT_NAME = 'Kit';
+export const SITE_ORIGIN = 'https://waykit.dev';
+export const SITE_NAME = 'Waykit';
+export const SITE_SHORT_NAME = 'waykit';
 export const SITE_MARK_SRC = '/assets/kit-mark.svg';
 export const SITE_SOCIAL_IMAGE = `${SITE_ORIGIN}/assets/og.jpg`;
 export const SITE_SOCIAL_IMAGE_WIDTH = 1200;
 export const SITE_SOCIAL_IMAGE_HEIGHT = 630;
 export const SITE_SOCIAL_IMAGE_ALT =
-  'Agent Lifecycle Kit: Eval-Driven Development, TDD for tool-using AI agents. Write evals, mock tools, assert routing, and gate PRs.';
+  'Waykit: software lifecycle for coding agents. Grill, spec, TDD, quality, release, and learning loops including eval-driven development.';
 export const SITE_GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
 
 export type PageSeo = {
@@ -52,22 +52,22 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs': {
     headline: 'Product guide',
     description:
-      'Start, practice, and reference for Agent Lifecycle Kit: install, Eval-Driven Development, SOPs, ADRs, and the kit map.'
+      'Start, practice, and reference for Waykit: install, feature lifecycle, live kit graph, learning loops, SOPs, ADRs, and the skill map.'
   },
   '/docs/start': {
     headline: 'Getting started',
     description:
-      'Install Agent Lifecycle Kit in about 10 minutes: link ~/.agents, run kit init, execute the demo eval suite, and hold the 95% routing bar. No API key.'
+      'Install Waykit in about 10 minutes: link ~/.agents, run wk init, then run the loops you need. No API key.'
   },
   '/docs/jobs': {
     headline: 'Jobs for today',
     description:
-      'Pick a job for today: wrong-tool routing, prompt or schema changes, fat always-on context, or starting a product feature with the kit lifecycle.'
+      'Pick a job for today: starting a product feature, install, fat always-on context, proving a tool call, or checking the live kit graph.'
   },
   '/docs/faq': {
     headline: 'Common questions',
     description:
-      'Answers for Agent Lifecycle Kit: why EDD, how the 95% gate works, which MCP profile to install, and what stays out of always-on context.'
+      'Waykit FAQ: install, API keys, why AGENTS.md stays small, how agents find the right SOP, where EDD fits, and what the map is not.'
   },
   '/docs/edd': {
     headline: 'EDD guide',
@@ -75,44 +75,44 @@ const PAGE_SEO: Record<string, SeoOverride> = {
       'Eval-Driven Development is TDD for prompts, MCP schemas, and routing: write cases, mock tools, gate PRs at 95% routing accuracy, and turn misses into the next eval.'
   },
   '/docs/kit': {
-    headline: 'What kit gives you',
+    headline: 'What Waykit gives you',
     description:
-      'What Agent Lifecycle Kit installs: thin AGENTS.md handshake, skills, SOPs, one MCP profile per session, kit check, and the EDD harness.'
+      'What Waykit installs: thin AGENTS.md handshake, lifecycle skills, live kit graph, one MCP profile per session, wk check, and eval loops.'
   },
   '/docs/lifecycle': {
     headline: 'Feature lifecycle',
     description:
-      'Route product work through grill, spec, TDD, XFN, review, and release skills without dumping every SOP into always-on context.'
+      'Route product work through grill, spec, TDD, XFN, review, and release. Learning loops (catalog, evals, prod misses) feed the next pass.'
   },
   '/docs/map': {
-    headline: 'Kit map',
+    headline: 'Waykit map',
     description:
-      'Map of Agent Lifecycle Kit skills, SOPs, MCP profiles, and ontology links so you can load the right chunk instead of the whole kit.'
+      'Live graph of this kit: skills, SOPs, MCPs, and evals derived from the tree, feeding kit-knowledge so you load one node instead of the whole kit.'
   },
   '/docs/sops': {
     headline: 'SOPs',
     description:
-      'Operator procedures for Agent Lifecycle Kit: behavior catalog, context budget, conventional commits, evals, and Cloudflare analytics ops.'
+      'Operator procedures for Waykit: behavior catalog, context budget, conventional commits, evals, and Cloudflare analytics ops.'
   },
   '/docs/ADRs': {
     headline: 'Architecture Decision Records',
     description:
-      'Sparse MADRs for Agent Lifecycle Kit: hexagonal defaults, Unlicense, EDD contracts, thin bootstrap, ontology memory, and the Astro docs site.'
+      'Sparse MADRs for Waykit: hexagonal defaults, Unlicense, EDD contracts, thin bootstrap, ontology memory, and the Astro docs site.'
   },
   '/evals/edd': {
     headline: 'Eval suites',
     description:
-      'Offline and live Eval-Driven Development suites for Agent Lifecycle Kit: routing, schemas, Cloudflare ops, and the teaching demo you can paste into a PR.'
+      'Offline and live eval suites for Waykit: routing, schemas, Cloudflare ops, and the teaching demo you can paste into a PR.'
   },
   '/mcps': {
     headline: 'MCP library',
     description:
-      'Named MCP profiles for Agent Lifecycle Kit sessions: default, cloud, cloudflare-ops, and how to install one profile without stacking tools.'
+      'Named MCP profiles for Waykit sessions: default, cloud, cloudflare-ops, and how to install one profile without stacking tools.'
   },
   '/ontology': {
-    headline: 'Author the kit map',
+    headline: 'Author the Waykit map',
     description:
-      'How to add skills, SOPs, and evals to the kit map: which files become nodes, how to regenerate the index, and why this is not a product architecture diagram.'
+      'How to add skills, SOPs, and evals to the Waykit map: which files become nodes, how to regenerate the index, and why this is not a product architecture diagram.'
   }
 };
 
@@ -259,7 +259,7 @@ export function resolvePageSeo(pathname: string, opts?: ResolvePageSeoOptions): 
     override?.description ??
     derived ??
     (excerptText && excerptText.length > 20 ? excerptText : undefined) ??
-    `${headline} in Agent Lifecycle Kit operator docs.`;
+    `${headline} in Waykit operator docs.`;
   const excerpt = excerptText ?? description;
   const indexable = override?.indexable !== false && !NOINDEX_PATHS.has(path);
 

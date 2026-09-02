@@ -37,12 +37,12 @@ JSONL case (`demo-edge` in [demo.jsonl](../demo.jsonl)):
 | **Expected** | Call `read_architecture_yaml` with `payment-api` |
 | **Red** | `FAIL demo-edge tool_selection`: conversational reply, no tool |
 | **Green** | Prompt/schema tightened; case passes on the scripted driver |
-| **Gate** | `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95` blocks the PR under 95% |
+| **Gate** | `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95` blocks the PR under 95% |
 
 ```bash
-kit eval run --suite evals/edd/demo.yaml --model scripted
-kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
-kit eval report --format md --out out/reports
+wk eval run --suite evals/edd/demo.yaml --model scripted
+wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
+wk eval report --format md --out out/reports
 ```
 
-Walk the same story in the browser: [eval-driven.dev/#demo](https://eval-driven.dev/#demo).
+Walk the same story in the browser: [waykit.dev/#demo](https://waykit.dev/#demo).

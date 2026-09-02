@@ -4,11 +4,14 @@ export const HEADING_ALIASES: Record<string, string> = {
   'what-do-i-use-this-for-today': 'today',
   'before-and-after-one-miss': 'proof',
   'install-kit': 'install',
+  'install-waykit': 'install',
   'the-same-loop-you-already-use-for-code': 'edd',
   'run-it-locally': 'cli',
   'context-mcp-and-the-quality-gate': 'kit',
   'common-questions': 'faq',
-  'feature-lifecycle': 'lifecycle'
+  'feature-lifecycle': 'lifecycle',
+  'was-this-kit-or-eval-drivendev': 'rename',
+  'why-not-dump-everything-into-agentsmd': 'context'
 };
 
 export type DocsTocItem = {

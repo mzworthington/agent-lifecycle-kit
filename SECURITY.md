@@ -29,7 +29,7 @@ In scope examples:
 * `install.sh` / bootstrap supply-chain issues
 * Secrets or high-entropy tokens leaking via skills, evals, or `kit audit` false negatives that hide real secrets
 * Prompt-injection gadgets in shipped skills/SOPs that cause destructive tool use by default
-* Vulnerabilities in the TypeScript `kit` CLI or first-party MCP servers under `mcps/servers/`
+* Vulnerabilities in the TypeScript `wk` CLI (`kit` remains an alias) or first-party MCP servers under `mcps/servers/`
 
 Out of scope examples:
 
@@ -39,7 +39,6 @@ Out of scope examples:
 
 ## Hardening tips for consumers
 
-* Prefer the **checksum-verified** install path in the README over bare `curl | sh`
 * Pin installs with `KIT_REF=vX.Y.Z` once releases exist
 * Run `kit audit` / `kit check` in CI on consuming repos
 * Keep MCP profiles lean ([mcps/README.md](./mcps/README.md)); do not stack unrelated servers

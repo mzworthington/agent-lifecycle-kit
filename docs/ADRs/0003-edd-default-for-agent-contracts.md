@@ -37,7 +37,7 @@ Chosen option: "**Option B**", because kit CI already gates EDD routing (≥95%)
 ```mermaid
 sequenceDiagram
   participant Dev as Author
-  participant Eval as kit eval ci
+  participant Eval as "kit eval ci"
   participant CI as GitHub Actions
   Dev->>Eval: failing JSONL/YAML case
   Dev->>Eval: register tool contract / prompt

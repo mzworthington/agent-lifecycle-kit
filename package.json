@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Modular agent lifecycle guardrails, skills, and tooling",
+  "description": "Waykit: software lifecycle, skills, and learning loops for coding agents",
   "bin": {
+    "wk": "./bin/kit",
     "kit": "./bin/kit",
     "agent-kit": "./bin/kit"
   },
   "scripts": {
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
+    "wk": "node --import tsx/esm bin/kit.ts",
     "kit": "node --import tsx/esm bin/kit.ts",
     "changelog": "node bin/changelog-render.mjs",
     "release:detect": "bash bin/release.sh detect",

@@ -1,34 +1,27 @@
 # Getting started
 
-Four steps to a failing eval you can paste into a PR. macOS and Linux; needs git, Node 22+, and `sha256sum`. No API key.
+Four steps to Waykit on a repo. macOS and Linux; needs git and Node 22+. No API key.
 
-1. **Install kit (~2 min)** — Links `~/.agents` and puts `kit` on your PATH via `~/.local/bin`.
-2. **Bootstrap this checkout (~2 min)** — `kit init . --mcp default --hook` writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? `./install.sh` is enough.
-3. **Run the demo suite (~3 min)** — `kit eval run --suite evals/edd/demo.yaml --model scripted`: six teaching cases, offline.
-4. **Hold the 95% bar (~3 min)** — `kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports` then `kit eval report --format md --out out/reports`.
+1. **Install Waykit (~2 min)** — Links `~/.agents` and puts `wk` on your PATH via `~/.local/bin` (`kit` remains an alias).
+2. **Bootstrap this checkout (~2 min)** — `wk init . --mcp default --hook` writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? `./install.sh` is enough.
+3. **Open the lifecycle (~3 min)** — Feature work routes grill → spec → TDD + XFN → audit → release. Read the [feature lifecycle](/docs/lifecycle).
+4. **Optional: prove a tool call (~3 min)** — `wk eval run --suite evals/edd/demo.yaml --model scripted`, then `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`.
 
-## Install kit
+## Install Waykit
 
-If `kit` is missing after install, add `~/.local/bin` to `PATH`.
+If `wk` is missing after install, add `~/.local/bin` to `PATH`.
 
 ```bash
-# macOS / Linux; needs git, Node 22+, and sha256sum (coreutils)
-BASE=https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main
-curl -fsSL "$BASE/install.sh" -o install.sh
-curl -fsSL "$BASE/install.sh.sha256" -o install.sh.sha256
-echo "$(cat install.sh.sha256)  install.sh" | sha256sum -c -
-sh install.sh
-kit init . --mcp default --hook
+curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+wk init . --mcp default --hook
 ```
 
-Convenience (no checksum): `curl -fsSL …/install.sh | sh` still works. Prefer the verified path above.
-
-## Run it locally
+## Run an eval locally (optional)
 
 ```bash
-kit eval run --suite evals/edd/demo.yaml --model scripted
-kit eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
-kit eval report --format md --out out/reports
+wk eval run --suite evals/edd/demo.yaml --model scripted
+wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
+wk eval report --format md --out out/reports
 ```
 
 The scripted driver works offline. A provider key is only for optional live-model evals.
@@ -36,7 +29,8 @@ The scripted driver works offline. A provider key is only for optional live-mode
 ## Next
 
 - [Jobs for today](/docs/jobs) if you already know the failure in front of you
+- [Feature lifecycle](/docs/lifecycle) for grill → spec → TDD → ship
 - [EDD guide](/docs/edd) for suites, CI, and production misses
-- [What kit gives you](/docs/kit) for context budget and MCP profiles
-- [Kit map](/docs/map) to browse skills and SOPs; [author it](/ontology) if you are changing the kit tree
+- [What Waykit gives you](/docs/kit) for context budget, the live kit graph, and MCP profiles
+- [Waykit map](/docs/map) is that graph in the browser; [author it](/ontology) after you change skills or SOPs
 - [Common questions](/docs/faq)

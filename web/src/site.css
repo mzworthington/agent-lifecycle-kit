@@ -1509,7 +1509,7 @@ footer a:hover {
   min-width: 0;
 }
 
-/* Five jobs: bottom row is two equal cards, not a lonely orphan */
+/* Six jobs: two rows of three (each spans 2 of 6). Five jobs: bottom row spans 3. */
 .job-grid > li:nth-child(4):nth-last-child(2),
 .job-grid > li:nth-child(5):nth-last-child(1) {
   grid-column: span 3;

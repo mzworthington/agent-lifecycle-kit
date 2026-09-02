@@ -1,6 +1,6 @@
 # Agent Bootstrap
 
-This repository **is** the `.agents` kit. Consumers symlink `~/.agents` here (`install.sh`). App repos use the thin handshake: [templates/project-AGENTS.md](./templates/project-AGENTS.md).
+This repository **is** Waykit (the `.agents` kit). Consumers symlink `~/.agents` here (`install.sh`). App repos use the thin handshake: [templates/project-AGENTS.md](./templates/project-AGENTS.md).
 
 Do not commit or push unless the user explicitly asks.
 
@@ -48,6 +48,6 @@ Do not commit or push unless the user explicitly asks.
 
 Handovers: `~/.agents/handover/<project>/` ([templates/handover.md](./templates/handover.md)). Run pre-commit before marking a phase **COMPLETE** when hooks exist.
 
-Public site: GitHub Pages at [eval-driven.dev](https://eval-driven.dev) (Astro app in `web/`, Markdown in `docs/`; `eval-driven-development.dev` 301s there; custom-domain DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
+Public site: GitHub Pages at [waykit.dev](https://waykit.dev) (Astro app in `web/`, Markdown in `docs/`; `eval-driven.dev` and `eval-driven-development.dev` 301 there; custom-domain DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
 
 Taxonomy: [skills/README.md](./skills/README.md). MCP catalog: [mcps/README.md](./mcps/README.md). Context budget: [SOPs/context-budget.md](./SOPs/context-budget.md).

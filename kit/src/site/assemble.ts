@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /** Custom domain for the GitHub Pages artifact (DNS lives in edge-dns). */
-export const PAGES_SITE_HOST = 'eval-driven.dev';
+export const PAGES_SITE_HOST = 'waykit.dev';
 
 export const WEB_DIST_REL = 'web/dist';
 

@@ -87,7 +87,11 @@ const crumbs = seo.breadcrumbs;
             }
             return <DocsWidget client:load name={segment.name} />;
           }
-          return <MermaidPreview client:load code={segment.code} />;
+          return (
+            <div class="docs-mermaid-island" transition:animate="none">
+              <MermaidPreview client:only="react" code={segment.code} />
+            </div>
+          );
         })
       }
       {

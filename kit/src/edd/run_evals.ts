@@ -94,7 +94,7 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
   const evalsDir = path.join(rootDir, 'evals');
   const skillsDir = path.join(rootDir, 'skills');
 
-  console.log('=== Agent Lifecycle Kit - Skill-trigger harness (registration / prompt hygiene) ===\n');
+  console.log('=== Waykit - Skill-trigger harness (registration / prompt hygiene) ===\n');
 
   const skillsMap = loadSkillsMeta(skillsDir);
   console.log(`Loaded ${skillsMap.size} kit skills from skills/\n`);

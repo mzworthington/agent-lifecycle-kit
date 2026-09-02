@@ -35,7 +35,6 @@ export const SITE_NAV: DocsNavItem[] = [
       '/docs/kit-review-backlog'
     ]
   },
-  { label: 'Evals', path: '/evals/edd', matchPrefixes: ['/evals'] },
   { label: 'Map', path: '/docs/map', matchPrefixes: ['/docs/map', '/ontology'] }
 ];
 
@@ -47,11 +46,11 @@ export const START_ITEMS: DocsNavItem[] = [
 ];
 
 export const PRACTICE_ITEMS: DocsNavItem[] = [
-  { label: 'EDD guide', path: '/docs/edd' },
-  { label: 'What kit gives you', path: '/docs/kit' },
   { label: 'Feature lifecycle', path: '/docs/lifecycle' },
-  { label: 'Kit map', path: '/docs/map' },
-  { label: 'Author the kit map', path: '/ontology' }
+  { label: 'What Waykit gives you', path: '/docs/kit' },
+  { label: 'Waykit map', path: '/docs/map' },
+  { label: 'Author the Waykit map', path: '/ontology' },
+  { label: 'EDD guide', path: '/docs/edd' }
 ];
 
 export const REFERENCE_CORE: DocsNavItem[] = [

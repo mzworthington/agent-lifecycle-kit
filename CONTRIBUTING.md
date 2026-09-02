@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve Agent Lifecycle Kit. This repo is the `.agents` kit: skills, SOPs, EDD harness, and the `kit` CLI.
+Thanks for helping improve Waykit. This repo is the `.agents` kit: skills, SOPs, learning loops (including the EDD harness), and the `wk` CLI (`kit` is an alias).
 
 ## Prerequisites
 
@@ -38,8 +38,6 @@ Examples: `feat(skills): …`, `fix(cli): …`, `docs: …`, `ci: …`.
 | Unit tests | `pnpm test` / `pnpm test:ci` |
 | Kit gate | `pnpm kit check` (audit, layout, EDD routing thresholds, context budget) |
 | Pre-commit | Husky runs audit/validate/verify (+ typecheck; lint when present) |
-
-Installer edits must refresh `install.sh.sha256` via `./bin/write-install-checksum.sh`.
 
 ## Docs and ADRs
 

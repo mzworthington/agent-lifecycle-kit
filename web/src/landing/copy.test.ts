@@ -3,18 +3,21 @@ import { HOME_BADGES, HOME_BRAND, HOME_EYEBROW, HOME_HEADLINE, HOME_NEXT } from 
 
 describe('homepage copy', () => {
   it('puts the kit name first, then the job line', () => {
-    expect(HOME_EYEBROW).toBe('Eval-Driven Development');
-    expect(HOME_BRAND).toBe('Agent Lifecycle Kit');
-    expect(HOME_HEADLINE).toMatch(/tools your agents call/i);
+    expect(HOME_EYEBROW).toMatch(/lifecycle/i);
+    expect(HOME_BRAND).toBe('Waykit');
+    expect(HOME_HEADLINE).toMatch(/grill/i);
     expect(HOME_NEXT).toHaveLength(4);
+    expect(HOME_NEXT[1]?.href).toBe('/docs/lifecycle');
+    expect(HOME_NEXT[2]?.href).toBe('/docs/map');
+    expect(HOME_NEXT[2]?.body).toMatch(/live graph/i);
   });
 
   it('mirrors the README status strip plus a live GitHub release badge', () => {
     const alts = HOME_BADGES.map((badge) => badge.alt);
     expect(alts).toEqual([
       'CI passing',
-      'EDD harness',
-      'Docs at eval-driven.dev',
+      'Feature lifecycle',
+      'Docs at waykit.dev',
       'Unlicense',
       'Latest GitHub release'
     ]);

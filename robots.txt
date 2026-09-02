@@ -27,4 +27,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://eval-driven.dev/sitemap.xml
+Sitemap: https://waykit.dev/sitemap.xml

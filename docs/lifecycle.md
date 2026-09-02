@@ -1,6 +1,6 @@
 # Feature lifecycle
 
-EDD is how you prove tool calls. When the job is a product feature, the orchestrator still routes work through specialist roles: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release. Language and framework profiles load on top of that once the stack is known.
+When the job is a product feature, Waykit routes work through specialist roles: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release. Language and framework profiles load on top of that once the stack is known. EDD is how you prove tool calls; it lives inside TDD when the change is a prompt or a tool schema.
 
 ```mermaid
 sequenceDiagram

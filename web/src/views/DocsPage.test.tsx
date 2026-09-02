@@ -16,7 +16,7 @@ describe('DocsPage', () => {
 
   it('renders the kit map authoring guide from ontology/README.md', () => {
     render(<DocsPage pathname="/ontology" />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Author the kit map' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'Author the Waykit map' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: /this is not a product architecture diagram/i })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Markdown source' }).getAttribute('href')).toBe(
       '/ontology/README.md'

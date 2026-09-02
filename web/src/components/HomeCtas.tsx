@@ -2,18 +2,18 @@ export function HomeCtas() {
   return (
     <ul className="home-ctas">
       <li>
-        <a href="/docs/start" className="btn-cta btn-cta-primary">
-          Install kit
+        <a href="#today" className="btn-cta btn-cta-primary">
+          Install Waykit
         </a>
       </li>
       <li>
-        <a href="/docs/edd" className="btn-cta btn-cta-ghost">
-          Read the EDD guide
+        <a href="/docs/lifecycle" className="btn-cta btn-cta-ghost">
+          Read the lifecycle
         </a>
       </li>
       <li>
         <a href="/docs/map" className="btn-cta btn-cta-ghost">
-          Open the kit map
+          Open the map
         </a>
       </li>
     </ul>

@@ -29,9 +29,10 @@ export interface EddCliOptions {
 
 function printEddHelp(): void {
   console.log(`
-Kit EDD (Eval-Driven Development) commands
+Waykit EDD (Eval-Driven Development) commands
 
-Usage: kit eval <subcommand> [options]
+Usage: wk eval <subcommand> [options]
+       kit eval <subcommand> [options]
        agent-kit eval <subcommand> [options]
 
 Subcommands:
