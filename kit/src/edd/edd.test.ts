@@ -295,7 +295,7 @@ mocks:
       }),
       progress: {
         onSuiteStart(info) {
-          events.push(`suite:${info.driver}:${info.model}:${info.caseCount}:${info.baseUrl}`);
+          events.push(`suite:${info.style}:${info.model}:${info.caseCount}:${info.baseUrl}`);
         },
         onCasePhase(info) {
           events.push(`phase:${info.phase}:${info.id}`);

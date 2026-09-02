@@ -27,6 +27,10 @@ export interface JudgeRuntimeOptions {
   complete?: JudgeCompletionPort;
 }
 
+function passFailScore(parsed: Record<string, unknown>): 'PASS' | 'FAIL' {
+  return String(parsed.score ?? 'FAIL').toUpperCase() === 'PASS' ? 'PASS' : 'FAIL';
+}
+
 function shouldUseHeuristic(options: {
   model: string;
   apiKey?: string;
@@ -72,7 +76,7 @@ export async function runLlmJudge(input: {
   }
 
   const parsed = await completeJudgeJson(input, buildJudgePrompt(input));
-  const score = String(parsed.score ?? 'FAIL').toUpperCase() === 'PASS' ? 'PASS' : 'FAIL';
+  const score = passFailScore(parsed);
   return {
     score,
     reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
@@ -184,7 +188,7 @@ export async function runTaskCompletionJudge(input: {
       agentResponse: input.agentResponse
     })
   );
-  const score = String(parsed.score ?? 'FAIL').toUpperCase() === 'PASS' ? 'PASS' : 'FAIL';
+  const score = passFailScore(parsed);
   return {
     score,
     reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',

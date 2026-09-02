@@ -1,7 +1,8 @@
 /** How one eval run talks to both the agent and the judge. */
 export type EvalStyle = 'local' | 'http' | 'cli';
 
-export type StyleJudgeBackend = 'heuristic' | 'http' | 'cli';
+/** Judge implementation that matches the run style (local → heuristic). */
+export type JudgeBackend = 'heuristic' | 'http' | 'cli';
 
 const LOCAL_MODEL_IDS = new Set(['', 'local', 'scripted', 'mock']);
 
@@ -9,9 +10,8 @@ export function isLocalModelId(model: string): boolean {
   return LOCAL_MODEL_IDS.has(model.trim().toLowerCase());
 }
 
-export function judgeBackendForStyle(style: EvalStyle): StyleJudgeBackend {
-  if (style === 'local') return 'heuristic';
-  return style;
+export function judgeBackendForStyle(style: EvalStyle): JudgeBackend {
+  return style === 'local' ? 'heuristic' : style;
 }
 
 export interface ResolveEvalRunInput {
@@ -26,7 +26,6 @@ export interface EvalRun {
   style: EvalStyle;
   model: string;
   cli?: string;
-  skipRequiresLiveCases: boolean;
 }
 
 function parseStyleToken(raw: string | undefined, flag: string): EvalStyle | undefined {
@@ -48,11 +47,7 @@ function inferStyle(input: ResolveEvalRunInput): EvalStyle {
 export function resolveEvalRun(input: ResolveEvalRunInput): EvalRun {
   const fromStyle = parseStyleToken(input.style, '--style');
   const cli = input.cli?.trim() || undefined;
-
-  let style = fromStyle;
-  if (!style) {
-    style = cli ? 'cli' : inferStyle(input);
-  }
+  const style = fromStyle ?? (cli ? 'cli' : inferStyle(input));
 
   if (style === 'local' && cli) {
     throw new Error('--cli is only valid with --style cli');
@@ -60,19 +55,13 @@ export function resolveEvalRun(input: ResolveEvalRunInput): EvalRun {
   if (style === 'cli' && !cli) {
     throw new Error('--style cli requires --cli <binary> (cursor-agent, claude, agy, or a PATH binary)');
   }
-  if (style === 'cli' && isLocalModelId(input.model)) {
+  if (style !== 'local' && isLocalModelId(input.model)) {
     throw new Error(
-      '--style cli requires --model <assistant model id> (not local/scripted), e.g. cursor-grok-4.6-medium'
+      `--style ${style} requires --model <model id> (not local/scripted), e.g. ${
+        style === 'cli' ? 'cursor-grok-4.6-medium' : 'gpt-4o-mini'
+      }`
     );
   }
-  if (style === 'http' && isLocalModelId(input.model)) {
-    throw new Error('--style http requires --model <provider model id>, e.g. gpt-4o-mini');
-  }
 
-  return {
-    style,
-    model: input.model,
-    cli,
-    skipRequiresLiveCases: style === 'local'
-  };
+  return { style, model: input.model, cli };
 }

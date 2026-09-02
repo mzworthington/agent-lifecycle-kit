@@ -2,22 +2,15 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
   createConsoleEvalProgress,
-  evalDriverKind,
   formatCaseDone,
   formatCasePhase,
   formatSuiteStart
 } from './progress.js';
 
 describe('EDD eval progress', () => {
-  it('labels local vs http from model and key', () => {
-    assert.equal(evalDriverKind('scripted'), 'local');
-    assert.equal(evalDriverKind('gemini-2.5-flash'), 'local');
-    assert.equal(evalDriverKind('gemini-2.5-flash', 'AIza'), 'http');
-  });
-
   it('formats an http suite start with base URL and hang hint', () => {
     const lines = formatSuiteStart({
-      driver: 'http',
+      style: 'http',
       model: 'gemini-2.5-flash',
       baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/',
       caseCount: 12,
@@ -32,7 +25,7 @@ describe('EDD eval progress', () => {
 
   it('formats local suite start without a hang hint', () => {
     const lines = formatSuiteStart({
-      driver: 'local',
+      style: 'local',
       model: 'scripted',
       caseCount: 9,
       skippedLive: 3
@@ -44,7 +37,7 @@ describe('EDD eval progress', () => {
 
   it('formats a CLI suite start with a hang hint for agent and judges', () => {
     const lines = formatSuiteStart({
-      driver: 'cli',
+      style: 'cli',
       model: 'cursor-grok-4.6-medium',
       caseCount: 9,
       skippedLive: 0
@@ -91,7 +84,7 @@ describe('EDD eval progress', () => {
     const lines: string[] = [];
     const progress = createConsoleEvalProgress((msg) => lines.push(msg));
     progress.onSuiteStart({
-      driver: 'local',
+      style: 'local',
       model: 'scripted',
       caseCount: 1,
       skippedLive: 0

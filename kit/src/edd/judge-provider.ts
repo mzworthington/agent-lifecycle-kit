@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { isLocalModelId, judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
+import { isLocalModelId, judgeBackendForStyle, resolveEvalRun, type JudgeBackend } from './eval-style.js';
 import { tryParseJsonObject } from './parse-json-object.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 
@@ -17,8 +17,7 @@ export type JudgeCompletionPort = (input: {
   prompt: string;
 }) => Promise<Record<string, unknown>>;
 
-/** How the harness obtains judge completions. */
-export type JudgeBackend = 'http' | 'cli' | 'heuristic';
+export type { JudgeBackend } from './eval-style.js';
 
 /** Known local code-assistant CLIs with headless JSON mode. */
 export type JudgeCliPreset = 'claude' | 'cursor-agent' | 'cursor' | 'agent' | 'agy' | 'antigravity';
@@ -145,9 +144,16 @@ export interface CliJudgePresetConfig {
   buildArgs: (input: { prompt: string; model: string }) => string[];
 }
 
-function modelFlag(model: string): string[] {
-  if (isLocalModelId(model)) return [];
-  return ['--model', model];
+function jsonPromptArgs(prompt: string, model: string): string[] {
+  const modelArgs = isLocalModelId(model) ? [] : ['--model', model];
+  return ['-p', prompt, '--output-format', 'json', ...modelArgs];
+}
+
+function jsonPromptPreset(command: string): CliJudgePresetConfig {
+  return {
+    command,
+    buildArgs: ({ prompt, model }) => jsonPromptArgs(prompt, model)
+  };
 }
 
 /**
@@ -156,14 +162,7 @@ function modelFlag(model: string): string[] {
  */
 const cursorAgentPreset: CliJudgePresetConfig = {
   command: 'cursor-agent',
-  buildArgs: ({ prompt, model }) => [
-    '-p',
-    prompt,
-    '--output-format',
-    'json',
-    '--mode=ask',
-    ...modelFlag(model)
-  ]
+  buildArgs: ({ prompt, model }) => [...jsonPromptArgs(prompt, model), '--mode=ask']
 };
 
 const CURSOR_AGENT_COMMANDS = new Set(['cursor-agent', 'cursor', 'agent']);
@@ -184,22 +183,30 @@ export function resolveJudgeCliExecutable(
 
 /** Preset argv builders for known headless assistant CLIs. */
 export const JUDGE_CLI_PRESETS: Record<JudgeCliPreset, CliJudgePresetConfig> = {
-  claude: {
-    command: 'claude',
-    buildArgs: ({ prompt, model }) => ['-p', prompt, '--output-format', 'json', ...modelFlag(model)]
-  },
+  claude: jsonPromptPreset('claude'),
   agent: cursorAgentPreset,
   cursor: cursorAgentPreset,
   'cursor-agent': cursorAgentPreset,
-  agy: {
-    command: 'agy',
-    buildArgs: ({ prompt, model }) => ['-p', prompt, '--output-format', 'json', ...modelFlag(model)]
-  },
-  antigravity: {
-    command: 'agy',
-    buildArgs: ({ prompt, model }) => ['-p', prompt, '--output-format', 'json', ...modelFlag(model)]
-  }
+  agy: jsonPromptPreset('agy'),
+  antigravity: jsonPromptPreset('agy')
 };
+
+export function resolveAssistantCli(options: {
+  cli: string;
+  command?: string;
+  buildArgs?: (input: { prompt: string; model: string }) => string[];
+  homedir?: string;
+  exists?: (filePath: string) => boolean;
+}): { command: string; buildArgs: (input: { prompt: string; model: string }) => string[] } {
+  const preset = JUDGE_CLI_PRESETS[options.cli as JudgeCliPreset];
+  return {
+    command: resolveJudgeCliExecutable(options.command ?? preset?.command ?? options.cli, {
+      homedir: options.homedir,
+      exists: options.exists
+    }),
+    buildArgs: options.buildArgs ?? preset?.buildArgs ?? ((input) => jsonPromptArgs(input.prompt, input.model))
+  };
+}
 
 export function isSpawnEnoent(err: unknown): boolean {
   return Boolean(err && typeof err === 'object' && 'code' in err && err.code === 'ENOENT');
@@ -236,22 +243,13 @@ export interface CreateCliJudgeCompletionOptions {
  * Prefer for local/dev-loop judging; keep HTTP for CI merge gates.
  */
 export function createCliJudgeCompletion(options: CreateCliJudgeCompletionOptions = {}): JudgeCompletionPort {
-  const presetKey = (options.cli ?? 'claude') as JudgeCliPreset;
-  const preset = JUDGE_CLI_PRESETS[presetKey];
-  const command = resolveJudgeCliExecutable(options.command ?? preset?.command ?? (options.cli || 'claude'), {
+  const { command, buildArgs } = resolveAssistantCli({
+    cli: options.cli ?? 'cursor-agent',
+    command: options.command,
+    buildArgs: options.buildArgs,
     homedir: options.homedir,
     exists: options.exists
   });
-  const buildArgs =
-    options.buildArgs ??
-    preset?.buildArgs ??
-    (({ prompt, model }: { prompt: string; model: string }) => [
-      '-p',
-      prompt,
-      '--output-format',
-      'json',
-      ...modelFlag(model)
-    ]);
   const execFile = options.execFile ?? spawnCapturedCli;
   const timeoutMs = options.timeoutMs ?? 120_000;
 
@@ -274,17 +272,6 @@ export function createCliJudgeCompletion(options: CreateCliJudgeCompletionOption
     }
   };
 }
-
-/** Claude Code: `claude -p … --output-format json`. */
-export const claudeCodeJudgeCompletion: JudgeCompletionPort = createCliJudgeCompletion({ cli: 'claude' });
-
-/** Cursor Agent CLI: `cursor-agent -p --output-format json --mode=ask`. */
-export const cursorAgentJudgeCompletion: JudgeCompletionPort = createCliJudgeCompletion({
-  cli: 'cursor-agent'
-});
-
-/** Antigravity CLI: `agy -p --output-format json`. */
-export const antigravityJudgeCompletion: JudgeCompletionPort = createCliJudgeCompletion({ cli: 'agy' });
 
 export interface ResolveJudgeOptions {
   /** Explicit style; default is inferred from key/baseUrl/model. */

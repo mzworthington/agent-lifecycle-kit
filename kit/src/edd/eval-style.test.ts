@@ -6,7 +6,6 @@ describe('resolveEvalRun', () => {
   it('defaults to local for scripted/local models even when a key is set', () => {
     const run = resolveEvalRun({ model: 'scripted', apiKey: 'sk-test' });
     assert.equal(run.style, 'local');
-    assert.equal(run.skipRequiresLiveCases, true);
     assert.equal(judgeBackendForStyle(run.style), 'heuristic');
   });
 
@@ -21,6 +20,7 @@ describe('resolveEvalRun', () => {
 
   it('keeps gemini without a key on local (no accidental HTTP)', () => {
     assert.equal(resolveEvalRun({ model: 'gemini-2.5-flash' }).style, 'local');
+    assert.equal(resolveEvalRun({ model: 'gemini-2.5-flash', apiKey: 'AIza' }).style, 'http');
   });
 
   it('uses --style for both agent and judge', () => {
@@ -36,7 +36,6 @@ describe('resolveEvalRun', () => {
     });
     assert.equal(cli.style, 'cli');
     assert.equal(cli.cli, 'cursor-agent');
-    assert.equal(cli.skipRequiresLiveCases, false);
     assert.equal(judgeBackendForStyle('cli'), 'cli');
   });
 

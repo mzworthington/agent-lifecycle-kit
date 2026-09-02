@@ -44,11 +44,6 @@ function normalizeArgs(args: string | Record<string, unknown>): Record<string, u
   return args;
 }
 
-/** True when the harness will use the local keyword driver instead of a live model. */
-export function usesScriptedDriver(model: string, apiKey?: string, baseUrl?: string): boolean {
-  return resolveEvalRun({ model, apiKey, baseUrl }).style === 'local';
-}
-
 function toolNames(tools: ToolContract[]): Set<string> {
   return new Set(tools.map((t) => t.name));
 }
@@ -520,13 +515,28 @@ export async function openAICompatibleDriver(
   };
 }
 
+function defaultAgentDriver(input: { model: string; apiKey: string; baseUrl: string }): AgentDriver {
+  if (resolveEvalRun({ model: input.model, apiKey: input.apiKey, baseUrl: input.baseUrl }).style === 'local') {
+    return scriptedDriver;
+  }
+  return async (call) =>
+    openAICompatibleDriver({
+      model: call.model,
+      baseUrl: input.baseUrl,
+      apiKey: input.apiKey,
+      systemPrompt: call.systemPrompt,
+      messages: call.messages,
+      tools: call.tools
+    });
+}
+
 export class AgentClient {
   private model: string;
   private baseUrl: string;
   private apiKey: string;
   private systemPrompt: string;
   private circuitBreakerThreshold: number;
-  private driver?: AgentDriver;
+  private driver: AgentDriver;
 
   private messages: HistoryTurn[] = [];
   private mocks = new Map<string, EvalMock[]>();
@@ -550,7 +560,11 @@ export class AgentClient {
       options.systemPrompt ??
       'You are a kit agent. Prefer registered tools for architecture lookups. On repeated tool failures, stop retrying and report the constraint to the user.';
     this.circuitBreakerThreshold = options.circuitBreakerThreshold ?? 2;
-    this.driver = options.driver;
+    this.driver = options.driver ?? defaultAgentDriver({
+      model: this.model,
+      apiKey: this.apiKey,
+      baseUrl: this.baseUrl
+    });
   }
 
   resetContext(): void {
@@ -587,35 +601,13 @@ export class AgentClient {
   async executePrompt(prompt: string): Promise<AgentResponse> {
     this.messages.push({ role: 'user', content: prompt });
 
-    const useScripted = usesScriptedDriver(this.model, this.apiKey, this.baseUrl);
-
-    let raw: Awaited<ReturnType<AgentDriver>>;
-    if (this.driver) {
-      raw = await this.driver({
-        model: this.model,
-        systemPrompt: this.systemPrompt,
-        messages: this.messages,
-        tools: [...this.tools.values()],
-        mocks: this.mocks
-      });
-    } else if (useScripted) {
-      raw = await scriptedDriver({
-        model: this.model,
-        systemPrompt: this.systemPrompt,
-        messages: this.messages,
-        tools: [...this.tools.values()],
-        mocks: this.mocks
-      });
-    } else {
-      raw = await openAICompatibleDriver({
-        model: this.model,
-        baseUrl: this.baseUrl,
-        apiKey: this.apiKey,
-        systemPrompt: this.systemPrompt,
-        messages: this.messages,
-        tools: [...this.tools.values()]
-      });
-    }
+    const raw = await this.driver({
+      model: this.model,
+      systemPrompt: this.systemPrompt,
+      messages: this.messages,
+      tools: [...this.tools.values()],
+      mocks: this.mocks
+    });
 
     // Apply mocked tool side-effects / failure counting for circuit-breaker metrics
     let consecutiveToolFailures = raw.consecutiveToolFailures ?? 0;

@@ -1,15 +1,13 @@
 import type { AgentDriver, ToolContract } from './agent-client.js';
-import { isLocalModelId, resolveEvalRun } from './eval-style.js';
+import { resolveEvalRun } from './eval-style.js';
 import { tryParseJsonObject } from './parse-json-object.js';
 import type { AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
 import {
-  JUDGE_CLI_PRESETS,
+  resolveAssistantCli,
   assistantCliMissingMessage,
   isSpawnEnoent,
-  resolveJudgeCliExecutable,
   spawnCapturedCli,
-  type ExecFileFn,
-  type JudgeCliPreset
+  type ExecFileFn
 } from './judge-provider.js';
 
 function asFiniteNumber(value: unknown): number | undefined {
@@ -215,11 +213,6 @@ export interface CreateCliAgentDriverOptions {
   onStdout?: (chunk: string) => void;
 }
 
-function fallbackAgentArgs(prompt: string, model: string): string[] {
-  const modelArgs = isLocalModelId(model) ? [] : ['--model', model];
-  return ['-p', prompt, '--output-format', 'json', ...modelArgs];
-}
-
 async function spawnAgentTurn(input: {
   command: string;
   buildArgs: (input: { prompt: string; model: string }) => string[];
@@ -261,13 +254,11 @@ async function spawnAgentTurn(input: {
 
 /** Shell-out AgentDriver: Cursor/Claude/agy return JSON tool_calls for Kit mocks. */
 export function createCliAgentDriver(options: CreateCliAgentDriverOptions = {}): AgentDriver {
-  const cli = options.cli ?? 'cursor-agent';
-  const preset = JUDGE_CLI_PRESETS[cli as JudgeCliPreset];
-  const command = resolveJudgeCliExecutable(preset?.command ?? cli, {
+  const { command, buildArgs } = resolveAssistantCli({
+    cli: options.cli ?? 'cursor-agent',
     homedir: options.homedir,
     exists: options.exists
   });
-  const buildArgs = preset?.buildArgs ?? ((input: { prompt: string; model: string }) => fallbackAgentArgs(input.prompt, input.model));
   const execFile = options.execFile ?? spawnCapturedCli;
   const timeoutMs = options.timeoutMs ?? 120_000;
 
@@ -304,8 +295,6 @@ export function createCliAgentDriver(options: CreateCliAgentDriverOptions = {}):
     };
   };
 }
-
-export type AgentBackend = 'http' | 'cli' | 'local';
 
 export function resolveCliAgentDriver(options: {
   style?: string;

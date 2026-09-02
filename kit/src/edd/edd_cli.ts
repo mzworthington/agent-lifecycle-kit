@@ -188,7 +188,8 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
     baseUrl,
     onStdout
   });
-  const apiKey = resolveJudgeApiKey(apiKeyFromEnv, baseUrl, judgeBackendForStyle(run.style));
+  const judgeBackend = judgeBackendForStyle(run.style);
+  const apiKey = resolveJudgeApiKey(apiKeyFromEnv, baseUrl, judgeBackend);
   return new EvalRunner({
     model: run.model,
     style: run.style,
@@ -197,7 +198,7 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
     systemPromptPath: fs.existsSync(systemPromptPath) ? systemPromptPath : undefined,
     apiKey,
     baseUrl,
-    judgeBackend: judgeBackendForStyle(run.style),
+    judgeBackend,
     complete
   });
 }

@@ -1,16 +1,16 @@
 export { EvalConfigSchema, EvalCaseSchema, type EvalConfig, type EvalCase } from './schema.js';
-export { AgentClient, scriptedDriver, usesScriptedDriver, type AgentDriver } from './agent-client.js';
+export { AgentClient, scriptedDriver, type AgentDriver } from './agent-client.js';
 export { EvalRunner, type EvalRunnerOptions } from './runner.js';
 export {
   resolveEvalRun,
   judgeBackendForStyle,
   isLocalModelId,
   type EvalStyle,
-  type EvalRun
+  type EvalRun,
+  type JudgeBackend
 } from './eval-style.js';
 export {
   createConsoleEvalProgress,
-  evalDriverKind,
   formatCaseDone,
   formatCasePhase,
   formatSuiteStart,
@@ -44,15 +44,11 @@ export {
   createCliAgentDriver,
   parseAgentCliStdout,
   parseCliUsage,
-  resolveCliAgentDriver,
-  type AgentBackend
+  resolveCliAgentDriver
 } from './cli-agent.js';
 export {
   openAiCompatibleJudgeCompletion,
   createCliJudgeCompletion,
-  claudeCodeJudgeCompletion,
-  cursorAgentJudgeCompletion,
-  antigravityJudgeCompletion,
   parseJudgeCliStdout,
   resolveJudgeBackend,
   resolveJudgeCompletion,
@@ -60,7 +56,6 @@ export {
   JUDGE_CLI_PRESETS,
   resolveJudgeCliExecutable,
   type JudgeCompletionPort,
-  type JudgeBackend,
   type JudgeCliPreset
 } from './judge-provider.js';
 export {

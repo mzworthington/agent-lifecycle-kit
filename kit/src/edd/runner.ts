@@ -97,7 +97,7 @@ export class EvalRunner {
     }
 
     this.progress.onSuiteStart({
-      driver: this.style,
+      style: this.style,
       model: this.model,
       baseUrl: this.baseUrl ?? process.env.KIT_EVAL_BASE_URL ?? process.env.OPENAI_BASE_URL,
       caseCount: dataset.length,
