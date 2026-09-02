@@ -13,6 +13,7 @@
 ### 🐛 Bug Fixes
 
 - *(edd)* Update CLI and evaluation run configurations
+- *(TodayJobs)* Update button text and aria attributes for better accessibility and functionality
 
 ### ⚙️ Refactoring & Performance
 
