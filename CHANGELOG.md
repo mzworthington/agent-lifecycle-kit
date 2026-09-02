@@ -6,6 +6,10 @@
 
 - Improve seo
 
+### ⚙️ Refactoring & Performance
+
+- Update theme colors and improve layout styles across components
+
 ### 🧰 Maintenance & Dependencies
 
 - Update site URLs and improve SEO metadata
