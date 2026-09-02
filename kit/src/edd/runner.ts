@@ -14,6 +14,11 @@ import {
   type SuiteReport
 } from './telemetry.js';
 import { emitAgentSpan, type OtelEmitter } from './otel.js';
+import {
+  createConsoleEvalProgress,
+  evalDriverKind,
+  type EvalProgress
+} from './progress.js';
 
 export interface EvalRunnerOptions {
   model: string;
@@ -25,6 +30,7 @@ export interface EvalRunnerOptions {
   baseUrl?: string;
   otel?: OtelEmitter;
   tags?: string[];
+  progress?: EvalProgress;
 }
 
 function resolvePath(baseFile: string, maybeRelative: string): string {
@@ -42,6 +48,7 @@ export class EvalRunner {
   private baseUrl?: string;
   private otel?: OtelEmitter;
   private tags?: string[];
+  private progress: EvalProgress;
   private lastReports: SuiteReport[] = [];
 
   constructor(options: EvalRunnerOptions) {
@@ -54,6 +61,7 @@ export class EvalRunner {
     this.baseUrl = options.baseUrl;
     this.otel = options.otel;
     this.tags = options.tags;
+    this.progress = options.progress ?? createConsoleEvalProgress();
   }
 
   getReports(): SuiteReport[] {
@@ -77,6 +85,14 @@ export class EvalRunner {
     if (skippedLive.length) {
       console.log(`Skipping ${skippedLive.length} requires-live case(s) (scripted driver).`);
     }
+
+    this.progress.onSuiteStart({
+      driver: evalDriverKind(this.model, this.apiKey),
+      model: this.model,
+      baseUrl: this.baseUrl ?? process.env.KIT_EVAL_BASE_URL ?? process.env.OPENAI_BASE_URL,
+      caseCount: dataset.length,
+      skippedLive: skippedLive.length
+    });
 
     const suitePromptPath = config.system_prompt
       ? resolvePath(absoluteYaml, config.system_prompt)
@@ -118,8 +134,12 @@ export class EvalRunner {
 
     const startedAt = new Date().toISOString();
     const results: CaseResult[] = [];
+    const total = dataset.length;
+    let index = 0;
 
     for (const testCase of dataset) {
+      index += 1;
+      const caseRef = { index, total, id: testCase.id };
       agent.resetContext();
 
       if (config.mocks) {
@@ -135,59 +155,88 @@ export class EvalRunner {
         agent.seedHistory(testCase.history);
       }
 
-      const startTime = performance.now();
-      const response = await agent.executePrompt(testCase.prompt);
-      const latency = performance.now() - startTime;
+      const caseStarted = performance.now();
+      this.progress.onCasePhase({ ...caseRef, phase: 'agent' });
+      try {
+        const startTime = performance.now();
+        const response = await agent.executePrompt(testCase.prompt);
+        const latency = performance.now() - startTime;
 
-      const assertion = await runCaseAssertions({
-        response,
-        metrics: config.metrics,
-        testCase,
-        config,
-        availableTools,
-        suiteYamlPath: absoluteYaml,
-        model: this.model,
-        judgeModel: this.judgeModel,
-        apiKey: this.apiKey,
-        baseUrl: this.baseUrl
-      });
+        this.progress.onCasePhase({ ...caseRef, phase: 'judges' });
+        const assertion = await runCaseAssertions({
+          response,
+          metrics: config.metrics,
+          testCase,
+          config,
+          availableTools,
+          suiteYamlPath: absoluteYaml,
+          model: this.model,
+          judgeModel: this.judgeModel,
+          apiKey: this.apiKey,
+          baseUrl: this.baseUrl
+        });
 
-      emitAgentSpan(this.otel, {
-        suite: config.name,
-        caseId: testCase.id,
-        prompt: testCase.prompt,
-        toolCalls: response.tool_calls,
-        routingConfidence: response.routingConfidence,
-        latencyMs: latency,
-        tokens: response.usage.totalTokens,
-        passed: assertion.passed
-      });
+        emitAgentSpan(this.otel, {
+          suite: config.name,
+          caseId: testCase.id,
+          prompt: testCase.prompt,
+          toolCalls: response.tool_calls,
+          routingConfidence: response.routingConfidence,
+          latencyMs: latency,
+          tokens: response.usage.totalTokens,
+          passed: assertion.passed
+        });
 
-      const metricExpectedTool = config.metrics.find((m) => m.type === 'tool_selection')?.expected;
-      const stepIndex = [...assertion.stepFailures.keys()][0];
-      results.push({
-        id: testCase.id,
-        prompt: testCase.prompt,
-        passed: assertion.passed,
-        latencyMs: latency,
-        tokens: response.usage.totalTokens,
-        routingConfidence: response.routingConfidence,
-        failures: assertion.failures,
-        tags: testCase.tags,
-        hallucinated: assertion.hallucinated,
-        routingOk: assertion.routingOk,
-        schemaOk: assertion.schemaOk,
-        trajectory: assertion.trajectory,
-        trace: assertion.passed
-          ? undefined
-          : buildFailureTrace({
-              testCase,
-              response,
-              failures: assertion.failures,
-              metricExpectedTool,
-              stepIndex
-            })
-      });
+        this.progress.onCaseDone({
+          ...caseRef,
+          passed: assertion.passed,
+          agentMs: latency,
+          totalMs: performance.now() - caseStarted
+        });
+
+        const metricExpectedTool = config.metrics.find((m) => m.type === 'tool_selection')?.expected;
+        const stepIndex = [...assertion.stepFailures.keys()][0];
+        results.push({
+          id: testCase.id,
+          prompt: testCase.prompt,
+          passed: assertion.passed,
+          latencyMs: latency,
+          tokens: response.usage.totalTokens,
+          routingConfidence: response.routingConfidence,
+          failures: assertion.failures,
+          tags: testCase.tags,
+          hallucinated: assertion.hallucinated,
+          routingOk: assertion.routingOk,
+          schemaOk: assertion.schemaOk,
+          trajectory: assertion.trajectory,
+          trace: assertion.passed
+            ? undefined
+            : buildFailureTrace({
+                testCase,
+                response,
+                failures: assertion.failures,
+                metricExpectedTool,
+                stepIndex
+              })
+        });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        this.progress.onCaseDone({
+          ...caseRef,
+          passed: false,
+          agentMs: performance.now() - caseStarted,
+          totalMs: performance.now() - caseStarted
+        });
+        results.push({
+          id: testCase.id,
+          prompt: testCase.prompt,
+          passed: false,
+          latencyMs: performance.now() - caseStarted,
+          tokens: 0,
+          failures: [`agent: ${message}`],
+          tags: testCase.tags
+        });
+      }
     }
 
     const report = buildSuiteReport({

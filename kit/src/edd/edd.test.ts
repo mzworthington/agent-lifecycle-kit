@@ -13,6 +13,10 @@ import { generateReport, publishEvalReportToGithubSummary, renderGithubSummaryOv
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoDir = path.resolve(here, '../../..');
 
+function unavailableFetch(): typeof fetch {
+  return async () => new Response('{"error":{"status":"UNAVAILABLE"}}', { status: 503 });
+}
+
 describe('EDD EvalRunner', () => {
   it('passes architecture routing suite with scripted model', async () => {
     const runner = new EvalRunner({
@@ -213,6 +217,69 @@ describe('EDD EvalRunner', () => {
     assert.match(md, /Tool Selection Failure/);
     assert.match(md, /Schema Violation/);
     assert.match(md, /Suggested Fix/);
+  });
+
+  it('emits per-case agent and judge progress', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-progress-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'mini-01',
+        prompt: 'lookup payment',
+        tags: ['routing'],
+        expect: { tool: 'read_architecture_yaml', arguments_contains: { componentId: 'payment-api' } }
+      })}\n`,
+      'utf8'
+    );
+    const suite = path.join(dir, 'suite.yaml');
+    fs.writeFileSync(
+      suite,
+      `name: "Mini progress"
+dataset: "cases.jsonl"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+mocks:
+  - tool: "read_architecture_yaml"
+    response:
+      status: "success"
+      component: "payment-api"
+`
+    );
+
+    const events: string[] = [];
+    const runner = new EvalRunner({
+      model: 'gemini-2.5-flash',
+      apiKey: 'test-key',
+      baseUrl: 'https://example.test/v1/',
+      driver: async () => ({
+        content: 'payment-api',
+        tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+        usage: { promptTokens: 1, completionTokens: 1, totalTokens: 2 },
+        routingConfidence: 1
+      }),
+      progress: {
+        onSuiteStart(info) {
+          events.push(`suite:${info.driver}:${info.model}:${info.caseCount}:${info.baseUrl}`);
+        },
+        onCasePhase(info) {
+          events.push(`phase:${info.phase}:${info.id}`);
+        },
+        onCaseDone(info) {
+          events.push(`done:${info.id}:${info.passed}`);
+        }
+      }
+    });
+
+    const report = await runner.runSuite(suite);
+    assert.equal(report.failed, 0, report.results[0]?.failures.join('; '));
+    assert.deepEqual(events, [
+      'suite:live:gemini-2.5-flash:1:https://example.test/v1/',
+      'phase:agent:mini-01',
+      'phase:judges:mini-01',
+      'done:mini-01:true'
+    ]);
   });
 
   it('skips requires-live cases when using the scripted driver', async () => {
@@ -511,5 +578,127 @@ metrics:
     });
     assert.equal(verdict.passed, true);
     assert.ok(verdict.score >= 0.5);
+  });
+
+  it('records agent output and continues the suite when judges return 503', async () => {
+    const prevAttempts = process.env.KIT_EVAL_RETRY_ATTEMPTS;
+    const prevBackoff = process.env.KIT_EVAL_RETRY_BACKOFF_MS;
+    process.env.KIT_EVAL_RETRY_ATTEMPTS = '2';
+    process.env.KIT_EVAL_RETRY_BACKOFF_MS = '0';
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = unavailableFetch();
+
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-judge-503-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'case-01',
+        prompt: 'lookup payment',
+        tags: ['routing'],
+        expect: { tool: 'read_architecture_yaml', arguments_contains: { componentId: 'payment-api' } }
+      })}\n${JSON.stringify({
+        id: 'case-02',
+        prompt: 'lookup payment again',
+        tags: ['routing'],
+        expect: { tool: 'read_architecture_yaml', arguments_contains: { componentId: 'payment-api' } }
+      })}\n`
+    );
+    const suite = path.join(dir, 'suite.yaml');
+    fs.writeFileSync(
+      suite,
+      `name: "Judge 503"
+dataset: "cases.jsonl"
+metrics:
+  - type: "tool_selection"
+  - type: "task_completion"
+mocks:
+  - tool: "read_architecture_yaml"
+    response:
+      status: "success"
+      component: "payment-api"
+`
+    );
+
+    try {
+      const runner = new EvalRunner({
+        model: 'gemini-3.7-flash',
+        apiKey: 'test-key',
+        baseUrl: 'https://example.test/v1/',
+        driver: async () => ({
+          content: 'payment-api',
+          tool_calls: [{ name: 'read_architecture_yaml', arguments: { componentId: 'payment-api' } }],
+          usage: { promptTokens: 1, completionTokens: 1, totalTokens: 7 },
+          routingConfidence: 1
+        })
+      });
+      const report = await runner.runSuite(suite);
+      assert.equal(report.total, 2);
+      assert.equal(report.failed, 2);
+      assert.equal(report.results[0]?.tokens, 7);
+      assert.equal(report.results[0]?.routingOk, true);
+      assert.ok(report.results[0]?.failures.some((f) => f.includes('503')));
+      assert.equal(report.results[1]?.id, 'case-02');
+      assert.equal(report.results[1]?.tokens, 7);
+    } finally {
+      globalThis.fetch = originalFetch;
+      if (prevAttempts === undefined) delete process.env.KIT_EVAL_RETRY_ATTEMPTS;
+      else process.env.KIT_EVAL_RETRY_ATTEMPTS = prevAttempts;
+      if (prevBackoff === undefined) delete process.env.KIT_EVAL_RETRY_BACKOFF_MS;
+      else process.env.KIT_EVAL_RETRY_BACKOFF_MS = prevBackoff;
+    }
+  });
+
+  it('continues the suite when the agent provider returns 503', async () => {
+    const prevAttempts = process.env.KIT_EVAL_RETRY_ATTEMPTS;
+    const prevBackoff = process.env.KIT_EVAL_RETRY_BACKOFF_MS;
+    process.env.KIT_EVAL_RETRY_ATTEMPTS = '2';
+    process.env.KIT_EVAL_RETRY_BACKOFF_MS = '0';
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = unavailableFetch();
+
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-agent-503-'));
+    fs.writeFileSync(
+      path.join(dir, 'cases.jsonl'),
+      `${JSON.stringify({
+        id: 'agent-01',
+        prompt: 'lookup payment',
+        tags: ['routing'],
+        expect: { tool: 'read_architecture_yaml' }
+      })}\n${JSON.stringify({
+        id: 'agent-02',
+        prompt: 'lookup payment again',
+        tags: ['routing'],
+        expect: { tool: 'read_architecture_yaml' }
+      })}\n`
+    );
+    const suite = path.join(dir, 'suite.yaml');
+    fs.writeFileSync(
+      suite,
+      `name: "Agent 503"
+dataset: "cases.jsonl"
+metrics:
+  - type: "tool_selection"
+`
+    );
+
+    try {
+      const runner = new EvalRunner({
+        model: 'gemini-3.7-flash',
+        apiKey: 'test-key',
+        baseUrl: 'https://example.test/v1/'
+      });
+      const report = await runner.runSuite(suite);
+      assert.equal(report.total, 2);
+      assert.equal(report.failed, 2);
+      assert.equal(report.results[0]?.id, 'agent-01');
+      assert.ok(report.results[0]?.failures.some((f) => /LLM provider error 503/.test(f)));
+      assert.equal(report.results[1]?.id, 'agent-02');
+    } finally {
+      globalThis.fetch = originalFetch;
+      if (prevAttempts === undefined) delete process.env.KIT_EVAL_RETRY_ATTEMPTS;
+      else process.env.KIT_EVAL_RETRY_ATTEMPTS = prevAttempts;
+      if (prevBackoff === undefined) delete process.env.KIT_EVAL_RETRY_BACKOFF_MS;
+      else process.env.KIT_EVAL_RETRY_BACKOFF_MS = prevBackoff;
+    }
   });
 });

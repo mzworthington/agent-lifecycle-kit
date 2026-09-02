@@ -224,60 +224,72 @@ export async function runCaseAssertions(input: RunAssertionsInput): Promise<Asse
     }
 
     if (metric.type === 'task_completion') {
-      const verdict = await runTaskCompletionJudge({
-        prompt: testCase.prompt,
-        goal: testCase.expect?.goal ?? metric.expected,
-        expectTool: testCase.expect?.tool,
-        expectTools: testCase.expect?.tools?.map((t) => t.name),
-        noTool: testCase.expect?.no_tool === true,
-        toolCalls: calls,
-        toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
-        agentResponse: response.content,
-        model: judgeModel(input, config),
-        apiKey: input.apiKey,
-        baseUrl: input.baseUrl
-      });
-      if (verdict.score !== 'PASS') {
-        failures.push(`completion: ${verdict.reasoning || 'task_completion failed'}`);
+      try {
+        const verdict = await runTaskCompletionJudge({
+          prompt: testCase.prompt,
+          goal: testCase.expect?.goal ?? metric.expected,
+          expectTool: testCase.expect?.tool,
+          expectTools: testCase.expect?.tools?.map((t) => t.name),
+          noTool: testCase.expect?.no_tool === true,
+          toolCalls: calls,
+          toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
+          agentResponse: response.content,
+          model: judgeModel(input, config),
+          apiKey: input.apiKey,
+          baseUrl: input.baseUrl
+        });
+        if (verdict.score !== 'PASS') {
+          failures.push(`completion: ${verdict.reasoning || 'task_completion failed'}`);
+        }
+      } catch (err) {
+        failures.push(`judge: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
 
     if (metric.type === 'criteria_judge') {
       if (testCase.expect?.no_tool) continue;
-      const verdict = await runCriteriaJudge({
-        prompt: testCase.prompt,
-        toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
-        agentResponse: response.content,
-        toolCalls: response.tool_calls,
-        criteria: metric.criteria ?? [],
-        threshold: metric.threshold,
-        model: judgeModel(input, config),
-        apiKey: input.apiKey,
-        baseUrl: input.baseUrl
-      });
-      if (!verdict.passed) {
-        const failed = verdict.results.filter((r) => !r.pass);
-        const detail =
-          failed.length > 0
-            ? failed.map((r) => `${r.criterion} (${r.reason})`).join('; ')
-            : verdict.reasoning;
-        failures.push(`criteria: ${detail}`);
+      try {
+        const verdict = await runCriteriaJudge({
+          prompt: testCase.prompt,
+          toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
+          agentResponse: response.content,
+          toolCalls: response.tool_calls,
+          criteria: metric.criteria ?? [],
+          threshold: metric.threshold,
+          model: judgeModel(input, config),
+          apiKey: input.apiKey,
+          baseUrl: input.baseUrl
+        });
+        if (!verdict.passed) {
+          const failed = verdict.results.filter((r) => !r.pass);
+          const detail =
+            failed.length > 0
+              ? failed.map((r) => `${r.criterion} (${r.reason})`).join('; ')
+              : verdict.reasoning;
+          failures.push(`criteria: ${detail}`);
+        }
+      } catch (err) {
+        failures.push(`judge: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
 
     if (metric.type === 'llm_as_judge') {
       if (testCase.expect?.no_tool) continue;
-      const verdict = await runLlmJudge({
-        prompt: testCase.prompt,
-        toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
-        agentResponse: response.content,
-        model: judgeModel(input, config),
-        apiKey: input.apiKey,
-        baseUrl: input.baseUrl
-      });
-      hallucinated = verdict.hallucinated;
-      if (verdict.score !== 'PASS') {
-        failures.push(`semantic: ${verdict.reasoning || 'llm_as_judge failed'}`);
+      try {
+        const verdict = await runLlmJudge({
+          prompt: testCase.prompt,
+          toolOutput: resolveToolOutput(testCase, config, calls[0]?.name),
+          agentResponse: response.content,
+          model: judgeModel(input, config),
+          apiKey: input.apiKey,
+          baseUrl: input.baseUrl
+        });
+        hallucinated = verdict.hallucinated;
+        if (verdict.score !== 'PASS') {
+          failures.push(`semantic: ${verdict.reasoning || 'llm_as_judge failed'}`);
+        }
+      } catch (err) {
+        failures.push(`judge: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
 

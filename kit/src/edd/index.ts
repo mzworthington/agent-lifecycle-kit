@@ -1,6 +1,14 @@
 export { EvalConfigSchema, EvalCaseSchema, type EvalConfig, type EvalCase } from './schema.js';
 export { AgentClient, scriptedDriver, usesScriptedDriver, type AgentDriver } from './agent-client.js';
 export { EvalRunner, type EvalRunnerOptions } from './runner.js';
+export {
+  createConsoleEvalProgress,
+  evalDriverKind,
+  formatCaseDone,
+  formatCasePhase,
+  formatSuiteStart,
+  type EvalProgress
+} from './progress.js';
 export { loadDataset, streamDataset, productionTraceToJsonl } from './dataset.js';
 export {
   generateReport,
@@ -24,6 +32,11 @@ export {
 } from './judge.js';
 export { runLlmJudge, runCriteriaJudge, runTaskCompletionJudge } from './run-judges.js';
 export { openAiCompatibleJudgeCompletion, type JudgeCompletionPort } from './judge-provider.js';
+export {
+  ProviderHttpError,
+  isRetryableProviderFailure,
+  withProviderRetry
+} from './provider-retry.js';
 export { evaluateArgumentCorrectness, parseToolArguments } from './argument-correctness.js';
 export { synthesizeParaphrases, synthesizeDataset } from './synthesize.js';
 export { buildTrajectory, annotatePlanStepFailures, type TrajectoryStep } from './trajectory.js';

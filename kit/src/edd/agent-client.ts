@@ -1,3 +1,4 @@
+import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 import type { AgentResponse, AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
 
 export interface ToolContract {
@@ -465,34 +466,36 @@ export async function openAICompatibleDriver(
     })
   ];
 
-  const res = await fetch(`${opts.baseUrl.replace(/\/$/, '')}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      authorization: `Bearer ${opts.apiKey}`
-    },
-    body: JSON.stringify({
-      model: opts.model,
-      messages,
-      tools: tools.length ? tools : undefined,
-      temperature: 0
-    })
-  });
+  const data = (await withProviderRetry(async () => {
+    const res = await fetch(`${opts.baseUrl.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${opts.apiKey}`
+      },
+      body: JSON.stringify({
+        model: opts.model,
+        messages,
+        tools: tools.length ? tools : undefined,
+        temperature: 0
+      })
+    });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`LLM provider error ${res.status}: ${body.slice(0, 500)}`);
-  }
+    if (!res.ok) {
+      const body = await res.text();
+      throw new ProviderHttpError('LLM', res.status, body);
+    }
 
-  const data = (await res.json()) as {
-    choices?: Array<{
-      message?: {
-        content?: string | null;
-        tool_calls?: Array<{ function?: { name?: string; arguments?: string } }>;
-      };
-    }>;
-    usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
-  };
+    return (await res.json()) as {
+      choices?: Array<{
+        message?: {
+          content?: string | null;
+          tool_calls?: Array<{ function?: { name?: string; arguments?: string } }>;
+        };
+      }>;
+      usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
+    };
+  }));
 
   const message = data.choices?.[0]?.message;
   const tool_calls: AgentToolCall[] = (message?.tool_calls ?? [])

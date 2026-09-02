@@ -55,6 +55,7 @@ Notes:
   - Default model is "scripted" (deterministic local driver for CI / offline). Cursor and Copilot users stay here; no API key.
   - Cases tagged requires-live are skipped on the scripted driver; nightly live runs include them.
   - Live LLM runs: KIT_EVAL_API_KEY (or OPENAI_API_KEY) plus --model <provider-model>. That HTTP path does not call Cursor Chat or Copilot Chat.
+  - Live and scripted runs print per-case progress (agent then judges). A pause after "agent" means the HTTP provider has not returned.
   - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
 `);
