@@ -57,7 +57,7 @@ Each run has **one style** for both the agent under test and the judge:
 |-------|------|-------|--------|
 | **local** | default, `--style local` | Keyword stub | Heuristic patterns |
 | **http** | `--style http --model <id>` plus key or `--base-url` | OpenAI-compatible `/chat/completions` | Same HTTP model |
-| **cli** | `--style cli --cli cursor-agent --model <id>` | Headless CLI JSON | Same CLI and model |
+| **cli** | `--style cli --cli <binary> --model <id>` (`--cli` is required) | Headless CLI JSON | Same CLI and model |
 
 ```mermaid
 flowchart TD
@@ -71,7 +71,7 @@ flowchart TD
 
 ### Cursor Agent CLI as the agent under test
 
-`cursor-agent` is not OpenAI `/chat/completions`. Kit prompts it in `--mode=ask` and expects a JSON envelope `{ "content": "…", "tool_calls": [{ "name": "<eval tool>", "arguments": {} }] }` using only registered eval tools. After a tool call, the harness fills `content` from the mock JSON (quality metrics grade that grounded text). Token totals come from the CLI JSON `usage` object when present (`inputTokens` / `input_tokens` / `prompt_tokens`); otherwise Kit estimates ~4 characters per token. Set `KIT_EVAL_TOKEN_USD_PER_1K` for a rough USD line on the suite summary. Judge calls use the same `--cli` and `--model`.
+`cursor-agent` is not OpenAI `/chat/completions`. Kit prompts it in `--mode=ask` and expects a JSON envelope `{ "content": "…", "tool_calls": [{ "name": "<eval tool>", "arguments": {} }] }` using only registered eval tools. After a tool call, the harness fills `content` from the mock JSON (quality metrics grade that grounded text). Token totals come from the CLI JSON `usage` object when present (`inputTokens` / `input_tokens` / `prompt_tokens`); otherwise Kit estimates ~4 characters per token. Suite summaries include a rough USD line using `$0.003` per 1k tokens (`DEFAULT_TOKEN_USD_PER_1K`). Override with `KIT_EVAL_TOKEN_USD_PER_1K`, or set it to `0` to hide USD. Local/scripted models omit USD. Judge calls use the same `--cli` and `--model`.
 
 ```bash
 noglob kit eval run --suite evals/edd/architecture_routing.yaml \
@@ -107,7 +107,7 @@ noglob kit eval run --suite evals/edd/architecture_routing.yaml \
 
 Prefer **http** for CI merge gates; **cli** for fast local iteration while writing evals (subscription rate limits and weaker structured-output guarantees).
 
-Optional: `KIT_EVAL_MODEL`, `KIT_EVAL_TOKEN_USD_PER_1K` (rough USD on the suite token total). Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
+Optional: `KIT_EVAL_MODEL`. Rough USD uses `$0.003` per 1k tokens unless `KIT_EVAL_TOKEN_USD_PER_1K` is set (`0` disables). Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
 
 ## Metrics and suites
 

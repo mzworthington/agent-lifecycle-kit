@@ -1,5 +1,6 @@
 import type { AgentDriver, ToolContract } from './agent-client.js';
-import { resolveEvalRun } from './eval-style.js';
+import { isLocalModelId, resolveEvalRun } from './eval-style.js';
+import { tryParseJsonObject } from './parse-json-object.js';
 import type { AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
 import {
   JUDGE_CLI_PRESETS,
@@ -10,30 +11,6 @@ import {
   type ExecFileFn,
   type JudgeCliPreset
 } from './judge-provider.js';
-
-function tryParseJsonObject(text: string): Record<string, unknown> | undefined {
-  const trimmed = text.trim();
-  if (!trimmed) return undefined;
-  try {
-    const parsed = JSON.parse(trimmed) as unknown;
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-  } catch {
-    /* fall through */
-  }
-  const match = trimmed.match(/\{[\s\S]*\}/);
-  if (!match) return undefined;
-  try {
-    const parsed = JSON.parse(match[0]) as unknown;
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
-}
 
 function asFiniteNumber(value: unknown): number | undefined {
   if (typeof value === 'number' && Number.isFinite(value) && value >= 0) return value;
@@ -239,7 +216,7 @@ export interface CreateCliAgentDriverOptions {
 }
 
 function fallbackAgentArgs(prompt: string, model: string): string[] {
-  const modelArgs = !model || model === 'scripted' || model === 'mock' || model === 'local' ? [] : ['--model', model];
+  const modelArgs = isLocalModelId(model) ? [] : ['--model', model];
   return ['-p', prompt, '--output-format', 'json', ...modelArgs];
 }
 
@@ -332,7 +309,6 @@ export type AgentBackend = 'http' | 'cli' | 'local';
 
 export function resolveCliAgentDriver(options: {
   style?: string;
-  agentCli?: string;
   cli?: string;
   model: string;
   execFile?: ExecFileFn;
@@ -341,11 +317,11 @@ export function resolveCliAgentDriver(options: {
   const run = resolveEvalRun({
     style: options.style,
     model: options.model,
-    cli: options.cli ?? options.agentCli
+    cli: options.cli
   });
   if (run.style !== 'cli') return undefined;
   return createCliAgentDriver({
-    cli: run.cli ?? 'cursor-agent',
+    cli: run.cli,
     execFile: options.execFile,
     onStdout: options.onStdout
   });

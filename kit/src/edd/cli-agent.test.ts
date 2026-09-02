@@ -200,7 +200,7 @@ describe('createCliAgentDriver', () => {
 
   it('refuses local model ids for the CLI style', () => {
     assert.throws(
-      () => resolveCliAgentDriver({ style: 'cli', model: 'scripted' }),
+      () => resolveCliAgentDriver({ style: 'cli', model: 'scripted', cli: 'claude' }),
       /cursor-grok-4.6-medium/
     );
     assert.equal(resolveCliAgentDriver({ model: 'cursor-grok-4.6-medium' }), undefined);

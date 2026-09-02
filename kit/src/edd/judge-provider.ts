@@ -2,7 +2,8 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
+import { isLocalModelId, judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
+import { tryParseJsonObject } from './parse-json-object.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 
 /**
@@ -104,30 +105,6 @@ export const openAiCompatibleJudgeCompletion: JudgeCompletionPort = async (input
   });
 };
 
-function tryParseJsonObject(text: string): Record<string, unknown> | undefined {
-  const trimmed = text.trim();
-  if (!trimmed) return undefined;
-  try {
-    const parsed = JSON.parse(trimmed) as unknown;
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-  } catch {
-    /* fall through */
-  }
-  const match = trimmed.match(/\{[\s\S]*\}/);
-  if (!match) return undefined;
-  try {
-    const parsed = JSON.parse(match[0]) as unknown;
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>;
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
-}
-
 /**
  * Normalize CLI envelopes (Claude Code / Cursor Agent / Antigravity) into judge JSON.
  * Accepts a raw judge object, or an envelope whose result/response/content is JSON text.
@@ -169,7 +146,7 @@ export interface CliJudgePresetConfig {
 }
 
 function modelFlag(model: string): string[] {
-  if (!model || model === 'scripted' || model === 'mock' || model === 'local') return [];
+  if (isLocalModelId(model)) return [];
   return ['--model', model];
 }
 
@@ -314,8 +291,6 @@ export interface ResolveJudgeOptions {
   style?: string;
   /** CLI preset or binary when style is `cli`. */
   cli?: string;
-  /** @deprecated Use cli. */
-  judgeCli?: string;
   model: string;
   apiKey?: string;
   baseUrl?: string;
@@ -336,7 +311,7 @@ export function resolveJudgeBackend(options: ResolveJudgeOptions): JudgeBackend 
     model: options.model,
     apiKey: options.apiKey,
     baseUrl: options.baseUrl,
-    cli: options.cli ?? options.judgeCli
+    cli: options.cli
   });
   return judgeBackendForStyle(run.style);
 }
@@ -348,7 +323,7 @@ export function resolveJudgeCompletion(options: ResolveJudgeOptions): JudgeCompl
   if (backend === 'heuristic') return undefined;
   if (backend === 'cli') {
     return createCliJudgeCompletion({
-      cli: options.cli ?? options.judgeCli ?? 'claude',
+      cli: options.cli,
       execFile: options.execFile,
       onStdout: options.onStdout
     });

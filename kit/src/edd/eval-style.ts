@@ -20,12 +20,6 @@ export interface ResolveEvalRunInput {
   apiKey?: string;
   baseUrl?: string;
   cli?: string;
-  /** @deprecated Use --cli. */
-  agentCli?: string;
-  /** @deprecated Use --cli. */
-  judgeCli?: string;
-  /** Removed: agent and judge share --model. */
-  judgeModel?: string;
 }
 
 export interface EvalRun {
@@ -52,27 +46,19 @@ function inferStyle(input: ResolveEvalRunInput): EvalStyle {
 
 /** One style and one model for agent + judge. Mixing backends is not supported. */
 export function resolveEvalRun(input: ResolveEvalRunInput): EvalRun {
-  if (input.judgeModel?.trim()) {
-    throw new Error('--judge-model is removed. Agent and judge share --model (one model per run).');
-  }
-
   const fromStyle = parseStyleToken(input.style, '--style');
-
-  const cliValues = [input.cli, input.agentCli, input.judgeCli]
-    .map((v) => v?.trim())
-    .filter((v): v is string => Boolean(v));
-  const uniqueCli = [...new Set(cliValues)];
-  if (uniqueCli.length > 1) {
-    throw new Error(`--cli must be a single binary (got ${uniqueCli.join(' vs ')}).`);
-  }
+  const cli = input.cli?.trim() || undefined;
 
   let style = fromStyle;
   if (!style) {
-    style = uniqueCli.length ? 'cli' : inferStyle(input);
+    style = cli ? 'cli' : inferStyle(input);
   }
 
-  if (style === 'local' && uniqueCli.length) {
+  if (style === 'local' && cli) {
     throw new Error('--cli is only valid with --style cli');
+  }
+  if (style === 'cli' && !cli) {
+    throw new Error('--style cli requires --cli <binary> (cursor-agent, claude, agy, or a PATH binary)');
   }
   if (style === 'cli' && isLocalModelId(input.model)) {
     throw new Error(
@@ -86,7 +72,7 @@ export function resolveEvalRun(input: ResolveEvalRunInput): EvalRun {
   return {
     style,
     model: input.model,
-    cli: uniqueCli[0],
+    cli,
     skipRequiresLiveCases: style === 'local'
   };
 }

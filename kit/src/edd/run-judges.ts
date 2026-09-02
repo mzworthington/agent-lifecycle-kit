@@ -5,7 +5,6 @@ import {
   localCriteriaJudge,
   localJudge,
   localTaskCompletion,
-  useLocalJudgeModel,
   type CriteriaJudgeVerdict,
   type JudgeVerdict
 } from './judge.js';
@@ -36,10 +35,7 @@ function shouldUseHeuristic(options: {
   complete?: JudgeCompletionPort;
 }): boolean {
   if (options.complete) return false;
-  const backend = options.backend ?? resolveJudgeBackend(options);
-  if (backend === 'heuristic') return true;
-  if (backend === 'cli' || backend === 'http') return false;
-  return useLocalJudgeModel(options.model, resolveJudgeApiKey(options.apiKey, options.baseUrl, backend));
+  return (options.backend ?? resolveJudgeBackend(options)) === 'heuristic';
 }
 
 async function completeJudgeJson(

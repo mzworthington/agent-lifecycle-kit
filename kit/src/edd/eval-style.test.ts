@@ -46,31 +46,16 @@ describe('resolveEvalRun', () => {
     assert.equal(run.cli, 'claude');
   });
 
-  it('rejects a second model for the judge', () => {
+  it('requires --cli and a real model for the cli style', () => {
     assert.throws(
-      () => resolveEvalRun({ model: 'gpt-4o-mini', judgeModel: 'gpt-4o', apiKey: 'sk' }),
-      /judge-model is removed/
+      () => resolveEvalRun({ style: 'cli', model: 'cursor-grok-4.6-medium' }),
+      /requires --cli/
     );
-  });
-
-  it('rejects local model ids for http and cli', () => {
-    assert.throws(() => resolveEvalRun({ style: 'cli', model: 'scripted' }), /requires --model/);
+    assert.throws(() => resolveEvalRun({ style: 'cli', model: 'scripted', cli: 'claude' }), /requires --model/);
     assert.throws(() => resolveEvalRun({ style: 'http', model: 'local' }), /requires --model/);
     assert.throws(
       () => resolveEvalRun({ style: 'local', model: 'scripted', cli: 'claude' }),
       /only valid with --style cli/
-    );
-  });
-
-  it('rejects two different CLI binaries', () => {
-    assert.throws(
-      () =>
-        resolveEvalRun({
-          model: 'cursor-grok-4.6-medium',
-          agentCli: 'claude',
-          judgeCli: 'cursor-agent'
-        }),
-      /single binary/
     );
   });
 });

@@ -100,10 +100,6 @@ export function buildTaskCompletionPrompt(input: {
     .replace('{agent_response}', input.agentResponse);
 }
 
-export function useLocalJudgeModel(model: string, apiKey?: string): boolean {
-  return model === 'scripted' || model === 'mock' || model === 'local' || !apiKey;
-}
-
 function toolOutputHasComponent(toolOutput: unknown): boolean {
   return !!toolOutput && typeof toolOutput === 'object' && 'component' in (toolOutput as object);
 }

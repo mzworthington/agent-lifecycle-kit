@@ -20,6 +20,8 @@ export { loadDataset, streamDataset, productionTraceToJsonl } from './dataset.js
 export {
   generateReport,
   buildSuiteReport,
+  tokenUsdPer1k,
+  DEFAULT_TOKEN_USD_PER_1K,
   renderGithubSummaryOverview,
   appendGithubStepSummary,
   publishEvalReportToGithubSummary,
@@ -35,8 +37,7 @@ export {
   localCriteriaJudge,
   localTaskCompletion,
   JUDGE_PROMPT_TEMPLATE,
-  JUDGE_GRADING_RULES,
-  useLocalJudgeModel
+  JUDGE_GRADING_RULES
 } from './judge.js';
 export { runLlmJudge, runCriteriaJudge, runTaskCompletionJudge } from './run-judges.js';
 export {

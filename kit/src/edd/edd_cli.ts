@@ -19,12 +19,8 @@ import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
 import type { EvalCase } from './schema.js';
 import { flagValue, hasFlag } from '../cli/flags.js';
 import { resolveCliAgentDriver } from './cli-agent.js';
-import { resolveEvalRun } from './eval-style.js';
-import {
-  resolveJudgeApiKey,
-  resolveJudgeCompletion,
-  type JudgeBackend
-} from './judge-provider.js';
+import { judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
+import { resolveJudgeApiKey, resolveJudgeCompletion } from './judge-provider.js';
 
 export interface EddCliOptions {
   repoDir: string;
@@ -51,7 +47,7 @@ Agent / judge options (run / watch / report / ci):
   --model <name>       One model for agent and judge (local ignores this)
   --cli <name>         When --style cli: cursor-agent | claude | agy | <binary>
   --cli-stdout         Tee CLI stdout to this terminal (still parsed as JSON)
-  --base-url <url>     OpenAI-compatible base (alias: --baseUrl). Local servers: http://localhost:11434/v1
+  --base-url <url>     OpenAI-compatible base. Local servers: http://localhost:11434/v1
   --api-key <key>      Override KIT_EVAL_API_KEY / OPENAI_API_KEY (use "local" for Ollama)
 
 Dataset options:
@@ -125,44 +121,54 @@ export function eddWatchTargets(repoDir: string, args: string[]): string[] {
   ].filter((t): t is string => Boolean(t));
 }
 
+function rejectRemovedEddFlags(args: string[]): void {
+  const pairs: Array<{ flags: string[]; message: string }> = [
+    {
+      flags: ['--agent', '--judge'],
+      message: '--agent and --judge are removed. Pass --style local|http|cli once.'
+    },
+    {
+      flags: ['--agent-cli', '--agentCli', '--judge-cli', '--judgeCli'],
+      message: '--agent-cli / --judge-cli are removed. Pass --cli once for agent and judge.'
+    },
+    {
+      flags: ['--judge-model', '--judgeModel'],
+      message: '--judge-model is removed. Agent and judge share --model (one model per run).'
+    },
+    {
+      flags: ['--agent-stdout', '--judge-stdout'],
+      message: '--agent-stdout / --judge-stdout are removed. Pass --cli-stdout.'
+    }
+  ];
+  for (const { flags, message } of pairs) {
+    if (flags.some((flag) => hasEddFlag(args, flag))) {
+      throw new Error(message);
+    }
+  }
+}
+
 function createRunner(repoDir: string, args: string[]): EvalRunner {
+  rejectRemovedEddFlags(args);
   const model = getEddFlag(args, '--model') ?? process.env.KIT_EVAL_MODEL ?? 'scripted';
   const tagsRaw = getEddFlag(args, '--tags');
   const tags = tagsRaw ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean) : undefined;
   const systemPromptPath =
     getEddFlag(args, '--system-prompt') ?? path.join(repoDir, 'evals', 'edd', 'system_prompt.md');
   const baseUrl =
-    getEddFlag(args, '--base-url') ??
-    getEddFlag(args, '--baseUrl') ??
-    process.env.KIT_EVAL_BASE_URL ??
-    process.env.OPENAI_BASE_URL;
+    getEddFlag(args, '--base-url') ?? process.env.KIT_EVAL_BASE_URL ?? process.env.OPENAI_BASE_URL;
   const apiKeyFromEnv =
     getEddFlag(args, '--api-key') ??
-    getEddFlag(args, '--apiKey') ??
     process.env.KIT_EVAL_API_KEY ??
     process.env.OPENAI_API_KEY ??
     process.env.ANTHROPIC_API_KEY;
-  if (getEddFlag(args, '--agent') || getEddFlag(args, '--judge')) {
-    throw new Error('--agent and --judge are removed. Pass --style local|http|cli once.');
-  }
   const run = resolveEvalRun({
     style: getEddFlag(args, '--style'),
     model,
     apiKey: apiKeyFromEnv,
     baseUrl,
-    cli: getEddFlag(args, '--cli'),
-    agentCli: getEddFlag(args, '--agent-cli') ?? getEddFlag(args, '--agentCli'),
-    judgeCli: getEddFlag(args, '--judge-cli') ?? getEddFlag(args, '--judgeCli'),
-    judgeModel: getEddFlag(args, '--judge-model') ?? getEddFlag(args, '--judgeModel')
+    cli: getEddFlag(args, '--cli')
   });
-  const cliStdout =
-    hasEddFlag(args, '--cli-stdout') ||
-    hasEddFlag(args, '--cliStdout') ||
-    hasEddFlag(args, '--agent-stdout') ||
-    hasEddFlag(args, '--judge-stdout') ||
-    process.env.KIT_EVAL_CLI_STDOUT === '1' ||
-    process.env.KIT_EVAL_AGENT_STDOUT === '1' ||
-    process.env.KIT_EVAL_JUDGE_STDOUT === '1';
+  const cliStdout = hasEddFlag(args, '--cli-stdout') || process.env.KIT_EVAL_CLI_STDOUT === '1';
   const onStdout = cliStdout
     ? (chunk: string) => {
         process.stderr.write(chunk);
@@ -174,8 +180,6 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
     model: run.model,
     onStdout
   });
-  const judgeBackend: JudgeBackend =
-    run.style === 'local' ? 'heuristic' : run.style;
   const complete = resolveJudgeCompletion({
     style: run.style,
     cli: run.cli,
@@ -184,7 +188,7 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
     baseUrl,
     onStdout
   });
-  const apiKey = resolveJudgeApiKey(apiKeyFromEnv, baseUrl, judgeBackend);
+  const apiKey = resolveJudgeApiKey(apiKeyFromEnv, baseUrl, judgeBackendForStyle(run.style));
   return new EvalRunner({
     model: run.model,
     style: run.style,
@@ -193,7 +197,7 @@ function createRunner(repoDir: string, args: string[]): EvalRunner {
     systemPromptPath: fs.existsSync(systemPromptPath) ? systemPromptPath : undefined,
     apiKey,
     baseUrl,
-    judgeBackend,
+    judgeBackend: judgeBackendForStyle(run.style),
     complete
   });
 }
@@ -282,7 +286,7 @@ async function cmdCi(repoDir: string, args: string[]): Promise<number> {
   const suite = resolveEddSuite(repoDir, args);
   const threshold = getEddNumberFlag(args, '--threshold-routing', 95);
   const outDir = path.resolve(process.cwd(), getEddFlag(args, '--out') ?? 'out/reports');
-  const runner = createRunner(repoDir, ['--model', getEddFlag(args, '--model') ?? 'scripted', ...args]);
+  const runner = createRunner(repoDir, args);
   const report = await runner.runSuite(suite);
   const written = runner.writeReports('md', outDir);
   runner.writeReports('json', outDir);

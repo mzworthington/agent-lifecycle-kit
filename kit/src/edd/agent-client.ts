@@ -1,3 +1,4 @@
+import { resolveEvalRun } from './eval-style.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 import type { AgentResponse, AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
 
@@ -44,8 +45,8 @@ function normalizeArgs(args: string | Record<string, unknown>): Record<string, u
 }
 
 /** True when the harness will use the local keyword driver instead of a live model. */
-export function usesScriptedDriver(model: string, apiKey?: string): boolean {
-  return model === 'scripted' || model === 'mock' || (!apiKey && model !== 'openai');
+export function usesScriptedDriver(model: string, apiKey?: string, baseUrl?: string): boolean {
+  return resolveEvalRun({ model, apiKey, baseUrl }).style === 'local';
 }
 
 function toolNames(tools: ToolContract[]): Set<string> {
@@ -586,7 +587,7 @@ export class AgentClient {
   async executePrompt(prompt: string): Promise<AgentResponse> {
     this.messages.push({ role: 'user', content: prompt });
 
-    const useScripted = usesScriptedDriver(this.model, this.apiKey);
+    const useScripted = usesScriptedDriver(this.model, this.apiKey, this.baseUrl);
 
     let raw: Awaited<ReturnType<AgentDriver>>;
     if (this.driver) {

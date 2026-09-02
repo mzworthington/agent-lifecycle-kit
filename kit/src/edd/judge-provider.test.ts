@@ -49,7 +49,7 @@ describe('resolveJudgeBackend', () => {
 
   it('honors explicit style', () => {
     assert.equal(
-      resolveJudgeBackend({ model: 'cursor-grok-4.6-medium', style: 'cli' }),
+      resolveJudgeBackend({ model: 'cursor-grok-4.6-medium', style: 'cli', cli: 'cursor-agent' }),
       'cli'
     );
     assert.equal(resolveJudgeBackend({ model: 'gpt-4o-mini', style: 'http', baseUrl: 'http://x' }), 'http');

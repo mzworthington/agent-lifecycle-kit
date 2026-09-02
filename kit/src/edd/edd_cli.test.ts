@@ -105,9 +105,6 @@ describe('EDD CLI flag helpers', () => {
     assert.match(text, /--cli <name>/);
     assert.match(text, /--cli-stdout/);
     assert.match(text, /--base-url/);
-    assert.doesNotMatch(text, /--judge-model/);
-    assert.doesNotMatch(text, /--agent </);
-    assert.doesNotMatch(text, /--judge </);
   });
 });
 
@@ -122,6 +119,23 @@ describe('handleEddEvalCli', () => {
   it('prints help and rejects unknown subcommands', async () => {
     assert.equal(await handleEddEvalCli({ repoDir: '/kit', args: ['help'] }), 0);
     assert.equal(await handleEddEvalCli({ repoDir: '/kit', args: ['nope'] }), 1);
+  });
+
+  it('rejects removed split agent/judge flags', async () => {
+    await assert.rejects(
+      handleEddEvalCli({
+        repoDir: '/kit',
+        args: ['run', '--suite', 'x.yaml', '--agent-cli', 'claude', '--model', 'scripted']
+      }),
+      /--agent-cli/
+    );
+    await assert.rejects(
+      handleEddEvalCli({
+        repoDir: '/kit',
+        args: ['run', '--suite', 'x.yaml', '--judge-model', 'gpt-4o', '--model', 'scripted']
+      }),
+      /--judge-model/
+    );
   });
 
   it('runs a scripted suite and writes reports', async () => {

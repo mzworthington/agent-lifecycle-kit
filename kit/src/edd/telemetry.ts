@@ -1,3 +1,4 @@
+import { isLocalModelId } from './eval-style.js';
 import fs from 'fs';
 import path from 'path';
 import { diagnoseFailures, type FailureTrace } from './failure-trace.js';
@@ -38,14 +39,26 @@ export interface SuiteReport {
   hallucinationRate: number;
   totalTokens: number;
   avgLatencyMs: number;
-  /** Optional rough USD estimate when KIT_EVAL_TOKEN_USD_PER_1K is set. */
+  /** Rough USD from tokens. Omitted for scripted/local models, or when the rate is 0. */
   estimatedCostUsd?: number;
   results: CaseResult[];
 }
 
-function estimateCostUsd(totalTokens: number): number | undefined {
-  const per1k = Number(process.env.KIT_EVAL_TOKEN_USD_PER_1K ?? '');
-  if (!Number.isFinite(per1k) || per1k <= 0) return undefined;
+/** Default blended USD per 1k tokens when KIT_EVAL_TOKEN_USD_PER_1K is unset. Override with that env; `0` disables. */
+export const DEFAULT_TOKEN_USD_PER_1K = 0.003;
+
+export function tokenUsdPer1k(env: NodeJS.ProcessEnv = process.env): number {
+  const raw = env.KIT_EVAL_TOKEN_USD_PER_1K;
+  if (raw === undefined || raw.trim() === '') return DEFAULT_TOKEN_USD_PER_1K;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 0) return DEFAULT_TOKEN_USD_PER_1K;
+  return n;
+}
+
+function estimateCostUsd(totalTokens: number, model: string): number | undefined {
+  if (isLocalModelId(model)) return undefined;
+  const per1k = tokenUsdPer1k();
+  if (per1k <= 0) return undefined;
   return (totalTokens / 1000) * per1k;
 }
 
@@ -99,7 +112,7 @@ export function buildSuiteReport(input: {
     hallucinationRate,
     totalTokens,
     avgLatencyMs,
-    estimatedCostUsd: estimateCostUsd(totalTokens),
+    estimatedCostUsd: estimateCostUsd(totalTokens, input.model),
     results: input.results
   };
 }

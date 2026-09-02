@@ -32,7 +32,7 @@ One style per run for **both** agent and judge.
 |--------|------|----------------|
 | `local` (CI default) | `kit eval ci`, PR CI (`kit check`), `--model scripted` | Harness, schema, keyword routing. **Not** a product LLM test. No API key. |
 | `http` | `--style http --model <id>` with key or `--base-url`; nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) | Same model for routing and quality metrics. Includes `requires-live` cases. |
-| `cli` | `--style cli --cli cursor-agent --model <id>` | Same CLI binary for agent and judge. |
+| `cli` | `--style cli --cli cursor-agent --model <id>` (`--cli` is required) | Same CLI binary for agent and judge. |
 
 Cursor and GitHub Copilot are IDE hosts (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). They are **not** the eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
 
@@ -170,4 +170,4 @@ Includes pass rate, tokens/latency, routing + schema adherence, and failure trac
 
 CI workflows (`.github/workflows/ci.yml` Verify, `edd-live.yml`) write a short “what this gate means” preamble plus the EDD overview into the run **Summary** tab.
 
-Live models (optional): `KIT_EVAL_API_KEY` first, then `OPENAI_API_KEY`, then `ANTHROPIC_API_KEY`. Optional `KIT_EVAL_BASE_URL` / `OPENAI_BASE_URL` (OpenAI-compatible `/chat/completions`; default `https://api.openai.com/v1`), `KIT_EVAL_TOKEN_USD_PER_1K`, `KIT_EVAL_MODEL`. Nightly CI only reads `KIT_EVAL_API_KEY`.
+Live models (optional): `KIT_EVAL_API_KEY` first, then `OPENAI_API_KEY`, then `ANTHROPIC_API_KEY`. Optional `KIT_EVAL_BASE_URL` / `OPENAI_BASE_URL` (OpenAI-compatible `/chat/completions`; default `https://api.openai.com/v1`), `KIT_EVAL_MODEL`. USD on live/CLI reports defaults to `$0.003` per 1k tokens (`KIT_EVAL_TOKEN_USD_PER_1K` to override, `0` to disable). Nightly CI only reads `KIT_EVAL_API_KEY`.
