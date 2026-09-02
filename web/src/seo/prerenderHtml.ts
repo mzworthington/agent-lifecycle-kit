@@ -28,6 +28,16 @@ function upsertCanonical(html: string, href: string): string {
   return html.replace(/<\/head>/i, `    ${tag}\n  </head>`);
 }
 
+/** The Markdown source stays published; point crawlers and agents at it. */
+function upsertMarkdownAlternate(html: string, href?: string): string {
+  if (!href) return html;
+  const tag = `<link rel="alternate" type="text/markdown" href="${escapeHtml(href)}" />`;
+  if (/<link\s+rel="alternate"\s+type="text\/markdown"/i.test(html)) {
+    return html.replace(/<link\s+rel="alternate"\s+type="text\/markdown"\s+href="[^"]*"\s*\/?>/i, tag);
+  }
+  return html.replace(/<\/head>/i, `    ${tag}\n  </head>`);
+}
+
 function stripJsonLdScripts(html: string): string {
   let result = '';
   let i = 0;
@@ -58,9 +68,9 @@ function stripJsonLdScripts(html: string): string {
   return result;
 }
 
-function upsertJsonLd(html: string, seo: PageSeo): string {
+function upsertJsonLd(html: string, seo: PageSeo, lastmod?: string): string {
   const without = stripJsonLdScripts(html);
-  const script = `<script type="application/ld+json">${JSON.stringify(buildJsonLdGraph(seo))}</script>`;
+  const script = `<script type="application/ld+json">${JSON.stringify(buildJsonLdGraph(seo, { lastmod }))}</script>`;
   return without.replace(/<\/head>/i, `    ${script}\n  </head>`);
 }
 
@@ -86,12 +96,15 @@ ${links}
 export function injectPrerenderedPageHtml(
   shellHtml: string,
   seo: PageSeo,
-  navLinks: Array<{ href: string; label: string }>
+  navLinks: Array<{ href: string; label: string }>,
+  opts: { lastmod?: string; markdownUrl?: string } = {}
 ): string {
   let html = shellHtml;
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(seo.title)}</title>`);
   html = replaceMetaContent(html, 'name', 'description', seo.description);
   html = upsertCanonical(html, seo.canonicalUrl);
+  html = upsertMarkdownAlternate(html, opts.markdownUrl);
+  html = replaceMetaContent(html, 'property', 'og:type', seo.path === '/' ? 'website' : 'article');
   html = replaceMetaContent(html, 'property', 'og:url', seo.canonicalUrl);
   html = replaceMetaContent(html, 'property', 'og:title', seo.title);
   html = replaceMetaContent(html, 'property', 'og:description', seo.description);
@@ -99,7 +112,10 @@ export function injectPrerenderedPageHtml(
   html = replaceMetaContent(html, 'name', 'twitter:title', seo.title);
   html = replaceMetaContent(html, 'name', 'twitter:description', seo.description);
   html = replaceMetaContent(html, 'name', 'twitter:image', seo.ogImageUrl);
-  html = upsertJsonLd(html, seo);
+  if (opts.lastmod) {
+    html = replaceMetaContent(html, 'property', 'article:modified_time', opts.lastmod);
+  }
+  html = upsertJsonLd(html, seo, opts.lastmod);
 
   const body = prerenderBody(seo, navLinks);
   if (/<div id="root"><\/div>/i.test(html)) {

@@ -54,6 +54,18 @@ function copyEntry(src: string, dest: string): void {
   fs.copyFileSync(src, dest);
 }
 
+/**
+ * Search-engine ownership proofs. Google, Bing, and IndexNow all verify with a
+ * file at the site root, so anything matching gets carried onto the artifact.
+ */
+export function isVerificationFile(name: string): boolean {
+  return (
+    /^google[0-9a-z]+\.html$/i.test(name) ||
+    name === 'BingSiteAuth.xml' ||
+    /^[0-9a-f]{8,}\.txt$/i.test(name)
+  );
+}
+
 export function overlayKitPublic(kitRoot: string, dest: string): void {
   const missing = PAGES_SITE_ENTRIES.filter((rel) => !fs.existsSync(path.join(kitRoot, rel)));
   if (missing.length > 0) {
@@ -61,6 +73,11 @@ export function overlayKitPublic(kitRoot: string, dest: string): void {
   }
   for (const rel of PAGES_SITE_ENTRIES) {
     copyEntry(path.join(kitRoot, rel), path.join(dest, rel));
+  }
+  for (const name of fs.readdirSync(kitRoot)) {
+    if (isVerificationFile(name) && fs.statSync(path.join(kitRoot, name)).isFile()) {
+      copyEntry(path.join(kitRoot, name), path.join(dest, name));
+    }
   }
   fs.writeFileSync(path.join(dest, 'CNAME'), `${PAGES_SITE_HOST}\n`, 'utf8');
   fs.writeFileSync(path.join(dest, '.nojekyll'), '', 'utf8');
