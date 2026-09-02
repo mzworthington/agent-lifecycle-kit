@@ -15,7 +15,8 @@ evals/edd/
 ├── examples/prod-trace.json
 ├── examples/otel-agent-loop.json   ← kit.* OTel span fixture
 ├── examples/prod-turns.jsonl      ← shadow-eval NDJSON corpus
-├── architecture_routing.yaml|.jsonl
+├── architecture_routing.yaml|.jsonl   ← CI seed (frozen unique intents)
+├── goldens/                           ← live golden + holdout (not kit check)
 ├── architecture_self_correction.yaml|.jsonl
 ├── architecture_terminal.yaml|.jsonl
 ├── kit_knowledge.yaml|.jsonl
@@ -36,7 +37,11 @@ One style per run for **both** agent and judge.
 
 Cursor and GitHub Copilot are IDE hosts (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). They are **not** the eval driver: `kit eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
 
-Do not extend the local keyword driver to pass `requires-live` cases. Add JSONL rows instead.
+Do not extend the local keyword driver to pass `requires-live` cases. Add JSONL rows instead. Volume for live ranking lives in [goldens/](./goldens/README.md) — not in CI seeds.
+
+## Live goldens
+
+Architecture routing has a **CI seed** (`architecture_routing.jsonl`, unique intents, `kit check`) and a **live golden** (`goldens/`, 80 working + 20 holdout). Run goldens with `--style cli` or `--style http`. Do not add them to `EDD_CI_SUITES`. Do not grow them with `dataset synthesize`. Procedure: [goldens/README.md](./goldens/README.md).
 
 ## Quick start
 
@@ -135,7 +140,12 @@ kit eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out
 kit eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
 ```
 
-Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`.
+Synthetic paraphrases keep expectations, add tags `synthetic` + `requires-live`. Use them to **propose** wording, not to fill the golden. Lint goldens with:
+
+```bash
+kit eval dataset lint --dataset evals/edd/goldens/architecture_routing.jsonl
+kit eval dataset lint --dataset evals/edd/goldens/architecture_routing.holdout.jsonl
+```
 
 ## Production telemetry (closed loop)
 
@@ -153,6 +163,9 @@ Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [exa
 | Tag | Meaning |
 |-----|---------|
 | `routing` | Counts toward routing accuracy |
+| `seed` | Frozen CI unique intent |
+| `golden` | Live ranking catalog |
+| `holdout` | Frozen live split — do not tune against it |
 | `requires-live` | Skipped when style is `local` |
 | `prod-derived` | Converted from a production miss via `productionTraceToJsonl` |
 | `prompt-injection` | Instruction-override attempts |

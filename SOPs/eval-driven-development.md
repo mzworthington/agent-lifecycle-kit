@@ -32,6 +32,7 @@ tools:
 | `kit eval watch --suite <path> --target <file>` | Re-run on prompt / tool schema changes |
 | `kit eval report --format md\|json --out <dir> [--github-summary]` | Markdown or JSON cost/latency/failure report; optional Actions job summary |
 | `kit eval ci --threshold-routing 95 --out out/reports` | Headless gate; fail if routing accuracy &lt; threshold |
+| `kit eval run --suite evals/edd/goldens/architecture_routing.yaml --style cli --cli cursor-agent --model …` | Live golden (not CI) |
 | `kit eval dataset lint\|dedupe\|synthesize\|from-trace` | Dataset hygiene (schema lint, dedupe, paraphrases, prod promote) |
 
 `agent-kit` is an alias of `kit`.

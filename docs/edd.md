@@ -150,5 +150,6 @@ You should then see `requires-live` cases execute instead of “Skipping N requi
 |----------|---------|
 | [SOPs/eval-driven-development.md](../SOPs/eval-driven-development.md) | Day-to-day procedure |
 | [evals/edd/README.md](../evals/edd/README.md) | Suites, metrics, layout |
+| [evals/edd/goldens/README.md](../evals/edd/goldens/README.md) | Live golden + holdout (architecture routing) |
 | [SOPs/edd-production-telemetry.md](../SOPs/edd-production-telemetry.md) | `kit.*` spans, `kit eval shadow`, from-trace, drift |
 | [skills/agent-orchestrator/SKILL.md](../skills/agent-orchestrator/SKILL.md) | Feature lifecycle around EDD |

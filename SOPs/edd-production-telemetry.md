@@ -20,7 +20,15 @@ Local and CI evals protect predefined intents. Production is unpredictable. Clos
 
 1. **Standardized span emitting** - `emitAgentSpan` records prompt, routing confidence, JSON tool payload, latency, and tokens (`kit.*` attributes). Sample span: [evals/edd/examples/otel-agent-loop.json](../evals/edd/examples/otel-agent-loop.json). Export to an OTLP collector with `kitSpanToOtlpJson` when you already run one.
 2. **Asynchronous shadow evals** - Do not judge every live prompt inline. Sample with `shouldShadowEval(0.05)` / `kit eval shadow --infile … --sample 0.05`. Example corpus: [evals/edd/examples/prod-turns.jsonl](../evals/edd/examples/prod-turns.jsonl).
-3. **Prod → JSONL** - On unhandled tool exceptions, circuit-breaker trips, user downvotes, or `shadow_fail`, use `productionTraceToJsonl` / `kit eval dataset from-trace`. Example input: [evals/edd/examples/prod-trace.json](../evals/edd/examples/prod-trace.json); catalog case `prod-cb-01` in `architecture_terminal.jsonl`.
+3. **Prod → JSONL (triage, then promote)** - On unhandled tool exceptions, circuit-breaker trips, user downvotes, or `shadow_fail`, run `productionTraceToJsonl` / `kit eval dataset from-trace`. **Do not append `--out` JSONL onto CI seeds or holdout.** Open each candidate:
+
+   | Decision | When | Where it goes |
+   |----------|------|----------------|
+   | Keep | New matrix cell or a real miss with a human `expect` | Working golden (`evals/edd/goldens/write-cases.mjs` → regenerate). Tag `prod-derived`. |
+   | Drop | Duplicate prompt+expect, junk prompt, unlabeled tool | Discard |
+   | Holdout | Only when freezing a scored slice | `architecture_routing.holdout.jsonl` — never while tuning a prompt |
+
+   Catalog example of a promoted miss: `prod-cb-01` in `architecture_terminal.jsonl`. Live architecture ranking: [evals/edd/goldens/README.md](../evals/edd/goldens/README.md).
 4. **Trajectory parity** - Multi-step failures should preserve ordered tool calls in history so `plan_adherence` / trajectory reports can name the failing step after promotion.
 5. **Routing drift detection** - Compare tool-share distributions with `detectRoutingDrift`. Alert when e.g. `read_architecture_yaml` drops from ~30% to ~2% traffic.
 
@@ -50,11 +58,14 @@ Filter production spans / turns by attributes `kit.case_id`, `kit.tool_name`, `k
 ```mermaid
 flowchart LR
   prod[Prod agent.loop spans] --> shadow[kit eval shadow]
-  shadow -->|shadow_fail| jsonl[evals JSONL]
+  shadow -->|shadow_fail| triage[Human triage]
   miss[Circuit breaker / downvote] --> fromTrace[from-trace]
-  fromTrace --> jsonl
-  jsonl --> ci[kit eval run / ci]
-  ci -->|green| ship[Ship]
+  fromTrace --> triage
+  triage -->|keep| golden[Working golden]
+  triage -->|drop| discard[Discard]
+  golden --> live[kit eval run --style cli or http]
+  hold[Frozen holdout] -->|weekly / release| live
+  live -->|green| ship[Ship]
 ```
 
-Yesterday's incident → JSONL (`from-trace` or shadow `--out`) → `kit eval run` → green before release. Keep prod-derived cases tagged `prod-derived`. Redact secrets from uploaded eval reports (harness redacts API-key-like strings in Markdown artifacts).
+Yesterday's incident → triage → working golden (`prod-derived`) → live `kit eval run` → green before release. Do not auto-append onto CI seeds or holdout. Redact secrets from uploaded eval reports (harness redacts API-key-like strings in Markdown artifacts).

@@ -26,7 +26,7 @@ The metamodel is [`schema.yaml`](./schema.yaml). Instances come from the live tr
 | Skill | `skills/<name>/SKILL.md` | `skill:agent-tdd` |
 | SOP | `SOPs/<name>.md` | `sop:context-budget` |
 | McpServer | `mcps/catalog.json` → `servers[].id` | `mcp:memory` |
-| EvalSuite | `evals/edd/*.yaml` and `skills/<name>/evals/eval.json` | `eval:demo` |
+| EvalSuite | `evals/edd/*.yaml`, `evals/edd/goldens/*.yaml`, and `skills/<name>/evals/eval.json` | `eval:demo` |
 | PhilosophySection | `CODING_PHILOSOPHY.md` `## N. Title` headings | `philosophy:8` |
 | Doc | `docs/*.md` (top-level files only) | `doc:edd` |
 | Handover | `handover/<project>/handover_*.md` | local only |
@@ -106,7 +106,7 @@ These paths are kit conventions (not vendor names):
 - `skills/<name>/SKILL.md` (frontmatter: `depends-on`, `mcp`, `phase`)
 - `SOPs/*.md`
 - `mcps/catalog.json` → `servers[].id`
-- `evals/edd/*.yaml` (optional `ontology.gates`)
+- `evals/edd/*.yaml`, `evals/edd/goldens/*.yaml` (optional `ontology.gates`)
 - `docs/*.md`, `CODING_PHILOSOPHY.md`, `handover/<project>/handover_*.md`
 
 No company or cloud vendor is special-cased in the generator.

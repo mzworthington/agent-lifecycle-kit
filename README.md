@@ -25,7 +25,7 @@ When an LLM calls MCP tools, APIs, or terminals, failures are probabilistic: wro
 
 Tangible proof on the site: [before / after](https://eval-driven.dev/#proof) · [interactive demo](https://eval-driven.dev/#demo) · [jobs for today](https://eval-driven.dev/docs/jobs).
 
-Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after write-up](./evals/edd/examples/before-after.md)). Full regression: [architecture_routing](./evals/edd/architecture_routing.yaml).
+Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after write-up](./evals/edd/examples/before-after.md)). CI seed: [architecture_routing](./evals/edd/architecture_routing.yaml). Live golden: [evals/edd/goldens](./evals/edd/goldens/README.md).
 
 ---
 

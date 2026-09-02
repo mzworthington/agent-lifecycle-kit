@@ -83,6 +83,9 @@ describe('generateOntologyIndex', () => {
     assert.equal(cf.length, 0, 'cloudflare_ops must not hard-gate agent-cloudflare-ops by name');
     const arch = getRelated(index, 'eval:architecture_routing', 'gates');
     assert.equal(arch.length, 0, 'architecture_* must not hard-gate agent-arch-drift by name');
+    const golden = getEntity(index, 'eval:goldens_architecture_routing');
+    assert.ok(golden, 'goldens/*.yaml should be indexed');
+    assert.equal(golden?.path, 'evals/edd/goldens/architecture_routing.yaml');
   });
 
   it('honors declarative ontology.gates in suite YAML', () => {

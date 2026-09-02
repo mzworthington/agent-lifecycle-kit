@@ -1,8 +1,9 @@
-# CI seed (frozen unique intents). Live goldens: evals/edd/goldens/
-name: "Routing: Architecture Extraction"
-dataset: "architecture_routing.jsonl"
+# Frozen holdout — weekly / release only; do not tune prompts against this file
+name: "Holdout: Architecture routing"
+dataset: "architecture_routing.holdout.jsonl"
+system_prompt: "../system_prompt.md"
 mcp_tools:
-  - "tools/read_architecture_yaml.json"
+  - "../tools/read_architecture_yaml.json"
 metrics:
   - type: "tool_selection"
     expected: "read_architecture_yaml"

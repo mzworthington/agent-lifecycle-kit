@@ -278,39 +278,45 @@ export function generateOntologyIndex(
     }
   }
 
-  // Eval suites - index entities; gates only from explicit suite metadata or skill-local path
+  // Eval suites (top-level + goldens/). Gates only from explicit suite metadata.
   const eddDir = path.join(kitRoot, 'evals', 'edd');
+  const eddYamls: string[] = [];
   if (fs.existsSync(eddDir)) {
     for (const f of fs.readdirSync(eddDir).sort()) {
-      if (!f.endsWith('.yaml') && !f.endsWith('.yml')) continue;
-      const stem = f.replace(/\.ya?ml$/, '');
-      const rel = path.join('evals', 'edd', f);
-      if (skipIgnored(rel)) continue;
-      const body = safeRead(path.join(kitRoot, rel)) ?? '';
-      pushEntity({
-        id: entityId('EvalSuite', stem),
-        type: 'EvalSuite',
-        name: stem,
-        path: rel
-      });
-
-      // Optional declarative gates in suite YAML (no vendor/name heuristics):
-      // ontology:
-      //   gates: [mcp:kit-knowledge, skill:agent-tdd]
-      try {
-        const parsed = parseYaml(body) as Record<string, unknown> | null;
-        const ontologyMeta =
-          parsed && typeof parsed === 'object' && parsed.ontology && typeof parsed.ontology === 'object'
-            ? (parsed.ontology as Record<string, unknown>)
-            : null;
-        const gates = asStringArray(ontologyMeta?.gates);
-        for (const targetId of gates) {
-          if (!targetId.includes(':')) continue;
-          addEdge(edges, seenEdges, entityId('EvalSuite', stem), 'gates', targetId);
-        }
-      } catch {
-        // ignore malformed suite YAML for ontology purposes
+      if (f.endsWith('.yaml') || f.endsWith('.yml')) eddYamls.push(f);
+    }
+    const goldensDir = path.join(eddDir, 'goldens');
+    if (fs.existsSync(goldensDir)) {
+      for (const f of fs.readdirSync(goldensDir).sort()) {
+        if (f.endsWith('.yaml') || f.endsWith('.yml')) eddYamls.push(path.join('goldens', f));
       }
+    }
+  }
+  for (const f of eddYamls) {
+    const stem = f.replace(/\.ya?ml$/, '').replace(/[/\\]/g, '_');
+    const rel = path.join('evals', 'edd', f);
+    if (skipIgnored(rel)) continue;
+    const body = safeRead(path.join(kitRoot, rel)) ?? '';
+    pushEntity({
+      id: entityId('EvalSuite', stem),
+      type: 'EvalSuite',
+      name: stem,
+      path: rel
+    });
+
+    try {
+      const parsed = parseYaml(body) as Record<string, unknown> | null;
+      const ontologyMeta =
+        parsed && typeof parsed === 'object' && parsed.ontology && typeof parsed.ontology === 'object'
+          ? (parsed.ontology as Record<string, unknown>)
+          : null;
+      const gates = asStringArray(ontologyMeta?.gates);
+      for (const targetId of gates) {
+        if (!targetId.includes(':')) continue;
+        addEdge(edges, seenEdges, entityId('EvalSuite', stem), 'gates', targetId);
+      }
+    } catch {
+      // ignore malformed suite YAML for ontology purposes
     }
   }
 
