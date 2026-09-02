@@ -6,10 +6,10 @@ import { parseTodayJobsMarkdown, type TodayJob } from '../landing/todayJobs.ts';
 export function TodayJobs({ showHeading = false }: { showHeading?: boolean }) {
   const jobs = useMemo(() => parseTodayJobsMarkdown(todayMd), []);
   const [activeId, setActiveId] = useState(jobs[0]?.id ?? '');
-  const active = jobs.find((job) => job.id === activeId) ?? jobs[0];
+  const active = jobs.find((job) => job.id === activeId);
   const [copied, setCopied] = useState(false);
 
-  if (!active) return null;
+  if (jobs.length === 0) return null;
 
   return (
     <section
@@ -29,16 +29,17 @@ export function TodayJobs({ showHeading = false }: { showHeading?: boolean }) {
       <div role="group" aria-label="Job list">
         <ul className="job-grid" id="job-grid">
           {jobs.map((job) => {
-            const selected = job.id === active.id;
+            const selected = job.id === active?.id;
             return (
               <li key={job.id}>
                 <button
                   type="button"
                   className="job-btn"
                   aria-pressed={selected}
-                  aria-controls="job-panel"
+                  aria-expanded={selected}
+                  aria-controls={selected ? 'job-panel' : undefined}
                   onClick={() => {
-                    setActiveId(job.id);
+                    setActiveId(selected ? '' : job.id);
                     setCopied(false);
                   }}
                 >
@@ -47,11 +48,11 @@ export function TodayJobs({ showHeading = false }: { showHeading?: boolean }) {
                     <span className="job-blurb">{job.blurb}</span>
                   </span>
                   <span className="job-cue">
-                    <span className="job-cue-label">{selected ? 'Showing steps' : 'Show steps'}</span>
+                    <span className="job-cue-label">{selected ? 'Hide steps' : 'Show steps'}</span>
                     <JobCueIcon expanded={selected} />
                   </span>
                 </button>
-                {selected ? (
+                {selected && active ? (
                   <JobPanel copied={copied} job={active} onCopied={setCopied} />
                 ) : null}
               </li>
