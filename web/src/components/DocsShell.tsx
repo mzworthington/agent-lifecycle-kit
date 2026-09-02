@@ -1,19 +1,32 @@
 import { type ReactNode, useState } from 'react';
-import { docsSidebar, isDocsNavActive, SITE_NAV } from '../docs/pages';
+import {
+  docsSidebar,
+  isDocsNavActive,
+  SITE_NAV,
+  type DocsNavPage
+} from '../docs/nav.ts';
+import { SITE_MARK_SRC, SITE_NAME, SITE_SHORT_NAME } from '../seo/siteSeo.ts';
 
 const GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
 
 type Props = {
   children: ReactNode;
   pathname: string;
+  pages: readonly DocsNavPage[];
   layout?: 'docs' | 'landing';
   wide?: boolean;
 };
 
-export function DocsShell({ children, pathname, layout = 'docs', wide = false }: Props) {
+export function DocsShell({
+  children,
+  pathname,
+  pages,
+  layout = 'docs',
+  wide = false
+}: Props) {
   const location = pathname.replace(/\/$/, '') || '/';
   const [open, setOpen] = useState(false);
-  const sidebar = docsSidebar(location);
+  const sidebar = docsSidebar(location, pages);
   const isLanding = layout === 'landing';
 
   return (
@@ -23,9 +36,9 @@ export function DocsShell({ children, pathname, layout = 'docs', wide = false }:
       </a>
       <header className="site-header">
         <div className="nav-container">
-          <a href="/" className="brand">
-            <img src="/assets/kit_logo_256.webp" alt="" width={36} height={36} />
-            <span>Agent Lifecycle Kit</span>
+          <a href="/" className="brand" aria-label={SITE_NAME}>
+            <img src={SITE_MARK_SRC} alt="" width={36} height={36} />
+            <span aria-hidden="true">{SITE_SHORT_NAME}</span>
           </a>
           <nav id="site-nav" className={`nav-links${open ? ' is-open' : ''}`} aria-label="Site">
             <ul>

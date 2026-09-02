@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from 'react';
+import { queueMermaidRender } from './mermaidRenderer.ts';
 
 type MermaidApi = {
   initialize: (config: Record<string, unknown>) => void;
@@ -39,7 +40,7 @@ export function MermaidPreview({ code }: Props) {
         const mermaid = await getMermaid();
         if (!active) return;
         const id = `mermaid-${reactId}-${Math.random().toString(36).slice(2, 9)}`;
-        const { svg: rendered } = await mermaid.render(id, code);
+        const { svg: rendered } = await queueMermaidRender(() => mermaid.render(id, code));
         if (active) {
           setSvg(rendered);
           setRendering(false);

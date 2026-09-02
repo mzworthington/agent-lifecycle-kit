@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Agent Lifecycle Kit">
+  <rect width="1200" height="630" fill="#090a0d"/>
+  <g transform="translate(88,139) scale(5.5)">
+    <polygon
+      fill="none"
+      stroke="#2dd4bf"
+      stroke-width="2.25"
+      stroke-linejoin="round"
+      points="32,7 53.95,19.75 53.95,44.25 32,57 10.05,44.25 10.05,19.75"
+    />
+    <path
+      fill="#2dd4bf"
+      d="M21.5 18h6.2v10.35L41.4 18h6.35L33.15 32.1 47.75 46.2H41.4L27.7 35.65V46.2H21.5Z"
+    />
+  </g>
+  <text x="500" y="268" fill="#f6f7f9" font-family="IBM Plex Sans, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="52" font-weight="600" letter-spacing="-1.4">Agent Lifecycle Kit</text>
+  <text x="500" y="328" fill="#5eead4" font-family="IBM Plex Sans, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="28" font-weight="500">Test the tools your agents call</text>
+  <rect x="500" y="360" width="72" height="3" rx="1.5" fill="#2dd4bf"/>
+  <text x="500" y="418" fill="#8e96a3" font-family="IBM Plex Sans, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22">eval-driven.dev</text>
+</svg>

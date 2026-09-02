@@ -1,7 +1,16 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { DocsPage } from '../views/DocsPage.tsx';
+import SiteChrome from '../components/SiteChrome.astro';
+import { MarkdownView } from '../components/MarkdownView.tsx';
+import { DocsFrontmatterMeta } from '../components/DocsFrontmatterMeta.tsx';
+import { DocsWidget } from '../components/DocsWidget.tsx';
+import { OntologyExplorer } from '../components/OntologyExplorer.tsx';
+import { MermaidPreview } from '../components/MermaidPreview.tsx';
 import { docsStaticPaths } from '../docs/staticPaths.ts';
+import { docsNeighbors } from '../docs/nav.ts';
+import { consumeMarkdownHeadings, docsToc, headingCountsRecord } from '../docs/outline.ts';
+import { DOC_PATHS, DOCS_PAGES } from '../docs/pages.ts';
+import { splitDocsMarkdown, splitFenceSegments } from '../docs/presentDocsMarkdown.ts';
 import { resolvePageSeo } from '../seo/siteSeo.ts';
 import type { DocsPageMeta } from '../docs/catalog.ts';
 
@@ -19,8 +28,105 @@ const seo = resolvePageSeo(page.path, {
   markdown: page.markdown,
   file: page.file
 });
+const navPages = DOCS_PAGES.map(({ path, title }) => ({ path, title }));
+const docPaths = [...DOC_PATHS];
+const { frontmatter, body } = splitDocsMarkdown(page.markdown);
+const segments = splitFenceSegments(body);
+const headingUsed = new Map<string, number>();
+const stamped = segments.map((segment) => {
+  if (segment.kind !== 'markdown') return { segment, headingStart: headingCountsRecord(headingUsed) };
+  const headingStart = headingCountsRecord(headingUsed);
+  consumeMarkdownHeadings(segment.text, headingUsed);
+  return { segment, headingStart };
+});
+const toc = docsToc(page.markdown).filter((item) => item.level === 2);
+const { prev, next } = docsNeighbors(page.path, navPages);
+const wide = page.path === '/docs/map';
+const crumbs = seo.breadcrumbs;
 ---
 
 <SiteLayout seo={seo}>
-  <DocsPage client:load pathname={page.path} />
+  <SiteChrome pathname={page.path} wide={wide} pages={navPages}>
+    <article class:list={['docs-panel', wide && 'docs-panel--wide']}>
+      {
+        crumbs.length > 1 ? (
+          <nav class="docs-breadcrumb" aria-label="Breadcrumb">
+            <ol>
+              {crumbs.map((crumb, index) => {
+                const last = index === crumbs.length - 1;
+                return (
+                  <li>
+                    {last ? (
+                      <span aria-current="page">{crumb.name}</span>
+                    ) : (
+                      <a href={crumb.path}>{crumb.name}</a>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </nav>
+        ) : null
+      }
+      {frontmatter ? <DocsFrontmatterMeta fields={frontmatter} /> : null}
+      {
+        stamped.map(({ segment, headingStart }) => {
+          if (segment.kind === 'markdown') {
+            return (
+              <MarkdownView
+                markdown={segment.text}
+                fromDir={page.dir}
+                docPaths={docPaths}
+                headingStart={headingStart}
+              />
+            );
+          }
+          if (segment.kind === 'widget') {
+            if (segment.name === 'ontology') {
+              return <OntologyExplorer client:load />;
+            }
+            return <DocsWidget client:load name={segment.name} />;
+          }
+          return <MermaidPreview client:load code={segment.code} />;
+        })
+      }
+      {
+        prev || next ? (
+          <nav class="docs-pager" aria-label="Nearby pages">
+            {prev ? (
+              <a href={prev.path} class="docs-pager-prev">
+                <span>Previous</span>
+                {prev.label}
+              </a>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <a href={next.path} class="docs-pager-next">
+                <span>Next</span>
+                {next.label}
+              </a>
+            ) : null}
+          </nav>
+        ) : null
+      }
+      <p class="docs-source">
+        <a href={`/${page.file}`}>Markdown source</a>
+      </p>
+    </article>
+    {
+      toc.length > 1 && !wide ? (
+        <nav class="docs-toc" aria-label="On this page">
+          <p class="docs-toc-title">On this page</p>
+          <ol>
+            {toc.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      ) : null
+    }
+  </SiteChrome>
 </SiteLayout>

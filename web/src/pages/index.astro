@@ -1,11 +1,26 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { HomePage } from '../views/HomePage.tsx';
+import SiteChrome from '../components/SiteChrome.astro';
+import { HomeHero } from '../components/HomeHero.tsx';
+import { HomeProof } from '../components/HomeProof.tsx';
+import { HomeNext } from '../components/HomeNext.tsx';
+import { TodayJobs } from '../components/TodayJobs.tsx';
+import { EvalDemo } from '../components/EvalDemo.tsx';
+import { DOCS_PAGES } from '../docs/pages.ts';
 import { resolvePageSeo } from '../seo/siteSeo.ts';
 
 const seo = resolvePageSeo('/');
+const navPages = DOCS_PAGES.map(({ path, title }) => ({ path, title }));
 ---
 
 <SiteLayout seo={seo}>
-  <HomePage client:load />
+  <SiteChrome layout="landing" pathname="/" pages={navPages}>
+    <div class="landing-page">
+      <HomeHero />
+      <TodayJobs client:load showHeading />
+      <HomeProof />
+      <EvalDemo client:load />
+      <HomeNext />
+    </div>
+  </SiteChrome>
 </SiteLayout>

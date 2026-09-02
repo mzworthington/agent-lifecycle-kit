@@ -34,6 +34,25 @@ export function headingId(text: string, used: Map<string, number>): string {
   return n === 0 ? base : `${base}-${n}`;
 }
 
+/** Advance heading counters for ATX h1–h3 so split Markdown views share ids. */
+export function consumeMarkdownHeadings(markdown: string, used: Map<string, number>): void {
+  let inFence = false;
+  for (const line of markdown.split(/\r?\n/)) {
+    if (line.trimStart().startsWith('```')) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+    const match = /^(#{1,3})\s+(.+)$/.exec(line);
+    if (!match) continue;
+    headingId(match[2]!.trim(), used);
+  }
+}
+
+export function headingCountsRecord(used: Map<string, number>): Record<string, number> {
+  return Object.fromEntries(used);
+}
+
 /** Visible h2/h3 ids for on-this-page nav. Skips fenced code. */
 export function docsToc(markdown: string): DocsTocItem[] {
   const body = splitDocsMarkdown(markdown).body;

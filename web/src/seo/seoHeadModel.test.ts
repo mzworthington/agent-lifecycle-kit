@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { seoHeadModel } from './siteSeo.ts';
 import { resolvePageSeo } from './siteSeo.ts';
@@ -11,6 +14,11 @@ describe('seoHeadModel', () => {
     expect(head.robots).toBe('index,follow');
     expect(head.ogType).toBe('article');
     expect(head.ogTitle).toBe(head.title);
+    expect(head.ogImageWidth).toBe(1200);
+    expect(head.ogImageHeight).toBe(630);
+    expect(head.ogImageAlt.toLowerCase()).toMatch(/eval-driven development/);
+    expect(head.ogImageAlt.toLowerCase()).toMatch(/kit/);
+    expect(head.twitterImageAlt).toBe(head.ogImageAlt);
     expect(JSON.stringify(head.jsonLd)).toContain('TechArticle');
     expect(JSON.stringify(head.jsonLd)).not.toContain('SoftwareApplication');
   });
@@ -20,6 +28,28 @@ describe('seoHeadModel', () => {
     expect(head.robots).toBe('noindex,nofollow');
     expect(head.jsonLd).toBeUndefined();
     expect(head.canonicalUrl).toBeUndefined();
+  });
+
+  it('declares a root ICO favicon and a PNG fallback in the site layout', () => {
+    const layout = fs.readFileSync(
+      path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../layouts/SiteLayout.astro'),
+      'utf8'
+    );
+    expect(layout).toContain('rel="icon" href="/favicon.ico"');
+    expect(layout).toContain('type="image/png" href="/assets/favicon-32.png"');
+    expect(layout).toContain('rel="apple-touch-icon" href="/assets/apple-touch-icon.png"');
+    expect(layout).not.toMatch(/rel="icon"[^>]+type="image\/webp"/);
+  });
+
+  it('shows Kit in the header and keeps the full name for assistive tech', () => {
+    const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../components');
+    const chrome = fs.readFileSync(path.join(dir, 'SiteChrome.astro'), 'utf8');
+    const shell = fs.readFileSync(path.join(dir, 'DocsShell.tsx'), 'utf8');
+    for (const source of [chrome, shell]) {
+      expect(source).toContain('aria-label={SITE_NAME}');
+      expect(source).toContain('{SITE_SHORT_NAME}');
+      expect(source).toContain('SITE_MARK_SRC');
+    }
   });
 
   it('exposes markdown source as an alternate for published pages', () => {

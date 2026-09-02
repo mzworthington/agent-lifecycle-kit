@@ -42,4 +42,14 @@ describe('OntologyExplorer', () => {
       true
     );
   });
+
+  it('mounts the live graph after the island hydrates', async () => {
+    const { mountOntologyExplorer } = await import('../ontology/map.ts');
+    vi.mocked(mountOntologyExplorer).mockClear();
+    render(<OntologyExplorer />);
+    expect(mountOntologyExplorer).toHaveBeenCalledTimes(1);
+    expect(mountOntologyExplorer).toHaveBeenCalledWith(
+      screen.getByRole('region', { name: 'Kit ontology map' })
+    );
+  });
 });

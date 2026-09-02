@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { DOCS_PAGES } from '../docs/pages.ts';
 import { HOME_LEDE } from '../landing/copy.ts';
 import {
+  SITE_MARK_SRC,
+  SITE_NAME,
   SITE_ORIGIN,
+  SITE_SHORT_NAME,
   SITE_SOCIAL_IMAGE,
   buildJsonLdGraph,
   buildSitemapXml,
@@ -31,7 +34,10 @@ describe('siteSeo catalog', () => {
     expect(seo.ogImageUrl).toBe(SITE_SOCIAL_IMAGE);
     expect(seo.indexable).toBe(true);
     expect(seo.ogType).toBe('website');
-    expect(seo.softwareName).toBe('Agent Lifecycle Kit');
+    expect(seo.softwareName).toBe(SITE_NAME);
+    expect(SITE_SHORT_NAME).toBe('Kit');
+    expect(SITE_NAME).toBe('Agent Lifecycle Kit');
+    expect(SITE_MARK_SRC).toBe('/assets/kit-mark.svg');
   });
 
   it('gives each hub a unique title and description', () => {

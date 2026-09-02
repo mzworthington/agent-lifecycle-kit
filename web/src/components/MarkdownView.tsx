@@ -1,23 +1,16 @@
-import { Children, isValidElement, lazy, Suspense, type ReactNode } from 'react';
+import { Children, isValidElement, type ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { DOC_PATHS } from '../docs/pages';
+import { headingId } from '../docs/outline';
 import { splitDocsMarkdown } from '../docs/presentDocsMarkdown';
 import { resolveDocsHref } from '../docs/resolveDocsHref';
 import { DocsFrontmatterMeta } from './DocsFrontmatterMeta';
-import { EvalDemo } from './EvalDemo';
-import { HomeCtas } from './HomeCtas';
-import { OntologyExplorer } from './OntologyExplorer';
-import { TodayJobs } from './TodayJobs';
-import { headingId } from '../docs/outline';
-
-const MermaidPreview = lazy(() =>
-  import('./MermaidPreview').then((m) => ({ default: m.MermaidPreview }))
-);
 
 type Props = {
   markdown: string;
   fromDir: string;
+  docPaths: readonly string[];
+  headingStart?: Record<string, number>;
 };
 
 function extractCodeText(node: ReactNode): string {
@@ -29,17 +22,10 @@ function extractCodeText(node: ReactNode): string {
   return '';
 }
 
-function Widget({ name }: { name: string }) {
-  if (name === 'today-jobs') return <TodayJobs />;
-  if (name === 'demo') return <EvalDemo />;
-  if (name === 'ontology') return <OntologyExplorer />;
-  if (name === 'ctas') return <HomeCtas />;
-  return null;
-}
-
-export function MarkdownView({ markdown, fromDir }: Props) {
+export function MarkdownView({ markdown, fromDir, docPaths, headingStart }: Props) {
   const { frontmatter, body } = splitDocsMarkdown(markdown);
-  const headingCounts = new Map<string, number>();
+  const headingCounts = new Map(Object.entries(headingStart ?? {}));
+  const knownPaths = new Set(docPaths);
 
   return (
     <div className="docs-prose docs-content">
@@ -63,7 +49,7 @@ export function MarkdownView({ markdown, fromDir }: Props) {
             return <h3 id={id}>{children}</h3>;
           },
           a: ({ href, children }) => {
-            const resolved = resolveDocsHref(href, fromDir, DOC_PATHS);
+            const resolved = resolveDocsHref(href, fromDir, knownPaths);
             if (resolved) {
               if (resolved.startsWith('#')) {
                 return <a href={resolved}>{children}</a>;
@@ -90,23 +76,8 @@ export function MarkdownView({ markdown, fromDir }: Props) {
               isValidElement<{ className?: string }>(codeEl) && codeEl.props.className
                 ? codeEl.props.className
                 : '';
-            if (/\blanguage-widget\b/.test(className)) {
-              const name = extractCodeText(codeEl).replace(/\n$/, '').trim();
-              return <Widget name={name} />;
-            }
-            if (/\blanguage-mermaid\b/.test(className)) {
-              const code = extractCodeText(codeEl).replace(/\n$/, '');
-              return (
-                <Suspense
-                  fallback={
-                    <div className="docs-mermaid docs-mermaid-loading" aria-busy="true">
-                      Loading diagram…
-                    </div>
-                  }
-                >
-                  <MermaidPreview code={code} />
-                </Suspense>
-              );
+            if (/\blanguage-widget\b/.test(className) || /\blanguage-mermaid\b/.test(className)) {
+              return null;
             }
             return (
               <figure className="docs-code">

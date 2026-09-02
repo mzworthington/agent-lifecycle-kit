@@ -1,7 +1,8 @@
 import { DocsShell } from '../components/DocsShell';
 import { MarkdownView } from '../components/MarkdownView';
-import { docsNeighbors, findPublishedPage } from '../docs/pages';
+import { docsNeighbors } from '../docs/nav.ts';
 import { docsToc } from '../docs/outline';
+import { DOCS_PAGES, DOC_PATHS, findPublishedPage } from '../docs/pages';
 import { resolvePageSeo } from '../seo/siteSeo.ts';
 
 type Props = {
@@ -11,10 +12,12 @@ type Props = {
 export function DocsPage({ pathname }: Props) {
   const path = pathname.replace(/\/$/, '') || '/';
   const page = findPublishedPage(path);
+  const navPages = DOCS_PAGES.map(({ path: pagePath, title }) => ({ path: pagePath, title }));
+  const docPaths = [...DOC_PATHS];
 
   if (!page) {
     return (
-      <DocsShell pathname={path}>
+      <DocsShell pathname={path} pages={navPages}>
         <article className="docs-panel">
           <h1>That page is not here</h1>
           <p>
@@ -26,7 +29,7 @@ export function DocsPage({ pathname }: Props) {
   }
 
   const toc = docsToc(page.markdown).filter((item) => item.level === 2);
-  const { prev, next } = docsNeighbors(page.path);
+  const { prev, next } = docsNeighbors(page.path, navPages);
   const wide = page.path === '/docs/map';
   const crumbs = resolvePageSeo(page.path, {
     headline: page.title,
@@ -35,7 +38,7 @@ export function DocsPage({ pathname }: Props) {
   }).breadcrumbs;
 
   return (
-    <DocsShell pathname={page.path} wide={wide}>
+    <DocsShell pathname={page.path} pages={navPages} wide={wide}>
       <article className={`docs-panel${wide ? ' docs-panel--wide' : ''}`}>
         {crumbs.length > 1 ? (
           <nav className="docs-breadcrumb" aria-label="Breadcrumb">
@@ -55,7 +58,7 @@ export function DocsPage({ pathname }: Props) {
             </ol>
           </nav>
         ) : null}
-        <MarkdownView markdown={page.markdown} fromDir={page.dir} />
+        <MarkdownView markdown={page.markdown} fromDir={page.dir} docPaths={docPaths} />
         {prev || next ? (
           <nav className="docs-pager" aria-label="Nearby pages">
             {prev ? (

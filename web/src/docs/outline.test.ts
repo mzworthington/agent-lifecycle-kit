@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { docsToc, headingId, slugifyHeading } from './outline.ts';
+import { consumeMarkdownHeadings, docsToc, headingCountsRecord, headingId, slugifyHeading } from './outline.ts';
 
 describe('docsToc', () => {
   it('collects h2/h3 ids and skips fenced headings', () => {
@@ -30,5 +30,14 @@ describe('headingId', () => {
     expect(headingId('Install kit', used)).toBe('install');
     expect(headingId('Other', used)).toBe('other');
     expect(headingId('Other', used)).toBe('other-1');
+  });
+});
+
+describe('consumeMarkdownHeadings', () => {
+  it('advances the same counters MarkdownView uses so split segments keep stable ids', () => {
+    const used = new Map<string, number>();
+    consumeMarkdownHeadings('# Title\n\n## Install kit\n', used);
+    expect(headingCountsRecord(used)).toEqual({ title: 1, 'install-kit': 1 });
+    expect(headingId('Install kit', used)).toBe('install-kit-1');
   });
 });

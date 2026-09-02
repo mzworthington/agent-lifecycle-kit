@@ -7,7 +7,7 @@ import {
   assemblePagesSite,
   PAGES_SITE_ENTRIES,
   PAGES_SITE_HOST,
-  VITE_DIST_REL
+  WEB_DIST_REL
 } from './assemble.js';
 import { kitRootFrom } from '../shared/paths.js';
 
@@ -44,7 +44,7 @@ const stubPublic = {
   'SOPs/context-budget.md': '# budget',
   'mcps/README.md': '# mcp',
   'ontology/README.md': '# ontology',
-  [`${VITE_DIST_REL}/index.html`]: '<html><div id="root"></div></html>'
+  [`${WEB_DIST_REL}/index.html`]: '<html><div id="root"></div></html>'
 };
 
 describe('PAGES_SITE_ENTRIES', () => {
@@ -119,7 +119,13 @@ describe('landing page assets', () => {
     assert.equal(fs.existsSync(path.join(kitRoot, 'index.html')), false);
     assert.equal(fs.existsSync(path.join(kitRoot, 'web/index.html')), false);
     assert.ok(fs.existsSync(path.join(kitRoot, 'web/public/assets/kit_logo_256.webp')));
+    assert.ok(fs.existsSync(path.join(kitRoot, 'web/public/assets/kit-mark.svg')));
     assert.equal(fs.existsSync(path.join(kitRoot, 'assets/kit_logo_256.webp')), false);
+    const favicon = fs.readFileSync(path.join(kitRoot, 'web/public/favicon.ico'));
+    assert.ok(favicon.length > 100);
+    assert.deepEqual([...favicon.subarray(0, 4)], [0, 0, 1, 0]);
+    const png32 = fs.readFileSync(path.join(kitRoot, 'web/public/assets/favicon-32.png'));
+    assert.deepEqual([...png32.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
   });
 
   it('Pages workflow builds the web app then uploads site/', () => {

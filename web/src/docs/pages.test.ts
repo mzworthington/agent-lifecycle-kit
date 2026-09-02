@@ -1,13 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import {
   DOC_PATHS,
+  DOCS_PAGES,
+  findPublishedPage
+} from './pages.ts';
+import {
   SITE_NAV,
   docsNeighbors,
   docsReadingOrder,
   docsSidebar,
-  findPublishedPage,
   isDocsNavActive
-} from './pages.ts';
+} from './nav.ts';
+
+const navPages = DOCS_PAGES.map(({ path, title }) => ({ path, title }));
 
 describe('published markdown catalog', () => {
   it('registers operator docs, SOPs, and ADRs from the glob', () => {
@@ -42,11 +47,11 @@ describe('site information architecture', () => {
   });
 
   it('uses a curated sidebar and expands procedures on SOP routes', () => {
-    const overview = docsSidebar('/docs');
+    const overview = docsSidebar('/docs', navPages);
     expect(overview.map((section) => section.title)).toEqual(['Start', 'Practice', 'Reference']);
     expect(overview[0]?.items[0]).toEqual({ label: 'Overview', path: '/docs' });
 
-    const sopNav = docsSidebar('/SOPs/context-budget');
+    const sopNav = docsSidebar('/SOPs/context-budget', navPages);
     expect(sopNav.some((section) => section.title === 'Procedures')).toBe(true);
     expect(
       sopNav.flatMap((section) => section.items).some((item) => item.path === '/SOPs/context-budget')
@@ -54,10 +59,10 @@ describe('site information architecture', () => {
   });
 
   it('walks prev/next along the curated reading order', () => {
-    const fromStart = docsNeighbors('/docs/start');
+    const fromStart = docsNeighbors('/docs/start', navPages);
     expect(fromStart.prev?.path).toBe('/docs');
     expect(fromStart.next?.path).toBe('/docs/jobs');
-    const order = docsReadingOrder();
+    const order = docsReadingOrder(navPages);
     expect(order.slice(0, 4)).toEqual(['/docs', '/docs/start', '/docs/jobs', '/docs/faq']);
   });
 });

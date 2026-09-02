@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { HomePage } from './HomePage.tsx';
+import { HomeLanding } from './HomeLanding.tsx';
 
-describe('HomePage', () => {
+describe('HomeLanding', () => {
   it('uses the brand-first hero, job picker, proof, and demo', () => {
-    render(<HomePage />);
+    render(<HomeLanding />);
     expect(screen.getByText('Eval-Driven Development')).toBeTruthy();
     expect(screen.getByRole('heading', { level: 1, name: 'Agent Lifecycle Kit' })).toBeTruthy();
     expect(screen.getByText('Test the tools your agents call')).toBeTruthy();

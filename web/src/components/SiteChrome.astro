@@ -1,0 +1,118 @@
+---
+import { SiteNav } from './SiteNav.tsx';
+import { docsSidebar, type DocsNavPage } from '../docs/nav.ts';
+import { SITE_MARK_SRC, SITE_NAME, SITE_SHORT_NAME } from '../seo/siteSeo.ts';
+
+const GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
+
+type Props = {
+  pathname: string;
+  layout?: 'docs' | 'landing';
+  wide?: boolean;
+  pages: readonly DocsNavPage[];
+};
+
+const { pathname, layout = 'docs', wide = false, pages } = Astro.props;
+const location = pathname.replace(/\/$/, '') || '/';
+const sidebar = docsSidebar(location, pages);
+const isLanding = layout === 'landing';
+---
+
+<div class:list={['site', isLanding && 'site--landing']}>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="/" class="brand" aria-label={SITE_NAME}>
+        <img src={SITE_MARK_SRC} alt="" width={36} height={36} />
+        <span aria-hidden="true">{SITE_SHORT_NAME}</span>
+      </a>
+      <SiteNav client:load pathname={pathname} />
+    </div>
+  </header>
+  {
+    !isLanding ? (
+      <nav class="docs-mobile-nav" aria-label="Documentation chapters">
+        {sidebar.map((section) => (
+          <nav class="docs-mobile-group" aria-label={section.title}>
+            <p class="docs-mobile-label">{section.title}</p>
+            <ul>
+              {section.items.map((item) => {
+                const active = location === item.path;
+                return (
+                  <li>
+                    <a href={item.path} class:list={[active && 'is-active']}>
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        ))}
+      </nav>
+    ) : null
+  }
+  <div class:list={[isLanding ? 'landing-shell' : 'docs-shell', !isLanding && wide && 'docs-shell--wide']}>
+    {
+      !isLanding ? (
+        <aside class="docs-sidebar" aria-label="Documentation">
+          {sidebar.map((section) => (
+            <section aria-labelledby={`nav-${section.title}`}>
+              <h2 id={`nav-${section.title}`} class="docs-sidebar-title">
+                {section.title}
+              </h2>
+              <ul class="docs-nav">
+                {section.items.map((item) => {
+                  const active = location === item.path;
+                  return (
+                    <li>
+                      <a
+                        href={item.path}
+                        class:list={[active && 'is-active']}
+                        aria-current={active ? 'page' : undefined}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))}
+        </aside>
+      ) : null
+    }
+    <main id="main">
+      <slot />
+    </main>
+  </div>
+  <footer class="site-footer">
+    <nav aria-label="Footer">
+      <ul>
+        <li>
+          <a href="/docs/start">Start</a>
+        </li>
+        <li>
+          <a href="/docs">Guide</a>
+        </li>
+        <li>
+          <a href="/evals/edd">Evals</a>
+        </li>
+        <li>
+          <a href="/docs/map">Map</a>
+        </li>
+        <li>
+          <a href={GITHUB} rel="noopener noreferrer">
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <p>
+      Made by{' '}
+      <a href="https://mzworthington.co.uk" rel="noopener noreferrer">
+        Matthew Z Worthington
+      </a>
+    </p>
+  </footer>
+</div>

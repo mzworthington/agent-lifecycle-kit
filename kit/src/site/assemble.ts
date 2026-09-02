@@ -4,7 +4,7 @@ import path from 'node:path';
 /** Custom domain for the GitHub Pages artifact (DNS lives in edge-dns). */
 export const PAGES_SITE_HOST = 'eval-driven.dev';
 
-export const VITE_DIST_REL = 'web/dist';
+export const WEB_DIST_REL = 'web/dist';
 
 /**
  * Markdown and static files copied onto the web build so agents keep stable
@@ -69,11 +69,11 @@ export function overlayKitPublic(kitRoot: string, dest: string): void {
 export function assemblePagesSite(opts: AssemblePagesSiteOptions): AssemblePagesSiteResult {
   const kitRoot = path.resolve(opts.kitRoot);
   const dest = path.resolve(opts.dest);
-  const dist = path.join(kitRoot, VITE_DIST_REL);
+  const dist = path.join(kitRoot, WEB_DIST_REL);
   const builtIndex = path.join(dist, 'index.html');
   if (!fs.existsSync(builtIndex)) {
     throw new Error(
-      `Pages site assemble needs ${VITE_DIST_REL}/index.html (run pnpm --dir web build)`
+      `Pages site assemble needs ${WEB_DIST_REL}/index.html (run pnpm --dir web build)`
     );
   }
 

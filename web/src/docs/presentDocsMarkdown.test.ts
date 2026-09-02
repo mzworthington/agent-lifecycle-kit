@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { presentDocsMarkdown, splitDocsMarkdown } from './presentDocsMarkdown';
+import { presentDocsMarkdown, splitDocsMarkdown, splitFenceSegments } from './presentDocsMarkdown';
 
 describe('splitDocsMarkdown', () => {
   it('parses frontmatter fields and returns the body without fences', () => {
@@ -17,5 +17,20 @@ describe('splitDocsMarkdown', () => {
 
   it('leaves markdown without frontmatter unchanged', () => {
     expect(splitDocsMarkdown('# Hello\n')).toEqual({ frontmatter: null, body: '# Hello\n' });
+  });
+});
+
+describe('splitFenceSegments', () => {
+  it('keeps ordinary markdown as one segment and lifts widget and mermaid fences', () => {
+    const segments = splitFenceSegments(
+      '# Title\n\nHello\n\n```widget\nontology\n```\n\nMore\n\n```mermaid\nflowchart LR\n  a --> b\n```\n\n```bash\nkit check\n```\n'
+    );
+    expect(segments).toEqual([
+      { kind: 'markdown', text: '# Title\n\nHello\n' },
+      { kind: 'widget', name: 'ontology' },
+      { kind: 'markdown', text: '\nMore\n' },
+      { kind: 'mermaid', code: 'flowchart LR\n  a --> b' },
+      { kind: 'markdown', text: '\n```bash\nkit check\n```\n' }
+    ]);
   });
 });

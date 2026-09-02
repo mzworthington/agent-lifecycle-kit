@@ -1,9 +1,19 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { DocsPage } from '../views/DocsPage.tsx';
+import SiteChrome from '../components/SiteChrome.astro';
+import { DOCS_PAGES } from '../docs/pages.ts';
 import { notFoundPageSeo } from '../seo/siteSeo.ts';
+
+const navPages = DOCS_PAGES.map(({ path, title }) => ({ path, title }));
 ---
 
 <SiteLayout seo={notFoundPageSeo()}>
-  <DocsPage client:load pathname="/404" />
+  <SiteChrome pathname="/404" pages={navPages}>
+    <article class="docs-panel">
+      <h1>That page is not here</h1>
+      <p>
+        Try the <a href="/">home page</a> or the <a href="/docs">docs overview</a>.
+      </p>
+    </article>
+  </SiteChrome>
 </SiteLayout>

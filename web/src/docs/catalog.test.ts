@@ -9,7 +9,7 @@ import {
 } from './catalog';
 
 describe('globKeyToRel', () => {
-  it('strips Vite relative prefixes', () => {
+  it('strips Vite/Astro relative prefixes', () => {
     expect(globKeyToRel('../../../docs/edd.md')).toBe('docs/edd.md');
     expect(globKeyToRel('../../../SOPs/context-budget.md')).toBe('SOPs/context-budget.md');
   });

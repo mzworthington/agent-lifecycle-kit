@@ -2,7 +2,13 @@ import { HOME_HEADLINE, HOME_LEDE } from '../landing/copy.ts';
 
 export const SITE_ORIGIN = 'https://eval-driven.dev';
 export const SITE_NAME = 'Agent Lifecycle Kit';
+export const SITE_SHORT_NAME = 'Kit';
+export const SITE_MARK_SRC = '/assets/kit-mark.svg';
 export const SITE_SOCIAL_IMAGE = `${SITE_ORIGIN}/assets/og.jpg`;
+export const SITE_SOCIAL_IMAGE_WIDTH = 1200;
+export const SITE_SOCIAL_IMAGE_HEIGHT = 630;
+export const SITE_SOCIAL_IMAGE_ALT =
+  'Agent Lifecycle Kit: Eval-Driven Development, TDD for tool-using AI agents. Write evals, mock tools, assert routing, and gate PRs.';
 export const SITE_GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
 
 export type PageSeo = {
@@ -391,6 +397,10 @@ export type SeoHeadModel = {
   ogTitle: string;
   ogDescription: string;
   ogImageUrl: string;
+  ogImageWidth: number;
+  ogImageHeight: number;
+  ogImageAlt: string;
+  twitterImageAlt: string;
   jsonLd?: Record<string, unknown>;
 };
 
@@ -406,6 +416,10 @@ export function seoHeadModel(seo: PageSeo): SeoHeadModel {
     ogTitle: seo.title,
     ogDescription: seo.description,
     ogImageUrl: seo.ogImageUrl,
+    ogImageWidth: SITE_SOCIAL_IMAGE_WIDTH,
+    ogImageHeight: SITE_SOCIAL_IMAGE_HEIGHT,
+    ogImageAlt: SITE_SOCIAL_IMAGE_ALT,
+    twitterImageAlt: SITE_SOCIAL_IMAGE_ALT,
     jsonLd: seo.indexable ? buildJsonLdGraph(seo) : undefined
   };
 }

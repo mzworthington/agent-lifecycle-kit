@@ -57,6 +57,9 @@ jobs:
       - name: TypeScript type-check
         run: pnpm typecheck && pnpm --dir web typecheck
 
+      - name: Build static site
+        run: pnpm --dir web build
+
       - name: Unit tests
         run: pnpm test:ci
 

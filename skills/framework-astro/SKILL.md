@@ -35,7 +35,7 @@ Install current docs via `kit mcp astro --install` (Astro Docs MCP). Do not stac
 - **Pages and layouts** (`src/pages`, `src/layouts`) own routing, document head, and composition.
 - **Do not put React views in `src/pages/`** — Astro treats that folder as file routes. Keep React in `src/components/` or `src/views/`.
 - **Static by default.** `output: 'static'` (or omit SSR adapters). GitHub Pages cannot run an Astro server adapter.
-- **Islands:** `client:load` / `client:visible` / `client:idle` only on interactive leaves (menus, widgets, diagrams). Never wrap the whole site in one island to preserve a SPA router.
+- **Islands:** `client:load` / `client:visible` / `client:idle` only on interactive leaves (menus, widgets, diagrams). Never wrap the whole site in one island to preserve a SPA router. Client islands must not import a markdown glob; page bodies are server props.
 - **Markdown is source.** Glob or content collections from repo Markdown. Do not hand-author parallel HTML copies of the same page.
 - **TypeScript:** follow [lang-typescript](../lang-typescript/SKILL.md). Prefer `astro check` when the toolchain is TypeScript 6.x. This kit uses TypeScript 7, which does not yet expose the programmatic API `astro check` needs — use `astro sync && tsc --noEmit` until that lands.
 
@@ -57,11 +57,10 @@ See [github-pages.md](github-pages.md) for `site`, trailing slashes, `404.html`,
 
 eval-driven.dev is the reference implementation:
 
-- Astro file routes in `web/src/pages`; React views in `web/src/views` (never under `pages/`).
-- `client:load` on `HomePage` / `DocsPage` so the mobile nav and fenced widgets (jobs, eval demo, ontology, mermaid) hydrate. Markdown still SSRs in that island. Do not restore `wouter` / `createRoot`.
-- After `astro build`, `kit site assemble` overlays raw Markdown and writes `CNAME` / `.nojekyll`. GitHub Actions still runs `pnpm --dir web build` then assemble.
-
-When splitting further, extract chrome into `.astro` and leave `client:*` only on those widgets.
+- Astro file routes in `web/src/pages`; React views in `web/src/views` or `web/src/components` (never under `pages/`).
+- Markdown catalog (`web/src/docs/pages.ts`) is **server-only**. Do not import it from islands. Pass page bodies, `docPaths`, and nav `{ path, title }` as props from `.astro` pages.
+- Chrome lives in `SiteChrome.astro`. `client:load` on `SiteNav`, landing widgets, mermaid, and the ontology map (`client:visible` is skipped after Astro view-transition swaps; mermaid’s SSR stub is empty so `client:visible` often never intersects). Never wrap a whole page as one island.
+- After `astro build`, `kit site assemble` overlays raw Markdown and writes `CNAME` / `.nojekyll`. The Astro `kitPages` hook writes `sitemap.xml` only. GitHub Actions still runs `pnpm --dir web build` then assemble.
 
 ## Testing
 

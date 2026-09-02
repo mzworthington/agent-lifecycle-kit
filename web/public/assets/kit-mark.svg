@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Kit">
+  <polygon
+    fill="none"
+    stroke="#2dd4bf"
+    stroke-width="2.25"
+    stroke-linejoin="round"
+    points="32,7 53.95,19.75 53.95,44.25 32,57 10.05,44.25 10.05,19.75"
+  />
+  <path
+    fill="#2dd4bf"
+    d="M21.5 18h6.2v10.35L41.4 18h6.35L33.15 32.1 47.75 46.2H41.4L27.7 35.65V46.2H21.5Z"
+  />
+</svg>

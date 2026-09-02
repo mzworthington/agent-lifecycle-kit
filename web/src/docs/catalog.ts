@@ -11,7 +11,7 @@ export type DocsPageMeta = {
 
 const EXCLUDED = /^(docs\/home\.md|docs\/landing\/|docs\/today-jobs\.md)/;
 
-/** Vite glob keys → repo-relative posix path. */
+/** Vite/Astro glob keys → repo-relative posix path. */
 export function globKeyToRel(key: string): string {
   const rel = key
     .split(/[/\\]/)
