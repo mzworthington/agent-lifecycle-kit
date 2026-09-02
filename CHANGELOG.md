@@ -13,6 +13,7 @@
 ### ⚙️ Refactoring & Performance
 
 - Update theme colors and improve layout styles across components
+- *(edd)* Unify evaluation styles and enhance CLI integration
 
 ### 🧰 Maintenance & Dependencies
 
