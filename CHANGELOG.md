@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-02
+
+### 🧰 Maintenance & Dependencies
+
+- Update site URLs and improve SEO metadata
+
 ## 2026-09-01
 
 ### 🚀 Features
