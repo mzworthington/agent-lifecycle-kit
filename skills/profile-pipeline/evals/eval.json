@@ -1,0 +1,16 @@
+{
+  "suite": "profile-pipeline-evals",
+  "description": "Co-located evaluation tests for delivery pipeline profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PROF-PIPELINE-COLOCATED-001",
+      "name": "CI/CD pipeline and GitHub Actions profile trigger",
+      "target_skill": "profile-pipeline",
+      "prompt": "Design a GitHub Actions CI/CD pipeline with build once, prod deploy, and smoke tests.",
+      "assertions": {
+        "required_triggers": ["ci/cd", "github actions", "pipeline"]
+      }
+    }
+  ]
+}

@@ -21,7 +21,8 @@ Do not commit or push unless the user explicitly asks.
 | Architecture / clean-code detail | [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) or kit-knowledge `get_philosophy_section` |
 | Feature routing / multi-phase | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) |
 | Phase work | Matching `skills/agent-*` only for that phase |
-| Stack rules | Matching `lang-*` / `framework-*` after detecting the codebase |
+| Stack rules | Matching `lang-*` / `framework-*` / `profile-*` after detecting the codebase |
+| CI/CD / GitHub Actions | [profile-pipeline](./skills/profile-pipeline/SKILL.md) |
 | Catalog / XFN matrix | [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) during Design |
 | Debug / RCA | [agent-debug](./skills/agent-debug/SKILL.md) + [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
 | EDD (prompts, MCP tools, routing) | [docs/edd.md](./docs/edd.md) + [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |

@@ -1,7 +1,7 @@
 {
   "suite": "stack-profiles",
   "description": "Evaluation benchmarks for lang-* and framework-* stack profiles",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "test_cases": [
     {
       "id": "EVAL-LANG-TS-001",
@@ -353,6 +353,22 @@
         "required_patterns": ["cardinality", "SLO"],
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Metric Naming", "SLO Link"]
+      }
+    },
+    {
+      "id": "EVAL-PROF-PIPELINE-001",
+      "name": "CI/CD Build-Once and Smoke-Rollback Profile",
+      "description": "Verifies one pipeline on PR and main, build-once promotion, auto app deploy with smoke rollback, and gated IaC apply.",
+      "target_skill": "profile-pipeline",
+      "prompt": "Design a GitHub Actions CI/CD pipeline with trunk-based checks, build once, prod deploy, smoke tests, and changelog push-back.",
+      "context": {
+        "detected_stack": ["GitHub Actions"]
+      },
+      "assertions": {
+        "required_triggers": ["ci/cd", "github actions", "pipeline", "build once", "smoke test", "changelog"],
+        "required_patterns": ["build once", "smoke", "rollback"],
+        "forbidden_patterns": ["ASCII art"],
+        "required_output_sections": ["Verify", "Deploy"]
       }
     }
   ]

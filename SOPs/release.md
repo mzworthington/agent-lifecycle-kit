@@ -11,7 +11,7 @@ tools:
 ---
 # Standard Operating Procedure: Release
 
-Use with [agent-release](../skills/agent-release/SKILL.md).
+Use with [agent-release](../skills/agent-release/SKILL.md). Pipeline shape (verify on PR and `main`, promote, changelog push-back): [profile-pipeline](../skills/profile-pipeline/SKILL.md).
 
 This kit ships as a **git checkout** (`install.sh` / `KIT_REF`), not npm. Versioned
 artifacts are **GitHub Releases** (`vX.Y.Z` tags). Changelog generation uses

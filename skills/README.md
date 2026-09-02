@@ -57,6 +57,7 @@ Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [co
 | Language / domain | Frameworks |
 |-------------------|------------|
 | [profile-iac](./profile-iac/SKILL.md) (secure IaC, CAF, least privilege) | [framework-terraform](./framework-terraform/SKILL.md), [framework-pulumi](./framework-pulumi/SKILL.md) |
+| [profile-pipeline](./profile-pipeline/SKILL.md) (CI/CD, GitHub Actions, promote-up) | (cross-stack delivery; IaC apply still follows profile-iac) |
 | [profile-api](./profile-api/SKILL.md) | (cross-stack HTTP/event APIs) |
 | [profile-mcp](./profile-mcp/SKILL.md) | (MCP tools, stdio/SSE transports, LLM JSON schemas) |
 | [profile-observability](./profile-observability/SKILL.md) | feeds [agent-telemetry](./agent-telemetry/SKILL.md) |
