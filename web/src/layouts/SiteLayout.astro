@@ -1,0 +1,64 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../index.css';
+import { SITE_NAME, SITE_ORIGIN, SITE_SOCIAL_IMAGE, type PageSeo } from '../seo/siteSeo.ts';
+import { seoHeadModel } from '../seo/siteSeo.ts';
+
+type Props = {
+  seo: PageSeo;
+};
+
+const { seo } = Astro.props;
+const head = seoHeadModel(seo);
+const jsonLd = head.jsonLd ? JSON.stringify(head.jsonLd).replaceAll('<', '\\u003c') : undefined;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{head.title}</title>
+    <meta name="description" content={head.description} />
+    <meta name="author" content="mzworthington" />
+    <meta name="robots" content={`${head.robots}, max-image-preview:large, max-snippet:-1, max-video-preview:-1`} />
+    <meta name="theme-color" content="#0b0d11" />
+    <meta name="color-scheme" content="dark" />
+    {head.canonicalUrl ? <link rel="canonical" href={head.canonicalUrl} /> : null}
+    {head.markdownUrl ? <link rel="alternate" type="text/markdown" href={head.markdownUrl} /> : null}
+    <link rel="alternate" type="text/plain" title="llms.txt" href={`${SITE_ORIGIN}/llms.txt`} />
+    <link rel="sitemap" type="application/xml" href={`${SITE_ORIGIN}/sitemap.xml`} />
+    <link rel="icon" type="image/webp" href="/assets/kit_logo_256.webp" sizes="256x256" />
+    <link rel="icon" type="image/webp" href="/assets/kit_logo.webp" sizes="1024x1024" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
+    <link rel="me" href="https://github.com/mzworthington/agent-lifecycle-kit" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content={head.ogType} />
+    <meta property="og:url" content={head.ogUrl} />
+    <meta property="og:title" content={head.ogTitle} />
+    <meta property="og:description" content={head.ogDescription} />
+    <meta property="og:image" content={head.ogImageUrl} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={head.ogUrl} />
+    <meta name="twitter:title" content={head.ogTitle} />
+    <meta name="twitter:description" content={head.ogDescription} />
+    <meta name="twitter:image" content={SITE_SOCIAL_IMAGE} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    {jsonLd ? <script type="application/ld+json" set:html={jsonLd} /> : null}
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+    <script
+      is:inline
+      type="module"
+      src="https://insights.eval-driven.dev/beacon.min.js"
+      data-cf-beacon='{"token":"b41c9a2375f44c4d8e0f46d7966f6642"}'></script>
+  </body>
+</html>

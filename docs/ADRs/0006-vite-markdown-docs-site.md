@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Superseded by ADR-0007
 date: 2026-09-01
 deciders: [kit maintainers]
 ---

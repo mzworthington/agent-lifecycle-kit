@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { Link } from 'wouter';
 
 const TOKEN = /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*)/g;
 
@@ -13,9 +12,9 @@ export function presentInlineMarkdown(text: string): ReactNode[] {
       const label = link[1]!;
       if (href.startsWith('/')) {
         return (
-          <Link key={index} href={href}>
+          <a key={index} href={href}>
             {label}
-          </Link>
+          </a>
         );
       }
       return (

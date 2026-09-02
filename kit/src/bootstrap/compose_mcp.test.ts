@@ -124,4 +124,15 @@ describe('composeMCP', () => {
     assert.ok(body.mcpServers['kit-knowledge']);
     assert.equal(body.mcpServers.vercel, undefined);
   });
+
+  it('composes the astro profile from the kit catalog', () => {
+    const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-astro-')), 'mcp.json');
+    composeMCP('astro', out, false, { repoDir: kitRoot, env: {} });
+    const body = JSON.parse(fs.readFileSync(out, 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(body.mcpServers['astro-docs']?.url, 'https://mcp.docs.astro.build/mcp');
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.equal(body.mcpServers.context7, undefined);
+  });
 });

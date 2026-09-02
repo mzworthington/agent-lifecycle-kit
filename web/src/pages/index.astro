@@ -1,0 +1,11 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { HomePage } from '../views/HomePage.tsx';
+import { resolvePageSeo } from '../seo/siteSeo.ts';
+
+const seo = resolvePageSeo('/');
+---
+
+<SiteLayout seo={seo}>
+  <HomePage client:load />
+</SiteLayout>

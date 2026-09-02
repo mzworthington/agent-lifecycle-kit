@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -29,11 +30,8 @@ describe('install.sh', () => {
     const expected = spawnSync('sha256sum', [installer], { encoding: 'utf8' });
     assert.equal(expected.status, 0, expected.stderr);
     const digest = expected.stdout.trim().split(/\s+/)[0];
-    const recorded = spawnSync('cat', [path.join(root, 'install.sh.sha256')], {
-      encoding: 'utf8',
-    });
-    assert.equal(recorded.status, 0, recorded.stderr);
-    assert.equal(recorded.stdout.trim(), digest);
+    const recorded = readFileSync(path.join(root, 'install.sh.sha256'), 'utf8');
+    assert.equal(recorded.trim(), digest);
   });
 
   it('rejects unknown options and missing --dir values', () => {

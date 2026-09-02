@@ -76,4 +76,17 @@ describe('unit test report helpers', () => {
     assert.equal(stats.failed, 1);
     assert.equal(stats.passed, 1);
   });
+
+  it('escapes backslashes before pipes in markdown table cells', () => {
+    const md = renderUnitTestReportMarkdown([
+      {
+        name: String.raw`path\to|cell`,
+        file: String.raw`dir\file.ts`,
+        outcome: 'pass',
+        durationMs: 1
+      }
+    ]);
+    assert.match(md, /dir\\\\file\.ts/);
+    assert.match(md, /path\\\\to\\\|cell/);
+  });
 });

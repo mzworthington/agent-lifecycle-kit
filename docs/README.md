@@ -1,6 +1,6 @@
 # Docs overview
 
-Public guides for Eval-Driven Development and Agent Lifecycle Kit. Markdown in this directory (plus `SOPs/`, eval write-ups, and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on the SPA.
+Public guides for Eval-Driven Development and Agent Lifecycle Kit. Markdown in this directory (plus `SOPs/`, eval write-ups, and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on client JavaScript.
 
 `pnpm site:dev` runs the docs app. `pnpm --dir web build` then `kit site assemble` writes `site/`.
 

@@ -49,7 +49,7 @@ export function summarizeUnitTests(cases) {
 
 /** @param {string} value */
 function escapeCell(value) {
-  return value.replace(/\|/g, '\\|').replace(/\n/g, ' ');
+  return value.replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 }
 
 /**

@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -11,6 +11,16 @@
       "triggers": ["SOP", "CODING_PHILOSOPHY", "handover", "kit search", "context budget"],
       "requiredEnv": [],
       "enabledByDefault": true
+    },
+    {
+      "id": "astro-docs",
+      "name": "Astro Docs",
+      "summary": "Official Astro documentation MCP for current Astro APIs, islands, and deploy guides.",
+      "transport": "http",
+      "phases": ["impl", "tdd", "xfn"],
+      "triggers": ["Astro", "astro.build", "islands", "content collections", "GitHub Pages"],
+      "requiredEnv": [],
+      "enabledByDefault": false
     },
     {
       "id": "context7",

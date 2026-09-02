@@ -1,0 +1,15 @@
+{
+  "id": "astro-docs",
+  "name": "Astro Docs",
+  "summary": "Official Astro documentation MCP (kapa.ai index) for current Astro APIs and deploy guides.",
+  "homepage": "https://docs.astro.build/en/guides/build-with-ai/",
+  "transport": "http",
+  "phases": ["impl", "tdd", "xfn"],
+  "triggers": ["Astro", "astro.build", "islands", "content collections", "GitHub Pages"],
+  "requiredEnv": [],
+  "mcp": {
+    "astro-docs": {
+      "url": "https://mcp.docs.astro.build/mcp"
+    }
+  }
+}

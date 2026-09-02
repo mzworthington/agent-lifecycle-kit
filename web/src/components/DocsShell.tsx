@@ -1,4 +1,3 @@
-import { Link, useLocation } from 'wouter';
 import { type ReactNode, useState } from 'react';
 import { docsSidebar, isDocsNavActive, SITE_NAV } from '../docs/pages';
 
@@ -6,12 +5,13 @@ const GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
 
 type Props = {
   children: ReactNode;
+  pathname: string;
   layout?: 'docs' | 'landing';
   wide?: boolean;
 };
 
-export function DocsShell({ children, layout = 'docs', wide = false }: Props) {
-  const [location] = useLocation();
+export function DocsShell({ children, pathname, layout = 'docs', wide = false }: Props) {
+  const location = pathname.replace(/\/$/, '') || '/';
   const [open, setOpen] = useState(false);
   const sidebar = docsSidebar(location);
   const isLanding = layout === 'landing';
@@ -23,24 +23,24 @@ export function DocsShell({ children, layout = 'docs', wide = false }: Props) {
       </a>
       <header className="site-header">
         <div className="nav-container">
-          <Link href="/" className="brand">
+          <a href="/" className="brand">
             <img src="/assets/kit_logo_256.webp" alt="" width={36} height={36} />
             <span>Agent Lifecycle Kit</span>
-          </Link>
+          </a>
           <nav id="site-nav" className={`nav-links${open ? ' is-open' : ''}`} aria-label="Site">
             <ul>
               {SITE_NAV.map((item) => {
                 const active = isDocsNavActive(location, item);
                 return (
                   <li key={item.path}>
-                    <Link
+                    <a
                       href={item.path}
                       className={`nav-link${active ? ' is-active' : ''}`}
                       aria-current={active ? 'page' : undefined}
                       onClick={() => setOpen(false)}
                     >
                       {item.label}
-                    </Link>
+                    </a>
                   </li>
                 );
               })}
@@ -73,9 +73,9 @@ export function DocsShell({ children, layout = 'docs', wide = false }: Props) {
                   const active = location === item.path;
                   return (
                     <li key={item.path}>
-                      <Link href={item.path} className={active ? 'is-active' : undefined}>
+                      <a href={item.path} className={active ? 'is-active' : undefined}>
                         {item.label}
-                      </Link>
+                      </a>
                     </li>
                   );
                 })}
@@ -101,13 +101,13 @@ export function DocsShell({ children, layout = 'docs', wide = false }: Props) {
                     const active = location === item.path;
                     return (
                       <li key={item.path}>
-                        <Link
+                        <a
                           href={item.path}
                           className={active ? 'is-active' : undefined}
                           aria-current={active ? 'page' : undefined}
                         >
                           {item.label}
-                        </Link>
+                        </a>
                       </li>
                     );
                   })}
@@ -122,16 +122,16 @@ export function DocsShell({ children, layout = 'docs', wide = false }: Props) {
         <nav aria-label="Footer">
           <ul>
             <li>
-              <Link href="/docs/start">Start</Link>
+              <a href="/docs/start">Start</a>
             </li>
             <li>
-              <Link href="/docs">Guide</Link>
+              <a href="/docs">Guide</a>
             </li>
             <li>
-              <Link href="/evals/edd">Evals</Link>
+              <a href="/evals/edd">Evals</a>
             </li>
             <li>
-              <Link href="/docs/map">Map</Link>
+              <a href="/docs/map">Map</a>
             </li>
             <li>
               <a href={GITHUB} rel="noopener noreferrer">

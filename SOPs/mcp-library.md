@@ -21,6 +21,7 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Kit SOP / philosophy / handover chunks | `kit-knowledge` on `default` (already) |
 | Linear / Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
+| Astro docs / GitHub Pages sites | `mcps/profiles/astro.json` |
 | Cloudflare / Vercel | `mcps/profiles/cloud.json` |
 | Cloudflare RUM / Worker / DNS diagnosis | `mcps/profiles/cloudflare-ops.json` |
 | Sentry / Slack ops | `mcps/profiles/ops.json` |

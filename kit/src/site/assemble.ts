@@ -7,7 +7,7 @@ export const PAGES_SITE_HOST = 'eval-driven.dev';
 export const VITE_DIST_REL = 'web/dist';
 
 /**
- * Markdown and static files copied onto the Vite build so agents keep stable
+ * Markdown and static files copied onto the web build so agents keep stable
  * `.md` / `.yaml` URLs next to the HTML app.
  */
 export const PAGES_SITE_ENTRIES: readonly string[] = [

@@ -1,7 +1,6 @@
 import { Children, isValidElement, lazy, Suspense, type ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Link } from 'wouter';
 import { DOC_PATHS } from '../docs/pages';
 import { splitDocsMarkdown } from '../docs/presentDocsMarkdown';
 import { resolveDocsHref } from '../docs/resolveDocsHref';
@@ -70,9 +69,9 @@ export function MarkdownView({ markdown, fromDir }: Props) {
                 return <a href={resolved}>{children}</a>;
               }
               return (
-                <Link href={resolved} className="docs-link">
+                <a href={resolved} className="docs-link">
                   {children}
-                </Link>
+                </a>
               );
             }
             return (

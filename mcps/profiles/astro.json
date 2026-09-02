@@ -1,0 +1,10 @@
+{
+  "name": "astro",
+  "description": "Astro content-site sessions: kit chunks, GitHub, memory, and current Astro docs. No Context7 — Astro Docs MCP is the vendor source. One profile; do not stack on default.",
+  "servers": [
+    "kit-knowledge",
+    "github",
+    "memory",
+    "astro-docs"
+  ]
+}

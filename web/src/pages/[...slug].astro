@@ -1,0 +1,26 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { DocsPage } from '../views/DocsPage.tsx';
+import { docsStaticPaths } from '../docs/staticPaths.ts';
+import { resolvePageSeo } from '../seo/siteSeo.ts';
+import type { DocsPageMeta } from '../docs/catalog.ts';
+
+export function getStaticPaths() {
+  return docsStaticPaths();
+}
+
+type Props = {
+  page: DocsPageMeta;
+};
+
+const { page } = Astro.props;
+const seo = resolvePageSeo(page.path, {
+  headline: page.title,
+  markdown: page.markdown,
+  file: page.file
+});
+---
+
+<SiteLayout seo={seo}>
+  <DocsPage client:load pathname={page.path} />
+</SiteLayout>

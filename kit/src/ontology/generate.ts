@@ -397,7 +397,7 @@ export function ontologyCachePath(kitRoot: string): string {
   return path.join(kitRoot, 'sync', 'ontology-index.json');
 }
 
-/** Homepage copy for the Vite public tree (gitignored; written at generate / Pages deploy). */
+/** Homepage copy for the web public tree (gitignored; written at generate / Pages deploy). */
 export function siteOntologyIndexPath(kitRoot: string): string {
   return path.join(kitRoot, 'web', 'public', 'assets', 'ontology-index.json');
 }
@@ -477,7 +477,7 @@ export function writeOntologyIndex(
   return out;
 }
 
-/** Sync cache plus the Vite public homepage JSON. Neither file is source of truth. */
+/** Sync cache plus the web public homepage JSON. Neither file is source of truth. */
 export function writeSiteOntologyIndex(
   kitRoot: string,
   index: OntologyIndex = generateOntologyIndex(kitRoot)

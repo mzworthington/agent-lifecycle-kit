@@ -1,5 +1,3 @@
-import { Link } from 'wouter';
-
 export function HomeProof() {
   return (
     <section id="proof" className="proof" aria-labelledby="proof-heading">
@@ -49,7 +47,7 @@ export function HomeProof() {
             <a href="#demo">Walk the interactive demo</a>
           </li>
           <li>
-            <Link href="/evals/edd/examples/before-after">Full before/after write-up</Link>
+            <a href="/evals/edd/examples/before-after">Full before/after write-up</a>
           </li>
           <li>
             <a href="/evals/edd/demo.yaml">Demo suite</a>

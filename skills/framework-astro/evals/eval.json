@@ -1,0 +1,21 @@
+{
+  "suite": "framework-astro-evals",
+  "description": "Co-located evaluation tests for Astro framework profile trigger resolution",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-FW-ASTRO-COLOCATED-001",
+      "name": "Astro static islands and GitHub Pages profile trigger",
+      "target_skill": "framework-astro",
+      "prompt": "Convert this Vite React docs SPA into an Astro TypeScript static site with islands and deploy it to GitHub Pages.",
+      "assertions": {
+        "required_triggers": [
+          "astro",
+          "islands",
+          "static site",
+          "github pages"
+        ]
+      }
+    }
+  ]
+}
