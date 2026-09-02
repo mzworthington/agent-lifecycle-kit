@@ -47,16 +47,21 @@ describe('injectPrerenderedPageHtml', () => {
     const html = injectPrerenderedPageHtml(shell, notFoundPageSeo(), nav);
     expect(html).toContain('noindex,nofollow');
     expect(html).not.toContain('application/ld+json');
+    expect(html).not.toMatch(/rel="canonical"/);
     expect(html).toMatch(/not here|not found/i);
   });
 
-  it('includes a markdown excerpt so crawlers see more than a one-line teaser', () => {
+  it('prerenders article HTML so crawlers receive headings, links, and body copy', () => {
     const seo = resolvePageSeo('/SOPs/context-budget', {
       headline: 'Context budget',
       markdown:
-        '# Context budget\n\nAlways-on agent context is a budget, not a dump of every SOP.\n\nKeep the handshake thin.\n'
+        '# Context budget\n\nAlways-on agent context is a budget, not a dump of every SOP.\n\n## Next\n\nKeep the handshake thin. See [EDD](/docs/edd).\n\n```widget\nontology\n```\n'
     });
     const html = injectPrerenderedPageHtml(shell, seo, nav);
     expect(html).toContain('Keep the handshake thin.');
+    expect(html).toContain('<h2>');
+    expect(html).toContain('href="/docs/edd"');
+    expect(html).not.toContain('ontology');
+    expect(html).toContain('property="og:type" content="article"');
   });
 });

@@ -1,4 +1,4 @@
-import { buildJsonLdGraph, type PageSeo } from './siteSeo.ts';
+import { buildJsonLdGraph, SITE_ORIGIN, type PageSeo } from './siteSeo.ts';
 
 const SEO_ATTR = 'data-kit-seo';
 
@@ -44,14 +44,22 @@ export function resetDocumentHeadManagedNodes(): void {
   document.head.querySelectorAll(`[${SEO_ATTR}]`).forEach((node) => node.remove());
 }
 
+function removeCanonicalLinks(): void {
+  document.head.querySelectorAll('link[rel="canonical"]').forEach((node) => node.remove());
+}
+
 export function applyDocumentHead(seo: PageSeo): void {
   document.title = seo.title;
   upsertMeta('name', 'description', seo.description);
   upsertMeta('name', 'robots', seo.indexable ? 'index,follow' : 'noindex,nofollow');
-  upsertLink('canonical', seo.canonicalUrl);
+  if (seo.indexable && seo.canonicalUrl) {
+    upsertLink('canonical', seo.canonicalUrl);
+  } else {
+    removeCanonicalLinks();
+  }
 
-  upsertMeta('property', 'og:type', 'website');
-  upsertMeta('property', 'og:url', seo.canonicalUrl);
+  upsertMeta('property', 'og:type', seo.ogType);
+  upsertMeta('property', 'og:url', seo.canonicalUrl || `${SITE_ORIGIN}/`);
   upsertMeta('property', 'og:title', seo.title);
   upsertMeta('property', 'og:description', seo.description);
   upsertMeta('property', 'og:image', seo.ogImageUrl);

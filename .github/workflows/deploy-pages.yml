@@ -23,7 +23,6 @@ on:
       - 'kit/src/site/**'
       - 'llms.txt'
       - 'robots.txt'
-      - 'sitemap.xml'
       - '.nojekyll'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:

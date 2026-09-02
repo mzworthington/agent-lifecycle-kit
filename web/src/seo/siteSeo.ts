@@ -13,9 +13,11 @@ export type PageSeo = {
   excerpt: string;
   canonicalUrl: string;
   ogImageUrl: string;
+  ogType: 'website' | 'article';
   indexable: boolean;
   markdownUrl?: string;
   softwareName?: string;
+  articleMarkdown?: string;
   breadcrumbs: Array<{ name: string; path: string }>;
 };
 
@@ -194,11 +196,23 @@ export function breadcrumbsFor(path: string, headline: string): Array<{ name: st
   return crumbs;
 }
 
+const PUBLISHED_PREFIXES = ['/docs/', '/SOPs/', '/evals/', '/mcps/', '/ontology/'] as const;
+
+function isPublishedKitPath(path: string): boolean {
+  if (path === '/' || PAGE_SEO[path]) return true;
+  return PUBLISHED_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
+
 function isKnownPath(path: string, opts?: ResolvePageSeoOptions): boolean {
-  if (path === '/') return true;
-  if (PAGE_SEO[path]) return true;
+  if (isPublishedKitPath(path)) return true;
   if (opts?.markdown || opts?.file) return true;
   return false;
+}
+
+export function canonicalUrlForPath(path: string): string {
+  const normalized = normalizePathname(path);
+  if (normalized === '/') return `${SITE_ORIGIN}/`;
+  return `${SITE_ORIGIN}${normalized}/`;
 }
 
 export function notFoundPageSeo(): PageSeo {
@@ -208,8 +222,9 @@ export function notFoundPageSeo(): PageSeo {
     title: `That page is not here | ${SITE_NAME}`,
     description: 'This URL is not a published kit page. Use the docs overview or the home page.',
     excerpt: 'Try the home page or the docs overview.',
-    canonicalUrl: `${SITE_ORIGIN}/404`,
+    canonicalUrl: '',
     ogImageUrl: SITE_SOCIAL_IMAGE,
+    ogType: 'website',
     indexable: false,
     breadcrumbs: [
       { name: SITE_NAME, path: '/' },
@@ -226,8 +241,7 @@ export function resolvePageSeo(pathname: string, opts?: ResolvePageSeoOptions): 
   if (!known) {
     return {
       ...notFoundPageSeo(),
-      path,
-      canonicalUrl: `${SITE_ORIGIN}${path}`
+      path
     };
   }
 
@@ -249,21 +263,29 @@ export function resolvePageSeo(pathname: string, opts?: ResolvePageSeoOptions): 
     title: titleFor(headline, override?.title),
     description,
     excerpt,
-    canonicalUrl: path === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${path}`,
+    canonicalUrl: canonicalUrlForPath(path),
     ogImageUrl: SITE_SOCIAL_IMAGE,
+    ogType: path === '/' ? 'website' : 'article',
     indexable,
     markdownUrl: opts?.file ? `${SITE_ORIGIN}/${opts.file}` : undefined,
-    softwareName: override?.softwareName ?? SITE_NAME,
+    softwareName: override?.softwareName,
+    articleMarkdown: opts?.markdown,
     breadcrumbs: breadcrumbsFor(path, headline)
   };
 }
 
 export function listIndexableSeoPaths(paths: readonly string[]): string[] {
-  return paths.filter((path) => resolvePageSeo(path).indexable).sort((a, b) => {
-    if (a === '/') return -1;
-    if (b === '/') return 1;
-    return a.localeCompare(b);
-  });
+  return paths
+    .filter((path) => {
+      const normalized = normalizePathname(path);
+      if (!isPublishedKitPath(normalized)) return false;
+      return resolvePageSeo(normalized).indexable;
+    })
+    .sort((a, b) => {
+      if (a === '/') return -1;
+      if (b === '/') return 1;
+      return a.localeCompare(b);
+    });
 }
 
 function sitemapPriority(path: string): string {
@@ -279,7 +301,7 @@ function sitemapPriority(path: string): string {
 export function buildSitemapXml(paths: readonly string[], lastmod: string): string {
   const urls = paths
     .map((path) => {
-      const loc = path === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${path}`;
+      const loc = canonicalUrlForPath(path);
       return `  <url>
     <loc>${loc}</loc>
     <lastmod>${lastmod}</lastmod>
@@ -315,7 +337,7 @@ export function buildJsonLdGraph(seo: PageSeo): Record<string, unknown> {
 
   const graph: Array<Record<string, unknown>> = [organization, website];
 
-  if (seo.softwareName) {
+  if (seo.path === '/' && seo.softwareName) {
     graph.push({
       '@type': 'SoftwareApplication',
       '@id': `${SITE_ORIGIN}/#software`,
@@ -347,7 +369,7 @@ export function buildJsonLdGraph(seo: PageSeo): Record<string, unknown> {
         '@type': 'ListItem',
         position: index + 1,
         name: crumb.name,
-        item: crumb.path === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${crumb.path}`
+        item: canonicalUrlForPath(crumb.path)
       }))
     });
   }

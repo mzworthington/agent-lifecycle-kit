@@ -30,6 +30,7 @@ describe('siteSeo catalog', () => {
     expect(seo.canonicalUrl).toBe(`${SITE_ORIGIN}/`);
     expect(seo.ogImageUrl).toBe(SITE_SOCIAL_IMAGE);
     expect(seo.indexable).toBe(true);
+    expect(seo.ogType).toBe('website');
     expect(seo.softwareName).toBe('Agent Lifecycle Kit');
   });
 
@@ -58,8 +59,9 @@ describe('siteSeo catalog', () => {
       });
       expect(seo.title.length).toBeGreaterThan(0);
       expect(seo.description.length).toBeGreaterThan(20);
-      expect(seo.canonicalUrl).toBe(`${SITE_ORIGIN}${page.path}`);
+      expect(seo.canonicalUrl).toBe(`${SITE_ORIGIN}${page.path}/`);
       expect(seo.markdownUrl).toBe(`${SITE_ORIGIN}/${page.file}`);
+      expect(seo.ogType).toBe('article');
     }
   });
 
@@ -71,6 +73,8 @@ describe('siteSeo catalog', () => {
     });
     expect(seo.description).toMatch(/always-on agent context is a budget/i);
     expect(seo.indexable).toBe(true);
+    expect(seo.canonicalUrl).toBe(`${SITE_ORIGIN}/SOPs/context-budget/`);
+    expect(seo.softwareName).toBeUndefined();
   });
 
   it('marks the review backlog and unknown routes as non-indexable', () => {
@@ -86,12 +90,20 @@ describe('siteSeo catalog', () => {
   });
 
   it('builds a sitemap of indexable URLs and omits the backlog', () => {
-    const paths = listIndexableSeoPaths(['/', '/docs/edd', '/docs/kit-review-backlog', '/workspace']);
-    expect(paths).toEqual(['/', '/docs/edd']);
+    const paths = listIndexableSeoPaths([
+      '/',
+      '/docs/edd',
+      '/SOPs/context-budget',
+      '/docs/kit-review-backlog',
+      '/workspace'
+    ]);
+    expect(paths).toEqual(['/', '/docs/edd', '/SOPs/context-budget']);
     const xml = buildSitemapXml(paths, '2026-09-02');
     expect(xml).toContain(`${SITE_ORIGIN}/`);
-    expect(xml).toContain(`${SITE_ORIGIN}/docs/edd`);
+    expect(xml).toContain(`${SITE_ORIGIN}/docs/edd/`);
+    expect(xml).toContain(`${SITE_ORIGIN}/SOPs/context-budget/`);
     expect(xml).not.toContain('kit-review-backlog');
+    expect(xml).not.toContain('/workspace');
   });
 
   it('builds JSON-LD with Organization, WebSite, SoftwareApplication, and breadcrumbs', () => {
@@ -110,13 +122,19 @@ describe('siteSeo catalog', () => {
     const eddGraph = edd['@graph'] as Array<Record<string, unknown>>;
     const crumbs = eddGraph.find((node) => node['@type'] === 'BreadcrumbList');
     expect(crumbs).toBeTruthy();
-    const items = crumbs?.itemListElement as Array<{ name: string }>;
+    const items = crumbs?.itemListElement as Array<{ name: string; item: string }>;
     expect(items.some((item) => item.name === 'EDD guide' || item.name.includes('EDD'))).toBe(true);
+    expect(items.find((item) => item.item.includes('/docs/edd'))?.item).toBe(`${SITE_ORIGIN}/docs/edd/`);
+    expect(types.filter((type) => type === 'SoftwareApplication')).toHaveLength(1);
+    const eddTypes = eddGraph.map((node) => node['@type']);
+    expect(eddTypes).not.toContain('SoftwareApplication');
+    expect(eddTypes).toContain('TechArticle');
   });
 
   it('describes GitHub Pages 404 shells as non-indexable', () => {
     const seo = notFoundPageSeo();
     expect(seo.indexable).toBe(false);
+    expect(seo.canonicalUrl).toBe('');
     expect(seo.headline.toLowerCase()).toMatch(/not here|not found/);
   });
 });

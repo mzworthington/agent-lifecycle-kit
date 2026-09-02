@@ -4,6 +4,23 @@ Allow: /
 Allow: /llms.txt
 Allow: /sitemap.xml
 
+# Index HTML routes. Raw markdown/YAML stay available to agents (llms.txt, GPTBot).
+User-agent: Googlebot
+Allow: /
+Allow: /llms.txt
+Allow: /sitemap.xml
+Disallow: /*.md$
+Disallow: /*.yaml$
+Disallow: /*.yml$
+
+User-agent: Bingbot
+Allow: /
+Allow: /llms.txt
+Allow: /sitemap.xml
+Disallow: /*.md$
+Disallow: /*.yaml$
+Disallow: /*.yml$
+
 User-agent: GPTBot
 Allow: /
 

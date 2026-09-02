@@ -129,4 +129,12 @@ describe('landing page assets', () => {
     assert.match(yml, /path: 'site'/);
     assert.doesNotMatch(yml, /path: '\.'/);
   });
+
+  it('asks Googlebot not to index raw markdown while leaving the HTML sitemap as the indexable map', () => {
+    const robots = fs.readFileSync(path.join(kitRoot, 'robots.txt'), 'utf8');
+    assert.match(robots, /User-agent: Googlebot/);
+    assert.match(robots, /Disallow: \/\*\.md\$/);
+    assert.match(robots, /Sitemap: https:\/\/eval-driven\.dev\/sitemap\.xml/);
+    assert.equal(fs.existsSync(path.join(kitRoot, 'sitemap.xml')), false);
+  });
 });

@@ -15,11 +15,13 @@ describe('applyDocumentHead', () => {
       40
     );
     expect(document.head.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(
-      'https://eval-driven.dev/docs/start'
+      'https://eval-driven.dev/docs/start/'
     );
     expect(document.head.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe('index,follow');
+    expect(document.head.querySelector('meta[property="og:type"]')?.getAttribute('content')).toBe('article');
     expect(document.head.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe(document.title);
-    expect(document.head.querySelector('script[type="application/ld+json"]')?.textContent).toContain(
+    expect(document.head.querySelector('script[type="application/ld+json"]')?.textContent).toContain('TechArticle');
+    expect(document.head.querySelector('script[type="application/ld+json"]')?.textContent).not.toContain(
       'SoftwareApplication'
     );
   });
@@ -28,6 +30,7 @@ describe('applyDocumentHead', () => {
     applyDocumentHead(resolvePageSeo('/missing'));
     expect(document.head.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe('noindex,nofollow');
     expect(document.head.querySelector('script[type="application/ld+json"]')).toBeNull();
+    expect(document.head.querySelector('link[rel="canonical"]')).toBeNull();
   });
 
   it('exposes markdown source as an alternate for published pages', () => {
