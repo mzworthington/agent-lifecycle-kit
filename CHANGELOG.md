@@ -2,6 +2,10 @@
 
 ## 2026-09-02
 
+### 🚀 Features
+
+- Improve seo
+
 ### 🧰 Maintenance & Dependencies
 
 - Update site URLs and improve SEO metadata
