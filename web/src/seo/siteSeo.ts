@@ -9,7 +9,7 @@ export const SITE_SOCIAL_IMAGE_WIDTH = 1200;
 export const SITE_SOCIAL_IMAGE_HEIGHT = 630;
 export const SITE_SOCIAL_IMAGE_ALT =
   'Waykit: software lifecycle for coding agents. Grill, spec, TDD, quality, release, and learning loops including eval-driven development.';
-export const SITE_GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
+export const SITE_GITHUB = 'https://github.com/mzworthington/waykit';
 
 export type PageSeo = {
   path: string;

@@ -9,7 +9,7 @@ Cursor is the reference host for skills and MCP compose. Other IDEs get the same
 
 ## What do I use this for today?
 - Starting a product feature → lifecycle (grill → spec → TDD + XFN → audit → release)
-- Never installed → `curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh` then `wk init . --mcp default --hook`
+- Never installed → `curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh` then `wk init . --mcp default --hook`
 - Always-on context too fat → `wk measure-context` then `wk check`
 - Wrong tool / made-up args → `wk eval run --suite evals/edd/demo.yaml --model scripted`
 - Gate a prompt or schema change → `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
@@ -30,11 +30,11 @@ Cursor is the reference host for skills and MCP compose. Other IDEs get the same
 - [Demo suite](https://waykit.dev/evals/edd/demo.yaml)
 - [Before/after write-up](https://waykit.dev/evals/edd/examples/before-after) ([markdown](https://waykit.dev/evals/edd/examples/before-after.md))
 - [Eval suites](https://waykit.dev/evals/edd) ([markdown](https://waykit.dev/evals/edd/README.md))
-- [GitHub](https://github.com/mzworthington/agent-lifecycle-kit)
+- [GitHub](https://github.com/mzworthington/waykit)
 
 ## Install
 ```
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 wk init . --mcp default --hook
 ```
 

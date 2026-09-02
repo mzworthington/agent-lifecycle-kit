@@ -34,4 +34,4 @@ sequenceDiagram
 5. **Audit:** Security and architecture-drift checks, then pre-commit.
 6. **Telemetry and release:** Map SLOs, update public docs if you touched them, ship with a conventional PR title.
 
-[Orchestrator skill](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/skills/agent-orchestrator/SKILL.md) · [Coding philosophy](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide](/docs/edd)
+[Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md) · [Coding philosophy](https://github.com/mzworthington/waykit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide](/docs/edd)

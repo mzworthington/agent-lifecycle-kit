@@ -8,14 +8,14 @@ Coding agents skip steps a team would not. Waykit is the software lifecycle they
 [![Lifecycle](https://img.shields.io/badge/Lifecycle-SDLC-blueviolet?style=for-the-badge&logo=git)](./docs/lifecycle.md)
 [![Pages](https://img.shields.io/badge/Docs-waykit.dev-blue?style=for-the-badge&logo=github)](https://waykit.dev/)
 [![License](https://img.shields.io/badge/License-Unlicense-success?style=for-the-badge)](./LICENSE)
-[![Version](https://img.shields.io/github/v/release/mzworthington/agent-lifecycle-kit?style=for-the-badge&logo=github&label=Version)](https://github.com/mzworthington/agent-lifecycle-kit/releases)
+[![Version](https://img.shields.io/github/v/release/mzworthington/waykit?style=for-the-badge&logo=github&label=Version)](https://github.com/mzworthington/waykit/releases)
 
 The CLI is `wk`. `kit` and `agent-kit` still work as aliases.
 
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 wk init . --mcp default --hook
 ```
 

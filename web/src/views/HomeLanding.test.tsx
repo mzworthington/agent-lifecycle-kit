@@ -15,7 +15,7 @@ describe('HomeLanding', () => {
     expect(screen.getByRole('img', { name: 'Unlicense' })).toBeTruthy();
     expect(screen.getByRole('img', { name: 'Latest GitHub release' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Latest GitHub release' }).getAttribute('href')).toMatch(
-      /github\.com\/mzworthington\/agent-lifecycle-kit\/releases$/
+      /github\.com\/mzworthington\/waykit\/releases$/
     );
     expect(screen.getByRole('heading', { name: /what do i use this for today/i })).toBeTruthy();
     expect(screen.getByRole('group', { name: 'Job list' })).toBeTruthy();

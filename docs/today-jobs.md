@@ -1,6 +1,6 @@
 # What do I use this for today?
 
-Pick the job in front of you. Waykit is a product you run, not a docs pile you browse.
+Pick the job in front of you. Each card opens the steps and a command you can copy.
 
 Each heading is `id | title`. The homepage picker and this page share the same source.
 
@@ -15,7 +15,7 @@ Get Waykit on PATH, bootstrap the repo, then run the loop that matches the job.
 3. **Read the lifecycle**, then optionally prove routing with the demo eval suite.
 
 ```
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 ```
 
 - [Start here in 10 minutes](/docs/start)
@@ -37,7 +37,7 @@ Open the orchestrator skill and follow the phase table in AGENTS.md
 ```
 
 - [Feature lifecycle](/docs/lifecycle)
-- [Orchestrator skill](https://github.com/mzworthington/agent-lifecycle-kit/blob/main/skills/agent-orchestrator/SKILL.md)
+- [Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md)
 - [How EDD fits](/docs/edd)
 
 ## context | Always-on context is too fat

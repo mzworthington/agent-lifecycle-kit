@@ -70,7 +70,7 @@ describe('docs/today-jobs.md', () => {
     expect(kitGraph.title).toBe('I changed a skill or SOP');
     expect(kitGraph.cmd).toBe('wk ontology check');
     expect(firstHour.cmd).toBe(
-      'curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh'
+      'curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh'
     );
   });
 });

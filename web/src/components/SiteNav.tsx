@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { isDocsNavActive, SITE_NAV } from '../docs/nav.ts';
 
-const GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
+const GITHUB = 'https://github.com/mzworthington/waykit';
 
 type Props = {
   pathname: string;

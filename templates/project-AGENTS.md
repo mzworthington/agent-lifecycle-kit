@@ -1,6 +1,6 @@
 # Agent Handshake
 
-Standards and lifecycle agents live in `~/.agents`.
+Standards and lifecycle agents live in `~/.agents` ([Waykit](https://github.com/mzworthington/waykit)).
 
 Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, SOPs, or skills up front.
 

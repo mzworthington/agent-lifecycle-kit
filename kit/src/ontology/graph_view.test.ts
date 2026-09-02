@@ -50,7 +50,7 @@ describe('entitySourceUrl', () => {
   it('builds a GitHub blob URL from a kit-relative path', () => {
     assert.equal(
       entitySourceUrl('skills/agent-tdd/SKILL.md'),
-      'https://github.com/mzworthington/agent-lifecycle-kit/blob/main/skills/agent-tdd/SKILL.md'
+      'https://github.com/mzworthington/waykit/blob/main/skills/agent-tdd/SKILL.md'
     );
   });
 

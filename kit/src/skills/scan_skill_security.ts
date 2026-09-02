@@ -45,7 +45,7 @@ const VALID_PHASES = [
 const SCANNABLE_EXTENSIONS = new Set(['.md', '.sh', '.json', '.ts', '.yml', '.yaml']);
 const PIN_PATTERN = /^(latest|v?\d+(\.\d+)*(-[\w.-]+)?|[0-9a-f]{40}|refs\/(tags|heads)\/[\w./-]+)$/i;
 const OFFICIAL_INSTALLER =
-  /raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/[^/\s]+\/install\.sh/;
+  /raw\.githubusercontent\.com\/mzworthington\/(?:waykit|agent-lifecycle-kit)\/[^/\s]+\/install\.sh/;
 
 /** Documented `curl | sh` (or bash) for this repo only - still flag every other pipe-to-shell. */
 export function isOfficialKitInstallerLine(line: string): boolean {

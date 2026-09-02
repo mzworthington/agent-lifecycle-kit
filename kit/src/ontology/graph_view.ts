@@ -66,7 +66,7 @@ export const REL_COLOR: Record<RelationName, string> = {
   orders: '#e8edf4'
 };
 
-const GITHUB_BLOB_BASE = 'https://github.com/mzworthington/agent-lifecycle-kit/blob/main';
+const GITHUB_BLOB_BASE = 'https://github.com/mzworthington/waykit/blob/main';
 
 export function entitySourceUrl(filePath?: string): string | null {
   if (!filePath) return null;

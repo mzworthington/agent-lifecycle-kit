@@ -8,7 +8,7 @@ deciders: [kit maintainers]
 
 ## Context and Problem Statement
 
-Agent Lifecycle Kit steers product teams (and coding agents) toward a single architectural language. Without a recorded default, agents invent ad-hoc layering or force heavy DDD onto throwaway code. We need an irreversible-enough default that still allows documented exceptions.
+Waykit steers product teams (and coding agents) toward a single architectural language. Without a recorded default, agents invent ad-hoc layering or force heavy DDD onto throwaway code. We need an irreversible-enough default that still allows documented exceptions.
 
 ## Decision Drivers
 

@@ -21,6 +21,6 @@ describe('homepage copy', () => {
       'Unlicense',
       'Latest GitHub release'
     ]);
-    expect(HOME_BADGES[4]?.src).toContain('github/v/release/mzworthington/agent-lifecycle-kit');
+    expect(HOME_BADGES[4]?.src).toContain('github/v/release/mzworthington/waykit');
   });
 });

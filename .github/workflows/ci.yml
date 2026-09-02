@@ -1,4 +1,4 @@
-name: Agent Lifecycle Kit CI
+name: Waykit CI
 
 # Verify (merge gate) → Promote (tag + changelog) on green main.
 # Side cadences stay separate: CodeQL, nightly live EDD, Pages (path-filtered).

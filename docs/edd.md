@@ -35,7 +35,7 @@ Bare `wk eval` still validates which Kit skill activates. `wk eval run|watch|rep
 ## Quick start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 wk init . --mcp default --hook
 
 wk eval run --suite evals/edd/architecture_routing.yaml --model scripted

@@ -11,7 +11,7 @@ Waykit is the software lifecycle for coding agents: grill, spec, TDD, quality, a
 On macOS or Linux, run the installer, then bootstrap the app repo:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 wk init . --mcp default --hook
 ```
 

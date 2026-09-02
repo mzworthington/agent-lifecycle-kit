@@ -12,7 +12,7 @@ Four steps to Waykit on a repo. macOS and Linux; needs git and Node 22+. No API 
 If `wk` is missing after install, add `~/.local/bin` to `PATH`.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 wk init . --mcp default --hook
 ```
 

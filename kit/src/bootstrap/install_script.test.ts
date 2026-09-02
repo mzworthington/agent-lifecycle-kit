@@ -17,7 +17,7 @@ describe('install.sh', () => {
     assert.equal(result.status, 0, result.stderr);
     assert.match(
       result.stdout,
-      /curl -fsSL https:\/\/raw\.githubusercontent\.com\/mzworthington\/agent-lifecycle-kit\/main\/install\.sh \| sh/
+      /curl -fsSL https:\/\/raw\.githubusercontent\.com\/mzworthington\/waykit\/main\/install\.sh \| sh/
     );
     assert.match(result.stdout, /wk init \. --mcp default --hook/);
   });

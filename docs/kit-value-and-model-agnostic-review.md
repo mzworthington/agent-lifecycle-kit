@@ -9,7 +9,7 @@
 
 ## What this kit is
 
-Agent Lifecycle Kit is a **governance + procedure pack** for coding agents, plus a TypeScript CLI (`kit`) for bootstrap, MCP compose, security scan, and eval harnesses. Core ideas:
+Waykit is a **governance + procedure pack** for coding agents, plus a TypeScript CLI (`kit`) for bootstrap, MCP compose, security scan, and eval harnesses. Core ideas:
 
 1. Thin always-on bootstrap (`AGENTS.md`) with on-demand skills/SOPs/philosophy.
 2. Lifecycle roles (`agent-*`) and stack profiles (`lang-*` / `framework-*`).

@@ -1,10 +1,10 @@
 #!/bin/sh
 # Bootstrap Waykit: clone or reuse a checkout, link ~/.agents, put wk on PATH.
-# curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+# curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
 # POSIX sh (dash, busybox ash, macOS /bin/sh). Do not require bash.
 set -eu
 
-GITHUB_REPO="${KIT_GITHUB_REPO:-mzworthington/agent-lifecycle-kit}"
+GITHUB_REPO="${KIT_GITHUB_REPO:-mzworthington/waykit}"
 KIT_DIR="${KIT_DIR:-}"
 GIT_REF="${KIT_REF:-main}"
 INSTALL_MCP="${INSTALL_MCP:-1}"
@@ -15,7 +15,7 @@ usage() {
   cat <<'EOF'
 Waykit installer
 
-  curl -fsSL https://raw.githubusercontent.com/mzworthington/agent-lifecycle-kit/main/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
   curl -fsSL .../install.sh | sh -s -- [options]
 
 From a Waykit checkout:
@@ -28,14 +28,14 @@ Then, in an app repo:
   wk init . --mcp default --hook
 
 Options:
-  --dir <path>     Clone destination (default: $HOME/.local/share/agent-lifecycle-kit)
+  --dir <path>     Clone destination (default: $HOME/.local/share/waykit)
   --ref <git-ref>  Branch or tag to clone (default: main)
   -h, --help       Show this help
 
 Environment:
   KIT_DIR                    Same as --dir
   KIT_REF                    Same as --ref
-  KIT_GITHUB_REPO            GitHub owner/repo (default: mzworthington/agent-lifecycle-kit)
+  KIT_GITHUB_REPO            GitHub owner/repo (default: mzworthington/waykit)
   INSTALL_MCP                Set to 0 to skip MCP compose
   INSTALL_EXTERNAL_SKILLS    Set to 1 to sync Cloudflare/Vercel skills
 EOF
@@ -147,7 +147,7 @@ clone_or_update() {
   if [ -d "${_dest}/.git" ]; then
     _origin=$(git -C "${_dest}" remote get-url origin 2>/dev/null || true)
     case "${_origin}" in
-      *"${GITHUB_REPO}"*) ;;
+      *"${GITHUB_REPO}"*|*"mzworthington/waykit"*|*"mzworthington/agent-lifecycle-kit"*) ;;
       *)
         echo "error: ${_dest} origin is ${_origin:-unset}, expected ${GITHUB_REPO}" >&2
         exit 1
@@ -289,7 +289,7 @@ bootstrap_checkout() {
   install_cli_bin "${_repo_dir}"
 
   echo ""
-  echo "Agent Lifecycle Kit is ready."
+  echo "Waykit is ready."
   echo "Unified CLI: kit (or pnpm kit)"
   echo "In an app repo:"
   echo "  kit init . --mcp default --hook"
@@ -311,7 +311,11 @@ if [ -z "${DEST}" ]; then
   DEST=$(resolve_agents_checkout || true)
 fi
 if [ -z "${DEST}" ]; then
-  DEST="${HOME}/.local/share/agent-lifecycle-kit"
+  if [ -d "${HOME}/.local/share/agent-lifecycle-kit/.git" ] && [ ! -d "${HOME}/.local/share/waykit/.git" ]; then
+    DEST="${HOME}/.local/share/agent-lifecycle-kit"
+  else
+    DEST="${HOME}/.local/share/waykit"
+  fi
 fi
 
 clone_or_update "${DEST}"

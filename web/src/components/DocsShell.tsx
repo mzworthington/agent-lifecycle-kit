@@ -7,7 +7,7 @@ import {
 } from '../docs/nav.ts';
 import { SITE_MARK_SRC, SITE_NAME, SITE_SHORT_NAME } from '../seo/siteSeo.ts';
 
-const GITHUB = 'https://github.com/mzworthington/agent-lifecycle-kit';
+const GITHUB = 'https://github.com/mzworthington/waykit';
 
 type Props = {
   children: ReactNode;

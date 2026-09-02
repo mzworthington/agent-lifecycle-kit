@@ -7,7 +7,7 @@ export const HOME_LEDE =
 /** Keep in sync with the README badge row. Version tracks GitHub Releases. */
 export const HOME_BADGES = [
   {
-    href: 'https://github.com/mzworthington/agent-lifecycle-kit/actions',
+    href: 'https://github.com/mzworthington/waykit/actions',
     src: 'https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions',
     alt: 'CI passing',
     width: 130,
@@ -35,8 +35,8 @@ export const HOME_BADGES = [
     height: 28
   },
   {
-    href: 'https://github.com/mzworthington/agent-lifecycle-kit/releases',
-    src: 'https://img.shields.io/github/v/release/mzworthington/agent-lifecycle-kit?style=for-the-badge&logo=github&label=Version',
+    href: 'https://github.com/mzworthington/waykit/releases',
+    src: 'https://img.shields.io/github/v/release/mzworthington/waykit?style=for-the-badge&logo=github&label=Version',
     alt: 'Latest GitHub release',
     width: 168,
     height: 28
