@@ -27,6 +27,7 @@ Commands:
 Examples:
   kit init ./my-app --mcp collab --hook
   kit mcp ops --install
+  kit mcp astro --install
   kit mcp cloudflare-ops --install
   kit audit
   kit eval

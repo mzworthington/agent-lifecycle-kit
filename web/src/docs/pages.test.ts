@@ -15,6 +15,7 @@ describe('published markdown catalog', () => {
     expect(DOC_PATHS.has('/docs/kit')).toBe(true);
     expect(DOC_PATHS.has('/SOPs/context-budget')).toBe(true);
     expect(DOC_PATHS.has('/docs/ADRs/0006-vite-markdown-docs-site')).toBe(true);
+    expect(DOC_PATHS.has('/docs/ADRs/0007-astro-static-docs-site')).toBe(true);
     expect(findPublishedPage('/docs/home')).toBeUndefined();
     expect(findPublishedPage('/docs/edd')?.title).toMatch(/EDD|Eval/i);
     expect(findPublishedPage('/ontology')?.title).toBe('Author the kit map');
@@ -32,7 +33,7 @@ describe('site information architecture', () => {
     const map = SITE_NAV.find((item) => item.label === 'Map')!;
     expect(isDocsNavActive('/docs', guide)).toBe(true);
     expect(isDocsNavActive('/docs/edd', guide)).toBe(true);
-    expect(isDocsNavActive('/docs/ADRs/0006-vite-markdown-docs-site', guide)).toBe(true);
+    expect(isDocsNavActive('/docs/ADRs/0007-astro-static-docs-site', guide)).toBe(true);
     expect(isDocsNavActive('/docs/start', guide)).toBe(false);
     expect(isDocsNavActive('/docs/start', start)).toBe(true);
     expect(isDocsNavActive('/docs/map', map)).toBe(true);
@@ -58,5 +59,15 @@ describe('site information architecture', () => {
     expect(fromStart.next?.path).toBe('/docs/jobs');
     const order = docsReadingOrder();
     expect(order.slice(0, 4)).toEqual(['/docs', '/docs/start', '/docs/jobs', '/docs/faq']);
+  });
+});
+
+describe('docsStaticPaths', () => {
+  it('emits a rest slug for every published markdown page', async () => {
+    const { docsStaticPaths } = await import('./staticPaths.ts');
+    const paths = docsStaticPaths();
+    expect(paths.some((entry) => entry.params.slug === 'docs/start')).toBe(true);
+    expect(paths.some((entry) => entry.params.slug === 'ontology')).toBe(true);
+    expect(paths.every((entry) => entry.params.slug.length > 0)).toBe(true);
   });
 });

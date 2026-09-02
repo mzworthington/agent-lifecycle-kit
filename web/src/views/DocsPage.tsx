@@ -1,22 +1,24 @@
-import { Link, useLocation } from 'wouter';
 import { DocsShell } from '../components/DocsShell';
 import { MarkdownView } from '../components/MarkdownView';
 import { docsNeighbors, findPublishedPage } from '../docs/pages';
 import { docsToc } from '../docs/outline';
 import { resolvePageSeo } from '../seo/siteSeo.ts';
 
-export function DocsPage() {
-  const [location] = useLocation();
-  const pathname = location.replace(/\/$/, '') || '/';
-  const page = findPublishedPage(pathname);
+type Props = {
+  pathname: string;
+};
+
+export function DocsPage({ pathname }: Props) {
+  const path = pathname.replace(/\/$/, '') || '/';
+  const page = findPublishedPage(path);
 
   if (!page) {
     return (
-      <DocsShell>
+      <DocsShell pathname={path}>
         <article className="docs-panel">
           <h1>That page is not here</h1>
           <p>
-            Try the <Link href="/">home page</Link> or the <Link href="/docs">docs overview</Link>.
+            Try the <a href="/">home page</a> or the <a href="/docs">docs overview</a>.
           </p>
         </article>
       </DocsShell>
@@ -33,7 +35,7 @@ export function DocsPage() {
   }).breadcrumbs;
 
   return (
-    <DocsShell wide={wide}>
+    <DocsShell pathname={page.path} wide={wide}>
       <article className={`docs-panel${wide ? ' docs-panel--wide' : ''}`}>
         {crumbs.length > 1 ? (
           <nav className="docs-breadcrumb" aria-label="Breadcrumb">
@@ -45,7 +47,7 @@ export function DocsPage() {
                     {last ? (
                       <span aria-current="page">{crumb.name}</span>
                     ) : (
-                      <Link href={crumb.path}>{crumb.name}</Link>
+                      <a href={crumb.path}>{crumb.name}</a>
                     )}
                   </li>
                 );
@@ -57,18 +59,18 @@ export function DocsPage() {
         {prev || next ? (
           <nav className="docs-pager" aria-label="Nearby pages">
             {prev ? (
-              <Link href={prev.path} className="docs-pager-prev">
+              <a href={prev.path} className="docs-pager-prev">
                 <span>Previous</span>
                 {prev.label}
-              </Link>
+              </a>
             ) : (
               <span />
             )}
             {next ? (
-              <Link href={next.path} className="docs-pager-next">
+              <a href={next.path} className="docs-pager-next">
                 <span>Next</span>
                 {next.label}
-              </Link>
+              </a>
             ) : null}
           </nav>
         ) : null}

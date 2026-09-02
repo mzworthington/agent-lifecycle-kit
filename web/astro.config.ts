@@ -1,0 +1,28 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import { kitPages } from './src/integrations/kitPages.ts';
+
+const webRoot = path.dirname(fileURLToPath(import.meta.url));
+const kitRoot = path.resolve(webRoot, '..');
+
+export default defineConfig({
+  site: 'https://eval-driven.dev',
+  output: 'static',
+  trailingSlash: 'ignore',
+  integrations: [react(), kitPages(kitRoot)],
+  vite: {
+    resolve: {
+      alias: {
+        '@kit': kitRoot,
+        d3: path.join(webRoot, 'node_modules/d3')
+      }
+    },
+    server: {
+      fs: {
+        allow: [webRoot, kitRoot]
+      }
+    }
+  }
+});

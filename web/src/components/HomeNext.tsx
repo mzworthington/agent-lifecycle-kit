@@ -1,4 +1,3 @@
-import { Link } from 'wouter';
 import { HOME_NEXT } from '../landing/copy.ts';
 
 export function HomeNext() {
@@ -8,10 +7,10 @@ export function HomeNext() {
       <ul className="home-next-grid">
         {HOME_NEXT.map((item) => (
           <li key={item.href}>
-            <Link href={item.href} className="home-next-card">
+            <a href={item.href} className="home-next-card">
               <span className="home-next-title">{item.title}</span>
               <span className="home-next-body">{item.body}</span>
-            </Link>
+            </a>
           </li>
         ))}
       </ul>

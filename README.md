@@ -141,7 +141,7 @@ Already cloned this repo? Run `./install.sh` from the checkout instead. Regenera
 | `kit sync` | Install upstream skills from the lockfile |
 | `kit check` | Local quality gate (audit, evals, EDD CI, context budget) |
 | `kit site assemble` | Copy `web/dist` plus public Markdown into `site/` (after `pnpm --dir web build`) |
-| `pnpm site:dev` | Vite docs app (Markdown in `docs/`) |
+| `pnpm site:dev` | Astro docs app (Markdown in `docs/`) |
 
 ---
 
@@ -156,7 +156,7 @@ Start with the path that matches what you’re trying to do:
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`kit eval shadow` + `from-trace`)
 6. **Operators:** [What kit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 
-Site: [eval-driven.dev](https://eval-driven.dev/) — Markdown in `docs/`, Vite app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://eval-driven.dev/docs/kit) sit next to the raw [`.md` URLs](https://eval-driven.dev/docs/kit.md).
+Site: [eval-driven.dev](https://eval-driven.dev/) — Markdown in `docs/`, Astro app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://eval-driven.dev/docs/kit) sit next to the raw [`.md` URLs](https://eval-driven.dev/docs/kit.md).
 
 ---
 

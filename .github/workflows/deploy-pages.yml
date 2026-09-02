@@ -43,6 +43,8 @@ jobs:
       name: github-pages
       url: https://eval-driven.dev
     runs-on: ubuntu-latest
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7

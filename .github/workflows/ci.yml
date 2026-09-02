@@ -18,6 +18,8 @@ jobs:
   verify:
     name: Verify
     runs-on: ubuntu-latest
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
 
     steps:
       - name: Checkout repository

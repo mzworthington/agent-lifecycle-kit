@@ -1,7 +1,7 @@
 {
   "suite": "stack-profiles",
   "description": "Evaluation benchmarks for lang-* and framework-* stack profiles",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "test_cases": [
     {
       "id": "EVAL-LANG-TS-001",
@@ -145,6 +145,22 @@
         "required_patterns": ["export function", "useState"],
         "forbidden_patterns": ["class extends React.Component"],
         "required_output_sections": ["Custom Hook", "Component Definition"]
+      }
+    },
+    {
+      "id": "EVAL-FW-ASTRO-001",
+      "name": "Astro Static Islands & GitHub Pages Profile",
+      "description": "Verifies Astro pages/layouts as the delivery adapter, TypeScript, static output, and leaf islands.",
+      "target_skill": "framework-astro",
+      "prompt": "Build an Astro TypeScript static site with React islands and GitHub Pages deploy.",
+      "context": {
+        "detected_stack": ["TypeScript", "Astro"]
+      },
+      "assertions": {
+        "required_triggers": ["astro", "islands", "static site", "github pages"],
+        "required_patterns": ["client:", ".astro"],
+        "forbidden_patterns": ["createRoot(", "pages/api/"],
+        "required_output_sections": ["Astro Page", "Island"]
       }
     },
     {

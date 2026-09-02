@@ -48,7 +48,7 @@ const stubPublic = {
 };
 
 describe('PAGES_SITE_ENTRIES', () => {
-  it('allowlists public markdown, not the Vite shell source', () => {
+  it('allowlists public markdown, not the web app source', () => {
     assert.ok(PAGES_SITE_ENTRIES.includes('docs'));
     assert.ok(PAGES_SITE_ENTRIES.includes('evals/edd'));
     assert.ok(PAGES_SITE_ENTRIES.includes('SOPs'));
@@ -61,7 +61,7 @@ describe('PAGES_SITE_ENTRIES', () => {
 });
 
 describe('assemblePagesSite', () => {
-  it('copies the Vite dist plus allowlisted markdown and writes the Pages CNAME', () => {
+  it('copies the web dist plus allowlisted markdown and writes the Pages CNAME', () => {
     const src = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-src-'));
     const dest = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-dest-'));
     try {
@@ -85,7 +85,7 @@ describe('assemblePagesSite', () => {
     }
   });
 
-  it('fails when the Vite dist is missing', () => {
+  it('fails when the web dist is missing', () => {
     const src = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-missing-'));
     const dest = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-site-dest-'));
     try {
@@ -113,16 +113,16 @@ describe('assemblePagesSite', () => {
 });
 
 describe('landing page assets', () => {
-  it('keeps the Vite shell in web/ instead of a hand-maintained root index.html', () => {
-    const html = fs.readFileSync(path.join(kitRoot, 'web/index.html'), 'utf8');
-    assert.match(html, /src="\/src\/main\.tsx"/);
-    assert.match(html, /id="root"/);
+  it('keeps the public site in web/ instead of a hand-maintained root index.html', () => {
+    assert.ok(fs.existsSync(path.join(kitRoot, 'web/src/pages/index.astro')));
+    assert.ok(fs.existsSync(path.join(kitRoot, 'web/astro.config.ts')));
     assert.equal(fs.existsSync(path.join(kitRoot, 'index.html')), false);
+    assert.equal(fs.existsSync(path.join(kitRoot, 'web/index.html')), false);
     assert.ok(fs.existsSync(path.join(kitRoot, 'web/public/assets/kit_logo_256.webp')));
     assert.equal(fs.existsSync(path.join(kitRoot, 'assets/kit_logo_256.webp')), false);
   });
 
-  it('Pages workflow builds the Vite app then uploads site/', () => {
+  it('Pages workflow builds the web app then uploads site/', () => {
     const yml = fs.readFileSync(path.join(kitRoot, '.github/workflows/deploy-pages.yml'), 'utf8');
     assert.match(yml, /pnpm --dir web build/);
     assert.match(yml, /pnpm kit site assemble/);

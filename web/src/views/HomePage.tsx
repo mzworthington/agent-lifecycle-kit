@@ -7,7 +7,7 @@ import { TodayJobs } from '../components/TodayJobs';
 
 export function HomePage() {
   return (
-    <DocsShell layout="landing">
+    <DocsShell layout="landing" pathname="/">
       <div className="landing-page">
         <HomeHero />
         <TodayJobs showHeading />

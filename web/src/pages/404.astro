@@ -1,0 +1,9 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { DocsPage } from '../views/DocsPage.tsx';
+import { notFoundPageSeo } from '../seo/siteSeo.ts';
+---
+
+<SiteLayout seo={notFoundPageSeo()}>
+  <DocsPage client:load pathname="/404" />
+</SiteLayout>

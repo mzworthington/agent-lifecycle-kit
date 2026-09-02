@@ -91,7 +91,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/ADRs': {
     headline: 'Architecture Decision Records',
     description:
-      'Sparse MADRs for Agent Lifecycle Kit: hexagonal defaults, Unlicense, EDD contracts, thin bootstrap, ontology memory, and the Vite docs site.'
+      'Sparse MADRs for Agent Lifecycle Kit: hexagonal defaults, Unlicense, EDD contracts, thin bootstrap, ontology memory, and the Astro docs site.'
   },
   '/evals/edd': {
     headline: 'Eval suites',
@@ -377,5 +377,35 @@ export function buildJsonLdGraph(seo: PageSeo): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@graph': graph
+  };
+}
+
+export type SeoHeadModel = {
+  title: string;
+  description: string;
+  robots: string;
+  canonicalUrl?: string;
+  markdownUrl?: string;
+  ogType: PageSeo['ogType'];
+  ogUrl: string;
+  ogTitle: string;
+  ogDescription: string;
+  ogImageUrl: string;
+  jsonLd?: Record<string, unknown>;
+};
+
+export function seoHeadModel(seo: PageSeo): SeoHeadModel {
+  return {
+    title: seo.title,
+    description: seo.description,
+    robots: seo.indexable ? 'index,follow' : 'noindex,nofollow',
+    canonicalUrl: seo.indexable && seo.canonicalUrl ? seo.canonicalUrl : undefined,
+    markdownUrl: seo.markdownUrl,
+    ogType: seo.ogType,
+    ogUrl: seo.canonicalUrl || `${SITE_ORIGIN}/`,
+    ogTitle: seo.title,
+    ogDescription: seo.description,
+    ogImageUrl: seo.ogImageUrl,
+    jsonLd: seo.indexable ? buildJsonLdGraph(seo) : undefined
   };
 }
