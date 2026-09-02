@@ -32,6 +32,7 @@
 - *(edd)* Update README and SOPs to clarify live goldens and CI seed usage
 - Clarify installation process and update terminology for skill-trigger evaluations
 - Update references from Agent Lifecycle Kit to Waykit, enhancing clarity and consistency across documentation
+- Update AGENTS.md and SOPs/release.md for clarity on stack rules and release procedures; add new evaluation case for CI/CD pipeline
 
 ## 2026-09-01
 
