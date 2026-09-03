@@ -32,6 +32,7 @@ sequenceDiagram
   O->>Tel: SLOs plus leading indicator
   O->>R: Conventional PR title, flag expiry
   opt Timebox elapsed
+    O->>Tel: Measure leading indicator in PostHog
     O->>U: Confirm or kill
     O->>O: Prune flag or slice
   end
@@ -43,7 +44,7 @@ sequenceDiagram
 4. **TDD:** Inventory the behavior catalog (both flag states), then gear 1 (domain) and gear 2 (thin adapters) in the same loop. EDD lives here when the change is a prompt or tool schema.
 5. **XFN:** Green the apply rows (accessibility, load, security) or skip with a reason — including flag-on surfaces in scope.
 6. **Audit:** Security and architecture-drift checks, then pre-commit.
-7. **Telemetry and release:** Map SLOs and the bet’s leading indicator, ship with a conventional PR title, record flag expiry and rollback.
-8. **Close the loop:** After the timebox, confirm (default on, prune flag) or kill (flag off, prune slice).
+7. **Telemetry and release:** Map SLOs (`agent-telemetry`) and the bet’s leading indicator in PostHog (`agent-posthog`). Ship with a conventional PR title, record flag expiry and rollback.
+8. **Close the loop:** After the timebox, measure that leading indicator in PostHog (`wk mcp posthog --install`). Then confirm (default on, prune flag) or kill (flag off, prune slice) via `agent-user-stories` and `agent-prune`. Do not add a separate product-insights role.
 
 [Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md) · [Coding philosophy](https://github.com/mzworthington/waykit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide (alpha)](/docs/edd) · [Hosts](/docs/hosts)

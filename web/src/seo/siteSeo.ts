@@ -82,7 +82,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/kit': {
     headline: 'What Waykit gives you',
     description:
-      'What Waykit installs: thin AGENTS.md handshake, lifecycle skills, live kit graph, one MCP profile per session, and the wk CLI (check, doctor, measure-context, eval).'
+      'What Waykit installs: thin AGENTS.md handshake, feature lifecycle skills, live kit graph, one MCP profile per session, and the wk CLI (check, doctor, measure-context, eval).'
   },
   '/docs/doctor': {
     headline: 'Repo doctor',
@@ -102,7 +102,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/lifecycle': {
     headline: 'Feature lifecycle',
     description:
-      'Route product work through grill, spec, TDD, XFN, review, and release. Learning loops (catalog, evals, prod misses) feed the next pass.'
+      'Route product work through grill, stories, spec, TDD, XFN, telemetry, and release. After a bet’s timebox, measure the leading indicator in PostHog, then confirm or kill.'
   },
   '/docs/map': {
     headline: 'Waykit map',

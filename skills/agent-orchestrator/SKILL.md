@@ -132,7 +132,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
 | New feature, new bounded context, new external integration | Full lifecycle (grill → PRD if bet → stories → spec → …) |
 | Product bet / PRD / experiment / kill criteria | **`agent-prd`** (grill first if unsettled) → `agent-user-stories` → `agent-spec` |
-| Timebox elapsed on a flagged bet | Measure via `agent-telemetry` if needed → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
+| Timebox elapsed on a flagged bet | Measure the leading indicator in PostHog (`agent-posthog`, `wk mcp posthog --install`) → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
 
 When in doubt, prefer the smaller route and ask.
 
@@ -186,6 +186,7 @@ sequenceDiagram
   O->>O: Telemetry (SLO + leading indicator)
   O->>R: Release (flag expiry / rollback)
   opt Timebox elapsed
+    O->>O: Measure leading indicator in PostHog
     O->>U: Confirm or kill story
     O->>O: Prune flag or slice
   end
@@ -198,6 +199,6 @@ sequenceDiagram
 5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
-8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md` and the bet’s leading indicator when present.
+8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. For a bet’s leading indicator (product usage), route to `agent-posthog` (`wk mcp posthog --install`). Do not invent extra dashboards.
 9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title, flag expiry, and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
-10. **Close the bet** - After the timebox: confirm or kill via `agent-user-stories`, then `agent-prune` for the flag or slice. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) - do not leave them as prose-only lessons.
+10. **Close the bet** - After the timebox: query the leading indicator in PostHog (`agent-posthog`), then confirm or kill via `agent-user-stories`, then `agent-prune` for the flag or slice. Do not add a product-insights skill or auto-file tickets from usage. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) - do not leave them as prose-only lessons.
