@@ -12,6 +12,7 @@
 - Enhance documentation for consumer align and add related commands to CLI help
 - Add 'Used on our own product repos' section to documentation
 - Add agent-user-stories skill and related evaluations to enhance user story management
+- Add new evaluations for operator user stories
 
 ### 🧰 Maintenance & Dependencies
 
