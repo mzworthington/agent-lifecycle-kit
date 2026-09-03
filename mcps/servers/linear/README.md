@@ -21,4 +21,4 @@ If your host cannot use remote HTTP MCP, bridge with:
 - Creating follow-up tickets after a bugfix or audit finding
 - Checking board status while scoping work
 
-Prefer project or `collab` profiles so every workspace does not always load issue-tracker tools.
+Included in the `default` profile (`./install.sh` / `wk mcp default --install`). OAuth on first tool use in Cursor. Notion and Slack stay on `collab` so those tool schemas are not always loaded.

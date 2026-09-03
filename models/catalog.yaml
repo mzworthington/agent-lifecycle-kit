@@ -1,0 +1,81 @@
+classes:
+  plan:
+    purpose: Ambiguity, trade-offs, grilling, spec, orchestration, RCA until a hypothesis is locked
+  review:
+    purpose: Adversarial audit of a plan or diff
+  implement:
+    purpose: Execute a frozen plan (TDD short loop, thin adapters, most delivery)
+  cheap:
+    purpose: Mechanical, low-judgment work (hooks, format, release checklist)
+
+# Fallback when a skill is not listed. Prefer listing every agent-* skill.
+phases:
+  grilling: plan
+  spec: plan
+  orchestration: plan
+  debug: plan
+  audit: review
+  tdd: implement
+  xfn: implement
+  impl: implement
+  telemetry: implement
+  maintenance: implement
+  quality: cheap
+  release: cheap
+
+# gatedBySpec: stay on plan until spec handover is COMPLETE (orchestrator passes specComplete).
+skills:
+  agent-orchestrator:
+    class: plan
+  agent-grilling:
+    class: plan
+  agent-grill-me:
+    class: plan
+  agent-spec:
+    class: plan
+  agent-api-contract:
+    class: plan
+  agent-adr:
+    class: plan
+  agent-incident:
+    class: plan
+  agent-debug:
+    class: plan
+  agent-tdd:
+    class: implement
+    gatedBySpec: true
+  agent-xfn:
+    class: implement
+    gatedBySpec: true
+  agent-adapter:
+    class: implement
+    gatedBySpec: true
+  agent-ui:
+    class: implement
+    gatedBySpec: true
+  agent-copy:
+    class: implement
+    gatedBySpec: true
+  agent-migration:
+    class: implement
+    gatedBySpec: true
+  agent-docs:
+    class: implement
+  agent-prune:
+    class: implement
+  agent-telemetry:
+    class: implement
+  agent-cloudflare-ops:
+    class: implement
+  agent-perf-opt:
+    class: implement
+  agent-review:
+    class: review
+  agent-security:
+    class: review
+  agent-arch-drift:
+    class: review
+  agent-pre-commit:
+    class: cheap
+  agent-release:
+    class: cheap

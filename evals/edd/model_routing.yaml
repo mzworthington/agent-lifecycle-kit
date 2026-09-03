@@ -1,0 +1,17 @@
+name: "Routing: Model class"
+dataset: "model_routing.jsonl"
+system_prompt: "model_routing_prompt.md"
+mcp_tools:
+  - "tools/select_model_class.json"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+  - type: "argument_correctness"
+  - type: "mcp_use"
+  - type: "task_completion"
+mocks:
+  - tool: "select_model_class"
+    response:
+      class: "plan"
+      note: "Host overlay maps class to a slug; do not invent ids"

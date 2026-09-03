@@ -110,6 +110,21 @@ describe('composeMCP', () => {
     );
   });
 
+  it('composes the default profile with Linear remote MCP', () => {
+    const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-default-')), 'mcp.json');
+    composeMCP('default', out, false, { repoDir: kitRoot, env: {} });
+    const body = JSON.parse(fs.readFileSync(out, 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(body.mcpServers.linear?.url, 'https://mcp.linear.app/mcp');
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.ok(body.mcpServers.github);
+    assert.ok(body.mcpServers.memory);
+    assert.ok(body.mcpServers.context7);
+    assert.equal(body.mcpServers.notion, undefined);
+    assert.equal(body.mcpServers.slack, undefined);
+  });
+
   it('composes the cloudflare-ops profile from the kit catalog', () => {
     const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-cf-')), 'mcp.json');
     composeMCP('cloudflare-ops', out, false, { repoDir: kitRoot, env: {} });

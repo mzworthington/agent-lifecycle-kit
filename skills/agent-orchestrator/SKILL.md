@@ -58,7 +58,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
-**PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Squash-and-merge makes the PR title the commit on the default branch.
+**PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Skill / SOP / model-catalog Markdown is `feat`/`fix`, not `docs`. Squash-and-merge makes the PR title the commit on the default branch.
 
 **Memory MCP (DoD):** After **spec** and **xfn** handovers, store durable facts (glossary terms, agreed SLOs, project preferences) via the catalogued **memory** server - or record explicit N/A in the handover Memory table. Never store secrets. Later sessions should recall XFN thresholds and ubiquitous language from memory before re-asking.
 
@@ -125,6 +125,8 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | New feature, new bounded context, new external integration | Full lifecycle |
 
 When in doubt, prefer the smaller route and ask.
+
+**Model class:** After picking the route, resolve class from [models/catalog.yaml](../../models/catalog.yaml) ([SOPs/model-routing.md](../../SOPs/model-routing.md)). Pass the Cursor slug from [models/hosts/cursor.yaml](../../models/hosts/cursor.yaml) to subagents (`wk model resolve --skill <id> [--spec-complete] [--blocked]`). Recommend switching the parent chat when the class changes. Escalate to `plan` if BLOCKED or a new architectural fork.
 
 ### Light XFN floor (non-optional when condition matches)
 

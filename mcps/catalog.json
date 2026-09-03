@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -60,7 +60,7 @@
       "phases": ["spec", "impl", "audit"],
       "triggers": ["Linear", "issue tracker", "ticket", "project board"],
       "requiredEnv": [],
-      "enabledByDefault": false
+      "enabledByDefault": true
     },
     {
       "id": "notion",

@@ -75,7 +75,7 @@ jobs:
             echo "|------|--------------------------|"
             echo "| actionlint | Workflow YAML is valid and Action-safe |"
             echo "| typecheck / unit tests | TypeScript and Node harness tests pass |"
-            echo "| kit check | Skill security scan, layout, IDE rules export, skill-trigger evals, EDD routing ≥95% (architecture + kit-knowledge + Cloudflare ops + safety + recovery), context budget |"
+            echo "| kit check | Skill security scan, layout, IDE rules export, skill-trigger evals, EDD routing ≥95% (architecture + model class + kit-knowledge + Cloudflare ops + safety + recovery), context budget |"
             echo "| MCP profile / kit metrics | Default MCP composition resolves; CLI metrics command runs |"
             echo ""
             echo "On \`main\`, a green Verify unlocks the **Promote** job (GitHub Release + changelog push)."

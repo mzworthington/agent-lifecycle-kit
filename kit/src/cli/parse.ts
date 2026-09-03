@@ -33,7 +33,19 @@ export type KitCommand =
   | { kind: 'check' }
   | { kind: 'ontology'; sub: 'generate' | 'check' }
   | { kind: 'memory-lint' }
+  | {
+      kind: 'model-resolve';
+      skill: string | undefined;
+      phase: string | undefined;
+      host: string;
+      specComplete: boolean | undefined;
+      blocked: boolean;
+    }
   | { kind: 'site-assemble'; dest: string | undefined };
+
+const MODEL_RESOLVE_USAGE = cliUsage(
+  'model resolve [--skill <id>] [--phase <id>] [--host cursor] [--spec-complete] [--blocked]'
+);
 
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
 
@@ -132,6 +144,26 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
     case 'memory':
       if (rest[0] === 'lint') return { kind: 'memory-lint' };
       return { kind: 'usage', message: cliUsage('memory lint') };
+
+    case 'model': {
+      if (rest[0] !== 'resolve') {
+        return { kind: 'usage', message: MODEL_RESOLVE_USAGE };
+      }
+      const modelRest = rest.slice(1);
+      const skill = flagValue(modelRest, '--skill');
+      const phase = flagValue(modelRest, '--phase');
+      if (!skill && !phase) {
+        return { kind: 'usage', message: MODEL_RESOLVE_USAGE };
+      }
+      return {
+        kind: 'model-resolve',
+        skill,
+        phase,
+        host: flagValue(modelRest, '--host') ?? 'cursor',
+        specComplete: hasFlag(modelRest, '--spec-complete') ? true : undefined,
+        blocked: hasFlag(modelRest, '--blocked')
+      };
+    }
 
     case 'site': {
       if (rest[0] !== 'assemble') {

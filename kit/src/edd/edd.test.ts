@@ -430,8 +430,19 @@ metrics:
     assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
     assert.ok(report.results.some((r) => r.id === 'kit-handover-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-cf-01'));
+    assert.ok(report.results.some((r) => r.id === 'kit-sop-model-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-02'));
+  });
+
+  it('passes model-routing suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/model_routing.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.ok(report.results.some((r) => r.id === 'model-plan-01'));
+    assert.ok(report.results.some((r) => r.id === 'model-implement-01'));
+    assert.ok(report.results.some((r) => r.id === 'model-escalate-01'));
+    assert.ok(!report.results.some((r) => r.id === 'model-live-01'));
   });
 
   it('passes cloudflare-ops suite with scripted model', async () => {

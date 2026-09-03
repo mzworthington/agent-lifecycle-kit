@@ -125,6 +125,7 @@ Do not mark **COMPLETE** while hook checks are failing.
 
 When you (or the user) create commits or open/update a pull request, follow [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md).
 
-- **Commit subject** and **PR title** both use `type(optional-scope): description` (e.g. `feat: …`, `fix(cli): …`, `docs: …`).
+- **Commit subject** and **PR title** both use `type(optional-scope): description` (e.g. `feat(skills): …`, `fix(cli): …`).
+- Type follows **behavior**, not file extension. Changes under `skills/`, `SOPs/`, `models/`, or `AGENTS.md` routing are `feat(skills):` / `feat(sops):` / `fix`, never `docs` just because they are Markdown.
 - Repos **squash-and-merge**: the PR title becomes the commit on the default branch. A conventional tip commit does not fix a free-form PR title.
 - Before handover that includes a PR link, verify the PR title is conventional; retitle if it drifted.

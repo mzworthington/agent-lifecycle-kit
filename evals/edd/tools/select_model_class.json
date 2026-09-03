@@ -1,0 +1,16 @@
+{
+  "name": "select_model_class",
+  "description": "Choose a Waykit capability class for this turn. Pass class only (plan, review, implement, cheap). Do not pass vendor model slugs; the host overlay maps class to a Cursor (or other) id.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["class"],
+    "properties": {
+      "class": {
+        "type": "string",
+        "enum": ["plan", "review", "implement", "cheap"],
+        "description": "Capability class from models/catalog.yaml"
+      }
+    },
+    "additionalProperties": false
+  }
+}

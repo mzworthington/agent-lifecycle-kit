@@ -43,7 +43,7 @@ Cursor and GitHub Copilot already load Kit via `.cursorrules` and `.github/copil
 
 ## CI
 
-- **Local gate:** [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) **Verify** runs `kit check` / `wk eval ci` with `--style local`. Cases tagged `requires-live` are skipped so paraphrases do not fail CI. `kit check` covers architecture routing, kit-knowledge, Cloudflare ops, safety, self-correction, and terminal-fallback suites.
+- **Local gate:** [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) **Verify** runs `kit check` / `wk eval ci` with `--style local`. Cases tagged `requires-live` are skipped so paraphrases do not fail CI. `kit check` covers architecture routing, model routing, kit-knowledge, Cloudflare ops, safety, self-correction, and terminal-fallback suites.
 - **Live nightly:** [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml) runs on a schedule when `KIT_EVAL_API_KEY` is set and `KIT_EVAL_MODEL` is a real provider model. That job includes `requires-live` rows. Missing `KIT_EVAL_API_KEY` skips the job; it does not fall through to `OPENAI_API_KEY`.
 - **Threshold gating:** `--threshold-routing 95` blocks merges when routing/schema extraction fails more than 5% of routing-tagged cases.
 - **Artifacts:** Reports upload with `if: always()` (`out/reports/eval-report.md`, `edd-report.md` / `.json`).

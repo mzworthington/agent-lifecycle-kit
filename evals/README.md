@@ -92,4 +92,4 @@ pnpm kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --m
 pnpm kit eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 ```
 
-`kit eval ci` with the scripted driver runs architecture routing, kit-knowledge MCP, Cloudflare ops, safety, self-correction, and terminal-fallback suites in `kit check`. That path is what Cursor and Copilot users run; no provider API key. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml). Key order and IDE vs HTTP driver: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).
+`kit eval ci` with the scripted driver runs architecture routing, model routing, kit-knowledge MCP, Cloudflare ops, safety, self-correction, and terminal-fallback suites in `kit check`. That path is what Cursor and Copilot users run; no provider API key. Live paraphrases live behind the `requires-live` tag and [`.github/workflows/edd-live.yml`](../.github/workflows/edd-live.yml). Key order and IDE vs HTTP driver: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).

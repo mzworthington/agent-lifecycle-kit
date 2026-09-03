@@ -8,8 +8,8 @@ Versioned catalog of [Model Context Protocol](https://modelcontextprotocol.io/) 
 mcps/
 ├── catalog.json              # Index of every server (id, purpose, secrets, phases)
 ├── profiles/                 # Named sets of server ids to install together
-│   ├── default.json          # Everyday kit profile → ~/.cursor/mcp.json
-│   ├── collab.json           # Linear + Notion + Slack on top of default
+│   ├── default.json          # Everyday kit profile → ~/.cursor/mcp.json (includes Linear)
+│   ├── collab.json           # Notion + Slack on top of default
 │   ├── devtools.json         # Chrome DevTools + Next.js DevTools + Playwright
 │   ├── cloud.json            # Cloudflare + Observability + Vercel (+ Context7)
 │   ├── astro.json            # Astro Docs MCP + lean kit servers
@@ -31,8 +31,8 @@ mcps/
 
 | Profile | Servers | Install target |
 |---------|---------|----------------|
-| `default` | kit-knowledge, context7, github, memory | `~/.cursor/mcp.json` via `install.sh` |
-| `collab` | default + linear, notion, slack | Global/project when the team uses those tools |
+| `default` | kit-knowledge, context7, github, memory, linear | `~/.cursor/mcp.json` via `install.sh` |
+| `collab` | default + notion, slack | When the team also uses Notion and Slack |
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
 | `cloud` | context7, cloudflare, cloudflare-observability, vercel | Workers / DNS / R2 / deploy work |
 | `astro` | kit-knowledge, github, memory, astro-docs | Astro pages, islands, GitHub Pages |
@@ -116,6 +116,7 @@ Follow [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 | SOP / handover chunks | **kit-knowledge** |
 | Cross-session glossary / SLOs | **memory** |
 | Vendor API docs | **context7** |
+| Linear issues / projects | **linear** (on `default`; OAuth on first use) |
 | Live trackers / browsers / cloud | Phase profiles (`collab`, `devtools`, `ops`, …) |
 
 ### Discipline

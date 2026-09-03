@@ -1,0 +1,8 @@
+# Cursor Task / subagent slugs. Update this file when Cursor's allowlist changes.
+# Do not copy these ids into skills or AGENTS.md.
+host: cursor
+models:
+  plan: claude-opus-5-thinking-high
+  review: gpt-5.6-sol-medium
+  implement: cursor-grok-4.6-medium
+  cheap: composer-2.5-fast

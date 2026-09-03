@@ -20,6 +20,7 @@ import { checkOntology, type OntologyCheckResult } from '../ontology/index.js';
 /** Default EDD suites for this kit. Forks may delete vendor-specific suites; missing files are skipped. */
 export const EDD_CI_SUITES = [
   'evals/edd/architecture_routing.yaml',
+  'evals/edd/model_routing.yaml',
   'evals/edd/kit_knowledge.yaml',
   'evals/edd/memory_ontology.yaml',
   'evals/edd/cloudflare_ops.yaml',

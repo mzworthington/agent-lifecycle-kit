@@ -1,10 +1,11 @@
 {
   "name": "default",
-  "description": "Global profile → ~/.cursor/mcp.json. Lean everyday set: kit chunks, docs, GitHub, local memory. Heavier/vendor servers go in collab or project profiles - compose one profile, do not stack.",
+  "description": "Global profile → ~/.cursor/mcp.json. Everyday set: kit chunks, docs, GitHub, Linear issues, local memory. Heavier/vendor servers (Notion, Slack, browsers, cloud) stay in named profiles - compose one profile, do not stack.",
   "servers": [
     "kit-knowledge",
     "context7",
     "github",
-    "memory"
+    "memory",
+    "linear"
   ]
 }

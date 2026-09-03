@@ -20,6 +20,7 @@ import { assemblePagesSite, defaultPagesSiteDest } from '../site/assemble.js';
 import { scanSkillSecurity } from '../skills/scan_skill_security.js';
 import { syncExternalSkills } from '../skills/sync_external_skills.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
+import { resolveModel } from '../models/catalog.js';
 import { errorMessage, printKitHelp } from './help.js';
 import type { KitCommand } from './parse.js';
 
@@ -145,6 +146,23 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         else console.error('ontology check FAILED.');
         return status(result.ok);
       }
+
+    case 'model-resolve': {
+      try {
+        const resolved = resolveModel(repoDir, {
+          skill: command.skill,
+          phase: command.phase,
+          host: command.host,
+          specComplete: command.specComplete,
+          blocked: command.blocked
+        });
+        console.log(JSON.stringify(resolved));
+        return 0;
+      } catch (err: unknown) {
+        console.error(`ERROR: ${errorMessage(err)}`);
+        return 1;
+      }
+    }
 
     case 'memory-lint': {
       const result = lintMemoryGraph(repoDir, memoryGraphPath(ctx));

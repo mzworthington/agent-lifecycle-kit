@@ -19,7 +19,8 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 |------|-----------|
 | Useful across most projects | `mcps/profiles/default.json` (+ global install) |
 | Kit SOP / philosophy / handover chunks | `kit-knowledge` on `default` (already) |
-| Linear / Notion / Slack | `mcps/profiles/collab.json` |
+| Linear issues / projects | `default` (OAuth; already in that profile) |
+| Notion / Slack | `mcps/profiles/collab.json` |
 | Chrome / Next / Playwright | `mcps/profiles/devtools.json` or `project-example` |
 | Astro docs / GitHub Pages sites | `mcps/profiles/astro.json` |
 | Cloudflare / Vercel | `mcps/profiles/cloud.json` |
@@ -87,7 +88,7 @@ kit mcp default
 # Global Cursor config (backup written if file exists)
 kit mcp default --install
 
-# Collab tools (Linear OAuth, Notion OAuth, Slack env tokens)
+# Collab extras (Notion OAuth, Slack env tokens; Linear is already on default)
 kit mcp collab --install
 
 # Ops / incident (Sentry OAuth + Slack)

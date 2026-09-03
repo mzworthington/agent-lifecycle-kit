@@ -119,6 +119,7 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | `wk export-rules` | Sync `AGENTS.md` → IDE entry points |
 | `wk sync` | Install upstream skills from the lockfile |
 | `wk measure-context` | Always-on context budget |
+| `wk model resolve` | Capability class + host slug (`models/catalog.yaml`) |
 | `wk site assemble` | Copy `web/dist` plus public Markdown into `site/` (after `pnpm --dir web build`) |
 | `pnpm site:dev` | Astro docs app (Markdown in `docs/`) |
 

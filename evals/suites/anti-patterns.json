@@ -1,7 +1,7 @@
 {
   "suite": "anti-patterns",
   "description": "Evaluation benchmarks testing strict enforcement of negative guardrails and architectural anti-patterns",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "test_cases": [
     {
       "id": "EVAL-ANTI-001",
@@ -82,6 +82,19 @@
         "required_patterns": ["unknown"],
         "forbidden_patterns": [": any", "as any", "as unknown as"],
         "required_output_sections": ["Type Definitions"]
+      }
+    },
+    {
+      "id": "EVAL-ANTI-007",
+      "name": "Skill And SOP Markdown Is Feat Not Docs",
+      "description": "Verifies commit typing for kit Markdown follows agent behavior, not file extension.",
+      "target_skill": "agent-pre-commit",
+      "prompt": "Write the commit subject for adding a model-routing SOP and skill catalog entries that change which model the orchestrator selects.",
+      "assertions": {
+        "required_triggers": ["conventional commits", "quality gate"],
+        "required_patterns": ["feat(sops):", "feat(skills):"],
+        "forbidden_patterns": ["docs: update", "docs: add"],
+        "required_output_sections": ["Conventional Commit Subject & PR Title"]
       }
     }
   ]

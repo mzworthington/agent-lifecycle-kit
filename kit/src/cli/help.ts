@@ -25,6 +25,7 @@ Commands:
   ontology generate    Dump derived ontology index to gitignored sync/ and web/public/assets/
   ontology check       Validate live-derived index (skill mcp/depends-on refs)
   memory lint          List legacy memory entities outside the ontology allowlist
+  model resolve        Resolve capability class + host slug (models/catalog.yaml)
   site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)
   help                 Display this help menu
 
@@ -41,6 +42,7 @@ Examples:
   ${CLI_BIN} ontology generate
   ${CLI_BIN} ontology check
   ${CLI_BIN} memory lint
+  ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host cursor
   ${CLI_BIN} site assemble
   ${CLI_BIN} export-rules
   ${CLI_BIN} metrics

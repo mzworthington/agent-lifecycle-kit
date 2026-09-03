@@ -10,7 +10,7 @@ Do not commit or push unless the user explicitly asks.
 
 1. **Hexagonal** - dependencies point inward; domain stays pure.
 2. **Mermaid** for diagrams; no ASCII/box-drawing architecture art ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) §8 when writing diagrams).
-3. **Conventional commits and PR titles** - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) (squash-and-merge uses the PR title).
+3. **Conventional commits and PR titles** - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) (squash-and-merge uses the PR title). Type follows **behavior**, not file extension: skill / SOP / model-catalog changes are `feat`/`fix`, not `docs`.
 4. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding.
 5. **One MCP profile per session** - prefer skill frontmatter `mcp:` ids; more tools cost tokens ([mcps/README.md](./mcps/README.md)).
 
@@ -26,10 +26,12 @@ Do not commit or push unless the user explicitly asks.
 | Catalog / XFN matrix | [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) during Design |
 | Debug / RCA | [agent-debug](./skills/agent-debug/SKILL.md) + [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
 | EDD (prompts, MCP tools, routing) | [docs/edd.md](./docs/edd.md) + [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
+| Model class / Cursor slug | [SOPs/model-routing.md](./SOPs/model-routing.md) (`models/catalog.yaml` + `models/hosts/`) |
 | SOP / handover search | **kit-knowledge** MCP (`search_kit`, `get_sop`, `get_handover`, `get_entity`, `get_related`) |
 | Kit ontology | `ontology/schema.yaml` only (index derived at use time; authoring: `ontology/README.md`) |
 | Cross-session facts | **memory** MCP (typed allowlist: glossary/SLO/prefs/project facts, never secrets) |
 | Vendor/framework API docs | **context7** MCP |
+| Linear issues / projects | **linear** MCP (OAuth; on the `default` profile) |
 
 ## Phase → skill
 

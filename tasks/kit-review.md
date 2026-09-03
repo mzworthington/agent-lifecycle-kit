@@ -48,7 +48,7 @@ When a lesson’s **EDD case** field is set, confirm the JSONL row exists and `k
 - [ ] **Skill length budget:** flag role `SKILL.md` bodies over ~150 lines; move procedure detail into [SOPs/](../SOPs/)
 - [ ] Check [skills/README.md](../skills/README.md) taxonomy still matches actual skills
 - [ ] Confirm skill frontmatter `mcp:` ids exist in [mcps/catalog.json](../mcps/catalog.json)
-- [ ] Confirm MCP install is a **single** profile (not stacked collab+devtools+ops); default includes kit-knowledge + memory
+- [ ] Confirm MCP install is a **single** profile (not stacked collab+devtools+ops); default includes kit-knowledge, memory, and linear
 - [ ] Run `pnpm kit measure-context` - always-on surface within target ([SOPs/context-budget.md](../SOPs/context-budget.md))
 - [ ] Confirm [AGENTS.md](../AGENTS.md) stays a thin index (no eager “read these eight files” lists)
 - [ ] Spot-check recent `handover/<project>/` runs: was test impact aligned? Was an XFN matrix present (including skip reasons)? Were apply suites greened? Was TDD gear 2 done in-session (not a late adapter-only phase)?

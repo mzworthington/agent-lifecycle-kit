@@ -100,6 +100,19 @@ describe('parseKitArgv', () => {
     assert.deepEqual(parseKitArgv(['scan'], opts), { kind: 'audit' });
   });
 
+  it('parses model resolve and requires skill or phase', () => {
+    assert.equal(parseKitArgv(['model'], opts).kind, 'usage');
+    assert.equal(parseKitArgv(['model', 'resolve'], opts).kind, 'usage');
+    assert.deepEqual(parseKitArgv(['model', 'resolve', '--skill', 'agent-tdd', '--spec-complete', '--host', 'cursor'], opts), {
+      kind: 'model-resolve',
+      skill: 'agent-tdd',
+      phase: undefined,
+      host: 'cursor',
+      specComplete: true,
+      blocked: false
+    });
+  });
+
   it('parses export-rules dir and --check', () => {
     assert.deepEqual(parseKitArgv(['export-rules'], opts), { kind: 'export-rules', dir: '/kit', check: false });
     assert.deepEqual(parseKitArgv(['export-rules', '--check', './app'], opts), {

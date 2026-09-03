@@ -80,7 +80,89 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     names.has('get_entity') ||
     names.has('get_related');
   const hasArch = names.has('read_architecture_yaml');
-  const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch;
+  const hasModelClass = names.has('select_model_class');
+  const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass;
+
+  if (hasModelClass && !hasArch) {
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea')
+    ) {
+      return scriptedNoTool('That is outside model routing. I can pick a capability class if you describe the job.');
+    }
+    if (prompt.includes('blocked') || prompt.includes('architectural fork')) {
+      return {
+        content: 'Escalating to plan after a blocked architectural fork.',
+        tool_calls: [{ name: 'select_model_class', arguments: { class: 'plan' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('pre-commit') ||
+      prompt.includes('prettier') ||
+      prompt.includes('knip')
+    ) {
+      return {
+        content: 'Selecting cheap for mechanical hook/format work.',
+        tool_calls: [{ name: 'select_model_class', arguments: { class: 'cheap' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('owasp') ||
+      prompt.includes('security audit') ||
+      prompt.includes('arch-drift') ||
+      prompt.includes('architecture drift') ||
+      prompt.includes('pr review') ||
+      prompt.includes('review the pr')
+    ) {
+      return {
+        content: 'Selecting review for an adversarial audit.',
+        tool_calls: [{ name: 'select_model_class', arguments: { class: 'review' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      (prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
+      (prompt.includes('tdd') || prompt.includes('short loop'))
+    ) {
+      return {
+        content: 'Selecting implement after a complete spec.',
+        tool_calls: [{ name: 'select_model_class', arguments: { class: 'implement' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('grill') ||
+      prompt.includes('decision frontier') ||
+      prompt.includes('write the spec') ||
+      prompt.includes('bounded context') ||
+      prompt.includes('new feature')
+    ) {
+      return {
+        content: 'Selecting plan for ambiguous or spec-stage work.',
+        tool_calls: [{ name: 'select_model_class', arguments: { class: 'plan' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.9
+      };
+    }
+    return scriptedNoTool('I am not sure which model class to use. Describe planning, review, implementation, or mechanical work.', 0.4);
+  }
 
   if (hasMemoryOnly) {
     if (
@@ -256,6 +338,16 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         consecutiveToolFailures: 0,
         haltedAutonomousExecution: false,
         routingConfidence: 0.9
+      };
+    }
+    if (prompt.includes('model routing') || prompt.includes('model-routing')) {
+      return {
+        content: 'Opening the model-routing SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'model-routing' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
       };
     }
     if (prompt.includes('cloudflare analytics') || prompt.includes('cloudflare-analytics')) {

@@ -29,7 +29,7 @@ Chosen option: "**Option B**", because invariants live in the thin handshake, pr
 
 ### Consequences
 
-* Good, because default sessions stay lean (`kit-knowledge`, context7, github, memory) and skills declare `mcp:` ids
+* Good, because default sessions stay lean (`kit-knowledge`, context7, github, memory, linear) and skills declare `mcp:` ids
 * Bad, because agents must look up procedures instead of having full SOP text in every prompt
 * Follow-up: do not stack `collab` + `devtools` + `ops` into one global `mcp.json`
 

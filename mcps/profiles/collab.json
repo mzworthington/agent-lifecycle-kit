@@ -1,6 +1,6 @@
 {
   "name": "collab",
-  "description": "Issue tracking, docs, and chat. Compose into ~/.cursor/mcp.json or a project file when the team uses Linear/Notion/Slack.",
+  "description": "Docs and chat on top of default (Linear already on default). Compose when the team also uses Notion and Slack.",
   "servers": [
     "kit-knowledge",
     "context7",

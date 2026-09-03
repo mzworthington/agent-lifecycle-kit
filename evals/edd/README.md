@@ -20,6 +20,7 @@ evals/edd/
 ├── architecture_self_correction.yaml|.jsonl
 ├── architecture_terminal.yaml|.jsonl
 ├── kit_knowledge.yaml|.jsonl
+├── model_routing.yaml|.jsonl
 ├── cloudflare_ops.yaml|.jsonl
 ├── safety.yaml|.jsonl
 └── tools/*.json
@@ -58,6 +59,7 @@ Full regression / CI suites:
 ```bash
 wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
 wk eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval ci --suite evals/edd/model_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 wk eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
@@ -128,7 +130,7 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 
 ## Safety suite
 
-Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, kit-knowledge, Cloudflare ops, self-correction, and terminal-fallback via `EDD_CI_SUITES`.
+Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, and terminal-fallback via `EDD_CI_SUITES`.
 
 ## Dataset hygiene
 
