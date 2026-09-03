@@ -20,6 +20,8 @@ triggers:
   - issue
   - ticket
   - product review
+  - review tickets
+  - operator story
 depends-on:
   - agent-grilling
   - agent-copy
@@ -44,40 +46,54 @@ Turn product gaps into **small, valuable tickets** a human can play. Hand Gherki
 
 Skip for bugs with a known defect (use `agent-debug` RCA, then a **fix** story only if the ask is still a capability). Skip for ADRs.
 
+## Classify before writing
+
+| Kind | Treat as | Wireframe |
+|------|----------|-----------|
+| UI / product path | INVEST story (customer or practitioner persona) | Required mermaid |
+| CLI / on-call / handshake | Operator story (`As an operator… so that paging/align is honest`) | Omit (optional mermaid of CLI flow only) |
+| Parent of playable children | Epic: Story + Children list, no fake AC | Omit |
+| Vendor onboarding (Get familiar with Linear, Import your data, …) | Cancel; not product work | — |
+| Copy-paste “wire product X” | One story per product with **unique** observables (URL, webhook, health) | Only if that product has a UI |
+
+Do not invent a customer for ops. Do not clone an open issue. Do not rewrite a ticket that already has Story + Given/When/Then AC + Out of scope (and Wireframe if UI).
+
 ## Workflow
 
-1. **Find the board.** `list_teams` / `list_projects` / `list_issues` (query + project). Deduplicate. Do not clone an open issue.
-2. **Grill only if the slice is unsettled** ([agent-grilling](../agent-grilling/SKILL.md)). Otherwise write the story.
-3. **Persona + outcome first.** Title is the user-visible capability (verb + object). Not a filename, component, or “investigate X”.
-4. **INVEST.** Independent, negotiable, valuable, estimable, small (one sitting), testable. Split if two personas or two screens.
-5. **Write the body** with the template below. UI stories **must** include a Mermaid wireframe ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Never ASCII/box-drawing art.
-6. **Create or patch Linear.** Team + project. Labels: `Feature` (new capability) or `Improvement` (existing path). Priority: 1 urgent / 2 high / 3 medium / 4 low. `relatedTo` for siblings. Return issue URLs.
-7. **Ops/checklists.** Recast as an operator story (“so that paging is honest”) or keep as a non-story task — do not fake a customer persona.
+1. **Find the board.** `list_teams` / `list_projects` / `list_issues`. Deduplicate. Fill empty project summaries.
+2. **Grill only if the slice is unsettled** ([agent-grilling](../agent-grilling/SKILL.md)). Split if two personas or two screens. Otherwise write.
+3. **Title** is the user-visible capability (verb + object). Not a filename, `wk` flag, or “investigate X”.
+4. **INVEST.** Small = one sitting. Parent stays an epic; playable work is children.
+5. **Body** from the matching template. Never ASCII/box-drawing art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+6. **Patch Linear.** Preserve ids. Labels: `Feature` / `Improvement`. Priority 1–4 (never leave 0 on a playable story). `parentId` for children, `relatedTo` / `blockedBy` for siblings. Do not change status unless asked, except cancel vendor onboarding.
+7. Return issue URLs. Do not implement in this role.
 
 ## Ticket template (Linear Markdown)
 
-Use these headings in order. Put a mermaid `flowchart TB` (screens and controls) under **Wireframe**.
+Headings in order. **Wireframe** only on UI stories.
 
 - **Story** — `As a <role>, I want <capability>, so that <outcome>.`
-- **Acceptance criteria** — checkbox lines: `Given <context>, when <action>, then <observable result>.` Include one failure/empty path and one keyboard/name check on UI stories.
-- **Wireframe** — mermaid flowchart of the surface (required for UI). Example: subgraph per screen, nodes as buttons/fields, arrows as next state.
+- **Acceptance criteria** — `- [ ] Given <context>, when <action>, then <observable result>.` One failure/empty path. UI: one keyboard/name check.
+- **Wireframe** — mermaid `flowchart TB` of screens and controls (UI only).
 - **Out of scope** — explicit non-goals.
-- **Notes** — ADR, funnel, sibling issues. No implementation plan.
+- **Notes** — siblings, ADRs, implementation hints. Not an implementation plan.
 
-Criteria are **observable** (copy, files on disk, who is connected). Forbidden in Story/AC: class names, package paths, HTTP verbs, “add a flag”. Those belong in Notes if at all.
+Epic parents: Story, **Children** (links), Out of scope, Notes. No checkbox AC that duplicates children.
+
+Criteria are **observable** (copy, files on disk, who is connected, CLI stdout, Linear status). Forbidden in Story/AC: class names, package paths, HTTP verbs as the want, “add a flag”. Those belong in Notes.
 
 ## Title bar
 
 | Good | Poor |
 |------|------|
 | Save a browser-scan map into a folder | Persist lite-scan YAML |
-| See scan progress against the file cap | Beat 5 progress UI |
-| Name and save a blank workspace first | Blank canvas journey |
+| See that handshake quality is align, not doctor | wk doctor: point non-kit repos at wk align |
+| Scrub team capacity on a timeline | Team creation journey |
 
 ## Review existing tickets
 
-Rewrite when missing Story, Given/When/Then AC, Out of scope, or a wireframe on a UI change. Preserve issue ids. Do not change status unless asked.
+Skip complete stories. Rewrite missing Story / Given-When-Then / Out of scope / UI wireframe. Recast `## Done when` bullets into operator AC. Split blobs. Cancel Linear product tours.
 
 ## After Linear
 
-Point to [agent-spec](../agent-spec/SKILL.md) for Gherkin when the story is ready to build. Do not implement in this role.
+Point to [agent-spec](../agent-spec/SKILL.md) when a story is ready to build.

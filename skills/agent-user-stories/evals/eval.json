@@ -6,7 +6,7 @@
     {
       "id": "EVAL-USERSTORIES-COLOCATED-001",
       "name": "Linear INVEST story with wireframe",
-      "description": "Ensures backlog tickets use persona/want/outcome, Given/When/Then criteria, and Mermaid — not code or ASCII art.",
+      "description": "Ensures UI backlog tickets use persona/want/outcome, Given/When/Then criteria, and Mermaid - not code or ASCII art.",
       "target_skill": "agent-user-stories",
       "prompt": "Add Linear user stories with acceptance criteria and wireframes for the onboarding chooser ZIP scan.",
       "context": {
@@ -17,6 +17,22 @@
         "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "```mermaid"],
         "forbidden_patterns": ["```typescript", "ASCII art", "box-drawing"],
         "required_output_sections": ["Story", "Acceptance criteria", "Wireframe", "Out of scope"]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-COLOCATED-002",
+      "name": "Review Linear: operator stories without fake UI",
+      "description": "Ensures a backlog review recasts CLI/on-call checklists as operator INVEST stories and does not require a Wireframe heading.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Review my Linear tasks and rewrite the wk align checklist tickets as operator user stories with acceptance criteria.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["linear", "review tickets", "operator story", "acceptance criteria"],
+        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "Out of scope"],
+        "forbidden_patterns": ["```typescript", "ASCII art", "box-drawing", "As a customer"],
+        "required_output_sections": ["Story", "Acceptance criteria", "Out of scope"]
       }
     }
   ]

@@ -402,6 +402,22 @@
         "forbidden_patterns": ["```typescript", "ASCII art"],
         "required_output_sections": ["Story", "Acceptance criteria", "Wireframe", "Out of scope"]
       }
+    },
+    {
+      "id": "EVAL-USERSTORIES-002",
+      "name": "Linear operator story review",
+      "description": "Verifies a Linear backlog review recasts CLI checklists as operator stories and does not fake a customer persona.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Review my Linear tasks and rewrite the wk CLI checklist tickets as operator user stories.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["linear", "review tickets", "operator story"],
+        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then "],
+        "forbidden_patterns": ["```typescript", "ASCII art", "As a customer"],
+        "required_output_sections": ["Story", "Acceptance criteria", "Out of scope"]
+      }
     }
   ]
 }
