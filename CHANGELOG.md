@@ -4,8 +4,7 @@
 
 ### 🚀 Features
 
-- Add PostHog MCP server and `posthog` profile (`wk mcp posthog --install`)
-- Add hypothesis-driven development SOP, agent-prd skill, and feature-flag / bet loop across grill, stories, spec, telemetry, release, and prune
+- Enhance AGENTS.md and SOPs/conventional-commits.md with updated guidelines on commit types and PR titles; add model routing references in various documents
 - Implement commit-msg hook for conventional commit validation
 - Cli documentation
 - Add zsh and bash tab-completion support to CLI
@@ -14,10 +13,12 @@
 - Add 'Used on our own product repos' section to documentation
 - Add agent-user-stories skill and related evaluations to enhance user story management
 - Add new evaluations for operator user stories
+- Introduce hypothesis-driven development SOP
+- Add PostHog MCP support for analytics and flags
+- Enhance PostHog integration
 
 ### 🐛 Bug Fixes
 
-- Treat empty host MCP config files as empty objects during compose
 - Update agent-user-stories documentation
 
 ### 🧰 Maintenance & Dependencies
