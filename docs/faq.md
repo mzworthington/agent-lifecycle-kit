@@ -34,11 +34,7 @@ Report-only by default. `--write` fills missing files and never overwrites READM
 
 ## How do I tab-complete wk commands?
 
-```zsh
-source <(wk completion zsh)
-```
-
-bash: `eval "$(wk completion bash)"`. Put that in `~/.zshrc` or `~/.bashrc`. Details: [Getting started](/docs/start#shell-completions).
+`wk completion install` writes a stub that asks the current `wk` binary on each tab (so CLI upgrades stay in sync). Add `fpath=("$HOME/.zfunc" $fpath)` before `compinit` in `~/.zshrc`, or `source` the bash file. Details: [Getting started](/docs/start#shell-completions).
 
 ## Why not dump everything into AGENTS.md?
 

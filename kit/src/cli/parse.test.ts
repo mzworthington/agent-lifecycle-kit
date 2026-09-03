@@ -205,4 +205,20 @@ describe('parseKitArgv', () => {
     assert.equal(parseKitArgv(['completion'], opts).kind, 'usage');
     assert.equal(parseKitArgv(['completion', 'fish'], opts).kind, 'usage');
   });
+
+  it('parses live complete words and completion install', () => {
+    assert.deepEqual(parseKitArgv(['__complete', '--', 'wk', 'eval', 'r'], opts), {
+      kind: 'complete',
+      words: ['wk', 'eval', 'r']
+    });
+    assert.deepEqual(parseKitArgv(['completion', 'install'], opts), {
+      kind: 'completion-install',
+      shell: undefined
+    });
+    assert.deepEqual(parseKitArgv(['completion', 'install', 'zsh'], opts), {
+      kind: 'completion-install',
+      shell: 'zsh'
+    });
+    assert.equal(parseKitArgv(['completion', 'install', 'fish'], opts).kind, 'usage');
+  });
 });

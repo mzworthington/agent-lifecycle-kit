@@ -26,7 +26,12 @@ import { syncExternalSkills } from '../skills/sync_external_skills.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
-import { listMcpProfileNames, renderCompletion } from './completion.js';
+import {
+  completeKitLine,
+  installCompletions,
+  listMcpProfileNames,
+  renderCompletion
+} from './completion.js';
 import { errorMessage, printKitHelp } from './help.js';
 import type { KitCommand } from './parse.js';
 
@@ -169,11 +174,25 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
     case 'check':
       return runKitCheck(repoDir);
 
-    case 'completion':
-      process.stdout.write(
-        renderCompletion(command.shell, { mcpProfiles: listMcpProfileNames(repoDir) })
-      );
+    case 'complete': {
+      const replies = completeKitLine(command.words, { mcpProfiles: listMcpProfileNames(repoDir) });
+      if (replies.length > 0) process.stdout.write(`${replies.join('\n')}\n`);
       return 0;
+    }
+
+    case 'completion':
+      process.stdout.write(renderCompletion(command.shell));
+      return 0;
+
+    case 'completion-install': {
+      const result = installCompletions({
+        homedir: ctx.homedir ?? os.homedir(),
+        shells: command.shell ? [command.shell] : undefined
+      });
+      for (const file of result.files) console.log(`Wrote ${file}`);
+      console.log(result.snippet);
+      return 0;
+    }
 
     case 'ontology':
       if (command.sub === 'generate') {

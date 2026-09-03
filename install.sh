@@ -279,6 +279,20 @@ install_cli_bin() {
   esac
 }
 
+install_shell_completions() {
+  _repo_dir="$1"
+  _kit="${_repo_dir}/bin/kit"
+  if [ ! -x "${_kit}" ]; then
+    return 0
+  fi
+  echo ""
+  echo "Installing live shell completions (stub stays valid across wk upgrades)"
+  "${_kit}" completion install || {
+    echo "WARN: completion install failed; run wk completion install"
+    return 0
+  }
+}
+
 bootstrap_checkout() {
   _repo_dir="$1"
   ensure_deps "${_repo_dir}"
@@ -288,6 +302,7 @@ bootstrap_checkout() {
   install_mcp_profile "${_repo_dir}"
   install_external_skills "${_repo_dir}"
   install_cli_bin "${_repo_dir}"
+  install_shell_completions "${_repo_dir}"
 
   echo ""
   echo "Waykit is ready."

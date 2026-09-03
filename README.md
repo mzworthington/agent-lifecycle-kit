@@ -112,7 +112,7 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | :--- | :--- |
 | `wk init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
 | `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps) |
-| `wk completion zsh` | Print zsh (or `bash`) tab-completion script |
+| `wk completion install` | Write a live tab-completion stub (zsh + bash); verbs follow the current `wk` |
 | `wk mcp <profile>` | Compose a named profile into Cursor, Claude, Copilot, and Antigravity (`--install` / `--project`) |
 | `wk check` | Local quality gate (audit, evals, EDD CI, context budget) |
 | `wk eval run\|watch\|report\|ci` | Eval harness for agent tool routing and schemas |

@@ -28,19 +28,22 @@ The scripted driver works offline. A provider key is only for optional live-mode
 
 ## Shell completions
 
-zsh (add to `~/.zshrc`, then `exec zsh`):
+`./install.sh` runs `wk completion install`, which writes a **thin stub** to `~/.zfunc/_wk` (zsh) and `~/.local/share/bash-completion/completions/wk` (bash). The stub calls `wk __complete` on each tab, so new verbs and flags appear after you upgrade `wk` without regenerating the file.
+
+zsh (once, in `~/.zshrc` **before** `compinit`, then `exec zsh`):
 
 ```zsh
-source <(wk completion zsh)
+fpath=("$HOME/.zfunc" $fpath)
+autoload -Uz compinit && compinit
 ```
 
-bash (add to `~/.bashrc`):
+bash (once, in `~/.bashrc`):
 
 ```bash
-eval "$(wk completion bash)"
+source "$HOME/.local/share/bash-completion/completions/wk"
 ```
 
-Tab after `wk ` lists commands; `wk eval `, `wk ontology `, and `wk mcp ` get the next word. `wk completion zsh` also works as a file: write it to `~/.zfunc/_wk` and add that directory to `fpath` before `compinit`.
+If you skip install, `source <(wk completion zsh)` still works: that printout is the same stub, not a baked command list. Tab after `wk ` lists commands; `wk eval `, `wk ontology `, and `wk mcp ` get the next word from the live CLI.
 
 ## Next
 

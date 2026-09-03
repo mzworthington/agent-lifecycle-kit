@@ -64,9 +64,11 @@ export type KitCommand =
       installHook: boolean;
       login: string | undefined;
     }
-  | { kind: 'completion'; shell: KitCompletionShell };
+  | { kind: 'completion'; shell: KitCompletionShell }
+  | { kind: 'completion-install'; shell: KitCompletionShell | undefined }
+  | { kind: 'complete'; words: string[] };
 
-const COMPLETION_USAGE = cliUsage('completion <zsh|bash>');
+const COMPLETION_USAGE = cliUsage('completion <zsh|bash|install>');
 
 const MCP_USAGE = cliUsage(
   'mcp [profile] [--install] [--project] [--host cursor|claude|copilot|antigravity|all] [-o <file>]'
@@ -181,12 +183,24 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
     case 'check':
       return { kind: 'check' };
 
+    case '__complete': {
+      const words = rest[0] === '--' ? rest.slice(1) : rest;
+      return { kind: 'complete', words };
+    }
+
     case 'completion': {
-      const shell = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
-      if (!isCompletionShell(shell)) {
+      const sub = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
+      if (sub === 'install') {
+        const shellArg = rest[1] && !rest[1].startsWith('--') ? rest[1] : undefined;
+        if (shellArg !== undefined && !isCompletionShell(shellArg)) {
+          return { kind: 'usage', message: COMPLETION_USAGE };
+        }
+        return { kind: 'completion-install', shell: shellArg };
+      }
+      if (!isCompletionShell(sub)) {
         return { kind: 'usage', message: COMPLETION_USAGE };
       }
-      return { kind: 'completion', shell };
+      return { kind: 'completion', shell: sub };
     }
 
     case 'doctor': {
