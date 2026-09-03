@@ -21,6 +21,10 @@
 
 - Update agent-user-stories documentation
 
+### ⚙️ Refactoring & Performance
+
+- Update documentation for hypothesis-driven development and lifecycle
+
 ### 🧰 Maintenance & Dependencies
 
 - Update documentation and configuration for EDD
