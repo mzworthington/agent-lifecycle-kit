@@ -14,6 +14,7 @@ Cursor is the reference host for skills and MCP compose. Other IDEs get the same
 - Wrong tool / made-up args → `wk eval run --suite evals/edd/demo.yaml --model scripted`
 - Gate a prompt or schema change → `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
 - Changed a skill or SOP → `wk ontology check` then the [Waykit map](https://waykit.dev/docs/map)
+- Owned repos missing README / license / templates → `wk doctor --owned --scan ~/Documents/dev`
 
 ## Start here
 - [Home](https://waykit.dev/)
@@ -24,6 +25,7 @@ Cursor is the reference host for skills and MCP compose. Other IDEs get the same
 - [Feature lifecycle](https://waykit.dev/docs/lifecycle) ([markdown](https://waykit.dev/docs/lifecycle.md))
 - [EDD guide](https://waykit.dev/docs/edd) ([markdown](https://waykit.dev/docs/edd.md))
 - [Operator guide](https://waykit.dev/docs/kit) ([markdown](https://waykit.dev/docs/kit.md))
+- [Repo doctor](https://waykit.dev/docs/doctor) ([markdown](https://waykit.dev/docs/doctor.md))
 - [Waykit map](https://waykit.dev/docs/map) ([markdown](https://waykit.dev/docs/map.md))
 - [Author the Waykit map](https://waykit.dev/ontology) ([markdown](https://waykit.dev/ontology/README.md))
 - [SOPs](https://waykit.dev/docs/sops) ([markdown](https://waykit.dev/docs/sops.md))
@@ -46,6 +48,7 @@ wk eval report --format md --out out/reports
 wk eval run --suite evals/edd/architecture_routing.yaml --style cli --cli cursor-agent --model cursor-grok-4.6-medium
 wk measure-context
 wk ontology check
+wk doctor --owned --scan ~/Documents/dev
 wk check
 wk mcp default --install
 ```

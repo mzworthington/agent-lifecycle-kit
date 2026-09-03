@@ -1,7 +1,11 @@
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { exportIDERules } from '../bootstrap/export_ide_rules.js';
 import { initProject } from '../bootstrap/init_project.js';
+import { ghGitHubPort } from '../doctor/github.js';
+import { printDoctorResult, runDoctor } from '../doctor/run.js';
+import { evaluateOwnership, shouldInstallInitHooks } from '../doctor/ownership.js';
 import { composeMCP } from '../bootstrap/compose_mcp.js';
 import { debugCiFailed } from '../debug/debug_ci_failed.js';
 import { initDebugBoardSession } from '../debug/init_debug_board.js';
@@ -21,6 +25,7 @@ import { scanSkillSecurity } from '../skills/scan_skill_security.js';
 import { syncExternalSkills } from '../skills/sync_external_skills.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
 import { resolveModel } from '../models/catalog.js';
+import { validateConventionalCommit } from '../commits/conventional.js';
 import { errorMessage, printKitHelp } from './help.js';
 import type { KitCommand } from './parse.js';
 
@@ -57,15 +62,41 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       console.error(command.message);
       return 2;
 
-    case 'init':
+    case 'init': {
+      let installHook = command.installHook;
+      if (installHook) {
+        const ownership = evaluateOwnership(ghGitHubPort().viewFromCwd(command.targetDir));
+        if (!shouldInstallInitHooks(ownership, true)) {
+          console.log(`Skipping git hooks (${ownership.reason}). Install hooks only on repos you admin.`);
+          installHook = false;
+        }
+      }
       initProject({
         targetDir: command.targetDir,
         mcpProfile: command.mcpProfile,
         installMCP: command.installMCP,
         installIDE: command.installIDE,
-        installHook: command.installHook
+        installHook
       });
       return 0;
+    }
+
+    case 'doctor': {
+      const result = runDoctor({
+        targetDir: command.targetDir,
+        write: command.write,
+        owned: command.owned,
+        scanDir: command.scanDir,
+        repoClass: command.repoClass,
+        installHook: command.installHook,
+        login: command.login,
+        kitRepoDir: repoDir,
+        github: ghGitHubPort()
+      });
+      printDoctorResult(result);
+      if (result.error) return 1;
+      return status(result.ok);
+    }
 
     case 'mcp':
       composeMCP(command.profile, command.outputFile, command.install);
@@ -169,6 +200,29 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       for (const msg of result.messages) console.log(msg);
       for (const e of result.legacyUnknown) {
         console.log(`- ${e.name} (${e.entityType})`);
+      }
+      return 0;
+    }
+
+    case 'commit-msg': {
+      let raw = command.message;
+      if (raw === undefined) {
+        const file = command.file;
+        if (!file) {
+          console.error('Usage: wk commit-msg [--message <subject>] [file]');
+          return 2;
+        }
+        try {
+          raw = fs.readFileSync(file, 'utf8');
+        } catch (err: unknown) {
+          console.error(`ERROR: ${errorMessage(err)}`);
+          return 1;
+        }
+      }
+      const result = validateConventionalCommit(raw);
+      if (!result.ok) {
+        console.error(result.error);
+        return 1;
       }
       return 0;
     }

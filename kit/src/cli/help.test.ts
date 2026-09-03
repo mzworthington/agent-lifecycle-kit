@@ -8,6 +8,8 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /skill-trigger evals/);
     assert.match(KIT_HELP, /mcps\/profiles\//);
     assert.match(KIT_HELP, /site assemble[\s\S]*web build first/);
+    assert.match(KIT_HELP, /commit-msg/);
+    assert.match(KIT_HELP, /doctor \[dir\]/);
     assert.match(KIT_HELP, /Usage: wk <command>/);
     assert.match(KIT_HELP, /kit <command>/);
     assert.match(KIT_HELP, /agent-kit <command>/);

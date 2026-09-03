@@ -30,6 +30,8 @@ Use [Conventional Commits](./SOPs/conventional-commits.md) for **every commit an
 
 Examples: `feat(skills): …`, `fix(cli): …`, `docs: …`, `ci: …`.
 
+Husky `.husky/commit-msg` (and `wk commit-msg`) reject a non-conventional **commit subject**. CI on pull requests also checks the **PR title**. `wk doctor` reports missing community files on GitHub sources you admin; `--write` fills gaps without overwriting README or LICENSE.
+
 ## Checks we expect green
 
 | Check | Command / location |
@@ -38,6 +40,7 @@ Examples: `feat(skills): …`, `fix(cli): …`, `docs: …`, `ci: …`.
 | Unit tests | `pnpm test` / `pnpm test:ci` |
 | Kit gate | `pnpm kit check` (audit, layout, EDD routing thresholds, context budget) |
 | Pre-commit | Husky runs audit/validate/verify (+ typecheck; lint when present) |
+| Commit message | Husky `commit-msg` → `wk commit-msg`; PR title checked in Verify |
 
 ## Docs and ADRs
 

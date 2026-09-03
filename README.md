@@ -30,6 +30,7 @@ macOS / Linux; needs git and Node 22+. Already cloned this repo? Run `./install.
 | Never installed Waykit | [Install](#install), then [start here in 10 minutes](https://waykit.dev/docs/start) |
 | Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
 | Always-on rules are too fat | `wk measure-context` then `wk check` |
+| Owned repos missing README / license / templates | `wk doctor --owned --scan <dev-dir>` |
 | Agent picked the wrong tool / made-up args | Write a JSONL case → `wk eval run --suite evals/edd/demo.yaml --model scripted` |
 | Gate a prompt or schema change | `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports` |
 | Promote a prod miss into the suite | `wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl` |
@@ -110,6 +111,7 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | Command | Purpose |
 | :--- | :--- |
 | `wk init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
+| `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps) |
 | `wk mcp <profile>` | Compose a named profile from `mcps/profiles/` |
 | `wk check` | Local quality gate (audit, evals, EDD CI, context budget) |
 | `wk eval run\|watch\|report\|ci` | Eval harness for agent tool routing and schemas |
@@ -136,7 +138,7 @@ Start with the path that matches what you’re trying to do:
 3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
 4. **Prove tool calls:** [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`wk eval shadow` + `from-trace`)
-6. **Operators:** [What Waykit gives you](./docs/kit.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
+6. **Operators:** [What Waykit gives you](./docs/kit.md) → [Repo doctor](./docs/doctor.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 7. **Live kit graph:** [Waykit map](./docs/map.md) → [author the map](./ontology/README.md) (`wk ontology check`)
 
 Site: [waykit.dev](https://waykit.dev/) — Markdown in `docs/`, Astro app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://waykit.dev/docs/kit) sit next to the raw [`.md` URLs](https://waykit.dev/docs/kit.md).

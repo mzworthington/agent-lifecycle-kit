@@ -9,7 +9,8 @@ Usage: ${CLI_BIN} <command> [options]
 ${aliasLine}
 
 Commands:
-  init [dir]           Bootstrap AGENTS.md, multi-IDE rules, .cursor/mcp.json & git hook
+  init [dir]           Bootstrap AGENTS.md, multi-IDE rules, .cursor/mcp.json & git hooks
+  doctor [dir]         Check community files on repos you admin (report only; --write fills gaps)
   mcp <profile>        Compose and install a named MCP profile from mcps/profiles/
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
@@ -27,10 +28,13 @@ Commands:
   memory lint          List legacy memory entities outside the ontology allowlist
   model resolve        Resolve capability class + host slug (models/catalog.yaml)
   site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)
+  commit-msg           Check a commit subject or PR title (conventional commits)
   help                 Display this help menu
 
 Examples:
   ${CLI_BIN} init ./my-app --mcp collab --hook
+  ${CLI_BIN} doctor --owned --scan ~/Documents/dev
+  ${CLI_BIN} doctor . --write --hook
   ${CLI_BIN} mcp ops --install
   ${CLI_BIN} mcp astro --install
   ${CLI_BIN} mcp cloudflare-ops --install

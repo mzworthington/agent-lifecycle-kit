@@ -49,6 +49,8 @@ Check, in order:
 |------|------|
 | `.pre-commit-config.yaml` | [pre-commit](https://pre-commit.com/) framework |
 | `.husky/pre-commit` | Husky shell hook |
+| `.husky/commit-msg` | Conventional commit subject |
+| `.githooks/commit-msg` | Portable commit-msg (copied to `.git/hooks` on bootstrap) |
 | `.git/hooks/pre-commit` | Plain git hook |
 
 Also read `package.json` / `Makefile` / CI workflow for scripts the hook delegates to (`lint`, `format:check`, `typecheck`, `test`, etc.).

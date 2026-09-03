@@ -64,6 +64,18 @@ wk sync --install
 
 `wk sync` installs upstream skills (Cloudflare, Vercel) from [skills/external.lock.json](../skills/external.lock.json) by **version tag** or `latest`, not a guessed commit SHA. [SOPs/external-skills.md](../SOPs/external-skills.md).
 
+## Repo doctor
+
+`wk doctor` is the community-file check for **GitHub sources you admin**, not a glob over every clone. Report-only by default. `--write` fills missing README, license, contributing, security, and GitHub templates and never overwrites existing files. `--owned --scan <dir>` matches local worktrees to `gh repo list --source`. Forks are skipped. `wk init` still owns the handshake and hooks.
+
+Guide: [Repo doctor](./doctor.md).
+
+```bash
+wk doctor
+wk doctor --owned --scan ~/Documents/dev
+wk doctor . --write
+```
+
 ## Live kit graph
 
 Skills, SOPs, MCP servers, evals, and docs are one graph derived from the files agents already edit. You do not maintain a second catalog. `wk ontology check` fails dangling `depends-on` and `mcp:` refs. `wk ontology generate` writes a gitignored index for kit-knowledge and the public map.
@@ -75,6 +87,7 @@ Browse: [Waykit map](./map.md). Authoring: [Author the Waykit map](/ontology). D
 | Command | What it measures or installs |
 |---------|------------------------------|
 | `wk measure-context` | Always-on bootstrap size vs 8KB |
+| `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`) |
 | `wk check` | Audit, ontology, evals, EDD CI, context budget |
 | `wk ontology check` | Live graph referential integrity |
 | `wk ontology generate` | Write gitignored index for kit-knowledge and the map |

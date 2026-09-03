@@ -136,4 +136,52 @@ describe('parseKitArgv', () => {
       outputFile: undefined
     });
   });
+
+  it('parses doctor check-first flags and defaults cwd', () => {
+    assert.deepEqual(parseKitArgv(['doctor'], opts), {
+      kind: 'doctor',
+      targetDir: path.resolve('/work', '.'),
+      write: false,
+      owned: false,
+      scanDir: undefined,
+      repoClass: undefined,
+      installHook: false,
+      login: undefined
+    });
+    assert.deepEqual(
+      parseKitArgv(
+        ['doctor', './app', '--write', '--owned', '--scan', '../dev', '--class', 'product', '--hook', '--login', 'mzworthington'],
+        opts
+      ),
+      {
+        kind: 'doctor',
+        targetDir: path.resolve('/work', './app'),
+        write: true,
+        owned: true,
+        scanDir: path.resolve('/work', '../dev'),
+        repoClass: 'product',
+        installHook: true,
+        login: 'mzworthington'
+      }
+    );
+  });
+
+  it('returns usage for an unknown doctor --class', () => {
+    assert.equal(parseKitArgv(['doctor', '--class', 'nope'], opts).kind, 'usage');
+  });
+
+  it('parses commit-msg from --message or a file path', () => {
+    assert.deepEqual(parseKitArgv(['commit-msg', '--message', 'feat(cli): add hook'], opts), {
+      kind: 'commit-msg',
+      message: 'feat(cli): add hook',
+      file: undefined
+    });
+    assert.deepEqual(parseKitArgv(['commit-msg', '.git/COMMIT_EDITMSG'], opts), {
+      kind: 'commit-msg',
+      message: undefined,
+      file: path.resolve('/work', '.git/COMMIT_EDITMSG')
+    });
+    assert.equal(parseKitArgv(['commit-msg'], opts).kind, 'usage');
+    assert.equal(parseKitArgv(['commit-msg', '--message'], opts).kind, 'usage');
+  });
 });

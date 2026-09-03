@@ -32,5 +32,6 @@ The scripted driver works offline. A provider key is only for optional live-mode
 - [Feature lifecycle](/docs/lifecycle) for grill → spec → TDD → ship
 - [EDD guide](/docs/edd) for suites, CI, and production misses
 - [What Waykit gives you](/docs/kit) for context budget, the live kit graph, and MCP profiles
+- [Repo doctor](/docs/doctor) for README, license, and GitHub templates on repos you own
 - [Waykit map](/docs/map) is that graph in the browser; [author it](/ontology) after you change skills or SOPs
 - [Common questions](/docs/faq)

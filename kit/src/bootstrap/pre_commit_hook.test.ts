@@ -13,3 +13,10 @@ describe('husky pre-commit', () => {
     assert.match(hook, /web" && pnpm typecheck/);
   });
 });
+
+describe('husky commit-msg', () => {
+  it('checks the commit subject with wk commit-msg', () => {
+    const hook = fs.readFileSync(path.join(repoDir, '.husky/commit-msg'), 'utf8');
+    assert.match(hook, /bin\/kit" commit-msg/);
+  });
+});

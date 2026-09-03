@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+# Waykit - Conventional Commits (Husky commit-msg)
+# Husky invokes hooks with `sh`; keep this POSIX-compatible.
+set -eu
+
+REPO_DIR="$(git rev-parse --show-toplevel)"
+"${REPO_DIR}/bin/kit" commit-msg "$1"

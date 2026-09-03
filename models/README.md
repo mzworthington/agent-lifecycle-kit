@@ -11,3 +11,5 @@ Vendor-neutral **capability classes** live in [`catalog.yaml`](./catalog.yaml). 
 ```bash
 wk model resolve --skill agent-tdd --spec-complete --host cursor
 ```
+
+Cursor overlay (cost-first): `plan` / `review` / `implement` → `cursor-grok-4.6-medium`; `cheap` → `composer-2.5-fast`. Parent chat for hooks: Composer 2.5 without Fast. Do not default Kimi/GLM/GPT/Opus (Other Models pool).

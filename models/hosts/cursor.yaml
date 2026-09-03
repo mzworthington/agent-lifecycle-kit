@@ -1,8 +1,9 @@
 # Cursor Task / subagent slugs. Update this file when Cursor's allowlist changes.
+# Stay on the Cursor Models pool (Grok + Composer). Kimi/GLM/GPT/Opus bill Other Models.
 # Do not copy these ids into skills or AGENTS.md.
 host: cursor
 models:
-  plan: claude-opus-5-thinking-high
-  review: gpt-5.6-sol-medium
+  plan: cursor-grok-4.6-medium
+  review: cursor-grok-4.6-medium
   implement: cursor-grok-4.6-medium
   cheap: composer-2.5-fast

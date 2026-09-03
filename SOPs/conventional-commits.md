@@ -67,3 +67,21 @@ A `.md` skill or SOP is still agent behavior. `docs` is for humans reading a gui
 - [ ] Title summarizes the whole PR (what lands on main after squash), not a single intermediate commit
 - [ ] Body can stay free-form (summary, test plan); title stays conventional
 - [ ] Skill / SOP / model-catalog changes use `feat`/`fix`, not `docs`
+
+## Git hook
+
+Every app repo should run a **commit-msg** hook that rejects a non-conventional subject:
+
+- Husky: `.husky/commit-msg` (Waykit, ArchLens, SteerLens, react-cloudflare-template)
+- pre-commit: `stages: [commit-msg]` (gpio-build-monitor)
+- `.githooks/commit-msg` copied into `.git/hooks` on bootstrap (edge-dns, mzworthington)
+
+The hook is the POSIX checker in [templates/git/commit-msg](../templates/git/commit-msg) (same rules as `wk commit-msg`). `wk init --hook` installs both `pre-commit` and `commit-msg`.
+
+Check a title without committing:
+
+```bash
+wk commit-msg --message "feat(cli): add commit-msg hook"
+```
+
+Squash-and-merge still uses the **PR title**. Keep that conventional even when every branch commit already passed the hook.

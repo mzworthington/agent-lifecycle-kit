@@ -19,6 +19,41 @@ export interface InitProjectOptions {
   hooksDir?: string;
 }
 
+export function installGitHooks(options: {
+  targetDir: string;
+  kitRepoDir: string;
+  hooksDir?: string;
+}): boolean {
+  const gitDir = path.join(options.targetDir, '.git');
+  if (!fs.existsSync(gitDir)) {
+    console.log(`ℹ️  No .git directory found in ${options.targetDir}; skipping git hook installation.`);
+    return false;
+  }
+  const hooksDir = options.hooksDir ?? gitHooksDir(gitDir);
+  if (!fs.existsSync(hooksDir)) {
+    fs.mkdirSync(hooksDir, { recursive: true });
+  }
+  const hookPath = path.join(hooksDir, 'pre-commit');
+  const hookScript = `#!/usr/bin/env bash\n# Pre-Commit Security & Quality Gate via Waykit\nset -e\nWK="$HOME/.agents/bin/kit"\nif [ -x "$WK" ]; then\n  "$WK" audit\nelif command -v wk >/dev/null 2>&1; then\n  wk audit\nelif command -v kit >/dev/null 2>&1; then\n  kit audit\nfi\n`;
+  fs.writeFileSync(hookPath, hookScript, { mode: 0o755 });
+  console.log(`✅ Installed pre-commit hook to ${hookPath}`);
+
+  const commitMsgTemplate = path.join(options.kitRepoDir, 'templates', 'git', 'commit-msg');
+  const commitMsgPath = path.join(hooksDir, 'commit-msg');
+  if (fs.existsSync(commitMsgTemplate)) {
+    fs.copyFileSync(commitMsgTemplate, commitMsgPath);
+    fs.chmodSync(commitMsgPath, 0o755);
+  } else {
+    fs.writeFileSync(
+      commitMsgPath,
+      `#!/usr/bin/env bash\nset -e\nWK="$HOME/.agents/bin/kit"\nif [ -x "$WK" ]; then\n  "$WK" commit-msg "$1"\nelif command -v wk >/dev/null 2>&1; then\n  wk commit-msg "$1"\nelif command -v kit >/dev/null 2>&1; then\n  kit commit-msg "$1"\nelse\n  echo "Waykit not found; cannot check conventional commit message." >&2\n  exit 1\nfi\n`,
+      { mode: 0o755 }
+    );
+  }
+  console.log(`✅ Installed commit-msg hook to ${commitMsgPath}`);
+  return true;
+}
+
 export function initProject(options: InitProjectOptions): void {
   const { targetDir, mcpProfile, installMCP, installIDE, installHook } = options;
   const kitRepoDir = options.kitRepoDir ?? defaultKitRepoDir;
@@ -68,21 +103,8 @@ export function initProject(options: InitProjectOptions): void {
     }
   }
 
-  // 4. Setup Git Pre-Commit Hook if requested or present
   if (installHook) {
-    const gitDir = path.join(targetDir, '.git');
-    if (fs.existsSync(gitDir)) {
-      const hooksDir = options.hooksDir ?? gitHooksDir(gitDir);
-      if (!fs.existsSync(hooksDir)) {
-        fs.mkdirSync(hooksDir, { recursive: true });
-      }
-      const hookPath = path.join(hooksDir, 'pre-commit');
-      const hookScript = `#!/usr/bin/env bash\n# Pre-Commit Security & Quality Gate via Waykit\nset -e\nWK="$HOME/.agents/bin/kit"\nif [ -x "$WK" ]; then\n  "$WK" audit\nelif command -v wk >/dev/null 2>&1; then\n  wk audit\nelif command -v kit >/dev/null 2>&1; then\n  kit audit\nfi\n`;
-      fs.writeFileSync(hookPath, hookScript, { mode: 0o755 });
-      console.log(`✅ Installed pre-commit hook to ${hookPath}`);
-    } else {
-      console.log(`ℹ️  No .git directory found in ${targetDir}; skipping git hook installation.`);
-    }
+    installGitHooks({ targetDir, kitRepoDir, hooksDir: options.hooksDir });
   }
 
   console.log(`\n🎉 Project bootstrapping complete!`);

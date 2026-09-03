@@ -15,7 +15,7 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Which model / Cursor slug | `SOPs/model-routing.md` (`wk model resolve --skill …`) |
 | Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |
 | Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
-| Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`) |
+| Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`); `commit-msg` git hook |
 | SOP / handover lookup | kit-knowledge MCP when installed |
 | Durable project facts | memory MCP (glossary, SLOs, prefs - never secrets) |
 | Linear tickets / board | linear MCP (on the kit `default` profile) |

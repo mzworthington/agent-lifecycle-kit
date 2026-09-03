@@ -21,6 +21,17 @@ You need git and Node 22+. If `wk` is not found, add `~/.local/bin` to `PATH`. F
 
 No. Install, `wk check`, and `wk eval` with `--style local` (the default) run offline. Cursor and Copilot load skills and `AGENTS.md`; they are not the eval runner. A provider key is only for `--style http` over an OpenAI-compatible API. `--style cli` shells out to `cursor-agent`, `claude`, or `agy`. Details: [EDD guide](/docs/edd).
 
+## How do I check README, license, and GitHub templates on my repos?
+
+Use `wk doctor`. It asks GitHub for **sources you admin** and skips forks:
+
+```bash
+wk doctor --owned --scan ~/Documents/dev
+wk doctor . --write
+```
+
+Report-only by default. `--write` fills missing files and never overwrites README or LICENSE. Handshake and hooks stay on `wk init`. Guide: [Repo doctor](/docs/doctor).
+
 ## Why not dump everything into AGENTS.md?
 
 Agents pay for every byte in the bootstrap. Always-on files (`AGENTS.md`, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Compose **one MCP profile** per session (`wk mcp default --install`, or the id on the skill's `mcp:` frontmatter) so unused tool schemas stay out of the prompt. `wk measure-context` prints the breakdown; `wk check` fails if the budget is exceeded. Operator write-up: [What Waykit gives you](/docs/kit).

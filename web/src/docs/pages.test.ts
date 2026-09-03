@@ -18,6 +18,7 @@ describe('published markdown catalog', () => {
   it('registers operator docs, SOPs, and ADRs from the glob', () => {
     expect(DOC_PATHS.has('/docs/edd')).toBe(true);
     expect(DOC_PATHS.has('/docs/kit')).toBe(true);
+    expect(DOC_PATHS.has('/docs/doctor')).toBe(true);
     expect(DOC_PATHS.has('/SOPs/context-budget')).toBe(true);
     expect(DOC_PATHS.has('/docs/ADRs/0006-vite-markdown-docs-site')).toBe(true);
     expect(DOC_PATHS.has('/docs/ADRs/0007-astro-static-docs-site')).toBe(true);

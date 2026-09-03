@@ -9,8 +9,8 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 | Page | Who it is for |
 |------|----------------|
 | [Getting started](./start.md) | First install, handshake, then the loops you need |
-| [Jobs for today](./jobs.md) | Six concrete jobs, one command each |
-| [Common questions](./faq.md) | Install, keys, context, how agents find an SOP, where EDD fits |
+| [Jobs for today](./jobs.md) | Seven concrete jobs, one command each |
+| [Common questions](./faq.md) | Install, keys, context, repo doctor, how agents find an SOP, where EDD fits |
 
 ## Practice
 
@@ -18,6 +18,7 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 |------|----------------|
 | [Feature lifecycle](./lifecycle.md) | Grill → spec → TDD → XFN → ship |
 | [What Waykit gives you](./kit.md) | Context budget, live kit graph, MCP profiles, `wk check` |
+| [Repo doctor](./doctor.md) | Owned-repo README, license, contributing, GitHub templates |
 | [Waykit map](./map.md) | Live graph of this kit (derived from files, not a second catalog) |
 | [Author the Waykit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
 | [EDD guide](./edd.md) | Anyone proving agent tool calls |

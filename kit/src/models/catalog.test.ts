@@ -35,7 +35,8 @@ describe('model catalog', () => {
     assert.equal(resolveModelClass(catalog, {}), 'plan');
 
     const overlay = loadHostOverlay(kitRoot, 'cursor');
-    assert.equal(overlay.models.plan, 'claude-opus-5-thinking-high');
+    assert.equal(overlay.models.plan, 'cursor-grok-4.6-medium');
+    assert.equal(overlay.models.review, 'cursor-grok-4.6-medium');
     assert.equal(resolveHostModel(kitRoot, 'implement', 'cursor').model, 'cursor-grok-4.6-medium');
     assert.equal(resolveHostModel(kitRoot, 'cheap', 'cursor').model, 'composer-2.5-fast');
   });

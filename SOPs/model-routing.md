@@ -38,4 +38,16 @@ Catalog: [models/catalog.yaml](../models/catalog.yaml). Cursor overlay: [models/
 
 Until spec handover is COMPLETE, stay on `plan` for gated skills (`agent-tdd`, `agent-xfn`, …). After COMPLETE, drop to `implement` unless the next specialist is `review` or `cheap`.
 
+## Cursor cost (this host)
+
+Stay on the **Cursor Models** pool: Grok 4.6, Grok 4.5, Composer 2.5. Do **not** default to Kimi K3, Kimi K2.7, GLM, GPT, or Opus. Those bill **Other Models** (smaller included pool, higher API rates). Kimi K3 is a user override for huge-context planning only.
+
+| Class | Subagent slug | Parent chat |
+|-------|----------------|-------------|
+| `plan` / `review` / `implement` | `cursor-grok-4.6-medium` | Grok 4.6 (medium, not Fast) |
+| `cheap` | `composer-2.5-fast` (Task allowlist) | Composer 2.5 **without** Fast |
+
+Composer 2.5 standard ($0.50 / $2.50) is the actually cheap model. Composer Fast and Grok Fast are latency SKUs, not the cheap class. Do not pass `cursor-grok-4.5-high-fast` for implement.
+
 Eval: [evals/edd/model_routing.yaml](../evals/edd/model_routing.yaml) (`wk eval run --suite evals/edd/model_routing.yaml --model scripted`).
+

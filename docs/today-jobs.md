@@ -111,3 +111,21 @@ wk ontology check
 - [Waykit map](/docs/map)
 - [Author the Waykit map](/ontology)
 - [Operator guide](/docs/kit)
+
+## repo-hygiene | Owned repos missing README or templates
+
+> You want LICENSE, CONTRIBUTING, and GitHub templates on repos you own, not on every clone.
+
+GitHub is the allowlist. `wk doctor` skips forks and checkouts you cannot admin. Report-only until you pass `--write`.
+
+1. **List sources** with `wk doctor --owned` (`gh` must be logged in).
+2. **Match local clones** with `--scan` on your dev directory.
+3. **Fill gaps** with `--write` (never overwrites README or LICENSE).
+
+```
+wk doctor --owned --scan ~/Documents/dev
+```
+
+- [Repo doctor](/docs/doctor)
+- [Operator guide](/docs/kit)
+- [Conventional commits](/SOPs/conventional-commits)

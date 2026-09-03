@@ -46,7 +46,7 @@ kit eval run
 });
 
 describe('docs/today-jobs.md', () => {
-  it('is the source for the six landing-page jobs', () => {
+  it('is the source for the landing-page jobs', () => {
     const jobs = parseTodayJobsMarkdown(todayMd);
     expect(jobs.map((job) => job.id)).toEqual([
       'first-hour',
@@ -54,7 +54,8 @@ describe('docs/today-jobs.md', () => {
       'context',
       'wrong-tool',
       'ci-gate',
-      'kit-graph'
+      'kit-graph',
+      'repo-hygiene'
     ]);
     const firstHour = jobs[0]!;
     expect(firstHour.title).toBe('I have never installed Waykit');
@@ -69,6 +70,9 @@ describe('docs/today-jobs.md', () => {
     const kitGraph = jobs.find((job) => job.id === 'kit-graph')!;
     expect(kitGraph.title).toBe('I changed a skill or SOP');
     expect(kitGraph.cmd).toBe('wk ontology check');
+    const hygiene = jobs.find((job) => job.id === 'repo-hygiene')!;
+    expect(hygiene.title).toBe('Owned repos missing README or templates');
+    expect(hygiene.cmd).toBe('wk doctor --owned --scan ~/Documents/dev');
     expect(firstHour.cmd).toBe(
       'curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh'
     );

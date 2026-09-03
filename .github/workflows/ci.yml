@@ -44,6 +44,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Conventional PR title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: pnpm kit commit-msg --message "$PR_TITLE"
+
       - name: TypeScript type-check
         run: pnpm typecheck && pnpm --dir web typecheck
 

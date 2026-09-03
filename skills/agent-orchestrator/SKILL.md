@@ -126,7 +126,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 
 When in doubt, prefer the smaller route and ask.
 
-**Model class:** After picking the route, resolve class from [models/catalog.yaml](../../models/catalog.yaml) ([SOPs/model-routing.md](../../SOPs/model-routing.md)). Pass the Cursor slug from [models/hosts/cursor.yaml](../../models/hosts/cursor.yaml) to subagents (`wk model resolve --skill <id> [--spec-complete] [--blocked]`). Recommend switching the parent chat when the class changes. Escalate to `plan` if BLOCKED or a new architectural fork.
+**Model class:** After picking the route, resolve class from [models/catalog.yaml](../../models/catalog.yaml) ([SOPs/model-routing.md](../../SOPs/model-routing.md)). Pass the Cursor slug from [models/hosts/cursor.yaml](../../models/hosts/cursor.yaml) to subagents (`wk model resolve --skill <id> [--spec-complete] [--blocked]`). Stay on Grok 4.6 / Composer; do not pick Kimi or other Other-Models ids unless the user asks. Recommend switching the parent chat when the class changes. Escalate to `plan` if BLOCKED or a new architectural fork.
 
 ### Light XFN floor (non-optional when condition matches)
 

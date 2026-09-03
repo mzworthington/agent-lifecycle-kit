@@ -62,12 +62,12 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/jobs': {
     headline: 'Jobs for today',
     description:
-      'Pick a job for today: starting a product feature, install, fat always-on context, proving a tool call, or checking the live kit graph.'
+      'Pick a job for today: starting a product feature, install, fat always-on context, proving a tool call, checking the live kit graph, or repo hygiene on sources you own.'
   },
   '/docs/faq': {
     headline: 'Common questions',
     description:
-      'Waykit FAQ: install, API keys, why AGENTS.md stays small, how agents find the right SOP, where EDD fits, and what the map is not.'
+      'Waykit FAQ: install, API keys, why AGENTS.md stays small, how agents find the right SOP, where EDD fits, repo doctor, and what the map is not.'
   },
   '/docs/edd': {
     headline: 'EDD guide',
@@ -78,6 +78,11 @@ const PAGE_SEO: Record<string, SeoOverride> = {
     headline: 'What Waykit gives you',
     description:
       'What Waykit installs: thin AGENTS.md handshake, lifecycle skills, live kit graph, one MCP profile per session, wk check, and eval loops.'
+  },
+  '/docs/doctor': {
+    headline: 'Repo doctor',
+    description:
+      'wk doctor checks README, license, contributing, and GitHub templates on sources you admin. Report-only by default; --write fills gaps and never overwrites.'
   },
   '/docs/lifecycle': {
     headline: 'Feature lifecycle',

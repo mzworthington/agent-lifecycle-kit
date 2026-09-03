@@ -1,4 +1,5 @@
 import path from 'path';
+import { isRepoClass, type RepoClass } from '../doctor/hygiene.js';
 import { firstPositional, flagValue, hasFlag } from './flags.js';
 import { cliUsage } from './name.js';
 
@@ -41,13 +42,29 @@ export type KitCommand =
       specComplete: boolean | undefined;
       blocked: boolean;
     }
-  | { kind: 'site-assemble'; dest: string | undefined };
+  | { kind: 'site-assemble'; dest: string | undefined }
+  | { kind: 'commit-msg'; message: string | undefined; file: string | undefined }
+  | {
+      kind: 'doctor';
+      targetDir: string;
+      write: boolean;
+      owned: boolean;
+      scanDir: string | undefined;
+      repoClass: RepoClass | undefined;
+      installHook: boolean;
+      login: string | undefined;
+    };
+
+const DOCTOR_USAGE = cliUsage(
+  'doctor [dir] [--write] [--owned] [--scan <dir>] [--class kit|product|dns|site|template] [--hook] [--login <user>]'
+);
 
 const MODEL_RESOLVE_USAGE = cliUsage(
   'model resolve [--skill <id>] [--phase <id>] [--host cursor] [--spec-complete] [--blocked]'
 );
 
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
+const COMMIT_MSG_USAGE = cliUsage('commit-msg [--message <subject>] [file]');
 
 export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitCommand {
   const command = argv[0];
@@ -133,6 +150,32 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
     case 'check':
       return { kind: 'check' };
 
+    case 'doctor': {
+      const positional = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
+      const repoClassRaw = flagValue(rest, '--class');
+      if (hasFlag(rest, '--class') && !isRepoClass(repoClassRaw)) {
+        return { kind: 'usage', message: DOCTOR_USAGE };
+      }
+      const scan = flagValue(rest, '--scan');
+      if (hasFlag(rest, '--scan') && (scan === undefined || scan.startsWith('--'))) {
+        return { kind: 'usage', message: DOCTOR_USAGE };
+      }
+      const login = flagValue(rest, '--login');
+      if (hasFlag(rest, '--login') && (login === undefined || login.startsWith('--'))) {
+        return { kind: 'usage', message: DOCTOR_USAGE };
+      }
+      return {
+        kind: 'doctor',
+        targetDir: path.resolve(opts.cwd, positional ?? '.'),
+        write: hasFlag(rest, '--write'),
+        owned: hasFlag(rest, '--owned'),
+        scanDir: scan ? path.resolve(opts.cwd, scan) : undefined,
+        repoClass: isRepoClass(repoClassRaw) ? repoClassRaw : undefined,
+        installHook: hasFlag(rest, '--hook'),
+        login
+      };
+    }
+
     case 'ontology': {
       const sub = rest[0];
       if (sub === 'generate' || sub === 'check') {
@@ -163,6 +206,21 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
         specComplete: hasFlag(modelRest, '--spec-complete') ? true : undefined,
         blocked: hasFlag(modelRest, '--blocked')
       };
+    }
+
+    case 'commit-msg': {
+      const message = flagValue(rest, '--message');
+      if (hasFlag(rest, '--message') && message === undefined) {
+        return { kind: 'usage', message: COMMIT_MSG_USAGE };
+      }
+      if (message !== undefined) {
+        return { kind: 'commit-msg', message, file: undefined };
+      }
+      const file = firstPositional(rest);
+      if (!file) {
+        return { kind: 'usage', message: COMMIT_MSG_USAGE };
+      }
+      return { kind: 'commit-msg', message: undefined, file: path.resolve(opts.cwd, file) };
     }
 
     case 'site': {
