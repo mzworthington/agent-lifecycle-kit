@@ -11,6 +11,7 @@
 - Add installation of live shell completions for zsh and bash
 - Enhance documentation for consumer align and add related commands to CLI help
 - Add 'Used on our own product repos' section to documentation
+- Add agent-user-stories skill and related evaluations to enhance user story management
 
 ### 🧰 Maintenance & Dependencies
 
