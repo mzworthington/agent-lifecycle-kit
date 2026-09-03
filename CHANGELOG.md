@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-03
+
+### 🚀 Features
+
+- Enhance AGENTS.md and SOPs/conventional-commits.md with updated guidelines on commit types and PR titles; add model routing references in various documents
+
 ## 2026-09-02
 
 ### 🚀 Features
