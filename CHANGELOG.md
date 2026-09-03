@@ -5,6 +5,7 @@
 ### 🚀 Features
 
 - Enhance AGENTS.md and SOPs/conventional-commits.md with updated guidelines on commit types and PR titles; add model routing references in various documents
+- Implement commit-msg hook for conventional commit validation
 
 ## 2026-09-02
 
