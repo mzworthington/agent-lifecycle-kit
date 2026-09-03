@@ -1,4 +1,5 @@
 import { EvalDemo } from '../components/EvalDemo';
+import { HomeCli } from '../components/HomeCli';
 import { HomeHero } from '../components/HomeHero';
 import { HomeNext } from '../components/HomeNext';
 import { HomeProof } from '../components/HomeProof';
@@ -9,6 +10,7 @@ export function HomeLanding() {
     <div className="landing-page">
       <HomeHero />
       <TodayJobs showHeading />
+      <HomeCli />
       <HomeProof />
       <EvalDemo />
       <HomeNext />

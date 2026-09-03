@@ -43,6 +43,7 @@ body {
 }
 
 .landing-page .today,
+.landing-page .home-cli,
 .landing-page .proof,
 .landing-page .demo,
 .landing-page .home-next {
@@ -62,6 +63,84 @@ body {
 
 .edd-links {
   justify-content: flex-start;
+}
+
+.home-cli {
+  margin: 0;
+}
+
+.home-cli h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.4rem;
+  color: var(--heading);
+  text-align: left;
+  text-wrap: balance;
+}
+
+.home-cli-lead {
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+  max-width: 42rem;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.home-cli .table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin: 0 0 0.85rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.home-cli table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.home-cli caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0 0 0.55rem;
+}
+
+.home-cli th,
+.home-cli td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.home-cli thead th {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--heading);
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.home-cli tbody th {
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--bg-card);
+}
+
+.home-cli td {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.home-cli code {
+  font-size: 0.86em;
+  color: var(--primary-light);
+}
+
+.home-cli-follow {
+  margin: 0;
+  text-align: left;
 }
 
 .home-next {

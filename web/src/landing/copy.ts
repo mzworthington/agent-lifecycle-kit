@@ -2,7 +2,7 @@ export const HOME_EYEBROW = 'Software lifecycle for coding agents';
 export const HOME_BRAND = 'Waykit';
 export const HOME_HEADLINE = 'Grill, spec, TDD, ship, then learn';
 export const HOME_LEDE =
-  'Coding agents skip steps a team would not: no spec, no test impact, no release bar. Waykit is the full SDLC plus the learning loops that make the next session better. Eval-driven development is one of those loops, when the change is a prompt or a tool contract.';
+  'Coding agents skip steps a team would not: no spec, no test impact, no release bar. Waykit is the full SDLC plus the learning loops that make the next session better. You run that lifecycle with wk. Eval-driven development is one of those loops, when the change is a prompt or a tool contract.';
 
 /** Keep in sync with the README badge row. Version tracks GitHub Releases. */
 export const HOME_BADGES = [
@@ -43,9 +43,12 @@ export const HOME_BADGES = [
   }
 ] as const;
 
+/** Product name for the operator CLI, not a how-to sentence. */
+export const HOME_CLI_HEADING = 'The wk CLI';
+
 export const HOME_NEXT = [
   { href: '/docs/start', title: 'Install Waykit in 10 minutes', body: 'Handshake, wk init, then the loops you need. No API key.' },
   { href: '/docs/lifecycle', title: 'Feature lifecycle', body: 'Grill, spec, TDD, XFN, audit, release. EDD sits here when tools are the change.' },
-  { href: '/docs/map', title: 'Waykit map', body: 'Live graph of this kit: edit files, check dangling links, load one node. Not a second catalog.' },
-  { href: '/docs', title: 'Docs overview', body: 'Start, practice, and reference in one place.' }
+  { href: '/docs/kit', title: 'CLI and what Waykit installs', body: 'wk check, doctor, measure-context, one MCP profile. The operator surface, not just skills on disk.' },
+  { href: '/docs/map', title: 'Waykit map', body: 'Live graph of this kit: edit files, check dangling links, load one node. Not a second catalog.' }
 ];

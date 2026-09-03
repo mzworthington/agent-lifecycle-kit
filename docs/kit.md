@@ -84,6 +84,8 @@ Browse: [Waykit map](./map.md). Authoring: [Author the Waykit map](/ontology). D
 
 ## Commands
 
+Skills and `AGENTS.md` tell the agent what to load. You operate the kit with `wk`: measure always-on context, compose one MCP profile, check community files on repos you admin, and fail the merge bar before CI does. `wk help` lists the rest.
+
 | Command | What it measures or installs |
 |---------|------------------------------|
 | `wk measure-context` | Always-on bootstrap size vs 8KB |

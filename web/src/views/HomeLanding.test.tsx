@@ -19,6 +19,13 @@ describe('HomeLanding', () => {
     );
     expect(screen.getByRole('heading', { name: /what do i use this for today/i })).toBeTruthy();
     expect(screen.getByRole('group', { name: 'Job list' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: /^See the CLI$/ }).getAttribute('href')).toBe('#cli');
+    expect(screen.getByRole('heading', { name: 'The wk CLI' })).toBeTruthy();
+    expect(screen.getByRole('columnheader', { name: 'Command' })).toBeTruthy();
+    expect(screen.getByText('wk check')).toBeTruthy();
+    expect(
+      screen.getByRole('link', { name: 'Operator guide: context, MCP, check, doctor' }).getAttribute('href')
+    ).toBe('/docs/kit');
     expect(screen.getByRole('heading', { name: /one loop: a miss becomes a failing eval/i })).toBeTruthy();
     expect(screen.getByText('Typically payment systems use PostgreSQL…', { exact: false })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Walk the interactive demo' }).getAttribute('href')).toBe(

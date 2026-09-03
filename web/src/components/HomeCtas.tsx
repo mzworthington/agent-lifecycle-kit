@@ -7,6 +7,11 @@ export function HomeCtas() {
         </a>
       </li>
       <li>
+        <a href="#cli" className="btn-cta btn-cta-ghost">
+          See the CLI
+        </a>
+      </li>
+      <li>
         <a href="/docs/lifecycle" className="btn-cta btn-cta-ghost">
           Read the lifecycle
         </a>

@@ -77,7 +77,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/kit': {
     headline: 'What Waykit gives you',
     description:
-      'What Waykit installs: thin AGENTS.md handshake, lifecycle skills, live kit graph, one MCP profile per session, wk check, and eval loops.'
+      'What Waykit installs: thin AGENTS.md handshake, lifecycle skills, live kit graph, one MCP profile per session, and the wk CLI (check, doctor, measure-context, eval).'
   },
   '/docs/doctor': {
     headline: 'Repo doctor',
