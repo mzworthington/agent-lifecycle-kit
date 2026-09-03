@@ -7,6 +7,14 @@
 - Enhance AGENTS.md and SOPs/conventional-commits.md with updated guidelines on commit types and PR titles; add model routing references in various documents
 - Implement commit-msg hook for conventional commit validation
 - Cli documentation
+- Add zsh and bash tab-completion support to CLI
+- Add installation of live shell completions for zsh and bash
+- Enhance documentation for consumer align and add related commands to CLI help
+- Add 'Used on our own product repos' section to documentation
+
+### 🧰 Maintenance & Dependencies
+
+- Update documentation and configuration for EDD
 
 ## 2026-09-02
 
