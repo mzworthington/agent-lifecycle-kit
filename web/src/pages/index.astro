@@ -3,6 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import SiteChrome from '../components/SiteChrome.astro';
 import { HomeHero } from '../components/HomeHero.tsx';
 import { HomeCli } from '../components/HomeCli.tsx';
+import { HomeUsedIn } from '../components/HomeUsedIn.tsx';
 import { HomeProof } from '../components/HomeProof.tsx';
 import { HomeNext } from '../components/HomeNext.tsx';
 import { TodayJobs } from '../components/TodayJobs.tsx';
@@ -20,6 +21,7 @@ const navPages = DOCS_PAGES.map(({ path, title }) => ({ path, title }));
       <HomeHero />
       <TodayJobs client:load showHeading />
       <HomeCli />
+      <HomeUsedIn />
       <HomeProof />
       <EvalDemo client:load />
       <HomeNext />

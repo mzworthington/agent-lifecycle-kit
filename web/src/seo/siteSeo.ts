@@ -94,6 +94,11 @@ const PAGE_SEO: Record<string, SeoOverride> = {
     description:
       'wk align checks an app repo for a thin handshake, host rule pointers, kit-knowledge MCP, and commit-msg. --write fills IDE pointers; it never overwrites AGENTS.md.'
   },
+  '/docs/used-in': {
+    headline: 'Used on our own product repos',
+    description:
+      'ArchLens, SteerLens, the React Cloudflare template, and GPIO build monitor run Waykit. Open those GitHub checkouts to see a thin handshake in the wild.'
+  },
   '/docs/lifecycle': {
     headline: 'Feature lifecycle',
     description:

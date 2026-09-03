@@ -73,7 +73,7 @@ wk sync --install
 
 `wk doctor` is the community-file check for **GitHub sources you admin**, not a glob over every clone. Report-only by default. `--write` fills missing README, license, contributing, security, and GitHub templates and never overwrites existing files. `--owned --scan <dir>` matches local worktrees to `gh repo list --source`. Forks are skipped. `wk init` still owns the handshake and hooks.
 
-Guide: [Repo doctor](./doctor.md). Consumer handshake: [Consumer align](./align.md).
+Guide: [Repo doctor](./doctor.md). Consumer handshake: [Consumer align](./align.md). First-party clones: [Used on our own product repos](./used-in.md).
 
 ```bash
 wk doctor

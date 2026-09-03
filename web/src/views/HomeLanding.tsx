@@ -3,6 +3,7 @@ import { HomeCli } from '../components/HomeCli';
 import { HomeHero } from '../components/HomeHero';
 import { HomeNext } from '../components/HomeNext';
 import { HomeProof } from '../components/HomeProof';
+import { HomeUsedIn } from '../components/HomeUsedIn';
 import { TodayJobs } from '../components/TodayJobs';
 
 export function HomeLanding() {
@@ -11,6 +12,7 @@ export function HomeLanding() {
       <HomeHero />
       <TodayJobs showHeading />
       <HomeCli />
+      <HomeUsedIn />
       <HomeProof />
       <EvalDemo />
       <HomeNext />

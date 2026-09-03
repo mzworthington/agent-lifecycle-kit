@@ -41,6 +41,7 @@ That replaces the project MCP file for the session. Restore `default` when you a
 
 ## Related
 
+- First-party checkouts that pass this gate: [Used on our own product repos](./used-in.md)
 - Handshake write: `wk init . --mcp default --hook`
 - Host pointers only: `wk export-rules`
 - Community files: `wk doctor`

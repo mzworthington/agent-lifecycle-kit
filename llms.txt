@@ -29,6 +29,7 @@ Cursor, Claude Code, Copilot, and Antigravity share `AGENTS.md`. MCP and model o
 - [Operator guide](https://waykit.dev/docs/kit) ([markdown](https://waykit.dev/docs/kit.md))
 - [Repo doctor](https://waykit.dev/docs/doctor) ([markdown](https://waykit.dev/docs/doctor.md))
 - [Consumer align](https://waykit.dev/docs/align) ([markdown](https://waykit.dev/docs/align.md))
+- [Used on our own product repos](https://waykit.dev/docs/used-in) ([markdown](https://waykit.dev/docs/used-in.md))
 - [Waykit map](https://waykit.dev/docs/map) ([markdown](https://waykit.dev/docs/map.md))
 - [Author the Waykit map](https://waykit.dev/ontology) ([markdown](https://waykit.dev/ontology/README.md))
 - [SOPs](https://waykit.dev/docs/sops) ([markdown](https://waykit.dev/docs/sops.md))

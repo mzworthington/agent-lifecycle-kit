@@ -30,7 +30,7 @@ wk doctor --owned --scan ~/Documents/dev
 wk doctor . --write
 ```
 
-Report-only by default. `--write` fills missing files and never overwrites README or LICENSE. Handshake and hooks stay on `wk init`. After init, `wk align .` checks the handshake still matches. Guides: [Repo doctor](/docs/doctor), [Consumer align](/docs/align).
+Report-only by default. `--write` fills missing files and never overwrites README or LICENSE. Handshake and hooks stay on `wk init`. After init, `wk align .` checks the handshake still matches. Guides: [Repo doctor](/docs/doctor), [Consumer align](/docs/align), [Used on our own product repos](/docs/used-in).
 
 ## How do I check that an app repo still follows Waykit?
 

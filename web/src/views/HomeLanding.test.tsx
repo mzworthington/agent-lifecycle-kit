@@ -21,6 +21,10 @@ describe('HomeLanding', () => {
     expect(screen.getByRole('group', { name: 'Job list' })).toBeTruthy();
     expect(screen.getByRole('link', { name: /^See the CLI$/ }).getAttribute('href')).toBe('#cli');
     expect(screen.getByRole('heading', { name: 'The wk CLI' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: /used on our own product repos/i })).toBeTruthy();
+    expect(screen.getByRole('link', { name: /ArchLens/ }).getAttribute('href')).toBe(
+      'https://github.com/mzworthington/blueprint'
+    );
     expect(screen.getByRole('columnheader', { name: 'Command' })).toBeTruthy();
     expect(screen.getByText('wk check')).toBeTruthy();
     expect(

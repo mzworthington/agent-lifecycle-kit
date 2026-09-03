@@ -54,5 +54,6 @@ If you skip install, `source <(wk completion zsh)` still works: that printout is
 - [What Waykit gives you](/docs/kit) for context budget, the live kit graph, and MCP profiles
 - [Repo doctor](/docs/doctor) for README, license, and GitHub templates on repos you own
 - [Consumer align](/docs/align) for handshake, host pointers, and kit MCP on an app clone
+- [Used on our own product repos](/docs/used-in) for first-party checkouts that already pass `wk align`
 - [Waykit map](/docs/map) is that graph in the browser; [author it](/ontology) after you change skills or SOPs
 - [Common questions](/docs/faq)

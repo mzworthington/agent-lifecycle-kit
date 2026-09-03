@@ -5,7 +5,8 @@ import {
   HOME_CLI_HEADING,
   HOME_EYEBROW,
   HOME_HEADLINE,
-  HOME_NEXT
+  HOME_NEXT,
+  HOME_USED_IN
 } from './copy.ts';
 
 describe('homepage copy', () => {
@@ -20,6 +21,13 @@ describe('homepage copy', () => {
     expect(HOME_NEXT[2]?.body).toMatch(/wk /i);
     expect(HOME_NEXT[3]?.href).toBe('/docs/map');
     expect(HOME_NEXT[3]?.body).toMatch(/live graph/i);
+    expect(HOME_USED_IN).toHaveLength(4);
+    expect(HOME_USED_IN.map((repo) => repo.href)).toEqual([
+      'https://github.com/mzworthington/blueprint',
+      'https://github.com/mzworthington/steerco',
+      'https://github.com/mzworthington/react-cloudflare-template',
+      'https://github.com/mzworthington/gpio-build-monitor'
+    ]);
   });
 
   it('mirrors the README status strip plus a live GitHub release badge', () => {

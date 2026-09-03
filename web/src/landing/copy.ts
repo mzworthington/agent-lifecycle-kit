@@ -52,3 +52,35 @@ export const HOME_NEXT = [
   { href: '/docs/kit', title: 'CLI and what Waykit installs', body: 'wk check, doctor, measure-context, one MCP profile. The operator surface, not just skills on disk.' },
   { href: '/docs/map', title: 'Waykit map', body: 'Live graph of this kit: edit files, check dangling links, load one node. Not a second catalog.' }
 ];
+
+/** First-party product checkouts that pass `wk align`. GitHub origins, not vanity domains. */
+export const HOME_USED_IN_HEADING = 'Used on our own product repos';
+export const HOME_USED_IN_LEAD =
+  'Waykit is not only this kit. These four checkouts run the thin handshake, kit MCP, and wk align. Open AGENTS.md if you want to see a consumer in the wild.';
+
+export const HOME_USED_IN = [
+  {
+    name: 'ArchLens',
+    href: 'https://github.com/mzworthington/blueprint',
+    what: 'Architecture canvas and CLI (GitHub repo still named blueprint)',
+    look: 'Hexagonal @archlens/core, TDD for parsers, sparse ADRs.'
+  },
+  {
+    name: 'SteerLens',
+    href: 'https://github.com/mzworthington/steerco',
+    what: 'Executive steering workspace',
+    look: 'In-app docs, Cloudflare Pages, handover under steerlens/.'
+  },
+  {
+    name: 'React Cloudflare template',
+    href: 'https://github.com/mzworthington/react-cloudflare-template',
+    what: 'Greenfield product starter',
+    look: 'The handshake wk init writes, already aligned so clones inherit it.'
+  },
+  {
+    name: 'GPIO build monitor',
+    href: 'https://github.com/mzworthington/gpio-build-monitor',
+    what: 'Pi LEDs and a Cloudflare Worker status UI',
+    look: 'Python plus Pulumi. Default MCP for agents; cloudflare-ops only when the Worker is the job.'
+  }
+] as const;

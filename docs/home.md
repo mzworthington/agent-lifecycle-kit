@@ -1,6 +1,6 @@
 # Waykit
 
-The public homepage is the Astro landing in `web/` (hero, job picker, CLI table, proof, demo). This file is the copy source of truth for that story.
+The public homepage is the Astro landing in `web/` (hero, job picker, CLI table, product repos, proof, demo). This file is the copy source of truth for that story.
 
 Waykit is the software lifecycle for coding agents: grill, spec, TDD, quality, audit, release, plus learning loops. You operate it with `wk`. Eval-driven development (**alpha**) is one of those loops: a routing harness, not a full EDD product.
 
@@ -11,6 +11,7 @@ Skills, SOPs, and MCPs are a live graph: you edit the files, `wk ontology check`
 - [Jobs for today](./jobs.md)
 - [Getting started](./start.md)
 - [What Waykit gives you](./kit.md) (`wk` commands)
+- [Used on our own product repos](./used-in.md)
 - [Feature lifecycle](./lifecycle.md)
 - [EDD guide (alpha)](./edd.md)
 - [Hosts](./hosts.md)

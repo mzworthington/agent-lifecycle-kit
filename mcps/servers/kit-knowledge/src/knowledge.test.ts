@@ -85,17 +85,19 @@ describe("kit-knowledge", () => {
   });
 
   it("stdio launch from a cwd without tsx still initializes (Cursor consumer workspace)", async () => {
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), "kit-knowledge-home-"));
+    fs.symlinkSync(kitRoot, path.join(home, ".agents"));
     const serverFile = path.join(kitRoot, "mcps", "servers", "kit-knowledge", "server.json");
     const spec = JSON.parse(fs.readFileSync(serverFile, "utf8")) as {
       mcp: { "kit-knowledge": { command: string; args: string[] } };
     };
     const args = spec.mcp["kit-knowledge"].args.map((a) =>
-      a.replaceAll("${userHome}", os.homedir())
+      a.replaceAll("${userHome}", home)
     );
     const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "kit-knowledge-cwd-"));
     const child = spawn("node", args, {
       cwd,
-      env: { ...process.env, KIT_ROOT: kitRoot },
+      env: { ...process.env, HOME: home, KIT_ROOT: kitRoot },
       stdio: ["pipe", "pipe", "pipe"],
     });
     const stderr: Buffer[] = [];

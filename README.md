@@ -141,7 +141,7 @@ Start with the path that matches what you’re trying to do:
 3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md) → [hosts](./docs/hosts.md)
 4. **Prove tool calls (EDD, alpha):** [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`wk eval shadow` + `from-trace`)
-6. **Operators:** [What Waykit gives you](./docs/kit.md) → [Repo doctor](./docs/doctor.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
+6. **Operators:** [What Waykit gives you](./docs/kit.md) → [Repo doctor](./docs/doctor.md) → [Consumer align](./docs/align.md) → [Used on our own product repos](./docs/used-in.md) → [Context budget](./SOPs/context-budget.md)
 7. **Live kit graph:** [Waykit map](./docs/map.md) → [author the map](./ontology/README.md) (`wk ontology check`)
 
 Site: [waykit.dev](https://waykit.dev/) — Markdown in `docs/`, Astro app in `web/` (`pnpm site:dev`). HTML routes like [/docs/kit](https://waykit.dev/docs/kit) sit next to the raw [`.md` URLs](https://waykit.dev/docs/kit.md).

@@ -75,15 +75,17 @@ describe('typed memory create_entities', () => {
   });
 
   it('stdio launch via ~/.agents symlink still initializes', async () => {
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-memory-home-'));
+    fs.symlinkSync(kitRoot, path.join(home, '.agents'));
     const serverFile = path.join(kitRoot, 'mcps', 'servers', 'memory', 'server.json');
     const spec = JSON.parse(fs.readFileSync(serverFile, 'utf8')) as {
       mcp: { memory: { args: string[] } };
     };
-    const args = spec.mcp.memory.args.map((a) => a.replaceAll('${userHome}', os.homedir()));
+    const args = spec.mcp.memory.args.map((a) => a.replaceAll('${userHome}', home));
     const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-memory-cwd-'));
     const child = spawn('node', args, {
       cwd,
-      env: { ...process.env, KIT_ROOT: kitRoot },
+      env: { ...process.env, HOME: home, KIT_ROOT: kitRoot },
       stdio: ['pipe', 'pipe', 'pipe']
     });
     const stderr: Buffer[] = [];
