@@ -54,6 +54,9 @@ jobs:
         run: pnpm typecheck && pnpm --dir web typecheck
 
       - name: Build static site
+        env:
+          POSTHOG_TOKEN: ${{ github.ref == 'refs/heads/main' && secrets.POSTHOG_TOKEN || '' }}
+          POSTHOG_HOST: ${{ github.ref == 'refs/heads/main' && 'https://a.mzworthington.co.uk' || '' }}
         run: pnpm --dir web build
 
       - name: Unit tests

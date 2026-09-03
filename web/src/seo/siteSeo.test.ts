@@ -83,6 +83,14 @@ describe('siteSeo catalog', () => {
     expect(seo.softwareName).toBeUndefined();
   });
 
+  it('indexes the privacy notice', () => {
+    const seo = resolvePageSeo('/privacy');
+    expect(seo.indexable).toBe(true);
+    expect(seo.headline).toBe('Privacy policy');
+    expect(seo.canonicalUrl).toBe(`${SITE_ORIGIN}/privacy/`);
+    expect(seo.description.toLowerCase()).toMatch(/posthog|cookieless/);
+  });
+
   it('marks the review backlog and unknown routes as non-indexable', () => {
     const backlog = resolvePageSeo('/docs/kit-review-backlog', {
       headline: 'Backlog',

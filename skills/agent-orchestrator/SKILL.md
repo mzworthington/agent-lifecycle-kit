@@ -34,6 +34,7 @@ depends-on:
   - agent-ui
   - agent-incident
   - agent-cloudflare-ops
+  - agent-posthog
   - agent-security
   - agent-arch-drift
   - agent-adr
@@ -87,6 +88,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 | Release | [agent-release](../agent-release/SKILL.md) |
 | Incident | [agent-incident](../agent-incident/SKILL.md) |
 | Cloudflare analytics / RUM | [agent-cloudflare-ops](../agent-cloudflare-ops/SKILL.md) |
+| PostHog product analytics | [agent-posthog](../agent-posthog/SKILL.md) |
 | Security audit | [agent-security](../agent-security/SKILL.md) |
 | Architecture audit | [agent-arch-drift](../agent-arch-drift/SKILL.md) |
 | Architecture decisions | [agent-adr](../agent-adr/SKILL.md) - sparse MADR in `docs/ADRs/` |
@@ -118,6 +120,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Bug, failed job, live-site / fetch symptom, flake | **`agent-debug`** → `agent-pre-commit` (hypothesis board + repro + proof). Light XFN when UI/auth/SLO touched. |
 | Production incident / page | **`agent-incident`** → `agent-debug` (+ Slack/Notion when configured) |
 | Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`kit mcp cloudflare-ops --install`) → IaC fix in owner repo |
+| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --install`) → adapter + privacy; not the Cursor wizard |
 | Tiny typo / obvious one-liner with clear repro | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
 | Extends existing behavior in one module | Design light: functional impact align → light or full XFN matrix → **`agent-tdd` short loop** (gear 1+2) |
 | Schema migration | `agent-migration` → `agent-pre-commit` (with light XFN / security as needed) |
@@ -165,7 +168,7 @@ sequenceDiagram
   participant X as agent-xfn
   participant A as agent-adapter
   participant R as agent-release
-  O->>G: Stress-test idea; contract vs bet
+  O->>G: Stress-test idea, contract vs bet
   opt Bet
     O->>P: PRD / bet card
   end

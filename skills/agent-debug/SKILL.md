@@ -65,6 +65,7 @@ Tooling: `kit debug-board`, `kit debug-ci`.
 |---------|-------|
 | Bug / failed job / live-site symptom | **`agent-debug`** (this skill) |
 | Live Cloudflare Web Analytics / RUM / beacon | **`agent-cloudflare-ops`** (MCP inventory; this skill only if RCA is app code) |
+| PostHog empty events / cookieless / wizard | **`agent-posthog`** (official MCP; this skill only if RCA is app code) |
 | Bug that needs a new product capability after RCA | Debug → then `agent-orchestrator` / light feature path |
 | “Is this already shipped?” / how-does-X-work | Triage only (§1); no impl |
 | New feature / new bounded context | `agent-orchestrator` |

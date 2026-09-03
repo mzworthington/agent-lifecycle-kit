@@ -9,8 +9,10 @@ const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../.
 
 function publishedMarkdownFiles(): string[] {
   const roots = [
+    path.join(kitRoot, 'README.md'),
     path.join(kitRoot, 'docs'),
     path.join(kitRoot, 'SOPs'),
+    path.join(kitRoot, 'skills'),
     path.join(kitRoot, 'evals', 'edd'),
     path.join(kitRoot, 'mcps', 'README.md'),
     path.join(kitRoot, 'ontology', 'README.md')
@@ -39,6 +41,16 @@ describe('docs mermaid fences', () => {
     mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
     const parsed = await mermaid.parse(code);
     expect(parsed).toMatchObject({ diagramType: 'sequence' });
+    expect(code).toMatch(/O->>G: Stress-test idea, contract vs bet/);
+    expect(code).not.toMatch(/O->>G:.*?;/);
+  });
+
+  it('rejects sequence messages that contain a semicolon, even when quoted', async () => {
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+    await expect(mermaid.parse('sequenceDiagram\n  A->>B: foo; bar\n')).rejects.toThrow(/Parse error/);
+    await expect(mermaid.parse('sequenceDiagram\n  A->>B: "foo; bar"\n')).rejects.toThrow(/Parse error/);
+    const parsed = await mermaid.parse('sequenceDiagram\n  A->>B: foo, bar\n');
+    expect(parsed).toMatchObject({ diagramType: 'sequence' });
   });
 
   it('parses the ADR 0003 sequence with a quoted actor alias', async () => {
@@ -53,7 +65,7 @@ describe('docs mermaid fences', () => {
     expect(parsed).toMatchObject({ diagramType: 'sequence' });
   });
 
-  it('parses every mermaid fence on published docs pages', async () => {
+  it('parses every mermaid fence in published docs, skills, and README', async () => {
     mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
     const failures: string[] = [];
     for (const file of publishedMarkdownFiles()) {

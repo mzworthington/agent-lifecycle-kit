@@ -12,6 +12,11 @@ describe('husky pre-commit', () => {
     assert.match(hook, /pnpm typecheck/);
     assert.match(hook, /web" && pnpm typecheck/);
   });
+
+  it('parses published mermaid fences so invalid sequence diagrams fail before CI', () => {
+    const hook = fs.readFileSync(path.join(repoDir, '.husky/pre-commit'), 'utf8');
+    assert.match(hook, /web" && pnpm test:mermaid/);
+  });
 });
 
 describe('husky commit-msg', () => {

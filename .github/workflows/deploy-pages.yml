@@ -45,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
+      POSTHOG_TOKEN: ${{ secrets.POSTHOG_TOKEN }}
+      POSTHOG_HOST: https://a.mzworthington.co.uk
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7

@@ -70,7 +70,7 @@ sequenceDiagram
   participant Tel as agent-telemetry
   participant R as agent-release
 
-  O->>G: Stress-test idea; contract vs bet
+  O->>G: Stress-test idea, contract vs bet
   O->>P: PRD / bet card when value is unproven
   O->>S: BDD spec (flag off / on / kill when flagged)
   O->>T: Inventory catalog and plan test impact

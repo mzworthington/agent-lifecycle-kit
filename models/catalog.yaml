@@ -71,6 +71,8 @@ skills:
     class: implement
   agent-cloudflare-ops:
     class: implement
+  agent-posthog:
+    class: implement
   agent-perf-opt:
     class: implement
   agent-review:

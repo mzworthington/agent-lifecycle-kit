@@ -1,0 +1,23 @@
+{
+  "suite": "agent-posthog-co-located",
+  "description": "Co-located evaluation benchmark for agent-posthog MCP and cookieless SDK skill",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-POSTHOG-COLOCATED-001",
+      "name": "Official MCP and cookieless wiring",
+      "description": "Ensures PostHog install uses the official MCP, cookieless defaults, a privacy notice, and never the Cursor wizard.",
+      "target_skill": "agent-posthog",
+      "prompt": "Add PostHog to this site with cookieless tracking and check why events are empty. Use the official MCP. Do not run the wizard.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["posthog", "cookieless", "phc_", "posthog wizard"],
+        "required_patterns": ["cookieless", "POSTHOG_TOKEN", "privacy", "mcp.posthog.com"],
+        "forbidden_patterns": ["self-driving", "siteToken in memory", "yarn add"],
+        "required_output_sections": ["Stack", "SDK options", "Privacy", "CI", "MCP proof"]
+      }
+    }
+  ]
+}

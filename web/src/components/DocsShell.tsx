@@ -6,8 +6,7 @@ import {
   type DocsNavPage
 } from '../docs/nav.ts';
 import { SITE_MARK_SRC, SITE_NAME, SITE_SHORT_NAME } from '../seo/siteSeo.ts';
-
-const GITHUB = 'https://github.com/mzworthington/waykit';
+import { SITE_FOOTER_NAV, SITE_GITHUB } from '../site/footerNav.ts';
 
 type Props = {
   children: ReactNode;
@@ -59,7 +58,7 @@ export function DocsShell({
               })}
             </ul>
           </nav>
-          <a href={GITHUB} className="btn-github" rel="noopener noreferrer">
+          <a href={SITE_GITHUB} className="btn-github" rel="noopener noreferrer">
             GitHub
           </a>
           <button
@@ -134,20 +133,13 @@ export function DocsShell({
       <footer className="site-footer">
         <nav aria-label="Footer">
           <ul>
+            {SITE_FOOTER_NAV.map((item) => (
+              <li key={item.href}>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))}
             <li>
-              <a href="/docs/start">Start</a>
-            </li>
-            <li>
-              <a href="/docs">Guide</a>
-            </li>
-            <li>
-              <a href="/evals/edd">Evals</a>
-            </li>
-            <li>
-              <a href="/docs/map">Map</a>
-            </li>
-            <li>
-              <a href={GITHUB} rel="noopener noreferrer">
+              <a href={SITE_GITHUB} rel="noopener noreferrer">
                 GitHub
               </a>
             </li>

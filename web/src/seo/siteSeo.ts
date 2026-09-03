@@ -112,7 +112,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/sops': {
     headline: 'SOPs',
     description:
-      'Operator procedures for Waykit: behavior catalog, context budget, conventional commits, evals, and Cloudflare analytics ops.'
+      'Operator procedures for Waykit: behavior catalog, context budget, conventional commits, evals, Cloudflare analytics ops, and PostHog product analytics.'
   },
   '/docs/ADRs': {
     headline: 'Architecture Decision Records',
@@ -133,6 +133,11 @@ const PAGE_SEO: Record<string, SeoOverride> = {
     headline: 'Author the Waykit map',
     description:
       'How to add skills, SOPs, and evals to the Waykit map: which files become nodes, how to regenerate the index, and why this is not a product architecture diagram.'
+  },
+  '/privacy': {
+    headline: 'Privacy policy',
+    description:
+      'What waykit.dev does with information: cookieless PostHog on Cloud EU, Cloudflare hosting, no PostHog cookie banner, and how to ask for deletion.'
   }
 };
 

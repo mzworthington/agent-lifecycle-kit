@@ -35,5 +35,5 @@ export function listPublishedMarkdownFiles(kitRoot: string): Array<{ file: strin
 }
 
 export function publishedSeoRoutes(kitRoot: string): string[] {
-  return ['/', ...listPublishedMarkdownFiles(kitRoot).map((entry) => fileToRoute(entry.file))];
+  return ['/', '/privacy', ...listPublishedMarkdownFiles(kitRoot).map((entry) => fileToRoute(entry.file))];
 }

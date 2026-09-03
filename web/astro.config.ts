@@ -14,6 +14,7 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [react(), kitPages(kitRoot)],
   vite: {
+    envPrefix: ['VITE_', 'POSTHOG_TOKEN', 'POSTHOG_HOST'],
     resolve: {
       alias: {
         '@kit': kitRoot,

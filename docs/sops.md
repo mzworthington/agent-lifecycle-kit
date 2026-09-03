@@ -18,5 +18,6 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [External skills](/SOPs/external-skills) | Pinning upstream skills |
 | [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning or splitting a hot path |
 | [Cloudflare analytics ops](/SOPs/cloudflare-analytics-ops) | RUM / beacon diagnosis |
+| [PostHog product analytics](/SOPs/posthog-product-analytics) | Cookieless SDK, privacy notice, official MCP |
 
 Operator narrative: [What Waykit gives you](/docs/kit).

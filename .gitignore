@@ -35,6 +35,7 @@ skills/*
 .env
 .env.*
 !.env.example
+!web/.env.example
 *.pem
 *.key
 secrets.json

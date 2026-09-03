@@ -388,6 +388,22 @@
       }
     },
     {
+      "id": "EVAL-POSTHOG-001",
+      "name": "PostHog cookieless MCP wiring",
+      "description": "Verifies PostHog install uses cookieless SDK defaults, a privacy notice, and official MCP diagnosis rather than the Cursor wizard.",
+      "target_skill": "agent-posthog",
+      "prompt": "Add PostHog to this site with cookieless tracking and check why events are empty. Use the official MCP. Do not run the wizard.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["posthog", "cookieless", "phc_", "posthog wizard"],
+        "required_patterns": ["cookieless", "POSTHOG_TOKEN", "privacy", "MCP"],
+        "forbidden_patterns": ["ASCII art", "self-driving", "yarn add"],
+        "required_output_sections": ["Stack", "SDK options", "Privacy", "CI", "MCP proof"]
+      }
+    },
+    {
       "id": "EVAL-USERSTORIES-001",
       "name": "Linear INVEST User Stories",
       "description": "Verifies Linear tickets use persona/want/outcome, Given/When/Then criteria, and Mermaid wireframes without implementation code.",

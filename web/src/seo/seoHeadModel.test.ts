@@ -49,6 +49,7 @@ describe('seoHeadModel', () => {
       expect(source).toContain('aria-label={SITE_NAME}');
       expect(source).toContain('{SITE_SHORT_NAME}');
       expect(source).toContain('SITE_MARK_SRC');
+      expect(source).toContain('SITE_FOOTER_NAV');
     }
   });
 

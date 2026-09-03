@@ -34,7 +34,7 @@ Do not commit or push unless the user explicitly asks.
 | Vendor/framework API docs | **context7** MCP |
 | Linear issues / projects | **linear** MCP (OAuth; on the `default` profile) |
 | Warp Factory tasks | **warp-factory** MCP (`wk mcp warp --install`; OAuth on first use) |
-| PostHog analytics / flags | **posthog** MCP (`wk mcp posthog --install`; OAuth on first use) |
+| PostHog product analytics / flags / empty events | [agent-posthog](./skills/agent-posthog/SKILL.md) (`wk mcp posthog --install`; official MCP) |
 
 ## Phase → skill
 
@@ -51,7 +51,7 @@ Do not commit or push unless the user explicitly asks.
 | Migration / API contract | [agent-migration](./skills/agent-migration/SKILL.md), [agent-api-contract](./skills/agent-api-contract/SKILL.md) |
 | Review / docs / release | [agent-review](./skills/agent-review/SKILL.md), [agent-docs](./skills/agent-docs/SKILL.md) (+ [agent-copy](./skills/agent-copy/SKILL.md) for narrative voice), [agent-release](./skills/agent-release/SKILL.md) |
 | Incident / security / arch | [agent-incident](./skills/agent-incident/SKILL.md), [agent-security](./skills/agent-security/SKILL.md), [agent-arch-drift](./skills/agent-arch-drift/SKILL.md), [agent-adr](./skills/agent-adr/SKILL.md) |
-| Prune / perf / debug / telemetry | [agent-prune](./skills/agent-prune/SKILL.md), [agent-perf-opt](./skills/agent-perf-opt/SKILL.md), [agent-debug](./skills/agent-debug/SKILL.md), [agent-telemetry](./skills/agent-telemetry/SKILL.md), [agent-cloudflare-ops](./skills/agent-cloudflare-ops/SKILL.md) |
+| Prune / perf / debug / telemetry | [agent-prune](./skills/agent-prune/SKILL.md), [agent-perf-opt](./skills/agent-perf-opt/SKILL.md), [agent-debug](./skills/agent-debug/SKILL.md), [agent-telemetry](./skills/agent-telemetry/SKILL.md), [agent-cloudflare-ops](./skills/agent-cloudflare-ops/SKILL.md), [agent-posthog](./skills/agent-posthog/SKILL.md) |
 | Pre-commit | [agent-pre-commit](./skills/agent-pre-commit/SKILL.md) |
 
 Handovers: `~/.agents/handover/<project>/` ([templates/handover.md](./templates/handover.md)). Run pre-commit before marking a phase **COMPLETE** when hooks exist.

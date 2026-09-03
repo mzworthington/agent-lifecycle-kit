@@ -17,7 +17,7 @@ sequenceDiagram
   participant Tel as telemetry
   participant R as release
 
-  O->>G: Stress-test idea; contract vs bet
+  O->>G: Stress-test idea, contract vs bet
   opt Bet
     O->>P: Belief, indicator, kill criteria, flag plan
   end

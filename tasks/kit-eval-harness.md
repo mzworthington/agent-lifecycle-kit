@@ -32,7 +32,8 @@ For each golden prompt: note expected route, actual route an agent took (or woul
 | 6 | “Wire Stripe for a port we just greened” | Prefer **tdd gear 2** same session; `agent-adapter` only if deep-dive | EVAL-ROUTE-024 / EVAL-ROUTE-015 |
 | 7 | “Production 500s spiking” | `agent-incident` → `agent-debug` (+ Sentry/Slack when configured) | EVAL-ROUTE-011 |
 | 8 | “Web Analytics isn’t recording / RUM beacon 404” | `agent-cloudflare-ops` (`kit mcp cloudflare-ops --install`) | EVAL-ROUTE-025 |
-| 9 | “Change MCP tool schema / system prompt for routing” | **EDD:** `kit eval run|ci` ([docs/edd.md](../docs/edd.md)); not vibes-only | `evals/edd/` |
+| 9 | “Add PostHog / cookieless events empty / do not run the wizard” | `agent-posthog` (`wk mcp posthog --install`) | EVAL-ROUTE-028 |
+| 10 | “Change MCP tool schema / system prompt for routing” | **EDD:** `kit eval run|ci` ([docs/edd.md](../docs/edd.md)); not vibes-only | `evals/edd/` |
 
 ### Pass criteria
 

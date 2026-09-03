@@ -2,8 +2,7 @@
 import { SiteNav } from './SiteNav.tsx';
 import { docsSidebar, type DocsNavPage } from '../docs/nav.ts';
 import { SITE_MARK_SRC, SITE_NAME, SITE_SHORT_NAME } from '../seo/siteSeo.ts';
-
-const GITHUB = 'https://github.com/mzworthington/waykit';
+import { SITE_FOOTER_NAV, SITE_GITHUB } from '../site/footerNav.ts';
 
 type Props = {
   pathname: string;
@@ -89,20 +88,15 @@ const isLanding = layout === 'landing';
   <footer class="site-footer">
     <nav aria-label="Footer">
       <ul>
+        {
+          SITE_FOOTER_NAV.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
         <li>
-          <a href="/docs/start">Start</a>
-        </li>
-        <li>
-          <a href="/docs">Guide</a>
-        </li>
-        <li>
-          <a href="/evals/edd">Evals</a>
-        </li>
-        <li>
-          <a href="/docs/map">Map</a>
-        </li>
-        <li>
-          <a href={GITHUB} rel="noopener noreferrer">
+          <a href={SITE_GITHUB} rel="noopener noreferrer">
             GitHub
           </a>
         </li>

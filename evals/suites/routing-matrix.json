@@ -329,6 +329,19 @@
       }
     },
     {
+      "id": "EVAL-ROUTE-028",
+      "name": "Route to Agent PostHog",
+      "description": "Verifies PostHog SDK / cookieless / wizard prompts route to agent-posthog rather than generic telemetry or Cloudflare RUM.",
+      "target_skill": "agent-posthog",
+      "prompt": "Add PostHog cookieless tracking to this site and check why events are empty. Do not run the wizard.",
+      "assertions": {
+        "required_triggers": ["posthog", "cookieless", "posthog wizard"],
+        "required_patterns": ["agent-posthog"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["Target Role: agent-posthog"]
+      }
+    },
+    {
       "id": "EVAL-ROUTE-026",
       "name": "Route to Agent User Stories",
       "description": "Verifies Linear backlog tickets with INVEST stories, acceptance criteria, and wireframes route to agent-user-stories, not Gherkin spec.",
