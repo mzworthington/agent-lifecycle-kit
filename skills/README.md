@@ -25,6 +25,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-grilling](./agent-grilling/SKILL.md) | spec | Design-tree interview primitive, decision frontier, fact/decision separation |
 | [agent-grill-me](./agent-grill-me/SKILL.md) | spec | Stateless user-invoked idea stress-testing, active dialogue, ungrillable boundary check |
 | [agent-spec](./agent-spec/SKILL.md) | spec | Requirements, Gherkin, XFN criteria, ambiguity removal |
+| [agent-user-stories](./agent-user-stories/SKILL.md) | spec | Linear INVEST tickets, AC, Mermaid wireframes |
 | [agent-tdd](./agent-tdd/SKILL.md) | tdd | Short loop: catalog impact, gear-1 domain/handlers, gear-2 thin adapters → hands XFN to `agent-xfn` |
 | [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
 | [agent-adapter](./agent-adapter/SKILL.md) | impl | **Optional deep-dive** when gear 2 is too large; else prefer `agent-tdd` |

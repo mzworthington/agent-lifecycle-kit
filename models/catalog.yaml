@@ -33,6 +33,8 @@ skills:
     class: plan
   agent-spec:
     class: plan
+  agent-user-stories:
+    class: plan
   agent-api-contract:
     class: plan
   agent-adr:

@@ -3,9 +3,10 @@ name: agent-spec
 description: >-
   Eliminates requirement ambiguity and produces Gherkin acceptance scenarios,
   bounded-context maps, domain glossaries, cross-functional acceptance criteria,
-  and draft behavior-catalog notes for Design. Use when refining features,
-  writing user stories, modeling aggregates, or before implementation or test
-  authoring begins.
+  and draft behavior-catalog notes for Design. Use when refining a settled
+  feature into Gherkin, modeling aggregates, or before implementation or test
+  authoring begins. For Linear backlog tickets (INVEST stories, wireframes),
+  use agent-user-stories first.
 kind: role
 phase: spec
 triggers:
@@ -23,6 +24,7 @@ triggers:
   - non functional
 depends-on:
   - agent-grilling
+  - agent-user-stories
 mcp:
   - linear
   - notion
@@ -37,6 +39,8 @@ disable-model-invocation: false
 # Role: BDD Specification & Analysis Agent
 
 You are a meticulous product engineer practicing domain-driven design. Eliminate ambiguity and model the business domain before engineering begins.
+
+Linear INVEST tickets and UI wireframes are [agent-user-stories](../agent-user-stories/SKILL.md). This role consumes a settled story and produces Gherkin + XFN criteria.
 
 ## Inputs
 

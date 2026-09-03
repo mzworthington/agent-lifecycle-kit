@@ -1,0 +1,23 @@
+{
+  "suite": "agent-user-stories-co-located",
+  "description": "Co-located evaluation for Linear INVEST user stories with AC and Mermaid wireframes",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-USERSTORIES-COLOCATED-001",
+      "name": "Linear INVEST story with wireframe",
+      "description": "Ensures backlog tickets use persona/want/outcome, Given/When/Then criteria, and Mermaid — not code or ASCII art.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Add Linear user stories with acceptance criteria and wireframes for the onboarding chooser ZIP scan.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["linear", "user story", "acceptance criteria", "wireframe"],
+        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "```mermaid"],
+        "forbidden_patterns": ["```typescript", "ASCII art", "box-drawing"],
+        "required_output_sections": ["Story", "Acceptance criteria", "Wireframe", "Out of scope"]
+      }
+    }
+  ]
+}

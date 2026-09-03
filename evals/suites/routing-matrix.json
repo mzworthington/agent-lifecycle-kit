@@ -6,9 +6,9 @@
     {
       "id": "EVAL-ROUTE-001",
       "name": "Route to Agent Spec",
-      "description": "Verifies that prompts asking for user stories, Gherkin scenarios, or requirement ambiguity resolution route to agent-spec.",
+      "description": "Verifies that prompts asking for Gherkin scenarios or requirement ambiguity resolution route to agent-spec.",
       "target_skill": "agent-spec",
-      "prompt": "I need to outline the requirements and write acceptance criteria for our export feature before writing tests.",
+      "prompt": "I need to outline the requirements and write Gherkin acceptance scenarios for our export feature before writing tests.",
       "assertions": {
         "required_triggers": ["acceptance criteria", "requirements"],
         "required_patterns": ["agent-spec"],
@@ -326,6 +326,19 @@
         "required_patterns": ["agent-cloudflare-ops"],
         "forbidden_patterns": ["agent-tdd"],
         "required_output_sections": ["Target Role: agent-cloudflare-ops"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-026",
+      "name": "Route to Agent User Stories",
+      "description": "Verifies Linear backlog tickets with INVEST stories, acceptance criteria, and wireframes route to agent-user-stories, not Gherkin spec.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Review this product and add improvement user stories to Linear with acceptance criteria and wireframes.",
+      "assertions": {
+        "required_triggers": ["linear", "user stories", "acceptance criteria", "wireframe"],
+        "required_patterns": ["agent-user-stories"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["Target Role: agent-user-stories"]
       }
     }
   ]

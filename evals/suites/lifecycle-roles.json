@@ -386,6 +386,22 @@
         "forbidden_patterns": ["ASCII art", "siteToken in memory"],
         "required_output_sections": ["Fleet inventory", "Root Cause", "Remediations"]
       }
+    },
+    {
+      "id": "EVAL-USERSTORIES-001",
+      "name": "Linear INVEST User Stories",
+      "description": "Verifies Linear tickets use persona/want/outcome, Given/When/Then criteria, and Mermaid wireframes without implementation code.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Create Linear user stories with acceptance criteria and wireframes for saving a scanned architecture map to a folder.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["linear", "user story", "acceptance criteria", "wireframe", "INVEST"],
+        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "```mermaid"],
+        "forbidden_patterns": ["```typescript", "ASCII art"],
+        "required_output_sections": ["Story", "Acceptance criteria", "Wireframe", "Out of scope"]
+      }
     }
   ]
 }

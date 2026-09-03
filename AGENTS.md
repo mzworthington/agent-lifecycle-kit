@@ -39,6 +39,7 @@ Do not commit or push unless the user explicitly asks.
 |-------|-------|
 | Idea stress-test | [agent-grilling](./skills/agent-grilling/SKILL.md) / [agent-grill-me](./skills/agent-grill-me/SKILL.md) |
 | Spec | [agent-spec](./skills/agent-spec/SKILL.md) |
+| Linear backlog / user stories | [agent-user-stories](./skills/agent-user-stories/SKILL.md) |
 | TDD short loop | [agent-tdd](./skills/agent-tdd/SKILL.md) |
 | XFN | [agent-xfn](./skills/agent-xfn/SKILL.md) |
 | Adapter deep-dive | [agent-adapter](./skills/agent-adapter/SKILL.md) (only if gear 2 is too large) |
