@@ -27,6 +27,7 @@ export const SITE_NAV: DocsNavItem[] = [
     path: '/docs',
     matchPrefixes: [
       '/docs/edd',
+      '/docs/hosts',
       '/docs/kit',
       '/docs/doctor',
       '/docs/lifecycle',
@@ -52,7 +53,8 @@ export const PRACTICE_ITEMS: DocsNavItem[] = [
   { label: 'Repo doctor', path: '/docs/doctor' },
   { label: 'Waykit map', path: '/docs/map' },
   { label: 'Author the Waykit map', path: '/ontology' },
-  { label: 'EDD guide', path: '/docs/edd' }
+  { label: 'EDD guide (alpha)', path: '/docs/edd' },
+  { label: 'Hosts', path: '/docs/hosts' }
 ];
 
 export const REFERENCE_CORE: DocsNavItem[] = [

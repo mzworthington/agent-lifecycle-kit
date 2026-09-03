@@ -20,7 +20,9 @@ describe('measureContextBudget', () => {
     write(root, 'CLAUDE.md', 'pointer\n');
     const result = measureContextBudget(root, 8000);
     assert.equal(result.ok, true);
-    assert.equal(result.alwaysOnChars, 'thin\n'.length + 'handshake\n'.length + 'rules\n'.length + 'pointer\n'.length);
+    assert.equal(result.alwaysOnChars, 'thin\n'.length + 'handshake\n'.length);
+    assert.equal(result.breakdown.cursorRules, 'rules\n'.length);
+    assert.equal(result.breakdown.claude, 'pointer\n'.length);
   });
 
   it('fails when always-on surface exceeds the target', () => {

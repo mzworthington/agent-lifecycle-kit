@@ -21,7 +21,7 @@ If this branch has lint wired: `pnpm lint`.
 
 1. Branch from `main`.
 2. Prefer the smallest change that matches [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) (and its **Applicability & opt-out** section).
-3. For prompt / MCP schema / agent-routing changes, follow **EDD**: add or extend evals first, then implement ([docs/edd.md](./docs/edd.md)).
+3. For prompt / MCP schema / agent-routing changes, follow **EDD (alpha)**: add or extend evals first, then implement ([docs/edd.md](./docs/edd.md)).
 4. Keep PRs focused. One concern per PR when practical.
 
 ## Commit and PR titles

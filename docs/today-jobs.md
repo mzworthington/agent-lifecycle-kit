@@ -26,10 +26,10 @@ curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.s
 
 > Need the lifecycle path: grill → spec → TDD short loop → XFN → ship.
 
-Feature work routes through specialist roles so the catalog and XFN rows stay honest. EDD sits in TDD when the change is a prompt or tool schema.
+Feature work routes through specialist roles so the catalog and XFN rows stay honest. EDD (alpha) sits in TDD when the change is a prompt or tool schema.
 
 1. **Stress-test the idea** (grilling) until the decision frontier is clear.
-2. **Spec** acceptance criteria, then TDD short loop (gear 1 + gear 2). Use EDD when the change is a prompt or tool schema.
+2. **Spec** acceptance criteria, then TDD short loop (gear 1 + gear 2). Use EDD (alpha) when the change is a prompt or tool schema.
 3. **Green XFN apply rows**, audit, then release with a conventional PR title.
 
 ```

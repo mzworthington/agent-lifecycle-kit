@@ -11,7 +11,7 @@ tools:
 ---
 # Standard Operating Procedure: MCP library
 
-Use this when adding a server to the kit catalog, composing a Cursor config, or wiring MCPs into a project.
+Use this when adding a server to the kit catalog, composing a host config, or wiring MCPs into a project.
 
 ## 1. Decide scope
 
@@ -31,8 +31,8 @@ Use this when adding a server to the kit catalog, composing a Cursor config, or 
 | Stripe payments | `mcps/profiles/payments.json` |
 | Bitwarden / LinkedIn / Polyglot / Obsidian | `mcps/profiles/personal.json` (**machine-local only**) |
 | Raspberry Pi / home lab SSH | `mcps/profiles/lab.json` (**machine-local only**) |
-| App-specific DB + frontend stack | `project-example` or a custom project `.cursor/mcp.json` |
-| Personal-only experiment | Local `~/.cursor/mcp.json` override (do not commit secrets) |
+| App-specific DB + frontend stack | `project-example` or `wk mcp project-example --project` |
+| Personal-only experiment | Local user MCP (`wk mcp default --install`) (do not commit secrets) |
 
 ### Profile discipline (token / attention budget)
 
@@ -78,6 +78,7 @@ See [SOPs/context-budget.md](./context-budget.md).
 - Never commit real tokens; only `${env:NAME}` / OAuth placeholders.
 - `mcp` object keys become Cursor `mcpServers` keys - keep them stable and unique.
 - Prefer official or well-known packages; note the homepage for audit.
+- First-party TypeScript stdio servers must `--import` the kit’s `node_modules/tsx/dist/esm/index.mjs`. Bare `tsx/esm` resolves from Cursor’s workspace cwd (the consumer app), not `~/.agents`, so tool discovery fails.
 
 ## 3. Compose and install
 
@@ -107,22 +108,23 @@ kit mcp personal --install
 # Home lab (Raspberry Pi over SSH) - machine only
 kit mcp lab --install
 
-# Project config (Next + Chrome DevTools + Playwright + read-only Postgres)
-mkdir -p .cursor
-kit mcp project-example -o .cursor/mcp.json
-kit mcp cloud -o .cursor/mcp.cloud.json   # optional merge by hand
-kit mcp cloudflare-ops --install          # RUM / Worker diagnosis
+# Project config
+wk mcp project-example --project
+wk mcp cloudflare-ops --install          # RUM / Worker diagnosis
+wk mcp default --install --host claude   # user-scope Claude Code only
 ```
 
-The installer (`curl | sh` in [Getting started](../docs/start.md), or `./install.sh` from a checkout) runs the **default** profile install only. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, and `cloudflare-ops` explicitly.
+The installer (`curl | sh` in [Getting started](../docs/start.md), or `./install.sh` from a checkout) runs the **default** profile install for every supported host. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, and `cloudflare-ops` explicitly.
 
-## 4. Verify in Cursor
+## 4. Verify in the host
 
-1. Fully restart Cursor (or reload MCP from **Customize → MCP**).
-2. Confirm the server shows a healthy/green status.
+1. Restart Cursor, Claude Code, VS Code / Copilot, or Antigravity so MCP reloads.
+2. Confirm the server shows a healthy status in that host’s MCP UI.
 3. Ask the agent to use a tool from that server on a real task.
-4. If auth fails, confirm the env var is set in the environment that launches Cursor (not only an unrelated shell).
+4. If auth fails, confirm the env var is set in the environment that launches **that** host.
+
+Host paths: [docs/hosts.md](../docs/hosts.md).
 
 ## 5. Project handshake
 
-For app repos, keep kit standards via `AGENTS.md` and optionally commit a composed `.cursor/mcp.json` (no secrets) using [templates/project-mcp.json](../templates/project-mcp.json) as a starting point.
+For app repos, keep kit standards via `AGENTS.md` and optionally commit composed project MCP files (no secrets) using `wk mcp <profile> --project`. Starting fragment: [templates/project-mcp.json](../templates/project-mcp.json).

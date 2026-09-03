@@ -6,7 +6,7 @@ Local stdio server that returns **chunks** from the agent lifecycle kit so agent
 
 No secrets. Reads from `KIT_ROOT` (default `${userHome}/.agents`). Handovers come from `~/.agents/handover/<project>/`.
 
-Requires Node 22+ and the kit checkout (with `tsx` available via the kit `node_modules`, or a global `tsx`). Compose from the kit symlink so `${userHome}/.agents` resolves.
+Requires Node 22+ and `pnpm install` in the kit so `node_modules/tsx` exists. Cursor starts stdio servers with the **consumer repo cwd**, which does not have `tsx`. Launch with `--import` of the kit’s `tsx/dist/esm/index.mjs`, not the bare `tsx/esm` specifier. Compose from the kit symlink so `${userHome}/.agents` resolves.
 
 ## Tools
 

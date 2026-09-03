@@ -1,4 +1,5 @@
 import { spawnSync } from 'child_process';
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { parseExternalLockFile } from './parse_external_lock.js';
@@ -13,6 +14,29 @@ export interface CommandRunner {
   skillAvailable(): boolean;
   run(bin: string, args: string[]): { status: number };
   userSkillsDir?: () => string;
+  /** Extra Agent Skills dirs (Claude, Antigravity). Tests omit this so we never write the real home. */
+  mirrorSkillDirs?: () => string[];
+}
+
+export function defaultMirrorSkillDirs(homedir: string = os.homedir()): string[] {
+  return [path.join(homedir, '.claude', 'skills'), path.join(homedir, '.gemini', 'skills')];
+}
+
+export function mirrorUserSkills(sourceDir: string, destDirs: string[]): string[] {
+  if (!fs.existsSync(sourceDir) || destDirs.length === 0) return [];
+  const linked: string[] = [];
+  for (const dest of destDirs) {
+    fs.mkdirSync(dest, { recursive: true });
+    for (const name of fs.readdirSync(sourceDir)) {
+      const from = path.join(sourceDir, name);
+      if (!fs.statSync(from).isDirectory()) continue;
+      const to = path.join(dest, name);
+      if (fs.existsSync(to)) continue;
+      fs.symlinkSync(from, to);
+      linked.push(to);
+    }
+  }
+  return linked;
 }
 
 export const defaultCommandRunner: CommandRunner = {
@@ -28,7 +52,8 @@ export const defaultCommandRunner: CommandRunner = {
     const result = spawnSync(bin, args, { stdio: 'inherit' });
     return { status: result.status ?? 1 };
   },
-  userSkillsDir: cursorUserSkillsDir
+  userSkillsDir: cursorUserSkillsDir,
+  mirrorSkillDirs: () => defaultMirrorSkillDirs()
 };
 
 function resolveUserSkillsDir(runner: CommandRunner): string {
@@ -84,9 +109,10 @@ function usage(): void {
   --dry-run   Report actions without changing files
   --force     Pass --force to gh skill install (overwrite local copies)
 
-Skills install to Cursor user scope (~/.cursor/skills) so they stay outside
-this kit's git tree. \`wk sync --update\` only refreshes lockfile ids in that
-directory. It does not scan kit-authored skills or other agent hosts.
+Skills install to Cursor user scope (~/.cursor/skills), then Waykit symlinks
+each skill into ~/.claude/skills and ~/.gemini/skills so Claude Code and
+Antigravity see the same lockfile set. \`wk sync --update\` only refreshes
+lockfile ids in the Cursor dir, then re-mirrors.
 Lockfile pins are git version tags or \`latest\` (tagged release, then HEAD),
 not commit SHAs. Upgrade path: edit the lockfile, re-run --install, or
 run --update to pull upstream changes.
@@ -147,7 +173,10 @@ export function syncExternalSkills(
       return 0;
     }
     console.log(`Updating: ${names.join(' ')}`);
-    return runner.run('gh', cmd).status;
+    const status = runner.run('gh', cmd).status;
+    if (status !== 0) return status;
+    mirrorAfterSync(runner);
+    return 0;
   }
 
   for (const entry of entries) {
@@ -174,8 +203,19 @@ export function syncExternalSkills(
     if (result.status !== 0) return result.status;
   }
 
+  if (parsed.dryRun) return 0;
+
+  mirrorAfterSync(runner);
   console.log('');
   console.log(`OK: external skills synced from ${lockFile}`);
   console.log('Upgrade later with: kit sync --update');
   return 0;
+}
+
+function mirrorAfterSync(runner: CommandRunner): void {
+  const dests = runner.mirrorSkillDirs?.() ?? [];
+  const linked = mirrorUserSkills(resolveUserSkillsDir(runner), dests);
+  for (const dest of linked) {
+    console.log(`Mirrored skill -> ${dest}`);
+  }
 }

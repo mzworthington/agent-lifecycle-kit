@@ -4,7 +4,7 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 
 | SOP | Use when |
 |-----|----------|
-| [Eval-driven development](/SOPs/eval-driven-development) | Writing or gating agent evals |
+| [Eval-driven development (alpha)](/SOPs/eval-driven-development) | Writing or gating agent evals |
 | [EDD production telemetry](/SOPs/edd-production-telemetry) | Turning live misses into cases |
 | [Behavior catalog and XFN](/SOPs/behavior-catalog-and-xfn) | Inventorying tests before a change |
 | [Context budget](/SOPs/context-budget) | Always-on files are too large |

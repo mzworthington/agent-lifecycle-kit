@@ -1,5 +1,5 @@
 ---
-title: Eval-Driven Development (EDD)
+title: Eval-Driven Development (EDD) — alpha
 kind: sop
 triggers:
   - edd
@@ -16,7 +16,7 @@ tools:
 ---
 # Standard Operating Procedure: Eval-Driven Development (EDD)
 
-**Default:** When changing agent prompts, MCP tool schemas, or routing behavior, use EDD - not ad-hoc playground checks. Companion: [docs/edd.md](../docs/edd.md), [evals/edd/README.md](../evals/edd/README.md).
+**Alpha.** Companion: [docs/edd.md](../docs/edd.md), [evals/edd/README.md](../evals/edd/README.md). When changing agent prompts, MCP tool schemas, or routing behavior, use this harness instead of ad-hoc playground checks. A green scripted run is not proof the live host model is correct.
 
 ## Loop (red → green → refactor)
 
@@ -39,7 +39,7 @@ tools:
 
 ## IDEs vs live keys
 
-Cursor and GitHub Copilot already load Kit via `.cursorrules` and `.github/copilot-instructions.md`. Run evals with `--style local`; no provider key. `--style http` POSTs to an OpenAI-compatible `/chat/completions`. `--style cli` shells out to one assistant binary for agent and judge. Key order, nightly vs PR: [docs/edd.md](../docs/edd.md#cursor-copilot-and-api-keys).
+Cursor, Claude Code, Copilot, and Antigravity load Kit via host pointers and MCP files ([docs/hosts.md](../docs/hosts.md)). Run evals with `--style local`; no provider key. `--style http` POSTs to an OpenAI-compatible `/chat/completions`. `--style cli` shells out to one assistant binary for agent and judge. Key order, nightly vs PR: [docs/edd.md](../docs/edd.md#cursor-claude-copilot-antigravity-and-api-keys).
 
 ## CI
 
@@ -61,4 +61,4 @@ Live spans share eval field names (`emitAgentSpan`). Hard failures convert to JS
 
 ## IDE session → EDD (debug / lessons)
 
-When a miss appears in the **current** Cursor/Copilot thread (wrong tool, bad args, prompt/schema drift), [agent-debug](../skills/agent-debug/SKILL.md) must promote a case from context (no user paste required), then red/green with `wk eval` ([hypothesis-driven-debug.md](./hypothesis-driven-debug.md) §11). Lessons that capture the same friction set **EDD case** + optional **Promote to** `evals/edd/*.jsonl` ([templates/lesson.md](../templates/lesson.md)). Other IDE threads remain invisible until reopened or exported.
+When a miss appears in the **current** Cursor, Claude, Copilot, or Antigravity thread (wrong tool, bad args, prompt/schema drift), [agent-debug](../skills/agent-debug/SKILL.md) must promote a case from context (no user paste required), then red/green with `wk eval` ([hypothesis-driven-debug.md](./hypothesis-driven-debug.md) §11). Lessons that capture the same friction set **EDD case** + optional **Promote to** `evals/edd/*.jsonl` ([templates/lesson.md](../templates/lesson.md)). Threads you cannot see stay invisible until reopened or exported.

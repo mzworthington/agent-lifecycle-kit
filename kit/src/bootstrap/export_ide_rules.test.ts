@@ -9,7 +9,7 @@ function kitWithTemplates(): string {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-ide-'));
   const templates = path.join(root, 'templates');
   fs.mkdirSync(templates);
-  fs.writeFileSync(path.join(templates, 'GEMINI.md'), '# gemini-from-template\n', 'utf8');
+  fs.writeFileSync(path.join(templates, 'project-GEMINI.md'), '# gemini-from-template\n', 'utf8');
   fs.writeFileSync(path.join(templates, 'project-CLAUDE.md'), '# claude-from-template\n', 'utf8');
   fs.writeFileSync(path.join(templates, 'project-windsurfrules'), '# windsurf-from-template\n', 'utf8');
   fs.writeFileSync(path.join(templates, 'project-cursorrules'), '# cursor-from-template\n', 'utf8');

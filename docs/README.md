@@ -21,7 +21,8 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 | [Repo doctor](./doctor.md) | Owned-repo README, license, contributing, GitHub templates |
 | [Waykit map](./map.md) | Live graph of this kit (derived from files, not a second catalog) |
 | [Author the Waykit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
-| [EDD guide](./edd.md) | Anyone proving agent tool calls |
+| [EDD guide (alpha)](./edd.md) | Anyone proving agent tool routing in CI |
+| [Hosts](./hosts.md) | Cursor, Claude Code, Copilot, Antigravity files |
 
 ## Reference
 

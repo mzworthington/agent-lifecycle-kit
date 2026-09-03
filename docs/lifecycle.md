@@ -1,6 +1,6 @@
 # Feature lifecycle
 
-When the job is a product feature, Waykit routes work through specialist roles: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release. Language and framework profiles load on top of that once the stack is known. EDD is how you prove tool calls; it lives inside TDD when the change is a prompt or a tool schema.
+When the job is a product feature, Waykit routes work through specialist roles: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release. Language and framework profiles load on top of that once the stack is known. EDD (**alpha**) is how you prove tool routing in CI; it lives inside TDD when the change is a prompt or a tool schema.
 
 ```mermaid
 sequenceDiagram
@@ -34,4 +34,4 @@ sequenceDiagram
 5. **Audit:** Security and architecture-drift checks, then pre-commit.
 6. **Telemetry and release:** Map SLOs, update public docs if you touched them, ship with a conventional PR title.
 
-[Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md) · [Coding philosophy](https://github.com/mzworthington/waykit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide](/docs/edd)
+[Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md) · [Coding philosophy](https://github.com/mzworthington/waykit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide (alpha)](/docs/edd) · [Hosts](/docs/hosts)

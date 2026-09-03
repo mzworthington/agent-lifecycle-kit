@@ -9,13 +9,13 @@ Usage: ${CLI_BIN} <command> [options]
 ${aliasLine}
 
 Commands:
-  init [dir]           Bootstrap AGENTS.md, multi-IDE rules, .cursor/mcp.json & git hooks
+  init [dir]           Bootstrap AGENTS.md, host rules, MCP configs, and git hooks
   doctor [dir]         Check community files on repos you admin (report only; --write fills gaps)
-  mcp <profile>        Compose and install a named MCP profile from mcps/profiles/
+  mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
-  export-rules [dir]   Export and sync AGENTS.md to CLAUDE.md, .windsurfrules & Copilot rules
+  export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
   metrics              Display telemetry analytics summary for subagent phase handovers
   verify               Verify skills directory layout conventions
   sync                 Sync official external skills (Cloudflare, Vercel)
@@ -37,6 +37,8 @@ Examples:
   ${CLI_BIN} doctor --owned --scan ~/Documents/dev
   ${CLI_BIN} doctor . --write --hook
   ${CLI_BIN} mcp ops --install
+  ${CLI_BIN} mcp default --install --host claude
+  ${CLI_BIN} mcp default --project
   ${CLI_BIN} mcp astro --install
   ${CLI_BIN} mcp cloudflare-ops --install
   ${CLI_BIN} audit
@@ -48,6 +50,7 @@ Examples:
   ${CLI_BIN} ontology check
   ${CLI_BIN} memory lint
   ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host cursor
+  ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host claude
   ${CLI_BIN} site assemble
   ${CLI_BIN} export-rules
   ${CLI_BIN} metrics

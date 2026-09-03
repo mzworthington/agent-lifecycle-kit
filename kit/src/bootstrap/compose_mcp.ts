@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { backupExistingFile } from '../shared/backup_file.js';
-import { resolveRepoDir, userCursorDir } from '../shared/paths.js';
+import { resolveRepoDir } from '../shared/paths.js';
+import { installMcpOnHosts, parseMcpHosts, type McpHostId } from './mcp_hosts.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
@@ -22,6 +23,10 @@ export interface ComposeMcpOptions {
   env?: NodeJS.ProcessEnv;
   /** Override for tests; default is `~/.cursor`. */
   cursorDir?: string;
+  hosts?: readonly McpHostId[];
+  /** Write project-scoped host files under this directory (`wk init` / `wk mcp --project`). */
+  projectDir?: string;
+  installProject?: boolean;
 }
 
 export function composeMCP(
@@ -98,12 +103,13 @@ export function composeMCP(
 
   if (missingEnv.length > 0) {
     console.warn(
-      "WARN: required env vars not set in this shell (Cursor may still resolve them): " +
-      missingEnv.join(", ")
+      'WARN: required env vars not set in this shell (the host may still resolve them): ' +
+        missingEnv.join(', ')
     );
   }
 
   const resultJSON = JSON.stringify({ mcpServers }, null, 2);
+  const hosts = options.hosts ?? parseMcpHosts('all');
 
   if (outputFile) {
     const targetPath = path.resolve(process.cwd(), outputFile);
@@ -114,16 +120,35 @@ export function composeMCP(
     backupExistingFile(targetPath);
     fs.writeFileSync(targetPath, resultJSON, 'utf8');
     console.log(`Composed profile '${profileName}' saved to ${targetPath}`);
-  } else if (installGlobally) {
-    const cursorDir = options.cursorDir ?? userCursorDir(homedir);
-    if (!fs.existsSync(cursorDir)) {
-      fs.mkdirSync(cursorDir, { recursive: true });
+    return;
+  }
+
+  let wrote = false;
+  if (installGlobally) {
+    const written = installMcpOnHosts(mcpServers, hosts, {
+      scope: 'user',
+      homedir,
+      cursorDir: options.cursorDir
+    });
+    for (const targetPath of written) {
+      console.log(`Installed profile '${profileName}' to ${targetPath}`);
     }
-    const targetPath = path.join(cursorDir, 'mcp.json');
-    backupExistingFile(targetPath);
-    fs.writeFileSync(targetPath, resultJSON, 'utf8');
-    console.log(`Installed profile '${profileName}' to ${targetPath}`);
-  } else {
+    wrote = true;
+  }
+  if (options.installProject) {
+    const projectDir = options.projectDir ?? process.cwd();
+    const written = installMcpOnHosts(mcpServers, hosts, {
+      scope: 'project',
+      homedir,
+      projectDir,
+      cursorDir: options.cursorDir
+    });
+    for (const targetPath of written) {
+      console.log(`Installed profile '${profileName}' to ${targetPath}`);
+    }
+    wrote = true;
+  }
+  if (!wrote) {
     console.log(resultJSON);
   }
 }

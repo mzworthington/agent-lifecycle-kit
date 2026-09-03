@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { composeMCP } from './compose_mcp.js';
 import { exportIDERules } from './export_ide_rules.js';
-import { gitHooksDir, projectCursorDir, resolveRepoDir } from '../shared/paths.js';
+import { gitHooksDir, resolveRepoDir } from '../shared/paths.js';
+import { parseMcpHosts, type McpHostId } from './mcp_hosts.js';
 
 const defaultKitRepoDir: string = resolveRepoDir(import.meta.url);
 
@@ -17,6 +18,7 @@ export interface InitProjectOptions {
   cursorDir?: string;
   /** Override for tests; default is `<target>/.git/hooks`. */
   hooksDir?: string;
+  hosts?: readonly McpHostId[];
 }
 
 export function installGitHooks(options: {
@@ -87,16 +89,16 @@ export function initProject(options: InitProjectOptions): void {
     exportIDERules(targetDir, false, kitRepoDir);
   }
 
-  // 3. Setup .cursor/mcp.json
   if (installMCP) {
-    const cursorDir = options.cursorDir ?? projectCursorDir(targetDir);
-    const mcpPath = path.join(cursorDir, 'mcp.json');
-    if (!fs.existsSync(cursorDir)) {
-      fs.mkdirSync(cursorDir, { recursive: true });
-    }
     try {
-      composeMCP(mcpProfile, mcpPath, false, { repoDir: kitRepoDir });
-      console.log(`✅ Composed MCP profile "${mcpProfile}" to ${mcpPath}`);
+      composeMCP(mcpProfile, undefined, false, {
+        repoDir: kitRepoDir,
+        installProject: true,
+        projectDir: targetDir,
+        cursorDir: options.cursorDir,
+        hosts: options.hosts ?? parseMcpHosts('all')
+      });
+      console.log(`✅ Composed MCP profile "${mcpProfile}" for Cursor, Claude Code, Copilot, and Antigravity`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.warn(`⚠️ MCP profile composition failed: ${msg}`);

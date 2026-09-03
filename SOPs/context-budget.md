@@ -18,7 +18,7 @@ Keep always-on agent context small. Load philosophy, SOPs, and skills **on deman
 
 | Surface | Target |
 |---------|--------|
-| Always-on bootstrap (`AGENTS.md` + project handshake + thin IDE rules) | **&lt; ~2k tokens** (~8KB chars combined when possible) |
+| Always-on bootstrap (`AGENTS.md` + project handshake) | **&lt; ~2k tokens** (~8KB chars). Host pointers are listed, not summed. |
 | Skill discovery (descriptions only) | Acceptable; do not pre-load skill bodies |
 | Full SOP / philosophy read on typo or debug routes | **Zero** unless the route needs that procedure |
 | MCP servers enabled | **One profile** matching the work; match skill `mcp:` frontmatter |

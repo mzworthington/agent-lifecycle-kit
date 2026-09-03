@@ -39,6 +39,10 @@ describe('model catalog', () => {
     assert.equal(overlay.models.review, 'cursor-grok-4.6-medium');
     assert.equal(resolveHostModel(kitRoot, 'implement', 'cursor').model, 'cursor-grok-4.6-medium');
     assert.equal(resolveHostModel(kitRoot, 'cheap', 'cursor').model, 'composer-2.5-fast');
+    assert.equal(resolveHostModel(kitRoot, 'plan', 'claude').model, 'opus');
+    assert.equal(resolveHostModel(kitRoot, 'implement', 'copilot').model, 'gpt-4.1');
+    assert.equal(resolveHostModel(kitRoot, 'cheap', 'agy').model, 'gemini-2.5-flash');
+    assert.equal(resolveHostModel(kitRoot, 'plan', 'gemini').host, 'antigravity');
   });
 
   it('rejects a host overlay that omits a class', () => {

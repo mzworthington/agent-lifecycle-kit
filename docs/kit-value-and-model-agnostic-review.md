@@ -3,7 +3,7 @@
 **Status:** refreshed 2026-09-01 (supersedes the Aug 30 draft on PR #22).  
 **Open actions:** [kit-review-backlog.md](./kit-review-backlog.md)
 
-**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline and primarily run agents in Cursor (or another host that loads `AGENTS.md` + progressive skills). Still **not model-agnostic in the strong sense**: content is mostly portable markdown; discovery, MCP install, skill format, and the live EDD driver remain Cursor- and OpenAI-compatible-shaped. Public copy now names that split; skill-trigger evals still do not invoke a model.
+**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline on Cursor, Claude Code, Copilot, or Antigravity. **Not** a full EDD product: the harness is alpha (scripted merge gate, OpenAI-compatible live path). Host MCP/model/rules writers now cover those four; Windsurf is still a rules pointer. Public copy should name EDD as alpha.
 
 ---
 
@@ -40,7 +40,7 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 | Closed-loop / live EDD aspirational | **Improved:** deeper EDD suites, shadow path, nightly `edd-live.yml` (still skips without `KIT_EVAL_API_KEY`) |
 | Default CI is scripted keyword driver | **Still true:** intentional merge gate; docs now say so clearly |
 | Skill-trigger evals are theater | **Still true:** `kit/src/edd/run_evals.ts` does not invoke a model or assert `required_patterns` / `required_output_sections` |
-| Multi-IDE peer-depth oversold | **Improved:** README, FAQ, and `llms.txt` name Cursor as the reference host; stubs vs discovery is explicit |
+| Multi-IDE peer-depth oversold | **Improved:** MCP/model/rules writers for Cursor, Claude, Copilot, Antigravity; Windsurf still rules-only |
 | Skill length budget slipping | **Still true:** `agent-prune` / `agent-orchestrator` / `agent-debug` / `agent-copy` over ~150 lines |
 | Thin stack profiles | **Still true:** several `framework-*` / `lang-*` skills ~38–48 lines |
 | Process weight | **Still true:** shortcuts exist; default narrative is multi-phase |
@@ -64,9 +64,9 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 
 ## Value judgment (unchanged in substance)
 
-**Worth adopting when:** Cursor (or manual skill mapping), shared hexagonal/TDD norms, MCP/tool agents that need a routing harness, thin always-on rules.
+**Worth adopting when:** Shared hexagonal/TDD norms, MCP/tool agents that need a routing harness, thin always-on rules, Cursor / Claude Code / Copilot / Antigravity.
 
-**Weak fit when:** Equal first-class Claude Code / Gemini / Copilot / Windsurf depth, out-of-the-box multi-model proof CI, architecture-flexible guidance, or a minimal prompt pack without lifecycle ceremony.
+**Weak fit when:** Equal Windsurf depth, out-of-the-box multi-model proof CI, architecture-flexible guidance, or a minimal prompt pack without lifecycle ceremony.
 
 **Net:** High **concept and structure** value; medium–rising **execution** value (EDD and honesty improved); still not “any model / any host, same guarantees.”
 

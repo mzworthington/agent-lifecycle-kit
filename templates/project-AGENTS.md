@@ -12,7 +12,7 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Bug / CI / live symptom | `skills/agent-debug` (+ hypothesis-driven-debug SOP) |
 | Cloudflare Web Analytics / RUM / beacon | `skills/agent-cloudflare-ops` (`wk mcp cloudflare-ops --install`) |
 | Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`wk eval run\|ci`) |
-| Which model / Cursor slug | `SOPs/model-routing.md` (`wk model resolve --skill …`) |
+| Which model / host slug | `SOPs/model-routing.md` (`wk model resolve --skill … --host cursor\|claude\|copilot\|antigravity`) |
 | Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |
 | Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
 | Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`); `commit-msg` git hook |

@@ -1,0 +1,8 @@
+# GitHub Copilot / VS Code agent picker ids. Update when Copilot's allowlist changes.
+# Do not copy these ids into skills or AGENTS.md.
+host: copilot
+models:
+  plan: gpt-5
+  review: gpt-5
+  implement: gpt-4.1
+  cheap: gpt-4.1-mini

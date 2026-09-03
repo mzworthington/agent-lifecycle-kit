@@ -2,7 +2,7 @@
 
 **Grill, spec, TDD, ship, then learn.**
 
-Coding agents skip steps a team would not. Waykit is the software lifecycle they actually run: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release, plus the learning loops that feed the next session. Eval-driven development is one of those loops, when the change is a prompt or a tool contract.
+Coding agents skip steps a team would not. Waykit is the software lifecycle they actually run: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release, plus the learning loops that feed the next session. Eval-driven development (**alpha**) is one of those loops, when the change is a prompt or a tool contract.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![Lifecycle](https://img.shields.io/badge/Lifecycle-SDLC-blueviolet?style=for-the-badge&logo=git)](./docs/lifecycle.md)
@@ -43,7 +43,7 @@ Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after writ
 
 ## The value: a full SDLC with learning loops
 
-Waykit standardizes coding-agent workflow. **Cursor is the reference host** for progressive skills and MCP compose. Claude Code, Gemini CLI, Windsurf, and Copilot get the same canonical `AGENTS.md` via thin entry stubs (`wk export-rules`), not equal skill/MCP discovery depth.
+Waykit standardizes coding-agent workflow across **Cursor, Claude Code, GitHub Copilot, and Antigravity** (Gemini CLI / `agy`). Same `AGENTS.md`, same skills, MCP composed into each host’s config file. [Hosts](./docs/hosts.md).
 
 | Pillar | Outcome |
 | :--- | :--- |
@@ -51,7 +51,7 @@ Waykit standardizes coding-agent workflow. **Cursor is the reference host** for 
 | **Architecture** | Hexagonal + DDD + vertical slices + clean code ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md); applicability/opt-out included) |
 | **Learning loops** | Behavior catalog, XFN gates, evals for tool calls, prod misses back into the suite |
 | **One rules file** | `AGENTS.md` syncs to IDE entry points (`wk export-rules`) |
-| **MCP catalog** | Composable profiles into `.cursor/mcp.json` ([mcps/](./mcps/)) |
+| **MCP catalog** | One profile composed into Cursor, Claude, Copilot, and Antigravity config files ([mcps/](./mcps/), [docs/hosts.md](./docs/hosts.md)) |
 | **Context budget** | Always-on bootstrap under ~8KB; `wk measure-context` / `wk check` ([docs/kit.md](./docs/kit.md)) |
 | **Security audit** | Prompt injection, secrets, entropy, unpinned skills (`wk audit`) |
 
@@ -80,7 +80,7 @@ sequenceDiagram
   O->>R: Conventional PR title and handover
 ```
 
-When the change is a prompt or tool schema, TDD includes **Eval-Driven Development**: write a failing eval, green the contract, gate merges with `wk eval ci --threshold-routing 95`. Details: [docs/edd.md](./docs/edd.md).
+When the change is a prompt or tool schema, TDD includes **Eval-Driven Development (alpha)**: write a failing eval, green the contract, gate merges with `wk eval ci --threshold-routing 95`. This is a routing/schema harness with a scripted merge gate, not a full EDD product. Details: [docs/edd.md](./docs/edd.md).
 
 ```mermaid
 flowchart LR
@@ -113,7 +113,7 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | `wk init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
 | `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps) |
 | `wk completion zsh` | Print zsh (or `bash`) tab-completion script |
-| `wk mcp <profile>` | Compose a named profile from `mcps/profiles/` |
+| `wk mcp <profile>` | Compose a named profile into Cursor, Claude, Copilot, and Antigravity (`--install` / `--project`) |
 | `wk check` | Local quality gate (audit, evals, EDD CI, context budget) |
 | `wk eval run\|watch\|report\|ci` | Eval harness for agent tool routing and schemas |
 | `wk eval` | Skill-trigger harness (which specialist activates) |
@@ -136,8 +136,8 @@ Start with the path that matches what you’re trying to do:
 
 1. **Feature work:** [Feature lifecycle](./docs/lifecycle.md) → [orchestrator](./skills/agent-orchestrator/SKILL.md) → [behavior catalog and XFN](./SOPs/behavior-catalog-and-xfn.md)
 2. **Architecture and bootstrap:** [Coding philosophy](./CODING_PHILOSOPHY.md) (incl. applicability) → [ADRs](./docs/ADRs/README.md) → [AGENTS.md](./AGENTS.md)
-3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md)
-4. **Prove tool calls:** [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
+3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md) → [hosts](./docs/hosts.md)
+4. **Prove tool calls (EDD, alpha):** [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`wk eval shadow` + `from-trace`)
 6. **Operators:** [What Waykit gives you](./docs/kit.md) → [Repo doctor](./docs/doctor.md) → [Context budget](./SOPs/context-budget.md) → [MCP library](./SOPs/mcp-library.md)
 7. **Live kit graph:** [Waykit map](./docs/map.md) → [author the map](./ontology/README.md) (`wk ontology check`)

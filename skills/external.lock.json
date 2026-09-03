@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "description": "Official / third-party agent skills managed by gh skill (not vendored into this repo). Install to Cursor user scope so updates stay outside kit git history. Prefer kit lang-*/framework-* for hexagonal/DDD structure; prefer upstream for vendor APIs.",
+  "description": "Official / third-party agent skills managed by gh skill (not vendored into this repo). Install to Cursor user scope, then symlink into ~/.claude/skills and ~/.gemini/skills. Prefer kit lang-*/framework-* for hexagonal/DDD structure; prefer upstream for vendor APIs.",
   "agent": "cursor",
   "scope": "user",
   "skills": [

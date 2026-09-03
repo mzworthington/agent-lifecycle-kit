@@ -6,6 +6,8 @@ Local stdio knowledge-graph memory compatible with the upstream JSONL format, wi
 
 No API keys. Graph path: `${userHome}/.agents/sync/mcp-memory.jsonl` (`sync/` is gitignored).
 
+Launch uses the kit `tsx` ESM loader path (same cwd-independent stdio pattern as kit-knowledge). Cursor’s workspace cwd will not resolve bare `tsx/esm`. The stdio entrypoint compares `realpath` of `argv[1]` to this file so a `~/.agents` symlink still starts the server.
+
 ## Tools
 
 Same surface as `@modelcontextprotocol/server-memory` (`create_entities`, `create_relations`, `add_observations`, `delete_*`, `read_graph`, `search_nodes`, `open_nodes`).

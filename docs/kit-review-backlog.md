@@ -4,7 +4,7 @@ Open findings from [kit-value-and-model-agnostic-review.md](./kit-value-and-mode
 
 ## P0: honesty / prove-what-you-claim
 
-No open P0 items. R1 (rename) and R2 (Cursor-first copy) are in **Done** below. Remaining skill-trigger work is asserting `required_patterns` (product, not copy).
+No open P0 items. R1 (rename) and R2 (host writers, not Cursor-only copy) are in **Done** below. Remaining skill-trigger work is asserting `required_patterns` (product, not copy).
 
 ## P1: eval / CI proof
 
@@ -28,7 +28,7 @@ No open P0 items. R1 (rename) and R2 (Cursor-first copy) are in **Done** below. 
 | D1 | Architecture stack felt non-optional / blocks adoption | Applicability & opt-out + seed ADRs (#36) |
 | D2 | EDD closed-loop entirely aspirational | Suites/depth (#23), shadow/OTel path (#28–#30), skill coverage (#31), nightly live workflow |
 | R1 | “Live trigger” language for a non-model skill-registration check | Renamed CLI help + harness banner to skill-trigger / prompt hygiene. Harness still ignores `required_patterns`. |
-| R2 | Multi-IDE peer-depth oversold | FAQ, `llms.txt`, EDD guide, and README: Cursor is the reference host; other IDEs get thin `AGENTS.md` stubs. |
+| R2 | Multi-IDE peer-depth oversold | MCP/model/rules writers for Cursor, Claude, Copilot, Antigravity; Windsurf still rules-only ([docs/hosts.md](./hosts.md)). |
 
 ## How to use
 

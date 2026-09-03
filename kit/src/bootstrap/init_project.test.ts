@@ -10,7 +10,7 @@ function kitRoot(): string {
   const templates = path.join(root, 'templates');
   fs.mkdirSync(templates);
   fs.writeFileSync(path.join(templates, 'project-AGENTS.md'), '# handshake-template\n', 'utf8');
-  fs.writeFileSync(path.join(templates, 'GEMINI.md'), 'g\n', 'utf8');
+  fs.writeFileSync(path.join(templates, 'project-GEMINI.md'), 'g\n', 'utf8');
   fs.writeFileSync(path.join(templates, 'project-CLAUDE.md'), 'c\n', 'utf8');
   fs.writeFileSync(path.join(templates, 'project-windsurfrules'), 'w\n', 'utf8');
   fs.writeFileSync(path.join(templates, 'project-cursorrules'), 'u\n', 'utf8');
@@ -71,6 +71,14 @@ describe('initProject', () => {
       mcpServers: { alpha: unknown };
     };
     assert.ok(mcp.mcpServers.alpha);
+    const claudeMcp = JSON.parse(fs.readFileSync(path.join(target, '.mcp.json'), 'utf8')) as {
+      mcpServers: { alpha: unknown };
+    };
+    assert.ok(claudeMcp.mcpServers.alpha);
+    const vscodeMcp = JSON.parse(fs.readFileSync(path.join(target, '.vscode', 'mcp.json'), 'utf8')) as {
+      servers: { alpha: unknown };
+    };
+    assert.ok(vscodeMcp.servers.alpha);
   });
 
   it('installs a pre-commit hook only when .git exists', () => {

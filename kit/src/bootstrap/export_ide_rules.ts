@@ -13,7 +13,7 @@ interface IDETarget {
 const IDE_TARGETS: IDETarget[] = [
   {
     filename: 'GEMINI.md',
-    templateName: 'GEMINI.md',
+    templateName: 'project-GEMINI.md',
     fallbackContent: `# Gemini CLI entry point\n\nThe canonical bootstrap lives in [AGENTS.md](./AGENTS.md).\n\nRead [AGENTS.md](./AGENTS.md) for context structure, lifecycle routing, and specialist activation.\n`
   },
   {

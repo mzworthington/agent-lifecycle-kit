@@ -20,6 +20,9 @@ const okBudget: ContextBudgetResult = {
     handshake: 0,
     cursorRules: 0,
     claude: 0,
+    copilot: 0,
+    gemini: 0,
+    windsurf: 0,
     philosophy: 0,
     skillDescriptions: 0
   }

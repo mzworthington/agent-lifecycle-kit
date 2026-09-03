@@ -30,7 +30,7 @@ Chosen option: "**Option B**", because kit CI already gates EDD routing (≥95%)
 
 * Good, because prompt/schema/routing regressions fail loudly
 * Bad, because authors must write eval cases before changing agent contracts
-* Follow-up: unit coverage reporting complements EDD; it does not replace it
+* Follow-up: the `wk eval` harness is **alpha** (scripted merge gate, OpenAI-compatible live path). It is the default *method* for contract changes, not a complete EDD product. See [docs/edd.md](../edd.md).
 
 ## Architecture sketch
 

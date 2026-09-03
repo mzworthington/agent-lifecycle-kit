@@ -28,6 +28,9 @@ skills/*
 !skills/framework-*/
 !skills/profile-*/
 
+# Antigravity workspace MCP (written by wk mcp --project / wk init)
+.agents/mcp_config.json
+
 # Environment & secrets
 .env
 .env.*

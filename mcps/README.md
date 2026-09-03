@@ -1,6 +1,6 @@
 # MCP library
 
-Versioned catalog of [Model Context Protocol](https://modelcontextprotocol.io/) servers for Cursor (and compatible hosts). Same idea as `skills/`: shared definitions live here; machines and projects opt into profiles.
+Versioned catalog of [Model Context Protocol](https://modelcontextprotocol.io/) servers. Same idea as `skills/`: shared definitions live here; `wk mcp` writes each host’s config file ([docs/hosts.md](../docs/hosts.md)).
 
 ## Layout
 
@@ -8,7 +8,7 @@ Versioned catalog of [Model Context Protocol](https://modelcontextprotocol.io/) 
 mcps/
 ├── catalog.json              # Index of every server (id, purpose, secrets, phases)
 ├── profiles/                 # Named sets of server ids to install together
-│   ├── default.json          # Everyday kit profile → ~/.cursor/mcp.json (includes Linear)
+│   ├── default.json          # Everyday kit profile (user install via install.sh)
 │   ├── collab.json           # Notion + Slack on top of default
 │   ├── devtools.json         # Chrome DevTools + Next.js DevTools + Playwright
 │   ├── cloud.json            # Cloudflare + Observability + Vercel (+ Context7)
@@ -31,7 +31,8 @@ mcps/
 
 | Profile | Servers | Install target |
 |---------|---------|----------------|
-| `default` | kit-knowledge, context7, github, memory, linear | `~/.cursor/mcp.json` via `install.sh` |
+| `default` | kit-knowledge, context7, github, memory, linear | `wk mcp default --install` (all hosts) |
+| `project-example` | context7, github, next-devtools, chrome-devtools, playwright, postgres | `wk mcp project-example --project` |
 | `collab` | default + notion, slack | When the team also uses Notion and Slack |
 | `devtools` | chrome-devtools, next-devtools, playwright | Frontend / XFN project config |
 | `cloud` | context7, cloudflare, cloudflare-observability, vercel | Workers / DNS / R2 / deploy work |
@@ -43,7 +44,6 @@ mcps/
 | `payments` | context7, stripe | Billing adapter work |
 | `personal` | bitwarden, linkedin, polyglot, obsidian | **Your machine only** (secrets / vault) |
 | `lab` | raspberry-pi | Home-lab SSH to a Pi / SBC |
-| `project-example` | context7, github, next-devtools, chrome-devtools, playwright, postgres | App `.cursor/mcp.json` |
 
 **One profile per session.** Compose **one** profile that matches the work. Do not stack `collab` + `devtools` + `ops` into a single global `mcp.json`. Extra MCP tools compete for attention, inflate tool-schema tokens, and slow agents.
 
@@ -51,26 +51,23 @@ mcps/
 
 | Scope | Path | When |
 |-------|------|------|
-| Global (all projects) | `~/.cursor/mcp.json` | `./install.sh` (or `kit mcp default --install`) |
-| Project (one app) | `<repo>/.cursor/mcp.json` | Copy/compose from a profile; see [templates/project-mcp.json](../templates/project-mcp.json) |
+| Global (all projects) | Cursor, Claude, Copilot, Antigravity user files | `./install.sh` or `wk mcp default --install` |
+| Project (one app) | `.cursor/mcp.json`, `.mcp.json`, `.vscode/mcp.json`, `.agents/mcp_config.json` | `wk mcp <profile> --project` |
 
 ```bash
-kit mcp default --install
-kit mcp collab --install
-kit mcp ops --install
-kit mcp security -o .cursor/mcp.security.json
-kit mcp design -o .cursor/mcp.design.json
-kit mcp payments -o .cursor/mcp.payments.json
-kit mcp personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
-kit mcp lab --install               # Raspberry Pi over SSH
-kit mcp devtools -o .cursor/mcp.json
-kit mcp cloud -o .cursor/mcp.json
-kit mcp astro --install             # Astro Docs MCP
-kit mcp cloudflare-ops --install    # RUM / Worker / DNS diagnosis
-kit mcp project-example -o .cursor/mcp.json
+wk mcp default --install
+wk mcp default --install --host claude
+wk mcp default --project
+wk mcp collab --install
+wk mcp ops --install
+wk mcp personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian
+wk mcp lab --install               # Raspberry Pi over SSH
+wk mcp astro --install             # Astro Docs MCP
+wk mcp cloudflare-ops --install    # RUM / Worker / DNS diagnosis
+wk mcp project-example --project
 ```
 
-Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare/Sentry/Stripe/Vercel use Cursor OAuth on first tool use.
+Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare/Sentry/Stripe/Vercel use host OAuth on first tool use.
 
 ## Catalog
 

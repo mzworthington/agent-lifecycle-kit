@@ -323,11 +323,19 @@ async function main() {
   }
 }
 
-const isMain =
-  process.argv[1] &&
-  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+function isStdioEntrypoint(): boolean {
+  if (!process.argv[1]) return false;
+  try {
+    return (
+      fs.realpathSync(process.argv[1]) ===
+      fs.realpathSync(fileURLToPath(import.meta.url))
+    );
+  } catch {
+    return false;
+  }
+}
 
-if (isMain) {
+if (isStdioEntrypoint()) {
   main().catch((err) => {
     process.stderr.write(`memory fatal: ${err}\n`);
     process.exit(1);

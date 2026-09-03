@@ -16,7 +16,7 @@ tools:
 
 Pick a **capability class**, then a **host slug**. Do not put vendor model ids in skills or `AGENTS.md`.
 
-Catalog: [models/catalog.yaml](../models/catalog.yaml). Cursor overlay: [models/hosts/cursor.yaml](../models/hosts/cursor.yaml). CLI: `wk model resolve --skill <id> [--phase <id>] [--host cursor] [--spec-complete] [--blocked]`.
+Catalog: [models/catalog.yaml](../models/catalog.yaml). Host overlays: [models/hosts/](../models/hosts/). CLI: `wk model resolve --skill <id> [--phase <id>] [--host cursor|claude|copilot|antigravity] [--spec-complete] [--blocked]`.
 
 ## Classes
 
@@ -32,7 +32,7 @@ Catalog: [models/catalog.yaml](../models/catalog.yaml). Cursor overlay: [models/
 1. If the phase is **BLOCKED** or a new architectural fork appears → `plan`.
 2. Else look up the specialist in `catalog.yaml` `skills`. If `gatedBySpec: true` and spec handover is not COMPLETE → `plan`.
 3. Else use the skill class, then `phases`, then default `plan`.
-4. Map class → slug via `models/hosts/<host>.yaml` (Cursor is the reference host).
+4. Map class → slug via `models/hosts/<host>.yaml`. Host files: [docs/hosts.md](../docs/hosts.md).
 5. **Subagents:** pass that slug as `model`. **Parent chat:** recommend a switch when the class changes; the host cannot force it.
 6. User or memory MCP `Preference` overrides the overlay for this session.
 

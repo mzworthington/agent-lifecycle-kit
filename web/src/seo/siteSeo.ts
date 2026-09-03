@@ -67,12 +67,17 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/faq': {
     headline: 'Common questions',
     description:
-      'Waykit FAQ: install, API keys, why AGENTS.md stays small, how agents find the right SOP, where EDD fits, repo doctor, and what the map is not.'
+      'Waykit FAQ: install, API keys, why AGENTS.md stays small, hosts (Cursor, Claude, Copilot, Antigravity), how agents find the right SOP, where EDD alpha fits, repo doctor, and what the map is not.'
   },
   '/docs/edd': {
-    headline: 'EDD guide',
+    headline: 'EDD guide (alpha)',
     description:
-      'Eval-Driven Development is TDD for prompts, MCP schemas, and routing: write cases, mock tools, gate PRs at 95% routing accuracy, and turn misses into the next eval.'
+      'Eval-Driven Development is alpha: a routing and schema harness with a scripted CI gate. Not a full EDD framework. Write cases, mock tools, optionally run live HTTP or CLI judges.'
+  },
+  '/docs/hosts': {
+    headline: 'Hosts',
+    description:
+      'Cursor, Claude Code, Copilot, and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay, and rules pointer. Windsurf still gets rules only.'
   },
   '/docs/kit': {
     headline: 'What Waykit gives you',

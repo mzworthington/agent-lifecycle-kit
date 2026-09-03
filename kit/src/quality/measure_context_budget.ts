@@ -12,6 +12,9 @@ export interface ContextBudgetResult {
     handshake: number;
     cursorRules: number;
     claude: number;
+    copilot: number;
+    gemini: number;
+    windsurf: number;
     philosophy: number;
     skillDescriptions: number;
   };
@@ -52,11 +55,13 @@ export function measureContextBudget(
     handshake: fileChars(path.join(repoDir, 'templates', 'project-AGENTS.md')),
     cursorRules: fileChars(path.join(repoDir, '.cursorrules')),
     claude: fileChars(path.join(repoDir, 'CLAUDE.md')),
+    copilot: fileChars(path.join(repoDir, '.github', 'copilot-instructions.md')),
+    gemini: fileChars(path.join(repoDir, 'GEMINI.md')),
+    windsurf: fileChars(path.join(repoDir, '.windsurfrules')),
     philosophy: fileChars(path.join(repoDir, 'CODING_PHILOSOPHY.md')),
     skillDescriptions: skillDescriptionChars(path.join(repoDir, 'skills'))
   };
-  const alwaysOnChars =
-    breakdown.agents + breakdown.handshake + breakdown.cursorRules + breakdown.claude;
+  const alwaysOnChars = breakdown.agents + breakdown.handshake;
   return {
     ok: alwaysOnChars <= targetChars,
     alwaysOnChars,
@@ -75,9 +80,20 @@ export function printContextBudget(result: ContextBudgetResult): void {
     `project-AGENTS.md         ${breakdown.handshake} chars (~${estimateTokens(breakdown.handshake)} tokens)`
   );
   console.log(
-    `.cursorrules              ${breakdown.cursorRules} chars (~${estimateTokens(breakdown.cursorRules)} tokens)`
+    `.cursorrules              ${breakdown.cursorRules} chars (~${estimateTokens(breakdown.cursorRules)} tokens) [host pointer, not summed]`
   );
-  console.log(`CLAUDE.md (pointer)       ${breakdown.claude} chars (~${estimateTokens(breakdown.claude)} tokens)`);
+  console.log(
+    `CLAUDE.md                 ${breakdown.claude} chars (~${estimateTokens(breakdown.claude)} tokens) [host pointer, not summed]`
+  );
+  console.log(
+    `copilot-instructions.md   ${breakdown.copilot} chars (~${estimateTokens(breakdown.copilot)} tokens) [host pointer, not summed]`
+  );
+  console.log(
+    `GEMINI.md                 ${breakdown.gemini} chars (~${estimateTokens(breakdown.gemini)} tokens) [host pointer, not summed]`
+  );
+  console.log(
+    `.windsurfrules            ${breakdown.windsurf} chars (~${estimateTokens(breakdown.windsurf)} tokens) [host pointer, not summed]`
+  );
   console.log(
     `CODING_PHILOSOPHY.md      ${breakdown.philosophy} chars (~${estimateTokens(breakdown.philosophy)} tokens) [on-demand only]`
   );
@@ -87,6 +103,7 @@ export function printContextBudget(result: ContextBudgetResult): void {
   console.log('');
   console.log(`Always-on estimate        ${alwaysOnChars} chars (~${estimateTokens(alwaysOnChars)} tokens)`);
   console.log(`Target                    < ${targetChars} chars (~${targetTokens} tokens)`);
+  console.log('A session loads AGENTS.md plus one host pointer, not every host file at once.');
   if (!ok) {
     console.log('');
     console.log('FAIL: always-on surface exceeds target. Thin AGENTS.md / handshake; keep philosophy on-demand.');

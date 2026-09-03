@@ -3,7 +3,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
-import { parseSyncArgs, syncExternalSkills, type CommandRunner } from './sync_external_skills.js';
+import {
+  parseSyncArgs,
+  syncExternalSkills,
+  mirrorUserSkills,
+  type CommandRunner
+} from './sync_external_skills.js';
 
 describe('parseSyncArgs', () => {
   it('defaults to install', () => {
@@ -149,5 +154,22 @@ describe('syncExternalSkills', () => {
     assert.deepEqual(ran, [
       ['gh', 'skill', 'install', 'cloudflare/skills', 'skills/cloudflare', '--agent', 'cursor', '--scope', 'user']
     ]);
+  });
+});
+
+describe('mirrorUserSkills', () => {
+  it('symlinks skill folders into Claude and Antigravity dirs without overwriting', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-skills-'));
+    const cursor = path.join(root, '.cursor', 'skills');
+    const claude = path.join(root, '.claude', 'skills');
+    fs.mkdirSync(path.join(cursor, 'cloudflare'), { recursive: true });
+    fs.writeFileSync(path.join(cursor, 'cloudflare', 'SKILL.md'), '# cf\n', 'utf8');
+    fs.mkdirSync(claude, { recursive: true });
+    fs.writeFileSync(path.join(claude, 'keep-me'), 'x', 'utf8');
+    const linked = mirrorUserSkills(cursor, [claude, path.join(root, '.gemini', 'skills')]);
+    assert.equal(linked.length, 2);
+    assert.equal(fs.readFileSync(path.join(claude, 'cloudflare', 'SKILL.md'), 'utf8'), '# cf\n');
+    assert.equal(fs.readFileSync(path.join(root, '.gemini', 'skills', 'cloudflare', 'SKILL.md'), 'utf8'), '# cf\n');
+    assert.equal(mirrorUserSkills(cursor, [claude]).length, 0);
   });
 });

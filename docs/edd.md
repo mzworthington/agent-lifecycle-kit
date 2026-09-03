@@ -1,8 +1,19 @@
-# Eval-Driven Development (EDD)
+# Eval-Driven Development (EDD) — alpha
 
 Connecting an LLM to MCP tools, APIs, or terminals turns a chatbot into a decision-maker. Failures rarely look like stack traces. They look like a wrong tool, a hallucinated parameter, or an infinite retry loop.
 
-EDD treats prompts and tool schemas as version-controlled, evaluated contracts. Waykit ships the harness, CI gates, and production closed loop as one learning loop inside the feature lifecycle.
+**Status: alpha.** Waykit ships a routing and schema harness you can run in CI. It is not a full EDD framework. There is no prompt registry, no hosted dataset product, no native Anthropic or Gemini judge, and the default merge gate does not call a product LLM. Skill-trigger `wk eval` (no subcommand) only checks which Kit skill should activate. Use this loop when you change prompts, tool schemas, or routing. Do not treat a green `wk eval ci` as proof that the live agent is correct.
+
+What you do get today:
+
+- YAML suites + JSONL cases, mocked tools, dual-layer asserts
+- A **scripted** (`--style local`) merge gate so PRs fail on keyword routing drift
+- Optional **http** (OpenAI-compatible `/chat/completions`) and **cli** (`cursor-agent`, `claude`, `agy`) runs
+- Dataset helpers and a production → JSONL / shadow path (`wk eval dataset from-trace`, `wk eval shadow`)
+
+Still to build before this is a framework: live judges per provider, skill-trigger evals that actually run a model, stronger structured output from CLI hosts, and a tighter closed loop from prod traces into suites.
+
+EDD treats prompts and tool schemas as version-controlled, evaluated contracts. The harness is one learning loop inside the feature lifecycle, not the whole product.
 
 ## The loop (same shape as TDD)
 
@@ -47,9 +58,9 @@ wk eval dataset lint --dataset evals/edd/architecture_routing.jsonl
 
 `kit` and `agent-kit` are aliases of `wk`.
 
-## Cursor, Copilot, and API keys
+## Cursor, Claude, Copilot, Antigravity, and API keys
 
-Cursor is the **reference host** for progressive skills and MCP compose. Copilot, Claude Code, Gemini CLI, and Windsurf get the same canonical `AGENTS.md` via thin stubs (`wk export-rules` / `wk init`), not equal skill or MCP discovery. Daily work and the merge gate use `--style local` (alias: `--model scripted`). You do **not** need an OpenAI (or any provider) API key for that.
+Rules and MCP install across those hosts: [hosts](./hosts.md). Daily work and the merge gate use `--style local` (alias: `--model scripted`). You do **not** need a provider API key for that. The IDE chat is never the eval runner.
 
 Each run has **one style** for both the agent under test and the judge:
 

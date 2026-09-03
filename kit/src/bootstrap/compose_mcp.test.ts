@@ -7,6 +7,15 @@ import { fileURLToPath } from 'node:url';
 import { composeMCP } from './compose_mcp.js';
 
 const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const KIT_TSX_LOADER = '${userHome}/.agents/node_modules/tsx/dist/esm/index.mjs';
+
+function assertStdioUsesKitTsx(server: unknown): void {
+  const cfg = server as { command?: string; args?: string[] };
+  assert.equal(cfg.command, 'node');
+  assert.equal(cfg.args?.[0], '--import');
+  assert.equal(cfg.args?.[1], KIT_TSX_LOADER);
+  assert.ok(!cfg.args?.includes('tsx/esm'), 'bare tsx/esm resolves from Cursor cwd, not the kit');
+}
 
 function writeServer(
   root: string,
@@ -62,6 +71,7 @@ describe('composeMCP', () => {
     assert.equal(fs.existsSync(installed), true);
     const body = JSON.parse(fs.readFileSync(installed, 'utf8')) as { mcpServers: { alpha: unknown } };
     assert.ok(body.mcpServers.alpha);
+    assert.equal(fs.existsSync(path.join(home, '.claude.json')), true);
   });
 
   it('accepts a profile path and warns on missing required env', () => {
@@ -123,6 +133,8 @@ describe('composeMCP', () => {
     assert.ok(body.mcpServers.context7);
     assert.equal(body.mcpServers.notion, undefined);
     assert.equal(body.mcpServers.slack, undefined);
+    assertStdioUsesKitTsx(body.mcpServers['kit-knowledge']);
+    assertStdioUsesKitTsx(body.mcpServers.memory);
   });
 
   it('composes the cloudflare-ops profile from the kit catalog', () => {

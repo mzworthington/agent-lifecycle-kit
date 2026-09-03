@@ -1,4 +1,4 @@
-# Eval-Driven Development (EDD) suites
+# Eval-Driven Development (EDD) suites (alpha)
 
 Suite reference for Kit’s agent eval harness. Day-to-day steps in [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md). Companion: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).
 
@@ -36,7 +36,7 @@ One style per run for **both** agent and judge.
 | `http` | `--style http --model <id>` with key or `--base-url`; nightly [`.github/workflows/edd-live.yml`](../../.github/workflows/edd-live.yml) | Same model for routing and quality metrics. Includes `requires-live` cases. |
 | `cli` | `--style cli --cli cursor-agent\|claude\|agy --model <id>` (`--cli` is required) | Same CLI binary for agent and judge. |
 
-Cursor is the reference host for skills and MCP (`AGENTS.md` → `.cursorrules` / `.github/copilot-instructions.md`). Other IDEs get thin stubs, not equal discovery. None of them is the eval driver: `wk eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md) (section *Cursor, Copilot, and API keys*).
+Cursor is not the only host. MCP and model overlays are written for Cursor, Claude Code, Copilot, and Antigravity ([docs/hosts.md](../../docs/hosts.md)). None of them is the eval driver: `wk eval` never calls Cursor Chat or Copilot Chat. Env resolution, CI jobs, and examples: [docs/edd.md](../../docs/edd.md). **EDD is alpha.**
 
 Do not extend the local keyword driver to pass `requires-live` cases. Add JSONL rows instead. Volume for live ranking lives in [goldens/](./goldens/README.md) — not in CI seeds.
 

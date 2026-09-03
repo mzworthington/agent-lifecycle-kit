@@ -148,12 +148,24 @@ export function loadHostOverlay(kitRoot: string, host: string): HostOverlay {
   };
 }
 
+const HOST_FILE_ALIASES: Record<string, string> = {
+  gemini: 'antigravity',
+  agy: 'antigravity',
+  'claude-code': 'claude',
+  vscode: 'copilot',
+  'vs-code': 'copilot'
+};
+
+export function hostOverlayId(host: string): string {
+  return HOST_FILE_ALIASES[host.trim().toLowerCase()] ?? host.trim().toLowerCase();
+}
+
 export function resolveHostModel(
   kitRoot: string,
   modelClass: ModelClass,
   host = 'cursor'
 ): ResolvedHostModel {
-  const overlay = loadHostOverlay(kitRoot, host);
+  const overlay = loadHostOverlay(kitRoot, hostOverlayId(host));
   return { class: modelClass, host: overlay.host, model: overlay.models[modelClass] };
 }
 

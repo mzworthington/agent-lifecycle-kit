@@ -77,7 +77,8 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         mcpProfile: command.mcpProfile,
         installMCP: command.installMCP,
         installIDE: command.installIDE,
-        installHook
+        installHook,
+        hosts: command.hosts
       });
       return 0;
     }
@@ -100,7 +101,11 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
     }
 
     case 'mcp':
-      composeMCP(command.profile, command.outputFile, command.install);
+      composeMCP(command.profile, command.outputFile, command.install, {
+        hosts: command.hosts,
+        installProject: command.project,
+        projectDir: command.project ? process.cwd() : undefined
+      });
       return 0;
 
     case 'audit':

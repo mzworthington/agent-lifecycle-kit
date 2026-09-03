@@ -1,8 +1,8 @@
 # What Waykit gives you
 
-Waykit is the SDLC for coding agents. The rest of this page is what that install actually puts on disk: a thin handshake, on-demand skills, one MCP profile, a quality gate, and learning loops. Eval-driven development is how you prove tool calls; it is not the whole product.
+Waykit is the SDLC for coding agents. The rest of this page is what that install actually puts on disk: a thin handshake, on-demand skills, one MCP profile per host, a quality gate, and learning loops. Eval-driven development (**alpha**) is how you prove tool routing in CI; it is not the whole product and it is not a complete EDD framework.
 
-Independent assessment (value + model-/host-agnosticism) and open follow-ups: [kit-value-and-model-agnostic-review.md](./kit-value-and-model-agnostic-review.md), [kit-review-backlog.md](./kit-review-backlog.md).
+Independent assessment (value + model-/host-agnosticism) and open follow-ups: [kit-value-and-model-agnostic-review.md](./kit-value-and-model-agnostic-review.md), [kit-review-backlog.md](./kit-review-backlog.md). Host adapters: [hosts.md](./hosts.md).
 
 ## Always-on context
 
@@ -10,7 +10,8 @@ Agents pay for every byte in the bootstrap. Waykit keeps **always-on** files sma
 
 | Surface | In the always-on total? | Target |
 |---------|-------------------------|--------|
-| `AGENTS.md` + project handshake + thin IDE rules (`.cursorrules`, `CLAUDE.md`) | Yes | **&lt; ~8KB** (~2k tokens) |
+| `AGENTS.md` + project handshake | Yes | **&lt; ~8KB** (~2k tokens) |
+| Thin host pointers (`.cursorrules`, `CLAUDE.md`, Copilot, `GEMINI.md`) | Printed, not summed | One pointer per session |
 | Skill descriptions (frontmatter only) | No (discovery) | Fine; do not pre-load skill bodies |
 | `CODING_PHILOSOPHY.md` and SOP files | No | Zero on typo/debug routes unless that procedure is needed |
 
@@ -24,10 +25,12 @@ Agent checklist: [SOPs/context-budget.md](../SOPs/context-budget.md).
 
 ```mermaid
 flowchart LR
-  alwaysOn[AGENTS.md + handshake + thin IDE rules]
+  alwaysOn[AGENTS.md + handshake]
+  hostPointer[One host pointer]
   onDemand[Philosophy, SOPs, skill bodies]
   mcp[One MCP profile]
   alwaysOn --> session[Agent session]
+  hostPointer --> session
   onDemand -.->|kit-knowledge or file read| session
   mcp --> session
 ```
@@ -38,6 +41,8 @@ Extra MCP tools compete for attention and inflate tool-schema tokens. Compose **
 
 ```bash
 wk mcp default --install
+wk mcp default --install --host claude
+wk mcp default --project
 wk mcp collab --install
 wk mcp ops --install
 wk mcp cloudflare-ops --install
@@ -94,9 +99,9 @@ Skills and `AGENTS.md` tell the agent what to load. You operate the kit with `wk
 | `wk check` | Audit, ontology, evals, EDD CI, context budget |
 | `wk ontology check` | Live graph referential integrity |
 | `wk ontology generate` | Write gitignored index for kit-knowledge and the map |
-| `wk mcp <profile>` | One MCP profile into `mcp.json` |
+| `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |
 | `wk audit` | Skills and scripts supply-chain scan |
 | `wk eval ci` | Routing accuracy gate (EDD) |
 | `wk sync` | Upstream skills from the lockfile |
 
-EDD loop, keys, and CI: [edd.md](./edd.md).
+EDD loop (alpha), keys, and CI: [edd.md](./edd.md). Host files: [hosts.md](./hosts.md).

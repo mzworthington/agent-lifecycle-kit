@@ -40,7 +40,8 @@ describe('parseKitArgv', () => {
       mcpProfile: 'collab',
       installMCP: true,
       installIDE: true,
-      installHook: true
+      installHook: true,
+      hosts: ['cursor', 'claude', 'copilot', 'antigravity']
     });
   });
 
@@ -51,7 +52,8 @@ describe('parseKitArgv', () => {
       mcpProfile: 'default',
       installMCP: false,
       installIDE: false,
-      installHook: false
+      installHook: false,
+      hosts: ['cursor', 'claude', 'copilot', 'antigravity']
     });
   });
 
@@ -122,18 +124,30 @@ describe('parseKitArgv', () => {
     });
   });
 
-  it('parses mcp profile, --install, and -o', () => {
+  it('parses mcp profile, --install, --project, --host, and -o', () => {
     assert.deepEqual(parseKitArgv(['mcp', 'ops', '--install', '-o', 'out.json'], opts), {
       kind: 'mcp',
       profile: 'ops',
       install: true,
-      outputFile: 'out.json'
+      project: false,
+      outputFile: 'out.json',
+      hosts: ['cursor', 'claude', 'copilot', 'antigravity']
     });
-    assert.deepEqual(parseKitArgv(['mcp', '--install'], opts), {
+    assert.deepEqual(parseKitArgv(['mcp', '--install', '--host', 'claude'], opts), {
       kind: 'mcp',
       profile: 'default',
       install: true,
-      outputFile: undefined
+      project: false,
+      outputFile: undefined,
+      hosts: ['claude']
+    });
+    assert.deepEqual(parseKitArgv(['mcp', 'default', '--project', '--host', 'copilot,agy'], opts), {
+      kind: 'mcp',
+      profile: 'default',
+      install: false,
+      project: true,
+      outputFile: undefined,
+      hosts: ['copilot', 'antigravity']
     });
   });
 

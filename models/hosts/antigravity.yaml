@@ -1,0 +1,9 @@
+# Antigravity / Gemini CLI slugs (`agy`, Gemini CLI). Update when Google's picker changes.
+# Aliases: --host gemini and --host agy resolve here.
+# Do not copy these ids into skills or AGENTS.md.
+host: antigravity
+models:
+  plan: gemini-2.5-pro
+  review: gemini-2.5-pro
+  implement: gemini-2.5-flash
+  cheap: gemini-2.5-flash

@@ -1,4 +1,5 @@
 import path from 'path';
+import { parseMcpHosts, type McpHostId } from '../bootstrap/mcp_hosts.js';
 import { isCompletionShell, type KitCompletionShell } from './completion.js';
 import { isRepoClass, type RepoClass } from '../doctor/hygiene.js';
 import { firstPositional, flagValue, hasFlag } from './flags.js';
@@ -20,8 +21,16 @@ export type KitCommand =
       installMCP: boolean;
       installIDE: boolean;
       installHook: boolean;
+      hosts: McpHostId[];
     }
-  | { kind: 'mcp'; profile: string; install: boolean; outputFile: string | undefined }
+  | {
+      kind: 'mcp';
+      profile: string;
+      install: boolean;
+      project: boolean;
+      outputFile: string | undefined;
+      hosts: McpHostId[];
+    }
   | { kind: 'audit' }
   | { kind: 'validate' }
   | { kind: 'eval'; rest: string[] }
@@ -59,12 +68,19 @@ export type KitCommand =
 
 const COMPLETION_USAGE = cliUsage('completion <zsh|bash>');
 
+const MCP_USAGE = cliUsage(
+  'mcp [profile] [--install] [--project] [--host cursor|claude|copilot|antigravity|all] [-o <file>]'
+);
+const INIT_USAGE = cliUsage(
+  'init [dir] [--mcp <profile>] [--host cursor|claude|copilot|antigravity|all] [--hook] [--skip-mcp] [--skip-ide]'
+);
+
 const DOCTOR_USAGE = cliUsage(
   'doctor [dir] [--write] [--owned] [--scan <dir>] [--class kit|product|dns|site|template] [--hook] [--login <user>]'
 );
 
 const MODEL_RESOLVE_USAGE = cliUsage(
-  'model resolve [--skill <id>] [--phase <id>] [--host cursor] [--spec-complete] [--blocked]'
+  'model resolve [--skill <id>] [--phase <id>] [--host cursor|claude|copilot|antigravity] [--spec-complete] [--blocked]'
 );
 
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
@@ -85,24 +101,35 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
       const targetFlag = flagValue(rest, '--target');
       const positional = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
       const targetDir = path.resolve(opts.cwd, targetFlag ?? positional ?? '.');
-      return {
-        kind: 'init',
-        targetDir,
-        mcpProfile: flagValue(rest, '--mcp') ?? 'default',
-        installMCP: !hasFlag(rest, '--skip-mcp'),
-        installIDE: !hasFlag(rest, '--skip-ide'),
-        installHook: hasFlag(rest, '--hook') || hasFlag(rest, '--with-hook')
-      };
+      try {
+        return {
+          kind: 'init',
+          targetDir,
+          mcpProfile: flagValue(rest, '--mcp') ?? 'default',
+          installMCP: !hasFlag(rest, '--skip-mcp'),
+          installIDE: !hasFlag(rest, '--skip-ide'),
+          installHook: hasFlag(rest, '--hook') || hasFlag(rest, '--with-hook'),
+          hosts: parseMcpHosts(flagValue(rest, '--host'))
+        };
+      } catch (err: unknown) {
+        return { kind: 'usage', message: err instanceof Error ? err.message : INIT_USAGE };
+      }
     }
 
     case 'mcp': {
       const profile = rest[0] && !rest[0].startsWith('-') ? rest[0] : 'default';
-      return {
-        kind: 'mcp',
-        profile,
-        install: hasFlag(rest, '--install'),
-        outputFile: flagValue(rest, '-o')
-      };
+      try {
+        return {
+          kind: 'mcp',
+          profile,
+          install: hasFlag(rest, '--install'),
+          project: hasFlag(rest, '--project'),
+          outputFile: flagValue(rest, '-o'),
+          hosts: parseMcpHosts(flagValue(rest, '--host'))
+        };
+      } catch (err: unknown) {
+        return { kind: 'usage', message: err instanceof Error ? err.message : MCP_USAGE };
+      }
     }
 
     case 'audit':

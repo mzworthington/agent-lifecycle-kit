@@ -12,7 +12,7 @@
       "command": "node",
       "args": [
         "--import",
-        "tsx/esm",
+        "${userHome}/.agents/node_modules/tsx/dist/esm/index.mjs",
         "${userHome}/.agents/mcps/servers/kit-knowledge/src/server.ts"
       ],
       "env": {

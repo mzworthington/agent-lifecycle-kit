@@ -1,0 +1,8 @@
+# Claude Code / Claude CLI slugs. Update when Anthropic's picker changes.
+# Do not copy these ids into skills or AGENTS.md.
+host: claude
+models:
+  plan: opus
+  review: opus
+  implement: sonnet
+  cheap: haiku

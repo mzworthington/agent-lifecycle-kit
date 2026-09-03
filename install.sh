@@ -213,17 +213,18 @@ install_mcp_profile() {
   fi
 
   echo ""
-  echo "Installing default MCP profile to ~/.cursor/mcp.json"
+  echo "Installing default MCP profile for Cursor, Claude Code, Copilot, and Antigravity"
   "${_kit}" mcp default --install || {
     echo "WARN: MCP compose/install failed; continue and run wk mcp default --install"
     return 0
   }
-  echo "Set GITHUB_PERSONAL_ACCESS_TOKEN in the environment that launches Cursor for the GitHub MCP."
+  echo "Set GITHUB_PERSONAL_ACCESS_TOKEN in the environment that launches the host for the GitHub MCP."
   echo "More profiles: collab | personal | lab | devtools | cloud | project-example"
   echo "  wk mcp collab --install"
   echo "  wk mcp personal --install   # Bitwarden/LinkedIn/Polyglot/Obsidian (local)"
   echo "  wk mcp lab --install        # Raspberry Pi over SSH (local)"
-  echo "Project-scoped: compose project-example or templates/project-mcp.json into .cursor/mcp.json"
+  echo "  wk mcp default --install --host claude   # one host only"
+  echo "Project-scoped: wk mcp project-example --project"
   echo "Skip later with: INSTALL_MCP=0 ./install.sh"
 }
 
