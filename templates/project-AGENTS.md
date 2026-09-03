@@ -18,7 +18,7 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`); `commit-msg` git hook |
 | SOP / handover lookup | kit-knowledge MCP when installed |
 | Durable project facts | memory MCP (glossary, SLOs, prefs - never secrets) |
-| Linear backlog / user stories | `skills/agent-user-stories` (INVEST + AC + mermaid wireframes; linear MCP on `default`) |
+| Linear backlog / user stories | `skills/agent-user-stories` (INVEST + AC; mermaid wireframes on UI; operator stories skip wireframe; linear MCP on `default`) |
 
 For **bugs / failed jobs / live symptoms**, use `agent-debug` (reproduce → hypothesis board → proof). Do not open the full feature lifecycle unless RCA needs a new capability.
 
