@@ -14,6 +14,10 @@
 - Add agent-user-stories skill and related evaluations to enhance user story management
 - Add new evaluations for operator user stories
 
+### 🐛 Bug Fixes
+
+- Update agent-user-stories documentation
+
 ### 🧰 Maintenance & Dependencies
 
 - Update documentation and configuration for EDD
