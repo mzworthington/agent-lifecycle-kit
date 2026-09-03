@@ -62,7 +62,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/jobs': {
     headline: 'Jobs for today',
     description:
-      'Pick a job for today: starting a product feature, install, fat always-on context, proving a tool call, checking the live kit graph, or repo hygiene on sources you own.'
+      'Pick a job for today: starting a product feature, install, fat always-on context, proving a tool call, checking the live kit graph, repo hygiene on sources you own, or consumer handshake drift.'
   },
   '/docs/faq': {
     headline: 'Common questions',
@@ -88,6 +88,11 @@ const PAGE_SEO: Record<string, SeoOverride> = {
     headline: 'Repo doctor',
     description:
       'wk doctor checks README, license, contributing, and GitHub templates on sources you admin. Report-only by default; --write fills gaps and never overwrites.'
+  },
+  '/docs/align': {
+    headline: 'Consumer align',
+    description:
+      'wk align checks an app repo for a thin handshake, host rule pointers, kit-knowledge MCP, and commit-msg. --write fills IDE pointers; it never overwrites AGENTS.md.'
   },
   '/docs/lifecycle': {
     headline: 'Feature lifecycle',

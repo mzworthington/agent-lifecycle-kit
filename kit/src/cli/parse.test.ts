@@ -151,6 +151,19 @@ describe('parseKitArgv', () => {
     });
   });
 
+  it('parses align directory and --write', () => {
+    assert.deepEqual(parseKitArgv(['align'], opts), {
+      kind: 'align',
+      targetDir: path.resolve('/work', '.'),
+      write: false
+    });
+    assert.deepEqual(parseKitArgv(['align', './app', '--write'], opts), {
+      kind: 'align',
+      targetDir: path.resolve('/work', './app'),
+      write: true
+    });
+  });
+
   it('parses doctor check-first flags and defaults cwd', () => {
     assert.deepEqual(parseKitArgv(['doctor'], opts), {
       kind: 'doctor',

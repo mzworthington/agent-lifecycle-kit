@@ -43,6 +43,7 @@ describe('docs/kit.md', () => {
     expect(rows.map((row) => row.command)).toEqual([
       'wk measure-context',
       'wk doctor',
+      'wk align',
       'wk completion zsh',
       'wk check',
       'wk ontology check',

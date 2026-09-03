@@ -55,7 +55,8 @@ describe('docs/today-jobs.md', () => {
       'wrong-tool',
       'ci-gate',
       'kit-graph',
-      'repo-hygiene'
+      'repo-hygiene',
+      'consumer-align'
     ]);
     const firstHour = jobs[0]!;
     expect(firstHour.title).toBe('I have never installed Waykit');
@@ -73,6 +74,9 @@ describe('docs/today-jobs.md', () => {
     const hygiene = jobs.find((job) => job.id === 'repo-hygiene')!;
     expect(hygiene.title).toBe('Owned repos missing README or templates');
     expect(hygiene.cmd).toBe('wk doctor --owned --scan ~/Documents/dev');
+    const align = jobs.find((job) => job.id === 'consumer-align')!;
+    expect(align.title).toBe('App repo drifted from the Waykit handshake');
+    expect(align.cmd).toBe('wk align .');
     expect(firstHour.cmd).toBe(
       'curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh'
     );

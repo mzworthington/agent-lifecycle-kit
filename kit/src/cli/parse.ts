@@ -42,6 +42,7 @@ export type KitCommand =
   | { kind: 'debug-board'; project: string; title: string }
   | { kind: 'debug-ci'; rest: string[] }
   | { kind: 'check' }
+  | { kind: 'align'; targetDir: string; write: boolean }
   | { kind: 'ontology'; sub: 'generate' | 'check' }
   | { kind: 'memory-lint' }
   | {
@@ -182,6 +183,15 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
 
     case 'check':
       return { kind: 'check' };
+
+    case 'align': {
+      const positional = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
+      return {
+        kind: 'align',
+        targetDir: path.resolve(opts.cwd, positional ?? '.'),
+        write: hasFlag(rest, '--write')
+      };
+    }
 
     case '__complete': {
       const words = rest[0] === '--' ? rest.slice(1) : rest;

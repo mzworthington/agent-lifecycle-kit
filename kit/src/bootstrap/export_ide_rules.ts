@@ -10,6 +10,14 @@ interface IDETarget {
   fallbackContent: string;
 }
 
+export const IDE_RULE_REL_PATHS: readonly string[] = [
+  'GEMINI.md',
+  'CLAUDE.md',
+  '.windsurfrules',
+  '.cursorrules',
+  path.join('.github', 'copilot-instructions.md')
+];
+
 const IDE_TARGETS: IDETarget[] = [
   {
     filename: 'GEMINI.md',

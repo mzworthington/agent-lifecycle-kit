@@ -40,5 +40,6 @@ Templates live under `templates/community/` in the Waykit checkout. Product copy
 ## Related
 
 - Handshake: `wk init . --mcp default --hook`
+- Consumer handshake after init: [Consumer align](./align.md) (`wk align .`)
 - Kit merge bar: `wk check` (audit, evals, ontology, context budget). Doctor is not part of that gate.
 - Conventional commits: [SOP](/SOPs/conventional-commits)

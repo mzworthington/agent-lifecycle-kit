@@ -30,7 +30,17 @@ wk doctor --owned --scan ~/Documents/dev
 wk doctor . --write
 ```
 
-Report-only by default. `--write` fills missing files and never overwrites README or LICENSE. Handshake and hooks stay on `wk init`. Guide: [Repo doctor](/docs/doctor).
+Report-only by default. `--write` fills missing files and never overwrites README or LICENSE. Handshake and hooks stay on `wk init`. After init, `wk align .` checks the handshake still matches. Guides: [Repo doctor](/docs/doctor), [Consumer align](/docs/align).
+
+## How do I check that an app repo still follows Waykit?
+
+Use `wk align`. It is the consumer counterpart to doctor: handshake size, host pointers, kit-knowledge MCP, and `commit-msg`. `--write` fills missing IDE pointers and never overwrites `AGENTS.md`.
+
+```bash
+wk align .
+wk align . --write
+wk mcp default --project
+```
 
 ## How do I tab-complete wk commands?
 

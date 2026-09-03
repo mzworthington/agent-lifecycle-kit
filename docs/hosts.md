@@ -18,6 +18,7 @@ Canonical content is still `AGENTS.md`, `skills/`, and `mcps/`. Host files are a
 
 ```bash
 wk init . --mcp default --hook
+wk align .
 wk mcp default --install
 wk mcp default --install --host claude
 wk mcp default --project

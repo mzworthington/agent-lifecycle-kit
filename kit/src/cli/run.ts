@@ -4,6 +4,7 @@ import path from 'path';
 import { exportIDERules } from '../bootstrap/export_ide_rules.js';
 import { initProject } from '../bootstrap/init_project.js';
 import { ghGitHubPort } from '../doctor/github.js';
+import { alignProject, printAlignResult } from '../align/align_project.js';
 import { printDoctorResult, runDoctor } from '../doctor/run.js';
 import { evaluateOwnership, shouldInstallInitHooks } from '../doctor/ownership.js';
 import { composeMCP } from '../bootstrap/compose_mcp.js';
@@ -173,6 +174,16 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
 
     case 'check':
       return runKitCheck(repoDir);
+
+    case 'align': {
+      const result = alignProject({
+        targetDir: command.targetDir,
+        kitRepoDir: repoDir,
+        write: command.write
+      });
+      printAlignResult(result);
+      return status(result.ok);
+    }
 
     case 'complete': {
       const replies = completeKitLine(command.words, { mcpProfiles: listMcpProfileNames(repoDir) });

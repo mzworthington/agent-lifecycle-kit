@@ -15,6 +15,7 @@ Cursor, Claude Code, Copilot, and Antigravity share `AGENTS.md`. MCP and model o
 - Gate a prompt or schema change → `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`
 - Changed a skill or SOP → `wk ontology check` then the [Waykit map](https://waykit.dev/docs/map)
 - Owned repos missing README / license / templates → `wk doctor --owned --scan ~/Documents/dev`
+- App repo drifted from the Waykit handshake → `wk align .`
 
 ## Start here
 - [Home](https://waykit.dev/)
@@ -27,6 +28,7 @@ Cursor, Claude Code, Copilot, and Antigravity share `AGENTS.md`. MCP and model o
 - [Hosts](https://waykit.dev/docs/hosts) ([markdown](https://waykit.dev/docs/hosts.md))
 - [Operator guide](https://waykit.dev/docs/kit) ([markdown](https://waykit.dev/docs/kit.md))
 - [Repo doctor](https://waykit.dev/docs/doctor) ([markdown](https://waykit.dev/docs/doctor.md))
+- [Consumer align](https://waykit.dev/docs/align) ([markdown](https://waykit.dev/docs/align.md))
 - [Waykit map](https://waykit.dev/docs/map) ([markdown](https://waykit.dev/docs/map.md))
 - [Author the Waykit map](https://waykit.dev/ontology) ([markdown](https://waykit.dev/ontology/README.md))
 - [SOPs](https://waykit.dev/docs/sops) ([markdown](https://waykit.dev/docs/sops.md))
@@ -50,6 +52,7 @@ wk eval run --suite evals/edd/architecture_routing.yaml --style cli --cli cursor
 wk measure-context
 wk ontology check
 wk doctor --owned --scan ~/Documents/dev
+wk align .
 wk completion install
 wk check
 wk mcp default --install

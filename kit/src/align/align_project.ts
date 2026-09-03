@@ -1,0 +1,195 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { exportIDERules, IDE_RULE_REL_PATHS } from '../bootstrap/export_ide_rules.js';
+import { DEFAULT_TARGET_CHARS } from '../quality/measure_context_budget.js';
+
+export type AlignStatus = 'ok' | 'fail';
+
+export interface AlignFinding {
+  id: string;
+  label: string;
+  status: AlignStatus;
+  detail: string;
+}
+
+export interface AlignResult {
+  ok: boolean;
+  targetDir: string;
+  findings: AlignFinding[];
+  written: string[];
+}
+
+export interface AlignProjectOptions {
+  targetDir: string;
+  kitRepoDir: string;
+  write: boolean;
+}
+
+function readIfPresent(filePath: string): string | undefined {
+  if (!fs.existsSync(filePath)) return undefined;
+  return fs.readFileSync(filePath, 'utf8');
+}
+
+function fileExists(dir: string, rel: string): boolean {
+  return fs.existsSync(path.join(dir, rel));
+}
+
+function finding(id: string, label: string, ok: boolean, detail: string): AlignFinding {
+  return { id, label, status: ok ? 'ok' : 'fail', detail };
+}
+
+function bulkLoadsPhilosophy(text: string): boolean {
+  if (/do not bulk-read|do not bulk-load/i.test(text)) return false;
+  return /before (starting work|phase work)[\s\S]{0,800}CODING_PHILOSOPHY/i.test(text)
+    || /Read[\s\S]{0,200}CODING_PHILOSOPHY\.md[\s\S]{0,80}before/i.test(text);
+}
+
+function mcpServerNames(targetDir: string): string[] {
+  const candidates = [
+    path.join(targetDir, '.cursor', 'mcp.json'),
+    path.join(targetDir, '.mcp.json')
+  ];
+  const names: string[] = [];
+  for (const filePath of candidates) {
+    const raw = readIfPresent(filePath);
+    if (raw === undefined) continue;
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      continue;
+    }
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) continue;
+    const doc = parsed as Record<string, unknown>;
+    const servers = doc.mcpServers;
+    if (!servers || typeof servers !== 'object' || Array.isArray(servers)) continue;
+    names.push(...Object.keys(servers as Record<string, unknown>));
+  }
+  return names;
+}
+
+function commitMsgPresent(targetDir: string): boolean {
+  return (
+    fileExists(targetDir, path.join('.husky', 'commit-msg')) ||
+    fileExists(targetDir, path.join('.githooks', 'commit-msg')) ||
+    fileExists(targetDir, path.join('.git', 'hooks', 'commit-msg'))
+  );
+}
+
+function handoverHomeOk(text: string, project: string): boolean {
+  const folders = [...text.matchAll(/handover\/([A-Za-z0-9._-]+)/g)].map((m) => m[1] ?? '');
+  if (folders.length === 0) return true;
+  if (folders.includes('blueprint') && project !== 'blueprint') return false;
+  return folders.includes(project);
+}
+
+function evaluate(targetDir: string): AlignFinding[] {
+  const project = path.basename(path.resolve(targetDir));
+  const agents = readIfPresent(path.join(targetDir, 'AGENTS.md'));
+  const findings: AlignFinding[] = [];
+
+  findings.push(finding('agents', 'AGENTS.md present', agents !== undefined, 'create via wk init or copy templates/project-AGENTS.md'));
+
+  const budgetOk = agents !== undefined && Buffer.byteLength(agents, 'utf8') <= DEFAULT_TARGET_CHARS;
+  findings.push(
+    finding(
+      'budget',
+      `AGENTS.md under ${DEFAULT_TARGET_CHARS} chars`,
+      budgetOk,
+      agents === undefined ? 'missing AGENTS.md' : `${Buffer.byteLength(agents, 'utf8')} chars`
+    )
+  );
+
+  const bulk = agents !== undefined && bulkLoadsPhilosophy(agents);
+  findings.push(
+    finding(
+      'no-bulk-load',
+      'Handshake does not eager-load philosophy',
+      agents !== undefined && !bulk,
+      'say “do not bulk-read”; load CODING_PHILOSOPHY.md only on demand'
+    )
+  );
+
+  findings.push(
+    finding(
+      'kit-pointer',
+      'Handshake points at ~/.agents',
+      agents !== undefined && /~\/\.agents/.test(agents),
+      'name ~/.agents as the kit root'
+    )
+  );
+
+  const missingHosts = IDE_RULE_REL_PATHS.filter((rel) => !fileExists(targetDir, rel));
+  findings.push(
+    finding(
+      'host-pointers',
+      'Host rule pointers present',
+      missingHosts.length === 0,
+      missingHosts.length ? `missing ${missingHosts.join(', ')}` : 'CLAUDE.md, .cursorrules, GEMINI.md, Copilot, Windsurf'
+    )
+  );
+
+  findings.push(
+    finding(
+      'commit-msg',
+      'Conventional commit-msg hook',
+      commitMsgPresent(targetDir),
+      'install .husky/commit-msg (wk init --hook)'
+    )
+  );
+
+  const servers = mcpServerNames(targetDir);
+  findings.push(
+    finding(
+      'mcp-kit-knowledge',
+      'Project MCP includes kit-knowledge',
+      servers.includes('kit-knowledge'),
+      'wk mcp default --project'
+    )
+  );
+
+  findings.push(
+    finding(
+      'handover-home',
+      `Handover path uses ${project}`,
+      agents === undefined || handoverHomeOk(agents, project),
+      `use ~/.agents/handover/${project}/, not a stale folder name`
+    )
+  );
+
+  return findings;
+}
+
+export function alignProject(options: AlignProjectOptions): AlignResult {
+  const targetDir = path.resolve(options.targetDir);
+  const written: string[] = [];
+
+  if (options.write) {
+    for (const rel of IDE_RULE_REL_PATHS) {
+      if (!fileExists(targetDir, rel)) written.push(rel);
+    }
+    exportIDERules(targetDir, false, options.kitRepoDir);
+  }
+
+  const findings = evaluate(targetDir);
+  return {
+    ok: findings.every((f) => f.status === 'ok'),
+    targetDir,
+    findings,
+    written: options.write ? written : []
+  };
+}
+
+export function printAlignResult(result: AlignResult, log: (msg: string) => void = console.log): void {
+  log(`=== align ${result.targetDir} ===`);
+  for (const item of result.findings) {
+    const mark = item.status === 'ok' ? 'ok  ' : 'fail';
+    const extra = item.status === 'fail' && item.detail ? ` (${item.detail})` : '';
+    log(`  ${mark}  ${item.label}${extra}`);
+  }
+  if (result.written.length > 0) {
+    log(`wrote: ${result.written.join(', ')}`);
+  }
+  if (result.ok) log('✅ align PASSED.');
+  else log('align FAILED (consumer handshake/MCP/hooks). Doctor still owns README/license/templates.');
+}

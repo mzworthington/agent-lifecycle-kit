@@ -31,6 +31,7 @@ macOS / Linux; needs git and Node 22+. Already cloned this repo? Run `./install.
 | Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
 | Always-on rules are too fat | `wk measure-context` then `wk check` |
 | Owned repos missing README / license / templates | `wk doctor --owned --scan <dev-dir>` |
+| App repo drifted from the Waykit handshake | `wk align .` (`--write` fills host pointers; `wk mcp default --project` for kit MCP) |
 | Agent picked the wrong tool / made-up args | Write a JSONL case → `wk eval run --suite evals/edd/demo.yaml --model scripted` |
 | Gate a prompt or schema change | `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports` |
 | Promote a prod miss into the suite | `wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl` |
@@ -112,6 +113,7 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | :--- | :--- |
 | `wk init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
 | `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps) |
+| `wk align [dir]` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` fills pointers) |
 | `wk completion install` | Write a live tab-completion stub (zsh + bash); verbs follow the current `wk` |
 | `wk mcp <profile>` | Compose a named profile into Cursor, Claude, Copilot, and Antigravity (`--install` / `--project`) |
 | `wk check` | Local quality gate (audit, evals, EDD CI, context budget) |

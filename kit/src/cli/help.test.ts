@@ -10,6 +10,7 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /site assemble[\s\S]*web build first/);
     assert.match(KIT_HELP, /commit-msg/);
     assert.match(KIT_HELP, /doctor \[dir\]/);
+    assert.match(KIT_HELP, /align \[dir\]/);
     assert.match(KIT_HELP, /completion <shell>/);
     assert.match(KIT_HELP, /completion install/);
     assert.match(KIT_HELP, /Usage: wk <command>/);

@@ -30,7 +30,7 @@ Use [Conventional Commits](./SOPs/conventional-commits.md) for **every commit an
 
 Examples: `feat(skills): …`, `fix(cli): …`, `docs: …`, `ci: …`.
 
-Husky `.husky/commit-msg` (and `wk commit-msg`) reject a non-conventional **commit subject**. CI on pull requests also checks the **PR title**. `wk doctor` reports missing community files on GitHub sources you admin; `--write` fills gaps without overwriting README or LICENSE.
+Husky `.husky/commit-msg` (and `wk commit-msg`) reject a non-conventional **commit subject**. CI on pull requests also checks the **PR title**. `wk doctor` reports missing community files on GitHub sources you admin. `wk align` reports consumer handshake drift (host pointers, kit MCP, commit-msg).
 
 ## Checks we expect green
 

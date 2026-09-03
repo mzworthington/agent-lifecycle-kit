@@ -129,3 +129,21 @@ wk doctor --owned --scan ~/Documents/dev
 - [Repo doctor](/docs/doctor)
 - [Operator guide](/docs/kit)
 - [Conventional commits](/SOPs/conventional-commits)
+
+## consumer-align | App repo drifted from the Waykit handshake
+
+> AGENTS.md got fat, host pointers are missing, or project MCP is a vendor pile instead of kit-knowledge.
+
+Doctor will stay green while the agent bootstrap drifts. `wk align` is the consumer check: handshake, IDE pointers, kit MCP, commit-msg.
+
+1. **Report** with `wk align .` in the app clone.
+2. **Fill host pointers** with `--write` (never overwrites `AGENTS.md`).
+3. **Compose kit MCP** with `wk mcp default --project`. Use `cloudflare-ops` only for that session.
+
+```
+wk align .
+```
+
+- [Consumer align](/docs/align)
+- [Hosts](/docs/hosts)
+- [Repo doctor](/docs/doctor)
