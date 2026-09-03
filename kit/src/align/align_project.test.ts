@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
-import { alignProject, printAlignResult } from './align_project.js';
+import { alignNextSteps, alignProject, printAlignResult } from './align_project.js';
 
 function write(root: string, rel: string, contents: string): void {
   const full = path.join(root, rel);
@@ -11,10 +11,18 @@ function write(root: string, rel: string, contents: string): void {
   fs.writeFileSync(full, contents, 'utf8');
 }
 
+const THIN_HANDSHAKE = `# Agent Handshake
+
+Standards live in ~/.agents ([Waykit](https://github.com/mzworthington/waykit)).
+
+Start from ~/.agents/AGENTS.md. **Do not** bulk-read philosophy, SOPs, or skills up front.
+`;
+
 function kitWithTemplates(): string {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-kit-'));
   const templates = path.join(root, 'templates');
   fs.mkdirSync(templates);
+  fs.writeFileSync(path.join(templates, 'project-AGENTS.md'), THIN_HANDSHAKE, 'utf8');
   for (const name of [
     'project-GEMINI.md',
     'project-CLAUDE.md',
@@ -26,13 +34,6 @@ function kitWithTemplates(): string {
   }
   return root;
 }
-
-const THIN_HANDSHAKE = `# Agent Handshake
-
-Standards live in ~/.agents ([Waykit](https://github.com/mzworthington/waykit)).
-
-Start from ~/.agents/AGENTS.md. **Do not** bulk-read philosophy, SOPs, or skills up front.
-`;
 
 function alignedApp(name = 'demoapp'): string {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), `kit-align-${name}-`));
@@ -108,6 +109,17 @@ describe('alignProject', () => {
     assert.equal(fs.readFileSync(path.join(target, 'AGENTS.md'), 'utf8'), before);
     assert.equal(fs.readFileSync(path.join(target, 'CLAUDE.md'), 'utf8'), '# project-CLAUDE.md\n');
   });
+
+  it('seeds AGENTS.md from the kit template when --write and the file is missing', () => {
+    const kit = kitWithTemplates();
+    const target = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-seed-'));
+    write(target, path.join('.husky', 'commit-msg'), 'ok\n');
+    write(target, path.join('.mcp.json'), JSON.stringify({ mcpServers: { 'kit-knowledge': {} } }));
+    const result = alignProject({ targetDir: target, kitRepoDir: kit, write: true });
+    assert.equal(result.ok, true);
+    assert.ok(result.written.includes('AGENTS.md'));
+    assert.match(fs.readFileSync(path.join(target, 'AGENTS.md'), 'utf8'), /~\/\.agents/);
+  });
 });
 
 describe('printAlignResult', () => {
@@ -128,5 +140,19 @@ describe('printAlignResult', () => {
     assert.match(lines.join('\n'), /ok\s+AGENTS.md present/);
     assert.match(lines.join('\n'), /fail\s+Host pointers/);
     assert.match(lines.join('\n'), /align FAILED/);
+    assert.match(lines.join('\n'), /next:/);
+    assert.match(lines.join('\n'), /wk align \. --write/);
+  });
+
+  it('groups next commands from failed finding ids', () => {
+    const steps = alignNextSteps([
+      { id: 'agents', label: 'AGENTS.md', status: 'fail', detail: '' },
+      { id: 'host-pointers', label: 'hosts', status: 'fail', detail: '' },
+      { id: 'mcp-kit-knowledge', label: 'mcp', status: 'fail', detail: '' },
+      { id: 'no-bulk-load', label: 'bulk', status: 'fail', detail: '' }
+    ]);
+    assert.equal(steps.length, 2);
+    assert.match(steps[0] ?? '', /--write/);
+    assert.match(steps[1] ?? '', /mcp default --project/);
   });
 });

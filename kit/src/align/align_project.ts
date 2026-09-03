@@ -134,7 +134,7 @@ function evaluate(targetDir: string): AlignFinding[] {
       'commit-msg',
       'Conventional commit-msg hook',
       commitMsgPresent(targetDir),
-      'install .husky/commit-msg (wk init --hook)'
+      'add .githooks/commit-msg then git config core.hooksPath .githooks (or wk init --hook)'
     )
   );
 
@@ -160,11 +160,47 @@ function evaluate(targetDir: string): AlignFinding[] {
   return findings;
 }
 
+const AGENTS_TEMPLATE_REL = path.join('templates', 'project-AGENTS.md');
+
+function seedAgentsMd(targetDir: string, kitRepoDir: string): boolean {
+  const dest = path.join(targetDir, 'AGENTS.md');
+  if (fs.existsSync(dest)) return false;
+  const src = path.join(kitRepoDir, AGENTS_TEMPLATE_REL);
+  if (!fs.existsSync(src)) return false;
+  fs.copyFileSync(src, dest);
+  return true;
+}
+
+export function alignNextSteps(findings: AlignFinding[]): string[] {
+  const failed = new Set(findings.filter((item) => item.status === 'fail').map((item) => item.id));
+  const steps: string[] = [];
+  if (failed.has('agents') || failed.has('host-pointers')) {
+    steps.push('wk align . --write   # seed AGENTS.md if missing; fill host pointers');
+  }
+  if (
+    !failed.has('agents') &&
+    (failed.has('no-bulk-load') ||
+      failed.has('kit-pointer') ||
+      failed.has('budget') ||
+      failed.has('handover-home'))
+  ) {
+    steps.push('Edit AGENTS.md (thin handshake, ~/.agents, handover/<this-folder>/)');
+  }
+  if (failed.has('commit-msg')) {
+    steps.push('Add .githooks/commit-msg then git config core.hooksPath .githooks  (or wk init --hook)');
+  }
+  if (failed.has('mcp-kit-knowledge')) {
+    steps.push('wk mcp default --project');
+  }
+  return steps;
+}
+
 export function alignProject(options: AlignProjectOptions): AlignResult {
   const targetDir = path.resolve(options.targetDir);
   const written: string[] = [];
 
   if (options.write) {
+    if (seedAgentsMd(targetDir, options.kitRepoDir)) written.push('AGENTS.md');
     for (const rel of IDE_RULE_REL_PATHS) {
       if (!fileExists(targetDir, rel)) written.push(rel);
     }
@@ -191,5 +227,12 @@ export function printAlignResult(result: AlignResult, log: (msg: string) => void
     log(`wrote: ${result.written.join(', ')}`);
   }
   if (result.ok) log('✅ align PASSED.');
-  else log('align FAILED (consumer handshake/MCP/hooks). Doctor still owns README/license/templates.');
+  else {
+    log('align FAILED (consumer handshake/MCP/hooks). Doctor still owns README/license/templates.');
+    const steps = alignNextSteps(result.findings);
+    if (steps.length > 0) {
+      log('next:');
+      for (const step of steps) log(`  ${step}`);
+    }
+  }
 }

@@ -95,7 +95,7 @@ Skills and `AGENTS.md` tell the agent what to load. You operate the kit with `wk
 |---------|------------------------------|
 | `wk measure-context` | Always-on bootstrap size vs 8KB |
 | `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`) |
-| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` fills pointers) |
+| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers) |
 | `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |
 | `wk check` | Audit, ontology, evals, EDD CI, context budget |
 | `wk ontology check` | Live graph referential integrity |

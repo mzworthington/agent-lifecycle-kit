@@ -11,7 +11,7 @@ ${aliasLine}
 Commands:
   init [dir]           Bootstrap AGENTS.md, host rules, MCP configs, and git hooks
   doctor [dir]         Check community files on repos you admin (report only; --write fills gaps)
-  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write fills pointers)
+  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds missing AGENTS.md and host pointers)
   mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas

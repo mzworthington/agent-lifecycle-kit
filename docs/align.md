@@ -12,7 +12,7 @@ wk align ../archlens
 wk align . --write    # fill missing CLAUDE.md / .cursorrules / Copilot / Gemini / Windsurf pointers
 ```
 
-`--write` never overwrites `AGENTS.md`. It does not compose MCP. After a miss on kit-knowledge:
+`--write` seeds `AGENTS.md` from `templates/project-AGENTS.md` when it is missing, and fills host pointers. It never overwrites `AGENTS.md`. It does not compose MCP. After a miss on kit-knowledge:
 
 ```bash
 wk mcp default --project
@@ -35,7 +35,7 @@ That replaces the project MCP file for the session. Restore `default` when you a
 | No bulk-load | Handshake does not require `CODING_PHILOSOPHY.md` before phase work (or it says do not bulk-read) |
 | Kit pointer | Text names `~/.agents` |
 | Host pointers | `.cursorrules`, `CLAUDE.md`, `GEMINI.md`, `.windsurfrules`, `.github/copilot-instructions.md` |
-| `commit-msg` | Husky, `.githooks`, or `.git/hooks` |
+| `commit-msg` | Husky, `.githooks`, or `.git/hooks` (enable `.githooks` with `git config core.hooksPath .githooks`) |
 | MCP | Project `.cursor/mcp.json` or `.mcp.json` includes `kit-knowledge` |
 | Handover home | If handover paths appear, they use this repo’s folder name, not a stale `blueprint` |
 

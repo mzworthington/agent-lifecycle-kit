@@ -27,6 +27,8 @@ wk doctor --class product     # skip auto class (kit | product | dns | site | te
 
 `--owned` needs the GitHub CLI (`gh`). Pass `--login` if you do not want `gh api user`. Uncloned sources are checked remotely and are never written; pass `--scan` so local worktrees can receive `--write`.
 
+On product, DNS, site, and template reports, doctor also prints that handshake quality is `wk align .`. Doctor still only checks community files.
+
 Default license for **kit** class is Unlicense. Other classes get an MIT stub. Existing LICENSE files stay put. Set `WK_COPYRIGHT_HOLDER` when `--write` creates MIT.
 
 ## What it looks for

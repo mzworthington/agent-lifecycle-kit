@@ -6,7 +6,7 @@ import { describe, it } from 'node:test';
 import { applyDoctorPlan } from './apply.js';
 import { planRepoDoctor } from './hygiene.js';
 import { evaluateOwnership } from './ownership.js';
-import { runDoctor } from './run.js';
+import { printDoctorResult, runDoctor } from './run.js';
 import type { GitHubPort } from './github.js';
 import type { RepoView } from './ownership.js';
 
@@ -121,5 +121,80 @@ describe('runDoctor --owned', () => {
     assert.equal(remote.remoteOnly, true);
     assert.equal(remote.written.length, 0);
     assert.equal(remote.plan.writeBlocked, true);
+  });
+});
+
+describe('printDoctorResult', () => {
+  it('hints wk align on non-kit reports', () => {
+    const lines: string[] = [];
+    printDoctorResult(
+      {
+        ok: true,
+        error: undefined,
+        reports: [
+          {
+            label: 'me/site',
+            targetDir: '/tmp/site',
+            written: [],
+            remoteOnly: false,
+            plan: {
+              repoClass: 'site',
+              ownership: evaluateOwnership({
+                nameWithOwner: 'me/site',
+                ownerLogin: 'me',
+                isFork: false,
+                isArchived: false,
+                viewerPermission: 'ADMIN'
+              }),
+              ok: true,
+              writeBlocked: false,
+              skippedReason: undefined,
+              findings: [{ relPath: 'README.md', status: 'ok' }],
+              writes: [],
+              installHooks: false
+            }
+          }
+        ]
+      },
+      (msg) => lines.push(msg)
+    );
+    assert.match(lines.join('\n'), /wk align/);
+    assert.match(lines.join('\n'), /doctor PASSED/);
+  });
+
+  it('does not hint align for kit-only reports', () => {
+    const lines: string[] = [];
+    printDoctorResult(
+      {
+        ok: true,
+        error: undefined,
+        reports: [
+          {
+            label: 'me/waykit',
+            targetDir: '/tmp/kit',
+            written: [],
+            remoteOnly: false,
+            plan: {
+              repoClass: 'kit',
+              ownership: evaluateOwnership({
+                nameWithOwner: 'me/waykit',
+                ownerLogin: 'me',
+                isFork: false,
+                isArchived: false,
+                viewerPermission: 'ADMIN'
+              }),
+              ok: true,
+              writeBlocked: false,
+              skippedReason: undefined,
+              findings: [{ relPath: 'README.md', status: 'ok' }],
+              writes: [],
+              installHooks: false
+            }
+          }
+        ]
+      },
+      (msg) => lines.push(msg)
+    );
+    assert.equal(/wk align/.test(lines.join('\n')), false);
   });
 });

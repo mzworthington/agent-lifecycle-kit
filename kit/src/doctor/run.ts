@@ -148,35 +148,45 @@ export function runDoctor(opts: DoctorRunOptions): DoctorRunResult {
   return { ok: plan.ok || plan.skippedReason !== undefined, reports, error: undefined };
 }
 
-export function printDoctorResult(result: DoctorRunResult): void {
+export function printDoctorResult(
+  result: DoctorRunResult,
+  log: (msg: string) => void = console.log,
+  error: (msg: string) => void = console.error
+): void {
   if (result.error) {
-    console.error(`ERROR: ${result.error}`);
+    error(`ERROR: ${result.error}`);
     return;
   }
   for (const report of result.reports) {
     const where = report.targetDir ?? 'not cloned';
-    console.log(`=== ${report.label} (${report.plan.repoClass}) [${where}] ===`);
+    log(`=== ${report.label} (${report.plan.repoClass}) [${where}] ===`);
     if (report.plan.skippedReason) {
-      console.log(`skip (${report.plan.skippedReason})`);
+      log(`skip (${report.plan.skippedReason})`);
       continue;
     }
     if (report.remoteOnly) {
-      console.log('remote check only (pass --scan with a local checkout to --write)');
+      log('remote check only (pass --scan with a local checkout to --write)');
     }
     if (report.plan.writeBlocked && !report.remoteOnly) {
-      console.log(`write blocked (${report.plan.ownership.reason})`);
+      log(`write blocked (${report.plan.ownership.reason})`);
     }
     for (const finding of report.plan.findings) {
       const mark = finding.status === 'ok' ? 'ok  ' : 'miss';
-      console.log(`  ${mark}  ${finding.relPath}`);
+      log(`  ${mark}  ${finding.relPath}`);
     }
     if (report.written.length > 0) {
-      console.log(`wrote: ${report.written.join(', ')}`);
+      log(`wrote: ${report.written.join(', ')}`);
     }
     if (report.plan.installHooks) {
-      console.log('hooks: installed');
+      log('hooks: installed');
     }
   }
-  if (result.ok) console.log('✅ doctor PASSED.');
-  else console.error('doctor FAILED (missing community files on an owned repo).');
+  const hintAlign = result.reports.some(
+    (report) => report.plan.skippedReason === undefined && report.plan.repoClass !== 'kit'
+  );
+  if (hintAlign) {
+    log('Handshake (thin AGENTS, MCP, host pointers) is wk align ., not doctor.');
+  }
+  if (result.ok) log('✅ doctor PASSED.');
+  else error('doctor FAILED (missing community files on an owned repo).');
 }
