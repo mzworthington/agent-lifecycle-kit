@@ -152,6 +152,20 @@ describe('composeMCP', () => {
     assert.equal(body.mcpServers.vercel, undefined);
   });
 
+  it('composes the warp profile from the kit catalog', () => {
+    const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-warp-')), 'mcp.json');
+    composeMCP('warp', out, false, { repoDir: kitRoot, env: {} });
+    const body = JSON.parse(fs.readFileSync(out, 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(body.mcpServers['warp-factory']?.url, 'https://app.warp.dev/api/v1/mcp/factory');
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.ok(body.mcpServers.github);
+    assert.ok(body.mcpServers.memory);
+    assert.equal(body.mcpServers.linear, undefined);
+    assert.equal(body.mcpServers.context7, undefined);
+  });
+
   it('composes the astro profile from the kit catalog', () => {
     const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-astro-')), 'mcp.json');
     composeMCP('astro', out, false, { repoDir: kitRoot, env: {} });

@@ -24,7 +24,7 @@ curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.s
 
 ## feature | Starting a product feature
 
-> Need the lifecycle path: grill → spec → TDD short loop → XFN → ship.
+> Need the lifecycle path: grill → PRD if bet → spec → TDD short loop → XFN → ship.
 
 Feature work routes through specialist roles so the catalog and XFN rows stay honest. EDD (alpha) sits in TDD when the change is a prompt or tool schema.
 

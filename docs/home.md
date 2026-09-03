@@ -2,7 +2,7 @@
 
 The public homepage is the Astro landing in `web/` (hero, job picker, CLI table, product repos, proof, demo). This file is the copy source of truth for that story.
 
-Waykit is the software lifecycle for coding agents: grill, spec, TDD, quality, audit, release, plus learning loops. You operate it with `wk`. Eval-driven development (**alpha**) is one of those loops: a routing harness, not a full EDD product.
+Waykit is the software lifecycle for coding agents: grill, PRD/bet when value is unproven, spec, TDD, quality, audit, release, plus learning loops. You operate it with `wk`. Eval-driven development (**alpha**) is one of those loops: a routing harness, not a full EDD product.
 
 The homepage CLI table is the [Commands](./kit.md#commands) list from the operator guide: measure context, doctor, check, ontology, one MCP profile, audit, eval CI, sync.
 

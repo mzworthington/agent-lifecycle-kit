@@ -20,6 +20,8 @@ tools:
 
 Owned by [agent-debug](../skills/agent-debug/SKILL.md). Use this when behavior is **wrong today**, not when designing a new feature.
 
+Product bets, experiments, and feature flags: [hypothesis-driven-development.md](./hypothesis-driven-development.md).
+
 Align with [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §4 (minimal change): evidence before edits; smallest fix that kills the symptom.
 
 ## 1. Intake checklist

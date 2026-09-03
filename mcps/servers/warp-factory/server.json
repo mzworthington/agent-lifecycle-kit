@@ -1,0 +1,15 @@
+{
+  "id": "warp-factory",
+  "name": "Warp Factory",
+  "summary": "Official Warp Factory MCP: list factories, send/continue/complete factory tasks, and onboard a factory via OAuth.",
+  "homepage": "https://docs.warp.dev/factories/factory-mcp/",
+  "transport": "http",
+  "phases": ["spec", "impl", "orchestration"],
+  "triggers": ["Warp", "Warp Factory", "factory task", "Foreman", "send_task"],
+  "requiredEnv": [],
+  "mcp": {
+    "warp-factory": {
+      "url": "https://app.warp.dev/api/v1/mcp/factory"
+    }
+  }
+}

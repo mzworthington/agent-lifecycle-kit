@@ -28,7 +28,7 @@ macOS / Linux; needs git and Node 22+. Already cloned this repo? Run `./install.
 | Job in front of you | Do this |
 | :--- | :--- |
 | Never installed Waykit | [Install](#install), then [start here in 10 minutes](https://waykit.dev/docs/start) |
-| Starting a product feature | Orchestrator lifecycle (grill → spec → TDD + XFN → audit → release) |
+| Starting a product feature | Orchestrator lifecycle (grill → PRD if bet → stories → spec → TDD + XFN → audit → release → confirm/kill) |
 | Always-on rules are too fat | `wk measure-context` then `wk check` |
 | Owned repos missing README / license / templates | `wk doctor --owned --scan <dev-dir>` |
 | App repo drifted from the Waykit handshake | `wk align .` (`--write` fills host pointers; `wk mcp default --project` for kit MCP) |
@@ -61,6 +61,7 @@ sequenceDiagram
   autonumber
   participant O as agent-orchestrator
   participant G as agent-grilling
+  participant P as agent-prd
   participant S as agent-spec
   participant T as agent-tdd
   participant X as agent-xfn
@@ -69,16 +70,17 @@ sequenceDiagram
   participant Tel as agent-telemetry
   participant R as agent-release
 
-  O->>G: Stress-test idea and decision frontier
-  O->>S: BDD spec and acceptance criteria
+  O->>G: Stress-test idea; contract vs bet
+  O->>P: PRD / bet card when value is unproven
+  O->>S: BDD spec (flag off / on / kill when flagged)
   O->>T: Inventory catalog and plan test impact
   O->>X: Cross-functional quality matrix
   O->>T: TDD short loop (gear 1 + gear 2)
   O->>X: Green apply-row XFN suites
   O->>Sec: Security and OWASP audit
   O->>Arch: Hexagonal boundaries, no drift
-  O->>Tel: Map SLOs to OpenTelemetry
-  O->>R: Conventional PR title and handover
+  O->>Tel: SLOs plus leading indicator
+  O->>R: Conventional PR title, flag expiry
 ```
 
 When the change is a prompt or tool schema, TDD includes **Eval-Driven Development (alpha)**: write a failing eval, green the contract, gate merges with `wk eval ci --threshold-routing 95`. This is a routing/schema harness with a scripted merge gate, not a full EDD product. Details: [docs/edd.md](./docs/edd.md).

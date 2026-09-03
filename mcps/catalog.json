@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -240,6 +240,16 @@
       "phases": ["impl", "adapter", "telemetry"],
       "triggers": ["Raspberry Pi", "RPi", "GPIO host", "SBC", "raspi-config", "ssh pi"],
       "requiredEnv": ["RASPBERRY_PI_HOST", "RASPBERRY_PI_USER", "RASPBERRY_PI_SSH_KEY"],
+      "enabledByDefault": false
+    },
+    {
+      "id": "warp-factory",
+      "name": "Warp Factory",
+      "summary": "Official Warp Factory MCP: list factories, send/continue/complete factory tasks, and onboard a factory via OAuth.",
+      "transport": "http",
+      "phases": ["spec", "impl", "orchestration"],
+      "triggers": ["Warp", "Warp Factory", "factory task", "Foreman", "send_task"],
+      "requiredEnv": [],
       "enabledByDefault": false
     }
   ]

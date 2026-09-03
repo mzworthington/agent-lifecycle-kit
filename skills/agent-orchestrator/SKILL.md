@@ -1,12 +1,13 @@
 ---
 name: agent-orchestrator
 description: >-
-  Coordinates multi-phase feature development across specification, TDD short
-  loop (catalog impact, gear-1 domain, gear-2 thin adapters), cross-functional
-  quality suites, optional adapter deep-dive, security/architecture audit, and
-  telemetry fed by XFN SLOs. Use when starting a new feature, running the full
-  lifecycle, routing between specialist roles, or producing phase handover
-  artifacts.
+  Coordinates multi-phase feature development across grilling, PRD/bet cards,
+  stories, specification, TDD short loop (catalog impact, gear-1 domain, gear-2
+  thin adapters), cross-functional quality suites, optional adapter deep-dive,
+  security/architecture audit, telemetry fed by XFN SLOs and bet indicators,
+  release, and confirm/kill plus flag prune. Use when starting a new feature,
+  running the full lifecycle, routing between specialist roles, or producing
+  phase handover artifacts.
 kind: role
 phase: orchestration
 triggers:
@@ -18,6 +19,7 @@ triggers:
 depends-on:
   - agent-grilling
   - agent-grill-me
+  - agent-prd
   - agent-spec
   - agent-user-stories
   - agent-tdd
@@ -55,7 +57,7 @@ disable-model-invocation: false
 
 You are the master coordinator responsible for guiding feature development through the multi-agent software engineering lifecycle.
 
-Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). **EDD (default for agent prompts/tools/routing):** [docs/edd.md](../../docs/edd.md), [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). API contracts: [SOPs/api-contracts.md](../../SOPs/api-contracts.md). Releases: [SOPs/release.md](../../SOPs/release.md).
+Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). **Product bets / flags / iterative design:** [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md). **EDD (default for agent prompts/tools/routing):** [docs/edd.md](../../docs/edd.md), [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). API contracts: [SOPs/api-contracts.md](../../SOPs/api-contracts.md). Releases: [SOPs/release.md](../../SOPs/release.md).
 
 **Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
@@ -70,6 +72,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 | Phase | Skill |
 |-------|-------|
 | Idea / plan stress-testing | [agent-grilling](../agent-grilling/SKILL.md) (primitive) / [agent-grill-me](../agent-grill-me/SKILL.md) (stateless) |
+| PRD / product bet | [agent-prd](../agent-prd/SKILL.md) |
 | Linear backlog / user stories | [agent-user-stories](../agent-user-stories/SKILL.md) |
 | Specification | [agent-spec](../agent-spec/SKILL.md) |
 | TDD short loop | [agent-tdd](../agent-tdd/SKILL.md) - gear 1 domain/handlers + gear 2 thin adapters |
@@ -124,7 +127,9 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | PR / diff review request | `agent-review` |
 | Landing / marketing / AI-sounding copy, microcopy, errors | `agent-copy` (+ `agent-ui` if layout/chrome) |
 | Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
-| New feature, new bounded context, new external integration | Full lifecycle |
+| New feature, new bounded context, new external integration | Full lifecycle (grill → PRD if bet → stories → spec → …) |
+| Product bet / PRD / experiment / kill criteria | **`agent-prd`** (grill first if unsettled) → `agent-user-stories` → `agent-spec` |
+| Timebox elapsed on a flagged bet | Measure via `agent-telemetry` if needed → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
 
 When in doubt, prefer the smaller route and ask.
 
@@ -152,32 +157,44 @@ Applies when the scope gate selects **full lifecycle** (adapt with light XFN on 
 ```mermaid
 sequenceDiagram
   participant O as Orchestrator
+  participant G as agent-grilling
+  participant P as agent-prd
+  participant U as agent-user-stories
   participant S as agent-spec
   participant T as agent-tdd
   participant X as agent-xfn
   participant A as agent-adapter
   participant R as agent-release
-  O->>S: 1 Intake / spec
-  O->>T: 2 Functional impact map
-  O->>X: 3 XFN plan matrix
-  O->>T: 4 Short loop gear1+gear2
+  O->>G: Stress-test idea; contract vs bet
+  opt Bet
+    O->>P: PRD / bet card
+  end
+  O->>U: INVEST stories (hypothesis + flag notes)
+  O->>S: Spec Gherkin (off / on / kill when flagged)
+  O->>T: Functional impact map
+  O->>X: XFN plan matrix
+  O->>T: Short loop gear1+gear2
   opt Large adapter
     O->>A: Deep-dive only
   end
-  O->>X: 5 XFN green apply rows
-  O->>O: 6 Audit security + arch-drift
-  O->>O: 7 Pre-commit
-  O->>O: 8 Telemetry
-  O->>R: 9 Release
+  O->>X: XFN green apply rows
+  O->>O: Audit security + arch-drift
+  O->>O: Pre-commit
+  O->>O: Telemetry (SLO + leading indicator)
+  O->>R: Release (flag expiry / rollback)
+  opt Timebox elapsed
+    O->>U: Confirm or kill story
+    O->>O: Prune flag or slice
+  end
 ```
 
-1. **Intake** - Read the user request. Route to `agent-spec` (include cross-functional acceptance criteria).
-2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact, first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
+1. **Intake** - Read the user request. Grill if unsettled. Route **bets** to `agent-prd`, then `agent-user-stories`, then `agent-spec` (Gherkin including flag off/on/kill and the leading-indicator event). Tiny contracts may skip PRD.
+2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
 3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
 4. **Short loop (execution)** - Route back to **`agent-tdd`**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.
 5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
-8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`.
-9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
-10. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) - do not leave them as prose-only lessons.
+8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md` and the bet’s leading indicator when present.
+9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title, flag expiry, and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
+10. **Close the bet** - After the timebox: confirm or kill via `agent-user-stories`, then `agent-prune` for the flag or slice. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) - do not leave them as prose-only lessons.

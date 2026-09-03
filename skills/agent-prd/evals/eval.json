@@ -1,0 +1,23 @@
+{
+  "suite": "agent-prd-co-located",
+  "description": "Co-located evaluation for product PRD / bet cards with kill criteria and flag plan",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "EVAL-PRD-COLOCATED-001",
+      "name": "Bet card with flag plan",
+      "description": "Ensures a product bet PRD names belief, leading indicator, kill criteria, experiment, and feature-flag fields without code or Linear tickets.",
+      "target_skill": "agent-prd",
+      "prompt": "Write a PRD / product bet for gating the new onboarding chooser behind a feature flag so we can kill it if activation stays flat.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["prd", "product bet", "kill criteria", "feature flag"],
+        "required_patterns": ["Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag"],
+        "forbidden_patterns": ["```typescript", "ASCII art", "I want a feature flag"],
+        "required_output_sections": ["Problem", "Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag", "Out of scope"]
+      }
+    }
+  ]
+}

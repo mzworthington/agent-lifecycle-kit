@@ -46,6 +46,7 @@ wk mcp default --project
 wk mcp collab --install
 wk mcp ops --install
 wk mcp cloudflare-ops --install
+wk mcp warp --install
 ```
 
 Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + devtools + ops into one global `mcp.json`. Catalog: [mcps/README.md](../mcps/README.md). Procedure: [SOPs/mcp-library.md](../SOPs/mcp-library.md).

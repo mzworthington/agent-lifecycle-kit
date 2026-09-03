@@ -1,7 +1,7 @@
 {
   "suite": "lifecycle-roles",
   "description": "Evaluation benchmarks for agent-* specialist lifecycle roles",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "test_cases": [
     {
       "id": "EVAL-SPEC-001",
@@ -417,6 +417,22 @@
         "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then "],
         "forbidden_patterns": ["```typescript", "ASCII art", "As a customer"],
         "required_output_sections": ["Story", "Acceptance criteria", "Out of scope"]
+      }
+    },
+    {
+      "id": "EVAL-PRD-001",
+      "name": "Product bet PRD",
+      "description": "Verifies a product-bet PRD names belief, leading indicator, kill criteria, experiment, and feature-flag plan without implementation code.",
+      "target_skill": "agent-prd",
+      "prompt": "Draft a PRD / product bet for an experiment that gates the new export pack behind a flag and kills it if nobody downloads the pack.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["prd", "product bet", "kill criteria", "feature flag"],
+        "required_patterns": ["Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag"],
+        "forbidden_patterns": ["```typescript", "ASCII art", "I want a feature flag"],
+        "required_output_sections": ["Problem", "Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag", "Out of scope"]
       }
     }
   ]

@@ -31,6 +31,8 @@ skills:
     class: plan
   agent-grill-me:
     class: plan
+  agent-prd:
+    class: plan
   agent-spec:
     class: plan
   agent-user-stories:

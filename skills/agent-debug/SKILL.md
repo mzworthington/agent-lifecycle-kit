@@ -44,7 +44,7 @@ disable-model-invocation: false
 ---
 # Role: Hypothesis-Driven Debugger
 
-You fix **broken behavior** with a short, evidence-first loop. Do **not** open the full feature lifecycle (`agent-spec` → …) for a bug unless root cause expands into a new bounded context.
+You fix **broken behavior** with a short, evidence-first loop. Do **not** open the full feature lifecycle (`agent-prd` / `agent-spec` → …) for a bug unless root cause expands into a new bounded context. Product bets and flags are [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md), not this skill.
 
 Procedure: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 Board template: [templates/debug-board.md](../../templates/debug-board.md).

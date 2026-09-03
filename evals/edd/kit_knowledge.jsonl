@@ -1,3 +1,4 @@
+{"id": "kit-sop-hdd-01", "prompt": "Open the kit SOP for hypothesis-driven development.", "tags": ["happy-path", "routing"], "expect": {"tool": "get_sop", "arguments_contains": {"name": "hypothesis-driven-development"}}}
 {"id": "kit-sop-01", "prompt": "Open the kit SOP for conventional commits.", "tags": ["happy-path", "routing"], "expect": {"tool": "get_sop", "arguments_contains": {"name": "conventional-commits"}}}
 {"id": "kit-sop-cf-01", "prompt": "Open the kit SOP for Cloudflare analytics ops.", "tags": ["happy-path", "routing"], "expect": {"tool": "get_sop", "arguments_contains": {"name": "cloudflare-analytics-ops"}}}
 {"id": "kit-sop-model-01", "prompt": "Open the kit SOP for model routing.", "tags": ["happy-path", "routing"], "expect": {"tool": "get_sop", "arguments_contains": {"name": "model-routing"}}}

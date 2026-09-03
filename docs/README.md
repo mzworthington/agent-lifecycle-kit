@@ -16,7 +16,7 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 
 | Page | Who it is for |
 |------|----------------|
-| [Feature lifecycle](./lifecycle.md) | Grill → spec → TDD → XFN → ship |
+| [Feature lifecycle](./lifecycle.md) | Grill → PRD if bet → spec → TDD → XFN → ship |
 | [What Waykit gives you](./kit.md) | `wk` CLI: context budget, live kit graph, MCP profiles, check, doctor |
 | [Repo doctor](./doctor.md) | Owned-repo README, license, contributing, GitHub templates |
 | [Consumer align](./align.md) | App-repo handshake, host pointers, kit MCP, commit-msg |

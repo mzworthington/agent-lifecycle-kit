@@ -45,6 +45,7 @@ Examples:
   ${CLI_BIN} mcp default --project
   ${CLI_BIN} mcp astro --install
   ${CLI_BIN} mcp cloudflare-ops --install
+  ${CLI_BIN} mcp warp --install
   ${CLI_BIN} audit
   ${CLI_BIN} eval
   ${CLI_BIN} eval run --suite evals/edd/architecture_routing.yaml --model scripted

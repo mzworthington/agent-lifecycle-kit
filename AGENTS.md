@@ -25,6 +25,7 @@ Do not commit or push unless the user explicitly asks.
 | CI/CD / GitHub Actions | [profile-pipeline](./skills/profile-pipeline/SKILL.md) |
 | Catalog / XFN matrix | [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) during Design |
 | Debug / RCA | [agent-debug](./skills/agent-debug/SKILL.md) + [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
+| Product bet / PRD / flags | [agent-prd](./skills/agent-prd/SKILL.md) + [SOPs/hypothesis-driven-development.md](./SOPs/hypothesis-driven-development.md) |
 | EDD (prompts, MCP tools, routing; **alpha**) | [docs/edd.md](./docs/edd.md) + [SOPs/eval-driven-development.md](./SOPs/eval-driven-development.md) |
 | Model class / host slug | [SOPs/model-routing.md](./SOPs/model-routing.md) (`models/catalog.yaml` + `models/hosts/`) |
 | SOP / handover search | **kit-knowledge** MCP (`search_kit`, `get_sop`, `get_handover`, `get_entity`, `get_related`) |
@@ -32,12 +33,14 @@ Do not commit or push unless the user explicitly asks.
 | Cross-session facts | **memory** MCP (typed allowlist: glossary/SLO/prefs/project facts, never secrets) |
 | Vendor/framework API docs | **context7** MCP |
 | Linear issues / projects | **linear** MCP (OAuth; on the `default` profile) |
+| Warp Factory tasks | **warp-factory** MCP (`wk mcp warp --install`; OAuth on first use) |
 
 ## Phase → skill
 
 | Phase | Skill |
 |-------|-------|
 | Idea stress-test | [agent-grilling](./skills/agent-grilling/SKILL.md) / [agent-grill-me](./skills/agent-grill-me/SKILL.md) |
+| PRD / product bet | [agent-prd](./skills/agent-prd/SKILL.md) |
 | Spec | [agent-spec](./skills/agent-spec/SKILL.md) |
 | Linear backlog / user stories | [agent-user-stories](./skills/agent-user-stories/SKILL.md) |
 | TDD short loop | [agent-tdd](./skills/agent-tdd/SKILL.md) |

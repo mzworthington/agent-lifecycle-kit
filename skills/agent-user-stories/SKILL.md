@@ -6,7 +6,7 @@ description: >-
   scope. Use when creating or rewriting Linear issues, product review
   backlogs, improvement suggestions as stories, or when the user asks for
   tickets with acceptance criteria and wireframes. Not for Gherkin domain
-  specs (agent-spec) or implementation.
+  specs (agent-spec), PRD/bet cards (agent-prd), or implementation.
 kind: role
 phase: spec
 triggers:
@@ -22,8 +22,10 @@ triggers:
   - product review
   - review tickets
   - operator story
+  - product bet
 depends-on:
   - agent-grilling
+  - agent-prd
   - agent-copy
 mcp:
   - linear
@@ -36,7 +38,9 @@ disable-model-invocation: false
 ---
 # Role: Linear user-story author
 
-Turn product gaps into **small, valuable tickets** a human can play. Hand Gherkin, bounded contexts, and XFN matrices to [agent-spec](../agent-spec/SKILL.md) after the story is settled.
+Turn product gaps into **small, valuable tickets** a human can play. Bet cards and PRDs are [agent-prd](../agent-prd/SKILL.md). Hand Gherkin, bounded contexts, and XFN matrices to [agent-spec](../agent-spec/SKILL.md) after the story is settled.
+
+Product bets and flags: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md).
 
 ## When
 
@@ -61,7 +65,7 @@ Do not invent a customer for ops. Do not clone an open issue. Do not rewrite a t
 ## Workflow
 
 1. **Find the board.** `list_teams` / `list_projects` / `list_issues`. Deduplicate. Fill empty project summaries.
-2. **Grill only if the slice is unsettled** ([agent-grilling](../agent-grilling/SKILL.md)). Split if two personas or two screens. Otherwise write.
+2. **Grill only if the slice is unsettled** ([agent-grilling](../agent-grilling/SKILL.md)). If the slice is a **bet** and no PRD/bet card exists, route to [agent-prd](../agent-prd/SKILL.md) first. Split if two personas or two screens. Otherwise write.
 3. **Title** is the user-visible capability (verb + object). Not a filename, `wk` flag, or “investigate X”.
 4. **INVEST.** Small = one sitting. Parent stays an epic; playable work is children.
 5. **Body** from the matching template. Never ASCII/box-drawing art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
@@ -73,14 +77,15 @@ Do not invent a customer for ops. Do not clone an open issue. Do not rewrite a t
 Headings in order. **Wireframe** only on UI stories.
 
 - **Story** — `As a <role>, I want <capability>, so that <outcome>.`
-- **Acceptance criteria** — `- [ ] Given <context>, when <action>, then <observable result>.` One failure/empty path. UI: one keyboard/name check.
+- **Hypothesis** — required on **bets**: `We believe [change] for [persona] will [outcome]. We’ll know in [window] if [indicator]. Kill if [criteria].` Omit on tiny contracts (say `n/a — contract` in Notes).
+- **Acceptance criteria** — `- [ ] Given <context>, when <action>, then <observable result>.` One failure/empty path. UI: one keyboard/name check. If flagged: one **flag-off** (safe/prior path) and one **flag-on** (new path).
 - **Wireframe** — mermaid `flowchart TB` of screens and controls (UI only).
 - **Out of scope** — explicit non-goals.
-- **Notes** — siblings, ADRs, implementation hints. Not an implementation plan.
+- **Notes** — siblings, ADRs, implementation hints. Not an implementation plan. Feature flags live here: name, default, audience, owner, expiry (or N/A).
 
 Epic parents: Story, **Children** (links), Out of scope, Notes. No checkbox AC that duplicates children.
 
-Criteria are **observable** (copy, files on disk, who is connected, CLI stdout, Linear status). Forbidden in Story/AC: class names, package paths, HTTP verbs as the want, “add a flag”. Those belong in Notes.
+Criteria are **observable** (copy, files on disk, who is connected, CLI stdout, Linear status). Forbidden in Story/AC: class names, package paths, HTTP verbs as the want, “add a flag” / “add a feature flag” as the want. Product flags belong in **Notes**; AC describe the user-visible off and on paths.
 
 ## Title bar
 
@@ -96,4 +101,4 @@ Skip complete stories. Rewrite missing Story / Given-When-Then / Out of scope / 
 
 ## After Linear
 
-Point to [agent-spec](../agent-spec/SKILL.md) when a story is ready to build.
+Point to [agent-spec](../agent-spec/SKILL.md) when a story is ready to build. After a bet’s timebox, write the follow-up story (default-on + prune flag, or kill + prune slice) rather than leaving the flag forever.

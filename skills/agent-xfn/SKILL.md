@@ -80,6 +80,8 @@ Complete and align before changing production code for XFN reasons.
 | Security tests | Authn/authz, sensitive data, trust boundaries, new inputs | No security-relevant surface (still note skip) |
 | Load / performance | Latency SLOs, high traffic, bulk/import, public spikes | No performance risk or SLO in spec |
 
+Flag-gated surfaces: apply XFN to the **flag-on** journey when this slice ships that audience. Skip a quality with “flag-off only in this change” when the on-path is explicitly out of scope. Do not skip a11y on a new UI because a flag exists.
+
 2. **Impact map** - For each applicable suite: **keep / extend / rewrite / retire / add**.
 3. **Thresholds** - Measurable targets (e.g. WCAG 2.2 AA, p95 under 200ms, 100 RPS, unauthenticated access denied). Copy load SLOs into Context for `agent-telemetry`.
 4. **Stubs / specs** - Add failing or skipped-with-TODO suite skeletons and file paths for every **apply** row. Prefer profile defaults; propose new dependencies only with alignment.

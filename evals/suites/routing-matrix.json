@@ -1,7 +1,7 @@
 {
   "suite": "routing-matrix",
   "description": "Evaluation benchmarks for cross-skill routing accuracy and specialist role activation",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "test_cases": [
     {
       "id": "EVAL-ROUTE-001",
@@ -339,6 +339,19 @@
         "required_patterns": ["agent-user-stories"],
         "forbidden_patterns": ["agent-tdd"],
         "required_output_sections": ["Target Role: agent-user-stories"]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-027",
+      "name": "Route to Agent PRD",
+      "description": "Verifies PRD / product-bet / kill-criteria prompts route to agent-prd, not Gherkin spec or Linear stories.",
+      "target_skill": "agent-prd",
+      "prompt": "Write a PRD and product bet with kill criteria and a feature-flag plan for gating the new onboarding chooser.",
+      "assertions": {
+        "required_triggers": ["prd", "product bet", "kill criteria"],
+        "required_patterns": ["agent-prd"],
+        "forbidden_patterns": ["agent-tdd"],
+        "required_output_sections": ["Target Role: agent-prd"]
       }
     }
   ]

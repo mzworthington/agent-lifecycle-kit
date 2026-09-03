@@ -24,8 +24,9 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-orchestrator](./agent-orchestrator/SKILL.md) | orchestration | Multi-phase feature work, handovers |
 | [agent-grilling](./agent-grilling/SKILL.md) | spec | Design-tree interview primitive, decision frontier, fact/decision separation |
 | [agent-grill-me](./agent-grill-me/SKILL.md) | spec | Stateless user-invoked idea stress-testing, active dialogue, ungrillable boundary check |
+| [agent-prd](./agent-prd/SKILL.md) | spec | PRD / bet card: belief, leading indicator, kill criteria, experiment, flag plan |
 | [agent-spec](./agent-spec/SKILL.md) | spec | Requirements, Gherkin, XFN criteria, ambiguity removal |
-| [agent-user-stories](./agent-user-stories/SKILL.md) | spec | Linear INVEST tickets, AC; Mermaid on UI; operator stories skip wireframe |
+| [agent-user-stories](./agent-user-stories/SKILL.md) | spec | Linear INVEST tickets, AC; Mermaid on UI; operator stories skip wireframe; bets get Hypothesis + flag Notes |
 | [agent-tdd](./agent-tdd/SKILL.md) | tdd | Short loop: catalog impact, gear-1 domain/handlers, gear-2 thin adapters → hands XFN to `agent-xfn` |
 | [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
 | [agent-adapter](./agent-adapter/SKILL.md) | impl | **Optional deep-dive** when gear 2 is too large; else prefer `agent-tdd` |
@@ -47,7 +48,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-perf-opt](./agent-perf-opt/SKILL.md) | maintenance | Profiling memory leaks, CPU bottlenecks, SQL EXPLAIN ANALYZE |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
-Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md), [Cloudflare analytics ops](../SOPs/cloudflare-analytics-ops.md), [model routing](../SOPs/model-routing.md).
+Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven development](../SOPs/hypothesis-driven-development.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md), [Cloudflare analytics ops](../SOPs/cloudflare-analytics-ops.md), [model routing](../SOPs/model-routing.md).
 
 ### TDD short loop (important)
 

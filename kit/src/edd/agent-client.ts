@@ -287,6 +287,19 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         routingConfidence: 0.91
       };
     }
+    if (
+      prompt.includes('hypothesis-driven development') ||
+      prompt.includes('hypothesis driven development')
+    ) {
+      return {
+        content: 'Opening the hypothesis-driven-development SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'hypothesis-driven-development' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
     if (prompt.includes('conventional-commit') || prompt.includes('conventional commit')) {
       return {
         content: 'Opening the conventional-commits SOP.',

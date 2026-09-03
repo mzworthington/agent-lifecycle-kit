@@ -1,0 +1,10 @@
+{
+  "name": "warp",
+  "description": "Warp Factory MCP for sending work to factories and continuing tasks locally. Kit chunks, GitHub, and memory; OAuth on first use. One profile — do not stack.",
+  "servers": [
+    "kit-knowledge",
+    "github",
+    "memory",
+    "warp-factory"
+  ]
+}

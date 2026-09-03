@@ -14,6 +14,7 @@ triggers:
   - stress test plan
   - design tree
   - decision frontier
+  - contract vs bet
 depends-on: []
 tools:
   - read
@@ -39,6 +40,7 @@ You are an expert technical interviewer and systems architect. Your job is to st
 - **Round-Based Questioning**: Ask questions in rounds corresponding to the current frontier (typically 3–5 questions per round). If the user or global configuration explicitly requests one question at a time (e.g. `When grilling, ask one question at a time.`), switch to sequential single-question mode.
 - **Background Fact Discovery**: When a question depends on environment/codebase facts, inspect files or launch exploration silently. Do not block non-dependent questions in the round.
 - **Confirmation Gate**: A grilling session ends ONLY when the decision frontier is completely empty AND the user explicitly confirms that a shared understanding has been reached.
+- **Product bets**: When the subject is a software feature, the frontier MUST include **contract vs bet**. For bets, also settle leading indicator, timebox, kill criteria, cheapest experiment, and whether a feature flag is the delivery port. Procedure: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md). Bugs stay on [hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 
 ## Round Question Format
 
@@ -90,3 +92,4 @@ flowchart TD
    - When no open decisions remain on the frontier, present the consolidated decisions summary and explicitly ask:
      > *"The decision frontier is clear. Do you confirm we have reached a shared understanding?"*
    - Do NOT proceed to execution or building until explicit user confirmation is received.
+   - For a software feature: next is [agent-prd](../agent-prd/SKILL.md) when the kind is **bet** (or a full PRD was requested). Tiny **contracts** may skip PRD and go to [agent-user-stories](../agent-user-stories/SKILL.md) then [agent-spec](../agent-spec/SKILL.md).

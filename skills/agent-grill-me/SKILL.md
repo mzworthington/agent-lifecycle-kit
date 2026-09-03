@@ -49,4 +49,4 @@ This skill is a **stateless user-invoked wrapper** around the core primitive [ag
 
 When the decision frontier empties and the user confirms shared understanding:
 1. Output a concise executive summary of the settled choices and scope boundaries.
-2. If the grilled idea is a software feature/system, offer to write Linear INVEST stories via [agent-user-stories](../agent-user-stories/SKILL.md), then hand over to [agent-spec](../agent-spec/SKILL.md) (`to-spec`) for Gherkin.
+2. If the grilled idea is a software feature/system: when it is a **bet**, offer [agent-prd](../agent-prd/SKILL.md) first; then Linear INVEST stories via [agent-user-stories](../agent-user-stories/SKILL.md), then [agent-spec](../agent-spec/SKILL.md) (`to-spec`) for Gherkin. Tiny contracts may skip the PRD.

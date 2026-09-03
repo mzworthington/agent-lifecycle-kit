@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Phase** | spec \| tdd \| xfn \| impl \| audit \| debug \| telemetry \| release \| maintenance |
+| **Phase** | grilling \| spec \| tdd \| xfn \| impl \| audit \| debug \| telemetry \| release \| maintenance |
 | **Status** | COMPLETE \| BLOCKED |
 | **Project** | `<project-name>` |
 | **Next agent** | `agent-<role>` |
@@ -47,7 +47,8 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 
 | Phase | Minimum to mark COMPLETE |
 |-------|--------------------------|
-| **spec** | Gherkin scenarios; draft XFN criteria (or explicit unknowns); draft catalog notes; **memory MCP** updated with glossary terms (or explicit N/A - no new durable terms) |
+| **prd** | Bet or contract named; problem; belief; leading indicator + timebox + kill criteria (bets); experiment; feature-flag table or N/A; **memory MCP** updated with bet/flag facts (or explicit N/A) |
+| **spec** | Gherkin scenarios (flag off/on/kill when flagged); draft XFN criteria (or explicit unknowns); draft catalog notes; bet/flag row or N/A; **memory MCP** updated with glossary terms (or explicit N/A - no new durable terms) |
 | **tdd** (design) | Functional impact table filled; every row Aligned = yes; first reds as needed; Next agent = `agent-xfn` (plan) |
 | **tdd** (short loop) | Gear 1 green (domain/handlers, mocked ports); gear 2 done or N/A (thin adapter + integration test, or reused existing); XFN fixtures noted; Next agent = `agent-xfn` (green) or `agent-adapter` only if deep-dive required |
 | **xfn** (plan) | Every matrix quality apply or skip + rationale; impact rows for apply qualities; suite paths or stubs; thresholds; SLOs noted for telemetry; Aligned = yes; **memory MCP** updated with agreed SLOs/thresholds (or explicit N/A) |
@@ -55,9 +56,9 @@ Incomplete DoD ⇒ Status must be **BLOCKED**, not COMPLETE.
 | **impl** (adapter deep-dive) | Large adapters wired without domain rule changes; stayed-within Design maps **or** revised maps re-aligned; fixtures needed by XFN noted |
 | **audit** | Security + arch findings recorded; catalog/XFN completeness checked (missing apply suites or silent rewrites = fail) |
 | **debug** | Root cause stated; debug board updated; reproduce + proof gates passed for the symptom class; regression test added when domain logic changed. See [SOPs/hypothesis-driven-debug.md](../SOPs/hypothesis-driven-debug.md) |
-| **telemetry** | Instrumentation added; XFN load SLOs (if any) mapped to metrics/alerts or explicit N/A. Cloudflare RUM/beacon diagnosis (`agent-cloudflare-ops`) inventories live vs IaC and proves HTTP/MCP evidence |
-| **release** | Prior phase DoDs satisfied; conventional PR title; catalog + matrix summary reported ([SOPs/release.md](../SOPs/release.md)) |
-| **maintenance** | Prune/complexity/migration batch complete; backlog rows updated; pre-commit green |
+| **telemetry** | Instrumentation added; XFN load SLOs (if any) mapped to metrics/alerts or explicit N/A; bet leading indicator + flag evaluation mapped or N/A. Cloudflare RUM/beacon diagnosis (`agent-cloudflare-ops`) inventories live vs IaC and proves HTTP/MCP evidence |
+| **release** | Prior phase DoDs satisfied; conventional PR title; catalog + matrix summary reported; flags include expiry and rollback ([SOPs/release.md](../SOPs/release.md)); open bets have a confirm/kill next step |
+| **maintenance** | Prune/complexity/migration batch complete; expired flags / killed slices handled when in scope; backlog rows updated; pre-commit green |
 
 ## Memory (required for spec / xfn when durable facts exist)
 
@@ -71,6 +72,19 @@ Store durable facts for later sessions via the catalogued **memory** MCP - **nev
 ## Open questions / blockers
 
 - List anything that must be resolved before the next phase.
+
+## Bet / feature flag (when the slice is a bet or flagged)
+
+See [SOPs/hypothesis-driven-development.md](../SOPs/hypothesis-driven-development.md).
+
+| Field | Value |
+|-------|-------|
+| **Kind** | contract \| bet \| n/a |
+| **Leading indicator** | event or n/a |
+| **Timebox** | date/event or n/a |
+| **Kill criteria** | or n/a |
+| **Flag** | name / default / expiry or n/a |
+| **Status** | draft \| in-flight \| confirmed \| killed \| n/a |
 
 ## Context for next agent
 

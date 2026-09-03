@@ -21,6 +21,8 @@ triggers:
   - simplify
   - cognitive complexity
   - refactor complexity
+  - expired flag
+  - feature flag cleanup
 depends-on:
   - agent-arch-drift
   - agent-pre-commit
@@ -43,6 +45,7 @@ Do not auto-run during feature work. Invoke only when the user requests pruning/
 - User asks to prune, remove dead code, simplify hotspots, or clean up after a migration
 - Post-migration cleanup when `agent-arch-drift` flagged unused exports or complexity
 - User says "run agent-prune on ready rows" in `dead-code-backlog.md` or `complexity-backlog.md`
+- **Expired or closed feature flags** after a bet is confirmed (default on, remove flag) or killed (flag off, remove slice) — [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md)
 - Standalone maintenance - not part of the default feature lifecycle
 
 Skip when the user asked for read-only review or when no backlog exists and no candidates were identified.
@@ -115,6 +118,15 @@ Before removing:
 3. Remove redirect routes, legacy param fallbacks, and tests together.
 
 If uncertain, leave row `blocked` and note why in handover.
+
+### A.6 Expired feature flags
+
+Treat a closed bet’s flag as **compat** until the user confirms removal:
+
+1. Confirmed: default on in code, delete flag checks, delete flag-off catalog cases that are no longer reachable, keep flag-on behavior as the new contract.
+2. Killed: keep flag off (or delete the new path), restore the prior path, retire flag-on cases.
+3. Search for the flag name across code, tests, docs, and release notes before delete.
+4. Same batch as other prune work; run pre-commit until green.
 
 ---
 

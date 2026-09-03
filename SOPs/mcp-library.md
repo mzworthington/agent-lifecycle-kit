@@ -31,6 +31,7 @@ Use this when adding a server to the kit catalog, composing a host config, or wi
 | Stripe payments | `mcps/profiles/payments.json` |
 | Bitwarden / LinkedIn / Polyglot / Obsidian | `mcps/profiles/personal.json` (**machine-local only**) |
 | Raspberry Pi / home lab SSH | `mcps/profiles/lab.json` (**machine-local only**) |
+| Warp Factory tasks / factory onboard | `mcps/profiles/warp.json` |
 | App-specific DB + frontend stack | `project-example` or `wk mcp project-example --project` |
 | Personal-only experiment | Local user MCP (`wk mcp default --install`) (do not commit secrets) |
 
@@ -108,13 +109,16 @@ kit mcp personal --install
 # Home lab (Raspberry Pi over SSH) - machine only
 kit mcp lab --install
 
+# Warp Factory (OAuth; send/continue factory tasks)
+kit mcp warp --install
+
 # Project config
 wk mcp project-example --project
 wk mcp cloudflare-ops --install          # RUM / Worker diagnosis
 wk mcp default --install --host claude   # user-scope Claude Code only
 ```
 
-The installer (`curl | sh` in [Getting started](../docs/start.md), or `./install.sh` from a checkout) runs the **default** profile install for every supported host. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, and `cloudflare-ops` explicitly.
+The installer (`curl | sh` in [Getting started](../docs/start.md), or `./install.sh` from a checkout) runs the **default** profile install for every supported host. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, `cloudflare-ops`, and `warp` explicitly.
 
 ## 4. Verify in the host
 

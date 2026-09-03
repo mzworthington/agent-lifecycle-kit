@@ -17,6 +17,8 @@ triggers:
   - observability
   - correlation id
   - slo
+  - feature flag
+  - leading indicator
 depends-on:
   - agent-tdd
   - agent-xfn
@@ -45,6 +47,7 @@ You ensure the system is observable, traceable, and debuggable under load. Load 
 - OpenTelemetry traces and semantic conventions at use-case boundaries.
 - Performance histograms around external I/O and adapter calls.
 - **SLO mapping** - For each apply load/performance row, add (or verify) metrics and alert thresholds that match the stated SLO (e.g. p95 latency, error rate under load). Do not invent different numbers than the XFN matrix without re-alignment.
+- **Bet / experiment mapping** - When the spec/PRD names a leading indicator, emit **that one event** (plus flag evaluation: name + on/off). Do not substitute generic page views. Procedure: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md). After the timebox, handover **Next agent** is `agent-user-stories` (confirm or kill) or `agent-prune` (flag/slice removal).
 
 ## Rules
 
@@ -56,5 +59,6 @@ You ensure the system is observable, traceable, and debuggable under load. Load 
 
 - Instrumentation at boundaries.
 - Table of XFN SLOs → metric name / alert (or N/A).
+- For bets: leading indicator → event name; flag name → evaluation log/metric (or N/A).
 
 Write handover to `~/.agents/handover/<project>/handover_telemetry.md` when complete.

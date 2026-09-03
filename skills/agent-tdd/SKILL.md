@@ -77,6 +77,8 @@ Complete this before writing new failing tests or changing production code. See 
 
 If discovery later shows cases outside this map, stop and re-confirm with the user before changing those tests.
 
+When the spec names a **feature flag**, the functional impact map must include **flag-off** and **flag-on** cases (and kill-switch if specified). Do not green only the on-path. Procedure: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md).
+
 When sketching slice boundaries or request flows, use Mermaid - not ASCII art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
 ## Guardrails

@@ -4,7 +4,7 @@
 
 ### 🚀 Features
 
-- Enhance AGENTS.md and SOPs/conventional-commits.md with updated guidelines on commit types and PR titles; add model routing references in various documents
+- Add hypothesis-driven development SOP, agent-prd skill, and feature-flag / bet loop across grill, stories, spec, telemetry, release, and prune
 - Implement commit-msg hook for conventional commit validation
 - Cli documentation
 - Add zsh and bash tab-completion support to CLI
