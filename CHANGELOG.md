@@ -4,6 +4,7 @@
 
 ### 🚀 Features
 
+- Add PostHog MCP server and `posthog` profile (`wk mcp posthog --install`)
 - Add hypothesis-driven development SOP, agent-prd skill, and feature-flag / bet loop across grill, stories, spec, telemetry, release, and prune
 - Implement commit-msg hook for conventional commit validation
 - Cli documentation
@@ -16,6 +17,7 @@
 
 ### 🐛 Bug Fixes
 
+- Treat empty host MCP config files as empty objects during compose
 - Update agent-user-stories documentation
 
 ### 🧰 Maintenance & Dependencies

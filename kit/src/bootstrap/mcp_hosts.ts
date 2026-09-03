@@ -97,6 +97,7 @@ function toVsCodeServer(raw: unknown): unknown {
 function readJsonObject(filePath: string): Record<string, unknown> {
   if (!fs.existsSync(filePath)) return {};
   const text = fs.readFileSync(filePath, 'utf8');
+  if (text.trim() === '') return {};
   const parsed: unknown = JSON.parse(text);
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
     throw new Error(`${filePath} must contain a JSON object`);

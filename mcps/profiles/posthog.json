@@ -1,0 +1,10 @@
+{
+  "name": "posthog",
+  "description": "PostHog MCP for product analytics, feature flags, and error tracking. Kit chunks, GitHub, and memory; OAuth on first use. One profile — do not stack.",
+  "servers": [
+    "kit-knowledge",
+    "github",
+    "memory",
+    "posthog"
+  ]
+}

@@ -76,6 +76,17 @@ describe('writeHostMcpFile', () => {
     assert.equal(body.theme, 'dark');
     assert.deepEqual(Object.keys(body.mcpServers), ['kit']);
   });
+
+  it('treats an empty existing file as an empty object', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-host-empty-'));
+    const file = path.join(dir, 'mcp_config.json');
+    fs.writeFileSync(file, '', 'utf8');
+    writeHostMcpFile(file, 'antigravity', { posthog: { url: 'https://mcp.posthog.com/mcp' } });
+    const body = JSON.parse(fs.readFileSync(file, 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(body.mcpServers.posthog?.url, 'https://mcp.posthog.com/mcp');
+  });
 });
 
 describe('installMcpOnHosts', () => {

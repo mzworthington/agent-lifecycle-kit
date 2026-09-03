@@ -34,6 +34,7 @@ Do not commit or push unless the user explicitly asks.
 | Vendor/framework API docs | **context7** MCP |
 | Linear issues / projects | **linear** MCP (OAuth; on the `default` profile) |
 | Warp Factory tasks | **warp-factory** MCP (`wk mcp warp --install`; OAuth on first use) |
+| PostHog analytics / flags | **posthog** MCP (`wk mcp posthog --install`; OAuth on first use) |
 
 ## Phase → skill
 

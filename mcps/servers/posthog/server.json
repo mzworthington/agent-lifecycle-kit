@@ -1,0 +1,15 @@
+{
+  "id": "posthog",
+  "name": "PostHog",
+  "summary": "Official PostHog remote MCP for product analytics, feature flags, error tracking, and HogQL (OAuth).",
+  "homepage": "https://posthog.com/docs/model-context-protocol",
+  "transport": "http",
+  "phases": ["telemetry", "debug", "impl"],
+  "triggers": ["PostHog", "product analytics", "feature flag", "HogQL", "session replay"],
+  "requiredEnv": [],
+  "mcp": {
+    "posthog": {
+      "url": "https://mcp.posthog.com/mcp"
+    }
+  }
+}

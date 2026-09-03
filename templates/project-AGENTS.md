@@ -13,6 +13,7 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Product bet / PRD / flags | `skills/agent-prd` (+ hypothesis-driven-development SOP) |
 | Cloudflare Web Analytics / RUM / beacon | `skills/agent-cloudflare-ops` (`wk mcp cloudflare-ops --install`) |
 | Warp Factory tasks / factory onboard | `wk mcp warp --install` (OAuth; `warp-factory` MCP) |
+| PostHog analytics / flags / errors | `wk mcp posthog --install` (OAuth; `posthog` MCP) |
 | Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`wk eval run\|ci`) |
 | Which model / host slug | `SOPs/model-routing.md` (`wk model resolve --skill … --host cursor\|claude\|copilot\|antigravity`) |
 | Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |

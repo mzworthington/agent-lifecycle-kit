@@ -21,6 +21,7 @@ mcps/
 │   ├── personal.json         # Bitwarden + LinkedIn + Polyglot + Obsidian (machine-local)
 │   ├── lab.json              # Raspberry Pi / home-lab hosts
 │   ├── warp.json             # Warp Factory (OAuth)
+│   ├── posthog.json          # PostHog analytics / flags (OAuth)
 │   └── project-example.json  # App-repo example
 ├── servers/<id>/
 │   ├── server.json           # Metadata + Cursor mcpServers fragment
@@ -46,6 +47,7 @@ mcps/
 | `personal` | bitwarden, linkedin, polyglot, obsidian | **Your machine only** (secrets / vault) |
 | `lab` | raspberry-pi | Home-lab SSH to a Pi / SBC |
 | `warp` | kit-knowledge, github, memory, warp-factory | Warp Factory tasks (send, continue locally, onboard) |
+| `posthog` | kit-knowledge, github, memory, posthog | PostHog analytics, flags, errors (OAuth) |
 
 **One profile per session.** Compose **one** profile that matches the work. Do not stack `collab` + `devtools` + `ops` into a single global `mcp.json`. Extra MCP tools compete for attention, inflate tool-schema tokens, and slow agents.
 
@@ -67,10 +69,11 @@ wk mcp lab --install               # Raspberry Pi over SSH
 wk mcp astro --install             # Astro Docs MCP
 wk mcp cloudflare-ops --install    # RUM / Worker / DNS diagnosis
 wk mcp warp --install              # Warp Factory (OAuth)
+wk mcp posthog --install           # PostHog analytics / flags (OAuth)
 wk mcp project-example --project
 ```
 
-Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare/Sentry/Stripe/Vercel/Warp Factory use host OAuth on first tool use.
+Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/Cloudflare/Sentry/Stripe/Vercel/Warp Factory/PostHog use host OAuth on first tool use.
 
 ## Catalog
 
@@ -101,6 +104,7 @@ Secrets never live in this repo. Stdio servers use `${env:VAR}`; Linear/Notion/C
 | obsidian | stdio | `OBSIDIAN_API_KEY` (Local REST API plugin; Obsidian running) |
 | raspberry-pi | stdio | `RASPBERRY_PI_HOST`, `RASPBERRY_PI_USER`, `RASPBERRY_PI_SSH_KEY` |
 | warp-factory | http | OAuth (optional agent API key only for headless; never in repo) |
+| posthog | http | OAuth (optional personal API key only for headless; never in repo) |
 
 ## Adding a server
 

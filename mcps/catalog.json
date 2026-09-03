@@ -1,5 +1,5 @@
 {
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "Registry of MCP servers managed by the agent lifecycle kit.",
   "servers": [
     {
@@ -249,6 +249,16 @@
       "transport": "http",
       "phases": ["spec", "impl", "orchestration"],
       "triggers": ["Warp", "Warp Factory", "factory task", "Foreman", "send_task"],
+      "requiredEnv": [],
+      "enabledByDefault": false
+    },
+    {
+      "id": "posthog",
+      "name": "PostHog",
+      "summary": "Official PostHog remote MCP for product analytics, feature flags, error tracking, and HogQL (OAuth).",
+      "transport": "http",
+      "phases": ["telemetry", "debug", "impl"],
+      "triggers": ["PostHog", "product analytics", "feature flag", "HogQL", "session replay"],
       "requiredEnv": [],
       "enabledByDefault": false
     }
