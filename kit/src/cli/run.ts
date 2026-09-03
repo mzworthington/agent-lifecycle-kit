@@ -26,6 +26,7 @@ import { syncExternalSkills } from '../skills/sync_external_skills.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
+import { listMcpProfileNames, renderCompletion } from './completion.js';
 import { errorMessage, printKitHelp } from './help.js';
 import type { KitCommand } from './parse.js';
 
@@ -162,6 +163,12 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
 
     case 'check':
       return runKitCheck(repoDir);
+
+    case 'completion':
+      process.stdout.write(
+        renderCompletion(command.shell, { mcpProfiles: listMcpProfileNames(repoDir) })
+      );
+      return 0;
 
     case 'ontology':
       if (command.sub === 'generate') {

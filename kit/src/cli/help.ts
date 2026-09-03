@@ -29,6 +29,7 @@ Commands:
   model resolve        Resolve capability class + host slug (models/catalog.yaml)
   site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)
   commit-msg           Check a commit subject or PR title (conventional commits)
+  completion <shell>   Print tab-completion script (zsh or bash)
   help                 Display this help menu
 
 Examples:
@@ -52,6 +53,7 @@ Examples:
   ${CLI_BIN} metrics
   ${CLI_BIN} sync --install
   ${CLI_BIN} debug-board archlens "initial load overlap"
+  ${CLI_BIN} completion zsh
   ${CLI_BIN} check
 `;
 

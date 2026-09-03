@@ -8,9 +8,9 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 
 | Page | Who it is for |
 |------|----------------|
-| [Getting started](./start.md) | First install, handshake, then the loops you need |
+| [Getting started](./start.md) | First install, handshake, shell completions, then the loops you need |
 | [Jobs for today](./jobs.md) | Seven concrete jobs, one command each |
-| [Common questions](./faq.md) | Install, keys, context, repo doctor, how agents find an SOP, where EDD fits |
+| [Common questions](./faq.md) | Install, keys, context, repo doctor, tab-complete, how agents find an SOP, where EDD fits |
 
 ## Practice
 

@@ -32,6 +32,14 @@ wk doctor . --write
 
 Report-only by default. `--write` fills missing files and never overwrites README or LICENSE. Handshake and hooks stay on `wk init`. Guide: [Repo doctor](/docs/doctor).
 
+## How do I tab-complete wk commands?
+
+```zsh
+source <(wk completion zsh)
+```
+
+bash: `eval "$(wk completion bash)"`. Put that in `~/.zshrc` or `~/.bashrc`. Details: [Getting started](/docs/start#shell-completions).
+
 ## Why not dump everything into AGENTS.md?
 
 Agents pay for every byte in the bootstrap. Always-on files (`AGENTS.md`, the project handshake, and thin IDE rules) stay under about 8KB, roughly 2k tokens. Philosophy and SOPs load on demand via kit-knowledge. Compose **one MCP profile** per session (`wk mcp default --install`, or the id on the skill's `mcp:` frontmatter) so unused tool schemas stay out of the prompt. `wk measure-context` prints the breakdown; `wk check` fails if the budget is exceeded. Operator write-up: [What Waykit gives you](/docs/kit).

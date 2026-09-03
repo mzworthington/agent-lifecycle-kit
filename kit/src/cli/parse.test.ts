@@ -184,4 +184,11 @@ describe('parseKitArgv', () => {
     assert.equal(parseKitArgv(['commit-msg'], opts).kind, 'usage');
     assert.equal(parseKitArgv(['commit-msg', '--message'], opts).kind, 'usage');
   });
+
+  it('parses completion zsh or bash and rejects other shells', () => {
+    assert.deepEqual(parseKitArgv(['completion', 'zsh'], opts), { kind: 'completion', shell: 'zsh' });
+    assert.deepEqual(parseKitArgv(['completion', 'bash'], opts), { kind: 'completion', shell: 'bash' });
+    assert.equal(parseKitArgv(['completion'], opts).kind, 'usage');
+    assert.equal(parseKitArgv(['completion', 'fish'], opts).kind, 'usage');
+  });
 });

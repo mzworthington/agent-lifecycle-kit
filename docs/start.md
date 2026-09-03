@@ -26,6 +26,22 @@ wk eval report --format md --out out/reports
 
 The scripted driver works offline. A provider key is only for optional live-model evals.
 
+## Shell completions
+
+zsh (add to `~/.zshrc`, then `exec zsh`):
+
+```zsh
+source <(wk completion zsh)
+```
+
+bash (add to `~/.bashrc`):
+
+```bash
+eval "$(wk completion bash)"
+```
+
+Tab after `wk ` lists commands; `wk eval `, `wk ontology `, and `wk mcp ` get the next word. `wk completion zsh` also works as a file: write it to `~/.zfunc/_wk` and add that directory to `fpath` before `compinit`.
+
 ## Next
 
 - [Jobs for today](/docs/jobs) if you already know the failure in front of you

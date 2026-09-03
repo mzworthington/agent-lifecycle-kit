@@ -1,4 +1,5 @@
 import path from 'path';
+import { isCompletionShell, type KitCompletionShell } from './completion.js';
 import { isRepoClass, type RepoClass } from '../doctor/hygiene.js';
 import { firstPositional, flagValue, hasFlag } from './flags.js';
 import { cliUsage } from './name.js';
@@ -53,7 +54,10 @@ export type KitCommand =
       repoClass: RepoClass | undefined;
       installHook: boolean;
       login: string | undefined;
-    };
+    }
+  | { kind: 'completion'; shell: KitCompletionShell };
+
+const COMPLETION_USAGE = cliUsage('completion <zsh|bash>');
 
 const DOCTOR_USAGE = cliUsage(
   'doctor [dir] [--write] [--owned] [--scan <dir>] [--class kit|product|dns|site|template] [--hook] [--login <user>]'
@@ -149,6 +153,14 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
 
     case 'check':
       return { kind: 'check' };
+
+    case 'completion': {
+      const shell = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
+      if (!isCompletionShell(shell)) {
+        return { kind: 'usage', message: COMPLETION_USAGE };
+      }
+      return { kind: 'completion', shell };
+    }
 
     case 'doctor': {
       const positional = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;

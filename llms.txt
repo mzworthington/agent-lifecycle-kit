@@ -49,6 +49,7 @@ wk eval run --suite evals/edd/architecture_routing.yaml --style cli --cli cursor
 wk measure-context
 wk ontology check
 wk doctor --owned --scan ~/Documents/dev
+wk completion zsh
 wk check
 wk mcp default --install
 ```
