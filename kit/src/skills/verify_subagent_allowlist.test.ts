@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import {
   STAY_SKILL_PREFIXES,
   listGenerateSubagents,
+  resolveSkillsOnlyMode,
   verifySubagentAllowlist
 } from './verify_subagent_allowlist.js';
 
@@ -74,7 +75,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/framework-react/SKILL.md': '---\nkind: profile\n---\n',
       'skills/profile-api/SKILL.md': '---\nkind: profile\n---\n',
       'docs/subagents.md':
-        '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\n'
+        '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0.\n'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, true, result.errors.join('\n'));
@@ -107,7 +108,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-adapter/SKILL.md': 'x',
       'skills/lang-go/SKILL.md': 'x',
       'docs/subagents.md':
-        'skill picker isolation audit sequential parent. Gear 1. agent-adapter.'
+        'skill picker isolation audit sequential parent. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS.'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -125,7 +126,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-tdd/SKILL.md': 'x',
       'skills/agent-adapter/SKILL.md': 'x',
       'docs/subagents.md':
-        'skill picker isolation audit sequential parent. Gear 1. agent-adapter.'
+        'skill picker isolation audit sequential parent. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS.'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -172,5 +173,26 @@ describe('verifySubagentAllowlist', () => {
     assert.match(docs, /skill picker/i);
     assert.match(docs, /gear 1/i);
     assert.match(docs, /agent-adapter/);
+    assert.equal(result.catalog?.skillsOnly, false);
+    assert.match(docs, /WK_SUBAGENTS/);
+    assert.match(docs, /skills-only/i);
+  });
+});
+
+describe('resolveSkillsOnlyMode', () => {
+  it('follows the catalog when WK_SUBAGENTS is unset', () => {
+    assert.equal(resolveSkillsOnlyMode({ catalogSkillsOnly: false, env: {} }), false);
+    assert.equal(resolveSkillsOnlyMode({ catalogSkillsOnly: true, env: {} }), true);
+  });
+
+  it('treats WK_SUBAGENTS=0 as skills-only and WK_SUBAGENTS=1 as launch', () => {
+    assert.equal(
+      resolveSkillsOnlyMode({ catalogSkillsOnly: false, env: { WK_SUBAGENTS: '0' } }),
+      true
+    );
+    assert.equal(
+      resolveSkillsOnlyMode({ catalogSkillsOnly: true, env: { WK_SUBAGENTS: '1' } }),
+      false
+    );
   });
 });

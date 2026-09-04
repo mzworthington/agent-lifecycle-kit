@@ -38,6 +38,7 @@ export const EDD_CI_SUITES = [
   'evals/edd/architecture_routing.yaml',
   'evals/edd/model_routing.yaml',
   'evals/edd/subagent_routing.yaml',
+  'evals/edd/subagent_routing_skills_only.yaml',
   'evals/edd/kit_knowledge.yaml',
   'evals/edd/memory_ontology.yaml',
   'evals/edd/cloudflare_ops.yaml',

@@ -22,6 +22,7 @@ evals/edd/
 ├── kit_knowledge.yaml|.jsonl
 ├── model_routing.yaml|.jsonl
 ├── subagent_routing.yaml|.jsonl
+├── subagent_routing_skills_only.yaml|.jsonl
 ├── cloudflare_ops.yaml|.jsonl
 ├── safety.yaml|.jsonl
 └── tools/*.json
@@ -62,6 +63,7 @@ wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
 wk eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/model_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/subagent_routing.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval ci --suite evals/edd/subagent_routing_skills_only.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 wk eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
@@ -132,9 +134,9 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 
 ## Safety suite
 
-Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, terminal-fallback, and host-subagent routing via `EDD_CI_SUITES`.
+Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, terminal-fallback, host-subagent launch, and skills-only routing via `EDD_CI_SUITES`.
 
-Subagent routing misses from production go through the same closed loop as other suites (`wk eval dataset from-trace`). Do not skip adding a golden when the orchestrator stays in the parent instead of launching the specialist.
+Subagent routing misses from production go through the same closed loop as other suites (`wk eval dataset from-trace`). Do not skip adding a golden when the orchestrator stays in the parent instead of launching the specialist (or the reverse, when `WK_SUBAGENTS=0`).
 
 ## Dataset hygiene
 

@@ -19,6 +19,8 @@ export interface SubagentRoleEntry {
 export interface SubagentAllowlistCatalog {
   expandKill: string;
   staySkillPrefixes: string[];
+  /** Kit default. Session override: WK_SUBAGENTS=0 (skills-only) or WK_SUBAGENTS=1 (launch). */
+  skillsOnly: boolean;
   tdd: { skill: string; gears: 'same-session'; escapeHatch: string };
   generate: {
     isolation: string[];
@@ -83,6 +85,13 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
   if (tdd.gears !== 'same-session') {
     throw new Error('tdd.gears must be same-session');
   }
+  let skillsOnly = false;
+  if (doc.skillsOnly !== undefined) {
+    if (typeof doc.skillsOnly !== 'boolean') {
+      throw new Error('skillsOnly must be a boolean');
+    }
+    skillsOnly = doc.skillsOnly;
+  }
   const generateRaw = doc.generate;
   if (!generateRaw || typeof generateRaw !== 'object') {
     throw new Error('generate must be a mapping');
@@ -125,6 +134,7 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
   return {
     expandKill: doc.expandKill,
     staySkillPrefixes,
+    skillsOnly,
     tdd: {
       skill: tdd.skill,
       gears: 'same-session',
@@ -137,6 +147,25 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
 
 function prefixStay(name: string, prefixes: readonly string[]): boolean {
   return prefixes.some((prefix) => name.startsWith(prefix));
+}
+
+/**
+ * Session override for whether the parent launches host subagents.
+ * `WK_SUBAGENTS=0` (also off/false/skills) stays in the parent.
+ * `WK_SUBAGENTS=1` (also on/true/launch) launches. Unset follows the catalog.
+ */
+export function resolveSkillsOnlyMode(opts: {
+  catalogSkillsOnly: boolean;
+  env?: NodeJS.ProcessEnv;
+}): boolean {
+  const raw = (opts.env ?? process.env).WK_SUBAGENTS?.trim().toLowerCase();
+  if (raw === '0' || raw === 'off' || raw === 'false' || raw === 'skills' || raw === 'skills-only') {
+    return true;
+  }
+  if (raw === '1' || raw === 'on' || raw === 'true' || raw === 'launch' || raw === 'subagents') {
+    return false;
+  }
+  return opts.catalogSkillsOnly;
 }
 
 export function listGenerateSubagents(catalog: SubagentAllowlistCatalog | null): string[] {
@@ -253,6 +282,9 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     }
     if (!/gear 1/i.test(docs) || !docs.includes('agent-adapter')) {
       errors.push(`${SUBAGENT_DOCS_REL} must keep TDD gear 1+2 in one agent and name agent-adapter`);
+    }
+    if (!/skills-only/i.test(docs) || !docs.includes('WK_SUBAGENTS')) {
+      errors.push(`${SUBAGENT_DOCS_REL} must name skills-only mode and WK_SUBAGENTS`);
     }
   }
 

@@ -58,6 +58,12 @@ Do not generate or launch `lang-*` / `framework-*` / `profile-*` as agents. Load
 
 Do not split TDD across two agents. `agent-adapter` stays a skill when gear 2 is too large.
 
+## Skills-only mode
+
+Default is **launch**. Set `WK_SUBAGENTS=0` for this session (also `off` / `false` / `skills`) to stay in the parent and load the matching `SKILL.md`. Set `WK_SUBAGENTS=1` (also `on` / `launch`) to force launch even if `skills/subagents.yaml` has `skillsOnly: true`. Unset follows that YAML flag (`false` in the kit). Handovers still go to disk. Do not uninstall `~/.cursor/agents` for this mode.
+
+When skills-only is on, do not call a host Task for spec, tdd, debug, xfn, or audit.
+
 ## Kill
 
 Freeze the generate list if auto-delegation picks the wrong specialist more often than today’s skill picker. Fix thin handovers before adding roles.

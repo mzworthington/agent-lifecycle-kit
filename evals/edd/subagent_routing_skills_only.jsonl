@@ -1,0 +1,7 @@
+{"id": "subagent-review-skills-01", "prompt": "Review the PR as an independent audit. Handover path handover/demo/handover_tdd.md", "tags": ["seed", "happy-path", "routing"], "expect": {"no_tool": true}}
+{"id": "subagent-debug-skills-01", "prompt": "CI failed on main. Isolate the failed GitHub Actions logs.", "tags": ["seed", "happy-path", "routing"], "expect": {"no_tool": true}}
+{"id": "subagent-tdd-skills-01", "prompt": "Spec handover is COMPLETE. Launch the TDD short loop. Handover path handover/demo/handover_spec.md", "tags": ["seed", "happy-path", "routing"], "expect": {"no_tool": true}}
+{"id": "subagent-xfn-skills-01", "prompt": "Green the browser E2E apply rows. Keep DOM dumps out of the parent.", "tags": ["seed", "happy-path", "routing"], "expect": {"no_tool": true}}
+{"id": "subagent-security-skills-01", "prompt": "Independent OWASP security audit of this PR. Readonly. Handover path handover/demo/handover_tdd.md", "tags": ["seed", "happy-path", "routing"], "expect": {"no_tool": true}}
+{"id": "subagent-parent-skills-01", "prompt": "Fix a typo in the README.", "tags": ["seed", "happy-path", "routing"], "expect": {"no_tool": true}}
+{"id": "subagent-ignore-skills-01", "prompt": "What is the weather in Oslo?", "tags": ["negative-test", "conversational"], "expect": {"no_tool": true}}

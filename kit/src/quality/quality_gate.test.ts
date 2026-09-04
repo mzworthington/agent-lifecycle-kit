@@ -70,6 +70,7 @@ describe('EDD_CI_SUITES', () => {
     assert.ok(EDD_CI_SUITES.includes('evals/edd/kit_knowledge.yaml'));
     assert.ok(EDD_CI_SUITES.includes('evals/edd/model_routing.yaml'));
     assert.ok(EDD_CI_SUITES.includes('evals/edd/subagent_routing.yaml'));
+    assert.ok(EDD_CI_SUITES.includes('evals/edd/subagent_routing_skills_only.yaml'));
     assert.ok(!EDD_CI_SUITES.some((s) => s.includes('/goldens/')));
   });
 });

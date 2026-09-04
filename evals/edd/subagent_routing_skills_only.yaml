@@ -1,0 +1,23 @@
+name: "Routing: Skills-only (no host subagent launch)"
+dataset: "subagent_routing_skills_only.jsonl"
+system_prompt: "subagent_routing_skills_only_prompt.md"
+mcp_tools:
+  - "tools/launch_specialist.json"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+  - type: "argument_correctness"
+  - type: "mcp_use"
+  - type: "task_completion"
+ontology:
+  gates:
+    - skill:agent-orchestrator
+    - skill:agent-review
+    - skill:agent-debug
+    - skill:agent-tdd
+mocks:
+  - tool: "launch_specialist"
+    response:
+      launched: false
+      note: "Skills-only mode: stay in the parent and load SKILL.md"

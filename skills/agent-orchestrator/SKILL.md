@@ -70,7 +70,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
-**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)): Cursor Task at `~/.cursor/agents/<name>.md`, prompt with Linear id, handover paths, DoD, and Next agent, model from `wk model resolve --skill <id>`. Read `COMPLETE`/`BLOCKED` from disk, not the chat summary.
+**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)): Cursor Task at `~/.cursor/agents/<name>.md`, prompt with Linear id, handover paths, DoD, and Next agent, model from `wk model resolve --skill <id>`. Read `COMPLETE`/`BLOCKED` from disk, not the chat summary. If `WK_SUBAGENTS=0` (or `skillsOnly: true` in the allowlist), load the matching `SKILL.md` in this chat instead of launching.
 
 ## Specialist roles
 

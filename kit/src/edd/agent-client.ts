@@ -67,7 +67,7 @@ function scriptedNoTool(content: string, confidence = 0.92): Omit<
  * Real model drivers are selected when model !== "scripted".
  * Cases tagged `requires-live` must not rely on these heuristics.
  */
-export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) => {
+export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, systemPrompt }) => {
   const lastUser = [...messages].reverse().find((m) => m.role === 'user');
   const prompt = (lastUser?.content ?? '').toLowerCase();
   const names = toolNames(tools);
@@ -83,6 +83,7 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
   const hasLaunchSpecialist = names.has('launch_specialist');
   const hasModelClass = names.has('select_model_class');
   const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass && !hasLaunchSpecialist;
+  const skillsOnly = /skills-only mode/i.test(systemPrompt ?? '');
 
   if (hasLaunchSpecialist && !hasArch) {
     if (
@@ -94,6 +95,11 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     }
     if (prompt.includes('typo')) {
       return scriptedNoTool('Staying in the parent for a tiny typo.');
+    }
+    if (skillsOnly) {
+      return scriptedNoTool(
+        'Skills-only mode: load the matching SKILL.md in the parent. Do not launch a host subagent.'
+      );
     }
     if (prompt.includes('owasp') || prompt.includes('security audit')) {
       return {

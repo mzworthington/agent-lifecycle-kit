@@ -46,6 +46,12 @@ Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, st
 
 **TDD:** Gear 1 (domain + mocked ports) and gear 2 (thin adapter) stay **one** `agent-tdd` session. `agent-adapter` stays a skill: the escape hatch when gear 2 is too large, not a second TDD agent.
 
+## Skills-only mode
+
+Default is launch (`skillsOnly: false` in [subagents.yaml](../skills/subagents.yaml)). For a cheaper parent session, set `WK_SUBAGENTS=0` and load the matching `SKILL.md` in the orchestrator chat instead of a host Task. `WK_SUBAGENTS=1` forces launch. Stubs may stay installed; this switch is routing, not uninstall.
+
+Eval coverage: `evals/edd/subagent_routing.yaml` (launch) and `evals/edd/subagent_routing_skills_only.yaml` (parent skill). Procedure: [subagent launch](../SOPs/subagent-launch.md).
+
 ## Stay skills
 
 | Kind | Runtime |
