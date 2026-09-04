@@ -41,7 +41,7 @@ Copy is a core user interface element. Clear, intentional text reduces cognitive
 
 Default stance: write like a sharp teammate explaining the product to another practitioner. Not a launch deck. Not a chatbot.
 
-Default **reader** for product and marketing surfaces: architects, CTOs, engineering directors, staff engineers. They already know the domain. Do not explain what architecture is. Do not sell transformation. Write as a peer in a design review.
+Default **reader** for product and marketing surfaces: a technical peer who already works on the system. They know the domain. Do not explain what architecture is. Do not sell transformation. Do not list job titles unless the user asked for a persona pass.
 
 ## When to load this skill
 
@@ -101,9 +101,9 @@ Use this when auditing existing copy (especially AI-drafted or slogan-heavy surf
 
 ### Audience (tech product)
 
-Write for people who already run architecture reviews: architects, CTOs, VPs/Directors of Engineering. Specific tools and failure modes beat benefits-speak.
+Write for a technical peer. Specific tools and failure modes beat benefits-speak. Do not inventory roles (architect, CTO, director) as the default audience.
 
-- Name the artefact (`BlueprintSpec` YAML, C4 map, blast radius) instead of "living architecture."
+- Name the artefact (`BlueprintSpec`, the diagram, blast radius) instead of "living architecture." Do not put the modeling method (`C4` map) or the file format (YAML) in every sentence. Product names first.
 - Uneven sentence rhythm. Do not stack three parallel clauses with matching grammar.
 - Headlines state the job. They are not a slogan that could sit on any SaaS site if you swap the product name. Exception: a headline the product already owns stays unless the user asks to change it.
 
@@ -133,11 +133,14 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | "Vibes" as a crutch in every paragraph | Use sparingly, or name the real gap (no asserts, no CI gate) |
 | Oxford comma on every list of three+ ("Canvas, CLI, and CI") | "Canvas, CLI and CI" unless the last two items would misparse as a pair |
 | Tricolon padding (*"model failures, surface hotspots, and get a ranked list"*) | One concrete action, then a second sentence if needed |
-| Section titles that belong on any landing page (*"Why it matters"*, *"Product suite"*, *"Unlock X"*) | Job-shaped headings (*"In a design review"*, *"The tools"*) |
+| Section titles that belong on any landing page (*"Why it matters"*, *"Product suite"*, *"Unlock X"*) | Job-shaped headings (*"On the diagram"*, *"The tools"*) |
 | Card CTA *"Learn more"* | Named destination (*"Canvas guide"*, *"Read the EDD guide →"*) |
 | Ampersand badges (*"Free & open source"*) | "Open source" or "Free and open source" |
 | Stock benefit adjectives (*"evidence-backed"*, *"living contract"*, *"while X is still cheap to change"*) | Say what the score is made of, or drop the clause |
 | Replacing a chosen brand H1 because it is punchy | Keep the owned headline; cut slogan stacking in the lede, cards and CTAs |
+| Persona laundry lists (*"for architects, CTOs and engineering directors"*) | A technical peer. Name job titles only when the user asked for a persona pass |
+| Repeating the method on every surface (*"C4 workspace"*, *"C4 studio"*) | Lead with the product contract and jobs. Name C4 only where it is the feature (zoom, import, level) |
+| Pitching the file format (*"BlueprintSpec YAML"* in every tagline) | Name the contract and the products. YAML is storage, not the pitch |
 
 ### Practitioner rewrite examples
 
@@ -152,7 +155,7 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | *"Why EDD?"* / *"Explore EDD →"* | *"How EDD works"* / *"Read the EDD guide →"* | Specific verb |
 | Swap *"Catch architecture risk before it becomes an outage"* on a de-AI pass | Keep that H1; rewrite the lede and cards | Owned brand headline, not template padding |
 | *"TraceLens, ChaosLens, and AdviceLens"* | *"TraceLens, ChaosLens and AdviceLens"* | House style omits the serial comma |
-| *"Why it matters"* / *"Product suite"* / *"Learn more"* | *"In a design review"* / *"The tools"* / *"Canvas guide"* | Marketing chrome that could sit on any site |
+| *"Why it matters"* / *"Product suite"* / *"Learn more"* | *"On the diagram"* / *"The tools"* / *"Canvas guide"* | Marketing chrome that could sit on any site |
 
 ## Rules & Standards
 
