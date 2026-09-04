@@ -1,7 +1,7 @@
 {
   "suite": "agent-posthog-co-located",
   "description": "Co-located evaluation benchmark for agent-posthog MCP and cookieless SDK skill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-POSTHOG-COLOCATED-001",
@@ -17,6 +17,46 @@
         "required_patterns": ["cookieless", "POSTHOG_TOKEN", "privacy", "mcp.posthog.com"],
         "forbidden_patterns": ["self-driving", "siteToken in memory", "yarn add"],
         "required_output_sections": ["Stack", "SDK options", "Privacy", "CI", "MCP proof"]
+      }
+    },
+    {
+      "id": "EVAL-POSTHOG-COLOCATED-002",
+      "name": "Intake writes a findings handover and forbids Linear",
+      "description": "Pulling PostHog suggestions into tickets stays on the posthog profile, writes a findings handover, and must not create Linear issues while PostHog is the only profile.",
+      "target_skill": "agent-posthog",
+      "prompt": "Pull PostHog suggestions into tickets from last week's funnels and session recordings.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["posthog", "product analytics"],
+        "required_patterns": [
+          "findings handover",
+          "handover_posthog",
+          "do not create Linear issues",
+          "wk mcp posthog"
+        ],
+        "forbidden_patterns": ["agent-insights", "save_issue", "self-driving"],
+        "required_output_sections": ["Findings handover"]
+      }
+    },
+    {
+      "id": "EVAL-POSTHOG-COLOCATED-003",
+      "name": "Empty events use the checklist, not the feature lifecycle",
+      "description": "Empty events (and related error clusters) expect the empty-events checklist on agent-posthog, not grill/PRD/stories/spec.",
+      "target_skill": "agent-posthog",
+      "prompt": "PostHog events are empty after deploy and the project shows an error cluster. Diagnose it.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["posthog", "product analytics"],
+        "required_patterns": [
+          "empty-events checklist",
+          "full feature lifecycle"
+        ],
+        "forbidden_patterns": ["agent-insights", "save_issue", "self-driving"],
+        "required_output_sections": ["MCP proof"]
       }
     }
   ]

@@ -1,7 +1,7 @@
 {
   "suite": "agent-user-stories-co-located",
   "description": "Co-located evaluation for Linear INVEST user stories with AC and Mermaid wireframes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-USERSTORIES-COLOCATED-001",
@@ -70,6 +70,42 @@
           "ASCII art",
           "box-drawing",
           "As a customer"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Out of scope"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-COLOCATED-003",
+      "name": "File PostHog handover after restoring default",
+      "description": "Filing a PostHog handover as Linear work restores default, then writes INVEST stories and routes bets or work larger than one sitting to agent-prd. Do not invent an insights skill.",
+      "target_skill": "agent-user-stories",
+      "prompt": "File this PostHog handover as Linear work. One row is a product bet larger than one sitting.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "linear",
+          "user stories",
+          "product bet",
+          "acceptance criteria"
+        ],
+        "required_patterns": [
+          "handover_posthog",
+          "wk mcp default",
+          "agent-prd",
+          "larger than one sitting",
+          "do not invent an insights skill"
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art",
+          "box-drawing",
+          "agent-insights"
         ],
         "required_output_sections": [
           "Story",
