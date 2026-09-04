@@ -143,7 +143,7 @@ Start with the path that matches what you’re trying to do:
 
 1. **Feature work:** [Feature lifecycle](./docs/lifecycle.md) → [orchestrator](./skills/agent-orchestrator/SKILL.md) → [behavior catalog and XFN](./SOPs/behavior-catalog-and-xfn.md)
 2. **Architecture and bootstrap:** [Coding philosophy](./CODING_PHILOSOPHY.md) (incl. applicability) → [ADRs](./docs/ADRs/README.md) → [AGENTS.md](./AGENTS.md)
-3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [mcps/README.md](./mcps/README.md) → [hosts](./docs/hosts.md)
+3. **Skills and MCP:** [skills/README.md](./skills/README.md) → [subagent allowlist](./docs/subagents.md) → [mcps/README.md](./mcps/README.md) → [hosts](./docs/hosts.md)
 4. **Prove tool calls (EDD, alpha):** [demo suite](./evals/edd/demo.yaml) → [before/after](./evals/edd/examples/before-after.md) → [EDD guide](./docs/edd.md)
 5. **Prod feedback:** [EDD production telemetry](./SOPs/edd-production-telemetry.md) (`wk eval shadow` + `from-trace`)
 6. **Operators:** [What Waykit gives you](./docs/kit.md) → [Repo doctor](./docs/doctor.md) → [Consumer align](./docs/align.md) → [Used on our own product repos](./docs/used-in.md) → [Context budget](./SOPs/context-budget.md)

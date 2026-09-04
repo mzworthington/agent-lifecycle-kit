@@ -57,7 +57,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 `wk check` is the local merge bar:
 
 1. `wk audit`: prompt injection, secrets, entropy, lockfile pins
-2. `wk validate` / `wk verify`: eval schemas, skills layout, and role line budget
+2. `wk validate` / `wk verify`: eval schemas, skills layout, role line budget, subagent allowlist, and thin host agent stubs
 3. `wk ontology check`: live-derived graph refs (`depends-on`, `mcp`)
 4. IDE rules match `AGENTS.md`
 5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `wk eval ci` (scripted, 95% routing)
@@ -105,6 +105,7 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 | `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |
 | `wk ontology check` | Live graph referential integrity |
 | `wk ontology generate` | Write gitignored index for kit-knowledge and the map |
+| `wk agents generate` | Write thin Cursor/Claude stubs from the role allowlist into `agents/` |
 | `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |
 | `wk audit` | Skills and scripts supply-chain scan |
 | `wk eval ci` | Routing accuracy gate (EDD) |

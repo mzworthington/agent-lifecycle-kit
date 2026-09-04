@@ -33,6 +33,7 @@ export const SITE_NAV: DocsNavItem[] = [
       '/docs/align',
       '/docs/used-in',
       '/docs/lifecycle',
+      '/docs/subagents',
       '/docs/sops',
       '/docs/ADRs',
       '/docs/kit-value-and-model-agnostic-review',
@@ -51,6 +52,7 @@ export const START_ITEMS: DocsNavItem[] = [
 
 export const PRACTICE_ITEMS: DocsNavItem[] = [
   { label: 'Feature lifecycle', path: '/docs/lifecycle' },
+  { label: 'Subagent allowlist', path: '/docs/subagents' },
   { label: 'What Waykit gives you', path: '/docs/kit' },
   { label: 'Repo doctor', path: '/docs/doctor' },
   { label: 'Consumer align', path: '/docs/align' },

@@ -16,6 +16,16 @@ import {
   type SkillsLayoutResult
 } from '../skills/verify_skills_layout.js';
 import {
+  printSubagentAllowlistResult,
+  verifySubagentAllowlist,
+  type SubagentAllowlistResult
+} from '../skills/subagents.js';
+import {
+  printHostAgentStubResult,
+  verifyHostAgentStubs,
+  type HostAgentStubResult
+} from '../skills/generate_host_agents.js';
+import {
   measureContextBudget,
   printContextBudget,
   type ContextBudgetResult
@@ -50,6 +60,10 @@ export interface KitCheckDeps {
   printLayout?: (result: SkillsLayoutResult) => void;
   verifyRoleBudget?: (repoDir: string) => RoleSkillLineBudgetResult;
   printRoleBudget?: (result: RoleSkillLineBudgetResult) => void;
+  verifySubagents?: (repoDir: string) => SubagentAllowlistResult;
+  printSubagents?: (result: SubagentAllowlistResult) => void;
+  verifyHostAgents?: (repoDir: string) => HostAgentStubResult;
+  printHostAgents?: (result: HostAgentStubResult) => void;
   exportRules?: (targetDir: string, checkOnly: boolean) => boolean;
   evals?: (repoDir: string) => boolean;
   edd?: (options: EddCliOptions) => Promise<number | null>;
@@ -70,6 +84,10 @@ export async function runKitCheck(
   const printLayout = deps.printLayout ?? printSkillsLayoutResult;
   const verifyRoleBudget = deps.verifyRoleBudget ?? verifyRoleSkillLineBudget;
   const printRoleBudget = deps.printRoleBudget ?? printRoleSkillLineBudgetResult;
+  const verifySubagents = deps.verifySubagents ?? verifySubagentAllowlist;
+  const printSubagents = deps.printSubagents ?? printSubagentAllowlistResult;
+  const verifyHostAgents = deps.verifyHostAgents ?? verifyHostAgentStubs;
+  const printHostAgents = deps.printHostAgents ?? printHostAgentStubResult;
   const exportRules = deps.exportRules ?? exportIDERules;
   const evals = deps.evals ?? runEvals;
   const edd = deps.edd ?? handleEddEvalCli;
@@ -120,6 +138,26 @@ export async function runKitCheck(
     path: repoDir
   });
   if (!roleBudget.ok) return finish(false);
+
+  const subagents = verifySubagents(repoDir);
+  if (!json) printSubagents(subagents);
+  findings.push({
+    id: 'subagent-allowlist',
+    status: subagents.ok ? 'ok' : 'fail',
+    path: repoDir,
+    detail: subagents.errors.length ? subagents.errors.join('; ') : undefined
+  });
+  if (!subagents.ok) return finish(false);
+
+  const hostAgents = verifyHostAgents(repoDir);
+  if (!json) printHostAgents(hostAgents);
+  findings.push({
+    id: 'host-agent-stubs',
+    status: hostAgents.ok ? 'ok' : 'fail',
+    path: repoDir,
+    detail: hostAgents.errors.length ? hostAgents.errors.join('; ') : undefined
+  });
+  if (!hostAgents.ok) return finish(false);
 
   const ontology = ontologyCheck(repoDir);
   findings.push({ id: 'ontology', status: ontology.ok ? 'ok' : 'fail', path: repoDir });

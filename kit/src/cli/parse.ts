@@ -54,6 +54,7 @@ export type KitCommand =
     }
   | { kind: 'version'; check: boolean }
   | { kind: 'ontology'; sub: 'generate' | 'check' }
+  | { kind: 'agents-generate'; dest: string | undefined }
   | { kind: 'memory-lint' }
   | {
       kind: 'model-resolve';
@@ -102,6 +103,7 @@ const MODEL_RESOLVE_USAGE = cliUsage(
 );
 
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
+const AGENTS_GENERATE_USAGE = cliUsage('agents generate [--out <dir>]');
 const COMMIT_MSG_USAGE = cliUsage('commit-msg [--message <subject>] [file]');
 
 export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitCommand {
@@ -277,6 +279,21 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
         return { kind: 'ontology', sub };
       }
       return { kind: 'usage', message: cliUsage('ontology <generate|check>') };
+    }
+
+    case 'agents': {
+      if (rest[0] !== 'generate') {
+        return { kind: 'usage', message: AGENTS_GENERATE_USAGE };
+      }
+      const agentsRest = rest.slice(1);
+      if (hasFlag(agentsRest, '--out') && flagValue(agentsRest, '--out') === undefined) {
+        return { kind: 'usage', message: AGENTS_GENERATE_USAGE };
+      }
+      const destArg = flagValue(agentsRest, '--out');
+      return {
+        kind: 'agents-generate',
+        dest: destArg ? path.resolve(opts.cwd, destArg) : undefined
+      };
     }
 
     case 'memory':

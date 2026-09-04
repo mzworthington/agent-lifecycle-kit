@@ -26,7 +26,8 @@ Commands:
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
   export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
   metrics              Display telemetry analytics summary for subagent phase handovers
-  verify               Verify skills layout and role SKILL.md line budget
+  verify               Verify skills layout, role SKILL.md line budget, subagent allowlist, and thin host agent stubs
+  agents generate      Write thin Cursor/Claude agent stubs from the role allowlist (optional --out)
   sync                 Sync official external skills (Cloudflare, Vercel)
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board
@@ -68,6 +69,7 @@ Examples:
   ${CLI_BIN} eval report --format md --out out/reports
   ${CLI_BIN} ontology generate
   ${CLI_BIN} ontology check
+  ${CLI_BIN} agents generate
   ${CLI_BIN} memory lint
   ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host cursor
   ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host claude
