@@ -53,7 +53,8 @@
           "security"
         ],
         "required_patterns": [
-          "agent-security"
+          "agent-security",
+          "readonly: true"
         ],
         "forbidden_patterns": [
           "agent-telemetry"
@@ -110,7 +111,8 @@
           "boundary"
         ],
         "required_patterns": [
-          "agent-arch-drift"
+          "agent-arch-drift",
+          "readonly: true"
         ],
         "forbidden_patterns": [
           "agent-telemetry"
@@ -231,7 +233,8 @@
           "change set"
         ],
         "required_patterns": [
-          "agent-review"
+          "agent-review",
+          "readonly: true"
         ],
         "forbidden_patterns": [
           "agent-spec"
@@ -567,6 +570,29 @@
         ],
         "forbidden_patterns": [
           "agent-tdd"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-029",
+      "name": "Audit after TDD is a readonly subagent",
+      "description": "Verifies that a PR/diff review after implementation routes through the orchestrator as a readonly subagent with handover/diff isolation.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "TDD just finished. Need a PR review of this change set in a fresh window before merge.",
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "handover"
+        ],
+        "required_patterns": [
+          "readonly subagent",
+          "readonly: true",
+          "handover_tdd.md",
+          "implementation chat",
+          "BLOCKED"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
         ]
       }
     }

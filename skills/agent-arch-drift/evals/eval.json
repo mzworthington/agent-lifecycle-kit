@@ -21,7 +21,9 @@
         "required_patterns": [
           "Hexagonal Boundary",
           "Dependency Direction",
-          "SOLID"
+          "SOLID",
+          "readonly: true",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "ASCII art"

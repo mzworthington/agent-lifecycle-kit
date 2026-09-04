@@ -224,6 +224,14 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     if (entry?.runtime !== 'subagent' || entry.bucket !== 'audit' || entry.readonly !== true) {
       errors.push(`${name} must be a readonly audit subagent`);
     }
+    const skillMdPath = path.join(repoDir, 'skills', name, 'SKILL.md');
+    if (fs.existsSync(skillMdPath)) {
+      const skillMd = fs.readFileSync(skillMdPath, 'utf8');
+      const fm = skillMd.match(/^---\s*\n([\s\S]*?)\n---/);
+      if (!fm || !/^readonly:\s*true\s*$/m.test(fm[1])) {
+        errors.push(`${name} SKILL.md must set readonly: true`);
+      }
+    }
   }
   for (const name of catalog.pilot.sequential) {
     const entry = catalog.roles[name];

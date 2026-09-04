@@ -14,7 +14,7 @@
       },
       "assertions": {
         "required_triggers": ["pr review", "pull request review", "diff review", "change set"],
-        "required_patterns": ["must-fix", "hexagonal", "catalog"],
+        "required_patterns": ["must-fix", "hexagonal", "catalog", "readonly: true", "BLOCKED"],
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Must-fix", "Should-fix", "Nit"]
       }

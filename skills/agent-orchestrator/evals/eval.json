@@ -22,7 +22,10 @@
           "agent-spec",
           "agent-tdd",
           "agent-xfn",
-          "agent-adapter"
+          "agent-adapter",
+          "readonly subagent",
+          "readonly: true",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "ASCII art"
@@ -54,6 +57,34 @@
         ],
         "required_output_sections": [
           "Linear ticket"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-003",
+      "name": "Audit after implementation is a readonly subagent",
+      "description": "After TDD, PR/diff review and security/arch-drift launch as readonly subagents with handover/diff paths only; honesty fail is BLOCKED back to tdd or xfn.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "TDD just finished. Review this PR diff and run security plus arch-drift in a fresh window.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "handover"
+        ],
+        "required_patterns": [
+          "readonly subagent",
+          "readonly: true",
+          "handover_tdd.md",
+          "implementation chat",
+          "BLOCKED",
+          "agent-tdd",
+          "agent-xfn"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
         ]
       }
     }

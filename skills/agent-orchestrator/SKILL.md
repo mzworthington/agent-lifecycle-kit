@@ -70,7 +70,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
-**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary.
+**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary. After TDD, launch `agent-review` / `agent-security` / `agent-arch-drift` as **readonly subagents** (`readonly: true`) with diff/handover paths only — never the implementation chat.
 
 ## Specialist roles
 
@@ -131,7 +131,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | OpenAPI / contract change | `agent-api-contract` (+ `agent-tdd` when behavior changes) |
 | Dead-code cleanup, post-migration prune | `agent-prune` → `agent-pre-commit` |
 | Complexity hotspot cleanup | `agent-arch-drift` → `agent-prune` → `agent-pre-commit` |
-| PR / diff review request | `agent-review` |
+| PR / diff review request | Launch `agent-review` as a **readonly subagent** (`readonly: true`; diff/handover paths only) |
 | Landing / marketing / AI-sounding copy, microcopy, errors | `agent-copy` (+ `agent-ui` if layout/chrome) |
 | Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
 | New feature, new bounded context, new external integration | Full lifecycle (grill → PRD if bet → stories → spec → …) |
@@ -201,7 +201,7 @@ sequenceDiagram
 3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
 4. **Short loop (execution)** - Route back to **`agent-tdd`**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.
 5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
-6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
+6. **Audit** - Launch `agent-security` and `agent-arch-drift` as **readonly subagents** in parallel when both are in scope ([SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Pass diff/handover paths (`handover_tdd.md`, `handover_xfn.md`) only; do not paste the implementation chat. Catalog or XFN honesty fail → Status **BLOCKED**, Next agent `agent-tdd` or `agent-xfn` — never a silent pass. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Launch `agent-review` the same way on a PR/diff ask.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
 8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. For a bet’s leading indicator (product usage), route to `agent-posthog` (`wk mcp posthog --install`). Do not invent extra dashboards.
 9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title, flag expiry, and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.

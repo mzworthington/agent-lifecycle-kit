@@ -20,7 +20,9 @@
         ],
         "required_patterns": [
           "OWASP",
-          "Input Validation"
+          "Input Validation",
+          "readonly: true",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "hardcoded secret",

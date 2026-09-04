@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import { AUDIT_STUB_ISOLATION_LINES } from '../audit/readonly_window.js';
 import {
   listGenerateSubagents,
   loadSubagentAllowlist,
@@ -46,14 +47,19 @@ export function renderSubagentStub(input: RenderSubagentStubInput): string {
         'Gear 1 (domain + mocked ports) and gear 2 (thin adapter) stay in this **same session**. Do not split gear 1 and gear 2. `agent-adapter` is an escape hatch only when gear 2 is too large.'
       ]
     : [];
+  const audit = input.readonly
+    ? ['', ...AUDIT_STUB_ISOLATION_LINES]
+    : [
+        '',
+        'The parent must pass: Linear id if any, relevant handover paths, Definition of Done, and Next agent. Write COMPLETE or BLOCKED to the handover. Return a short summary only.'
+      ];
   const body = [
     `You are the Waykit \`${input.name}\` specialist in an isolated host subagent.`,
     '',
     `Load the playbook at \`skills/${input.name}/SKILL.md\` (or \`~/.agents/skills/${input.name}/SKILL.md\`). Prefer kit-knowledge for SOP slices. Do not bulk-read CODING_PHILOSOPHY.md and do not paste SOP or philosophy text into this file.`,
     '',
     `Resolve the model class with \`wk model resolve --skill ${input.name}\`. Keep \`model: inherit\` unless the parent passes a catalog slug. Do not hardcode vendor model ids.`,
-    '',
-    'The parent must pass: Linear id if any, relevant handover paths, Definition of Done, and Next agent. Write COMPLETE or BLOCKED to the handover. Return a short summary only.',
+    ...audit,
     ...tdd,
     ''
   ].join('\n');

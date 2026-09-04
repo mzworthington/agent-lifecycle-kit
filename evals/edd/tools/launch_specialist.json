@@ -1,6 +1,6 @@
 {
   "name": "launch_specialist",
-  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
+  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. For agent-review, agent-security, and agent-arch-drift set readonly true and pass handoverPath/diffRef only — never the implementation transcript. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
   "inputSchema": {
     "type": "object",
     "required": ["specialist"],
@@ -22,6 +22,18 @@
         "type": "string",
         "enum": ["plan", "review", "implement", "cheap"],
         "description": "Optional capability class from models/catalog.yaml"
+      },
+      "readonly": {
+        "type": "boolean",
+        "description": "Must be true for audit specialists. No product file edits, no state-changing shell."
+      },
+      "handoverPath": {
+        "type": "string",
+        "description": "Primary handover the child may read (handover_tdd.md / handover_xfn.md). Never the implementation transcript."
+      },
+      "diffRef": {
+        "type": "string",
+        "description": "Git range or PR URL. Pass with handoverPath only."
       },
       "handoverPaths": {
         "type": "array",

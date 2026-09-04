@@ -66,7 +66,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/subagents.yaml': validYaml,
       'skills/agent-orchestrator/SKILL.md': '---\nkind: role\n---\n',
       'skills/agent-debug/SKILL.md': '---\nkind: role\n---\n',
-      'skills/agent-review/SKILL.md': '---\nkind: role\n---\n',
+      'skills/agent-review/SKILL.md': '---\nkind: role\nreadonly: true\n---\n',
       'skills/agent-spec/SKILL.md': '---\nkind: role\n---\n',
       'skills/agent-tdd/SKILL.md': '---\nkind: role\n---\n',
       'skills/agent-adapter/SKILL.md': '---\nkind: role\n---\n',
@@ -168,6 +168,9 @@ describe('verifySubagentAllowlist', () => {
       'agent-tdd',
       'agent-xfn'
     ]);
+    assert.equal(result.catalog?.roles['agent-review']?.readonly, true);
+    const reviewSkill = fs.readFileSync(path.join(kitRoot, 'skills/agent-review/SKILL.md'), 'utf8');
+    assert.match(reviewSkill, /^readonly:\s*true\s*$/m);
     const docs = fs.readFileSync(path.join(kitRoot, 'docs/subagents.md'), 'utf8');
     assert.match(docs, /skill picker/i);
     assert.match(docs, /gear 1/i);

@@ -90,6 +90,12 @@ describe('renderSubagentStub', () => {
     assert.match(stub, /skills\/agent-review\/SKILL\.md/);
     assert.match(stub, /kit-knowledge/);
     assert.match(stub, /wk model resolve --skill agent-review/);
+    assert.match(stub, /product files/);
+    assert.match(stub, /state-changing shell/);
+    assert.match(stub, /implementation chat/);
+    assert.match(stub, /BLOCKED/);
+    assert.match(stub, /agent-tdd/);
+    assert.match(stub, /agent-xfn/);
     assert.doesNotMatch(stub, /gpt-|opus|kimi/i);
     assert.ok(stub.split('\n').length <= SUBAGENT_STUB_LINE_BUDGET);
   });
@@ -116,6 +122,8 @@ describe('generateSubagentStubs and verifySubagentStubs', () => {
     const review = fs.readFileSync(path.join(root, AGENTS_DIR_REL, 'agent-review.md'), 'utf8');
     assert.match(review, /readonly: true/);
     assert.match(review, /PR review/);
+    assert.match(review, /implementation chat/);
+    assert.match(review, /handover_audit\.md/);
     assert.doesNotMatch(review, new RegExp(PLAYBOOK));
     assert.doesNotMatch(review, /Interaction Mandate/);
     const tdd = fs.readFileSync(path.join(root, AGENTS_DIR_REL, 'agent-tdd.md'), 'utf8');
@@ -140,6 +148,8 @@ describe('generateSubagentStubs and verifySubagentStubs', () => {
     assert.equal(result.ok, true, result.errors.join('\n'));
     const review = fs.readFileSync(path.join(kitRoot, AGENTS_DIR_REL, 'agent-review.md'), 'utf8');
     assert.match(review, /readonly: true/);
+    assert.match(review, /implementation chat/);
+    assert.match(review, /product files/);
     const skill = fs.readFileSync(path.join(kitRoot, 'skills/agent-review/SKILL.md'), 'utf8');
     const body = skill.replace(/^---[\s\S]*?\n---\n/, '');
     const longLine = body

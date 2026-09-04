@@ -88,6 +88,7 @@ triggers: [...]               # keywords for routing
 depends-on: [...]             # related skills
 mcp: [...]                    # optional catalogued MCP server ids (see mcps/)
 tools: []                     # optional CLI/tool hints for the agent
+readonly: true                # audit roles: no product writes / state-changing shell
 # model-class: plan           # optional overlay; kit catalog is source of truth (models/catalog.yaml)
 ---
 ```

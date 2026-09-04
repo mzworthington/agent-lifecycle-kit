@@ -11,4 +11,7 @@ Load the playbook at `skills/agent-arch-drift/SKILL.md` (or `~/.agents/skills/ag
 
 Resolve the model class with `wk model resolve --skill agent-arch-drift`. Keep `model: inherit` unless the parent passes a catalog slug. Do not hardcode vendor model ids.
 
-The parent must pass: Linear id if any, relevant handover paths, Definition of Done, and Next agent. Write COMPLETE or BLOCKED to the handover. Return a short summary only.
+This window is `readonly: true`: do not edit product files or run state-changing shell.
+The parent passes diff/PR refs and handover paths only. Do not receive the implementation chat.
+Catalog or XFN honesty fail → Status BLOCKED, Next agent agent-tdd or agent-xfn. Never a silent pass.
+Return Status and Next agent. The parent writes handover_audit.md.

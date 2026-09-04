@@ -1,3 +1,4 @@
+import { auditToolCallArguments, extractHandoverPath } from '../audit/readonly_window.js';
 import { resolveEvalRun } from './eval-style.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 import type { AgentResponse, AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
@@ -95,6 +96,33 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     if (prompt.includes('typo')) {
       return scriptedNoTool('Staying in the parent for a tiny typo.');
     }
+    const handoverPath = extractHandoverPath(prompt);
+    const wantsParallelAudit =
+      (prompt.includes('security') || prompt.includes('owasp')) &&
+      (prompt.includes('arch-drift') ||
+        prompt.includes('architecture-drift') ||
+        prompt.includes('architecture drift') ||
+        prompt.includes('hexagonal')) &&
+      (prompt.includes('parallel') || prompt.includes('both'));
+    if (wantsParallelAudit) {
+      return {
+        content: 'Launching readonly security and arch-drift auditors in parallel.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: auditToolCallArguments({ specialist: 'agent-security', handoverPath })
+          },
+          {
+            name: 'launch_specialist',
+            arguments: auditToolCallArguments({ specialist: 'agent-arch-drift', handoverPath })
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
     if (
       prompt.includes('pr') &&
       (prompt.includes('review') || prompt.includes('audit') || prompt.includes('independent'))
@@ -102,7 +130,49 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       return {
         content: 'Launching agent-review as a readonly audit subagent.',
         tool_calls: [
-          { name: 'launch_specialist', arguments: { specialist: 'agent-review', class: 'review' } }
+          {
+            name: 'launch_specialist',
+            arguments: auditToolCallArguments({ specialist: 'agent-review', handoverPath })
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('owasp') ||
+      prompt.includes('security audit') ||
+      prompt.includes('security review')
+    ) {
+      return {
+        content: 'Launching agent-security as a readonly audit subagent.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: auditToolCallArguments({ specialist: 'agent-security', handoverPath })
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('arch-drift') ||
+      prompt.includes('architecture-drift') ||
+      prompt.includes('architecture drift') ||
+      prompt.includes('hexagonal')
+    ) {
+      return {
+        content: 'Launching agent-arch-drift as a readonly audit subagent.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: auditToolCallArguments({ specialist: 'agent-arch-drift', handoverPath })
+          }
         ],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
         consecutiveToolFailures: 0,
@@ -411,7 +481,7 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         routingConfidence: 0.91
       };
     }
-    if (prompt.includes('host subagent') || prompt.includes('launching a host')) {
+    if (prompt.includes('host subagent') || prompt.includes('launching a host') || prompt.includes('readonly audit')) {
       return {
         content: 'Opening the subagent-launch SOP.',
         tool_calls: [{ name: 'get_sop', arguments: { name: 'subagent-launch' } }],

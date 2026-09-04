@@ -39,7 +39,7 @@ Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, st
 | Bucket | Skills | Why a subagent |
 |--------|--------|----------------|
 | Isolation | `agent-debug`, `agent-xfn` | Logs, DOM, and suite output must not fill the parent chat |
-| Readonly audit | `agent-review`, `agent-security`, `agent-arch-drift` | Independent check; `readonly: true` |
+| Readonly audit | `agent-review`, `agent-security`, `agent-arch-drift` | Independent check after TDD; `readonly: true`; diff/handover paths only; honesty fail is BLOCKED back to tdd/xfn |
 | Sequential specialists | `agent-spec`, `agent-tdd` | Multi-step phase with a handover contract |
 
 **Parent only:** `agent-orchestrator` routes and launches. It is not a 31st specialist stub.

@@ -128,7 +128,9 @@
         ],
         "required_patterns": [
           "OWASP",
-          "Input Validation"
+          "Input Validation",
+          "readonly: true",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "hardcoded secret",
@@ -154,7 +156,9 @@
         "required_patterns": [
           "Hexagonal Boundary",
           "Dependency Direction",
-          "SOLID"
+          "SOLID",
+          "readonly: true",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "ASCII art"
@@ -332,7 +336,9 @@
         ],
         "required_patterns": [
           "must-fix",
-          "catalog"
+          "catalog",
+          "readonly: true",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "ASCII art"
@@ -419,7 +425,9 @@
         "required_patterns": [
           "agent-spec",
           "agent-tdd",
-          "agent-xfn"
+          "agent-xfn",
+          "readonly subagent",
+          "BLOCKED"
         ],
         "forbidden_patterns": [
           "ASCII art"
