@@ -22,6 +22,8 @@ triggers:
   - PR title
   - commit message
 depends-on: []
+mcp:
+  - linear
 tools:
   - read
   - write
@@ -123,11 +125,10 @@ When completing a lifecycle phase, include in the handover:
 
 Do not mark **COMPLETE** while hook checks are failing.
 
-## 6. Commit messages and PR titles
+## 6. Commit messages
 
-When you (or the user) create commits or open/update a pull request, follow [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md).
+When work is ready (or the user is about to commit), follow [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md) and [SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md).
 
-- **Commit subject** and **PR title** both use `type(optional-scope): description` (e.g. `feat(skills): …`, `fix(cli): …`).
+- **Output** a commit subject `type(optional-scope): description`. Include `(WAY-123)` when a Linear issue was in play, and repeat the id in the body.
+- Stay on **main**. Leave the tree **uncommitted**. Do not `git commit`, push, or open a PR unless the user explicitly asks.
 - Type follows **behavior**, not file extension. Changes under `skills/`, `SOPs/`, `models/`, or `AGENTS.md` routing are `feat(skills):` / `feat(sops):` / `fix`, never `docs` just because they are Markdown.
-- Repos **squash-and-merge**: the PR title becomes the commit on the default branch. A conventional tip commit does not fix a free-form PR title.
-- Before handover that includes a PR link, verify the PR title is conventional; retitle if it drifted.
