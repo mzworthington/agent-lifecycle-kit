@@ -15,6 +15,7 @@
 - *(align)* Compose kit default MCP when asked (MZW-23)
 - *(subagents)* Add support for host subagent stubs and update related documentation
 - *(subagents)* Introduce skills-only mode and update related documentation
+- *(subagents)* Status, launch-prompt, and honest eval adapter
 
 ### 🐛 Bug Fixes
 
