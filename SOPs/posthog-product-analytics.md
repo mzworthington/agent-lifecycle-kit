@@ -71,6 +71,8 @@ flowchart TD
 5. **CI** - `secrets.POSTHOG_TOKEN` (and optional `POSTHOG_HOST`). Document that the agent cannot mint the secret.
 6. **Prove** - After deploy, query recent pageviews via MCP. If empty: cookieless mode off, token not baked, ad blockers, or reverse proxy. Unit tests are not live proof.
 
+Live product signals (errors, empty or dropping events, funnel drop-offs, flag exposure vs leading indicator, timeboxed bets due) are a **different** loop: [product-signal-intake](./product-signal-intake.md). Restore `wk mcp default` when this session ends. Do not create Linear issues on the `posthog` profile.
+
 Do not store `phc_` keys in memory MCP or handovers.
 
 ## Ownership

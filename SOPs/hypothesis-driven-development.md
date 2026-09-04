@@ -83,7 +83,7 @@ flowchart LR
 3. **Stories** — [agent-user-stories](../skills/agent-user-stories/SKILL.md): INVEST + Hypothesis block; flag details in Notes.
 4. **Spec** — [agent-spec](../skills/agent-spec/SKILL.md): Gherkin for off/on/kill; one telemetry event that can falsify the belief.
 5. **Ship** — [agent-release](../skills/agent-release/SKILL.md): flag, default, expiry, rollback.
-6. **Measure** — Product usage: [agent-posthog](../skills/agent-posthog/SKILL.md) against the leading indicator (`wk mcp posthog --install`). SLOs and traces: [agent-telemetry](../skills/agent-telemetry/SKILL.md). Not generic logs or a ten-metric dashboard.
+6. **Measure** — Product usage: [agent-posthog](../skills/agent-posthog/SKILL.md) against the leading indicator (`wk mcp posthog --install`). SLOs and traces: [agent-telemetry](../skills/agent-telemetry/SKILL.md). Not generic logs or a ten-metric dashboard. Two-session filing: [product-signal-intake](./product-signal-intake.md).
 7. **Close** — After the timebox: query that indicator, then confirmed → default on + prune flag; killed → flag off + prune slice ([agent-user-stories](../skills/agent-user-stories/SKILL.md), [agent-prune](../skills/agent-prune/SKILL.md)). Next story records the learning.
 
 ## 5. Ban list
