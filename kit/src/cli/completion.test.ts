@@ -34,6 +34,7 @@ describe('completeKitLine', () => {
       'report',
       'ci',
       'shadow',
+      'compare',
       'dataset'
     ]);
     assert.ok(completeKitLine(['wk', 'eval', 'dataset', ''], { mcpProfiles: profiles }).includes('lint'));
@@ -82,7 +83,7 @@ describe('renderCompletion', () => {
       if (cmd === 'scan') continue;
       assert.match(KIT_HELP, new RegExp(`(?:^|\\n)\\s+${cmd}\\b`, 'm'));
     }
-    assert.match(KIT_HELP, /run\|watch\|report\|ci\|shadow\|dataset/);
+    assert.match(KIT_HELP, /run\|watch\|report\|ci\|shadow\|dataset\|compare/);
     assert.deepEqual([...KIT_NESTED_COMMANDS.completion], ['zsh', 'bash', 'install']);
   });
 

@@ -1,6 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import {
+  compareMissRatesFromRepo,
+  formatMissRate,
+  generateNamesOutsideFreezeBaseline
+} from '../edd/compare_miss_rates.js';
 import { KIT_SKILL_DIR_PREFIX } from './verify_skills_layout.js';
 
 export const SUBAGENT_ALLOWLIST_REL = 'skills/subagents.yaml';
@@ -80,6 +85,9 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
   }
   if (!/from-trace/i.test(doc.expandKillIndicator)) {
     throw new Error('expandKillIndicator must name wk eval dataset from-trace');
+  }
+  if (!/routing-matrix/i.test(doc.expandKillIndicator)) {
+    throw new Error('expandKillIndicator must name evals/suites/routing-matrix.json');
   }
   const staySkillPrefixes = asStringArray(doc.staySkillPrefixes, 'staySkillPrefixes');
   const tddRaw = doc.tdd;
@@ -340,6 +348,25 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     }
     if (!docs.includes('launch-prompt') || !/eval adapter/i.test(docs)) {
       errors.push(`${SUBAGENT_DOCS_REL} must name wk agents launch-prompt and the eval adapter`);
+    }
+    if (!docs.includes('wk eval compare')) {
+      errors.push(`${SUBAGENT_DOCS_REL} must document wk eval compare`);
+    }
+  }
+
+  const compare = compareMissRatesFromRepo(repoDir, catalog.expandKill);
+  if (compare.decision === 'freeze') {
+    const extra = generateNamesOutsideFreezeBaseline(listGenerateSubagents(catalog));
+    if (extra.length > 0) {
+      errors.push(
+        `generate list is frozen (specialist-launch ${formatMissRate(compare.specialist)} vs skill-picker ${formatMissRate(compare.skillPicker)}); do not add ${extra.join(', ')}`
+      );
+    }
+    if (/add a role|adding roles/i.test(catalog.expandKill)) {
+      errors.push('expandKill must state freeze and must not tell you to add a role while freeze is indicated');
+    }
+    if (!/freeze/i.test(catalog.expandKill)) {
+      errors.push('expandKill must state freeze while the compare decision is freeze');
     }
   }
 

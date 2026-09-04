@@ -25,7 +25,7 @@ function writeTree(files: Record<string, string>): string {
 
 const validYaml = `version: 1
 expandKill: Freeze this generate list if auto-delegation is worse than today's skill picker.
-expandKillIndicator: Promote misses with wk eval dataset from-trace into evals/edd/subagent_routing.jsonl.
+expandKillIndicator: Promote misses with wk eval dataset from-trace into evals/edd/subagent_routing.jsonl versus evals/suites/routing-matrix.json.
 staySkillPrefixes:
   - lang-
   - framework-
@@ -58,7 +58,7 @@ roles:
 `;
 
 const docsOk =
-  '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0. wk agents launch-prompt. eval adapter.\n';
+  '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0. wk agents launch-prompt. eval adapter. wk eval compare.\n';
 
 describe('verifySubagentAllowlist', () => {
   it('accepts a complete tree that keeps profiles as skills and TDD as one subagent', () => {
@@ -175,6 +175,73 @@ describe('verifySubagentAllowlist', () => {
     assert.match(docs, /launch-prompt/);
     assert.match(docs, /eval adapter/i);
     assert.match(result.catalog?.expandKillIndicator ?? '', /from-trace/);
+    assert.match(result.catalog?.expandKillIndicator ?? '', /routing-matrix/);
+    assert.match(docs, /wk eval compare/);
+  });
+
+  it('fails when freeze is indicated and a specialist is added anyway', () => {
+    const freezeYaml = validYaml.replace(
+      'Freeze this generate list if auto-delegation is worse than today\'s skill picker.',
+      'Freeze the generate list.'
+    ).replace(
+      'agent-adapter:\n    runtime: skill\n',
+      'agent-adapter:\n    runtime: skill\n  agent-copy:\n    runtime: subagent\n    bucket: isolation\n    readonly: false\n'
+    );
+    const root = writeTree({
+      'skills/subagents.yaml': freezeYaml,
+      'skills/agent-orchestrator/SKILL.md': '---\nname: agent-orchestrator\n---\n',
+      'skills/agent-debug/SKILL.md': '---\nname: agent-debug\n---\n',
+      'skills/agent-review/SKILL.md': '---\nname: agent-review\n---\n',
+      'skills/agent-spec/SKILL.md': '---\nname: agent-spec\ntriggers:\n  - gherkin\n---\n',
+      'skills/agent-tdd/SKILL.md': '---\nname: agent-tdd\n---\n',
+      'skills/agent-adapter/SKILL.md': '---\nname: agent-adapter\n---\n',
+      'skills/agent-copy/SKILL.md': '---\nname: agent-copy\n---\n',
+      'docs/subagents.md': docsOk,
+      'evals/edd/subagent_routing.jsonl': `${JSON.stringify({
+        id: 'trace-miss',
+        prompt: 'Please isolate the noisy CI logs from last night.',
+        tags: ['prod-derived'],
+        expect: { tool: 'launch_specialist', arguments_contains: { specialist: 'agent-debug' } }
+      })}\n`,
+      'evals/suites/routing-matrix.json': JSON.stringify({
+        suite: 'routing-matrix',
+        test_cases: [{ id: 'r1', prompt: 'Write gherkin for export', target_skill: 'agent-spec' }]
+      })
+    });
+    const result = verifySubagentAllowlist(root);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /frozen/);
+    assert.match(result.errors.join('\n'), /agent-copy/);
+  });
+
+  it('fails when freeze is indicated and expandKill still tells you to add a role', () => {
+    const staleKill = validYaml.replace(
+      'Freeze this generate list if auto-delegation is worse than today\'s skill picker.',
+      'Freeze this generate list if worse than the skill picker. Fix thin handovers before adding roles.'
+    );
+    const root = writeTree({
+      'skills/subagents.yaml': staleKill,
+      'skills/agent-orchestrator/SKILL.md': '---\nname: agent-orchestrator\n---\n',
+      'skills/agent-debug/SKILL.md': '---\nname: agent-debug\n---\n',
+      'skills/agent-review/SKILL.md': '---\nname: agent-review\n---\n',
+      'skills/agent-spec/SKILL.md': '---\nname: agent-spec\ntriggers:\n  - gherkin\n---\n',
+      'skills/agent-tdd/SKILL.md': '---\nname: agent-tdd\n---\n',
+      'skills/agent-adapter/SKILL.md': '---\nname: agent-adapter\n---\n',
+      'docs/subagents.md': docsOk,
+      'evals/edd/subagent_routing.jsonl': `${JSON.stringify({
+        id: 'trace-miss',
+        prompt: 'Please isolate the noisy CI logs from last night.',
+        tags: ['prod-derived'],
+        expect: { tool: 'launch_specialist', arguments_contains: { specialist: 'agent-debug' } }
+      })}\n`,
+      'evals/suites/routing-matrix.json': JSON.stringify({
+        suite: 'routing-matrix',
+        test_cases: [{ id: 'r1', prompt: 'Write gherkin for export', target_skill: 'agent-spec' }]
+      })
+    });
+    const result = verifySubagentAllowlist(root);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /add a role|adding roles/i);
   });
 
   it('rejects a stale generate list that does not match roles', () => {

@@ -86,6 +86,7 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
       shadow: {
         flags: [{ name: '--infile' }, { name: '--sample' }, { name: '--out' }, { name: '--seed' }]
       },
+      compare: { flags: [{ name: '--json' }] },
       dataset: {
         subs: {
           lint: { flags: [{ name: '--dataset' }] },

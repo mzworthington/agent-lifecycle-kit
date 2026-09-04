@@ -77,4 +77,4 @@ When skills-only is on, do not call a host Task for spec, tdd, debug, xfn, or au
 
 ## Kill
 
-Freeze the generate list if auto-delegation picks the wrong specialist more often than today’s skill picker. Indicator: promote misses with `wk eval dataset from-trace` into `evals/edd/subagent_routing.jsonl` and compare to skill-picker misses in `evals/suites/routing-matrix.json`. Fix thin handovers before adding roles.
+Run `wk eval compare` (also printed by `wk agents status`). Specialist-launch miss rate comes from `wk eval dataset from-trace` rows in `evals/edd/subagent_routing.jsonl`. Skill-picker miss rate comes from `evals/suites/routing-matrix.json`. No from-trace goldens → `not-enough`, not a fake 0% win. When specialist misses are worse, the expand-kill line is Freeze. `wk verify` fails if you add a generate-list name anyway.
