@@ -236,7 +236,8 @@ describe("kit-knowledge", () => {
     });
     child.kill("SIGKILL");
     assert.doesNotMatch(stdout, /Unknown kit entity type/);
-    assert.match(stdout, /"type": "Subagent"/);
+    assert.match(stdout, /subagent:agent-tdd/);
+    assert.match(stdout, /Subagent/);
     assert.match(stdout, /skill:agent-tdd/);
   });
 });
