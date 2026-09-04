@@ -16,6 +16,7 @@
 - *(subagents)* Add support for host subagent stubs and update related documentation
 - *(subagents)* Introduce skills-only mode and update related documentation
 - *(subagents)* Status, launch-prompt, and honest eval adapter
+- *(evals)* Compare specialist vs skill-picker miss rates (MZW-73)
 
 ### 🐛 Bug Fixes
 
