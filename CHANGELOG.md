@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-04
+
+### 📚 Documentation
+
+- Enhance documentation for consumer CI and reusable workflows
+- Clarify Windsurf's status as rules-only and update related documentation
+
 ## 2026-09-03
 
 ### 🚀 Features
