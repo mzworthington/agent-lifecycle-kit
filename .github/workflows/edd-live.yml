@@ -91,6 +91,11 @@ jobs:
             --threshold-routing 95 \
             --out out/reports
           pnpm kit eval ci \
+            --suite evals/edd/posthog_intake.yaml \
+            --model "${KIT_EVAL_MODEL}" \
+            --threshold-routing 95 \
+            --out out/reports
+          pnpm kit eval ci \
             --suite evals/edd/safety.yaml \
             --model "${KIT_EVAL_MODEL}" \
             --threshold-routing 95 \
@@ -113,6 +118,7 @@ jobs:
             echo "| kit_knowledge | Live kit-knowledge MCP routing |"
             echo "| model_routing | Live plan/review/implement/cheap class selection |"
             echo "| cloudflare_ops | Live Cloudflare RUM / observability MCP routing |"
+            echo "| posthog_intake | Live PostHog intake vs Linear create routing |"
             echo "| safety | Injection + no-tool refusal under a live model |"
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"

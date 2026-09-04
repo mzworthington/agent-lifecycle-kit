@@ -86,4 +86,5 @@ Write `~/.agents/handover/<project>/handover_posthog.md` (Phase = telemetry) wit
 - Enabling replay without saying so on `/privacy`
 - Storing the project API key in memory MCP or the handover
 - Stacking the `posthog` MCP profile onto `default`
+- Creating Linear issues while PostHog is the only profile (Session A)
 - Treating Cloudflare RUM as a PostHog substitute

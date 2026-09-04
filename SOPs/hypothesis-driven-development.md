@@ -94,3 +94,4 @@ flowchart LR
 - Measuring ten things instead of the leading indicator
 - Closing a bet as “shipped” without confirmed / killed
 - Using the debug hypothesis board for product bets (wrong SOP)
+- Auto-filing Linear tickets from PostHog insights ([product-signal-intake](./product-signal-intake.md))

@@ -1,0 +1,35 @@
+name: "Routing: PostHog product-signal intake"
+dataset: "posthog_intake.jsonl"
+system_prompt: "posthog_intake_prompt.md"
+mcp_tools:
+  - "tools/insights-list.json"
+  - "tools/query-funnel.json"
+  - "tools/save_issue.json"
+metrics:
+  - type: "tool_selection"
+  - type: "schema_match"
+    strict: true
+  - type: "argument_correctness"
+  - type: "mcp_use"
+  - type: "task_completion"
+ontology:
+  gates:
+    - skill:agent-posthog
+    - skill:agent-user-stories
+    - skill:agent-prd
+mocks:
+  - tool: "insights-list"
+    response:
+      insights:
+        - id: 1
+          name: "Docs to start drop-off"
+  - tool: "query-funnel"
+    response:
+      name: "signup-funnel"
+      steps:
+        - "view"
+        - "start"
+  - tool: "save_issue"
+    response:
+      id: "MZW-000"
+      url: "https://linear.app/mzworthington/issue/MZW-000"

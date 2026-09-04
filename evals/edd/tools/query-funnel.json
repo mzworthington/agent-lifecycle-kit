@@ -1,0 +1,15 @@
+{
+  "name": "query-funnel",
+  "description": "Run a PostHog funnel query (drop-off steps). Use in Session A intake. Do not file Linear tickets from the result.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["name"],
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Funnel name or slug, e.g. signup-funnel"
+      }
+    },
+    "additionalProperties": false
+  }
+}

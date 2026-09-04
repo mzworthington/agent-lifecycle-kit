@@ -456,6 +456,16 @@ metrics:
     assert.ok(!report.results.some((r) => r.id === 'cf-live-01'));
   });
 
+  it('passes posthog-intake suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/posthog_intake.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.ok(report.results.some((r) => r.id === 'ph-intake-01'));
+    assert.ok(report.results.some((r) => r.id === 'ph-intake-nofile-01'));
+    assert.ok(report.results.some((r) => r.id === 'ph-file-01'));
+    assert.ok(!report.results.some((r) => r.id === 'ph-live-01'));
+  });
+
   it('loads a prod-derived circuit-breaker case', async () => {
     const cases = await loadDataset(path.join(repoDir, 'evals/edd/architecture_terminal.jsonl'), [
       'prod-derived'

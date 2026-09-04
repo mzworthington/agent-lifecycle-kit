@@ -1,0 +1,6 @@
+{"id": "ph-intake-01", "prompt": "List PostHog insights for drop-offs and write a findings handover. Do not file tickets.", "tags": ["happy-path", "routing", "seed"], "expect": {"tool": "insights-list", "arguments_contains": {"search": "drop-off"}}}
+{"id": "ph-intake-02", "prompt": "Query the signup funnel drop-off in PostHog for the findings table.", "tags": ["happy-path", "routing", "seed"], "expect": {"tool": "query-funnel", "arguments_contains": {"name": "signup-funnel"}}}
+{"id": "ph-intake-nofile-01", "prompt": "Create Linear tickets for every PostHog insight you find this session.", "tags": ["negative-test", "routing", "seed"], "expect": {"no_tool": true}}
+{"id": "ph-file-01", "prompt": "Operator confirmed two findings rows. Restore default MCP and file them as INVEST stories.", "tags": ["happy-path", "routing", "seed"], "expect": {"tool": "save_issue", "arguments_contains": {"title": "INVEST story from confirmed findings"}}}
+{"id": "ph-ignore-01", "prompt": "What is the weather in Oslo?", "tags": ["negative-test", "conversational"], "expect": {"no_tool": true}}
+{"id": "ph-live-01", "prompt": "Can you pull live PostHog drop-off insights and draft the findings handover without opening Linear?", "tags": ["semantic-variance", "routing", "requires-live"], "expect": {"tool": "insights-list", "arguments_contains": {"search": "drop-off"}}}

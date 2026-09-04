@@ -85,6 +85,8 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
     names.has('get_entity') ||
     names.has('get_related');
   const hasArch = names.has('read_architecture_yaml');
+  const hasPosthogIntake =
+    (names.has('insights-list') || names.has('query-funnel')) && names.has('save_issue');
   const hasLaunchSpecialist = names.has('launch_specialist');
   const hasModelClass = names.has('select_model_class');
   const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass && !hasLaunchSpecialist;
@@ -542,6 +544,76 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
       };
     }
     return scriptedNoTool('I am not sure which Cloudflare tool to use. Ask for RUM sites, the site_info endpoint, or Worker logs.', 0.4);
+  }
+
+  if (hasPosthogIntake && !hasArch) {
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea')
+    ) {
+      return scriptedNoTool(
+        'That is outside PostHog intake. I can list insights or query a funnel if you ask.'
+      );
+    }
+    if (
+      (prompt.includes('confirmed') &&
+        (prompt.includes('restore') || prompt.includes('default')) &&
+        (prompt.includes('stories') || prompt.includes('file them') || prompt.includes('invest'))) ||
+      (prompt.includes('confirmed') && prompt.includes('invest'))
+    ) {
+      return {
+        content:
+          'Default MCP restored. Filing only operator-confirmed sitting-contract rows as INVEST stories.',
+        tool_calls: [
+          { name: 'save_issue', arguments: { title: 'INVEST story from confirmed findings' } }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('every insight') ||
+      prompt.includes('create linear tickets') ||
+      prompt.includes('file tickets this session') ||
+      (prompt.includes('linear') && prompt.includes('every') && !prompt.includes('confirmed'))
+    ) {
+      return scriptedNoTool(
+        'Session A intake does not create Linear issues. Write the findings handover and wait for the operator gate.'
+      );
+    }
+    if (names.has('query-funnel') && prompt.includes('funnel')) {
+      return {
+        content: 'Querying the PostHog signup funnel for the findings table.',
+        tool_calls: [{ name: 'query-funnel', arguments: { name: 'signup-funnel' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      names.has('insights-list') &&
+      (prompt.includes('insight') ||
+        prompt.includes('findings') ||
+        prompt.includes('drop-off') ||
+        prompt.includes('drop-offs'))
+    ) {
+      return {
+        content: 'Listing PostHog insights for the findings handover. Not filing Linear tickets.',
+        tool_calls: [{ name: 'insights-list', arguments: { search: 'drop-off' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    return scriptedNoTool(
+      'I am not sure which PostHog intake tool to use. Ask for insights, a funnel query, or confirmed-row filing after restore default.',
+      0.4
+    );
   }
 
   const priorToolError = [...messages]
