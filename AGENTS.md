@@ -22,7 +22,7 @@ Do not commit or push unless the user explicitly asks.
 | Feature routing / multi-phase | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) |
 | Phase work | Matching `skills/agent-*` only for that phase |
 | Stack rules | Matching `lang-*` / `framework-*` / `profile-*` after detecting the codebase |
-| Subagent stubs vs skills | [skills/subagents.yaml](./skills/subagents.yaml) + [docs/subagents.md](./docs/subagents.md) |
+| Subagent stubs vs skills | [skills/subagents.yaml](./skills/subagents.yaml) + generated [agents/](./agents/) (`wk agents generate`) |
 | CI/CD / GitHub Actions | [profile-pipeline](./skills/profile-pipeline/SKILL.md) |
 | Catalog / XFN matrix | [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) during Design |
 | Debug / RCA | [agent-debug](./skills/agent-debug/SKILL.md) + [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |

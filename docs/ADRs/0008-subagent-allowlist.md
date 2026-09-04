@@ -28,7 +28,7 @@ Cursor can turn specialist roles into subagent stubs. Emitting an agent for ever
 
 Chosen option: "**Option C**", because Cursor’s own split is isolation / parallelism / independent verification versus one-shot playbooks, and because a later generator needs a frozen contract. Catalog: [skills/subagents.yaml](../../skills/subagents.yaml). Human copy: [docs/subagents.md](../subagents.md). Taxonomy: [skills/README.md](../../skills/README.md).
 
-This iteration does not generate agent files, change orchestrator launch behaviour, or touch host install paths.
+Iteration 0 published the list only. Iteration 1 (MZW-60) generates thin stubs under `agents/cursor` and `agents/claude` via `wk agents generate`. Playbooks stay in `SKILL.md`. Host install paths and orchestrator launch still do not change here.
 
 ### Consequences
 

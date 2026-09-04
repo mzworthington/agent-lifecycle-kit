@@ -13,6 +13,7 @@ Windsurf is **rules-only forever**. `wk export-rules` / `wk align` keep `.windsu
 | User MCP | `~/.cursor/mcp.json` | `~/.claude.json` (`mcpServers`) | `~/.copilot/mcp-config.json` | `~/.gemini/config/mcp_config.json` |
 | Model overlay | `models/hosts/cursor.yaml` | `models/hosts/claude.yaml` | `models/hosts/copilot.yaml` | `models/hosts/antigravity.yaml` |
 | External skills (`wk sync`) | `~/.cursor/skills` | symlink `~/.claude/skills` | not mirrored (use repo `.mcp.json`) | symlink `~/.gemini/skills` |
+| Generated role stubs | `agents/cursor/*.md` (kit clone; not installed yet) | `agents/claude/*.md` (kit clone; not installed yet) | — | — |
 
 Canonical content is still `AGENTS.md`, `skills/`, and `mcps/`. Host files are adapters.
 

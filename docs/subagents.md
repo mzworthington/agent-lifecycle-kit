@@ -1,16 +1,16 @@
 # Subagent allowlist
 
-Iteration 0. This page is the human copy of [`skills/subagents.yaml`](https://github.com/mzworthington/waykit/blob/main/skills/subagents.yaml): which `agent-*` roles may later become Cursor subagent stubs, and which stay `SKILL.md`. Generators are not wired yet. Orchestrator launch and host install paths do not change here.
+Iteration 1. This page is the human copy of [`skills/subagents.yaml`](https://github.com/mzworthington/waykit/blob/main/skills/subagents.yaml): which `agent-*` roles become thin Cursor/Claude agent stubs, and which stay `SKILL.md`. `wk agents generate` writes [`agents/`](https://github.com/mzworthington/waykit/blob/main/agents/). Orchestrator launch and host install paths (`~/.cursor/agents`) do not change here.
 
 Cursor’s own guidance: use subagents for isolation, parallelism, and independent verification. Keep skills for one-shot playbooks. Waykit does not emit one agent per role. Stack profiles never become agents.
 
 ```mermaid
-flowchart TB
-  roles[kind role skills]
-  roles --> yes{Isolation, audit, or multi-step phase?}
-  yes -->|yes| agent[Allowlist for subagent stub]
-  yes -->|no| skill[Stay SKILL.md]
-  profiles[kind profile] --> skill
+flowchart LR
+  skill[SKILL.md playbook] --> gen[wk agents generate]
+  allow[Allowlist] --> gen
+  gen --> stub[Thin agent.md]
+  stub --> cursor[agents/cursor]
+  stub --> claude[agents/claude]
 ```
 
 ## Allowlist
@@ -32,10 +32,14 @@ Gear 1 (domain + mocked ports) and gear 2 (thin adapter + integration test) stay
 
 The generate-agent list is the pilot set above. If someone proposes adding a role, freeze if auto-delegation is worse than today's skill picker. Expanding this list is a kill, not a default.
 
+Stubs carry YAML `name` and `description` (when-to-delegate), `model: inherit`, `readonly: true` on the audit band, and a load-this-skill prompt. Resolve host slugs with `wk model resolve --skill <id>`. Do not hardcode Other-Models ids. `agent-tdd` forbids splitting gear 1 and gear 2.
+
+`wk verify` fails if a stub grows into a playbook or copies SOP/philosophy text.
+
 ## Out of scope (this iteration)
 
-- Generating agent files
-- Changing orchestrator launch behaviour
-- Host install paths
+- Installing into `~/.cursor/agents`
+- Writing files into product app repos
+- Changing orchestrator launch behaviour / live Task launches
 
 Taxonomy: [skills/README.md](https://github.com/mzworthington/waykit/blob/main/skills/README.md). Decision: [ADR 0008](./ADRs/0008-subagent-allowlist.md). Feature path: [lifecycle](/docs/lifecycle).

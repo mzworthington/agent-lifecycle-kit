@@ -10,7 +10,7 @@ interface SecurityViolation {
   snippet: string;
 }
 
-const SCAN_DIRECTORIES: string[] = ['skills', 'kit', 'bin', 'SOPs', 'templates', 'mcps'];
+const SCAN_DIRECTORIES: string[] = ['skills', 'kit', 'bin', 'SOPs', 'templates', 'mcps', 'agents'];
 const SKIP_DIRS = new Set(['.git', 'node_modules', '.pnpm-store', '.pnpm', '.husky']);
 const SKIP_FILES = new Set(['scan_skill_security.ts']);
 

@@ -38,6 +38,8 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
     printRoleBudget: () => undefined,
     verifySubagents: () => ({ ok: true, errors: [] }),
     printSubagents: () => undefined,
+    verifyHostAgents: () => ({ ok: true, errors: [] }),
+    printHostAgents: () => undefined,
     exportRules: () => true,
     evals: () => true,
     edd: async () => 0,
@@ -149,6 +151,15 @@ describe('runKitCheck', () => {
         '/kit',
         passingDeps({
           verifySubagents: () => ({ ok: false, errors: ['pilot set'] })
+        })
+      ),
+      1
+    );
+    assert.equal(
+      await runKitCheck(
+        '/kit',
+        passingDeps({
+          verifyHostAgents: () => ({ ok: false, errors: ['fat stub'] })
         })
       ),
       1

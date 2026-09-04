@@ -32,6 +32,11 @@ import {
 } from '../skills/verify_role_skill_line_budget.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
 import { printSubagentAllowlistResult, verifySubagentAllowlist } from '../skills/subagents.js';
+import {
+  generateHostAgents,
+  printHostAgentStubResult,
+  verifyHostAgentStubs
+} from '../skills/generate_host_agents.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
 import {
@@ -174,7 +179,9 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       printRoleSkillLineBudgetResult(budget);
       const subagents = verifySubagentAllowlist(repoDir);
       printSubagentAllowlistResult(subagents);
-      return status(layout.ok && budget.ok && subagents.ok);
+      const stubs = verifyHostAgentStubs(repoDir);
+      printHostAgentStubResult(stubs);
+      return status(layout.ok && budget.ok && subagents.ok && stubs.ok);
     }
 
     case 'sync':
@@ -266,6 +273,17 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       for (const file of result.files) console.log(`Wrote ${file}`);
       console.log(result.snippet);
       return 0;
+    }
+
+    case 'agents-generate': {
+      try {
+        const result = generateHostAgents(repoDir, command.dest);
+        console.log(`Wrote ${result.files.length} host agent stubs: ${result.dest}`);
+        return 0;
+      } catch (err: unknown) {
+        console.error(`ERROR: ${errorMessage(err)}`);
+        return 1;
+      }
     }
 
     case 'ontology':

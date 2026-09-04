@@ -52,6 +52,7 @@ describe('docs/kit.md', () => {
       'wk completion zsh',
       'wk ontology check',
       'wk ontology generate',
+      'wk agents generate',
       'wk mcp <profile>',
       'wk audit',
       'wk eval ci',
