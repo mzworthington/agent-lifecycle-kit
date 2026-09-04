@@ -12,6 +12,7 @@
 - *(cli)* Emit stable JSON findings for align, doctor, and check (MZW-26)
 - *(skills)* Treat filtered tests as a pre-commit failure
 - *(mcp)* Restore the previous project profile after a session (MZW-28)
+- *(align)* Compose kit default MCP when asked (MZW-23)
 
 ### 🐛 Bug Fixes
 
