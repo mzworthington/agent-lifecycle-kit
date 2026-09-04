@@ -96,7 +96,7 @@ const TOOLS = [
   {
     name: "get_entity",
     description:
-      "Return one ontology entity by id (e.g. skill:agent-tdd, sop:conventional-commits, philosophy:8, doc:edd).",
+      "Return one ontology entity by id (e.g. skill:agent-tdd, subagent:agent-tdd, sop:conventional-commits, philosophy:8, doc:edd).",
     inputSchema: {
       type: "object",
       properties: {
@@ -112,7 +112,7 @@ const TOOLS = [
   {
     name: "get_related",
     description:
-      "Return ontology edges from an entity (optional relation filter: loads, uses, depends-on, implements, references, …).",
+      "Return ontology edges from an entity (optional relation filter: adapts, loads, uses, depends-on, implements, references, …).",
     inputSchema: {
       type: "object",
       properties: {

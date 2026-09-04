@@ -51,7 +51,7 @@ Agents pay for every byte in the bootstrap. Always-on files (`AGENTS.md` and the
 
 ## How does the agent find the right SOP?
 
-The kit is a live graph: skills, host subagent stubs, SOPs, MCP servers, evals, and docs. You edit those files; `wk ontology check` fails dangling `depends-on`, `mcp:`, and subagent→skill links. Agents stay on the thin handshake, then kit-knowledge walks neighbors (`get_entity`, `get_related`) instead of dumping the tree. Browse it: [Waykit map](/docs/map). How to add a node: [Author the Waykit map](/ontology). Launch flow: [Host subagents](/docs/subagents).
+The kit is a live graph: skills, host subagent stubs, SOPs, MCP servers, evals, and docs. You edit those files; `wk ontology check` fails dangling `depends-on`, `mcp:`, and subagent→skill links, and a stale type union after a schema bump. Agents stay on the thin handshake, then kit-knowledge walks neighbors (`get_entity` `subagent:agent-tdd`, `get_related` `adapts`) instead of dumping the tree. Browse it: [Waykit map](/docs/map). How to add a node: [Author the Waykit map](/ontology). Launch flow: [Host subagents](/docs/subagents).
 
 ## Where does EDD fit?
 

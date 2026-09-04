@@ -70,7 +70,7 @@ kit ontology check
 kit ontology generate
 ```
 
-`check` validates the live-derived index. `generate` writes a gitignored cache to `sync/ontology-index.json` and the site copy to `web/public/assets/ontology-index.json`. Neither file is source of truth; do not commit them.
+`check` validates the live-derived index. It also fails when `sync/ontology-index.json` is stamped with an older type union after a schema bump — regenerate and restart kit-knowledge so `get_entity` can load `subagent:*` ids. `generate` writes a gitignored cache to `sync/ontology-index.json` and the site copy to `web/public/assets/ontology-index.json`. Neither file is source of truth; do not commit them.
 
 `kit check` already runs the ontology gate.
 

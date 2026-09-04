@@ -203,7 +203,10 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       printSubagentAllowlistResult(subagents);
       const stubs = verifySubagentStubs(repoDir);
       printSubagentStubResult(stubs);
-      return status(layout.ok && budget.ok && subagents.ok && stubs.ok);
+      const ontology = checkOntology(repoDir);
+      for (const msg of ontology.messages) console.error(msg);
+      if (!ontology.ok) console.error('ontology check FAILED.');
+      return status(layout.ok && budget.ok && subagents.ok && stubs.ok && ontology.ok);
     }
 
     case 'sync': {

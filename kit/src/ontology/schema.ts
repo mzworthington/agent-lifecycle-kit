@@ -24,7 +24,9 @@ export function loadOntologySchema(kitRoot: string): OntologySchema {
   const types = asStringArray(data.types) as KitEntityType[];
   for (const t of types) {
     if (!KIT_ENTITY_TYPES.includes(t)) {
-      throw new Error(`Unknown kit entity type in schema: ${t}`);
+      throw new Error(
+        `Unknown kit entity type: ${t}. Update kit/src/ontology/types.ts (KIT_ENTITY_TYPES) and restart kit-knowledge.`
+      );
     }
   }
 

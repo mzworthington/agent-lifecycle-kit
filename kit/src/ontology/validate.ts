@@ -1,6 +1,12 @@
-import { generateOntologyIndex, writeSiteOntologyIndex } from './generate.js';
+import fs from 'node:fs';
+import { generateOntologyIndex, ontologyCachePath, writeSiteOntologyIndex } from './generate.js';
 import { loadOntologySchema } from './schema.js';
-import type { OntologyIndex } from './types.js';
+import {
+  indexCoversSchemaTypes,
+  staleOntologyTypeUnionMessage,
+  type OntologyIndex,
+  type OntologySchema
+} from './types.js';
 
 export interface OntologyCheckResult {
   ok: boolean;
@@ -8,28 +14,47 @@ export interface OntologyCheckResult {
   unknownSkillMcp: Array<{ skill: string; mcp: string }>;
   unknownDependsOn: Array<{ skill: string; dep: string }>;
   unknownSubagentSkill: Array<{ subagent: string; skill: string }>;
+  staleTypeUnion: string[];
   messages: string[];
 }
 
 /**
  * Validate a freshly generated ontology index (no committed snapshot / drift check).
- * Fails on broken skill mcp: / depends-on refs.
+ * Fails on broken skill mcp: / depends-on refs, and on a stale sync/ type union.
  */
+function emptyCheck(messages: string[]): OntologyCheckResult {
+  return {
+    ok: false,
+    missingEndpoints: [],
+    unknownSkillMcp: [],
+    unknownDependsOn: [],
+    unknownSubagentSkill: [],
+    staleTypeUnion: [],
+    messages
+  };
+}
+
+function readCachedTypeUnion(kitRoot: string, schema: OntologySchema): string[] {
+  const cachePath = ontologyCachePath(kitRoot);
+  if (!fs.existsSync(cachePath)) return [];
+  try {
+    const raw = fs.readFileSync(cachePath, 'utf8');
+    const cached = JSON.parse(raw) as OntologyIndex;
+    return indexCoversSchemaTypes(cached, schema.types).missing;
+  } catch {
+    return [...schema.types];
+  }
+}
+
 export function checkOntology(kitRoot: string): OntologyCheckResult {
   const messages: string[] = [];
   let index: OntologyIndex;
+  let schema: OntologySchema;
   try {
-    loadOntologySchema(kitRoot);
+    schema = loadOntologySchema(kitRoot);
     index = generateOntologyIndex(kitRoot);
   } catch (err) {
-    return {
-      ok: false,
-      missingEndpoints: [],
-      unknownSkillMcp: [],
-      unknownDependsOn: [],
-      unknownSubagentSkill: [],
-      messages: [err instanceof Error ? err.message : String(err)]
-    };
+    return emptyCheck([err instanceof Error ? err.message : String(err)]);
   }
 
   const ids = new Set(index.entities.map((e) => e.id));
@@ -79,11 +104,17 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
     messages.push(`Subagent ${m.subagent} adapts unknown skill:${m.skill}`);
   }
 
+  const staleTypeUnion = readCachedTypeUnion(kitRoot, schema);
+  if (staleTypeUnion.length > 0) {
+    messages.push(staleOntologyTypeUnionMessage(staleTypeUnion));
+  }
+
   const ok =
     missingEndpoints.length === 0 &&
     unknownSkillMcp.length === 0 &&
     unknownDependsOn.length === 0 &&
-    unknownSubagentSkill.length === 0;
+    unknownSubagentSkill.length === 0 &&
+    staleTypeUnion.length === 0;
 
   return {
     ok,
@@ -91,6 +122,7 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
     unknownSkillMcp,
     unknownDependsOn,
     unknownSubagentSkill,
+    staleTypeUnion,
     messages
   };
 }

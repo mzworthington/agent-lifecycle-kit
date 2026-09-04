@@ -84,6 +84,15 @@ describe("kit-knowledge", () => {
     assert.ok(docs.some((e) => e.to.startsWith("doc:")));
   });
 
+  it("get_entity returns subagent:agent-tdd and get_related adapts the playbook skill", () => {
+    const entity = getKitEntity(kitRoot, "subagent:agent-tdd");
+    assert.ok(entity);
+    assert.equal(entity!.type, "Subagent");
+    assert.equal(entity!.id, "subagent:agent-tdd");
+    const adapts = getKitRelated(kitRoot, "subagent:agent-tdd", "adapts");
+    assert.ok(adapts.some((e) => e.to === "skill:agent-tdd"));
+  });
+
   it("stdio launch from a cwd without tsx still initializes (Cursor consumer workspace)", async () => {
     const home = fs.mkdtempSync(path.join(os.tmpdir(), "kit-knowledge-home-"));
     fs.symlinkSync(kitRoot, path.join(home, ".agents"));
@@ -145,5 +154,89 @@ describe("kit-knowledge", () => {
     });
     child.kill("SIGKILL");
     assert.match(stdout, /"name":"kit-knowledge"/);
+  });
+
+  it("stdio get_entity returns subagent:agent-tdd in a fresh session", async () => {
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), "kit-knowledge-home-"));
+    fs.symlinkSync(kitRoot, path.join(home, ".agents"));
+    const serverFile = path.join(kitRoot, "mcps", "servers", "kit-knowledge", "server.json");
+    const spec = JSON.parse(fs.readFileSync(serverFile, "utf8")) as {
+      mcp: { "kit-knowledge": { command: string; args: string[] } };
+    };
+    const args = spec.mcp["kit-knowledge"].args.map((a) =>
+      a.replaceAll("${userHome}", home)
+    );
+    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "kit-knowledge-cwd-"));
+    const child = spawn("node", args, {
+      cwd,
+      env: { ...process.env, HOME: home, KIT_ROOT: kitRoot },
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    const stderr: Buffer[] = [];
+    child.stderr?.on("data", (chunk: Buffer) => stderr.push(chunk));
+    const stdout = await new Promise<string>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        child.kill("SIGKILL");
+        reject(new Error(`timeout. stderr=${Buffer.concat(stderr).toString()}`));
+      }, 8000);
+      let out = "";
+      child.stdout?.on("data", (chunk: Buffer) => {
+        out += chunk.toString();
+        if (out.includes("subagent:agent-tdd") && out.includes("skill:agent-tdd")) {
+          clearTimeout(timer);
+          resolve(out);
+        }
+      });
+      child.on("error", (err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+      child.on("exit", (code) => {
+        if (!out.includes("subagent:agent-tdd")) {
+          clearTimeout(timer);
+          reject(
+            new Error(
+              `exited ${code}. stderr=${Buffer.concat(stderr).toString()} stdout=${out}`
+            )
+          );
+        }
+      });
+      child.stdin?.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "initialize",
+          params: {
+            protocolVersion: "2024-11-05",
+            capabilities: {},
+            clientInfo: { name: "probe", version: "0" },
+          },
+        })}\n`
+      );
+      child.stdin?.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 2,
+          method: "tools/call",
+          params: { name: "get_entity", arguments: { id: "subagent:agent-tdd" } },
+        })}\n`
+      );
+      child.stdin?.write(
+        `${JSON.stringify({
+          jsonrpc: "2.0",
+          id: 3,
+          method: "tools/call",
+          params: {
+            name: "get_related",
+            arguments: { id: "subagent:agent-tdd", relation: "adapts" },
+          },
+        })}\n`
+      );
+      child.stdin?.end();
+    });
+    child.kill("SIGKILL");
+    assert.doesNotMatch(stdout, /Unknown kit entity type/);
+    assert.match(stdout, /"type": "Subagent"/);
+    assert.match(stdout, /skill:agent-tdd/);
   });
 });

@@ -66,8 +66,27 @@ export interface OntologyEdge {
 export interface OntologyIndex {
   version: number;
   generatedFrom: string;
+  /** Schema type union at generate time. Missing/stale stamps fail ontology check. */
+  types?: KitEntityType[];
   entities: OntologyEntity[];
   edges: OntologyEdge[];
+}
+
+export function indexCoversSchemaTypes(
+  index: Pick<OntologyIndex, 'types'>,
+  schemaTypes: readonly string[]
+): { ok: boolean; missing: string[] } {
+  const have = new Set<string>(index.types ?? []);
+  const missing = schemaTypes.filter((t) => !have.has(t));
+  return { ok: missing.length === 0, missing };
+}
+
+export function staleOntologyTypeUnionMessage(missing: readonly string[]): string {
+  const listed = missing.length > 0 ? missing.join(', ') : 'declared schema types';
+  return (
+    `Ontology cache is stale after a schema bump (type union missing ${listed}). ` +
+    'Run `wk ontology generate` and restart the kit-knowledge MCP session so get_entity can load subagent:* ids.'
+  );
 }
 
 export function entityId(type: KitEntityType, name: string): string {

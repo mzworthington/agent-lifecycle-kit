@@ -6,6 +6,8 @@ import { loadOntologySchema } from './schema.js';
 import { toHomepageIndex } from './graph_view.js';
 import {
   entityId,
+  indexCoversSchemaTypes,
+  KIT_ENTITY_TYPES,
   type OntologyEdge,
   type OntologyEntity,
   type OntologyIndex,
@@ -430,6 +432,7 @@ export function generateOntologyIndex(
   return {
     version: schema.version,
     generatedFrom: 'ontology/schema.yaml',
+    types: [...schema.types],
     entities,
     edges
   };
@@ -459,9 +462,12 @@ export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolea
   if (useCache && fs.existsSync(cachePath)) {
     try {
       const cacheStat = fs.statSync(cachePath);
-      if (cacheStat.mtimeMs >= latestOntologySourceMtime(kitRoot)) {
-        const raw = safeRead(cachePath);
-        if (raw) return JSON.parse(raw) as OntologyIndex;
+      const raw = safeRead(cachePath);
+      if (raw && cacheStat.mtimeMs >= latestOntologySourceMtime(kitRoot)) {
+        const cached = JSON.parse(raw) as OntologyIndex;
+        if (indexCoversSchemaTypes(cached, KIT_ENTITY_TYPES).ok) {
+          return cached;
+        }
       }
     } catch {
       // fall through to regenerate
@@ -482,6 +488,9 @@ export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolea
 function latestOntologySourceMtime(kitRoot: string): number {
   const roots = [
     path.join(kitRoot, 'ontology', 'schema.yaml'),
+    path.join(kitRoot, 'kit', 'src', 'ontology', 'types.ts'),
+    path.join(kitRoot, 'kit', 'src', 'ontology', 'generate.ts'),
+    path.join(kitRoot, 'kit', 'src', 'ontology', 'schema.ts'),
     path.join(kitRoot, 'CODING_PHILOSOPHY.md'),
     path.join(kitRoot, 'skills'),
     path.join(kitRoot, 'agents'),

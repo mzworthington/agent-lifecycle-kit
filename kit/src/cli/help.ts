@@ -26,7 +26,7 @@ Commands:
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
   export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
   metrics              Display telemetry analytics summary for subagent phase handovers
-  verify               Verify skills layout, role SKILL.md line budget, subagent allowlist, and thin agent stubs
+  verify               Verify skills layout, role SKILL.md line budget, subagent allowlist, thin agent stubs, and ontology type union
   agents generate      Write thin Cursor/Claude agent stubs under agents/ from skills/subagents.yaml
   agents install       Copy those stubs into ~/.cursor/agents and ~/.claude/agents (user scope; not the app repo)
   sync                 Sync official external skills (Cloudflare, Vercel); also refreshes user kit subagent stubs
@@ -35,7 +35,7 @@ Commands:
   debug-ci             Fetch failed GitHub Actions logs
   check                Run the local quality gate (audit, ontology, evals, EDD CI, context budget; --json)
   ontology generate    Dump derived ontology index to gitignored sync/ and web/public/assets/
-  ontology check       Validate live-derived index (skill mcp/depends-on/subagent refs)
+  ontology check       Validate live-derived index (skill mcp/depends-on/subagent refs; stale type union)
   memory lint          List legacy memory entities outside the ontology allowlist
   model resolve        Resolve capability class + host slug (models/catalog.yaml)
   site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)

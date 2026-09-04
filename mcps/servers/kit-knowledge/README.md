@@ -17,8 +17,8 @@ Requires Node 22+ and `pnpm install` in the kit so `node_modules/tsx` exists. Cu
 | `get_philosophy_section` | One `CODING_PHILOSOPHY.md` section by id or title |
 | `get_sop` | One SOP by stem (truncated if very long) |
 | `get_handover` | Latest or named phase handover for a project |
-| `get_entity` | One ontology entity by id (`skill:…`, `sop:…`, `philosophy:…`, `doc:…`) |
-| `get_related` | Ontology edges from an entity (optional `relation` filter) |
+| `get_entity` | One ontology entity by id (`skill:…`, `subagent:…`, `sop:…`, `philosophy:…`, `doc:…`) |
+| `get_related` | Ontology edges from an entity (optional `relation` filter: `adapts`, `uses`, `loads`, …) |
 
 ## When to use
 

@@ -56,6 +56,7 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
       unknownSkillMcp: [],
       unknownDependsOn: [],
       unknownSubagentSkill: [],
+      staleTypeUnion: [],
       messages: []
     }),
     // Default test: pretend all catalogued suites exist
@@ -187,6 +188,7 @@ describe('runKitCheck', () => {
             unknownSkillMcp: [],
             unknownDependsOn: [],
             unknownSubagentSkill: [],
+            staleTypeUnion: ['Subagent'],
             messages: ['boom']
           })
         })

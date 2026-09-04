@@ -10,8 +10,12 @@ import {
   generateOntologyIndex,
   getEntity,
   getRelated,
+  indexCoversSchemaTypes,
   loadOntologySchema,
-  validateMemoryEntityWrites
+  ontologyCachePath,
+  staleOntologyTypeUnionMessage,
+  validateMemoryEntityWrites,
+  writeOntologyIndex
 } from './index.js';
 
 const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -22,12 +26,27 @@ describe('ontology schema', () => {
     assert.equal(schema.version, 1);
     assert.ok(schema.types.includes('Skill'));
     assert.ok(schema.types.includes('PhilosophySection'));
+    assert.ok(schema.types.includes('Subagent'));
     assert.deepEqual(schema.memoryEntityTypes, [
       'GlossaryTerm',
       'Slo',
       'Preference',
       'ProjectFact'
     ]);
+  });
+
+  it('fails load when schema declares a type missing from the running union', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-schema-unknown-'));
+    try {
+      fs.mkdirSync(path.join(tmp, 'ontology'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmp, 'ontology', 'schema.yaml'),
+        'version: 1\ntypes: [Skill, AlienType]\nmemoryEntityTypes: []\nrelations: []\nphaseOrder: []\n'
+      );
+      assert.throws(() => loadOntologySchema(tmp), /Unknown kit entity type: AlienType/);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
   });
 });
 
@@ -62,6 +81,7 @@ describe('generateOntologyIndex', () => {
     assert.ok(getEntity(index, 'doc:edd'));
     assert.ok(getEntity(index, 'phase:tdd'));
     assert.ok(getEntity(index, 'subagent:agent-tdd'));
+    assert.ok(index.types?.includes('Subagent'));
   });
 
   it('emits depends-on and uses edges from skill frontmatter', () => {
@@ -175,5 +195,75 @@ See [SOP](../../SOPs/demo.md).
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
+  });
+
+  it('fails when the sync cache type union is missing Subagent after a schema bump', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-ontology-stale-'));
+    try {
+      fs.mkdirSync(path.join(tmp, 'ontology'), { recursive: true });
+      fs.copyFileSync(
+        path.join(kitRoot, 'ontology', 'schema.yaml'),
+        path.join(tmp, 'ontology', 'schema.yaml')
+      );
+      fs.writeFileSync(path.join(tmp, 'CODING_PHILOSOPHY.md'), '## 1. Hexagonal\n\nPorts.\n');
+      fs.mkdirSync(path.join(tmp, 'mcps'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmp, 'mcps', 'catalog.json'),
+        JSON.stringify({ servers: [{ id: 'memory', name: 'Memory' }] })
+      );
+      fs.mkdirSync(path.join(tmp, 'sync'), { recursive: true });
+      fs.writeFileSync(
+        ontologyCachePath(tmp),
+        JSON.stringify({
+          version: 1,
+          generatedFrom: 'ontology/schema.yaml',
+          types: ['Phase', 'Skill', 'SOP', 'Handover', 'EvalSuite', 'McpServer', 'PhilosophySection', 'Doc'],
+          entities: [],
+          edges: []
+        })
+      );
+
+      const result = checkOntology(tmp);
+      assert.equal(result.ok, false);
+      assert.deepEqual(result.staleTypeUnion, ['Subagent']);
+      assert.match(result.messages.join('\n'), /stale after a schema bump/);
+      assert.match(result.messages.join('\n'), /wk ontology generate/);
+      assert.match(result.messages.join('\n'), /restart/);
+      assert.match(result.messages.join('\n'), /subagent:\*/);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it('passes after the cache is regenerated with the current type union', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-ontology-fresh-'));
+    try {
+      fs.mkdirSync(path.join(tmp, 'ontology'), { recursive: true });
+      fs.copyFileSync(
+        path.join(kitRoot, 'ontology', 'schema.yaml'),
+        path.join(tmp, 'ontology', 'schema.yaml')
+      );
+      fs.writeFileSync(path.join(tmp, 'CODING_PHILOSOPHY.md'), '## 1. Hexagonal\n\nPorts.\n');
+      fs.mkdirSync(path.join(tmp, 'mcps'), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmp, 'mcps', 'catalog.json'),
+        JSON.stringify({ servers: [{ id: 'memory', name: 'Memory' }] })
+      );
+      writeOntologyIndex(tmp);
+      const result = checkOntology(tmp);
+      assert.equal(result.ok, true);
+      assert.deepEqual(result.staleTypeUnion, []);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('indexCoversSchemaTypes', () => {
+  it('treats a missing types stamp as stale', () => {
+    const cover = indexCoversSchemaTypes({}, ['Skill', 'Subagent']);
+    assert.equal(cover.ok, false);
+    assert.deepEqual(cover.missing, ['Skill', 'Subagent']);
+    assert.match(staleOntologyTypeUnionMessage(cover.missing), /type union missing Skill, Subagent/);
   });
 });

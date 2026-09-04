@@ -32,7 +32,7 @@ sequenceDiagram
   Parent->>Disk: Read status
 ```
 
-Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, stubs are `subagent:*` nodes with an `adapts` edge to their skill ([Waykit map](./map.md)).
+Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, stubs are `subagent:*` nodes with an `adapts` edge to their skill ([Waykit map](./map.md)). Fetch the same ids from kit-knowledge: `get_entity` with `subagent:agent-tdd`, then `get_related` with `relation: adapts` to reach `skill:agent-tdd`.
 
 ## Generate list
 

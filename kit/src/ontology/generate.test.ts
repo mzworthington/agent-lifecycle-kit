@@ -9,7 +9,10 @@ import {
   getEntity,
   getRelated,
   isGitIgnored,
+  ontologyCachePath,
+  resolveOntologyIndex,
   serializeOntologyIndex,
+  writeOntologyIndex,
   writeSiteOntologyIndex
 } from './generate.js';
 import type { OntologyIndex } from './types.js';
@@ -164,6 +167,7 @@ describe('generateOntologyIndex', () => {
       assert.ok(getRelated(index, 'subagent:agent-demo', 'adapts').some((e) => e.to === 'skill:agent-demo'));
       assert.ok(getRelated(index, 'subagent:agent-demo', 'references').some((e) => e.to === 'doc:subagents'));
       assert.equal(getEntity(index, 'subagent:README'), null);
+      assert.ok(index.types?.includes('Subagent'));
     });
   });
 
@@ -201,6 +205,29 @@ describe('writeSiteOntologyIndex', () => {
       assert.ok(getEntity(site, 'skill:agent-demo'));
       assert.match(sitePath, /web\/public\/assets\/ontology-index\.json$/);
       assert.match(serializeOntologyIndex(site), /\n$/);
+    });
+  });
+});
+
+describe('resolveOntologyIndex', () => {
+  it('regenerates a newer cache that is missing Subagent from the type union', () => {
+    withKit((root) => {
+      writeOntologyIndex(root);
+      const cachePath = ontologyCachePath(root);
+      const stale = JSON.parse(fs.readFileSync(cachePath, 'utf8')) as OntologyIndex;
+      stale.types = (stale.types ?? []).filter((t) => t !== 'Subagent');
+      stale.entities = stale.entities.filter((e) => e.type !== 'Subagent');
+      stale.edges = stale.edges.filter((e) => e.relation !== 'adapts');
+      fs.writeFileSync(cachePath, serializeOntologyIndex(stale), 'utf8');
+      const future = new Date(Date.now() + 60_000);
+      fs.utimesSync(cachePath, future, future);
+
+      const resolved = resolveOntologyIndex(root);
+      assert.ok(getEntity(resolved, 'subagent:agent-demo'));
+      assert.ok(resolved.types?.includes('Subagent'));
+      assert.ok(
+        getRelated(resolved, 'subagent:agent-demo', 'adapts').some((e) => e.to === 'skill:agent-demo')
+      );
     });
   });
 });

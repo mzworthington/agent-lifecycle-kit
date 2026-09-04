@@ -26,6 +26,8 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /agents install/);
     assert.match(KIT_HELP, /refreshes user kit subagent stubs/);
     assert.match(KIT_HELP, /thin agent stubs/);
+    assert.match(KIT_HELP, /ontology type union/);
+    assert.match(KIT_HELP, /stale type union/);
     assert.match(KIT_HELP, /Usage: wk <command>/);
     assert.match(KIT_HELP, /kit <command>/);
     assert.match(KIT_HELP, /agent-kit <command>/);

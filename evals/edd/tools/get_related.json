@@ -1,6 +1,6 @@
 {
   "name": "get_related",
-  "description": "Return ontology edges from an entity (optional relation filter: loads, uses, depends-on, implements, references).",
+  "description": "Return ontology edges from an entity (optional relation filter: adapts, loads, uses, depends-on, implements, references).",
   "inputSchema": {
     "type": "object",
     "required": ["id"],
