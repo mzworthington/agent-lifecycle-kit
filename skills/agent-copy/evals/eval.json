@@ -58,6 +58,30 @@
           "agent-copy"
         ]
       }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-004",
+      "name": "Oxford Comma And Exec Audience",
+      "description": "Voice pass for tech-buying readers must drop default Oxford commas and slogan stacks.",
+      "target_skill": "agent-copy",
+      "prompt": "The homepage and docs are obviously AI-generated, including incorrect Oxford comma usage. Rewrite for architects, CTOs and engineering directors.",
+      "assertions": {
+        "required_triggers": [
+          "sounds AI",
+          "AI-generated copy",
+          "Oxford comma"
+        ],
+        "required_patterns": [
+          "serial comma",
+          "Oxford",
+          "CTO",
+          "tricolon"
+        ],
+        "forbidden_patterns": [
+          "Catch architecture risk before it becomes an outage",
+          "Why it matters"
+        ]
+      }
     }
   ]
 }

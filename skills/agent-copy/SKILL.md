@@ -1,10 +1,11 @@
 ---
 name: agent-copy
 description: >-
-  Crafts, audits, and refines product copy, UI microcopy, error messages, landing and
-  marketing narrative, and documentation voice. Enforces a human-centric practitioner tone,
-  strips AI-template slogans, and keeps terminology consistent. Use when copy sounds AI-written,
-  needs humanizing, or when landing, onboarding, error, or brand messaging changes.
+  Crafts, audits and refines product copy, UI microcopy, error messages, landing
+  narrative and docs voice. Enforces a human-centric practitioner tone, strips
+  AI-template slogans and keeps terminology consistent. Use when copy sounds AI-written,
+  needs humanizing or when landing, onboarding, error or brand messaging changes. Also use
+  for Oxford comma / serial-comma house style on public pages.
 kind: role
 phase: impl
 triggers:
@@ -22,6 +23,8 @@ triggers:
   - AI-generated copy
   - landing page copy
   - marketing copy
+  - Oxford comma
+  - serial comma
 depends-on:
   - agent-spec
   - agent-ui
@@ -36,7 +39,9 @@ disable-model-invocation: false
 
 Copy is a core user interface element. Clear, intentional text reduces cognitive friction, guides action, and aligns product behavior with user expectations ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md)).
 
-Default stance: write like a sharp teammate explaining the product to another practitioner - not like a launch deck, not like a chatbot.
+Default stance: write like a sharp teammate explaining the product to another practitioner. Not a launch deck. Not a chatbot.
+
+Default **reader** for product and marketing surfaces: architects, CTOs, engineering directors, staff engineers. They already know the domain. Do not explain what architecture is. Do not sell transformation. Write as a peer in a design review.
 
 ## When to load this skill
 
@@ -67,7 +72,7 @@ Customize pillars and the tone matrix to the brand. When unset, use the practiti
 ### Voice Pillars
 
 1. **Clear & Direct:** Front-load the point. Cut passive voice and corporate fluff.
-2. **Practitioner, not pitch deck:** Name the concrete failure or job. Prefer "wrong tool, made-up args" over "Ship AI agents you can prove."
+2. **Practitioner, not pitch deck:** Name the concrete failure or job. Prefer "wrong tool, made-up args" over "Ship AI agents you can prove." For a tech-buying audience, prefer "Fault a dependency on the C4 map" over "Catch architecture risk before it becomes an outage."
 3. **Empathetic & Solution-Focused:** Frame feedback around user goals. Never blame the user for errors; give a recovery step.
 4. **Precise & Consistent:** Reuse domain terms across UI, tooltips, and docs. Do not invent parallel slogans for the same idea.
 5. **Action-Oriented:** CTAs start with a specific verb ("Run `wk eval ci`", "Read the guide") - not "Learn more" or "Get started" unless that is the only honest label.
@@ -76,7 +81,7 @@ Customize pillars and the tone matrix to the brand. When unset, use the practiti
 
 | Context | Target Tone | Key Characteristics | Example |
 |---------|-------------|---------------------|---------|
-| **Landing / marketing** | Confident, concrete, human | One problem, one promise, no slogan stack | *"Test the tools your agents call"* |
+| **Landing / marketing** | Confident, concrete, human | One problem, one promise, no slogan stack. Peer-to-peer, not vendor. | *"A C4 map you can fault in a design review"* |
 | **Success / Onboarding** | Encouraging, warm, clear | Brief celebration, clear next steps | *"Workspace created. Invite team members to collaborate."* |
 | **Error / Recovery** | Calm, direct, actionable | What happened, why if useful, what next | *"Unable to save changes. Check your network connection and try again."* |
 | **UI Action / Microcopy** | Concise, unambiguous, verb-first | 1–4 words, sentence-case | *"Save changes"*, *"Export CSV"* |
@@ -90,8 +95,27 @@ Use this when auditing existing copy (especially AI-drafted or slogan-heavy surf
 2. **Flag tells** against the anti-patterns below (slogans, fake urgency, cyber chrome labels, emoji-as-heading).
 3. **Rewrite for a peer:** say what breaks, what the product does about it, and what to do next.
 4. **Keep structure** unless the user asked for a redesign - swap phrases, not the information architecture.
-5. **Read aloud:** if it sounds like a press release or a motivational poster, cut again.
+5. **Read aloud:** if it sounds like a press release, a motivational poster or three matching benefit cards, cut again.
 6. **Align chrome:** sentence-case filters and status labels; no ALL-CAPS "MESH ONLINE" theater.
+7. **Serial comma:** omit the Oxford comma unless the last two items would otherwise parse as a pair. See punctuation below.
+
+### Audience (tech product)
+
+Write for people who already run architecture reviews: architects, CTOs, VPs/Directors of Engineering. Specific tools and failure modes beat benefits-speak.
+
+- Name the artefact (`BlueprintSpec` YAML, C4 map, blast radius) instead of "living architecture."
+- Uneven sentence rhythm. Do not stack three parallel clauses with matching grammar.
+- Headlines state the job. They are not a slogan that could sit on any SaaS site if you swap the product name.
+
+### Punctuation (house style)
+
+Align with [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8.
+
+- **No em dashes.** Comma, colon, period or hyphen with spaces (` - `).
+- **No Oxford / serial comma by default.** Write "Canvas, CLI and CI" not "Canvas, CLI, and CI."
+- **Use the serial comma only to prevent a misparse:** "We invited the architects, the CTO, and the legal team" (otherwise "the CTO and the legal team" reads as one invitee).
+- Never put a comma before "and" in a two-item list.
+- Do not force every sentence into an "X, Y, and Z" tricolon. That rhythm, plus a serial comma on every list, is a common AI tell. US-trained models insert Oxford commas as a default; this house style does not.
 
 ### Anti-patterns (AI / template tells)
 
@@ -105,8 +129,14 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | ALL-CAPS filter / pill spam | Sentence case |
 | Emoji as section titles | Short text labels (*"Evals"*, *"Architecture"*) or none |
 | Gradient-speak headlines that could fit any SaaS | Product-specific wording that fails the brand test if the name is removed |
-| Repeating the same tagline in title, H1, body, and footer | Say it once; elsewhere add new information |
+| Repeating the same tagline in title, H1, body and footer | Say it once; elsewhere add new information |
 | "Vibes" as a crutch in every paragraph | Use sparingly, or name the real gap (no asserts, no CI gate) |
+| Oxford comma on every list of three+ ("Canvas, CLI, and CI") | "Canvas, CLI and CI" unless the last two items would misparse as a pair |
+| Tricolon padding (*"model failures, surface hotspots, and get a ranked list"*) | One concrete action, then a second sentence if needed |
+| Section titles that belong on any landing page (*"Why it matters"*, *"Product suite"*, *"Unlock X"*) | Job-shaped headings (*"In a design review"*, *"The tools"*) |
+| Card CTA *"Learn more"* | Named destination (*"Canvas guide"*, *"Read the EDD guide →"*) |
+| Ampersand badges (*"Free & open source"*) | "Open source" or "Free and open source" |
+| Stock benefit adjectives (*"evidence-backed"*, *"living contract"*, *"while X is still cheap to change"*) | Say what the score is made of, or drop the clause |
 
 ### Practitioner rewrite examples
 
@@ -119,6 +149,9 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | *"KIT MESH · ONLINE"* | *"Kit map"* | Removes cosplay ops chrome |
 | *"EDD harness"* + lab-coat emoji | *"A harness you can run in CI"* | Outcome over badge |
 | *"Why EDD?"* / *"Explore EDD →"* | *"How EDD works"* / *"Read the EDD guide →"* | Specific verb |
+| *"Catch architecture risk before it becomes an outage"* | *"A C4 map you can fault in a design review"* | Slogan vs the job a CTO is actually doing |
+| *"TraceLens, ChaosLens, and AdviceLens"* | *"TraceLens, ChaosLens and AdviceLens"* | House style omits the serial comma |
+| *"Why it matters"* / *"Product suite"* / *"Learn more"* | *"In a design review"* / *"The tools"* / *"Canvas guide"* | Marketing chrome that could sit on any site |
 
 ## Rules & Standards
 
@@ -129,7 +162,8 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 5. **Formatting:**
    - Bold key terms or field names in step-by-step instructions only when it aids scanning.
    - Use numerals for counts (*"Select 3 items"*).
-   - Prefer commas, colons, periods, or spaced hyphens over em dashes in kit-owned prose ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Product UI may follow the project's established punctuation.
+   - Prefer commas, colons, periods or spaced hyphens over em dashes in kit-owned prose ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Product UI may follow the project's established punctuation.
+   - Omit the Oxford comma unless the last two items would otherwise parse as a unit. Do not sprinkle serial commas because a US style guide would.
 6. **General anti-patterns:**
    - No passive voice (*"The file was uploaded by you"* → *"You uploaded the file"*).
    - No generic error codes as the only message.
