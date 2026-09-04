@@ -1,7 +1,8 @@
 # Subagent allowlist — iteration 0
 #
-# Source of truth for later generators. Do not emit agent files from this list yet.
-# Do not change orchestrator launch behaviour or host install paths from this file.
+# Source of truth for host installers (wk align / wk sync / install).
+# Do not widen generate-agent from this file.
+# Do not change orchestrator launch behaviour from this file.
 #
 # Cursor: use subagents for isolation, parallelism, and independent verification.
 # Keep skills for one-shot playbooks.

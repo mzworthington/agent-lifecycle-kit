@@ -21,7 +21,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 
 Source of truth: [subagents.yaml](./subagents.yaml). Human copy: [docs/subagents.md](../docs/subagents.md). Decision: [ADR 0008](../docs/ADRs/0008-subagent-allowlist.md).
 
-Cursor: use subagents for isolation, parallelism, and independent verification; keep skills for one-shot playbooks. Iteration 0 publishes the list only. It does not generate agent files, change orchestrator launch behaviour, or touch host install paths.
+Cursor: use subagents for isolation, parallelism, and independent verification; keep skills for one-shot playbooks. `wk align` / `wk sync` / install write allowlisted stubs to `~/.cursor/agents` and `~/.claude/agents`. Copilot and Antigravity stay handshake plus skills. Orchestrator launch behaviour does not change here.
 
 | Band | Disposition | Skills |
 |------|-------------|--------|

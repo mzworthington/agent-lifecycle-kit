@@ -1,9 +1,14 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { exportIDERules, IDE_RULE_REL_PATHS } from '../bootstrap/export_ide_rules.js';
 import { composeMCP } from '../bootstrap/compose_mcp.js';
 import { MCP_HOSTS, projectMcpPath, type McpHostId } from '../bootstrap/mcp_hosts.js';
 import { DEFAULT_TARGET_CHARS } from '../quality/measure_context_budget.js';
+import {
+  installHostSubagents,
+  type InstallHostSubagentsResult
+} from '../skills/host_subagents.js';
 
 export type AlignStatus = 'ok' | 'fail';
 
@@ -19,6 +24,7 @@ export interface AlignResult {
   targetDir: string;
   findings: AlignFinding[];
   written: string[];
+  hostAgents?: InstallHostSubagentsResult;
 }
 
 export interface AlignProjectOptions {
@@ -29,6 +35,7 @@ export interface AlignProjectOptions {
   composeMcp?: boolean;
   mcpHosts?: readonly McpHostId[];
   cursorDir?: string;
+  homedir?: string;
 }
 
 function readIfPresent(filePath: string): string | undefined {
@@ -239,7 +246,7 @@ export function alignProject(options: AlignProjectOptions): AlignResult {
     for (const rel of IDE_RULE_REL_PATHS) {
       if (!fileExists(targetDir, rel)) written.push(rel);
     }
-    exportIDERules(targetDir, false, options.kitRepoDir);
+    exportIDERules(targetDir, false, options.kitRepoDir, options.homedir ?? os.homedir());
   }
 
   if (options.composeMcp) {
@@ -253,12 +260,18 @@ export function alignProject(options: AlignProjectOptions): AlignResult {
     written.push('mcp default');
   }
 
+  const hostAgents = installHostSubagents({
+    kitRepoDir: options.kitRepoDir,
+    homedir: options.homedir ?? os.homedir()
+  });
+
   const findings = evaluate(targetDir);
   return {
     ok: findings.every((f) => f.status === 'ok'),
     targetDir,
     findings,
-    written: options.write || options.composeMcp ? written : []
+    written: options.write || options.composeMcp ? written : [],
+    hostAgents
   };
 }
 
@@ -271,6 +284,11 @@ export function printAlignResult(result: AlignResult, log: (msg: string) => void
   }
   if (result.written.length > 0) {
     log(`wrote: ${result.written.join(', ')}`);
+  }
+  if (result.hostAgents && result.hostAgents.written.length > 0) {
+    log(
+      `user subagents: ${result.hostAgents.written.length} kit stubs in ~/.cursor/agents and ~/.claude/agents (not in this clone)`
+    );
   }
   if (result.ok) log('✅ align PASSED.');
   else {

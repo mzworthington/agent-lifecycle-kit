@@ -17,7 +17,7 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 | Page | Who it is for |
 |------|----------------|
 | [Feature lifecycle](./lifecycle.md) | Grill → PRD if bet → spec → TDD → XFN → ship |
-| [Subagent allowlist](./subagents.md) | Which `agent-*` roles may become subagent stubs; stack profiles stay skills |
+| [Subagent allowlist](./subagents.md) | Which `agent-*` roles install as Cursor/Claude user-scope stubs; stack profiles stay skills |
 | [What Waykit gives you](./kit.md) | `wk` CLI: context budget, live kit graph, MCP profiles, check, doctor |
 | [Repo doctor](./doctor.md) | Owned-repo README, license, contributing, GitHub templates |
 | [Consumer align](./align.md) | App-repo handshake, host pointers, kit MCP, commit-msg, reusable PR Action |
@@ -25,7 +25,7 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 | [Waykit map](./map.md) | Live graph of this kit (derived from files, not a second catalog) |
 | [Author the Waykit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
 | [EDD guide (alpha)](./edd.md) | Anyone proving agent tool routing in CI |
-| [Hosts](./hosts.md) | Cursor, Claude Code, Copilot, Antigravity files |
+| [Hosts](./hosts.md) | Cursor, Claude Code, Copilot, Antigravity files; user-scope kit subagents |
 
 ## Reference
 

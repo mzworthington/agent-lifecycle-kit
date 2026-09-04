@@ -97,7 +97,7 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 
 | Command | What it measures or installs |
 |---------|------------------------------|
-| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers; `--owned --scan` for a worktree farm; `--json` for findings) |
+| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg, and user-scope Cursor/Claude subagents (`--write` seeds missing AGENTS.md and pointers; `--owned --scan` for a worktree farm; `--json` for findings) |
 | `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`; `--json` for findings) |
 | `wk check` | Audit, ontology, evals, EDD CI, context budget (`--json` for findings) |
 | `wk version` | Kit package/git describe and whether `~/.agents` is this clone (`--check` warns if origin is weeks ahead) |
@@ -108,6 +108,6 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 | `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |
 | `wk audit` | Skills and scripts supply-chain scan |
 | `wk eval ci` | Routing accuracy gate (EDD) |
-| `wk sync` | Upstream skills from the lockfile |
+| `wk sync` | Upstream skills from the lockfile, plus kit subagents in `~/.cursor/agents` and `~/.claude/agents` |
 
 EDD loop (alpha), keys, and CI: [edd.md](./edd.md). Host files: [hosts.md](./hosts.md).

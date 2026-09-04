@@ -1,16 +1,17 @@
 # Subagent allowlist
 
-Iteration 0. This page is the human copy of [`skills/subagents.yaml`](https://github.com/mzworthington/waykit/blob/main/skills/subagents.yaml): which `agent-*` roles may later become Cursor subagent stubs, and which stay `SKILL.md`. Generators are not wired yet. Orchestrator launch and host install paths do not change here.
+This page is the human copy of [`skills/subagents.yaml`](https://github.com/mzworthington/waykit/blob/main/skills/subagents.yaml): which `agent-*` roles become Cursor and Claude subagent stubs, and which stay `SKILL.md`. Orchestrator launch behaviour does not change here.
+
+`wk align`, `wk sync`, and install write those stubs under `~/.cursor/agents/` and `~/.claude/agents/` (user scope). Product clones do not commit them. Copilot and Antigravity stay handshake plus skills.
 
 Cursor’s own guidance: use subagents for isolation, parallelism, and independent verification. Keep skills for one-shot playbooks. Waykit does not emit one agent per role. Stack profiles never become agents.
 
 ```mermaid
-flowchart TB
-  roles[kind role skills]
-  roles --> yes{Isolation, audit, or multi-step phase?}
-  yes -->|yes| agent[Allowlist for subagent stub]
-  yes -->|no| skill[Stay SKILL.md]
-  profiles[kind profile] --> skill
+flowchart LR
+  kit[Waykit clone] --> wk[wk align or sync]
+  wk --> cu["~/.cursor/agents"]
+  wk --> cl["~/.claude/agents"]
+  app[App repo handshake] --> skills[Load SKILL.md on demand]
 ```
 
 ## Allowlist
@@ -32,10 +33,12 @@ Gear 1 (domain + mocked ports) and gear 2 (thin adapter + integration test) stay
 
 The generate-agent list is the pilot set above. If someone proposes adding a role, freeze if auto-delegation is worse than today's skill picker. Expanding this list is a kill, not a default.
 
-## Out of scope (this iteration)
+## Out of scope (this page)
 
-- Generating agent files
 - Changing orchestrator launch behaviour
-- Host install paths
+- EDD routing suites
+- Inventing a Copilot or Antigravity agents directory
 
-Taxonomy: [skills/README.md](https://github.com/mzworthington/waykit/blob/main/skills/README.md). Decision: [ADR 0008](./ADRs/0008-subagent-allowlist.md). Feature path: [lifecycle](/docs/lifecycle).
+Re-running install refreshes kit-managed stubs and leaves unrelated custom agents you added yourself.
+
+Taxonomy: [skills/README.md](https://github.com/mzworthington/waykit/blob/main/skills/README.md). Decision: [ADR 0008](./ADRs/0008-subagent-allowlist.md). Hosts: [hosts](./hosts.md). Feature path: [lifecycle](/docs/lifecycle).

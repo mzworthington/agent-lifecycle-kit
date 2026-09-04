@@ -9,6 +9,8 @@ import {
   mirrorUserSkills,
   type CommandRunner
 } from './sync_external_skills.js';
+import { PILOT_GENERATE_AGENT } from './subagents.js';
+import { userSubagentDir } from './host_subagents.js';
 
 describe('parseSyncArgs', () => {
   it('defaults to install', () => {
@@ -171,5 +173,59 @@ describe('mirrorUserSkills', () => {
     assert.equal(fs.readFileSync(path.join(claude, 'cloudflare', 'SKILL.md'), 'utf8'), '# cf\n');
     assert.equal(fs.readFileSync(path.join(root, '.gemini', 'skills', 'cloudflare', 'SKILL.md'), 'utf8'), '# cf\n');
     assert.equal(mirrorUserSkills(cursor, [claude]).length, 0);
+  });
+});
+
+describe('sync installs kit subagents', () => {
+  it('writes user-scope Cursor and Claude stubs even when gh is missing', () => {
+    const root = lockRoot();
+    fs.writeFileSync(
+      path.join(root, 'skills', 'subagents.yaml'),
+      `version: 1
+iteration: 0
+kill:
+  freezeIf: freeze if auto-delegation is worse than today's skill picker
+bands:
+  - id: pilot-isolation
+    disposition: generate-agent
+    skills: [agent-debug, agent-xfn]
+  - id: readonly-audit
+    disposition: generate-agent
+    skills: [agent-review, agent-security, agent-arch-drift]
+  - id: sequential-specialists
+    disposition: generate-agent
+    skills: [agent-spec, agent-tdd]
+  - id: parent-only
+    disposition: parent-only
+    skills: [agent-orchestrator]
+staySkill:
+  prefixes: [lang-, framework-, profile-]
+tdd:
+  skill: agent-tdd
+  gears: [1, 2]
+  sameAgent: true
+  escapeHatch: agent-adapter
+`
+    );
+    for (const name of [...PILOT_GENERATE_AGENT, 'agent-orchestrator']) {
+      const dir = path.join(root, 'skills', name);
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(
+        path.join(dir, 'SKILL.md'),
+        `---\nname: ${name}\ndescription: Use ${name}.\nkind: role\n---\n# ${name}\n`,
+        'utf8'
+      );
+    }
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-sync-home-'));
+    const code = syncExternalSkills(root, ['--install'], {
+      exists: () => false,
+      skillAvailable: () => false,
+      homedir: () => home,
+      run: () => ({ status: 0 })
+    });
+    assert.equal(code, 1);
+    assert.equal(fs.existsSync(path.join(userSubagentDir('cursor', home), 'agent-debug.md')), true);
+    assert.equal(fs.existsSync(path.join(userSubagentDir('claude', home), 'agent-tdd.md')), true);
+    assert.equal(fs.existsSync(path.join(home, '.copilot', 'agents')), false);
   });
 });

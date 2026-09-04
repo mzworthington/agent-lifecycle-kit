@@ -25,7 +25,7 @@ import { runKitCheck } from '../quality/quality_gate.js';
 import { renderAnalyticsSummary } from '../quality/telemetry_analytics.js';
 import { assemblePagesSite, defaultPagesSiteDest } from '../site/assemble.js';
 import { scanSkillSecurity } from '../skills/scan_skill_security.js';
-import { syncExternalSkills } from '../skills/sync_external_skills.js';
+import { syncExternalSkills, defaultCommandRunner } from '../skills/sync_external_skills.js';
 import {
   printRoleSkillLineBudgetResult,
   verifyRoleSkillLineBudget
@@ -98,7 +98,8 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         installMCP: command.installMCP,
         installIDE: command.installIDE,
         installHook,
-        hosts: command.hosts
+        hosts: command.hosts,
+        homedir: ctx.homedir ?? os.homedir()
       });
       return 0;
     }
@@ -155,7 +156,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
     }
 
     case 'export-rules': {
-      const ok = exportIDERules(command.dir, command.check);
+      const ok = exportIDERules(command.dir, command.check, repoDir, ctx.homedir ?? os.homedir());
       if (command.check) {
         if (ok) console.log('✅ Multi-IDE rule check PASSED.');
         else console.error('Multi-IDE rule check FAILED.');
@@ -178,7 +179,10 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
     }
 
     case 'sync':
-      return syncExternalSkills(repoDir, command.rest);
+      return syncExternalSkills(repoDir, command.rest, {
+        ...defaultCommandRunner,
+        homedir: () => ctx.homedir ?? os.homedir()
+      });
 
     case 'measure-context': {
       const result = measureContextBudget(repoDir);
@@ -216,7 +220,8 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
           scanDir: command.scanDir,
           login: command.login,
           kitRepoDir: repoDir,
-          github: ghGitHubPort()
+          github: ghGitHubPort(),
+          homedir: ctx.homedir ?? os.homedir()
         });
         if (command.json) {
           printJsonReport(alignOwnedResultToJson(result));
@@ -230,7 +235,8 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         targetDir: command.targetDir,
         kitRepoDir: repoDir,
         write: command.write,
-        composeMcp: command.composeMcp
+        composeMcp: command.composeMcp,
+        homedir: ctx.homedir ?? os.homedir()
       });
       if (command.json) {
         printJsonReport(alignResultToJson(result));

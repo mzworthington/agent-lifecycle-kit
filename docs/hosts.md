@@ -13,8 +13,19 @@ Windsurf is **rules-only forever**. `wk export-rules` / `wk align` keep `.windsu
 | User MCP | `~/.cursor/mcp.json` | `~/.claude.json` (`mcpServers`) | `~/.copilot/mcp-config.json` | `~/.gemini/config/mcp_config.json` |
 | Model overlay | `models/hosts/cursor.yaml` | `models/hosts/claude.yaml` | `models/hosts/copilot.yaml` | `models/hosts/antigravity.yaml` |
 | External skills (`wk sync`) | `~/.cursor/skills` | symlink `~/.claude/skills` | not mirrored (use repo `.mcp.json`) | symlink `~/.gemini/skills` |
+| Kit subagents (`wk align` / `wk sync` / install) | `~/.cursor/agents` | `~/.claude/agents` | handshake plus skills (no agents dir) | handshake plus skills (no agents dir) |
 
-Canonical content is still `AGENTS.md`, `skills/`, and `mcps/`. Host files are adapters.
+Canonical content is still `AGENTS.md`, `skills/`, and `mcps/`. Host files are adapters. Kit subagents install to **user** scope so a product clone does not have to commit them. Project `.cursor/agents/` still wins on name conflict. Copilot and Antigravity stay handshake plus skills until those hosts have an equivalent; align does not invent a fake agents dir for them.
+
+Allowlist: [subagents](./subagents.md).
+
+```mermaid
+flowchart LR
+  kit[Waykit clone] --> wk[wk align or sync]
+  wk --> cu["~/.cursor/agents"]
+  wk --> cl["~/.claude/agents"]
+  app[App repo handshake] --> skills[Load SKILL.md on demand]
+```
 
 ```bash
 wk init . --mcp default --hook

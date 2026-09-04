@@ -77,7 +77,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/hosts': {
     headline: 'Hosts',
     description:
-      'Cursor, Claude Code, Copilot, and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay, and rules pointer. Windsurf is rules-only forever.'
+      'Cursor, Claude Code, Copilot, and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay, and rules pointer. Kit subagents install to ~/.cursor/agents and ~/.claude/agents. Windsurf is rules-only forever.'
   },
   '/docs/kit': {
     headline: 'What Waykit gives you',
@@ -107,7 +107,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/subagents': {
     headline: 'Subagent allowlist',
     description:
-      'Which agent-* roles may become Cursor subagent stubs: isolation, readonly audit, sequential specialists. Stack profiles stay skills. Orchestrator stays parent only.'
+      'Which agent-* roles become Cursor and Claude subagent stubs under ~/.cursor/agents and ~/.claude/agents. Stack profiles stay skills. Orchestrator stays parent only.'
   },
   '/docs/map': {
     headline: 'Waykit map',

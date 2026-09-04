@@ -45,6 +45,17 @@ describe('Windsurf host docs', () => {
   });
 });
 
+describe('kit subagent host docs', () => {
+  it('installs Cursor and Claude user-scope agents and does not invent Copilot or Antigravity dirs', () => {
+    const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+    const hosts = fs.readFileSync(path.join(kitRoot, 'docs/hosts.md'), 'utf8');
+    assert.match(hosts, /~\/\.cursor\/agents/);
+    assert.match(hosts, /~\/\.claude\/agents/);
+    assert.match(hosts, /handshake plus skills \(no agents dir\)/);
+    assert.match(hosts, /does not invent a fake agents dir/i);
+  });
+});
+
 describe('host MCP paths', () => {
   it('places user and project files where each host actually reads them', () => {
     const home = '/Users/me';
