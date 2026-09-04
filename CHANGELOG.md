@@ -2,10 +2,23 @@
 
 ## 2026-09-04
 
+### 🚀 Features
+
+- Add fleet align, wk version, and role skill line budget
+- Wire Linear ticket workflow into commit and SOP routing
+- Prefer uncommitted work on main for ticket execution
+- Land fleet align, wk version, and role skill line budget
+- Enhance pre-commit hook with context measurement and update contributing guidelines
+
+### ⚙️ Refactoring & Performance
+
+- Update AGENTS.md and evals to enhance clarity and structure
+
 ### 📚 Documentation
 
 - Enhance documentation for consumer CI and reusable workflows
 - Clarify Windsurf's status as rules-only and update related documentation
+- Update SKILL.md to clarify trunk-based pipeline requirements and GitHub PR behavior
 
 ## 2026-09-03
 
