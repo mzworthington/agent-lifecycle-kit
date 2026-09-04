@@ -1,6 +1,6 @@
 {
   "name": "launch_specialist",
-  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
+  "description": "Launch an allowlisted Waykit specialist as a host Task/subagent. Pass specialist id, capability class, Linear ticket if any, previous handover paths, Definition of Done, and Next agent. Do not pass a vendor model slug. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
   "inputSchema": {
     "type": "object",
     "required": ["specialist"],
@@ -21,12 +21,24 @@
       "class": {
         "type": "string",
         "enum": ["plan", "review", "implement", "cheap"],
-        "description": "Optional capability class from models/catalog.yaml"
+        "description": "Optional capability class from models/catalog.yaml (resolve via wk model resolve --skill)"
+      },
+      "ticket": {
+        "type": "string",
+        "description": "Linear id when playing a ticket, e.g. WAY-123"
       },
       "handoverPaths": {
         "type": "array",
         "items": { "type": "string" },
-        "description": "Handover files the child must read or write"
+        "description": "Previous handover files the child must read"
+      },
+      "definitionOfDone": {
+        "type": "string",
+        "description": "Phase Definition of Done the child must meet before COMPLETE"
+      },
+      "nextAgent": {
+        "type": "string",
+        "description": "Recommended next role skill after this child writes the handover"
       }
     },
     "additionalProperties": false

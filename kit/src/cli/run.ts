@@ -42,6 +42,7 @@ import {
 } from '../skills/generate_subagent_stubs.js';
 import { installUserSubagentStubs } from '../skills/install_subagent_stubs.js';
 import { resolveModel } from '../models/catalog.js';
+import { composeSpecialistLaunch, readHandoverContract } from '../orchestrator/launch.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
 import {
   completeKitLine,
@@ -316,6 +317,44 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         else console.error('ontology check FAILED.');
         return status(result.ok);
       }
+
+    case 'specialist-prompt': {
+      try {
+        const composed = composeSpecialistLaunch({
+          kitRoot: repoDir,
+          skill: command.skill,
+          project: command.project,
+          ticket: command.ticket,
+          host: command.host,
+          specComplete: command.specComplete,
+          blocked: command.blocked,
+          homedir: ctx.homedir,
+          handoverDir: command.handoverDir
+        });
+        console.log(JSON.stringify(composed));
+        return 0;
+      } catch (err: unknown) {
+        console.error(`ERROR: ${errorMessage(err)}`);
+        return 1;
+      }
+    }
+
+    case 'specialist-status': {
+      const contract = readHandoverContract(command.project, {
+        homedir: ctx.homedir,
+        kitRoot: repoDir,
+        handoverDir: command.handoverDir,
+        phase: command.phase
+      });
+      if (!contract || !contract.status) {
+        console.error(
+          'ERROR: No COMPLETE or BLOCKED handover found. The chat summary is not the contract.'
+        );
+        return 1;
+      }
+      console.log(JSON.stringify(contract));
+      return 0;
+    }
 
     case 'model-resolve': {
       try {

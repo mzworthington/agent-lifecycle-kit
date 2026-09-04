@@ -65,6 +65,22 @@ export type KitCommand =
       specComplete: boolean | undefined;
       blocked: boolean;
     }
+  | {
+      kind: 'specialist-prompt';
+      skill: string;
+      project: string;
+      ticket: string | undefined;
+      host: string;
+      specComplete: boolean | undefined;
+      blocked: boolean;
+      handoverDir: string | undefined;
+    }
+  | {
+      kind: 'specialist-status';
+      project: string;
+      phase: string | undefined;
+      handoverDir: string | undefined;
+    }
   | { kind: 'site-assemble'; dest: string | undefined }
   | { kind: 'commit-msg'; message: string | undefined; file: string | undefined }
   | {
@@ -101,6 +117,10 @@ const ALIGN_USAGE = cliUsage(
 
 const MODEL_RESOLVE_USAGE = cliUsage(
   'model resolve [--skill <id>] [--phase <id>] [--host cursor|claude|copilot|antigravity] [--spec-complete] [--blocked]'
+);
+
+const SPECIALIST_USAGE = cliUsage(
+  'specialist prompt|status --project <name> [--skill <id>] [--ticket <id>] [--phase <id>] [--host cursor|claude|copilot|antigravity] [--spec-complete] [--blocked] [--handover-dir <path>]'
 );
 
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
@@ -294,6 +314,40 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
     case 'memory':
       if (rest[0] === 'lint') return { kind: 'memory-lint' };
       return { kind: 'usage', message: cliUsage('memory lint') };
+
+    case 'specialist': {
+      const sub = rest[0];
+      if (sub !== 'prompt' && sub !== 'status') {
+        return { kind: 'usage', message: SPECIALIST_USAGE };
+      }
+      const specRest = rest.slice(1);
+      const project = flagValue(specRest, '--project');
+      if (!project) {
+        return { kind: 'usage', message: SPECIALIST_USAGE };
+      }
+      if (sub === 'status') {
+        return {
+          kind: 'specialist-status',
+          project,
+          phase: flagValue(specRest, '--phase'),
+          handoverDir: flagValue(specRest, '--handover-dir')
+        };
+      }
+      const skill = flagValue(specRest, '--skill');
+      if (!skill) {
+        return { kind: 'usage', message: SPECIALIST_USAGE };
+      }
+      return {
+        kind: 'specialist-prompt',
+        skill,
+        project,
+        ticket: flagValue(specRest, '--ticket'),
+        host: flagValue(specRest, '--host') ?? 'cursor',
+        specComplete: hasFlag(specRest, '--spec-complete') ? true : undefined,
+        blocked: hasFlag(specRest, '--blocked'),
+        handoverDir: flagValue(specRest, '--handover-dir')
+      };
+    }
 
     case 'model': {
       if (rest[0] !== 'resolve') {

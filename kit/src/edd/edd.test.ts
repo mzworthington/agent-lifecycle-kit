@@ -436,6 +436,22 @@ metrics:
     assert.ok(!report.results.some((r) => r.id === 'kit-live-02'));
   });
 
+  it('passes subagent-routing suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/subagent_routing.yaml'));
+    assert.equal(
+      report.failed,
+      0,
+      report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | ')
+    );
+    assert.ok(report.results.some((r) => r.id === 'subagent-spec-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-tdd-gears-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-after-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-tdd-01'));
+    assert.ok(!report.results.some((r) => r.id === 'subagent-live-01'));
+    assert.ok(!report.results.some((r) => r.id === 'subagent-live-02'));
+  });
+
   it('passes model-routing suite with scripted model', async () => {
     const runner = new EvalRunner({ model: 'scripted' });
     const report = await runner.runSuite(path.join(repoDir, 'evals/edd/model_routing.yaml'));

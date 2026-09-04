@@ -427,6 +427,34 @@
       }
     },
     {
+      "id": "EVAL-ORCH-002",
+      "name": "Launch specialists with handover as the contract",
+      "description": "Verifies the orchestrator documents Task/subagent launch with Linear id, handover paths, Definition of Done, and Next agent, then reads COMPLETE or BLOCKED from the handover.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Scope gate picked tdd. Ports are new. Launch the specialist from the last handover.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "handover",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "wk specialist prompt",
+          "wk model resolve --skill",
+          "Definition of Done",
+          "Next agent",
+          "COMPLETE",
+          "BLOCKED"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
+      }
+    },
+    {
       "id": "EVAL-GRILLING-001",
       "name": "Design-Tree Grilling",
       "description": "Verifies plan stress-tests map a design tree, compute the decision frontier, and wait for human confirmation.",

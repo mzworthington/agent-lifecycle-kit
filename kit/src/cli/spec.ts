@@ -122,6 +122,24 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
       }
     }
   },
+  specialist: {
+    subs: {
+      prompt: {
+        flags: [
+          { name: '--skill' },
+          { name: '--project' },
+          { name: '--ticket' },
+          HOST_FLAG,
+          { name: '--spec-complete' },
+          { name: '--blocked' },
+          { name: '--handover-dir' }
+        ]
+      },
+      status: {
+        flags: [{ name: '--project' }, { name: '--phase' }, { name: '--handover-dir' }]
+      }
+    }
+  },
   site: { subs: { assemble: { flags: [{ name: '--out' }] } } },
   'commit-msg': { flags: [{ name: '--message' }] },
   completion: {

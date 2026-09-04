@@ -3,6 +3,7 @@ dataset: "subagent_routing.jsonl"
 system_prompt: "subagent_routing_prompt.md"
 mcp_tools:
   - "tools/launch_specialist.json"
+  - "tools/get_handover.json"
 metrics:
   - type: "tool_selection"
   - type: "schema_match"
@@ -21,3 +22,9 @@ mocks:
     response:
       launched: true
       note: "Parent reads COMPLETE/BLOCKED from the handover, not the chat summary"
+  - tool: "get_handover"
+    response:
+      path: "handover/canvas/handover_spec.md"
+      phase: "spec"
+      status: "COMPLETE"
+      nextAgent: "agent-tdd"

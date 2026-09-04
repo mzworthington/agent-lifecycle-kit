@@ -70,7 +70,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
-**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary.
+**Isolated specialists:** Stay the parent. Do not role-play an allowlisted skill in this window. Launch the matching host Task / subagent ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Build the child prompt with `wk specialist prompt --skill <id> --project <name> [--ticket <id>]` (or write the same fields by hand): Linear id if any, paths to previous handover files, Definition of Done, and Next agent. Pass the Cursor slug from `wk model resolve --skill <id>` — never a hardcoded Kimi/GPT/Opus id. After the child returns, `wk specialist status --project <name>` (or kit-knowledge `get_handover`) and read `COMPLETE`/`BLOCKED`. The chat summary is not the contract. TDD gear 1 and gear 2 stay in the same child when ports are new.
 
 ## Specialist roles
 
@@ -196,10 +196,10 @@ sequenceDiagram
   end
 ```
 
-1. **Intake** - Read the user request. If a Linear identifier is in play, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)) before routing. Grill if unsettled. Route **bets** to `agent-prd`, then `agent-user-stories`, then `agent-spec` (Gherkin including flag off/on/kill and the leading-indicator event). Tiny contracts may skip PRD.
-2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
-3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
-4. **Short loop (execution)** - Route back to **`agent-tdd`**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.
+1. **Intake** - Read the user request. If a Linear identifier is in play, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)) before routing. Grill if unsettled. Route **bets** to `agent-prd`, then `agent-user-stories`, then launch `agent-spec` (Gherkin including flag off/on/kill and the leading-indicator event). Tiny contracts may skip PRD.
+2. **Design (functional)** - Launch `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
+3. **Design (XFN plan)** - Launch `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
+4. **Short loop (execution)** - Launch **`agent-tdd`** again: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same child session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.
 5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.

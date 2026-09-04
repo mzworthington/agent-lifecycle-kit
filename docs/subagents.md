@@ -56,7 +56,7 @@ Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, st
 
 ## Adding a role
 
-Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. If specialists re-explore the repo, fix the handover prompt (iteration 3) before generating more stubs.
+Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. The parent launch prompt is the IPC contract (`wk specialist prompt` / `wk specialist status`). If a child still re-explores from an empty window, thicken that prompt — do not generate more stubs.
 
 Out of this page’s scope: Copilot/Antigravity agent directories. Stubs themselves are generated into [agents/](../agents/). `wk agents install` writes only `~/.cursor/agents` and `~/.claude/agents`.
 

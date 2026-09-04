@@ -118,6 +118,33 @@ describe('parseKitArgv', () => {
     });
   });
 
+  it('parses specialist prompt and status', () => {
+    assert.equal(parseKitArgv(['specialist'], opts).kind, 'usage');
+    assert.equal(parseKitArgv(['specialist', 'prompt'], opts).kind, 'usage');
+    assert.deepEqual(
+      parseKitArgv(
+        ['specialist', 'prompt', '--skill', 'agent-spec', '--project', 'waykit', '--ticket', 'MZW-63'],
+        opts
+      ),
+      {
+        kind: 'specialist-prompt',
+        skill: 'agent-spec',
+        project: 'waykit',
+        ticket: 'MZW-63',
+        host: 'cursor',
+        specComplete: undefined,
+        blocked: false,
+        handoverDir: undefined
+      }
+    );
+    assert.deepEqual(parseKitArgv(['specialist', 'status', '--project', 'waykit', '--phase', 'spec'], opts), {
+      kind: 'specialist-status',
+      project: 'waykit',
+      phase: 'spec',
+      handoverDir: undefined
+    });
+  });
+
   it('parses export-rules dir and --check', () => {
     assert.deepEqual(parseKitArgv(['export-rules'], opts), { kind: 'export-rules', dir: '/kit', check: false });
     assert.deepEqual(parseKitArgv(['export-rules', '--check', './app'], opts), {

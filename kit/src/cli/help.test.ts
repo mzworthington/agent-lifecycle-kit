@@ -24,6 +24,8 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /role SKILL\.md line budget/);
     assert.match(KIT_HELP, /agents generate/);
     assert.match(KIT_HELP, /agents install/);
+    assert.match(KIT_HELP, /specialist prompt/);
+    assert.match(KIT_HELP, /specialist status/);
     assert.match(KIT_HELP, /thin agent stubs/);
     assert.match(KIT_HELP, /Usage: wk <command>/);
     assert.match(KIT_HELP, /kit <command>/);

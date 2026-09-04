@@ -28,12 +28,16 @@ sequenceDiagram
 
 ## Parent must pass
 
+Build the child prompt with `wk specialist prompt --skill <id> --project <name> [--ticket <id>]`. That JSON is the launch contract. Equivalent Task fields if you write the prompt by hand:
+
 1. Linear id when playing a ticket.
 2. Relevant handover paths under `~/.agents/handover/<project>/`.
 3. Definition of Done for this phase.
 4. Next agent (role skill name).
 
-The child writes `COMPLETE` or `BLOCKED` to the handover and returns a short summary only.
+On Cursor, launch the stub in `agents/<skill>.md` (or `~/.cursor/agents/<skill>.md` after `wk agents install`). Set `model` from `wk model resolve --skill <id> [--spec-complete] [--blocked]` — never a hardcoded Kimi, GPT, or Opus id.
+
+The child writes `COMPLETE` or `BLOCKED` to the handover and returns a short summary only. The parent continues with `wk specialist status --project <name>` (or kit-knowledge `get_handover`). Do not treat the chat summary as the contract.
 
 ## Routing rules
 

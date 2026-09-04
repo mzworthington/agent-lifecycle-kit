@@ -96,6 +96,23 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       return scriptedNoTool('Staying in the parent for a tiny typo.');
     }
     if (
+      names.has('get_handover') &&
+      (prompt.includes('child finished') ||
+        prompt.includes('chat summary') ||
+        (prompt.includes('read') &&
+          (prompt.includes('complete') || prompt.includes('blocked')) &&
+          prompt.includes('handover')))
+    ) {
+      return {
+        content: 'Reading COMPLETE or BLOCKED from the handover file. The chat summary is not the contract.',
+        tool_calls: [{ name: 'get_handover', arguments: { project: 'canvas' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.93
+      };
+    }
+    if (
       prompt.includes('pr') &&
       (prompt.includes('review') || prompt.includes('audit') || prompt.includes('independent'))
     ) {
@@ -124,14 +141,50 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         routingConfidence: 0.92
       };
     }
+    const ticketMatch = lastUser?.content?.match(/\b([A-Z]{2,10}-\d+)\b/);
+    const ticket = ticketMatch?.[1];
     if (
-      (prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
-      (prompt.includes('tdd') || prompt.includes('short loop'))
+      prompt.includes('short loop') ||
+      prompt.includes('picked tdd') ||
+      prompt.includes('ports are new') ||
+      ((prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
+        prompt.includes('tdd'))
     ) {
       return {
         content: 'Launching agent-tdd for gear 1 and gear 2 in one session.',
         tool_calls: [
-          { name: 'launch_specialist', arguments: { specialist: 'agent-tdd', class: 'implement' } }
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-tdd',
+              class: 'implement',
+              ...(ticket ? { ticket } : {})
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('spec') ||
+      prompt.includes('gherkin') ||
+      prompt.includes('write the spec')
+    ) {
+      return {
+        content: 'Launching agent-spec as a sequential specialist with the handover contract.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-spec',
+              class: 'plan',
+              ...(ticket ? { ticket } : {}),
+              nextAgent: 'agent-tdd'
+            }
+          }
         ],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
         consecutiveToolFailures: 0,

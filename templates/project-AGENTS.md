@@ -15,6 +15,7 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Warp Factory / PostHog | `wk mcp warp --install` / `skills/agent-posthog` (`wk mcp posthog --install`) |
 | Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`wk eval run\|ci`) |
 | Which model / host slug | `SOPs/model-routing.md` (`wk model resolve`) |
+| Launch a specialist | `SOPs/subagent-launch.md` (`wk specialist prompt` / `wk specialist status`) |
 | Landing copy / docs narrative | `skills/agent-copy` (+ `agent-ui` / `agent-docs` as needed) |
 | Commit / Linear ticket | `SOPs/conventional-commits.md` + `SOPs/linear-ticket-workflow.md` |
 | SOP / handover lookup | kit-knowledge MCP when installed |

@@ -38,6 +38,8 @@ Commands:
   ontology check       Validate live-derived index (skill mcp/depends-on/subagent refs)
   memory lint          List legacy memory entities outside the ontology allowlist
   model resolve        Resolve capability class + host slug (models/catalog.yaml)
+  specialist prompt    Build a Task/subagent launch prompt (ticket, handover paths, DoD, Next agent)
+  specialist status    Read COMPLETE or BLOCKED from ~/.agents/handover/<project>/
   site assemble        Copy web/dist plus public Markdown into site/ (needs web build first; optional --out)
   commit-msg           Check a commit subject or PR title (conventional commits)
   completion <shell>   Print a live tab-completion stub (zsh or bash)
@@ -75,6 +77,8 @@ Examples:
   ${CLI_BIN} memory lint
   ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host cursor
   ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host claude
+  ${CLI_BIN} specialist prompt --skill agent-spec --project waykit --ticket MZW-63
+  ${CLI_BIN} specialist status --project waykit --phase spec
   ${CLI_BIN} site assemble
   ${CLI_BIN} export-rules
   ${CLI_BIN} metrics

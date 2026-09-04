@@ -56,6 +56,37 @@
           "Linear ticket"
         ]
       }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-003",
+      "name": "Launch specialists with handover as the contract",
+      "description": "When the scope gate picks spec or tdd, the orchestrator launches a Task/subagent with Linear id, handover paths, Definition of Done, and Next agent; the parent then reads COMPLETE or BLOCKED from the handover, not a chat summary.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Scope gate picked spec for MZW-63. Launch the specialist, then continue from the handover.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "handover",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "wk specialist prompt",
+          "wk model resolve --skill",
+          "Definition of Done",
+          "Next agent",
+          "COMPLETE",
+          "BLOCKED",
+          "same child session"
+        ],
+        "forbidden_patterns": [
+          "kimi-k3",
+          "gpt-5",
+          "claude-opus"
+        ]
+      }
     }
   ]
 }
