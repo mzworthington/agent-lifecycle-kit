@@ -50,7 +50,8 @@
         "forbidden_patterns": [
           "git checkout -b",
           "git commit",
-          "ASCII art"
+          "ASCII art",
+          "PASS (targeted)"
         ]
       }
     }

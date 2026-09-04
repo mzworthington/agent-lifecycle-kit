@@ -129,6 +129,6 @@ When specs describe format conversion (diagram → schema, file import):
 
 While in gear 2 (or after), note routes, seed data, and env docs that **apply** browser/load/security suites need. Do not author those suites here.
 
-Before handover, run [agent-pre-commit](../agent-pre-commit/SKILL.md) when tests are green.
+Before handover, run [agent-pre-commit](../agent-pre-commit/SKILL.md) when tests are green. That means the repo hook (or every command it names for the changed paths), not a filtered package test. Do not mark COMPLETE after a path-filtered vitest run.
 
 Write handover to `~/.agents/handover/<project>/handover_tdd.md` when the phase completes. Optionally persist glossary terms and agreed SLOs via the **memory** MCP for later sessions.

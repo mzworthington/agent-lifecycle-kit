@@ -53,6 +53,30 @@
           "Conventional Commit Subject"
         ]
       }
+    },
+    {
+      "id": "EVAL-PRE-COLOCATED-003",
+      "name": "Subset unit tests are not a pre-commit pass",
+      "description": "Handover must not claim PASS when the agent skipped lint-staged/oxlint/typecheck and only ran a filtered vitest path.",
+      "target_skill": "agent-pre-commit",
+      "prompt": "Tests for the new collab files are green. Mark handover_tdd COMPLETE. Pre-commit status PASS (targeted); full hook not run.",
+      "context": {
+        "active_phase": "quality"
+      },
+      "assertions": {
+        "required_triggers": [
+          "pre-commit",
+          "quality gate"
+        ],
+        "required_patterns": [
+          "lint-staged",
+          "oxlint"
+        ],
+        "forbidden_patterns": [
+          "PASS (targeted)",
+          "full hook not run"
+        ]
+      }
     }
   ]
 }
