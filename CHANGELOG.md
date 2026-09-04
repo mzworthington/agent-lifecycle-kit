@@ -10,6 +10,11 @@
 - Land fleet align, wk version, and role skill line budget
 - Enhance pre-commit hook with context measurement and update contributing guidelines
 - *(cli)* Emit stable JSON findings for align, doctor, and check (MZW-26)
+- *(skills)* Treat filtered tests as a pre-commit failure
+
+### 🐛 Bug Fixes
+
+- *(evals)* Reject self-forbidden skill-trigger prompts before CI
 
 ### ⚙️ Refactoring & Performance
 
