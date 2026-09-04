@@ -17,6 +17,6 @@ Cloudflare stays on a named profile. For live Worker or Pages work: `wk mcp clou
 | React Cloudflare template | [mzworthington/react-cloudflare-template](https://github.com/mzworthington/react-cloudflare-template) | The handshake `wk init` writes, so clones start aligned. |
 | GPIO build monitor | [mzworthington/gpio-build-monitor](https://github.com/mzworthington/gpio-build-monitor) | Python on the Pi, Pulumi + Worker for the public UI. Commit-msg lives in `.githooks/`. |
 
-These are maintainer repos, not a customer logo wall. If a handshake drifts, `wk align` fails the same way `wk doctor` fails missing community files.
+These are maintainer repos, not a customer logo wall. If a handshake drifts, `wk align` fails the same way `wk doctor` fails missing community files. gpio-build-monitor also runs that check on PRs via the reusable [align-consumer](./align.md#consumer-ci) workflow.
 
 Related: [Consumer align](./align.md), [Repo doctor](./doctor.md), [Hosts](./hosts.md).

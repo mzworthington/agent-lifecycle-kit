@@ -26,6 +26,20 @@ wk mcp cloudflare-ops --project
 
 That replaces the project MCP file for the session. Restore `default` when you are done. Do not merge profiles by hand.
 
+## Consumer CI
+
+Product pull requests can run the same report-only check through a reusable workflow. It installs Waykit (MCP compose off) and runs `wk align .`. It does not run `wk doctor` or live EDD.
+
+```yaml
+jobs:
+  align:
+    uses: mzworthington/waykit/.github/workflows/align-consumer.yml@main
+```
+
+Pin `kit_ref` (and the `uses:` ref) to a `vX.Y.Z` tag once you want a frozen installer. Optional `working_directory` is the path `wk align` runs in (default `.`).
+
+First adopter: [gpio-build-monitor](https://github.com/mzworthington/gpio-build-monitor) (`align` job on pull requests). Align failures fail that check.
+
 ## What it looks for
 
 | Check | Pass when |

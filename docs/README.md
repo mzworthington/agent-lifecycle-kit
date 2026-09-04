@@ -19,7 +19,7 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 | [Feature lifecycle](./lifecycle.md) | Grill → PRD if bet → spec → TDD → XFN → ship |
 | [What Waykit gives you](./kit.md) | `wk` CLI: context budget, live kit graph, MCP profiles, check, doctor |
 | [Repo doctor](./doctor.md) | Owned-repo README, license, contributing, GitHub templates |
-| [Consumer align](./align.md) | App-repo handshake, host pointers, kit MCP, commit-msg |
+| [Consumer align](./align.md) | App-repo handshake, host pointers, kit MCP, commit-msg, reusable PR Action |
 | [Used on our own product repos](./used-in.md) | ArchLens, SteerLens, React Cloudflare template, GPIO monitor |
 | [Waykit map](./map.md) | Live graph of this kit (derived from files, not a second catalog) |
 | [Author the Waykit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |

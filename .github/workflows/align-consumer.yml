@@ -1,0 +1,64 @@
+name: Align consumer
+
+# Call from a product repo:
+#   jobs:
+#     align:
+#       uses: mzworthington/waykit/.github/workflows/align-consumer.yml@main
+# Pin to a vX.Y.Z tag once that release includes this workflow.
+
+on:
+  workflow_call:
+    inputs:
+      kit_ref:
+        description: Waykit git ref to install (tag, branch, or SHA)
+        type: string
+        required: false
+        default: main
+      working_directory:
+        description: Directory in the caller checkout to pass to wk align
+        type: string
+        required: false
+        default: '.'
+
+permissions:
+  contents: read
+
+jobs:
+  align:
+    name: Align
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout caller
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install Waykit
+        env:
+          KIT_REF: ${{ inputs.kit_ref }}
+          INSTALL_MCP: '0'
+          INSTALL_EXTERNAL_SKILLS: '0'
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/mzworthington/waykit/${KIT_REF}/install.sh" | sh
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Run wk align
+        working-directory: ${{ inputs.working_directory }}
+        run: |
+          {
+            echo "## wk align"
+            echo ""
+            echo "- kit_ref: \`${{ inputs.kit_ref }}\`"
+            echo "- working_directory: \`${{ inputs.working_directory }}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+          wk align .
