@@ -7,6 +7,7 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /run\|watch\|report\|ci\|shadow\|dataset/);
     assert.match(KIT_HELP, /skill-trigger evals/);
     assert.match(KIT_HELP, /mcps\/profiles\//);
+    assert.match(KIT_HELP, /mcp restore --project/);
     assert.match(KIT_HELP, /site assemble[\s\S]*web build first/);
     assert.match(KIT_HELP, /commit-msg/);
     assert.match(KIT_HELP, /doctor \[dir\]/);

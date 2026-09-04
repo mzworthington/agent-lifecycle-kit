@@ -15,7 +15,7 @@ tools:
 
 Use with [agent-posthog](../skills/agent-posthog/SKILL.md) and the `posthog` MCP profile. Live product analytics, flags, and errors come from the **official** PostHog MCP (`https://mcp.posthog.com/mcp`). Do not guess dashboard state.
 
-Install once per session: `wk mcp posthog --install` (OAuth on first tool use). One profile only. Restore `wk mcp default --install` (or `--project`) when the session ends.
+Install once per session: `wk mcp posthog --install` (OAuth on first tool use). One profile only. Restore `wk mcp restore --project` (or `wk mcp default --install`) when the session ends.
 
 ## Do not use the wizard in Cursor
 

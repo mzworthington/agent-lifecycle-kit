@@ -19,7 +19,7 @@ Commands:
   doctor [dir]         Check community files on repos you admin (report only; --write fills gaps; --json)
   align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --owned --scan fleet; --json)
   version              Print kit version, git describe, and whether ~/.agents is this clone (--check warns if origin is weeks ahead)
-  mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
+  mcp <profile>        Compose a named MCP profile from mcps/profiles/ (restore reapplies the previous project profile)
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
@@ -54,6 +54,8 @@ Examples:
   ${CLI_BIN} mcp ops --install
   ${CLI_BIN} mcp default --install --host claude
   ${CLI_BIN} mcp default --project
+  ${CLI_BIN} mcp cloudflare-ops --project
+  ${CLI_BIN} mcp restore --project
   ${CLI_BIN} mcp astro --install
   ${CLI_BIN} mcp cloudflare-ops --install
   ${CLI_BIN} mcp warp --install

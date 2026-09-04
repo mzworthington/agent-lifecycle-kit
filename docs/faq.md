@@ -40,6 +40,7 @@ Use `wk align`. It is the consumer counterpart to doctor: handshake size, host p
 wk align .
 wk align . --write
 wk mcp default --project
+wk mcp restore --project
 ```
 
 ## How do I tab-complete wk commands?

@@ -3,7 +3,7 @@ import path from 'path';
 import os from 'os';
 import { backupExistingFile } from '../shared/backup_file.js';
 import { resolveRepoDir } from '../shared/paths.js';
-import { recordComposedProfile } from './mcp_profile_stamp.js';
+import { MCP_RESTORE_PROFILE, recordComposedProfile, resolveComposeProfileName } from './mcp_profile_stamp.js';
 import { installMcpOnHosts, parseMcpHosts, type McpHostId } from './mcp_hosts.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
@@ -40,13 +40,16 @@ export function composeMCP(
   const mcpsDir = path.join(repoDir, 'mcps');
   const env = options.env ?? process.env;
   const homedir = options.homedir ?? os.homedir();
+  const projectDir = options.projectDir ?? process.cwd();
+  const requestedName = profileName;
+  const resolvedName = resolveComposeProfileName(profileName, projectDir);
 
   let profilePath: string;
 
-  if (profileName.endsWith('.json') || profileName.includes('/') || profileName.includes('\\')) {
-    profilePath = path.resolve(process.cwd(), profileName);
+  if (resolvedName.endsWith('.json') || resolvedName.includes('/') || resolvedName.includes('\\')) {
+    profilePath = path.resolve(process.cwd(), resolvedName);
   } else {
-    profilePath = path.join(mcpsDir, 'profiles', `${profileName}.json`);
+    profilePath = path.join(mcpsDir, 'profiles', `${resolvedName}.json`);
   }
 
   if (!fs.existsSync(profilePath)) {
@@ -120,7 +123,7 @@ export function composeMCP(
     }
     backupExistingFile(targetPath);
     fs.writeFileSync(targetPath, resultJSON, 'utf8');
-    console.log(`Composed profile '${profileName}' saved to ${targetPath}`);
+    console.log(`Composed profile '${resolvedName}' saved to ${targetPath}`);
     return;
   }
 
@@ -132,12 +135,11 @@ export function composeMCP(
       cursorDir: options.cursorDir
     });
     for (const targetPath of written) {
-      console.log(`Installed profile '${profileName}' to ${targetPath}`);
+      console.log(`Installed profile '${resolvedName}' to ${targetPath}`);
     }
     wrote = true;
   }
   if (options.installProject) {
-    const projectDir = options.projectDir ?? process.cwd();
     const written = installMcpOnHosts(mcpServers, hosts, {
       scope: 'project',
       homedir,
@@ -145,12 +147,15 @@ export function composeMCP(
       cursorDir: options.cursorDir
     });
     for (const targetPath of written) {
-      console.log(`Installed profile '${profileName}' to ${targetPath}`);
+      console.log(`Installed profile '${resolvedName}' to ${targetPath}`);
     }
-    recordComposedProfile(projectDir, profileName);
+    recordComposedProfile(projectDir, resolvedName);
     wrote = true;
   }
   if (!wrote) {
     console.log(resultJSON);
+  }
+  if (requestedName === MCP_RESTORE_PROFILE && wrote) {
+    console.log(`Restored previous MCP profile '${resolvedName}'`);
   }
 }

@@ -29,7 +29,7 @@ Cloudflare, browsers, and other vendor servers stay on a **named** profile. For 
 wk mcp cloudflare-ops --project
 ```
 
-That replaces the project MCP file for the session. Restore `default` when you are done. Do not merge profiles by hand.
+That replaces the project MCP file for the session. Restore with `wk mcp restore --project` (or `wk mcp default --project` when that was the previous profile). Do not merge profiles by hand.
 
 ## Consumer CI
 

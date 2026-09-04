@@ -190,4 +190,88 @@ describe('composeMCP', () => {
     assert.ok(body.mcpServers['kit-knowledge']);
     assert.equal(body.mcpServers.context7, undefined);
   });
+
+  it('restores the previous project profile after cloudflare-ops', () => {
+    const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-restore-'));
+    const opts = {
+      repoDir: kitRoot,
+      env: {},
+      installProject: true,
+      projectDir,
+      hosts: ['cursor'] as const
+    };
+    composeMCP('astro', undefined, false, opts);
+    composeMCP('cloudflare-ops', undefined, false, opts);
+    const afterOps = JSON.parse(fs.readFileSync(path.join(projectDir, '.cursor', 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, unknown>;
+    };
+    assert.ok(afterOps.mcpServers.cloudflare);
+    composeMCP('restore', undefined, false, opts);
+    const restored = JSON.parse(fs.readFileSync(path.join(projectDir, '.cursor', 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(restored.mcpServers['astro-docs']?.url, 'https://mcp.docs.astro.build/mcp');
+    assert.equal(restored.mcpServers.cloudflare, undefined);
+    assert.ok(fs.readFileSync(path.join(projectDir, '.cursor', 'mcp.json'), 'utf8').trim().length > 0);
+    composeMCP('restore', undefined, false, opts);
+    const second = JSON.parse(fs.readFileSync(path.join(projectDir, '.cursor', 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(second.mcpServers['astro-docs']?.url, 'https://mcp.docs.astro.build/mcp');
+    assert.equal(second.mcpServers.cloudflare, undefined);
+  });
+
+  it('restores kit default into the project file when nothing was composed', () => {
+    const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-restore-empty-'));
+    composeMCP('restore', undefined, false, {
+      repoDir: kitRoot,
+      env: {},
+      installProject: true,
+      projectDir,
+      hosts: ['cursor']
+    });
+    const restored = JSON.parse(fs.readFileSync(path.join(projectDir, '.cursor', 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.ok(restored.mcpServers['kit-knowledge']);
+    assert.equal(restored.mcpServers.linear?.url, 'https://mcp.linear.app/mcp');
+    assert.equal(restored.mcpServers.cloudflare, undefined);
+    assert.notEqual(Object.keys(restored.mcpServers).length, 0);
+  });
+
+  it('stays on default after named restore via wk mcp default --project', () => {
+    const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-restore-default-'));
+    const opts = {
+      repoDir: kitRoot,
+      env: {},
+      installProject: true,
+      projectDir,
+      hosts: ['cursor'] as const
+    };
+    composeMCP('default', undefined, false, opts);
+    composeMCP('cloudflare-ops', undefined, false, opts);
+    composeMCP('default', undefined, false, opts);
+    composeMCP('restore', undefined, false, opts);
+    const body = JSON.parse(fs.readFileSync(path.join(projectDir, '.cursor', 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, unknown>;
+    };
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.equal(body.mcpServers.cloudflare, undefined);
+  });
+
+  it('gitignores the profile stamp after a project compose', () => {
+    const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-restore-gi-'));
+    composeMCP('default', undefined, false, {
+      repoDir: kitRoot,
+      env: {},
+      installProject: true,
+      projectDir,
+      hosts: ['cursor']
+    });
+    const gitignore = fs.readFileSync(path.join(projectDir, '.gitignore'), 'utf8');
+    assert.match(gitignore, /\.agents\/mcp-profile\.stamp/);
+    assert.match(gitignore, /\*\.json\.bak\.\*/);
+    const stamp = fs.readFileSync(path.join(projectDir, '.agents', 'mcp-profile.stamp'), 'utf8');
+    assert.doesNotMatch(stamp, /token|secret|KEY/i);
+  });
 });
