@@ -23,6 +23,7 @@ system/config.json
 skills/*
 !skills/README.md
 !skills/external.lock.json
+!skills/subagents.yaml
 !skills/agent-*/
 !skills/lang-*/
 !skills/framework-*/

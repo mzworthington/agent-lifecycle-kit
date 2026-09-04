@@ -57,7 +57,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 `wk check` is the local merge bar:
 
 1. `wk audit`: prompt injection, secrets, entropy, lockfile pins
-2. `wk validate` / `wk verify`: eval schemas, skills layout, and role line budget
+2. `wk validate` / `wk verify`: eval schemas, skills layout, role line budget, and subagent allowlist
 3. `wk ontology check`: live-derived graph refs (`depends-on`, `mcp`)
 4. IDE rules match `AGENTS.md`
 5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `wk eval ci` (scripted, 95% routing)

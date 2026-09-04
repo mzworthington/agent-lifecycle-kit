@@ -3,7 +3,7 @@ import path from 'path';
 
 /** Committed kit skills only. Upstream vendors belong in ~/.cursor/skills. */
 export const KIT_SKILL_DIR_PREFIX = /^(agent|profile|lang|framework)-/;
-const SKIP = new Set(['README.md', 'external.lock.json']);
+const SKIP = new Set(['README.md', 'external.lock.json', 'subagents.yaml']);
 
 export interface SkillsLayoutResult {
   ok: boolean;

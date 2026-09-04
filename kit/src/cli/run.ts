@@ -31,6 +31,7 @@ import {
   verifyRoleSkillLineBudget
 } from '../skills/verify_role_skill_line_budget.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
+import { printSubagentAllowlistResult, verifySubagentAllowlist } from '../skills/subagents.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
 import {
@@ -171,7 +172,9 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       printSkillsLayoutResult(layout);
       const budget = verifyRoleSkillLineBudget(repoDir);
       printRoleSkillLineBudgetResult(budget);
-      return status(layout.ok && budget.ok);
+      const subagents = verifySubagentAllowlist(repoDir);
+      printSubagentAllowlistResult(subagents);
+      return status(layout.ok && budget.ok && subagents.ok);
     }
 
     case 'sync':

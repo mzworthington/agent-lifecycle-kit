@@ -21,7 +21,7 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /wk check/);
     assert.match(KIT_HELP, /mcp restore --project/);
     assert.match(KIT_HELP, /--json/);
-    assert.match(KIT_HELP, /role SKILL\.md line budget/);
+    assert.match(KIT_HELP, /role SKILL\.md line budget, and subagent allowlist/);
     assert.match(KIT_HELP, /Usage: wk <command>/);
     assert.match(KIT_HELP, /kit <command>/);
     assert.match(KIT_HELP, /agent-kit <command>/);
