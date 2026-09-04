@@ -79,7 +79,9 @@
           "brand headline",
           "persona",
           "C4",
-          "YAML"
+          "YAML",
+          "chatbot",
+          "product names"
         ],
         "forbidden_patterns": [
           "Why it matters"

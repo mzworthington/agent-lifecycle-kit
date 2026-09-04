@@ -101,9 +101,9 @@ Use this when auditing existing copy (especially AI-drafted or slogan-heavy surf
 
 ### Audience (tech product)
 
-Write for a technical peer. Specific tools and failure modes beat benefits-speak. Do not inventory roles (architect, CTO, director) as the default audience.
+Write for a technical peer. Specific tools and failure modes beat benefits-speak. Product at the forefront; skip schema-speak on landing pages.
 
-- Name the artefact (`BlueprintSpec`, the diagram, blast radius) instead of "living architecture." Do not put the modeling method (`C4` map) or the file format (YAML) in every sentence. Product names first.
+- Lead with product names (Canvas, TraceLens, ChaosLens, AdviceLens, BlueprintSpec). Jobs over internals. Do not put the modeling method (`C4` map) or the file format (YAML) in every sentence. Do not inventory roles (architect, CTO, director) as the default audience.
 - Uneven sentence rhythm. Do not stack three parallel clauses with matching grammar.
 - Headlines state the job. They are not a slogan that could sit on any SaaS site if you swap the product name. Exception: a headline the product already owns stays unless the user asks to change it.
 
@@ -141,6 +141,8 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | Persona laundry lists (*"for architects, CTOs and engineering directors"*) | A technical peer. Name job titles only when the user asked for a persona pass |
 | Repeating the method on every surface (*"C4 workspace"*, *"C4 studio"*) | Lead with the product contract and jobs. Name C4 only where it is the feature (zoom, import, level) |
 | Pitching the file format (*"BlueprintSpec YAML"* in every tagline) | Name the contract and the products. YAML is storage, not the pitch |
+| Contrasting with AI (*"not an LLM"*, *"not a chatbot paragraph"*) | Name what the score is made of (TraceLens, ChaosLens). Drop the strawman |
+| Consultant leftovers (*"parking lot of actions"*, *"redesign budget"*) | Say the job: a ranked list of what to change |
 
 ### Practitioner rewrite examples
 
