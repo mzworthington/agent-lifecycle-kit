@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { composeMCP } from './compose_mcp.js';
+import { composeMCP, restoreProjectMcp } from './compose_mcp.js';
 
 const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const KIT_TSX_LOADER = '${userHome}/.agents/node_modules/tsx/dist/esm/index.mjs';
@@ -189,5 +189,60 @@ describe('composeMCP', () => {
     assert.equal(body.mcpServers['astro-docs']?.url, 'https://mcp.docs.astro.build/mcp');
     assert.ok(body.mcpServers['kit-knowledge']);
     assert.equal(body.mcpServers.context7, undefined);
+  });
+
+  it('restores the previous project profile after cloudflare-ops', () => {
+    const project = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-restore-'));
+    const cursorDir = path.join(project, 'cursor-config');
+    composeMCP('default', undefined, false, {
+      repoDir: kitRoot,
+      installProject: true,
+      projectDir: project,
+      cursorDir,
+      hosts: ['cursor'],
+      env: {}
+    });
+    composeMCP('cloudflare-ops', undefined, false, {
+      repoDir: kitRoot,
+      installProject: true,
+      projectDir: project,
+      cursorDir,
+      hosts: ['cursor'],
+      env: {}
+    });
+    const ops = JSON.parse(fs.readFileSync(path.join(cursorDir, 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.ok(ops.mcpServers.cloudflare);
+    restoreProjectMcp({
+      repoDir: kitRoot,
+      projectDir: project,
+      cursorDir,
+      hosts: ['cursor'],
+      env: {}
+    });
+    const restored = JSON.parse(fs.readFileSync(path.join(cursorDir, 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, { url?: string }>;
+    };
+    assert.equal(restored.mcpServers.linear?.url, 'https://mcp.linear.app/mcp');
+    assert.equal(restored.mcpServers.cloudflare, undefined);
+    assert.ok(Object.keys(restored.mcpServers).length > 0);
+  });
+
+  it('restores kit default into a non-empty project file when nothing was composed', () => {
+    const project = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-restore-empty-'));
+    const cursorDir = path.join(project, 'cursor-config');
+    restoreProjectMcp({
+      repoDir: kitRoot,
+      projectDir: project,
+      cursorDir,
+      hosts: ['cursor'],
+      env: {}
+    });
+    const body = JSON.parse(fs.readFileSync(path.join(cursorDir, 'mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, unknown>;
+    };
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.notEqual(JSON.stringify(body.mcpServers), '{}');
   });
 });

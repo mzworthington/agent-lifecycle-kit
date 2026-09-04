@@ -41,6 +41,7 @@ describe('completeKitLine', () => {
 
   it('lists MCP profiles and doctor flag values from the current checkout', () => {
     assert.deepEqual(completeKitLine(['wk', 'mcp', ''], { mcpProfiles: profiles }), [
+      'restore',
       'default',
       'collab',
       '--install',

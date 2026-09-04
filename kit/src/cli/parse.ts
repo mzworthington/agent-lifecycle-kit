@@ -82,7 +82,7 @@ export type KitCommand =
 const COMPLETION_USAGE = cliUsage('completion <zsh|bash|install>');
 
 const MCP_USAGE = cliUsage(
-  'mcp [profile] [--install] [--project] [--host cursor|claude|copilot|antigravity|all] [-o <file>]'
+  'mcp [profile|restore] [--install] [--project] [--host cursor|claude|copilot|antigravity|all] [-o <file>]'
 );
 const INIT_USAGE = cliUsage(
   'init [dir] [--mcp <profile>] [--host cursor|claude|copilot|antigravity|all] [--hook] [--skip-mcp] [--skip-ide]'

@@ -8,7 +8,8 @@ import { alignProject, printAlignResult } from '../align/align_project.js';
 import { printAlignOwnedResult, runAlignOwned } from '../align/align_owned.js';
 import { printDoctorResult, runDoctor } from '../doctor/run.js';
 import { evaluateOwnership, shouldInstallInitHooks } from '../doctor/ownership.js';
-import { composeMCP } from '../bootstrap/compose_mcp.js';
+import { composeMCP, restoreProjectMcp } from '../bootstrap/compose_mcp.js';
+import { profileToRestore } from '../bootstrap/mcp_profile_stamp.js';
 import { debugCiFailed } from '../debug/debug_ci_failed.js';
 import { initDebugBoardSession } from '../debug/init_debug_board.js';
 import { handleEddEvalCli } from '../edd/edd_cli.js';
@@ -122,13 +123,23 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       return status(result.ok);
     }
 
-    case 'mcp':
-      composeMCP(command.profile, command.outputFile, command.install, {
+    case 'mcp': {
+      if (command.profile === 'restore' && !command.install && !command.outputFile) {
+        restoreProjectMcp({
+          hosts: command.hosts,
+          projectDir: process.cwd()
+        });
+        return 0;
+      }
+      const profile =
+        command.profile === 'restore' ? profileToRestore(process.cwd()) : command.profile;
+      composeMCP(profile, command.outputFile, command.install, {
         hosts: command.hosts,
         installProject: command.project,
         projectDir: command.project ? process.cwd() : undefined
       });
       return 0;
+    }
 
     case 'audit':
       return status(scanSkillSecurity(repoDir).ok);

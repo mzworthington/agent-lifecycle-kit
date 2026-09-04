@@ -62,6 +62,7 @@ mcps/
 wk mcp default --install
 wk mcp default --install --host claude
 wk mcp default --project
+wk mcp restore --project
 wk mcp collab --install
 wk mcp ops --install
 wk mcp personal --install          # Bitwarden / LinkedIn / Polyglot / Obsidian

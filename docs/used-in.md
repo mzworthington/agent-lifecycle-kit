@@ -8,7 +8,7 @@ Open the repo, read `AGENTS.md`, then:
 wk align .
 ```
 
-Cloudflare stays on a named profile. For live Worker or Pages work: `wk mcp cloudflare-ops --project`, then restore `wk mcp default --project`.
+Cloudflare stays on a named profile. For live Worker or Pages work: `wk mcp cloudflare-ops --project`, then `wk mcp restore --project`.
 
 | Product | GitHub | What to look at |
 |---------|--------|-----------------|

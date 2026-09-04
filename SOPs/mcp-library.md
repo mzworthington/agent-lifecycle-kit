@@ -118,7 +118,9 @@ kit mcp posthog --install
 
 # Project config
 wk mcp project-example --project
-wk mcp cloudflare-ops --install          # RUM / Worker diagnosis
+wk mcp cloudflare-ops --project          # RUM / Worker diagnosis for this session
+wk mcp restore --project                 # previous profile, or kit default
+wk mcp cloudflare-ops --install          # RUM / Worker diagnosis (user-scope)
 wk mcp default --install --host claude   # user-scope Claude Code only
 ```
 
@@ -135,4 +137,4 @@ Host paths: [docs/hosts.md](../docs/hosts.md).
 
 ## 5. Project handshake
 
-For app repos, keep kit standards via `AGENTS.md` and optionally commit composed project MCP files (no secrets) using `wk mcp <profile> --project`. Starting fragment: [templates/project-mcp.json](../templates/project-mcp.json).
+For app repos, keep kit standards via `AGENTS.md` and optionally commit composed project MCP files (no secrets) using `wk mcp <profile> --project`. After a named session profile (`cloudflare-ops`, `posthog`, …), `wk mcp restore --project` recomposes the previous name (kit `default` if none). The stamp `.wk-mcp-profile.stamp` is gitignored and holds profile names only. Starting fragment: [templates/project-mcp.json](../templates/project-mcp.json).
