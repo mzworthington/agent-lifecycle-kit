@@ -21,6 +21,7 @@ evals/edd/
 ├── architecture_terminal.yaml|.jsonl
 ├── kit_knowledge.yaml|.jsonl
 ├── model_routing.yaml|.jsonl
+├── orchestrator_routing.yaml|.jsonl  ← specialist launch (not parent implement)
 ├── cloudflare_ops.yaml|.jsonl
 ├── safety.yaml|.jsonl
 └── tools/*.json
@@ -60,6 +61,7 @@ Full regression / CI suites:
 wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
 wk eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/model_routing.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval ci --suite evals/edd/orchestrator_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 wk eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
@@ -130,7 +132,19 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 
 ## Safety suite
 
-Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, and terminal-fallback via `EDD_CI_SUITES`.
+Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` / `wk eval ci` runs it plus architecture routing, model routing, orchestrator specialist launch, kit-knowledge, Cloudflare ops, self-correction, and terminal-fallback via `EDD_CI_SUITES` at `--threshold-routing 95`.
+
+### Orchestrator specialist launch
+
+`orchestrator_routing` fails when the parent implements or loads grill-spec-tdd-xfn-release instead of launching the specialist (`launch_specialist` + specialist id, plus handover path / model class when relevant).
+
+A miss in production traces is a JSONL case, not a prose-only lesson:
+
+```bash
+wk eval dataset from-trace --trace path/to/trace.json --out evals/edd/orchestrator_routing.jsonl
+```
+
+Do not stop at a handover note or `lessons/` write-up. Tag the row `prod-derived` and keep the existing routing threshold path.
 
 ## Dataset hygiene
 

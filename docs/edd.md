@@ -7,7 +7,7 @@ Connecting an LLM to MCP tools, APIs, or terminals turns a chatbot into a decisi
 What you do get today:
 
 - YAML suites + JSONL cases, mocked tools, dual-layer asserts
-- A **scripted** (`--style local`) merge gate so PRs fail on keyword routing drift
+- A **scripted** (`--style local`) merge gate so PRs fail on keyword routing drift, including orchestrator specialist launch (`evals/edd/orchestrator_routing.yaml`)
 - Optional **http** (OpenAI-compatible `/chat/completions`) and **cli** (`cursor-agent`, `claude`, `agy`) runs
 - Dataset helpers and a production → JSONL / shadow path (`wk eval dataset from-trace`, `wk eval shadow`)
 
@@ -50,6 +50,7 @@ curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.s
 wk init . --mcp default --hook
 
 wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
+wk eval run --suite evals/edd/orchestrator_routing.yaml --model scripted
 wk eval ci --threshold-routing 95 --out out/reports
 wk eval report --format md --out out/reports
 wk eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
@@ -129,6 +130,7 @@ Beyond tool selection and schema shape, suites can assert:
 | Outcome quality | `argument_correctness`, `task_completion`, `criteria_judge` |
 | MCP / multi-step | `mcp_use`, `plan_adherence`, `step_efficiency`, trajectory traces in reports |
 | Safety | `evals/edd/safety.yaml` (injection + no-tool; in `wk check` and nightly live) |
+| Orchestrator | `evals/edd/orchestrator_routing.yaml` (launch the specialist; do not implement or open the full lifecycle in the parent) |
 | Extensibility | `type: plugin` modules; `wk eval dataset lint\|dedupe\|synthesize\|from-trace` |
 
 Full metric table and harness layout: [evals/edd/README.md](../evals/edd/README.md).

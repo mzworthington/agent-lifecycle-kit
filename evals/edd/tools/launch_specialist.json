@@ -1,0 +1,24 @@
+{
+  "name": "launch_specialist",
+  "description": "Launch a specialist subagent. Pass the specialist skill id. Do not implement the work in the parent and do not load the full grill-spec-tdd-xfn-release lifecycle unless the request is a new feature. When a prior phase exists, pass the handover path. When model class is asserted for TDD after spec COMPLETE, pass class implement.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["specialist"],
+    "properties": {
+      "specialist": {
+        "type": "string",
+        "description": "Specialist skill id such as agent-review, agent-debug, or agent-tdd"
+      },
+      "handover": {
+        "type": "string",
+        "description": "Path to the relevant handover when the specialist needs prior phase output"
+      },
+      "class": {
+        "type": "string",
+        "enum": ["plan", "review", "implement", "cheap"],
+        "description": "Model class for the specialist when asserted. After spec COMPLETE, TDD is implement unless BLOCKED or a new architectural fork."
+      }
+    },
+    "additionalProperties": false
+  }
+}

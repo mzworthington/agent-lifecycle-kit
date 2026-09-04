@@ -136,7 +136,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Product bet / PRD / experiment / kill criteria | **`agent-prd`** (grill first if unsettled) → `agent-user-stories` → `agent-spec` |
 | Timebox elapsed on a flagged bet | Measure the leading indicator in PostHog (`agent-posthog`, `wk mcp posthog --install`) → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
 
-When in doubt, prefer the smaller route and ask.
+When in doubt, prefer the smaller route and ask. **Launch** the specialist as a subagent. Do not implement the phase in the parent, and do not open grill → spec → tdd → xfn → release unless the request is a new feature. EDD: [evals/edd/orchestrator_routing.yaml](../../evals/edd/orchestrator_routing.yaml).
 
 **Model class:** After picking the route, resolve class from [models/catalog.yaml](../../models/catalog.yaml) ([SOPs/model-routing.md](../../SOPs/model-routing.md)). Pass the Cursor slug from [models/hosts/cursor.yaml](../../models/hosts/cursor.yaml) to subagents (`wk model resolve --skill <id> [--spec-complete] [--blocked]`). Stay on Grok 4.6 / Composer; do not pick Kimi or other Other-Models ids unless the user asks. Recommend switching the parent chat when the class changes. Escalate to `plan` if BLOCKED or a new architectural fork.
 

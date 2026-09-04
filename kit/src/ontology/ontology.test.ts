@@ -88,6 +88,16 @@ describe('generateOntologyIndex', () => {
     assert.equal(golden?.path, 'evals/edd/goldens/architecture_routing.yaml');
   });
 
+  it('gates orchestrator specialist routing to the documented specialists', () => {
+    const index = generateOntologyIndex(kitRoot);
+    const gates = getRelated(index, 'eval:orchestrator_routing', 'gates');
+    const targets = new Set(gates.map((e) => e.to));
+    assert.ok(targets.has('skill:agent-orchestrator'));
+    assert.ok(targets.has('skill:agent-review'));
+    assert.ok(targets.has('skill:agent-debug'));
+    assert.ok(targets.has('skill:agent-tdd'));
+  });
+
   it('honors declarative ontology.gates in suite YAML', () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-ontology-gates-'));
     try {

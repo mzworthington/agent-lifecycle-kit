@@ -48,6 +48,30 @@ function toolNames(tools: ToolContract[]): Set<string> {
   return new Set(tools.map((t) => t.name));
 }
 
+function handoverFromPrompt(original: string): string | undefined {
+  const match = original.match(/handover\/[A-Za-z0-9._/-]+/);
+  return match?.[0];
+}
+
+function scriptedSpecialistCall(input: {
+  content: string;
+  specialist: string;
+  class?: 'plan' | 'review' | 'implement' | 'cheap';
+  handover?: string;
+}): Omit<Awaited<ReturnType<AgentDriver>>, never> {
+  const arguments_: Record<string, unknown> = { specialist: input.specialist };
+  if (input.class) arguments_.class = input.class;
+  if (input.handover) arguments_.handover = input.handover;
+  return {
+    content: input.content,
+    tool_calls: [{ name: 'launch_specialist', arguments: arguments_ }],
+    usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+    consecutiveToolFailures: 0,
+    haltedAutonomousExecution: false,
+    routingConfidence: 0.91
+  };
+}
+
 function scriptedNoTool(content: string, confidence = 0.92): Omit<
   Awaited<ReturnType<AgentDriver>>,
   never
@@ -69,8 +93,10 @@ function scriptedNoTool(content: string, confidence = 0.92): Omit<
  */
 export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) => {
   const lastUser = [...messages].reverse().find((m) => m.role === 'user');
-  const prompt = (lastUser?.content ?? '').toLowerCase();
+  const originalPrompt = lastUser?.content ?? '';
+  const prompt = originalPrompt.toLowerCase();
   const names = toolNames(tools);
+  const hasSpecialist = names.has('launch_specialist');
   const hasKit =
     names.has('search_kit') ||
     names.has('get_sop') ||
@@ -82,6 +108,60 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
   const hasArch = names.has('read_architecture_yaml');
   const hasModelClass = names.has('select_model_class');
   const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass;
+
+  if (hasSpecialist && !hasArch) {
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea')
+    ) {
+      return scriptedNoTool('That is outside orchestration. I can launch a specialist if you name a review, CI failure, or TDD slice.');
+    }
+    if (
+      prompt.includes('pr review') ||
+      prompt.includes('review the pr') ||
+      prompt.includes('review this pr') ||
+      prompt.includes('pull request') ||
+      prompt.includes('diff review') ||
+      prompt.includes('review of this change')
+    ) {
+      return scriptedSpecialistCall({
+        content: 'Launching the review specialist. The parent will not implement the review.',
+        specialist: 'agent-review'
+      });
+    }
+    if (
+      prompt.includes('ci failed') ||
+      prompt.includes('failed ci') ||
+      prompt.includes('github actions') ||
+      prompt.includes('failed job') ||
+      prompt.includes('red verify') ||
+      prompt.includes('workflow went red') ||
+      prompt.includes('flake on main')
+    ) {
+      return scriptedSpecialistCall({
+        content: 'Launching debug for the failed CI symptom. Not opening grill-spec-tdd-xfn-release.',
+        specialist: 'agent-debug'
+      });
+    }
+    if (
+      (prompt.includes('spec handover is complete') ||
+        prompt.includes('spec is complete') ||
+        prompt.includes('spec is signed off')) &&
+      (prompt.includes('tdd') || prompt.includes('short loop') || prompt.includes('failing tests'))
+    ) {
+      return scriptedSpecialistCall({
+        content: 'Launching TDD after a complete spec. Selecting implement and passing the spec handover.',
+        specialist: 'agent-tdd',
+        class: 'implement',
+        handover: handoverFromPrompt(originalPrompt) ?? 'handover/canvas/handover_spec.md'
+      });
+    }
+    return scriptedNoTool(
+      'I am not sure which specialist to launch. Ask for a PR review, a failed CI job, or TDD after a complete spec.',
+      0.4
+    );
+  }
 
   if (hasModelClass && !hasArch) {
     if (

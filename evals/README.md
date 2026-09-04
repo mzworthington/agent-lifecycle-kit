@@ -89,6 +89,7 @@ Run the CLI unit tests (`kit/src/**/*.test.ts`) and the scripted routing CI gate
 pnpm test
 pnpm kit eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 pnpm kit eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
+pnpm kit eval ci --suite evals/edd/orchestrator_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 pnpm kit eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 ```
 

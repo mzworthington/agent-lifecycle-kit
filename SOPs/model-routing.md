@@ -49,5 +49,5 @@ Stay on the **Cursor Models** pool: Grok 4.6, Grok 4.5, Composer 2.5. Do **not**
 
 Composer 2.5 standard ($0.50 / $2.50) is the actually cheap model. Composer Fast and Grok Fast are latency SKUs, not the cheap class. Do not pass `cursor-grok-4.5-high-fast` for implement.
 
-Eval: [evals/edd/model_routing.yaml](../evals/edd/model_routing.yaml) (`wk eval run --suite evals/edd/model_routing.yaml --model scripted`).
+Eval: [evals/edd/model_routing.yaml](../evals/edd/model_routing.yaml) (`wk eval run --suite evals/edd/model_routing.yaml --model scripted`). Specialist launch (parent must not implement): [evals/edd/orchestrator_routing.yaml](../evals/edd/orchestrator_routing.yaml).
 

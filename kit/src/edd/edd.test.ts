@@ -446,6 +446,71 @@ metrics:
     assert.ok(!report.results.some((r) => r.id === 'model-live-01'));
   });
 
+  it('passes orchestrator specialist-launch suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/orchestrator_routing.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.ok(report.results.some((r) => r.id === 'orch-review-01'));
+    assert.ok(report.results.some((r) => r.id === 'orch-debug-01'));
+    assert.ok(report.results.some((r) => r.id === 'orch-tdd-01'));
+    assert.ok(!report.results.some((r) => r.id === 'orch-live-01'));
+  });
+
+  it('fails when the parent implements or loads the lifecycle instead of launching the specialist', async () => {
+    const runner = new EvalRunner({
+      model: 'scripted',
+      driver: async ({ messages }) => {
+        const prompt = [...messages].reverse().find((m) => m.role === 'user')?.content ?? '';
+        return {
+          content: 'I will implement this in the parent and open grill-spec-tdd-xfn-release.',
+          tool_calls: prompt.toLowerCase().includes('pr review')
+            ? [{ name: 'launch_specialist', arguments: { specialist: 'agent-tdd' } }]
+            : [
+                { name: 'launch_specialist', arguments: { specialist: 'agent-grilling' } },
+                { name: 'launch_specialist', arguments: { specialist: 'agent-spec' } },
+                { name: 'launch_specialist', arguments: { specialist: 'agent-tdd' } }
+              ],
+          usage: { promptTokens: 10, completionTokens: 10, totalTokens: 20 },
+          consecutiveToolFailures: 0,
+          haltedAutonomousExecution: false
+        };
+      }
+    });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/orchestrator_routing.yaml'));
+    const review = report.results.find((r) => r.id === 'orch-review-01');
+    const debug = report.results.find((r) => r.id === 'orch-debug-01');
+    assert.equal(review?.passed, false, 'PR review must fail when implement/tdd is launched');
+    assert.equal(debug?.passed, false, 'Failed CI must fail when grill-spec-tdd is opened');
+    assert.ok(review?.failures.some((f) => f.includes('agent-review')));
+    assert.ok(debug?.failures.some((f) => /agent-debug|expected 1 tool/.test(f)));
+  });
+
+  it('fails TDD after spec COMPLETE when the parent stays on plan without a documented reason', async () => {
+    const runner = new EvalRunner({
+      model: 'scripted',
+      driver: async () => ({
+        content: 'Staying on plan in the parent instead of launching implement TDD.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-tdd',
+              class: 'plan',
+              handover: 'handover/canvas/handover_spec.md'
+            }
+          }
+        ],
+        usage: { promptTokens: 10, completionTokens: 10, totalTokens: 20 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false
+      })
+    });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/orchestrator_routing.yaml'));
+    const tdd = report.results.find((r) => r.id === 'orch-tdd-01');
+    assert.equal(tdd?.passed, false);
+    assert.ok(tdd?.failures.some((f) => f.includes('implement')));
+  });
+
   it('passes cloudflare-ops suite with scripted model', async () => {
     const runner = new EvalRunner({ model: 'scripted' });
     const report = await runner.runSuite(path.join(repoDir, 'evals/edd/cloudflare_ops.yaml'));
