@@ -22,6 +22,7 @@ Do not commit or push unless the user explicitly asks.
 | Feature routing / multi-phase | [agent-orchestrator](./skills/agent-orchestrator/SKILL.md) |
 | Phase work | Matching `skills/agent-*` only for that phase |
 | Stack rules | Matching `lang-*` / `framework-*` / `profile-*` after detecting the codebase |
+| Subagent stubs vs skills | [skills/subagents.yaml](./skills/subagents.yaml) + [docs/subagents.md](./docs/subagents.md) |
 | CI/CD / GitHub Actions | [profile-pipeline](./skills/profile-pipeline/SKILL.md) |
 | Catalog / XFN matrix | [SOPs/behavior-catalog-and-xfn.md](./SOPs/behavior-catalog-and-xfn.md) during Design |
 | Debug / RCA | [agent-debug](./skills/agent-debug/SKILL.md) + [SOPs/hypothesis-driven-debug.md](./SOPs/hypothesis-driven-debug.md) |
@@ -58,4 +59,4 @@ Handovers: `~/.agents/handover/<project>/` ([templates/handover.md](./templates/
 
 Public site: [waykit.dev](https://waykit.dev) (Astro in `web/`, Markdown in `docs/`; DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
 
-Taxonomy: [skills/README.md](./skills/README.md). MCP catalog: [mcps/README.md](./mcps/README.md). Context budget: [SOPs/context-budget.md](./SOPs/context-budget.md).
+Taxonomy: [skills/README.md](./skills/README.md). Subagent allowlist: [docs/subagents.md](./docs/subagents.md). MCP catalog: [mcps/README.md](./mcps/README.md). Context budget: [SOPs/context-budget.md](./SOPs/context-budget.md).

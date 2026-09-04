@@ -104,6 +104,11 @@ const PAGE_SEO: Record<string, SeoOverride> = {
     description:
       'Route product work through grill, stories, spec, TDD, XFN, telemetry, and release. After a bet’s timebox, measure the leading indicator in PostHog, then confirm or kill.'
   },
+  '/docs/subagents': {
+    headline: 'Subagent allowlist',
+    description:
+      'Which agent-* roles may become Cursor subagent stubs: isolation, readonly audit, sequential specialists. Stack profiles stay skills. Orchestrator stays parent only.'
+  },
   '/docs/map': {
     headline: 'Waykit map',
     description:
