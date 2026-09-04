@@ -18,6 +18,8 @@ export interface SubagentRoleEntry {
 
 export interface SubagentAllowlistCatalog {
   expandKill: string;
+  /** How to measure the freeze: from-trace misses vs skill-picker routing. */
+  expandKillIndicator: string;
   staySkillPrefixes: string[];
   /** Kit default. Session override: WK_SUBAGENTS=0 (skills-only) or WK_SUBAGENTS=1 (launch). */
   skillsOnly: boolean;
@@ -73,6 +75,12 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
   if (typeof doc.expandKill !== 'string' || doc.expandKill.trim() === '') {
     throw new Error('expandKill must be a non-empty string');
   }
+  if (typeof doc.expandKillIndicator !== 'string' || doc.expandKillIndicator.trim() === '') {
+    throw new Error('expandKillIndicator must be a non-empty string');
+  }
+  if (!/from-trace/i.test(doc.expandKillIndicator)) {
+    throw new Error('expandKillIndicator must name wk eval dataset from-trace');
+  }
   const staySkillPrefixes = asStringArray(doc.staySkillPrefixes, 'staySkillPrefixes');
   const tddRaw = doc.tdd;
   if (!tddRaw || typeof tddRaw !== 'object') {
@@ -92,17 +100,6 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
     }
     skillsOnly = doc.skillsOnly;
   }
-  const generateRaw = doc.generate;
-  if (!generateRaw || typeof generateRaw !== 'object') {
-    throw new Error('generate must be a mapping');
-  }
-  const generateIn = generateRaw as Record<string, unknown>;
-  const generate = {
-    isolation: asStringArray(generateIn.isolation, 'generate.isolation'),
-    audit: asStringArray(generateIn.audit, 'generate.audit'),
-    sequential: asStringArray(generateIn.sequential, 'generate.sequential'),
-    parent: asStringArray(generateIn.parent, 'generate.parent')
-  };
   const rolesRaw = doc.roles;
   if (!rolesRaw || typeof rolesRaw !== 'object') {
     throw new Error('roles must be a mapping');
@@ -131,8 +128,27 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
     }
     roles[name] = parsed;
   }
+  const generate = deriveGenerate(roles);
+  if (doc.generate !== undefined) {
+    if (!doc.generate || typeof doc.generate !== 'object') {
+      throw new Error('generate must be a mapping when set');
+    }
+    const generateIn = doc.generate as Record<string, unknown>;
+    const listed = {
+      isolation: asStringArray(generateIn.isolation, 'generate.isolation'),
+      audit: asStringArray(generateIn.audit, 'generate.audit'),
+      sequential: asStringArray(generateIn.sequential, 'generate.sequential'),
+      parent: asStringArray(generateIn.parent, 'generate.parent')
+    };
+    if (!sameGenerate(listed, generate)) {
+      throw new Error(
+        'generate isolation+audit+sequential+parent must match roles (or omit generate and let it derive)'
+      );
+    }
+  }
   return {
     expandKill: doc.expandKill,
+    expandKillIndicator: doc.expandKillIndicator,
     staySkillPrefixes,
     skillsOnly,
     tdd: {
@@ -143,6 +159,42 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
     generate,
     roles
   };
+}
+
+export function deriveGenerate(
+  roles: Record<string, SubagentRoleEntry>
+): SubagentAllowlistCatalog['generate'] {
+  const isolation: string[] = [];
+  const audit: string[] = [];
+  const sequential: string[] = [];
+  const parent: string[] = [];
+  for (const [name, entry] of Object.entries(roles)) {
+    if (entry.runtime === 'parent') parent.push(name);
+    if (entry.runtime !== 'subagent') continue;
+    if (entry.bucket === 'isolation') isolation.push(name);
+    else if (entry.bucket === 'audit') audit.push(name);
+    else if (entry.bucket === 'sequential') sequential.push(name);
+  }
+  isolation.sort();
+  audit.sort();
+  sequential.sort();
+  parent.sort();
+  return { isolation, audit, sequential, parent };
+}
+
+function sameGenerate(
+  a: SubagentAllowlistCatalog['generate'],
+  b: SubagentAllowlistCatalog['generate']
+): boolean {
+  const key = (g: SubagentAllowlistCatalog['generate']) =>
+    [...g.isolation].sort().join(',') +
+    '|' +
+    [...g.audit].sort().join(',') +
+    '|' +
+    [...g.sequential].sort().join(',') +
+    '|' +
+    [...g.parent].sort().join(',');
+  return key(a) === key(b);
 }
 
 function prefixStay(name: string, prefixes: readonly string[]): boolean {
@@ -285,6 +337,9 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     }
     if (!/skills-only/i.test(docs) || !docs.includes('WK_SUBAGENTS')) {
       errors.push(`${SUBAGENT_DOCS_REL} must name skills-only mode and WK_SUBAGENTS`);
+    }
+    if (!docs.includes('launch-prompt') || !/eval adapter/i.test(docs)) {
+      errors.push(`${SUBAGENT_DOCS_REL} must name wk agents launch-prompt and the eval adapter`);
     }
   }
 

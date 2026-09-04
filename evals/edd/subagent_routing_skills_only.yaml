@@ -16,6 +16,10 @@ ontology:
     - skill:agent-review
     - skill:agent-debug
     - skill:agent-tdd
+    - skill:agent-xfn
+    - skill:agent-security
+    - skill:agent-spec
+    - skill:agent-arch-drift
 mocks:
   - tool: "launch_specialist"
     response:

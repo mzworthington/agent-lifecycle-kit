@@ -4,7 +4,8 @@ import {
   JUDGE_GRADING_RULES,
   buildCriteriaJudgePrompt,
   buildJudgePrompt,
-  buildTaskCompletionPrompt
+  buildTaskCompletionPrompt,
+  localTaskCompletion
 } from './judge.js';
 
 describe('eval judge prompts', () => {
@@ -33,5 +34,24 @@ describe('eval judge prompts', () => {
     });
     assert.match(completion, /payment-api/);
     assert.doesNotMatch(completion, /Calling a related tool without achieving the goal is FAIL/);
+  });
+
+  it('requires goal tokens even when no_tool is set', () => {
+    const miss = localTaskCompletion({
+      prompt: 'Review the PR',
+      goal: 'load skills/agent-review/SKILL.md',
+      noTool: true,
+      toolCalls: [],
+      agentResponse: 'Staying in the parent.'
+    });
+    assert.equal(miss.score, 'FAIL');
+    const hit = localTaskCompletion({
+      prompt: 'Review the PR',
+      goal: 'load skills/agent-review/SKILL.md',
+      noTool: true,
+      toolCalls: [],
+      agentResponse: 'Skills-only mode: load skills/agent-review/SKILL.md in the parent.'
+    });
+    assert.equal(hit.score, 'PASS');
   });
 });

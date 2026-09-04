@@ -1,6 +1,11 @@
 import { resolveEvalRun } from './eval-style.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 import type { AgentResponse, AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
+import {
+  LAUNCH_SPECIALIST_TOOL,
+  launchArgsForPrompt,
+  skillsOnlyContent
+} from './scripted_subagent_routing.js';
 
 export interface ToolContract {
   name: string;
@@ -86,121 +91,29 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
   const skillsOnly = /skills-only mode/i.test(systemPrompt ?? '');
 
   if (hasLaunchSpecialist && !hasArch) {
-    if (
-      prompt.includes('weather') ||
-      prompt.includes('brew coffee') ||
-      prompt.includes('make tea')
-    ) {
-      return scriptedNoTool('That is outside subagent routing. I can launch an allowlisted specialist if you describe the job.');
-    }
-    if (prompt.includes('typo')) {
-      return scriptedNoTool('Staying in the parent for a tiny typo.');
-    }
+    const launch = launchArgsForPrompt(prompt);
     if (skillsOnly) {
-      return scriptedNoTool(
-        'Skills-only mode: load the matching SKILL.md in the parent. Do not launch a host subagent.'
-      );
+      return scriptedNoTool(skillsOnlyContent(launch?.specialist ?? null));
     }
-    if (prompt.includes('owasp') || prompt.includes('security audit')) {
-      return {
-        content: 'Launching agent-security as a readonly audit subagent.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-security',
-              class: 'review',
-              handoverPaths: ['handover/demo/handover_tdd.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.92
-      };
+    if (!launch) {
+      if (prompt.includes('weather') || prompt.includes('brew coffee') || prompt.includes('make tea')) {
+        return scriptedNoTool(
+          'That is outside subagent routing. I can launch an allowlisted specialist if you describe the job.'
+        );
+      }
+      if (prompt.includes('typo')) {
+        return scriptedNoTool('Staying in the parent for a tiny typo.');
+      }
+      return scriptedNoTool('Stay in the parent unless the job matches the host-subagent allowlist.', 0.4);
     }
-    if (
-      prompt.includes('pr') &&
-      (prompt.includes('review') || prompt.includes('audit') || prompt.includes('independent'))
-    ) {
-      return {
-        content: 'Launching agent-review as a readonly audit subagent.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-review',
-              class: 'review',
-              handoverPaths: ['handover/demo/handover_tdd.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.92
-      };
-    }
-    if (
-      prompt.includes('ci failed') ||
-      prompt.includes('failed github actions') ||
-      prompt.includes('failed job')
-    ) {
-      return {
-        content: 'Launching agent-debug so CI noise stays out of the parent chat.',
-        tool_calls: [{ name: 'launch_specialist', arguments: { specialist: 'agent-debug' } }],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.92
-      };
-    }
-    if (
-      prompt.includes('browser e2e') ||
-      prompt.includes('xfn apply') ||
-      prompt.includes('green the browser')
-    ) {
-      return {
-        content: 'Launching agent-xfn so browser noise stays out of the parent chat.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-xfn',
-              handoverPaths: ['handover/demo/handover_xfn.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.91
-      };
-    }
-    if (
-      (prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
-      (prompt.includes('tdd') || prompt.includes('short loop'))
-    ) {
-      return {
-        content: 'Launching agent-tdd for gear 1 and gear 2 in one session.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-tdd',
-              class: 'implement',
-              handoverPaths: ['handover/demo/handover_spec.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.91
-      };
-    }
-    return scriptedNoTool('Stay in the parent unless the job matches the host-subagent allowlist.', 0.4);
+    return {
+      content: `Launching ${launch.specialist} via the launch_specialist eval adapter (host Task in production).`,
+      tool_calls: [{ name: LAUNCH_SPECIALIST_TOOL, arguments: { ...launch } }],
+      usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+      consecutiveToolFailures: 0,
+      haltedAutonomousExecution: false,
+      routingConfidence: 0.92
+    };
   }
 
   if (hasModelClass && !hasArch) {

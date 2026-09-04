@@ -13,16 +13,16 @@ sequenceDiagram
   participant Disk as handover on disk
 
   User->>Parent: Feature, bug, or audit
-  Parent->>Parent: Scope gate, pick smallest path
-  alt Allowlisted specialist
-    Parent->>Child: Launch stub plus Linear id, handover paths, DoD, Next agent
+  Parent->>Parent: wk agents status, pick smallest path
+  alt Allowlisted specialist and launch mode
+    Parent->>Child: Task prompt from wk agents launch-prompt
     Child->>Disk: COMPLETE or BLOCKED
     Parent->>Disk: Read status, do not trust the chat summary
     alt BLOCKED
       Parent->>Child: Route back (tdd, xfn, or debug)
     end
   else Stay in parent
-    Parent->>Parent: Typo, grill, or a role that is still a skill
+    Parent->>Parent: Typo, grill, skills-only, or a role that is still a skill
   end
 ```
 
@@ -35,11 +35,22 @@ sequenceDiagram
 
 The child writes `COMPLETE` or `BLOCKED` to the handover and returns a short summary only.
 
+Print the Task body (do not invent it):
+
+```bash
+wk agents launch-prompt --skill agent-tdd --project my-app \
+  --linear MZW-59 \
+  --handover ~/.agents/handover/my-app/handover_spec.md \
+  --next agent-xfn
+```
+
 ## Cursor Task invocation
 
-After `wk agents install`, launch `~/.cursor/agents/<name>.md` as a Cursor **Task** (host subagent). The child does not inherit parent chat. Put Linear id, handover paths, DoD, and Next agent in the Task prompt. Resolve the slug with `wk model resolve --skill <id>`. Do not paste `SKILL.md` into the prompt. When the Task returns, read `COMPLETE` or `BLOCKED` from `~/.agents/handover/<project>/`.
+After `wk agents install`, launch `~/.cursor/agents/<name>.md` as a Cursor **Task** (host subagent). The child does not inherit parent chat. Paste the `launch-prompt` output. Resolve the slug with `wk model resolve --skill <id>`. Do not paste `SKILL.md` into the prompt. When the Task returns, read `COMPLETE` or `BLOCKED` from `~/.agents/handover/<project>/`.
 
 Claude Code: same contract with `~/.claude/agents/<name>.md`.
+
+EDD’s `launch_specialist` tool is an **eval adapter** for this host Task. Live Cursor/Claude sessions do not call it.
 
 Keep **one** MCP profile. If the specialist needs Cloudflare or PostHog, `wk mcp <profile> --project`, then restore `wk mcp default --project`. Do not stack vendor MCP onto the default profile.
 
@@ -60,10 +71,10 @@ Do not split TDD across two agents. `agent-adapter` stays a skill when gear 2 is
 
 ## Skills-only mode
 
-Default is **launch**. Set `WK_SUBAGENTS=0` for this session (also `off` / `false` / `skills`) to stay in the parent and load the matching `SKILL.md`. Set `WK_SUBAGENTS=1` (also `on` / `launch`) to force launch even if `skills/subagents.yaml` has `skillsOnly: true`. Unset follows that YAML flag (`false` in the kit). Handovers still go to disk. Do not uninstall `~/.cursor/agents` for this mode.
+Default is **launch**. Set `WK_SUBAGENTS=0` for this session (also `off` / `false` / `skills`) in the shell that starts the host, then run `wk agents status`. Stay in the parent and load the matching `SKILL.md`. Set `WK_SUBAGENTS=1` (also `on` / `launch`) to force launch even if `skills/subagents.yaml` has `skillsOnly: true`. Unset follows that YAML flag (`false` in the kit). Handovers still go to disk. Do not uninstall `~/.cursor/agents` for this mode.
 
 When skills-only is on, do not call a host Task for spec, tdd, debug, xfn, or audit.
 
 ## Kill
 
-Freeze the generate list if auto-delegation picks the wrong specialist more often than today’s skill picker. Fix thin handovers before adding roles.
+Freeze the generate list if auto-delegation picks the wrong specialist more often than today’s skill picker. Indicator: promote misses with `wk eval dataset from-trace` into `evals/edd/subagent_routing.jsonl` and compare to skill-picker misses in `evals/suites/routing-matrix.json`. Fix thin handovers before adding roles.

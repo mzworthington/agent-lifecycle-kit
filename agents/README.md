@@ -11,6 +11,8 @@ Do not paste SOP or philosophy text here. `wk verify` fails if a stub is stale, 
 
 ```bash
 wk agents install
+wk agents status
+wk agents launch-prompt --skill agent-tdd --project demo
 ```
 
 Install is user-scope (`~/.cursor/agents`, `~/.claude/agents`). It refreshes kit-managed files via `.waykit-managed-agents.json` and leaves custom agents alone. Do not commit `agents/` into a product clone.

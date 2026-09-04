@@ -99,7 +99,24 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
   'export-rules': { flags: [{ name: '--check' }] },
   metrics: {},
   verify: {},
-  agents: { subs: { generate: {}, install: {} } },
+  agents: {
+    subs: {
+      generate: {},
+      install: {},
+      status: { flags: [{ name: '--json' }] },
+      'launch-prompt': {
+        flags: [
+          { name: '--skill' },
+          { name: '--project' },
+          { name: '--linear' },
+          { name: '--handover' },
+          { name: '--next' },
+          { name: '--dod' }
+        ]
+      }
+    }
+  },
+  subagents: { subs: { status: { flags: [{ name: '--json' }] } } },
   sync: {
     flags: [{ name: '--install' }, { name: '--update' }, { name: '--dry-run' }, { name: '--force' }]
   },

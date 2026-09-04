@@ -488,7 +488,8 @@ function latestOntologySourceMtime(kitRoot: string): number {
     path.join(kitRoot, 'SOPs'),
     path.join(kitRoot, 'docs'),
     path.join(kitRoot, 'mcps', 'catalog.json'),
-    path.join(kitRoot, 'evals', 'edd')
+    path.join(kitRoot, 'evals', 'edd'),
+    path.join(kitRoot, 'kit', 'src', 'ontology')
   ];
   let latest = 0;
   const visit = (p: string) => {

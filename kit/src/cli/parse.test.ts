@@ -100,6 +100,18 @@ describe('parseKitArgv', () => {
     assert.deepEqual(parseKitArgv(['ontology', 'generate'], opts), { kind: 'ontology', sub: 'generate' });
     assert.deepEqual(parseKitArgv(['agents', 'generate'], opts), { kind: 'agents-generate' });
     assert.deepEqual(parseKitArgv(['agents', 'install'], opts), { kind: 'agents-install' });
+    assert.deepEqual(parseKitArgv(['agents', 'status'], opts), { kind: 'agents-status', json: false });
+    assert.deepEqual(parseKitArgv(['subagents', 'status', '--json'], opts), { kind: 'agents-status', json: true });
+    assert.deepEqual(parseKitArgv(['agents', 'launch-prompt', '--skill', 'agent-tdd', '--handover', 'a.md', '--handover', 'b.md'], opts), {
+      kind: 'agents-launch-prompt',
+      skill: 'agent-tdd',
+      project: '',
+      linearId: undefined,
+      handoverPaths: ['a.md', 'b.md'],
+      nextAgent: undefined,
+      definitionOfDone: undefined
+    });
+    assert.equal(parseKitArgv(['agents', 'launch-prompt'], opts).kind, 'usage');
     assert.deepEqual(parseKitArgv(['ontology', 'check'], opts), { kind: 'ontology', sub: 'check' });
     assert.deepEqual(parseKitArgv(['memory', 'lint'], opts), { kind: 'memory-lint' });
     assert.deepEqual(parseKitArgv(['scan'], opts), { kind: 'audit' });

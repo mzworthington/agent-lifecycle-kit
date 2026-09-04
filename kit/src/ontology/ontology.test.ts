@@ -21,7 +21,7 @@ describe('ontology schema', () => {
     const schema = loadOntologySchema(kitRoot);
     assert.equal(schema.version, 1);
     assert.ok(schema.types.includes('Skill'));
-    assert.ok(schema.types.includes('PhilosophySection'));
+    assert.ok(schema.types.includes('Subagent'));
     assert.deepEqual(schema.memoryEntityTypes, [
       'GlossaryTerm',
       'Slo',

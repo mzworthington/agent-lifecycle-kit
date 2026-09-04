@@ -41,6 +41,12 @@ import {
   verifySubagentStubs
 } from '../skills/generate_subagent_stubs.js';
 import { installUserSubagentStubs } from '../skills/install_subagent_stubs.js';
+import {
+  buildLaunchPrompt,
+  defaultProjectName,
+  formatSubagentStatus,
+  subagentStatus
+} from '../skills/subagent_runtime.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
 import {
@@ -322,6 +328,39 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         `Installed ${result.written.length} kit subagent file(s) into ~/.cursor/agents and ~/.claude/agents`
       );
       return 0;
+    }
+
+    case 'agents-status': {
+      const status = subagentStatus({
+        repoDir,
+        env: ctx.env ?? process.env,
+        homedir: ctx.homedir ?? os.homedir()
+      });
+      if (command.json) {
+        console.log(JSON.stringify(status));
+      } else {
+        console.log(formatSubagentStatus(status));
+      }
+      return 0;
+    }
+
+    case 'agents-launch-prompt': {
+      try {
+        const body = buildLaunchPrompt({
+          repoDir,
+          skill: command.skill,
+          project: command.project.trim() || defaultProjectName(process.cwd()),
+          linearId: command.linearId,
+          handoverPaths: command.handoverPaths,
+          nextAgent: command.nextAgent,
+          definitionOfDone: command.definitionOfDone
+        });
+        console.log(body);
+        return 0;
+      } catch (err: unknown) {
+        console.error(`ERROR: ${errorMessage(err)}`);
+        return 1;
+      }
     }
 
     case 'ontology':

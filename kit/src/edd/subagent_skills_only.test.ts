@@ -15,6 +15,7 @@ describe('scriptedDriver skills-only', () => {
     });
     assert.equal(response.tool_calls?.length ?? 0, 0);
     assert.match(response.content ?? '', /skills-only/i);
+    assert.match(response.content ?? '', /skills\/agent-review\/SKILL.md/);
   });
 
   it('launches review when skills-only mode is off', async () => {

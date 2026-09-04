@@ -43,7 +43,7 @@ wk agents generate
 wk agents install
 ```
 
-`wk agents install` (also `wk align . --write` and `wk sync --install`) copies kit stubs into **user** `~/.cursor/agents` and `~/.claude/agents`. It does not write the product repo’s `.cursor/agents`, and it does not invent Copilot or Antigravity agent dirs. Launch contract: [subagent launch](/SOPs/subagent-launch). Set `WK_SUBAGENTS=0` to keep specialists as skills in the parent without uninstalling stubs.
+`wk agents install` (also `wk align . --write` and `wk sync --install`) copies kit stubs into **user** `~/.cursor/agents` and `~/.claude/agents`. It does not write the product repo’s `.cursor/agents`, and it does not invent Copilot or Antigravity agent dirs. Launch contract: [subagent launch](/SOPs/subagent-launch). Run `wk agents status` for launch vs skills-only. `WK_SUBAGENTS=0` in the host’s start shell keeps specialists as skills in the parent without uninstalling stubs. Print the Task body with `wk agents launch-prompt --skill <id>`.
 
 OAuth popups differ (Cursor vs Claude vs VS Code). Stdio servers that need env vars still need those vars in the process that launches the host.
 

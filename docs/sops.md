@@ -16,7 +16,7 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [Release](/SOPs/release) | Shipping with a conventional title |
 | [Conventional commits](/SOPs/conventional-commits) | Commit message output (ticket id when in play); stay on main, uncommitted |
 | [Linear ticket execution](/SOPs/linear-ticket-workflow) | Claim In Progress, assign host agent, commit message with id |
-| [Host subagent launch](/SOPs/subagent-launch) | Parent launches allowlisted specialists; handover is the contract |
+| [Host subagent launch](/SOPs/subagent-launch) | Parent uses `wk agents launch-prompt`; handover is the contract |
 | [External skills](/SOPs/external-skills) | Pinning upstream skills |
 | [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning or splitting a hot path |
 | [Cloudflare analytics ops](/SOPs/cloudflare-analytics-ops) | RUM / beacon diagnosis |

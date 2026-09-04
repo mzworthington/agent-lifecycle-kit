@@ -203,6 +203,15 @@ export function localCriteriaJudge(input: {
   };
 }
 
+function goalTokensHit(response: string, goal: string): boolean {
+  const tokens = goal
+    .split(/[^a-zA-Z0-9_-]+/)
+    .map((t) => t.toLowerCase())
+    .filter((t) => t.length >= 4);
+  const lower = response.toLowerCase();
+  return tokens.length === 0 || tokens.some((t) => lower.includes(t));
+}
+
 /**
  * Scripted task-completion heuristic: correct expected tool use (or no_tool) counts as done.
  */
@@ -218,10 +227,23 @@ export function localTaskCompletion(input: {
   const calls = input.toolCalls ?? [];
 
   if (input.noTool) {
-    const ok = calls.length === 0;
+    if (calls.length > 0) {
+      return {
+        score: 'FAIL',
+        reasoning: 'Tool call issued when goal required none.',
+        hallucinated: false
+      };
+    }
+    if (input.goal && !goalTokensHit(input.agentResponse, input.goal)) {
+      return {
+        score: 'FAIL',
+        reasoning: `Response misses goal: ${input.goal}`,
+        hallucinated: false
+      };
+    }
     return {
-      score: ok ? 'PASS' : 'FAIL',
-      reasoning: ok ? 'Goal met without tool use.' : 'Tool call issued when goal required none.',
+      score: 'PASS',
+      reasoning: 'Goal met without tool use.',
       hallucinated: false
     };
   }
@@ -249,12 +271,7 @@ export function localTaskCompletion(input: {
   }
 
   if (input.goal) {
-    const tokens = input.goal
-      .split(/[^a-zA-Z0-9_-]+/)
-      .map((t) => t.toLowerCase())
-      .filter((t) => t.length >= 4);
-    const response = input.agentResponse.toLowerCase();
-    const hit = tokens.length === 0 || tokens.some((t) => response.includes(t));
+    const hit = goalTokensHit(input.agentResponse, input.goal);
     return {
       score: hit ? 'PASS' : 'FAIL',
       reasoning: hit ? 'Response addresses goal tokens.' : `Response misses goal: ${input.goal}`,

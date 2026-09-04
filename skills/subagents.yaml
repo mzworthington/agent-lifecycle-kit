@@ -1,10 +1,15 @@
 # Source of truth for which role skills become host subagents (MZW-59).
 # Playbooks stay in SKILL.md. This file only classifies runtime.
+# generate lists are derived from roles (do not duplicate them here).
 version: 1
 skillsOnly: false
 expandKill: >-
   Freeze this generate list if auto-delegation picks the wrong agent more often
   than today's skill picker. Fix thin handovers before adding roles.
+expandKillIndicator: >-
+  Promote wrong-specialist misses with wk eval dataset from-trace into
+  evals/edd/subagent_routing.jsonl. Freeze generate when that miss rate
+  exceeds skill-picker misses in evals/suites/routing-matrix.json.
 staySkillPrefixes:
   - lang-
   - framework-
@@ -13,19 +18,6 @@ tdd:
   skill: agent-tdd
   gears: same-session
   escapeHatch: agent-adapter
-generate:
-  isolation:
-    - agent-debug
-    - agent-xfn
-  audit:
-    - agent-review
-    - agent-security
-    - agent-arch-drift
-  sequential:
-    - agent-spec
-    - agent-tdd
-  parent:
-    - agent-orchestrator
 roles:
   agent-orchestrator:
     runtime: parent

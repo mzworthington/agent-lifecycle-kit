@@ -1,6 +1,6 @@
 {
   "name": "launch_specialist",
-  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
+  "description": "Eval adapter for launching an allowlisted Waykit specialist. The live parent does not call this tool: it opens ~/.cursor/agents/<name>.md as a Cursor Task (or ~/.claude/agents). Pass the same fields as wk agents launch-prompt (specialist, class, handover paths, Linear id, DoD, Next agent). Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
   "inputSchema": {
     "type": "object",
     "required": ["specialist"],
@@ -27,6 +27,22 @@
         "type": "array",
         "items": { "type": "string" },
         "description": "Handover files the child must read or write"
+      },
+      "linearId": {
+        "type": "string",
+        "description": "Linear issue id when the session plays a ticket"
+      },
+      "definitionOfDone": {
+        "type": "string",
+        "description": "Phase Definition of Done"
+      },
+      "nextAgent": {
+        "type": "string",
+        "description": "Next role skill name"
+      },
+      "readonly": {
+        "type": "boolean",
+        "description": "True for audit specialists"
       }
     },
     "additionalProperties": false

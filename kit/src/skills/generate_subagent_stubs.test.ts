@@ -17,6 +17,7 @@ const PLAYBOOK = 'UNIQUE_PLAYBOOK_SENTENCE_DO_NOT_COPY_INTO_THE_STUB_FILE_PLEASE
 
 const allowlistYaml = `version: 1
 expandKill: Freeze this generate list if auto-delegation is worse than today's skill picker.
+expandKillIndicator: Promote misses with wk eval dataset from-trace into evals/edd/subagent_routing.jsonl.
 staySkillPrefixes:
   - lang-
   - framework-
@@ -25,11 +26,6 @@ tdd:
   skill: agent-tdd
   gears: same-session
   escapeHatch: agent-adapter
-generate:
-  isolation: []
-  audit: [agent-review]
-  sequential: [agent-tdd]
-  parent: [agent-orchestrator]
 roles:
   agent-orchestrator:
     runtime: parent
@@ -71,7 +67,7 @@ function writeTree(): string {
   fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
   fs.writeFileSync(
     path.join(root, 'docs/subagents.md'),
-    'isolation audit sequential parent skill picker. Gear 1. agent-adapter.\n'
+    'isolation audit sequential parent skill picker. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS. launch-prompt eval adapter.\n'
   );
   return root;
 }

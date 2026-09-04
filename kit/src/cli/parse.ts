@@ -2,7 +2,7 @@ import path from 'path';
 import { parseMcpHosts, type McpHostId } from '../bootstrap/mcp_hosts.js';
 import { isCompletionShell, type KitCompletionShell } from './completion.js';
 import { isRepoClass, type RepoClass } from '../doctor/hygiene.js';
-import { firstPositional, flagValue, hasFlag } from './flags.js';
+import { firstPositional, flagValue, hasFlag, collectFlagValues } from './flags.js';
 import { cliUsage } from './name.js';
 
 export interface ParseKitArgvOptions {
@@ -39,6 +39,16 @@ export type KitCommand =
   | { kind: 'verify' }
   | { kind: 'agents-generate' }
   | { kind: 'agents-install' }
+  | { kind: 'agents-status'; json: boolean }
+  | {
+      kind: 'agents-launch-prompt';
+      skill: string;
+      project: string;
+      linearId: string | undefined;
+      handoverPaths: string[];
+      nextAgent: string | undefined;
+      definitionOfDone: string | undefined;
+    }
   | { kind: 'sync'; rest: string[] }
   | { kind: 'measure-context' }
   | { kind: 'debug-board'; project: string; title: string }
@@ -103,6 +113,10 @@ const MODEL_RESOLVE_USAGE = cliUsage(
   'model resolve [--skill <id>] [--phase <id>] [--host cursor|claude|copilot|antigravity] [--spec-complete] [--blocked]'
 );
 
+const AGENTS_USAGE = cliUsage(
+  'agents generate|install|status|launch-prompt [--skill <id>] [--project <name>] [--linear <id>] [--handover <path>] [--next <skill>] [--dod <text>]'
+);
+const SUBAGENTS_USAGE = cliUsage('subagents status [--json]');
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
 const COMMIT_MSG_USAGE = cliUsage('commit-msg [--message <subject>] [file]');
 
@@ -184,7 +198,32 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
       if (rest[0] === 'install') {
         return { kind: 'agents-install' };
       }
-      return { kind: 'usage', message: cliUsage('agents generate|install') };
+      if (rest[0] === 'status') {
+        return { kind: 'agents-status', json: hasFlag(rest, '--json') };
+      }
+      if (rest[0] === 'launch-prompt') {
+        const skill = flagValue(rest, '--skill');
+        if (!skill || skill.startsWith('--')) {
+          return { kind: 'usage', message: AGENTS_USAGE };
+        }
+        return {
+          kind: 'agents-launch-prompt',
+          skill,
+          project: flagValue(rest, '--project') ?? '',
+          linearId: flagValue(rest, '--linear'),
+          handoverPaths: collectFlagValues(rest, '--handover'),
+          nextAgent: flagValue(rest, '--next'),
+          definitionOfDone: flagValue(rest, '--dod')
+        };
+      }
+      return { kind: 'usage', message: AGENTS_USAGE };
+    }
+
+    case 'subagents': {
+      if (rest[0] === 'status') {
+        return { kind: 'agents-status', json: hasFlag(rest, '--json') };
+      }
+      return { kind: 'usage', message: SUBAGENTS_USAGE };
     }
 
     case 'sync':

@@ -1,45 +1,15 @@
 # Feature lifecycle
 
-When the job is a product feature, Waykit routes work through specialist roles: grilling, PRD/bet (when the value is unproven), stories, spec, TDD, cross-functional quality, audit, telemetry, and release — then confirm or kill flagged bets. Language and framework profiles load on top of that once the stack is known. The **orchestrator stays in the parent chat**. Isolation, sequential, and readonly-audit roles on the [subagent allowlist](/docs/subagents) launch as host subagents by default; they write `COMPLETE`/`BLOCKED` to the handover ([subagent launch](/SOPs/subagent-launch)). Set `WK_SUBAGENTS=0` to keep those roles as skills in the parent. EDD (**alpha**) is how you prove tool routing in CI; it lives inside TDD when the change is a prompt or a tool schema. Product bets: [hypothesis-driven development](/SOPs/hypothesis-driven-development). Bugs: [hypothesis-driven debug](/SOPs/hypothesis-driven-debug).
+When the job is a product feature, Waykit routes work through specialist roles: grilling, PRD/bet (when the value is unproven), stories, spec, TDD, cross-functional quality, audit, telemetry, and release — then confirm or kill flagged bets. Language and framework profiles load on top of that once the stack is known. The **orchestrator stays in the parent chat**. Isolation, sequential, and readonly-audit roles on the [subagent allowlist](/docs/subagents) launch as host subagents by default; they write `COMPLETE`/`BLOCKED` to the handover ([subagent launch](/SOPs/subagent-launch)). Run `wk agents status` before routing. Set `WK_SUBAGENTS=0` in the host’s shell, then confirm `mode: skills-only`, to keep those roles as skills in the parent. EDD (**alpha**) is how you prove tool routing in CI; it lives inside TDD when the change is a prompt or a tool schema. Product bets: [hypothesis-driven development](/SOPs/hypothesis-driven-development). Bugs: [hypothesis-driven debug](/SOPs/hypothesis-driven-debug).
 
-```mermaid
-sequenceDiagram
-  autonumber
-  participant O as orchestrator parent
-  participant G as grilling skill
-  participant P as prd skill
-  participant U as stories skill
-  participant S as spec subagent
-  participant T as tdd subagent
-  participant X as xfn subagent
-  participant Sec as security subagent
-  participant Arch as arch-drift subagent
-  participant Tel as telemetry skill
-  participant R as release skill
-  participant Disk as handover
+| Step | Runtime |
+|------|---------|
+| Grilling, PRD, stories | Skills in the parent |
+| Spec, TDD (gear 1+2), XFN | Host subagents (or skills if `wk agents status` says skills-only) |
+| Security / hex-drift audit | Readonly host subagents |
+| Telemetry, release, prune | Skills in the parent |
 
-  O->>G: Stress-test idea, contract vs bet
-  opt Bet
-    O->>P: Belief, indicator, kill criteria, flag plan
-  end
-  O->>U: INVEST stories (hypothesis + flag notes)
-  O->>S: Launch spec specialist
-  S->>Disk: COMPLETE
-  O->>Disk: Read spec status
-  O->>T: Launch TDD (gear 1 + gear 2, same child)
-  T->>Disk: COMPLETE
-  O->>X: Launch XFN (own window)
-  X->>Disk: COMPLETE
-  O->>Sec: Readonly security audit
-  O->>Arch: Readonly hex drift
-  O->>Tel: SLOs plus leading indicator
-  O->>R: Conventional PR title, flag expiry
-  opt Timebox elapsed
-    O->>Tel: Measure leading indicator in PostHog
-    O->>U: Confirm or kill
-    O->>O: Prune flag or slice
-  end
-```
+The sequence and Task prompt live on [subagent launch](/SOPs/subagent-launch), not here.
 
 1. **Grilling:** If the idea is still mushy, interview until the decision frontier is clear — including contract vs bet.
 2. **PRD / bet:** For bets, write problem, belief, leading indicator, timebox, kill criteria, cheapest experiment, and flag plan (`agent-prd`). Tiny contracts may skip this.

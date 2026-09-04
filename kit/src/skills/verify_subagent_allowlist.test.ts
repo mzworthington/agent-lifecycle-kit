@@ -25,6 +25,7 @@ function writeTree(files: Record<string, string>): string {
 
 const validYaml = `version: 1
 expandKill: Freeze this generate list if auto-delegation is worse than today's skill picker.
+expandKillIndicator: Promote misses with wk eval dataset from-trace into evals/edd/subagent_routing.jsonl.
 staySkillPrefixes:
   - lang-
   - framework-
@@ -33,11 +34,6 @@ tdd:
   skill: agent-tdd
   gears: same-session
   escapeHatch: agent-adapter
-generate:
-  isolation: [agent-debug]
-  audit: [agent-review]
-  sequential: [agent-spec, agent-tdd]
-  parent: [agent-orchestrator]
 roles:
   agent-orchestrator:
     runtime: parent
@@ -61,6 +57,9 @@ roles:
     runtime: skill
 `;
 
+const docsOk =
+  '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0. wk agents launch-prompt. eval adapter.\n';
+
 describe('verifySubagentAllowlist', () => {
   it('accepts a complete tree that keeps profiles as skills and TDD as one subagent', () => {
     const root = writeTree({
@@ -74,8 +73,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/lang-go/SKILL.md': '---\nkind: profile\n---\n',
       'skills/framework-react/SKILL.md': '---\nkind: profile\n---\n',
       'skills/profile-api/SKILL.md': '---\nkind: profile\n---\n',
-      'docs/subagents.md':
-        '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0.\n'
+      'docs/subagents.md': docsOk
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, true, result.errors.join('\n'));
@@ -107,8 +105,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-tdd/SKILL.md': 'x',
       'skills/agent-adapter/SKILL.md': 'x',
       'skills/lang-go/SKILL.md': 'x',
-      'docs/subagents.md':
-        'skill picker isolation audit sequential parent. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS.'
+      'docs/subagents.md': docsOk
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -125,8 +122,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-spec/SKILL.md': 'x',
       'skills/agent-tdd/SKILL.md': 'x',
       'skills/agent-adapter/SKILL.md': 'x',
-      'docs/subagents.md':
-        'skill picker isolation audit sequential parent. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS.'
+      'docs/subagents.md': docsOk
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -176,6 +172,32 @@ describe('verifySubagentAllowlist', () => {
     assert.equal(result.catalog?.skillsOnly, false);
     assert.match(docs, /WK_SUBAGENTS/);
     assert.match(docs, /skills-only/i);
+    assert.match(docs, /launch-prompt/);
+    assert.match(docs, /eval adapter/i);
+    assert.match(result.catalog?.expandKillIndicator ?? '', /from-trace/);
+  });
+
+  it('rejects a stale generate list that does not match roles', () => {
+    const stale = `${validYaml}
+generate:
+  isolation: [agent-debug]
+  audit: [agent-review]
+  sequential: [agent-tdd]
+  parent: [agent-orchestrator]
+`;
+    const root = writeTree({
+      'skills/subagents.yaml': stale,
+      'skills/agent-orchestrator/SKILL.md': 'x',
+      'skills/agent-debug/SKILL.md': 'x',
+      'skills/agent-review/SKILL.md': 'x',
+      'skills/agent-spec/SKILL.md': 'x',
+      'skills/agent-tdd/SKILL.md': 'x',
+      'skills/agent-adapter/SKILL.md': 'x',
+      'docs/subagents.md': docsOk
+    });
+    const result = verifySubagentAllowlist(root);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /must match roles/);
   });
 });
 

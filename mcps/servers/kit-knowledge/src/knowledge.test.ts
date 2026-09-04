@@ -82,6 +82,11 @@ describe("kit-knowledge", () => {
     assert.ok(phil.some((e) => e.to.startsWith("philosophy:")));
     const docs = getKitRelated(kitRoot, "sop:eval-driven-development", "references");
     assert.ok(docs.some((e) => e.to.startsWith("doc:")));
+    const stub = getKitEntity(kitRoot, "subagent:agent-tdd");
+    assert.ok(stub);
+    assert.equal(stub!.type, "Subagent");
+    const adapts = getKitRelated(kitRoot, "subagent:agent-tdd", "adapts");
+    assert.ok(adapts.some((e) => e.to === "skill:agent-tdd"));
   });
 
   it("stdio launch from a cwd without tsx still initializes (Cursor consumer workspace)", async () => {

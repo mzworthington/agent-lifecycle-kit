@@ -49,6 +49,12 @@ wk align . --write --mcp
 
 Agents pay for every byte in the bootstrap. Always-on files (`AGENTS.md` and the project handshake) stay under about 8KB, roughly 2k tokens. Host pointers (`.cursorrules`, `CLAUDE.md`, Copilot instructions, `GEMINI.md`) are copies of the same thin file; a session loads one of them, so `wk measure-context` does not sum every host. Philosophy and SOPs load on demand via kit-knowledge. Compose **one MCP profile** per session (`wk mcp default --install`, or `--host claude` / `copilot` / `antigravity`) so unused tool schemas stay out of the prompt. `wk measure-context` prints the breakdown; `wk check` fails if the budget is exceeded. Operator write-up: [What Waykit gives you](/docs/kit). Host paths: [hosts](/docs/hosts).
 
+## How does host subagent launch work?
+
+Allowlisted specialists (debug, xfn, spec, tdd, review, security, arch-drift) get a thin stub in `~/.cursor/agents` after `wk agents install`. The parent prints a Task prompt with `wk agents launch-prompt` and reads `COMPLETE`/`BLOCKED` from the handover. EDD’s `launch_specialist` tool is only an eval adapter. Copilot and Antigravity have no kit agent directory.
+
+`WK_SUBAGENTS=0` is skills-only **when the shell that starts the host exports it**. Then `wk agents status` must show `mode: skills-only`. Cursor Chat does not see a var you exported in a different terminal. YAML `skillsOnly: true` is the catalog default if the env is unset. FAQ path: [Host subagents](/docs/subagents).
+
 ## How does the agent find the right SOP?
 
 The kit is a live graph: skills, host subagent stubs, SOPs, MCP servers, evals, and docs. You edit those files; `wk ontology check` fails dangling `depends-on`, `mcp:`, and subagent→skill links. Agents stay on the thin handshake, then kit-knowledge walks neighbors (`get_entity`, `get_related`) instead of dumping the tree. Browse it: [Waykit map](/docs/map). How to add a node: [Author the Waykit map](/ontology). Launch flow: [Host subagents](/docs/subagents).

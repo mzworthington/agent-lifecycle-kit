@@ -29,6 +29,9 @@ Commands:
   verify               Verify skills layout, role SKILL.md line budget, subagent allowlist, and thin agent stubs
   agents generate      Write thin Cursor/Claude agent stubs under agents/ from skills/subagents.yaml
   agents install       Copy those stubs into ~/.cursor/agents and ~/.claude/agents (user scope; not the app repo)
+  agents status        Print launch vs skills-only (WK_SUBAGENTS) and the expand-kill indicator
+  agents launch-prompt Print the parent Task prompt for an allowlisted specialist
+  subagents status     Alias of agents status
   sync                 Sync official external skills (Cloudflare, Vercel); also refreshes user kit subagent stubs
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board
@@ -71,6 +74,8 @@ Examples:
   ${CLI_BIN} ontology generate
   ${CLI_BIN} agents generate
   ${CLI_BIN} agents install
+  ${CLI_BIN} agents status
+  ${CLI_BIN} agents launch-prompt --skill agent-tdd --project demo
   ${CLI_BIN} ontology check
   ${CLI_BIN} memory lint
   ${CLI_BIN} model resolve --skill agent-tdd --spec-complete --host cursor
