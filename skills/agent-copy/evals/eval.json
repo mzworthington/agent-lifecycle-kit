@@ -75,10 +75,10 @@
           "serial comma",
           "Oxford",
           "CTO",
-          "tricolon"
+          "tricolon",
+          "brand headline"
         ],
         "forbidden_patterns": [
-          "Catch architecture risk before it becomes an outage",
           "Why it matters"
         ]
       }

@@ -72,7 +72,7 @@ Customize pillars and the tone matrix to the brand. When unset, use the practiti
 ### Voice Pillars
 
 1. **Clear & Direct:** Front-load the point. Cut passive voice and corporate fluff.
-2. **Practitioner, not pitch deck:** Name the concrete failure or job. Prefer "wrong tool, made-up args" over "Ship AI agents you can prove." For a tech-buying audience, prefer "Fault a dependency on the C4 map" over "Catch architecture risk before it becomes an outage."
+2. **Practitioner, not pitch deck:** Name the concrete failure or job. Prefer "wrong tool, made-up args" over "Ship AI agents you can prove." Keep a brand headline the product already owns; rewrite the lede and chrome around it.
 3. **Empathetic & Solution-Focused:** Frame feedback around user goals. Never blame the user for errors; give a recovery step.
 4. **Precise & Consistent:** Reuse domain terms across UI, tooltips, and docs. Do not invent parallel slogans for the same idea.
 5. **Action-Oriented:** CTAs start with a specific verb ("Run `wk eval ci`", "Read the guide") - not "Learn more" or "Get started" unless that is the only honest label.
@@ -81,7 +81,7 @@ Customize pillars and the tone matrix to the brand. When unset, use the practiti
 
 | Context | Target Tone | Key Characteristics | Example |
 |---------|-------------|---------------------|---------|
-| **Landing / marketing** | Confident, concrete, human | One problem, one promise, no slogan stack. Peer-to-peer, not vendor. | *"A C4 map you can fault in a design review"* |
+| **Landing / marketing** | Confident, concrete, human | One problem, one promise, no slogan stack. Peer-to-peer, not vendor. Keep the owned H1. | *"Catch architecture risk before it becomes an outage"* |
 | **Success / Onboarding** | Encouraging, warm, clear | Brief celebration, clear next steps | *"Workspace created. Invite team members to collaborate."* |
 | **Error / Recovery** | Calm, direct, actionable | What happened, why if useful, what next | *"Unable to save changes. Check your network connection and try again."* |
 | **UI Action / Microcopy** | Concise, unambiguous, verb-first | 1–4 words, sentence-case | *"Save changes"*, *"Export CSV"* |
@@ -94,7 +94,7 @@ Use this when auditing existing copy (especially AI-drafted or slogan-heavy surf
 1. **Inventory** the first viewport / section: brand, headline, support line, CTAs, labels.
 2. **Flag tells** against the anti-patterns below (slogans, fake urgency, cyber chrome labels, emoji-as-heading).
 3. **Rewrite for a peer:** say what breaks, what the product does about it, and what to do next.
-4. **Keep structure** unless the user asked for a redesign - swap phrases, not the information architecture.
+4. **Keep structure** unless the user asked for a redesign - swap phrases, not the information architecture. Keep an established brand headline; de-AI the supporting copy.
 5. **Read aloud:** if it sounds like a press release, a motivational poster or three matching benefit cards, cut again.
 6. **Align chrome:** sentence-case filters and status labels; no ALL-CAPS "MESH ONLINE" theater.
 7. **Serial comma:** omit the Oxford comma unless the last two items would otherwise parse as a pair. See punctuation below.
@@ -105,7 +105,7 @@ Write for people who already run architecture reviews: architects, CTOs, VPs/Dir
 
 - Name the artefact (`BlueprintSpec` YAML, C4 map, blast radius) instead of "living architecture."
 - Uneven sentence rhythm. Do not stack three parallel clauses with matching grammar.
-- Headlines state the job. They are not a slogan that could sit on any SaaS site if you swap the product name.
+- Headlines state the job. They are not a slogan that could sit on any SaaS site if you swap the product name. Exception: a headline the product already owns stays unless the user asks to change it.
 
 ### Punctuation (house style)
 
@@ -137,6 +137,7 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | Card CTA *"Learn more"* | Named destination (*"Canvas guide"*, *"Read the EDD guide →"*) |
 | Ampersand badges (*"Free & open source"*) | "Open source" or "Free and open source" |
 | Stock benefit adjectives (*"evidence-backed"*, *"living contract"*, *"while X is still cheap to change"*) | Say what the score is made of, or drop the clause |
+| Replacing a chosen brand H1 because it is punchy | Keep the owned headline; cut slogan stacking in the lede, cards and CTAs |
 
 ### Practitioner rewrite examples
 
@@ -149,7 +150,7 @@ Reject or rewrite these patterns unless the project explicitly uses them as bran
 | *"KIT MESH · ONLINE"* | *"Kit map"* | Removes cosplay ops chrome |
 | *"EDD harness"* + lab-coat emoji | *"A harness you can run in CI"* | Outcome over badge |
 | *"Why EDD?"* / *"Explore EDD →"* | *"How EDD works"* / *"Read the EDD guide →"* | Specific verb |
-| *"Catch architecture risk before it becomes an outage"* | *"A C4 map you can fault in a design review"* | Slogan vs the job a CTO is actually doing |
+| Swap *"Catch architecture risk before it becomes an outage"* on a de-AI pass | Keep that H1; rewrite the lede and cards | Owned brand headline, not template padding |
 | *"TraceLens, ChaosLens, and AdviceLens"* | *"TraceLens, ChaosLens and AdviceLens"* | House style omits the serial comma |
 | *"Why it matters"* / *"Product suite"* / *"Learn more"* | *"In a design review"* / *"The tools"* / *"Canvas guide"* | Marketing chrome that could sit on any site |
 
