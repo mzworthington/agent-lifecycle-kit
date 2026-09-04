@@ -11,6 +11,7 @@
 - Enhance pre-commit hook with context measurement and update contributing guidelines
 - *(cli)* Emit stable JSON findings for align, doctor, and check (MZW-26)
 - *(skills)* Treat filtered tests as a pre-commit failure
+- *(mcp)* Restore the previous project profile after a session (MZW-28)
 
 ### 🐛 Bug Fixes
 
