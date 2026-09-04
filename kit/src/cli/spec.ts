@@ -43,7 +43,10 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
       { name: '--target' }
     ]
   },
-  align: { flags: [{ name: '--write' }] },
+  align: {
+    flags: [{ name: '--write' }, { name: '--owned' }, { name: '--scan' }, { name: '--login' }]
+  },
+  version: { flags: [{ name: '--check' }] },
   doctor: {
     flags: [
       { name: '--write' },

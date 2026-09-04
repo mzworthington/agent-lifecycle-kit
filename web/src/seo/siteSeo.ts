@@ -92,7 +92,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/align': {
     headline: 'Consumer align',
     description:
-      'wk align checks an app repo for a thin handshake, host rule pointers, kit-knowledge MCP, and commit-msg. --write seeds missing AGENTS.md and IDE pointers; it never overwrites AGENTS.md.'
+      'wk align checks an app repo for a thin handshake, host rule pointers, kit-knowledge MCP, and commit-msg. --write seeds missing AGENTS.md and IDE pointers; --owned --scan reports a worktree farm.'
   },
   '/docs/used-in': {
     headline: 'Used on our own product repos',

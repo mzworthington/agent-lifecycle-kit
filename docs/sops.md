@@ -14,7 +14,8 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [API contracts](/SOPs/api-contracts) | Published HTTP or event contracts |
 | [DB migration](/SOPs/db-migration) | Expand/contract schema changes |
 | [Release](/SOPs/release) | Shipping with a conventional title |
-| [Conventional commits](/SOPs/conventional-commits) | Commit and PR titles |
+| [Conventional commits](/SOPs/conventional-commits) | Commit message output (ticket id when in play); stay on main, uncommitted |
+| [Linear ticket execution](/SOPs/linear-ticket-workflow) | Claim In Progress, assign host agent, commit message with id |
 | [External skills](/SOPs/external-skills) | Pinning upstream skills |
 | [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning or splitting a hot path |
 | [Cloudflare analytics ops](/SOPs/cloudflare-analytics-ops) | RUM / beacon diagnosis |

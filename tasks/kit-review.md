@@ -45,7 +45,7 @@ When a lesson’s **EDD case** field is set, confirm the JSONL row exists and `k
 ## 3. Audit the shared kit
 
 - [ ] Run [agent-arch-drift](../skills/agent-arch-drift/SKILL.md) against the kit repo: duplicate rules, contradictions, skills that grew too long
-- [ ] **Skill length budget:** flag role `SKILL.md` bodies over ~150 lines; move procedure detail into [SOPs/](../SOPs/)
+- [ ] **Skill length budget:** `wk verify` fails role `SKILL.md` bodies over 150 lines unless allowlisted; move procedure detail into [SOPs/](../SOPs/)
 - [ ] Check [skills/README.md](../skills/README.md) taxonomy still matches actual skills
 - [ ] Confirm skill frontmatter `mcp:` ids exist in [mcps/catalog.json](../mcps/catalog.json)
 - [ ] Confirm MCP install is a **single** profile (not stacked collab+devtools+ops); default includes kit-knowledge, memory, and linear

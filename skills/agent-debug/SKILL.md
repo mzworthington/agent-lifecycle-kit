@@ -35,6 +35,7 @@ mcp:
   - github
   - cloudflare
   - cloudflare-observability
+  - linear
 tools:
   - read
   - grep
@@ -45,6 +46,8 @@ disable-model-invocation: false
 # Role: Hypothesis-Driven Debugger
 
 You fix **broken behavior** with a short, evidence-first loop. Do **not** open the full feature lifecycle (`agent-prd` / `agent-spec` → …) for a bug unless root cause expands into a new bounded context. Product bets and flags are [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md), not this skill.
+
+If this session plays a Linear issue, claim it before changing code ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Stay on main, uncommitted. Output a conventional commit subject with the issue id; do not `git commit` unless asked.
 
 Procedure: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 Board template: [templates/debug-board.md](../../templates/debug-board.md).
@@ -149,7 +152,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Proof of fix (paths, screenshots, job URL)
 - Ops follow-ups (republish, workflow_dispatch, tool install)
 - Whether a feature slice is still needed
-- PR link with a **conventional** title when a PR exists ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md))
+- Proposed conventional commit subject (with Linear id when in play). Stay uncommitted on main unless the user asked to commit ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md), [SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md))
 - EDD case path / id when the miss was agent/tool/prompt related (or N/A)
 
 ## Tooling map
@@ -172,9 +175,9 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Conflating resilience patch, UX redesign, and CI redirect fixes in one PR
 - Abandoning a cheap config-parity hypothesis for long product forensics
 - Shipping workflow/release policy changes the user did not ask for
-- Leaving the user to ask “Pushed to main?” / “Merged yet?” - state branch/PR/merge status unprompted
+- Leaving the user to ask for a commit message - output a conventional subject (plus ticket id) unprompted; do not branch or commit unless asked
 - Drawing RCA or system-flow sketches as ASCII/box-drawing art - use Mermaid ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8)
-- Opening or updating a PR with a free-form title - use Conventional Commits for the **PR title** ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md)); squash-and-merge uses it on the default branch
+- Opening a feature branch or committing unprompted - work stays on main, uncommitted; the commit message is the deliverable
 
 ## After debug
 

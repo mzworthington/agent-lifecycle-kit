@@ -34,6 +34,8 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
     validate: () => ({ ok: true, errors: 0, totalSuites: 0, totalTests: 0 }),
     verifyLayout: () => ({ ok: true, invalid: [] }),
     printLayout: () => undefined,
+    verifyRoleBudget: () => ({ ok: true, budget: 150, violations: [], allowed: [] }),
+    printRoleBudget: () => undefined,
     exportRules: () => true,
     evals: () => true,
     edd: async () => 0,
@@ -124,6 +126,20 @@ describe('runKitCheck', () => {
     );
     assert.equal(
       await runKitCheck('/kit', passingDeps({ verifyLayout: () => ({ ok: false, invalid: ['cloudflare'] }) })),
+      1
+    );
+    assert.equal(
+      await runKitCheck(
+        '/kit',
+        passingDeps({
+          verifyRoleBudget: () => ({
+            ok: false,
+            budget: 150,
+            violations: [{ skill: 'agent-fat', lines: 200, budget: 150 }],
+            allowed: []
+          })
+        })
+      ),
       1
     );
     assert.equal(

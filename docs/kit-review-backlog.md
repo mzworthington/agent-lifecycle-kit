@@ -17,7 +17,7 @@ No open P0 items. R1 (rename) and R2 (host writers, not Cursor-only copy) are in
 
 | ID | Finding | Proposed action | Status |
 |----|---------|-----------------|--------|
-| R5 | Role skills over ~150-line kit-review budget (`agent-prune`, `agent-orchestrator`, `agent-debug`, `agent-copy`) | Move procedure back to SOPs; keep role skills as routers | **Open** |
+| R5 | Role skills over ~150-line kit-review budget (`agent-prune`, `agent-orchestrator`, `agent-debug`, `agent-copy`) | `wk verify` now fails new over-budget role skills; named skills are allowlisted until thinned (MZW-32). Move procedure back to SOPs | **Open** (gate in; thinning still open) |
 | R6 | Several `lang-*` / `framework-*` skills are short checklists (~38–48 lines) | Cut unused profiles or deepen with evals + concrete anti-patterns (see `lang-typescript` direction) | **Open** |
 
 ## Done since Aug 30 draft (do not reopen without new evidence)

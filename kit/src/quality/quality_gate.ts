@@ -6,6 +6,11 @@ import { handleEddEvalCli, type EddCliOptions } from '../edd/edd_cli.js';
 import { scanSkillSecurity, type ScanSkillSecurityResult } from '../skills/scan_skill_security.js';
 import { validateEvals, type ValidateEvalsResult } from '../edd/validate_evals.js';
 import {
+  printRoleSkillLineBudgetResult,
+  verifyRoleSkillLineBudget,
+  type RoleSkillLineBudgetResult
+} from '../skills/verify_role_skill_line_budget.js';
+import {
   verifySkillsLayout,
   printSkillsLayoutResult,
   type SkillsLayoutResult
@@ -42,6 +47,8 @@ export interface KitCheckDeps {
   validate?: (repoDir: string) => ValidateEvalsResult;
   verifyLayout?: (repoDir: string) => SkillsLayoutResult;
   printLayout?: (result: SkillsLayoutResult) => void;
+  verifyRoleBudget?: (repoDir: string) => RoleSkillLineBudgetResult;
+  printRoleBudget?: (result: RoleSkillLineBudgetResult) => void;
   exportRules?: (targetDir: string, checkOnly: boolean) => boolean;
   evals?: (repoDir: string) => boolean;
   edd?: (options: EddCliOptions) => Promise<number | null>;
@@ -56,6 +63,8 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
   const validate = deps.validate ?? validateEvals;
   const verifyLayout = deps.verifyLayout ?? verifySkillsLayout;
   const printLayout = deps.printLayout ?? printSkillsLayoutResult;
+  const verifyRoleBudget = deps.verifyRoleBudget ?? verifyRoleSkillLineBudget;
+  const printRoleBudget = deps.printRoleBudget ?? printRoleSkillLineBudgetResult;
   const exportRules = deps.exportRules ?? exportIDERules;
   const evals = deps.evals ?? runEvals;
   const edd = deps.edd ?? handleEddEvalCli;
@@ -73,6 +82,10 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
   const layout = verifyLayout(repoDir);
   printLayout(layout);
   if (!layout.ok) return 1;
+
+  const roleBudget = verifyRoleBudget(repoDir);
+  printRoleBudget(roleBudget);
+  if (!roleBudget.ok) return 1;
 
   const ontology = ontologyCheck(repoDir);
   if (!ontology.ok) {

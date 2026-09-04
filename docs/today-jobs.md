@@ -157,6 +157,7 @@ Doctor will stay green while the agent bootstrap drifts. `wk align` is the consu
 1. **Report** with `wk align .` in the app clone (or the [reusable GitHub Action](./align.md#consumer-ci) on a PR).
 2. **Fill host pointers** with `--write` (never overwrites `AGENTS.md`).
 3. **Compose kit MCP** with `wk mcp default --project`. Use `cloudflare-ops` only for that session.
+4. **Fleet** with `wk align --owned --scan ~/Documents/dev` (kit clones skipped).
 
 ```
 wk align .

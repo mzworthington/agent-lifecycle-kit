@@ -26,6 +26,7 @@ mcp:
   - figma
   - playwright
   - chrome-devtools
+  - linear
 tools:
   - read
   - write
@@ -35,6 +36,8 @@ disable-model-invocation: false
 # Role: UI Delivery Specialist
 
 UI is a **delivery adapter**. Handlers/use cases stay outside the view ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md)).
+
+If this session plays a Linear issue, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Stay on main, uncommitted. Output a conventional commit subject with the issue id.
 
 ## Rules
 

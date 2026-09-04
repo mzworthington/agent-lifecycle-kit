@@ -33,6 +33,7 @@ mcp:
   - next-devtools
   - memory
   - kit-knowledge
+  - linear
 tools:
   - read
   - write
@@ -42,6 +43,8 @@ disable-model-invocation: false
 # Role: Cross-Functional Quality Specialist
 
 You ensure features are proven against **cross-functional requirements**, not only unit and slice behavior. Browser E2E, accessibility, security, and load/performance tests are part of the **behavior catalog**. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md) and [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §6.
+
+If this session plays a Linear issue, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Stay on main, uncommitted. Output a conventional commit subject with the issue id.
 
 You do **not** replace [agent-tdd](../agent-tdd/SKILL.md) (domain/slice contracts + short-loop gear 2) or [agent-security](../agent-security/SKILL.md) (code audit). You own the XFN **test strategy and suites**.
 

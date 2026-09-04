@@ -10,9 +10,10 @@ Do not commit or push unless the user explicitly asks.
 
 1. **Hexagonal** - dependencies point inward; domain stays pure.
 2. **Mermaid** for diagrams; no ASCII/box-drawing architecture art ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) §8 when writing diagrams).
-3. **Conventional commits and PR titles** - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md) (squash-and-merge uses the PR title). Type follows **behavior**, not file extension: skill / SOP / model-catalog changes are `feat`/`fix`, not `docs`.
-4. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding.
-5. **One MCP profile per session** - prefer skill frontmatter `mcp:` ids; more tools cost tokens ([mcps/README.md](./mcps/README.md)).
+3. **Conventional commits and PR titles** - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md). Type follows **behavior**, not file extension: skill / SOP / model-catalog changes are `feat`/`fix`, not `docs`. Stay on **main**; leave work **uncommitted** unless the user asks to commit. Output the commit message (include the Linear id when playing a ticket).
+4. **Linear ticket claim** - When executing an issue, mark it In Progress and assign/delegate to the host agent (Cursor). Details: [SOPs/linear-ticket-workflow.md](./SOPs/linear-ticket-workflow.md). Do not bulk-claim a backlog review.
+5. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding.
+6. **One MCP profile per session** - prefer skill frontmatter `mcp:` ids; more tools cost tokens ([mcps/README.md](./mcps/README.md)).
 
 ## Load on demand
 
@@ -32,7 +33,7 @@ Do not commit or push unless the user explicitly asks.
 | Kit ontology | `ontology/schema.yaml` only (index derived at use time; authoring: `ontology/README.md`) |
 | Cross-session facts | **memory** MCP (typed allowlist: glossary/SLO/prefs/project facts, never secrets) |
 | Vendor/framework API docs | **context7** MCP |
-| Linear issues / projects | **linear** MCP (OAuth; on the `default` profile) |
+| Linear issues / projects | **linear** MCP (OAuth; on the `default` profile). Playing a ticket: [SOPs/linear-ticket-workflow.md](./SOPs/linear-ticket-workflow.md) |
 | Warp Factory tasks | **warp-factory** MCP (`wk mcp warp --install`; OAuth on first use) |
 | PostHog product analytics / flags / empty events | [agent-posthog](./skills/agent-posthog/SKILL.md) (`wk mcp posthog --install`; official MCP) |
 

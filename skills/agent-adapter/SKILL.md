@@ -26,6 +26,7 @@ mcp:
   - context7
   - postgres
   - stripe
+  - linear
 tools:
   - read
   - write
@@ -35,6 +36,8 @@ disable-model-invocation: false
 # Role: Adapter Deep-Dive (optional)
 
 You are an expert integration engineer for **large** outbound adapter work.
+
+If this session plays a Linear issue, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Stay on main, uncommitted. Output a conventional commit subject with the issue id.
 
 **Default path:** [agent-tdd](../agent-tdd/SKILL.md) owns the short loop - **gear 1** (domain/handler + mocked ports) and **gear 2** (one thin adapter + integration test in the same session). Invoke this skill only when gear 2 would break that loop.
 

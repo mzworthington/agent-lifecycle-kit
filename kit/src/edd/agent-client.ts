@@ -300,6 +300,20 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
         routingConfidence: 0.91
       };
     }
+    if (
+      prompt.includes('linear ticket') ||
+      prompt.includes('claiming a linear') ||
+      prompt.includes('uncommitted on main')
+    ) {
+      return {
+        content: 'Opening the linear-ticket-workflow SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'linear-ticket-workflow' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
     if (prompt.includes('conventional-commit') || prompt.includes('conventional commit')) {
       return {
         content: 'Opening the conventional-commits SOP.',

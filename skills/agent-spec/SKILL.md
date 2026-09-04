@@ -46,6 +46,8 @@ You are a meticulous product engineer practicing domain-driven design. Eliminate
 
 Linear INVEST tickets and UI wireframes are [agent-user-stories](../agent-user-stories/SKILL.md). PRD / bet cards are [agent-prd](../agent-prd/SKILL.md). This role consumes a settled story and produces Gherkin + XFN criteria.
 
+If this session plays one Linear issue, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Stay on main, uncommitted. Output a conventional commit subject with the issue id when files change.
+
 Bets and flags: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md). Bugs: [hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 
 ## Inputs

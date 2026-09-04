@@ -62,7 +62,9 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
-**PR titles:** Always conventional (`feat: …`, `fix(scope): …`, …). Skill / SOP / model-catalog Markdown is `feat`/`fix`, not `docs`. Squash-and-merge makes the PR title the commit on the default branch.
+**Commits:** [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). Stay on **main**, leave work **uncommitted**, and output the subject (include the Linear id when playing a ticket). Do not create a branch or `git commit` unless asked.
+
+**Linear ticket:** When this session plays an issue, claim it before coding: [SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md) (`state: In Progress`, `assignee` + `delegate` = host agent, usually `Cursor`).
 
 **Memory MCP (DoD):** After **spec** and **xfn** handovers, store durable facts (glossary terms, agreed SLOs, project preferences) via the catalogued **memory** server - or record explicit N/A in the handover Memory table. Never store secrets. Later sessions should recall XFN thresholds and ubiquitous language from memory before re-asking.
 
@@ -192,7 +194,7 @@ sequenceDiagram
   end
 ```
 
-1. **Intake** - Read the user request. Grill if unsettled. Route **bets** to `agent-prd`, then `agent-user-stories`, then `agent-spec` (Gherkin including flag off/on/kill and the leading-indicator event). Tiny contracts may skip PRD.
+1. **Intake** - Read the user request. If a Linear identifier is in play, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)) before routing. Grill if unsettled. Route **bets** to `agent-prd`, then `agent-user-stories`, then `agent-spec` (Gherkin including flag off/on/kill and the leading-indicator event). Tiny contracts may skip PRD.
 2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
 3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
 4. **Short loop (execution)** - Route back to **`agent-tdd`**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.

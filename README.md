@@ -32,7 +32,8 @@ macOS / Linux; needs git and Node 22+. Already cloned this repo? Run `./install.
 | Starting a product feature | Orchestrator lifecycle (grill → PRD if bet → stories → spec → TDD + XFN → audit → release → confirm/kill) |
 | Always-on rules are too fat | `wk measure-context` then `wk check` |
 | Owned repos missing README / license / templates | `wk doctor --owned --scan <dev-dir>` |
-| App repo drifted from the Waykit handshake | `wk align .` (`--write` fills host pointers; `wk mcp default --project` for kit MCP). Product PRs can call the reusable [align-consumer](./docs/align.md#consumer-ci) workflow. |
+| App repo drifted from the Waykit handshake | `wk align .` (`--write` fills host pointers; `wk mcp default --project` for kit MCP). Fleet: `wk align --owned --scan <dev-dir>`. Product PRs can call the reusable [align-consumer](./docs/align.md#consumer-ci) workflow. |
+| Which kit am I running? | `wk version` (`--check` warns if origin is weeks ahead; does not pull) |
 | Agent picked the wrong tool / made-up args | Write a JSONL case → `wk eval run --suite evals/edd/demo.yaml --model scripted` |
 | Gate a prompt or schema change | `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports` |
 | Promote a prod miss into the suite | `wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl` |
@@ -116,14 +117,15 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | :--- | :--- |
 | `wk init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
 | `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps) |
-| `wk align [dir]` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers) |
+| `wk align [dir]` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds; `--owned --scan` for a worktree farm) |
+| `wk version` | Package/git describe and whether `~/.agents` is this clone (`--check` warns if stale) |
 | `wk completion install` | Write a live tab-completion stub (zsh + bash); verbs follow the current `wk` |
 | `wk mcp <profile>` | Compose a named profile into Cursor, Claude, Copilot, and Antigravity (`--install` / `--project`) |
 | `wk check` | Local quality gate (audit, evals, EDD CI, context budget) |
 | `wk eval run\|watch\|report\|ci` | Eval harness for agent tool routing and schemas |
 | `wk eval` | Skill-trigger harness (which specialist activates) |
 | `wk audit` | Security and supply-chain audit |
-| `wk validate` / `wk verify` | Eval schema + skills layout |
+| `wk validate` / `wk verify` | Eval schema + skills layout and role line budget |
 | `wk export-rules` | Sync `AGENTS.md` → IDE entry points |
 | `wk sync` | Install upstream skills from the lockfile |
 | `wk measure-context` | Always-on context budget |

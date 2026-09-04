@@ -9,6 +9,8 @@
 | **Project** | `<project-name>` |
 | **Next agent** | `agent-<role>` |
 | **Date** | YYYY-MM-DD |
+| **Linear ticket** | `WAY-123` or n/a |
+| **Proposed commit** | `feat(scope): description (WAY-123)` or n/a |
 
 Mark **COMPLETE** only when this phase's Definition of Done below is satisfied. Otherwise use **BLOCKED** and list gaps.
 

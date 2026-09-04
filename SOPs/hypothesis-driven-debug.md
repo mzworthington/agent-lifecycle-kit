@@ -99,10 +99,10 @@ Separate PRs (or ask before combining) when any two differ:
 | “Layout fixed” | Before/after visual of **initial load** (not only unit packing tests) |
 | “Empty system fixed” | Named entity non-empty in **published** artifact or explicit republish TODO |
 | “Job fixed” | Failing step green locally or in Actions |
-| “On main” | `gh pr view` + compare squash tip to branch tip; open follow-up if tip diverged |
+| “On main” | Working tree on default branch, **uncommitted**; proposed conventional commit subject (with ticket id) |
 | “Agent/tool miss fixed” | New or existing EDD case red→green; `kit eval run` (or `ci`) evidence |
 
-State merge/PR status in the user-facing summary without waiting to be asked. PR titles must follow [conventional-commits.md](./conventional-commits.md) (squash-and-merge uses the title on the default branch).
+Output the conventional commit subject without waiting to be asked. Do not branch or commit unless asked. Follow [conventional-commits.md](./conventional-commits.md) and [linear-ticket-workflow.md](./linear-ticket-workflow.md).
 
 ## 7. CI / ops playbook
 

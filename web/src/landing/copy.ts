@@ -56,7 +56,7 @@ export const HOME_NEXT = [
 /** First-party product checkouts that pass `wk align`. GitHub origins, not vanity domains. */
 export const HOME_USED_IN_HEADING = 'Used on our own product repos';
 export const HOME_USED_IN_LEAD =
-  'Waykit is not only this kit. These four checkouts run the thin handshake, kit MCP, and wk align. Open AGENTS.md if you want to see a consumer in the wild.';
+  'Waykit is not only this kit. First-party checkouts run the thin handshake, kit MCP, and wk align. Open AGENTS.md if you want to see a consumer in the wild.';
 
 export const HOME_USED_IN = [
   {

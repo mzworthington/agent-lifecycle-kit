@@ -20,6 +20,7 @@ depends-on:
   - agent-copy
 mcp:
   - github
+  - linear
 tools:
   - read
   - grep
@@ -37,7 +38,7 @@ You review change sets for craft and catalog honesty - not style nitpicks.
 3. **XFN** - Apply rows have suites or BLOCKED owners; skip rows have rationales.
 4. **Security** - Trust boundaries, validation, secrets ([agent-security](../agent-security/SKILL.md)).
 5. **Minimal change** - No speculative abstractions ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
-6. **Commits / PR title** - Conventional ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md)).
+6. **Commit message** - Conventional subject, plus Linear id when in play ([SOPs/conventional-commits.md](../../SOPs/conventional-commits.md), [SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Work should be on main and uncommitted unless the user asked otherwise.
 7. **Public copy / docs voice** - If landing, README lead, marketing, or UI microcopy changed, check for AI-template tells (slogan stacks, "sensible default", fake systems chrome, emoji-as-heading) per [agent-copy](../agent-copy/SKILL.md).
 8. **No `any`** - TypeScript `: any`, `as any`, and `as unknown as` are **must-fix**. Replacements: `unknown` + narrowing, generics, `satisfies`, typed test fakes. Vitest `expect.any(...)` is allowed. See [lang-typescript](../lang-typescript/SKILL.md).
 

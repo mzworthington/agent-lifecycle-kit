@@ -42,7 +42,15 @@ export type KitCommand =
   | { kind: 'debug-board'; project: string; title: string }
   | { kind: 'debug-ci'; rest: string[] }
   | { kind: 'check' }
-  | { kind: 'align'; targetDir: string; write: boolean }
+  | {
+      kind: 'align';
+      targetDir: string;
+      write: boolean;
+      owned: boolean;
+      scanDir: string | undefined;
+      login: string | undefined;
+    }
+  | { kind: 'version'; check: boolean }
   | { kind: 'ontology'; sub: 'generate' | 'check' }
   | { kind: 'memory-lint' }
   | {
@@ -80,6 +88,10 @@ const INIT_USAGE = cliUsage(
 
 const DOCTOR_USAGE = cliUsage(
   'doctor [dir] [--write] [--owned] [--scan <dir>] [--class kit|product|dns|site|template] [--hook] [--login <user>]'
+);
+
+const ALIGN_USAGE = cliUsage(
+  'align [dir] [--write] [--owned] [--scan <dir>] [--login <user>]'
 );
 
 const MODEL_RESOLVE_USAGE = cliUsage(
@@ -184,12 +196,26 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
     case 'check':
       return { kind: 'check' };
 
+    case 'version':
+      return { kind: 'version', check: hasFlag(rest, '--check') };
+
     case 'align': {
       const positional = rest[0] && !rest[0].startsWith('--') ? rest[0] : undefined;
+      const scan = flagValue(rest, '--scan');
+      if (hasFlag(rest, '--scan') && (scan === undefined || scan.startsWith('--'))) {
+        return { kind: 'usage', message: ALIGN_USAGE };
+      }
+      const login = flagValue(rest, '--login');
+      if (hasFlag(rest, '--login') && (login === undefined || login.startsWith('--'))) {
+        return { kind: 'usage', message: ALIGN_USAGE };
+      }
       return {
         kind: 'align',
         targetDir: path.resolve(opts.cwd, positional ?? '.'),
-        write: hasFlag(rest, '--write')
+        write: hasFlag(rest, '--write'),
+        owned: hasFlag(rest, '--owned'),
+        scanDir: scan ? path.resolve(opts.cwd, scan) : undefined,
+        login
       };
     }
 

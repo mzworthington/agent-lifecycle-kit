@@ -41,7 +41,7 @@ sequenceDiagram
 1. **Grilling:** If the idea is still mushy, interview until the decision frontier is clear — including contract vs bet.
 2. **PRD / bet:** For bets, write problem, belief, leading indicator, timebox, kill criteria, cheapest experiment, and flag plan (`agent-prd`). Tiny contracts may skip this.
 3. **Stories then spec:** INVEST tickets (Hypothesis block on bets; flags in Notes), then Gherkin including flag off/on/kill when flagged.
-4. **TDD:** Inventory the behavior catalog (both flag states), then gear 1 (domain) and gear 2 (thin adapters) in the same loop. EDD lives here when the change is a prompt or tool schema.
+4. **TDD:** Inventory the behavior catalog (both flag states), then gear 1 (domain) and gear 2 (thin adapters) in the same loop. Claim the Linear issue In Progress and assign the host agent first ([linear ticket workflow](/SOPs/linear-ticket-workflow)). Stay on main, uncommitted; output the conventional commit subject with the ticket id. EDD lives here when the change is a prompt or tool schema.
 5. **XFN:** Green the apply rows (accessibility, load, security) or skip with a reason — including flag-on surfaces in scope.
 6. **Audit:** Security and architecture-drift checks, then pre-commit.
 7. **Telemetry and release:** Map SLOs (`agent-telemetry`) and the bet’s leading indicator in PostHog (`agent-posthog`). Ship with a conventional PR title, record flag expiry and rollback.

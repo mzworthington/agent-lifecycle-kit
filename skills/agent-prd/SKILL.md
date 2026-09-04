@@ -35,7 +35,7 @@ disable-model-invocation: false
 
 Turn an unsettled capability into a **bet card** a human can play or kill. Procedure: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md). Template: [templates/prd.md](../../templates/prd.md).
 
-Linear INVEST tickets are [agent-user-stories](../agent-user-stories/SKILL.md). Gherkin is [agent-spec](../agent-spec/SKILL.md). Bugs are [agent-debug](../agent-debug/SKILL.md).
+Linear INVEST tickets are [agent-user-stories](../agent-user-stories/SKILL.md). Gherkin is [agent-spec](../agent-spec/SKILL.md). Bugs are [agent-debug](../agent-debug/SKILL.md). Playing one issue: [SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md).
 
 ## When
 
