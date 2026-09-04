@@ -15,18 +15,18 @@ pnpm test
 pnpm kit check
 ```
 
-If this branch has lint wired: `pnpm lint`.
+If this clone has lint wired: `pnpm lint`.
 
 ## Workflow
 
-1. Branch from `main`.
-2. Prefer the smallest change that matches [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) (and its **Applicability & opt-out** section).
-3. For prompt / MCP schema / agent-routing changes, follow **EDD (alpha)**: add or extend evals first, then implement ([docs/edd.md](./docs/edd.md)).
-4. Keep PRs focused. One concern per PR when practical.
+1. Work on **main**. Do not create a feature branch.
+2. Leave changes **uncommitted** unless asked to commit. Output a conventional commit subject (include the Linear id when playing a ticket).
+3. Prefer the smallest change that matches [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) (and its **Applicability & opt-out** section).
+4. For prompt / MCP schema / agent-routing changes, follow **EDD (alpha)**: add or extend evals first, then implement ([docs/edd.md](./docs/edd.md)).
 
 ## Commit and PR titles
 
-Use [Conventional Commits](./SOPs/conventional-commits.md) for **every commit and every PR title**. This repo squash-merges; the PR title becomes the commit on `main` and feeds changelog/release automation.
+Use [Conventional Commits](./SOPs/conventional-commits.md) for the **output** commit subject. Stay on main, uncommitted unless asked. Include the Linear id when playing a ticket.
 
 Examples: `feat(skills): …`, `fix(cli): …`, `docs: …`, `ci: …`.
 

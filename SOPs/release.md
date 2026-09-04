@@ -26,7 +26,7 @@ artifacts are **GitHub Releases** (`vX.Y.Z` tags). Changelog generation uses
 
 ## 2. Human-facing package
 
-- [ ] Conventional **PR title** ([conventional-commits.md](./conventional-commits.md)); squash-and-merge uses it on the default branch
+- [ ] Conventional **commit subject** output ([conventional-commits.md](./conventional-commits.md), [linear-ticket-workflow.md](./linear-ticket-workflow.md)); stay on main, uncommitted unless asked
 - [ ] Changelog / release notes: user-visible behavior, migrations, flags (name, default, expiry, rollback)
 - [ ] Rollback: previous version / flag off / migration reverse notes
 - [ ] Bets: timebox still open **or** confirm/kill follow-up filed ([hypothesis-driven-development.md](./hypothesis-driven-development.md))

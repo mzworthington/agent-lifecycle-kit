@@ -16,7 +16,7 @@ tools:
 
 Use when this session is **playing a Linear issue** (identifier in the prompt, a linked issue, or an agreed ticket). Authoring or reviewing a backlog without executing one issue is [agent-user-stories](../skills/agent-user-stories/SKILL.md) and does **not** bulk-claim.
 
-Linear MCP (`save_issue`, `get_issue`, `list_issue_statuses`) lives on the `default` profile.
+Align with [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8 (Interaction Mandate). Linear MCP (`save_issue`, `get_issue`, `list_issue_statuses`) lives on the `default` profile.
 
 ## Claim (before changing product code)
 

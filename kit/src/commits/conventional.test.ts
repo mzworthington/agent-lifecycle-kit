@@ -11,7 +11,8 @@ describe('validateConventionalCommit', () => {
       'docs: prefer mermaid over ascii diagrams',
       'chore: update .gitignore for env files',
       'feat(api)!: drop v1 export',
-      'revert: undo broken mcp compose'
+      'revert: undo broken mcp compose',
+      'feat(skills): claim linear tickets (WAY-123)'
     ]) {
       const result = validateConventionalCommit(raw);
       assert.equal(result.ok, true, raw);

@@ -59,18 +59,11 @@ A `.md` skill or SOP is still agent behavior. `docs` is for humans reading a gui
 
 ## Rules
 
-1. **Every git commit message** uses the format above (subject line).
-2. **Every pull request title** uses the same format. Treat the PR title as the squash-merge commit message.
-3. When updating a PR, keep the title conventional if the primary change type is unchanged; retitle if the PR’s purpose shifted (e.g. `feat` → `fix`).
+1. **Output** a conventional subject at the end of ticket work. Do not `git commit` unless the user asks. Stay on **main**.
+2. Include the Linear identifier in the subject suffix and body when a ticket was in play ([linear-ticket-workflow.md](./linear-ticket-workflow.md)).
+3. If the user later opens a PR, that title uses the same format.
 4. Prefer one clear type from the table above. Never pick `docs` only because the path ends in `.md`.
-5. Do not use merge-commit style subjects (`Merge pull request #…`) as PR titles.
-
-## Checklist before open / update PR
-
-- [ ] PR title matches `<type>(scope): description`
-- [ ] Title summarizes the whole PR (what lands on main after squash), not a single intermediate commit
-- [ ] Body can stay free-form (summary, test plan); title stays conventional
-- [ ] Skill / SOP / model-catalog changes use `feat`/`fix`, not `docs`
+5. Do not use merge-commit style subjects (`Merge pull request #…`).
 
 ## Git hook
 
@@ -87,5 +80,3 @@ Check a title without committing:
 ```bash
 wk commit-msg --message "feat(cli): add commit-msg hook"
 ```
-
-Squash-and-merge still uses the **PR title**. Keep that conventional even when every branch commit already passed the hook.

@@ -18,6 +18,22 @@
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Phase Handover Plan", "Specialist Role Assignments"]
       }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-002",
+      "name": "Claim Linear ticket on main",
+      "description": "When playing a Linear issue, orchestrator claims In Progress, assigns the host agent, stays on main uncommitted, and outputs a conventional commit subject with the ticket id.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Work WAY-123: implement the handshake align pointers on main.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": ["lifecycle", "orchestrate"],
+        "required_patterns": ["In Progress", "Cursor", "WAY-123", "feat("],
+        "forbidden_patterns": ["git checkout -b", "git commit", "feature branch"],
+        "required_output_sections": ["Linear ticket", "Proposed commit"]
+      }
     }
   ]
 }

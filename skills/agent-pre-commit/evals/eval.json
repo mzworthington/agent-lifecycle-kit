@@ -18,6 +18,22 @@
         "forbidden_patterns": ["WIP", "fixed stuff"],
         "required_output_sections": ["Pre-Commit Checks Summary", "Conventional Commit Subject & PR Title"]
       }
+    },
+    {
+      "id": "EVAL-PRE-COLOCATED-002",
+      "name": "Commit message includes Linear ticket and stays uncommitted",
+      "description": "When a ticket is in play, the commit-message output is conventional, includes the id, and does not instruct a branch or git commit.",
+      "target_skill": "agent-pre-commit",
+      "prompt": "WAY-123 is done. Format the commit message for main. Do not commit.",
+      "context": {
+        "active_phase": "quality"
+      },
+      "assertions": {
+        "required_triggers": ["conventional commits", "commit message"],
+        "required_patterns": ["feat:", "WAY-123"],
+        "forbidden_patterns": ["git checkout -b", "git commit", "WIP"],
+        "required_output_sections": ["Conventional Commit Subject"]
+      }
     }
   ]
 }

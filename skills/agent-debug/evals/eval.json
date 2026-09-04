@@ -46,6 +46,22 @@
           "EDD case"
         ]
       }
+    },
+    {
+      "id": "EVAL-DBG-COLOCATED-003",
+      "name": "Claim Linear bug ticket uncommitted on main",
+      "description": "A Linear bug ticket is claimed In Progress, assigned to Cursor, not branched or committed, and the commit subject includes the id.",
+      "target_skill": "agent-debug",
+      "prompt": "WAY-123: the handshake tour flakes in CI. Debug it on main and leave the fix uncommitted.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": ["bug", "debug", "root cause"],
+        "required_patterns": ["In Progress", "Cursor", "WAY-123"],
+        "forbidden_patterns": ["git checkout -b", "git commit"],
+        "required_output_sections": ["Hypothesis Board", "Proposed commit"]
+      }
     }
   ]
 }

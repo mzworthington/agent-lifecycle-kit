@@ -18,6 +18,22 @@
         "forbidden_patterns": ["ASCII art"],
         "required_output_sections": ["Behavior Catalog Impact", "Port Interface Contracts", "Red-Green-Refactor Plan"]
       }
+    },
+    {
+      "id": "EVAL-TDD-COLOCATED-002",
+      "name": "Claim ticket and output commit message",
+      "description": "Playing a Linear issue requires In Progress + Cursor assignment, no branch or commit, and a conventional subject that includes the ticket id.",
+      "target_skill": "agent-tdd",
+      "prompt": "Implement WAY-123 with TDD on main. Leave the diff uncommitted and give me the commit message.",
+      "context": {
+        "active_phase": "tdd"
+      },
+      "assertions": {
+        "required_triggers": ["tdd", "implementation"],
+        "required_patterns": ["In Progress", "Cursor", "WAY-123", "feat("],
+        "forbidden_patterns": ["git checkout -b", "git commit", "ASCII art"],
+        "required_output_sections": ["Behavior Catalog Impact", "Proposed commit"]
+      }
     }
   ]
 }
