@@ -13,6 +13,7 @@
 - *(skills)* Treat filtered tests as a pre-commit failure
 - *(mcp)* Restore the previous project profile after a session (MZW-28)
 - *(align)* Compose kit default MCP when asked (MZW-23)
+- *(subagents)* Add support for host subagent stubs and update related documentation
 
 ### 🐛 Bug Fixes
 
