@@ -26,6 +26,10 @@
 - Clarify Windsurf's status as rules-only and update related documentation
 - Update SKILL.md to clarify trunk-based pipeline requirements and GitHub PR behavior
 
+### 🧪 Testing
+
+- *(edd)* Route failed Actions jobs to debug SOP
+
 ## 2026-09-03
 
 ### 🚀 Features
