@@ -50,7 +50,7 @@ function toolNames(tools: ToolContract[]): Set<string> {
 
 function handoverFromPrompt(original: string): string | undefined {
   const match = original.match(/handover\/[A-Za-z0-9._/-]+/);
-  return match?.[0];
+  return match?.[0]?.replace(/[.,;:]+$/, '');
 }
 
 function scriptedSpecialistCall(input: {
