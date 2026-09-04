@@ -93,7 +93,8 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
           synthesize: { flags: [{ name: '--dataset' }, { name: '--count' }, { name: '--out' }] },
           'from-trace': { flags: [{ name: '--trace' }, { name: '--out' }] }
         }
-      }
+      },
+      'miss-rate': {}
     }
   },
   'export-rules': { flags: [{ name: '--check' }] },

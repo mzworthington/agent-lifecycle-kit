@@ -4,11 +4,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
+import { checkOntology } from './validate.js';
 import {
   generateOntologyIndex,
   getEntity,
   getRelated,
   isGitIgnored,
+  resolveOntologyIndex,
   serializeOntologyIndex,
   writeSiteOntologyIndex
 } from './generate.js';
@@ -202,6 +204,34 @@ describe('writeSiteOntologyIndex', () => {
       assert.match(sitePath, /web\/public\/assets\/ontology-index\.json$/);
       assert.match(serializeOntologyIndex(site), /\n$/);
     });
+  });
+});
+
+describe('stale ontology cache', () => {
+  it('fails checkOntology and skips a cache that is missing Subagent', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-stale-cache-'));
+    try {
+      seedKit(root);
+      const live = generateOntologyIndex(root);
+      assert.ok(getEntity(live, 'subagent:agent-demo'));
+      const stale = {
+        version: live.version,
+        generatedFrom: 'stale',
+        entities: live.entities.filter((e) => e.type !== 'Subagent'),
+        edges: live.edges.filter((e) => !e.from.startsWith('subagent:') && !e.to.startsWith('subagent:'))
+      };
+      const cachePath = path.join(root, 'sync', 'ontology-index.json');
+      fs.mkdirSync(path.dirname(cachePath), { recursive: true });
+      fs.writeFileSync(cachePath, serializeOntologyIndex(stale), 'utf8');
+      const checked = checkOntology(root);
+      assert.equal(checked.ok, false);
+      assert.match(checked.messages.join('\n'), /missing type Subagent/);
+      assert.match(checked.messages.join('\n'), /get_entity\(subagent:agent-tdd\)/);
+      const resolved = resolveOntologyIndex(root);
+      assert.ok(getEntity(resolved, 'subagent:agent-demo'));
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
   });
 });
 

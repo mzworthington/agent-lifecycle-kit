@@ -1,4 +1,6 @@
-import { generateOntologyIndex, writeSiteOntologyIndex } from './generate.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { generateOntologyIndex, staleOntologyCacheTypes, writeSiteOntologyIndex } from './generate.js';
 import { loadOntologySchema } from './schema.js';
 import type { OntologyIndex } from './types.js';
 
@@ -79,11 +81,28 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
     messages.push(`Subagent ${m.subagent} adapts unknown skill:${m.skill}`);
   }
 
+  const cachePath = path.join(kitRoot, 'sync', 'ontology-index.json');
+  if (fs.existsSync(cachePath)) {
+    try {
+      const cached = JSON.parse(fs.readFileSync(cachePath, 'utf8')) as OntologyIndex;
+      for (const t of staleOntologyCacheTypes(kitRoot, cached)) {
+        messages.push(
+          `Stale ontology cache is missing type ${t}. Delete sync/ontology-index.json and restart kit-knowledge so get_entity(subagent:agent-tdd) resolves.`
+        );
+      }
+    } catch {
+      messages.push(
+        'Stale ontology cache at sync/ontology-index.json is unreadable. Delete it and restart kit-knowledge.'
+      );
+    }
+  }
+
   const ok =
     missingEndpoints.length === 0 &&
     unknownSkillMcp.length === 0 &&
     unknownDependsOn.length === 0 &&
-    unknownSubagentSkill.length === 0;
+    unknownSubagentSkill.length === 0 &&
+    !messages.some((m) => m.includes('Stale ontology cache'));
 
   return {
     ok,

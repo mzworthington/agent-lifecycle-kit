@@ -452,7 +452,27 @@ export function siteOntologyIndexPath(kitRoot: string): string {
 /**
  * Resolve the ontology index by generating from the live kit tree.
  * Optional short-lived cache under sync/ invalidated when schema or source dirs change.
+ * A cache that predates a schema type (for example Subagent) is ignored.
  */
+export function staleOntologyCacheTypes(kitRoot: string, index: OntologyIndex): string[] {
+  const schema = loadOntologySchema(kitRoot);
+  const present = new Set(index.entities.map((e) => e.type));
+  const missing: string[] = [];
+  if (schema.types.includes('Subagent')) {
+    const agentsDir = path.join(kitRoot, 'agents');
+    let hasStub = false;
+    try {
+      hasStub =
+        fs.existsSync(agentsDir) &&
+        fs.readdirSync(agentsDir).some((f) => f.endsWith('.md') && f !== 'README.md');
+    } catch {
+      hasStub = false;
+    }
+    if (hasStub && !present.has('Subagent')) missing.push('Subagent');
+  }
+  return missing;
+}
+
 export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolean }): OntologyIndex {
   const useCache = opts?.useCache !== false;
   const cachePath = ontologyCachePath(kitRoot);
@@ -461,7 +481,10 @@ export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolea
       const cacheStat = fs.statSync(cachePath);
       if (cacheStat.mtimeMs >= latestOntologySourceMtime(kitRoot)) {
         const raw = safeRead(cachePath);
-        if (raw) return JSON.parse(raw) as OntologyIndex;
+        if (raw) {
+          const cached = JSON.parse(raw) as OntologyIndex;
+          if (staleOntologyCacheTypes(kitRoot, cached).length === 0) return cached;
+        }
       }
     } catch {
       // fall through to regenerate

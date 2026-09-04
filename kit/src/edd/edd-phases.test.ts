@@ -228,6 +228,31 @@ metrics:
     assert.match(fs.readFileSync(fromOut, 'utf8'), /prod-derived/);
   });
 
+  it('prints specialist vs skill-picker miss rates', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'edd-miss-rate-'));
+    fs.mkdirSync(path.join(dir, 'evals', 'edd'), { recursive: true });
+    fs.mkdirSync(path.join(dir, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, 'evals', 'edd', 'subagent_routing.jsonl'),
+      '{"id":"a","prompt":"x","tags":["seed"],"expect":{"no_tool":true}}\n'
+    );
+    fs.writeFileSync(
+      path.join(dir, 'evals', 'suites', 'routing-matrix.json'),
+      JSON.stringify({ test_cases: [{ id: 'EVAL-1' }] })
+    );
+    const logs: string[] = [];
+    const orig = console.log;
+    console.log = (msg?: unknown) => {
+      logs.push(String(msg ?? ''));
+    };
+    try {
+      assert.equal(await handleEddEvalCli({ repoDir: dir, args: ['miss-rate'] }), 0);
+    } finally {
+      console.log = orig;
+    }
+    assert.match(logs.join('\n'), /verdict: not-enough/);
+  });
+
   it('redacts credential-like strings in report text', async () => {
     const { redactSecrets } = await import('./redact.js');
     assert.match(redactSecrets('key sk-abc123456789 token'), /REDACTED_API_KEY/);

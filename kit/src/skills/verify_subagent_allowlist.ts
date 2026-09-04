@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import { compareMissRates, FREEZE_GENERATE_MAX } from '../edd/miss_rate.js';
 import { KIT_SKILL_DIR_PREFIX } from './verify_skills_layout.js';
 
 export const SUBAGENT_ALLOWLIST_REL = 'skills/subagents.yaml';
@@ -340,6 +341,25 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     }
     if (!docs.includes('launch-prompt') || !/eval adapter/i.test(docs)) {
       errors.push(`${SUBAGENT_DOCS_REL} must name wk agents launch-prompt and the eval adapter`);
+    }
+    if (!/wk eval miss-rate/i.test(docs)) {
+      errors.push(`${SUBAGENT_DOCS_REL} must name wk eval miss-rate`);
+    }
+  }
+
+  const miss = compareMissRates(repoDir);
+  if (miss.verdict === 'freeze') {
+    const generateCount = listGenerateSubagents(catalog).length;
+    if (generateCount > FREEZE_GENERATE_MAX) {
+      errors.push(
+        `miss-rate freeze: generate list has ${generateCount} specialists (cap ${FREEZE_GENERATE_MAX}); do not add a role`
+      );
+    }
+    if (miss.verdict === 'freeze' && /before adding roles/i.test(catalog.expandKill)) {
+      errors.push('miss-rate freeze: expandKill still tells maintainers to add roles');
+    }
+    if (miss.verdict === 'freeze' && !/^Freeze /i.test(catalog.expandKill.trim())) {
+      errors.push('miss-rate freeze: expandKill must start with Freeze');
     }
   }
 

@@ -18,6 +18,7 @@ import {
 import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
 import type { EvalCase } from './schema.js';
 import { flagValue, hasFlag } from '../cli/flags.js';
+import { compareMissRates, formatMissRateCompare } from './miss_rate.js';
 import { resolveCliAgentDriver } from './cli-agent.js';
 import { judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
 import { resolveJudgeApiKey, resolveJudgeCompletion } from './judge-provider.js';
@@ -42,6 +43,7 @@ Subcommands:
   ci       --suite <path> [--threshold-routing <pct>] [--model <name>] [--out <dir>]
   shadow   --infile <jsonl> [--sample <rate>] [--out <jsonl>] [--seed <n>]
   dataset  lint|dedupe|synthesize|from-trace [options]
+  miss-rate  Compare specialist-launch vs skill-picker prod-derived miss rates
 
 Agent / judge options (run / watch / report / ci):
   --style <name>       local | http | cli  (default: infer; CI uses local)
@@ -56,6 +58,7 @@ Dataset options:
   dedupe       --dataset <jsonl> [--out <jsonl>]
   synthesize   --dataset <jsonl> --count <n> [--out <jsonl>]
   from-trace   --trace <json> [--out <jsonl>]
+  miss-rate    Compare evals/edd/subagent_routing.jsonl to evals/suites/routing-matrix.json
 
 Shadow options:
   --infile     NDJSON of prod turns or kit OTel spans (see evals/edd/examples/)
@@ -483,6 +486,11 @@ export async function handleEddEvalCli(options: EddCliOptions): Promise<number |
       return cmdDataset(repoDir, rest);
     case 'shadow':
       return cmdShadow(repoDir, rest);
+    case 'miss-rate': {
+      const cmp = compareMissRates(repoDir);
+      console.log(formatMissRateCompare(cmp));
+      return 0;
+    }
     default:
       if (sub.endsWith('.yaml') || sub.endsWith('.yml') || sub === 'all') {
         return null;

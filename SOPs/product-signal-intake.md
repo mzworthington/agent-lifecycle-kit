@@ -38,9 +38,11 @@ flowchart TD
 ## Session A — `wk mcp posthog`
 
 1. Install one profile: `wk mcp posthog --install` (or `--project`). Do not stack PostHog onto `default`.
-2. Query the set below. Write a findings table into `~/.agents/handover/<project>/` using [templates/posthog-findings.md](../templates/posthog-findings.md).
+2. Query the set below. Write a findings table into `~/.agents/handover/<project>/` using [templates/posthog-findings.md](../templates/posthog-findings.md). If `handover_posthog.md` already records SDK wiring, add a **PostHog findings** heading rather than wiping that handover.
 3. Do **not** create Linear issues in this session. Do not call Linear MCP. Stop at the handover.
-4. Restore `wk mcp default --install` (or `--project`) when Session A ends, even if filing happens later.
+4. Restore `wk mcp default --install` (or `--project`) when Session A ends, even if filing happens later. `--install` replaces the default profile (Linear is gone until restore). The same chat can continue Session A after OAuth; do not stack PostHog onto `default`.
+5. If the nominated consumer has no dedicated PostHog project, query the org project that actually ingested events. Name **hosts** from web stats, not tokens. Classify mixed-host ingest as its own row when traffic is not one site.
+6. `projects-get` and the MCP active-environment blurb may include a project API key. Never copy it into the handover, memory, or chat tables.
 
 ## Human gate
 

@@ -96,7 +96,7 @@ const TOOLS = [
   {
     name: "get_entity",
     description:
-      "Return one ontology entity by id (e.g. skill:agent-tdd, sop:conventional-commits, philosophy:8, doc:edd).",
+      "Return one ontology entity by id (e.g. skill:agent-tdd, subagent:agent-tdd, sop:conventional-commits, philosophy:8, doc:edd).",
     inputSchema: {
       type: "object",
       properties: {

@@ -23,6 +23,7 @@ export {
   ontologyCachePath,
   siteOntologyIndexPath,
   serializeOntologyIndex,
+  staleOntologyCacheTypes,
   getEntity,
   getRelated
 } from './generate.js';

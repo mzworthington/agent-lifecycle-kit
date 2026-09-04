@@ -136,7 +136,7 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 
 Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, terminal-fallback, host-subagent launch, and skills-only routing via `EDD_CI_SUITES`.
 
-Subagent routing misses from production go through the same closed loop as other suites (`wk eval dataset from-trace`). Do not skip adding a golden when the orchestrator stays in the parent instead of launching the specialist (or the reverse, when `WK_SUBAGENTS=0`). `launch_specialist` is an eval adapter for the host Task (`wk agents launch-prompt`); live Cursor/Claude sessions do not call that tool.
+Subagent routing misses from production go through the same closed loop as other suites (`wk eval dataset from-trace`, then `wk eval miss-rate`). Do not skip adding a golden when the orchestrator stays in the parent instead of launching the specialist (or the reverse, when `WK_SUBAGENTS=0`). `launch_specialist` is an eval adapter for the host Task (`wk agents launch-prompt`); live Cursor/Claude sessions do not call that tool.
 
 ## Dataset hygiene
 
@@ -162,6 +162,7 @@ Promote production misses into the suite with the same `kit.*` fields as eval ca
 ```bash
 wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
 wk eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+wk eval miss-rate
 ```
 
 Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [examples/prod-turns.jsonl](./examples/prod-turns.jsonl), [examples/prod-trace.json](./examples/prod-trace.json). Procedure: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).

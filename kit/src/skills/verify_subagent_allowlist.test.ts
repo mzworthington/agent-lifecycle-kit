@@ -58,7 +58,7 @@ roles:
 `;
 
 const docsOk =
-  '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0. wk agents launch-prompt. eval adapter.\n';
+  '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: WK_SUBAGENTS=0. wk agents launch-prompt. eval adapter.\nwk eval miss-rate\n';
 
 describe('verifySubagentAllowlist', () => {
   it('accepts a complete tree that keeps profiles as skills and TDD as one subagent', () => {
@@ -174,7 +174,55 @@ describe('verifySubagentAllowlist', () => {
     assert.match(docs, /skills-only/i);
     assert.match(docs, /launch-prompt/);
     assert.match(docs, /eval adapter/i);
+    assert.match(docs, /wk eval miss-rate/);
     assert.match(result.catalog?.expandKillIndicator ?? '', /from-trace/);
+  });
+
+  it('fails verify when miss-rate freeze is on and the generate list grew', () => {
+    const extraRole = validYaml.replace(
+      'agent-adapter:\n    runtime: skill\n',
+      `agent-adapter:
+    runtime: skill
+  agent-copy:
+    runtime: subagent
+    bucket: isolation
+    readonly: false
+  agent-docs:
+    runtime: subagent
+    bucket: isolation
+    readonly: false
+  agent-ui:
+    runtime: subagent
+    bucket: isolation
+    readonly: false
+  agent-prd:
+    runtime: subagent
+    bucket: isolation
+    readonly: false
+`
+    );
+    const root = writeTree({
+      'skills/subagents.yaml': extraRole,
+      'skills/agent-orchestrator/SKILL.md': 'x',
+      'skills/agent-debug/SKILL.md': 'x',
+      'skills/agent-review/SKILL.md': 'x',
+      'skills/agent-spec/SKILL.md': 'x',
+      'skills/agent-tdd/SKILL.md': 'x',
+      'skills/agent-adapter/SKILL.md': 'x',
+      'skills/agent-copy/SKILL.md': 'x',
+      'skills/agent-docs/SKILL.md': 'x',
+      'skills/agent-ui/SKILL.md': 'x',
+      'skills/agent-prd/SKILL.md': 'x',
+      'docs/subagents.md': docsOk,
+      'evals/edd/subagent_routing.jsonl':
+        '{"id":"a","prompt":"x","tags":["seed"],"expect":{"no_tool":true}}\n{"id":"m","prompt":"y","tags":["prod-derived"],"expect":{"no_tool":true}}\n',
+      'evals/suites/routing-matrix.json': JSON.stringify({
+        test_cases: [{ id: 'EVAL-1' }, { id: 'EVAL-2' }, { id: 'EVAL-3', tags: ['prod-derived'] }]
+      })
+    });
+    const result = verifySubagentAllowlist(root);
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /miss-rate freeze/);
   });
 
   it('rejects a stale generate list that does not match roles', () => {

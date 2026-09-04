@@ -23,13 +23,13 @@ Commands:
   mcp restore          Recompose the previous project profile (or kit default if none)
   audit                Run security & supply chain audit across skills and scripts
   validate             Validate evals structure against JSON schemas
-  eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
+  eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset|miss-rate)
   export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
   metrics              Display telemetry analytics summary for subagent phase handovers
   verify               Verify skills layout, role SKILL.md line budget, subagent allowlist, and thin agent stubs
   agents generate      Write thin Cursor/Claude agent stubs under agents/ from skills/subagents.yaml
   agents install       Copy those stubs into ~/.cursor/agents and ~/.claude/agents (user scope; not the app repo)
-  agents status        Print launch vs skills-only (WK_SUBAGENTS) and the expand-kill indicator
+  agents status        Print launch vs skills-only, miss-rate freeze, and expand-kill
   agents launch-prompt Print the parent Task prompt for an allowlisted specialist
   subagents status     Alias of agents status
   sync                 Sync official external skills (Cloudflare, Vercel); also refreshes user kit subagent stubs
@@ -70,7 +70,7 @@ Examples:
   ${CLI_BIN} eval
   ${CLI_BIN} eval run --suite evals/edd/architecture_routing.yaml --model scripted
   ${CLI_BIN} eval ci --threshold-routing 95 --out out/reports
-  ${CLI_BIN} eval report --format md --out out/reports
+  ${CLI_BIN} eval miss-rate
   ${CLI_BIN} ontology generate
   ${CLI_BIN} agents generate
   ${CLI_BIN} agents install

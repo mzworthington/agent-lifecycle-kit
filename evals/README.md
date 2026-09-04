@@ -2,7 +2,7 @@
 
 Kit evaluates two layers: **skill routing** (which specialist activates) and **agent tool use** (EDD alpha: how an agent calls tools in the harness). Use EDD when you change prompts, MCP schemas, or routing.
 
-1. **Eval-Driven Development (`evals/edd/`):** YAML + JSONL harness for tool routing, schema match, LLM-as-a-judge, CI gates (`kit eval run|watch|report|ci`). Guide: [docs/edd.md](../docs/edd.md) · Suites: [edd/README.md](./edd/README.md).
+1. **Eval-Driven Development (`evals/edd/`):** YAML + JSONL harness for tool routing, schema match, LLM-as-a-judge, CI gates (`kit eval run|watch|report|ci|shadow|dataset|miss-rate`). Guide: [docs/edd.md](../docs/edd.md) · Suites: [edd/README.md](./edd/README.md).
 2. **Co-located skill evals (`skills/<skill>/evals/eval.json`):** Single-skill output assertions next to `SKILL.md`.
 3. **Centralized routing suites (`evals/suites/*.json`):** Cross-skill routing matrix, lifecycle roles, stack profiles (`kit eval`).
 

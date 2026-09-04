@@ -23,7 +23,7 @@ wk agents status
 wk agents launch-prompt --skill agent-tdd --project my-app --linear MZW-59 --handover ~/.agents/handover/my-app/handover_spec.md --next agent-xfn
 ```
 
-`launch_specialist` in EDD is an **eval adapter** for that host Task. Cursor and Claude do not expose that tool. On the map, stubs are `subagent:*` nodes with an `adapts` edge to their skill ([Waykit map](./map.md)). Restart kit-knowledge after ontology type changes so `get_entity(subagent:agent-tdd)` resolves.
+`launch_specialist` in EDD is an **eval adapter** for that host Task. Cursor and Claude do not expose that tool. On the map, stubs are `subagent:*` nodes with an `adapts` edge to their skill ([Waykit map](./map.md)). Look them up with kit-knowledge `get_entity` using `subagent:agent-tdd` (same prefix style as `skill:agent-tdd`). `wk ontology check` fails if `sync/ontology-index.json` is missing Subagent after a schema bump — delete that cache and restart kit-knowledge.
 
 ## Generate list
 
@@ -53,7 +53,7 @@ Eval coverage: `evals/edd/subagent_routing.yaml` (launch) and `evals/edd/subagen
 
 ## Adding a role
 
-Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. Measure that with `wk eval dataset from-trace` into `evals/edd/subagent_routing.jsonl` versus skill-picker misses in `evals/suites/routing-matrix.json` (`expandKillIndicator` in the YAML). If specialists re-explore the repo, fix the handover before generating more stubs.
+Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. Measure that with `wk eval miss-rate` after promoting misses via `wk eval dataset from-trace` into `evals/edd/subagent_routing.jsonl` versus skill-picker misses in `evals/suites/routing-matrix.json`. Empty traces print `not-enough`, not a fake 0% win. If the verdict is freeze, `wk agents status` says freeze and `wk verify` fails if you add another specialist. Fix the handover before generating more stubs.
 
 Out of this page’s scope: Copilot/Antigravity agent directories. Stubs themselves are generated into [agents/](../agents/). `wk agents install` writes only `~/.cursor/agents` and `~/.claude/agents`.
 

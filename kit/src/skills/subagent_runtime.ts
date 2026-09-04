@@ -2,6 +2,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { resolveModel } from '../models/catalog.js';
 import { userSubagentInstallDirs } from './install_subagent_stubs.js';
+import { compareMissRates, freezeExpandKillLine, type MissRateCompare } from '../edd/miss_rate.js';
 import {
   listGenerateSubagents,
   loadSubagentAllowlist,
@@ -16,6 +17,7 @@ export interface SubagentStatus {
   installDirs: string[];
   expandKill: string;
   expandKillIndicator: string;
+  missRate: MissRateCompare;
 }
 
 export interface LaunchPromptInput {
@@ -38,14 +40,16 @@ export function subagentStatus(opts: {
   const catalog = loadSubagentAllowlist(opts.repoDir);
   const env = opts.env ?? process.env;
   const raw = env.WK_SUBAGENTS?.trim() || null;
+  const missRate = compareMissRates(opts.repoDir);
   return {
     catalogSkillsOnly: catalog.skillsOnly,
     skillsOnly: resolveSkillsOnlyMode({ catalogSkillsOnly: catalog.skillsOnly, env }),
     envRaw: raw,
     generate: listGenerateSubagents(catalog).sort(),
     installDirs: userSubagentInstallDirs(opts.homedir ?? os.homedir()),
-    expandKill: catalog.expandKill.trim(),
-    expandKillIndicator: catalog.expandKillIndicator.trim()
+    expandKill: freezeExpandKillLine(missRate, catalog.expandKill.trim()),
+    expandKillIndicator: catalog.expandKillIndicator.trim(),
+    missRate
   };
 }
 
@@ -60,6 +64,9 @@ export function formatSubagentStatus(status: SubagentStatus): string {
     `install: ${status.installDirs.join(', ')}`,
     `expand-kill: ${status.expandKill}`,
     `expand-kill-indicator: ${status.expandKillIndicator}`,
+    `miss-rate: ${status.missRate.verdict}`,
+    `miss-rate-specialist: ${status.missRate.specialist.enough ? `${(status.missRate.specialist.rate! * 100).toFixed(1)}%` : 'not-enough'}`,
+    `miss-rate-skill-picker: ${status.missRate.picker.enough ? `${(status.missRate.picker.rate! * 100).toFixed(1)}%` : 'not-enough'}`,
     'prompt: wk agents launch-prompt --skill <id> --project <name>'
   ].join('\n');
 }

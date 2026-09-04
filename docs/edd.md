@@ -9,7 +9,7 @@ What you do get today:
 - YAML suites + JSONL cases, mocked tools, dual-layer asserts
 - A **scripted** (`--style local`) merge gate so PRs fail on keyword routing drift
 - Optional **http** (OpenAI-compatible `/chat/completions`) and **cli** (`cursor-agent`, `claude`, `agy`) runs
-- Dataset helpers and a production → JSONL / shadow path (`wk eval dataset from-trace`, `wk eval shadow`)
+- Dataset helpers and a production → JSONL / shadow path (`wk eval dataset from-trace`, `wk eval shadow`, `wk eval miss-rate`)
 
 Still to build before this is a framework: live judges per provider, skill-trigger evals that actually run a model, stronger structured output from CLI hosts, and a tighter closed loop from prod traces into suites.
 
@@ -38,7 +38,7 @@ flowchart LR
 | **Deterministic mocks** | Measure routing and extraction, not third-party latency. |
 | **Dual-layer asserts** | Schema/shape plus argument meaning, task completion, criteria judge, optional LLM-as-a-judge. |
 | **CI quality gates** | `wk eval ci --threshold-routing 95` blocks routing drift; safety suite runs in `wk check`. |
-| **Closed-loop telemetry** | Production misses become `.jsonl` cases (`wk eval dataset from-trace`); `wk eval shadow` samples live turns into the suite. |
+| **Closed-loop telemetry** | Production misses become `.jsonl` cases (`wk eval dataset from-trace`); `wk eval shadow` samples live turns into the suite; `wk eval miss-rate` compares specialist-launch vs skill-picker prod-derived rates. |
 | **Dataset hygiene** | `wk eval dataset lint\|dedupe\|synthesize\|from-trace` keeps suites valid and scalable. |
 
 Bare `wk eval` still validates which Kit skill activates. `wk eval run|watch|report|ci` validates how an agent calls tools. Use EDD whenever you change prompts, tool schemas, or routing.
@@ -54,6 +54,7 @@ wk eval ci --threshold-routing 95 --out out/reports
 wk eval report --format md --out out/reports
 wk eval watch --suite evals/edd/architecture_routing.yaml --target evals/edd
 wk eval dataset lint --dataset evals/edd/architecture_routing.jsonl
+wk eval miss-rate
 ```
 
 `kit` and `agent-kit` are aliases of `wk`.

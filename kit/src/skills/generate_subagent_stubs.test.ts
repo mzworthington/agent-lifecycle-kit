@@ -67,7 +67,7 @@ function writeTree(): string {
   fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
   fs.writeFileSync(
     path.join(root, 'docs/subagents.md'),
-    'isolation audit sequential parent skill picker. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS. launch-prompt eval adapter.\n'
+    'isolation audit sequential parent skill picker. Gear 1. agent-adapter. Skills-only WK_SUBAGENTS. launch-prompt eval adapter. wk eval miss-rate.\n'
   );
   return root;
 }
