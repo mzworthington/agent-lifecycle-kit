@@ -113,6 +113,8 @@ kit debug-ci
 kit debug-ci --run <run-id>
 ```
 
+Prove against the **named verify workflow** (`ci.yml` / “CI & Deployment”), not a green sibling (CodeQL, Dependabot, Lighthouse). Filter with `gh run list --workflow ci.yml`. Local tests plus a green sibling are not the CI prove gate. Do not mark a Linear issue done until that workflow is green (or BLOCKED with a documented gap).
+
 When Actions cannot be dispatched (403):
 
 1. Document the permission gap.

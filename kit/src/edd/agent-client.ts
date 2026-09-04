@@ -288,6 +288,21 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       };
     }
     if (
+      prompt.includes('hypothesis-driven debug') ||
+      prompt.includes('hypothesis driven debug') ||
+      prompt.includes('failed job') ||
+      prompt.includes('github actions')
+    ) {
+      return {
+        content: 'Opening the hypothesis-driven-debug SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'hypothesis-driven-debug' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
       prompt.includes('hypothesis-driven development') ||
       prompt.includes('hypothesis driven development')
     ) {

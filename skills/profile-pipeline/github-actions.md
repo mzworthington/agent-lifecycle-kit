@@ -27,6 +27,8 @@ Raise per job: `id-token: write` for cloud OIDC, `pull-requests: write` for plan
 
 Pin third-party actions by **git SHA**, not a moving tag.
 
+Registry installs of the package manager (for example `pnpm/setup` fetching `@pnpm/linux-x64` from npm) should retry once on 5xx/timeout. A 504 on that download is not a product failure. Do not treat a green sibling workflow (CodeQL) as the verify graph.
+
 ## Skip re-entry
 
 - Release detect: `docs` / `chore` / `ci` / `test` alone → no tag.

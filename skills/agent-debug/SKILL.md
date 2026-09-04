@@ -137,7 +137,7 @@ Kill UI theories when artifacts contradict them. Kill product deep-dives when a 
 |---------------|------------|
 | UI | After screenshot/recording of the **same** path; unit tests green |
 | Live catalog | Code fix **and** explicit republish/compose note (code ≠ published) |
-| CI job | Local or Actions green for the failing step; or BLOCKED with permission/tool gap |
+| CI job | Local **and** the named verify workflow green (`ci.yml`, not a sibling CodeQL/Lighthouse run); or BLOCKED with permission/tool gap |
 | Fetch | Repro path succeeds; errors are actionable if partial failure remains |
 | Agent / tool / prompt | Failing **EDD** case exists (or was already covered); `kit eval run` (or `ci`) green after the fix |
 
@@ -172,6 +172,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Fixing from screenshots without labeling before/after or reproducing
 - Trusting the user’s entity name when a peer system is the empty one
 - Declaring done from unit tests while live/UI still broken
+- Treating a green CodeQL or other sibling workflow as the CI prove gate
 - Conflating resilience patch, UX redesign, and CI redirect fixes in one PR
 - Abandoning a cheap config-parity hypothesis for long product forensics
 - Shipping workflow/release policy changes the user did not ask for
