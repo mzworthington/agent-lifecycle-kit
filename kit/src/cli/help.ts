@@ -26,7 +26,7 @@ Commands:
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
   export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
   metrics              Display telemetry analytics summary for subagent phase handovers
-  verify               Verify skills layout and role SKILL.md line budget
+  verify               Verify skills layout, role SKILL.md line budget, and subagent allowlist
   sync                 Sync official external skills (Cloudflare, Vercel)
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board

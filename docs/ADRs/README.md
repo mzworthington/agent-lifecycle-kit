@@ -11,5 +11,6 @@ Sparse [MADR](https://adr.github.io/madr/)-style records for choices that are **
 | [0005](./0005-live-derived-ontology-memory-allowlist.md) | Live-derived ontology index and typed memory allowlist | Accepted | 2026-09-01 |
 | [0006](./0006-vite-markdown-docs-site.md) | Vite app renders public docs from Markdown | Superseded by 0007 | 2026-09-01 |
 | [0007](./0007-astro-static-docs-site.md) | Astro emits the public docs site as static HTML | Accepted | 2026-09-02 |
+| [0008](./0008-subagent-allowlist.md) | Sparse subagent allowlist instead of one agent per skill | Accepted | 2026-09-04 |
 
 New ADRs: copy [templates/adr.md](../../templates/adr.md) to `docs/ADRs/NNNN-short-title.md`. Prefer not adding an ADR unless the gate in [agent-adr](../../skills/agent-adr/SKILL.md) applies.

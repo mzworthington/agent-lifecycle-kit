@@ -17,6 +17,8 @@ const navPages = DOCS_PAGES.map(({ path, title }) => ({ path, title }));
 describe('published markdown catalog', () => {
   it('registers operator docs, SOPs, and ADRs from the glob', () => {
     expect(DOC_PATHS.has('/docs/edd')).toBe(true);
+    expect(DOC_PATHS.has('/docs/lifecycle')).toBe(true);
+    expect(DOC_PATHS.has('/docs/subagents')).toBe(true);
     expect(DOC_PATHS.has('/docs/hosts')).toBe(true);
     expect(DOC_PATHS.has('/docs/kit')).toBe(true);
     expect(DOC_PATHS.has('/docs/doctor')).toBe(true);
@@ -25,6 +27,7 @@ describe('published markdown catalog', () => {
     expect(DOC_PATHS.has('/SOPs/context-budget')).toBe(true);
     expect(DOC_PATHS.has('/docs/ADRs/0006-vite-markdown-docs-site')).toBe(true);
     expect(DOC_PATHS.has('/docs/ADRs/0007-astro-static-docs-site')).toBe(true);
+    expect(DOC_PATHS.has('/docs/ADRs/0008-subagent-allowlist')).toBe(true);
     expect(findPublishedPage('/docs/home')).toBeUndefined();
     expect(findPublishedPage('/docs/edd')?.title).toMatch(/EDD|Eval/i);
     expect(findPublishedPage('/ontology')?.title).toBe('Author the Waykit map');
@@ -42,6 +45,8 @@ describe('site information architecture', () => {
     const map = SITE_NAV.find((item) => item.label === 'Map')!;
     expect(isDocsNavActive('/docs', guide)).toBe(true);
     expect(isDocsNavActive('/docs/edd', guide)).toBe(true);
+    expect(isDocsNavActive('/docs/lifecycle', guide)).toBe(true);
+    expect(isDocsNavActive('/docs/subagents', guide)).toBe(true);
     expect(isDocsNavActive('/docs/align', guide)).toBe(true);
     expect(isDocsNavActive('/docs/used-in', guide)).toBe(true);
     expect(isDocsNavActive('/docs/ADRs/0007-astro-static-docs-site', guide)).toBe(true);
