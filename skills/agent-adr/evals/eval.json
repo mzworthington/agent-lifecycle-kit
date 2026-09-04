@@ -13,10 +13,20 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["adr", "madr", "architecture decision"],
-        "required_patterns": ["Context and Problem Statement", "Decision Drivers", "Considered Options", "Decision Outcome"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["MADR Specification", "Consequences"]
+        "required_triggers": [
+          "adr",
+          "madr",
+          "architecture decision"
+        ],
+        "required_patterns": [
+          "agent-adr"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Consequences"
+        ]
       }
     }
   ]

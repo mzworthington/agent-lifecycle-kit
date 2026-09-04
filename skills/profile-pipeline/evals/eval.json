@@ -9,7 +9,14 @@
       "target_skill": "profile-pipeline",
       "prompt": "Design a GitHub Actions CI/CD pipeline with build once, prod deploy, and smoke tests.",
       "assertions": {
-        "required_triggers": ["ci/cd", "github actions", "pipeline"]
+        "required_triggers": [
+          "ci/cd",
+          "github actions",
+          "pipeline"
+        ],
+        "required_patterns": [
+          "profile-pipeline"
+        ]
       }
     }
   ]

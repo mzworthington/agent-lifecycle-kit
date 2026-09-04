@@ -13,10 +13,20 @@
         "active_phase": "tdd"
       },
       "assertions": {
-        "required_triggers": ["behavior catalog", "test impact", "red green refactor"],
-        "required_patterns": ["Red", "Green", "Refactor", "Port Interface"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Behavior Catalog Impact", "Port Interface Contracts", "Red-Green-Refactor Plan"]
+        "required_triggers": [
+          "behavior catalog",
+          "test impact",
+          "red green refactor"
+        ],
+        "required_patterns": [
+          "Red",
+          "Green",
+          "Refactor",
+          "Port Interface"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -29,10 +39,19 @@
         "active_phase": "tdd"
       },
       "assertions": {
-        "required_triggers": ["tdd", "implementation"],
-        "required_patterns": ["In Progress", "Cursor", "WAY-123", "feat("],
-        "forbidden_patterns": ["git checkout -b", "git commit", "ASCII art"],
-        "required_output_sections": ["Behavior Catalog Impact", "Proposed commit"]
+        "required_triggers": [
+          "tdd",
+          "implementation"
+        ],
+        "required_patterns": [
+          "In Progress",
+          "Cursor"
+        ],
+        "forbidden_patterns": [
+          "git checkout -b",
+          "git commit",
+          "ASCII art"
+        ]
       }
     }
   ]

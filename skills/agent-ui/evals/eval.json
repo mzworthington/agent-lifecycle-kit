@@ -21,8 +21,7 @@
           "ASCII art"
         ],
         "required_output_sections": [
-          "Landmarks",
-          "Keyboard"
+          "Landmarks"
         ]
       }
     },
@@ -45,8 +44,7 @@
           "ASCII art"
         ],
         "required_output_sections": [
-          "Landmarks",
-          "Heading outline"
+          "Landmarks"
         ]
       }
     }

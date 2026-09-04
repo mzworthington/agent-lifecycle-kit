@@ -12,6 +12,9 @@
         "required_triggers": [
           "copy",
           "tone of voice"
+        ],
+        "required_patterns": [
+          "agent-copy"
         ]
       }
     },
@@ -50,6 +53,9 @@
           "sounds AI",
           "marketing copy",
           "brand voice"
+        ],
+        "required_patterns": [
+          "agent-copy"
         ]
       }
     }

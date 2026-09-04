@@ -12,6 +12,9 @@
         "required_triggers": [
           "spring boot",
           "spring"
+        ],
+        "required_patterns": [
+          "framework-springboot"
         ]
       }
     }

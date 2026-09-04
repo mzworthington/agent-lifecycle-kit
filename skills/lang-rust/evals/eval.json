@@ -13,6 +13,9 @@
           "rust",
           "cargo",
           "borrow checker"
+        ],
+        "required_patterns": [
+          "lang-rust"
         ]
       }
     }

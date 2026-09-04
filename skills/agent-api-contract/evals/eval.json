@@ -12,6 +12,9 @@
         "required_triggers": [
           "openapi",
           "api contract"
+        ],
+        "required_patterns": [
+          "agent-api-contract"
         ]
       }
     }

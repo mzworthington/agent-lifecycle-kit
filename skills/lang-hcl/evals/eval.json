@@ -12,6 +12,9 @@
         "required_triggers": [
           "hcl",
           "terraform"
+        ],
+        "required_patterns": [
+          "lang-hcl"
         ]
       }
     }

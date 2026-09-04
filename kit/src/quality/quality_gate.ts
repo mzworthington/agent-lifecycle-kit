@@ -20,6 +20,7 @@ import {
   printContextBudget,
   type ContextBudgetResult
 } from './measure_context_budget.js';
+import { printJsonReport, type JsonFinding } from '../cli/json_report.js';
 import { checkOntology, type OntologyCheckResult } from '../ontology/index.js';
 
 /** Default EDD suites for this kit. Forks may delete vendor-specific suites; missing files are skipped. */
@@ -58,7 +59,11 @@ export interface KitCheckDeps {
   eddSuites?: (repoDir: string) => string[];
 }
 
-export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Promise<number> {
+export async function runKitCheck(
+  repoDir: string,
+  deps: KitCheckDeps = {},
+  opts: { json?: boolean } = {}
+): Promise<number> {
   const scan = deps.scan ?? scanSkillSecurity;
   const validate = deps.validate ?? validateEvals;
   const verifyLayout = deps.verifyLayout ?? verifySkillsLayout;
@@ -72,40 +77,71 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
   const printBudget = deps.printBudget ?? printContextBudget;
   const ontologyCheck = deps.ontologyCheck ?? checkOntology;
   const eddSuites = deps.eddSuites ?? resolveEddCiSuites;
+  const json = opts.json === true;
+  const findings: JsonFinding[] = [];
 
-  console.log('=== kit check ===');
-  console.log('');
+  const finish = (ok: boolean): number => {
+    if (json) printJsonReport({ ok, command: 'check', findings });
+    return ok ? 0 : 1;
+  };
 
-  if (!scan(repoDir).ok) return 1;
-  if (!validate(repoDir).ok) return 1;
+  if (!json) {
+    console.log('=== kit check ===');
+    console.log('');
+  }
+
+  const auditOk = scan(repoDir).ok;
+  findings.push({ id: 'audit', status: auditOk ? 'ok' : 'fail', path: repoDir });
+  if (!auditOk) return finish(false);
+
+  const validateOk = validate(repoDir).ok;
+  findings.push({ id: 'validate', status: validateOk ? 'ok' : 'fail', path: repoDir });
+  if (!validateOk) return finish(false);
 
   const layout = verifyLayout(repoDir);
-  printLayout(layout);
-  if (!layout.ok) return 1;
+  if (!json) printLayout(layout);
+  findings.push({
+    id: 'layout',
+    status: layout.ok ? 'ok' : 'fail',
+    path: repoDir,
+    detail: layout.invalid.length ? layout.invalid.join(',') : undefined
+  });
+  if (!layout.ok) return finish(false);
 
   const roleBudget = verifyRoleBudget(repoDir);
-  printRoleBudget(roleBudget);
-  if (!roleBudget.ok) return 1;
+  if (!json) printRoleBudget(roleBudget);
+  findings.push({
+    id: 'role-line-budget',
+    status: roleBudget.ok ? 'ok' : 'fail',
+    path: repoDir
+  });
+  if (!roleBudget.ok) return finish(false);
 
   const ontology = ontologyCheck(repoDir);
+  findings.push({ id: 'ontology', status: ontology.ok ? 'ok' : 'fail', path: repoDir });
   if (!ontology.ok) {
-    for (const msg of ontology.messages) console.error(msg);
-    console.error('Ontology check FAILED.');
-    return 1;
+    if (!json) {
+      for (const msg of ontology.messages) console.error(msg);
+      console.error('Ontology check FAILED.');
+    }
+    return finish(false);
   }
-  console.log('✅ Ontology check PASSED (derived index, no committed snapshot).');
+  if (!json) console.log('✅ Ontology check PASSED (derived index, no committed snapshot).');
 
   const rulesOk = exportRules(repoDir, true);
+  findings.push({ id: 'ide-rules', status: rulesOk ? 'ok' : 'fail', path: repoDir });
   if (!rulesOk) {
-    console.error('Multi-IDE rule check FAILED.');
-    return 1;
+    if (!json) console.error('Multi-IDE rule check FAILED.');
+    return finish(false);
   }
-  console.log('✅ Multi-IDE rule check PASSED.');
+  if (!json) console.log('✅ Multi-IDE rule check PASSED.');
 
-  if (!evals(repoDir)) return 1;
+  const evalsOk = evals(repoDir);
+  findings.push({ id: 'skill-trigger-evals', status: evalsOk ? 'ok' : 'fail', path: repoDir });
+  if (!evalsOk) return finish(false);
 
   const suites = eddSuites(repoDir);
-  if (suites.length === 0) {
+  if (suites.length === 0 && !json) {
     console.log('No EDD CI suites present on disk; skipping EDD gate.');
   }
   for (const suite of suites) {
@@ -125,14 +161,27 @@ export async function runKitCheck(repoDir: string, deps: KitCheckDeps = {}): Pro
         'out/reports'
       ]
     });
-    if (code !== 0) return code ?? 1;
+    const eddOk = code === 0;
+    findings.push({
+      id: `edd:${suite}`,
+      status: eddOk ? 'ok' : 'fail',
+      path: path.join(repoDir, suite)
+    });
+    if (!eddOk) return finish(false);
   }
 
   const budgetResult = budget(repoDir);
-  printBudget(budgetResult);
-  if (!budgetResult.ok) return 1;
+  if (!json) printBudget(budgetResult);
+  findings.push({
+    id: 'context-budget',
+    status: budgetResult.ok ? 'ok' : 'fail',
+    path: repoDir
+  });
+  if (!budgetResult.ok) return finish(false);
 
-  console.log('');
-  console.log('✅ kit check PASSED.');
-  return 0;
+  if (!json) {
+    console.log('');
+    console.log('✅ kit check PASSED.');
+  }
+  return finish(true);
 }

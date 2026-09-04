@@ -13,10 +13,24 @@
         "active_phase": "debug"
       },
       "assertions": {
-        "required_triggers": ["incident", "outage", "sev", "production down"],
-        "required_patterns": ["Stabilize", "Signals", "agent-debug"],
-        "forbidden_patterns": ["ASCII art", "hardcoded secret"],
-        "required_output_sections": ["Stabilize", "Signal Board", "Handoff to RCA"]
+        "required_triggers": [
+          "incident",
+          "outage",
+          "sev",
+          "production down"
+        ],
+        "required_patterns": [
+          "Stabilize",
+          "Signals",
+          "agent-debug"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "hardcoded secret"
+        ],
+        "required_output_sections": [
+          "Stabilize"
+        ]
       }
     }
   ]

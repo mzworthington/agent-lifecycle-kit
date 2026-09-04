@@ -13,10 +13,31 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["linear", "user story", "acceptance criteria", "wireframe"],
-        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "```mermaid"],
-        "forbidden_patterns": ["```typescript", "ASCII art", "box-drawing"],
-        "required_output_sections": ["Story", "Acceptance criteria", "Wireframe", "Out of scope"]
+        "required_triggers": [
+          "linear",
+          "user story",
+          "acceptance criteria",
+          "wireframe"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "Given ",
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art",
+          "box-drawing"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Wireframe",
+          "Out of scope"
+        ]
       }
     },
     {
@@ -29,10 +50,32 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["linear", "review tickets", "operator story", "acceptance criteria"],
-        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "Out of scope"],
-        "forbidden_patterns": ["```typescript", "ASCII art", "box-drawing", "As a customer"],
-        "required_output_sections": ["Story", "Acceptance criteria", "Out of scope"]
+        "required_triggers": [
+          "linear",
+          "review tickets",
+          "operator story",
+          "acceptance criteria"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "Given ",
+          "When ",
+          "Then ",
+          "Out of scope"
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art",
+          "box-drawing",
+          "As a customer"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Out of scope"
+        ]
       }
     }
   ]

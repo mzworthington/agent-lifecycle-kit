@@ -3,6 +3,7 @@ import path from 'path';
 import os from 'os';
 import { backupExistingFile } from '../shared/backup_file.js';
 import { resolveRepoDir } from '../shared/paths.js';
+import { recordComposedProfile } from './mcp_profile_stamp.js';
 import { installMcpOnHosts, parseMcpHosts, type McpHostId } from './mcp_hosts.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
@@ -146,6 +147,7 @@ export function composeMCP(
     for (const targetPath of written) {
       console.log(`Installed profile '${profileName}' to ${targetPath}`);
     }
+    recordComposedProfile(projectDir, profileName);
     wrote = true;
   }
   if (!wrote) {

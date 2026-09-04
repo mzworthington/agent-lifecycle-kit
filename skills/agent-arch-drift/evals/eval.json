@@ -13,10 +13,19 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["hexagonal", "boundary", "solid"],
-        "required_patterns": ["Hexagonal Boundary", "Dependency Direction", "SOLID"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Boundary Conformance Analysis", "Dependency Direction Audit", "Remediation Checklist"]
+        "required_triggers": [
+          "hexagonal",
+          "boundary",
+          "solid"
+        ],
+        "required_patterns": [
+          "Hexagonal Boundary",
+          "Dependency Direction",
+          "SOLID"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     }
   ]

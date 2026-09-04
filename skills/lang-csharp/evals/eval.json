@@ -12,6 +12,9 @@
         "required_triggers": [
           "c#",
           "csharp"
+        ],
+        "required_patterns": [
+          "lang-csharp"
         ]
       }
     }

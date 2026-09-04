@@ -93,6 +93,56 @@ describe('runEvals', () => {
     assert.equal(runEvals(root), false);
   });
 
+  it('fails when required_patterns are missing from the skill body', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    writeSkill(root, 'agent-tdd', ['tdd']);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'patterns.json'),
+      JSON.stringify({
+        suite: 'patterns',
+        test_cases: [
+          {
+            id: 'EVAL-TDD-PAT',
+            name: 'missing body contract',
+            target_skill: 'agent-tdd',
+            prompt: 'tdd',
+            assertions: { required_patterns: ['Red-Green-Refactor Plan'] }
+          }
+        ]
+      }),
+      'utf8'
+    );
+    assert.equal(runEvals(root), false);
+  });
+
+  it('passes when required_patterns and required_output_sections are in the skill body', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
+    writeSkill(root, 'agent-tdd', ['tdd']);
+    fs.appendFileSync(path.join(root, 'skills', 'agent-tdd', 'SKILL.md'), '\nRed-Green-Refactor Plan\nPort Interface\n');
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'patterns-ok.json'),
+      JSON.stringify({
+        suite: 'patterns-ok',
+        test_cases: [
+          {
+            id: 'EVAL-TDD-OK',
+            name: 'body contract',
+            target_skill: 'agent-tdd',
+            prompt: 'tdd',
+            assertions: {
+              required_patterns: ['Port Interface'],
+              required_output_sections: ['Red-Green-Refactor Plan']
+            }
+          }
+        ]
+      }),
+      'utf8'
+    );
+    assert.equal(runEvals(root), true);
+  });
+
   it('passes with zero suites', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-eval-'));
     assert.equal(runEvals(root), true);

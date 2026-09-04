@@ -13,10 +13,26 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["acceptance criteria", "user story", "gherkin", "bounded context"],
-        "required_patterns": ["Scenario:", "Given ", "When ", "Then "],
-        "forbidden_patterns": ["```typescript", "```java", "import {", "ASCII art"],
-        "required_output_sections": ["Bounded Contexts", "Gherkin Acceptance Scenarios", "Cross-Functional Criteria"]
+        "required_triggers": [
+          "acceptance criteria",
+          "user story",
+          "gherkin",
+          "bounded context"
+        ],
+        "required_patterns": [
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "```java",
+          "import {",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Bounded Contexts",
+          "Gherkin Acceptance Scenarios"
+        ]
       }
     },
     {
@@ -29,10 +45,20 @@
         "active_phase": "tdd"
       },
       "assertions": {
-        "required_triggers": ["behavior catalog", "test impact", "red green refactor"],
-        "required_patterns": ["Red", "Green", "Refactor", "Port Interface"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Behavior Catalog Impact", "Port Interface Contracts", "Red-Green-Refactor Plan"]
+        "required_triggers": [
+          "behavior catalog",
+          "test impact",
+          "red green refactor"
+        ],
+        "required_patterns": [
+          "Red",
+          "Green",
+          "Refactor",
+          "Port Interface"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -45,10 +71,20 @@
         "active_phase": "xfn"
       },
       "assertions": {
-        "required_triggers": ["xfn matrix", "accessibility", "browser e2e"],
-        "required_patterns": ["Accessibility", "Security", "Performance", "SLO"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["XFN Quality Matrix", "Test Suite Stubs", "SLO Verification Plan"]
+        "required_triggers": [
+          "xfn matrix",
+          "accessibility",
+          "browser e2e"
+        ],
+        "required_patterns": [
+          "Accessibility",
+          "Security",
+          "Performance",
+          "SLO"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -61,10 +97,18 @@
         "active_phase": "impl"
       },
       "assertions": {
-        "required_triggers": ["infrastructure", "adapter", "repository"],
-        "required_patterns": ["Implements", "Port", "Adapter"],
-        "forbidden_patterns": ["domain logic inside adapter"],
-        "required_output_sections": ["Impact Re-confirmation", "Adapter Implementation", "Fixture Alignment"]
+        "required_triggers": [
+          "infrastructure",
+          "adapter",
+          "repository"
+        ],
+        "required_patterns": [
+          "Port",
+          "Adapter"
+        ],
+        "forbidden_patterns": [
+          "domain logic inside adapter"
+        ]
       }
     },
     {
@@ -77,10 +121,19 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["owasp", "security audit", "vulnerability"],
-        "required_patterns": ["OWASP", "Input Validation", "Authentication/Authorization"],
-        "forbidden_patterns": ["hardcoded secret", "eval("],
-        "required_output_sections": ["Vulnerability Assessment", "OWASP Verification Matrix", "Remediation Steps"]
+        "required_triggers": [
+          "owasp",
+          "security audit",
+          "vulnerability"
+        ],
+        "required_patterns": [
+          "OWASP",
+          "Input Validation"
+        ],
+        "forbidden_patterns": [
+          "hardcoded secret",
+          "eval("
+        ]
       }
     },
     {
@@ -93,10 +146,19 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["hexagonal", "boundary", "solid"],
-        "required_patterns": ["Hexagonal Boundary", "Dependency Direction", "SOLID"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Boundary Conformance Analysis", "Dependency Direction Audit", "Remediation Checklist"]
+        "required_triggers": [
+          "hexagonal",
+          "boundary",
+          "solid"
+        ],
+        "required_patterns": [
+          "Hexagonal Boundary",
+          "Dependency Direction",
+          "SOLID"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -109,10 +171,20 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["adr", "madr", "architecture decision"],
-        "required_patterns": ["Context and Problem Statement", "Decision Drivers", "Decision Outcome"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["MADR Specification", "Consequences"]
+        "required_triggers": [
+          "adr",
+          "madr",
+          "architecture decision"
+        ],
+        "required_patterns": [
+          "agent-adr"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Consequences"
+        ]
       }
     },
     {
@@ -125,10 +197,17 @@
         "active_phase": "maintenance"
       },
       "assertions": {
-        "required_triggers": ["dead code", "prune", "complexity"],
-        "required_patterns": ["Dead Code Inventory", "Cognitive Complexity Audit"],
-        "forbidden_patterns": ["deleting active tests"],
-        "required_output_sections": ["Hotspot Audit", "Pruning Verification Plan"]
+        "required_triggers": [
+          "dead code",
+          "prune",
+          "complexity"
+        ],
+        "required_patterns": [
+          "agent-prune"
+        ],
+        "forbidden_patterns": [
+          "deleting active tests"
+        ]
       }
     },
     {
@@ -141,10 +220,22 @@
         "active_phase": "debug"
       },
       "assertions": {
-        "required_triggers": ["hypothesis", "root cause", "reproduce"],
-        "required_patterns": ["Hypothesis", "Evidence", "Root Cause"],
-        "forbidden_patterns": ["guessing without logs"],
-        "required_output_sections": ["Hypothesis Board", "Empirical Evidence & Logs", "Root Cause & Fix"]
+        "required_triggers": [
+          "hypothesis",
+          "root cause",
+          "reproduce"
+        ],
+        "required_patterns": [
+          "Hypothesis",
+          "Evidence",
+          "Root Cause"
+        ],
+        "forbidden_patterns": [
+          "guessing without logs"
+        ],
+        "required_output_sections": [
+          "Hypothesis Board"
+        ]
       }
     },
     {
@@ -157,10 +248,18 @@
         "active_phase": "telemetry"
       },
       "assertions": {
-        "required_triggers": ["logging", "tracing", "metrics"],
-        "required_patterns": ["SLO", "Metric", "Trace Context"],
-        "forbidden_patterns": ["unstructured console.log"],
-        "required_output_sections": ["Telemetry Strategy", "Metric & Trace Definitions", "Alerting & Dashboard Rules"]
+        "required_triggers": [
+          "logging",
+          "tracing",
+          "metrics"
+        ],
+        "required_patterns": [
+          "SLO",
+          "Metric"
+        ],
+        "forbidden_patterns": [
+          "unstructured console.log"
+        ]
       }
     },
     {
@@ -173,10 +272,18 @@
         "active_phase": "quality"
       },
       "assertions": {
-        "required_triggers": ["pre-commit", "quality gate", "conventional commits"],
-        "required_patterns": ["feat:", "fix:", "conventional commit"],
-        "forbidden_patterns": ["WIP", "fixed stuff"],
-        "required_output_sections": ["Pre-Commit Checks Summary", "Conventional Commit Subject & PR Title"]
+        "required_triggers": [
+          "pre-commit",
+          "quality gate",
+          "conventional commits"
+        ],
+        "required_patterns": [
+          "conventional commit"
+        ],
+        "forbidden_patterns": [
+          "WIP",
+          "fixed stuff"
+        ]
       }
     },
     {
@@ -189,10 +296,22 @@
         "active_phase": "debug"
       },
       "assertions": {
-        "required_triggers": ["incident", "outage", "sev", "production down"],
-        "required_patterns": ["Stabilize", "agent-debug"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Stabilize", "Signal Board", "Handoff to RCA"]
+        "required_triggers": [
+          "incident",
+          "outage",
+          "sev",
+          "production down"
+        ],
+        "required_patterns": [
+          "Stabilize",
+          "agent-debug"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Stabilize"
+        ]
       }
     },
     {
@@ -205,10 +324,24 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["pr review", "pull request review", "diff review", "change set"],
-        "required_patterns": ["must-fix", "catalog"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Must-fix", "Should-fix", "Nit"]
+        "required_triggers": [
+          "pr review",
+          "pull request review",
+          "diff review",
+          "change set"
+        ],
+        "required_patterns": [
+          "must-fix",
+          "catalog"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Must-fix",
+          "Should-fix",
+          "Nit"
+        ]
       }
     },
     {
@@ -221,10 +354,24 @@
         "active_phase": "release"
       },
       "assertions": {
-        "required_triggers": ["release", "ship", "changelog", "version bump", "prepare merge"],
-        "required_patterns": ["feat:", "changelog"],
-        "forbidden_patterns": ["WIP", "fixed stuff"],
-        "required_output_sections": ["Conventional PR Title", "Changelog Notes"]
+        "required_triggers": [
+          "release",
+          "ship",
+          "changelog",
+          "version bump",
+          "prepare merge"
+        ],
+        "required_patterns": [
+          "feat:",
+          "changelog"
+        ],
+        "forbidden_patterns": [
+          "WIP",
+          "fixed stuff"
+        ],
+        "required_output_sections": [
+          "Conventional PR Title"
+        ]
       }
     },
     {
@@ -237,10 +384,21 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["grill-me", "interview idea", "explore idea"],
-        "required_patterns": ["stateless"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Frontier", "Settled Choices"]
+        "required_triggers": [
+          "grill-me",
+          "interview idea",
+          "explore idea"
+        ],
+        "required_patterns": [
+          "stateless"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Frontier",
+          "Settled Choices"
+        ]
       }
     },
     {
@@ -253,10 +411,19 @@
         "active_phase": "orchestration"
       },
       "assertions": {
-        "required_triggers": ["lifecycle", "multi-phase", "orchestrate"],
-        "required_patterns": ["agent-spec", "agent-tdd", "agent-xfn"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Phase Handover Plan", "Specialist Role Assignments"]
+        "required_triggers": [
+          "lifecycle",
+          "multi-phase",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "agent-spec",
+          "agent-tdd",
+          "agent-xfn"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -269,10 +436,24 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["grilling", "design tree", "decision frontier", "stress test plan"],
-        "required_patterns": ["Frontier", "design tree"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Design Tree", "Decision Frontier", "Round"]
+        "required_triggers": [
+          "grilling",
+          "design tree",
+          "decision frontier",
+          "stress test plan"
+        ],
+        "required_patterns": [
+          "Frontier",
+          "design tree"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Design Tree",
+          "Decision Frontier",
+          "Round"
+        ]
       }
     },
     {
@@ -285,10 +466,23 @@
         "active_phase": "impl"
       },
       "assertions": {
-        "required_triggers": ["humanize", "landing page copy", "sounds AI", "brand voice"],
-        "required_patterns": ["Voice Pillars", "Anti-patterns"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Voice Pillars", "Anti-patterns"]
+        "required_triggers": [
+          "humanize",
+          "landing page copy",
+          "sounds AI",
+          "brand voice"
+        ],
+        "required_patterns": [
+          "Voice Pillars",
+          "Anti-patterns"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Voice Pillars",
+          "Anti-patterns"
+        ]
       }
     },
     {
@@ -301,10 +495,23 @@
         "active_phase": "release"
       },
       "assertions": {
-        "required_triggers": ["documentation", "readme", "runbook", "docs narrative"],
-        "required_patterns": ["agent-copy", "README"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["README", "Runbook"]
+        "required_triggers": [
+          "documentation",
+          "readme",
+          "runbook",
+          "docs narrative"
+        ],
+        "required_patterns": [
+          "agent-copy",
+          "README"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "README",
+          "Runbook"
+        ]
       }
     },
     {
@@ -317,10 +524,22 @@
         "active_phase": "maintenance"
       },
       "assertions": {
-        "required_triggers": ["migration", "expand contract", "schema change"],
-        "required_patterns": ["expand", "contract", "rollback"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Expand/Contract Sequence", "Rollback"]
+        "required_triggers": [
+          "migration",
+          "expand contract",
+          "schema change"
+        ],
+        "required_patterns": [
+          "expand",
+          "contract",
+          "rollback"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Rollback"
+        ]
       }
     },
     {
@@ -333,10 +552,22 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["openapi", "api contract", "webhook contract"],
-        "required_patterns": ["port", "additive", "agent-tdd"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Port Contract", "Consumer Impact"]
+        "required_triggers": [
+          "openapi",
+          "api contract",
+          "webhook contract"
+        ],
+        "required_patterns": [
+          "port",
+          "additive",
+          "agent-tdd"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Consumer Impact"
+        ]
       }
     },
     {
@@ -349,10 +580,24 @@
         "active_phase": "impl"
       },
       "assertions": {
-        "required_triggers": ["ui", "semantic html", "landmarks", "heading order", "form", "a11y"],
-        "required_patterns": ["landmark", "heading"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Landmarks", "Heading outline"]
+        "required_triggers": [
+          "ui",
+          "semantic html",
+          "landmarks",
+          "heading order",
+          "form",
+          "a11y"
+        ],
+        "required_patterns": [
+          "landmark",
+          "heading"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Landmarks"
+        ]
       }
     },
     {
@@ -365,10 +610,23 @@
         "active_phase": "maintenance"
       },
       "assertions": {
-        "required_triggers": ["memory leak", "explain analyze", "latency optimization", "profiling"],
-        "required_patterns": ["p95", "EXPLAIN"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Empirical Performance Profiling", "Database Query Optimization"]
+        "required_triggers": [
+          "memory leak",
+          "explain analyze",
+          "latency optimization",
+          "profiling"
+        ],
+        "required_patterns": [
+          "p95",
+          "EXPLAIN"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Empirical Performance Profiling",
+          "Database Query Optimization"
+        ]
       }
     },
     {
@@ -381,10 +639,26 @@
         "active_phase": "telemetry"
       },
       "assertions": {
-        "required_triggers": ["web analytics", "rum", "beacon", "diagnose cloudflare"],
-        "required_patterns": ["Inventory", "MCP", "owning"],
-        "forbidden_patterns": ["ASCII art", "siteToken in memory"],
-        "required_output_sections": ["Fleet inventory", "Root Cause", "Remediations"]
+        "required_triggers": [
+          "web analytics",
+          "rum",
+          "beacon",
+          "diagnose cloudflare"
+        ],
+        "required_patterns": [
+          "Inventory",
+          "MCP",
+          "owning"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "siteToken in memory"
+        ],
+        "required_output_sections": [
+          "Fleet inventory",
+          "Root Cause",
+          "Remediations"
+        ]
       }
     },
     {
@@ -397,10 +671,30 @@
         "active_phase": "telemetry"
       },
       "assertions": {
-        "required_triggers": ["posthog", "cookieless", "phc_", "posthog wizard"],
-        "required_patterns": ["cookieless", "POSTHOG_TOKEN", "privacy", "MCP"],
-        "forbidden_patterns": ["ASCII art", "self-driving", "yarn add"],
-        "required_output_sections": ["Stack", "SDK options", "Privacy", "CI", "MCP proof"]
+        "required_triggers": [
+          "posthog",
+          "cookieless",
+          "phc_",
+          "posthog wizard"
+        ],
+        "required_patterns": [
+          "cookieless",
+          "POSTHOG_TOKEN",
+          "privacy",
+          "MCP"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "self-driving",
+          "yarn add"
+        ],
+        "required_output_sections": [
+          "Stack",
+          "SDK options",
+          "Privacy",
+          "CI",
+          "MCP proof"
+        ]
       }
     },
     {
@@ -413,10 +707,31 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["linear", "user story", "acceptance criteria", "wireframe", "INVEST"],
-        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then ", "```mermaid"],
-        "forbidden_patterns": ["```typescript", "ASCII art"],
-        "required_output_sections": ["Story", "Acceptance criteria", "Wireframe", "Out of scope"]
+        "required_triggers": [
+          "linear",
+          "user story",
+          "acceptance criteria",
+          "wireframe",
+          "INVEST"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "Given ",
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Wireframe",
+          "Out of scope"
+        ]
       }
     },
     {
@@ -429,10 +744,29 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["linear", "review tickets", "operator story"],
-        "required_patterns": ["As a", "I want", "so that", "Given ", "When ", "Then "],
-        "forbidden_patterns": ["```typescript", "ASCII art", "As a customer"],
-        "required_output_sections": ["Story", "Acceptance criteria", "Out of scope"]
+        "required_triggers": [
+          "linear",
+          "review tickets",
+          "operator story"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "Given ",
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art",
+          "As a customer"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Out of scope"
+        ]
       }
     },
     {
@@ -445,10 +779,33 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["prd", "product bet", "kill criteria", "feature flag"],
-        "required_patterns": ["Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag"],
-        "forbidden_patterns": ["```typescript", "ASCII art", "I want a feature flag"],
-        "required_output_sections": ["Problem", "Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag", "Out of scope"]
+        "required_triggers": [
+          "prd",
+          "product bet",
+          "kill criteria",
+          "feature flag"
+        ],
+        "required_patterns": [
+          "Belief",
+          "Leading indicator",
+          "Kill criteria",
+          "Experiment",
+          "Feature flag"
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art",
+          "I want a feature flag"
+        ],
+        "required_output_sections": [
+          "Problem",
+          "Belief",
+          "Leading indicator",
+          "Kill criteria",
+          "Experiment",
+          "Feature flag",
+          "Out of scope"
+        ]
       }
     }
   ]

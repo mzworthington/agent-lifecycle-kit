@@ -12,6 +12,9 @@
         "required_triggers": [
           "api",
           "rest api"
+        ],
+        "required_patterns": [
+          "profile-api"
         ]
       }
     }

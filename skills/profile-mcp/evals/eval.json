@@ -13,6 +13,9 @@
           "mcp",
           "mcp server",
           "mcp tool"
+        ],
+        "required_patterns": [
+          "profile-mcp"
         ]
       }
     }

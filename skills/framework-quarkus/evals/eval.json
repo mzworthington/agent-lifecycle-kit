@@ -9,13 +9,30 @@
       "target_skill": "framework-quarkus",
       "prompt": "Add a Quarkus RESTEasy Reactive resource with a Panache repository and note GraalVM native image reflection.",
       "context": {
-        "detected_stack": ["Java", "Quarkus"]
+        "detected_stack": [
+          "Java",
+          "Quarkus"
+        ]
       },
       "assertions": {
-        "required_triggers": ["quarkus", "resteasy", "panache", "graalvm", "native image"],
-        "required_patterns": ["resource", "handler"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Resource Adapter", "Handler", "Panache Repository"]
+        "required_triggers": [
+          "quarkus",
+          "resteasy",
+          "panache",
+          "graalvm",
+          "native image"
+        ],
+        "required_patterns": [
+          "resource",
+          "handler"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Handler",
+          "Panache Repository"
+        ]
       }
     }
   ]

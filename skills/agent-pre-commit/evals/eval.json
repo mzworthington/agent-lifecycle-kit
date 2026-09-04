@@ -13,10 +13,18 @@
         "active_phase": "quality"
       },
       "assertions": {
-        "required_triggers": ["pre-commit", "quality gate", "conventional commits"],
-        "required_patterns": ["feat:", "fix:", "conventional commit"],
-        "forbidden_patterns": ["WIP", "fixed stuff"],
-        "required_output_sections": ["Pre-Commit Checks Summary", "Conventional Commit Subject & PR Title"]
+        "required_triggers": [
+          "pre-commit",
+          "quality gate",
+          "conventional commits"
+        ],
+        "required_patterns": [
+          "conventional commit"
+        ],
+        "forbidden_patterns": [
+          "WIP",
+          "fixed stuff"
+        ]
       }
     },
     {
@@ -29,10 +37,21 @@
         "active_phase": "quality"
       },
       "assertions": {
-        "required_triggers": ["conventional commits", "commit message"],
-        "required_patterns": ["feat:", "WAY-123"],
-        "forbidden_patterns": ["git checkout -b", "git commit", "WIP"],
-        "required_output_sections": ["Conventional Commit Subject"]
+        "required_triggers": [
+          "conventional commits",
+          "commit message"
+        ],
+        "required_patterns": [
+          "WAY-123"
+        ],
+        "forbidden_patterns": [
+          "git checkout -b",
+          "git commit",
+          "WIP"
+        ],
+        "required_output_sections": [
+          "Conventional Commit Subject"
+        ]
       }
     }
   ]

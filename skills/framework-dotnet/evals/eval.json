@@ -9,13 +9,31 @@
       "target_skill": "framework-dotnet",
       "prompt": "Implement an ASP.NET Core Minimal API with EF Core in the adapter and a MediatR-style handler, covered by xUnit WebApplicationFactory tests.",
       "context": {
-        "detected_stack": [".NET", "C#"]
+        "detected_stack": [
+          ".NET",
+          "C#"
+        ]
       },
       "assertions": {
-        "required_triggers": ["dotnet", "aspnetcore", "ef core", "mediatr", "xunit", "webapplicationfactory"],
-        "required_patterns": ["handler", "adapter"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Delivery Adapter", "Handler", "EF Core Adapter"]
+        "required_triggers": [
+          "dotnet",
+          "aspnetcore",
+          "ef core",
+          "mediatr",
+          "xunit",
+          "webapplicationfactory"
+        ],
+        "required_patterns": [
+          "handler",
+          "adapter"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Handler",
+          "EF Core Adapter"
+        ]
       }
     }
   ]

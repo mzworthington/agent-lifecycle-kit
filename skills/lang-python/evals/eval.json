@@ -12,6 +12,9 @@
         "required_triggers": [
           "python",
           "type hints"
+        ],
+        "required_patterns": [
+          "lang-python"
         ]
       }
     }

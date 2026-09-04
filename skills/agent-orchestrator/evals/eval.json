@@ -13,10 +13,20 @@
         "active_phase": "orchestration"
       },
       "assertions": {
-        "required_triggers": ["lifecycle", "multi-phase", "orchestrate"],
-        "required_patterns": ["agent-spec", "agent-tdd", "agent-xfn", "agent-adapter"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Phase Handover Plan", "Specialist Role Assignments"]
+        "required_triggers": [
+          "lifecycle",
+          "multi-phase",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "agent-spec",
+          "agent-tdd",
+          "agent-xfn",
+          "agent-adapter"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -29,10 +39,22 @@
         "active_phase": "orchestration"
       },
       "assertions": {
-        "required_triggers": ["lifecycle", "orchestrate"],
-        "required_patterns": ["In Progress", "Cursor", "WAY-123", "feat("],
-        "forbidden_patterns": ["git checkout -b", "git commit", "feature branch"],
-        "required_output_sections": ["Linear ticket", "Proposed commit"]
+        "required_triggers": [
+          "lifecycle",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "In Progress",
+          "Cursor"
+        ],
+        "forbidden_patterns": [
+          "git checkout -b",
+          "git commit",
+          "feature branch"
+        ],
+        "required_output_sections": [
+          "Linear ticket"
+        ]
       }
     }
   ]

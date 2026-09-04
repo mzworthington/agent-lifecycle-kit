@@ -12,6 +12,9 @@
         "required_triggers": [
           "migration",
           "expand contract"
+        ],
+        "required_patterns": [
+          "agent-migration"
         ]
       }
     }

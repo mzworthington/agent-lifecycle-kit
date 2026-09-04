@@ -13,6 +13,9 @@
           "memory leak",
           "explain analyze",
           "latency optimization"
+        ],
+        "required_patterns": [
+          "agent-perf-opt"
         ]
       }
     }

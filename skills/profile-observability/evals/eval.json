@@ -12,6 +12,9 @@
         "required_triggers": [
           "opentelemetry",
           "tracing"
+        ],
+        "required_patterns": [
+          "profile-observability"
         ]
       }
     }

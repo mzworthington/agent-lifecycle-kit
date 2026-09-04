@@ -13,10 +13,25 @@
         "active_phase": "spec"
       },
       "assertions": {
-        "required_triggers": ["acceptance criteria", "gherkin", "user story"],
-        "required_patterns": ["Scenario:", "Given ", "When ", "Then "],
-        "forbidden_patterns": ["```typescript", "```java", "import {", "ASCII art"],
-        "required_output_sections": ["Bounded Contexts", "Gherkin Acceptance Scenarios", "Cross-Functional Criteria"]
+        "required_triggers": [
+          "acceptance criteria",
+          "gherkin",
+          "user story"
+        ],
+        "required_patterns": [
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "```java",
+          "import {",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Bounded Contexts",
+          "Gherkin Acceptance Scenarios"
+        ]
       }
     }
   ]

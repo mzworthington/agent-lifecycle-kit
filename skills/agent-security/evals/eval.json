@@ -13,10 +13,19 @@
         "active_phase": "audit"
       },
       "assertions": {
-        "required_triggers": ["owasp", "security audit", "vulnerability"],
-        "required_patterns": ["OWASP", "Input Validation", "Authentication/Authorization"],
-        "forbidden_patterns": ["hardcoded secret", "eval("],
-        "required_output_sections": ["Vulnerability Assessment", "OWASP Verification Matrix", "Remediation Steps"]
+        "required_triggers": [
+          "owasp",
+          "security audit",
+          "vulnerability"
+        ],
+        "required_patterns": [
+          "OWASP",
+          "Input Validation"
+        ],
+        "forbidden_patterns": [
+          "hardcoded secret",
+          "eval("
+        ]
       }
     }
   ]

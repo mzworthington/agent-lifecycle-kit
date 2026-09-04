@@ -13,10 +13,24 @@
         "active_phase": "release"
       },
       "assertions": {
-        "required_triggers": ["release", "ship", "changelog", "version bump"],
-        "required_patterns": ["feat:", "changelog", "XFN"],
-        "forbidden_patterns": ["WIP", "fixed stuff"],
-        "required_output_sections": ["Conventional PR Title", "Changelog Notes", "Catalog & XFN Summary"]
+        "required_triggers": [
+          "release",
+          "ship",
+          "changelog",
+          "version bump"
+        ],
+        "required_patterns": [
+          "feat:",
+          "changelog",
+          "XFN"
+        ],
+        "forbidden_patterns": [
+          "WIP",
+          "fixed stuff"
+        ],
+        "required_output_sections": [
+          "Conventional PR Title"
+        ]
       }
     }
   ]

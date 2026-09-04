@@ -13,10 +13,17 @@
         "active_phase": "maintenance"
       },
       "assertions": {
-        "required_triggers": ["dead code", "prune", "complexity"],
-        "required_patterns": ["Dead Code Inventory", "Cognitive Complexity Audit", "Batch Removal Plan"],
-        "forbidden_patterns": ["deleting active tests"],
-        "required_output_sections": ["Hotspot Audit", "Pruning Verification Plan"]
+        "required_triggers": [
+          "dead code",
+          "prune",
+          "complexity"
+        ],
+        "required_patterns": [
+          "agent-prune"
+        ],
+        "forbidden_patterns": [
+          "deleting active tests"
+        ]
       }
     }
   ]

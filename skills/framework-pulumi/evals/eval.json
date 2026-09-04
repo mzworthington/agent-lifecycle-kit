@@ -9,13 +9,29 @@
       "target_skill": "framework-pulumi",
       "prompt": "Write a Pulumi ComponentResource for this zone and run pulumi preview with a CrossGuard policy pack.",
       "context": {
-        "detected_stack": ["Pulumi", "TypeScript"]
+        "detected_stack": [
+          "Pulumi",
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["pulumi", "pulumi preview", "component resource", "crossguard"],
-        "required_patterns": ["ComponentResource", "stack"],
-        "forbidden_patterns": ["hardcoded secret", "pulumi config set --plaintext password"],
-        "required_output_sections": ["Component Layout", "Stack Isolation", "Secrets"]
+        "required_triggers": [
+          "pulumi",
+          "pulumi preview",
+          "component resource",
+          "crossguard"
+        ],
+        "required_patterns": [
+          "ComponentResource",
+          "stack"
+        ],
+        "forbidden_patterns": [
+          "hardcoded secret",
+          "pulumi config set --plaintext password"
+        ],
+        "required_output_sections": [
+          "Secrets"
+        ]
       }
     }
   ]

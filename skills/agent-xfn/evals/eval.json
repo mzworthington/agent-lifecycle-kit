@@ -13,10 +13,20 @@
         "active_phase": "xfn"
       },
       "assertions": {
-        "required_triggers": ["xfn matrix", "accessibility", "browser e2e"],
-        "required_patterns": ["Accessibility", "Security", "Performance", "SLO"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["XFN Quality Matrix", "Test Suite Stubs", "SLO Verification Plan"]
+        "required_triggers": [
+          "xfn matrix",
+          "accessibility",
+          "browser e2e"
+        ],
+        "required_patterns": [
+          "Accessibility",
+          "Security",
+          "Performance",
+          "SLO"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     }
   ]

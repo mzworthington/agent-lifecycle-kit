@@ -12,6 +12,9 @@
         "required_triggers": [
           "iac",
           "infrastructure as code"
+        ],
+        "required_patterns": [
+          "profile-iac"
         ]
       }
     }

@@ -13,6 +13,9 @@
           "express",
           "express router",
           "express middleware"
+        ],
+        "required_patterns": [
+          "framework-express"
         ]
       }
     }

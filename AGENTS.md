@@ -10,10 +10,9 @@ Do not commit or push unless the user explicitly asks.
 
 1. **Hexagonal** - dependencies point inward; domain stays pure.
 2. **Mermaid** for diagrams; no ASCII/box-drawing architecture art ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) §8 when writing diagrams).
-3. **Conventional commits and PR titles** - [SOPs/conventional-commits.md](./SOPs/conventional-commits.md). Type follows **behavior**, not file extension: skill / SOP / model-catalog changes are `feat`/`fix`, not `docs`. Stay on **main**; leave work **uncommitted** unless the user asks to commit. Output the commit message (include the Linear id when playing a ticket).
-4. **Linear ticket claim** - When executing an issue, mark it In Progress and assign/delegate to the host agent (Cursor). Details: [SOPs/linear-ticket-workflow.md](./SOPs/linear-ticket-workflow.md). Do not bulk-claim a backlog review.
-5. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding.
-6. **One MCP profile per session** - prefer skill frontmatter `mcp:` ids; more tools cost tokens ([mcps/README.md](./mcps/README.md)).
+3. **Commits / tickets** - conventional subjects ([SOPs/conventional-commits.md](./SOPs/conventional-commits.md)); type follows **behavior**. Linear playbook: [SOPs/linear-ticket-workflow.md](./SOPs/linear-ticket-workflow.md) (main, uncommitted unless asked).
+4. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding.
+5. **One MCP profile per session** - prefer skill frontmatter `mcp:` ids; more tools cost tokens ([mcps/README.md](./mcps/README.md)).
 
 ## Load on demand
 
@@ -33,7 +32,7 @@ Do not commit or push unless the user explicitly asks.
 | Kit ontology | `ontology/schema.yaml` only (index derived at use time; authoring: `ontology/README.md`) |
 | Cross-session facts | **memory** MCP (typed allowlist: glossary/SLO/prefs/project facts, never secrets) |
 | Vendor/framework API docs | **context7** MCP |
-| Linear issues / projects | **linear** MCP (OAuth; on the `default` profile). Playing a ticket: [SOPs/linear-ticket-workflow.md](./SOPs/linear-ticket-workflow.md) |
+| Linear issues / projects | **linear** MCP (OAuth; on the `default` profile) |
 | Warp Factory tasks | **warp-factory** MCP (`wk mcp warp --install`; OAuth on first use) |
 | PostHog product analytics / flags / empty events | [agent-posthog](./skills/agent-posthog/SKILL.md) (`wk mcp posthog --install`; official MCP) |
 
@@ -57,6 +56,6 @@ Do not commit or push unless the user explicitly asks.
 
 Handovers: `~/.agents/handover/<project>/` ([templates/handover.md](./templates/handover.md)). Run pre-commit before marking a phase **COMPLETE** when hooks exist.
 
-Public site: GitHub Pages at [waykit.dev](https://waykit.dev) (Astro app in `web/`, Markdown in `docs/`; `eval-driven.dev` and `eval-driven-development.dev` 301 there; custom-domain DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
+Public site: [waykit.dev](https://waykit.dev) (Astro in `web/`, Markdown in `docs/`; DNS in [edge-dns](https://github.com/mzworthington/edge-dns)).
 
 Taxonomy: [skills/README.md](./skills/README.md). MCP catalog: [mcps/README.md](./mcps/README.md). Context budget: [SOPs/context-budget.md](./SOPs/context-budget.md).

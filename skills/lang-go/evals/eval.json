@@ -12,6 +12,9 @@
         "required_triggers": [
           "go",
           "golang"
+        ],
+        "required_patterns": [
+          "lang-go"
         ]
       }
     }

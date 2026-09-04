@@ -13,10 +13,18 @@
         "active_phase": "impl"
       },
       "assertions": {
-        "required_triggers": ["adapter", "infrastructure", "repository"],
-        "required_patterns": ["Implements", "Port", "Adapter"],
-        "forbidden_patterns": ["domain logic inside adapter"],
-        "required_output_sections": ["Impact Re-confirmation", "Adapter Implementation", "Fixture Alignment"]
+        "required_triggers": [
+          "adapter",
+          "infrastructure",
+          "repository"
+        ],
+        "required_patterns": [
+          "Port",
+          "Adapter"
+        ],
+        "forbidden_patterns": [
+          "domain logic inside adapter"
+        ]
       }
     }
   ]

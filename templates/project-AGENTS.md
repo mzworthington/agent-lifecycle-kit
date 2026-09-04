@@ -12,22 +12,15 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Bug / CI / live symptom | `skills/agent-debug` (+ hypothesis-driven-debug SOP) |
 | Product bet / PRD / flags | `skills/agent-prd` (+ hypothesis-driven-development SOP) |
 | Cloudflare Web Analytics / RUM / beacon | `skills/agent-cloudflare-ops` (`wk mcp cloudflare-ops --install`) |
-| Warp Factory tasks / factory onboard | `wk mcp warp --install` (OAuth; `warp-factory` MCP) |
-| PostHog product analytics / flags / empty events | `skills/agent-posthog` (`wk mcp posthog --install`; official MCP) |
+| Warp Factory / PostHog | `wk mcp warp --install` / `skills/agent-posthog` (`wk mcp posthog --install`) |
 | Prompt / MCP tool / routing change | `docs/edd.md` + EDD SOP (`wk eval run\|ci`) |
-| Which model / host slug | `SOPs/model-routing.md` (`wk model resolve --skill … --host cursor\|claude\|copilot\|antigravity`) |
-| Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |
-| Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
-| Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`); output the message; stay on main, uncommitted unless asked; include Linear id when playing a ticket |
-| Playing a Linear ticket | `SOPs/linear-ticket-workflow.md` (In Progress + assign/delegate host agent, usually Cursor) |
+| Which model / host slug | `SOPs/model-routing.md` (`wk model resolve`) |
+| Landing copy / docs narrative | `skills/agent-copy` (+ `agent-ui` / `agent-docs` as needed) |
+| Commit / Linear ticket | `SOPs/conventional-commits.md` + `SOPs/linear-ticket-workflow.md` |
 | SOP / handover lookup | kit-knowledge MCP when installed |
 | Durable project facts | memory MCP (glossary, SLOs, prefs - never secrets) |
-| Linear backlog / user stories | `skills/agent-user-stories` (INVEST + AC; mermaid wireframes on UI; operator stories skip wireframe; hypothesis + flag notes on bets; linear MCP on `default`) |
+| Linear backlog / user stories | `skills/agent-user-stories` |
 
-For **bugs / failed jobs / live symptoms**, use `agent-debug` (reproduce → hypothesis board → proof). Do not open the full feature lifecycle unless RCA needs a new capability.
+For **bugs / failed jobs / live symptoms**, use `agent-debug`. Do not open the full feature lifecycle unless RCA needs a new capability.
 
-For non-trivial **feature** work, before coding:
-
-1. Inventory related tests (functional + XFN) and align on **test-case impact**.
-2. Complete an **XFN apply/skip matrix** (browser E2E, a11y, security, load) - light floor on bug-fixes when UI/auth/SLO is touched.
-3. Follow orchestrator routing: **Grilling (if ambiguous/unsettled)** → PRD if **bet** → Stories → Spec → TDD impact → XFN plan → **TDD short loop (gear 1+2)** → XFN green → Audit → Telemetry → Release → confirm/kill + prune flags. Use `agent-adapter` only for large adapter deep-dives.
+For non-trivial **feature** work: inventory tests (functional + XFN), complete an XFN apply/skip matrix, then orchestrator routing (grill if unsettled → spec → TDD short loop → XFN → audit → release).

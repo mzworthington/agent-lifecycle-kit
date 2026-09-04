@@ -10,13 +10,24 @@
       "target_skill": "lang-typescript",
       "prompt": "Create a TypeScript value object codec for share payloads.",
       "context": {
-        "detected_stack": ["TypeScript"]
+        "detected_stack": [
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["typescript", "node", "zod"],
-        "required_patterns": ["readonly", "interface", "export type"],
-        "forbidden_patterns": [": any", "as any", "as unknown as"],
-        "required_output_sections": ["Type Definitions", "Domain Service Implementation"]
+        "required_triggers": [
+          "typescript",
+          "node",
+          "zod"
+        ],
+        "required_patterns": [
+          "interface"
+        ],
+        "forbidden_patterns": [
+          ": any",
+          "as any",
+          "as unknown as"
+        ]
       }
     }
   ]

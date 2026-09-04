@@ -10,10 +10,19 @@
       "target_skill": "agent-arch-drift",
       "prompt": "Diagram the bounded contexts and package dependency direction for canvas storage.",
       "assertions": {
-        "required_triggers": ["hexagonal", "boundary"],
-        "required_patterns": ["```mermaid", "graph TD", "subgraph"],
-        "forbidden_patterns": ["+---+", "+===", "|   |", "+---+---+"],
-        "required_output_sections": ["Boundary Conformance Analysis"]
+        "required_triggers": [
+          "hexagonal",
+          "boundary"
+        ],
+        "required_patterns": [
+          "agent-arch-drift"
+        ],
+        "forbidden_patterns": [
+          "+---+",
+          "+===",
+          "|   |",
+          "+---+---+"
+        ]
       }
     },
     {
@@ -23,10 +32,24 @@
       "target_skill": "agent-spec",
       "prompt": "Create acceptance criteria for adding multi-tenant workspace sharing.",
       "assertions": {
-        "required_triggers": ["acceptance criteria", "user story", "gherkin"],
-        "required_patterns": ["Given ", "When ", "Then "],
-        "forbidden_patterns": ["```typescript", "```java", "class WorkspaceService", "import {"],
-        "required_output_sections": ["Gherkin Acceptance Scenarios"]
+        "required_triggers": [
+          "acceptance criteria",
+          "user story",
+          "gherkin"
+        ],
+        "required_patterns": [
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "```java",
+          "class WorkspaceService",
+          "import {"
+        ],
+        "required_output_sections": [
+          "Gherkin Acceptance Scenarios"
+        ]
       }
     },
     {
@@ -36,10 +59,18 @@
       "target_skill": "agent-pre-commit",
       "prompt": "Format the PR title for adding workspace invitation links.",
       "assertions": {
-        "required_triggers": ["conventional commits", "quality gate"],
-        "required_patterns": ["feat(workspace):", "Conventional Commit Subject"],
-        "forbidden_patterns": ["WIP", "fixed bugs", "updated code"],
-        "required_output_sections": ["Conventional Commit Subject & PR Title"]
+        "required_triggers": [
+          "conventional commits",
+          "quality gate"
+        ],
+        "required_patterns": [
+          "Conventional Commit Subject"
+        ],
+        "forbidden_patterns": [
+          "WIP",
+          "fixed bugs",
+          "updated code"
+        ]
       }
     },
     {
@@ -49,10 +80,18 @@
       "target_skill": "agent-xfn",
       "prompt": "Write the Playwright accessibility and load test suites for the sharing modal as part of the XFN matrix.",
       "assertions": {
-        "required_triggers": ["xfn", "playwright", "accessibility", "load test"],
-        "required_patterns": ["agent-xfn", "XFN Quality Matrix"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["XFN Quality Matrix"]
+        "required_triggers": [
+          "xfn",
+          "playwright",
+          "accessibility",
+          "load test"
+        ],
+        "required_patterns": [
+          "agent-xfn"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     },
     {
@@ -62,10 +101,17 @@
       "target_skill": "agent-tdd",
       "prompt": "Wire a thin Stripe client for the payment port interface we just greened in this TDD session.",
       "assertions": {
-        "required_triggers": ["tdd", "port interface"],
-        "required_patterns": ["agent-tdd", "gear 2"],
-        "forbidden_patterns": ["agent-adapter"],
-        "required_output_sections": ["Red-Green-Refactor Plan"]
+        "required_triggers": [
+          "tdd",
+          "port interface"
+        ],
+        "required_patterns": [
+          "agent-tdd",
+          "gear 2"
+        ],
+        "forbidden_patterns": [
+          "agent-adapter"
+        ]
       }
     },
     {
@@ -75,13 +121,24 @@
       "target_skill": "lang-typescript",
       "prompt": "Write a TypeScript parser that turns untyped JSON into a share-payload value object.",
       "context": {
-        "detected_stack": ["TypeScript"]
+        "detected_stack": [
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["typescript", "node", "zod"],
-        "required_patterns": ["unknown"],
-        "forbidden_patterns": [": any", "as any", "as unknown as"],
-        "required_output_sections": ["Type Definitions"]
+        "required_triggers": [
+          "typescript",
+          "node",
+          "zod"
+        ],
+        "required_patterns": [
+          "unknown"
+        ],
+        "forbidden_patterns": [
+          ": any",
+          "as any",
+          "as unknown as"
+        ]
       }
     },
     {
@@ -91,10 +148,18 @@
       "target_skill": "agent-pre-commit",
       "prompt": "Write the commit subject for adding a model-routing SOP and skill catalog entries that change which model the orchestrator selects.",
       "assertions": {
-        "required_triggers": ["conventional commits", "quality gate"],
-        "required_patterns": ["feat(sops):", "feat(skills):"],
-        "forbidden_patterns": ["docs: update", "docs: add"],
-        "required_output_sections": ["Conventional Commit Subject & PR Title"]
+        "required_triggers": [
+          "conventional commits",
+          "quality gate"
+        ],
+        "required_patterns": [
+          "feat(sops):",
+          "feat(skills):"
+        ],
+        "forbidden_patterns": [
+          "docs: update",
+          "docs: add"
+        ]
       }
     }
   ]

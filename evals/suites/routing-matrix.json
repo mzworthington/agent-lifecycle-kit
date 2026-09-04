@@ -10,10 +10,16 @@
       "target_skill": "agent-spec",
       "prompt": "I need to outline the requirements and write Gherkin acceptance scenarios for our export feature before writing tests.",
       "assertions": {
-        "required_triggers": ["acceptance criteria", "requirements"],
-        "required_patterns": ["agent-spec"],
-        "forbidden_patterns": ["agent-adapter"],
-        "required_output_sections": ["Target Role: agent-spec"]
+        "required_triggers": [
+          "acceptance criteria",
+          "requirements"
+        ],
+        "required_patterns": [
+          "agent-spec"
+        ],
+        "forbidden_patterns": [
+          "agent-adapter"
+        ]
       }
     },
     {
@@ -23,10 +29,16 @@
       "target_skill": "agent-tdd",
       "prompt": "Let's inventory our functional test catalog and design the test impact map for the storage adapter.",
       "assertions": {
-        "required_triggers": ["behavior catalog", "test impact"],
-        "required_patterns": ["agent-tdd"],
-        "forbidden_patterns": ["agent-spec"],
-        "required_output_sections": ["Target Role: agent-tdd"]
+        "required_triggers": [
+          "behavior catalog",
+          "test impact"
+        ],
+        "required_patterns": [
+          "agent-tdd"
+        ],
+        "forbidden_patterns": [
+          "agent-spec"
+        ]
       }
     },
     {
@@ -36,10 +48,16 @@
       "target_skill": "agent-security",
       "prompt": "We need an OWASP top 10 security review on our auth and token handlers before deploying.",
       "assertions": {
-        "required_triggers": ["owasp", "security"],
-        "required_patterns": ["agent-security"],
-        "forbidden_patterns": ["agent-telemetry"],
-        "required_output_sections": ["Target Role: agent-security"]
+        "required_triggers": [
+          "owasp",
+          "security"
+        ],
+        "required_patterns": [
+          "agent-security"
+        ],
+        "forbidden_patterns": [
+          "agent-telemetry"
+        ]
       }
     },
     {
@@ -49,10 +67,16 @@
       "target_skill": "agent-debug",
       "prompt": "Our E2E tour test randomly times out in GitHub Actions. Help me run a hypothesis-driven RCA to fix it.",
       "assertions": {
-        "required_triggers": ["hypothesis", "root cause"],
-        "required_patterns": ["agent-debug"],
-        "forbidden_patterns": ["agent-prune"],
-        "required_output_sections": ["Target Role: agent-debug"]
+        "required_triggers": [
+          "hypothesis",
+          "root cause"
+        ],
+        "required_patterns": [
+          "agent-debug"
+        ],
+        "forbidden_patterns": [
+          "agent-prune"
+        ]
       }
     },
     {
@@ -62,10 +86,16 @@
       "target_skill": "agent-prune",
       "prompt": "The storage adapter package has accumulated dead code and high cyclomatic complexity. Let's prune it in safe batches.",
       "assertions": {
-        "required_triggers": ["dead code", "complexity"],
-        "required_patterns": ["agent-prune"],
-        "forbidden_patterns": ["agent-security"],
-        "required_output_sections": ["Target Role: agent-prune"]
+        "required_triggers": [
+          "dead code",
+          "complexity"
+        ],
+        "required_patterns": [
+          "agent-prune"
+        ],
+        "forbidden_patterns": [
+          "agent-security"
+        ]
       }
     },
     {
@@ -75,10 +105,16 @@
       "target_skill": "agent-arch-drift",
       "prompt": "Audit our app structure to ensure core domain packages don't depend on UI or storage adapters.",
       "assertions": {
-        "required_triggers": ["hexagonal", "boundary"],
-        "required_patterns": ["agent-arch-drift"],
-        "forbidden_patterns": ["agent-telemetry"],
-        "required_output_sections": ["Target Role: agent-arch-drift"]
+        "required_triggers": [
+          "hexagonal",
+          "boundary"
+        ],
+        "required_patterns": [
+          "agent-arch-drift"
+        ],
+        "forbidden_patterns": [
+          "agent-telemetry"
+        ]
       }
     },
     {
@@ -88,10 +124,17 @@
       "target_skill": "agent-orchestrator",
       "prompt": "We want to build a brand new collaborative whiteboard sharing feature from end-to-end through all lifecycle phases.",
       "assertions": {
-        "required_triggers": ["lifecycle", "multi-phase", "orchestrate"],
-        "required_patterns": ["agent-orchestrator"],
-        "forbidden_patterns": ["jumping straight to code"],
-        "required_output_sections": ["Target Role: agent-orchestrator"]
+        "required_triggers": [
+          "lifecycle",
+          "multi-phase",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "agent-orchestrator"
+        ],
+        "forbidden_patterns": [
+          "jumping straight to code"
+        ]
       }
     },
     {
@@ -101,10 +144,17 @@
       "target_skill": "agent-perf-opt",
       "prompt": "Our database API endpoint is experiencing high latency and memory leak issues under load. Analyze EXPLAIN ANALYZE for performance optimization.",
       "assertions": {
-        "required_triggers": ["latency optimization", "memory leak", "explain analyze"],
-        "required_patterns": ["agent-perf-opt"],
-        "forbidden_patterns": ["agent-spec"],
-        "required_output_sections": ["Target Role: agent-perf-opt"]
+        "required_triggers": [
+          "latency optimization",
+          "memory leak",
+          "explain analyze"
+        ],
+        "required_patterns": [
+          "agent-perf-opt"
+        ],
+        "forbidden_patterns": [
+          "agent-spec"
+        ]
       }
     },
     {
@@ -114,10 +164,17 @@
       "target_skill": "agent-copy",
       "prompt": "The website copy sounds AI-generated. Humanize the landing page wording and tighten brand voice without a redesign.",
       "assertions": {
-        "required_triggers": ["humanize", "landing page copy", "sounds AI"],
-        "required_patterns": ["agent-copy"],
-        "forbidden_patterns": ["agent-security"],
-        "required_output_sections": ["Target Role: agent-copy"]
+        "required_triggers": [
+          "humanize",
+          "landing page copy",
+          "sounds AI"
+        ],
+        "required_patterns": [
+          "agent-copy"
+        ],
+        "forbidden_patterns": [
+          "agent-security"
+        ]
       }
     },
     {
@@ -127,10 +184,18 @@
       "target_skill": "agent-docs",
       "prompt": "Rewrite the README lead and docs narrative so public documentation does not sound like template marketing copy.",
       "assertions": {
-        "required_triggers": ["documentation", "docs narrative", "readme"],
-        "required_patterns": ["agent-docs", "agent-copy"],
-        "forbidden_patterns": ["agent-prune"],
-        "required_output_sections": ["Target Role: agent-docs"]
+        "required_triggers": [
+          "documentation",
+          "docs narrative",
+          "readme"
+        ],
+        "required_patterns": [
+          "agent-docs",
+          "agent-copy"
+        ],
+        "forbidden_patterns": [
+          "agent-prune"
+        ]
       }
     },
     {
@@ -140,10 +205,17 @@
       "target_skill": "agent-incident",
       "prompt": "Sev-1 incident: production down. Coordinate the outage before we debug.",
       "assertions": {
-        "required_triggers": ["incident", "outage", "sev"],
-        "required_patterns": ["agent-incident"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["Target Role: agent-incident"]
+        "required_triggers": [
+          "incident",
+          "outage",
+          "sev"
+        ],
+        "required_patterns": [
+          "agent-incident"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     },
     {
@@ -153,10 +225,17 @@
       "target_skill": "agent-review",
       "prompt": "Need a PR review and code review of this change set before merge.",
       "assertions": {
-        "required_triggers": ["pr review", "code review", "change set"],
-        "required_patterns": ["agent-review"],
-        "forbidden_patterns": ["agent-spec"],
-        "required_output_sections": ["Target Role: agent-review"]
+        "required_triggers": [
+          "pr review",
+          "code review",
+          "change set"
+        ],
+        "required_patterns": [
+          "agent-review"
+        ],
+        "forbidden_patterns": [
+          "agent-spec"
+        ]
       }
     },
     {
@@ -166,10 +245,18 @@
       "target_skill": "agent-xfn",
       "prompt": "Create the Playwright accessibility and load-test XFN matrix for the sharing modal.",
       "assertions": {
-        "required_triggers": ["xfn", "playwright", "accessibility", "load test"],
-        "required_patterns": ["agent-xfn"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["Target Role: agent-xfn"]
+        "required_triggers": [
+          "xfn",
+          "playwright",
+          "accessibility",
+          "load test"
+        ],
+        "required_patterns": [
+          "agent-xfn"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     },
     {
@@ -179,10 +266,17 @@
       "target_skill": "agent-migration",
       "prompt": "Rename the orders.status column with an expand-contract migration so the schema change stays online-safe.",
       "assertions": {
-        "required_triggers": ["migration", "expand contract", "schema change"],
-        "required_patterns": ["agent-migration"],
-        "forbidden_patterns": ["agent-orchestrator"],
-        "required_output_sections": ["Target Role: agent-migration"]
+        "required_triggers": [
+          "migration",
+          "expand contract",
+          "schema change"
+        ],
+        "required_patterns": [
+          "agent-migration"
+        ],
+        "forbidden_patterns": [
+          "agent-orchestrator"
+        ]
       }
     },
     {
@@ -192,10 +286,18 @@
       "target_skill": "agent-adapter",
       "prompt": "This payment gateway needs an adapter deep dive with a message bus and a large infrastructure repository client.",
       "assertions": {
-        "required_triggers": ["adapter deep dive", "payment gateway", "message bus", "repository"],
-        "required_patterns": ["agent-adapter"],
-        "forbidden_patterns": ["agent-spec"],
-        "required_output_sections": ["Target Role: agent-adapter"]
+        "required_triggers": [
+          "adapter deep dive",
+          "payment gateway",
+          "message bus",
+          "repository"
+        ],
+        "required_patterns": [
+          "agent-adapter"
+        ],
+        "forbidden_patterns": [
+          "agent-spec"
+        ]
       }
     },
     {
@@ -205,10 +307,18 @@
       "target_skill": "agent-grilling",
       "prompt": "Grill this plan with a design tree. Stress test the decision frontier before we write a spec.",
       "assertions": {
-        "required_triggers": ["grilling", "design tree", "decision frontier", "stress test plan"],
-        "required_patterns": ["agent-grilling"],
-        "forbidden_patterns": ["grill-me"],
-        "required_output_sections": ["Target Role: agent-grilling"]
+        "required_triggers": [
+          "grilling",
+          "design tree",
+          "decision frontier",
+          "stress test plan"
+        ],
+        "required_patterns": [
+          "agent-grilling"
+        ],
+        "forbidden_patterns": [
+          "grill-me"
+        ]
       }
     },
     {
@@ -218,10 +328,17 @@
       "target_skill": "agent-grill-me",
       "prompt": "Use grill-me to interview this idea and explore the idea without writing files.",
       "assertions": {
-        "required_triggers": ["grill-me", "interview idea", "explore idea"],
-        "required_patterns": ["agent-grill-me"],
-        "forbidden_patterns": ["agent-spec"],
-        "required_output_sections": ["Target Role: agent-grill-me"]
+        "required_triggers": [
+          "grill-me",
+          "interview idea",
+          "explore idea"
+        ],
+        "required_patterns": [
+          "agent-grill-me"
+        ],
+        "forbidden_patterns": [
+          "agent-spec"
+        ]
       }
     },
     {
@@ -231,10 +348,18 @@
       "target_skill": "agent-api-contract",
       "prompt": "Evolve the OpenAPI contract and webhook contract with a consumer driven contract check before we change handlers.",
       "assertions": {
-        "required_triggers": ["openapi", "api contract", "webhook contract", "consumer driven contract"],
-        "required_patterns": ["agent-api-contract"],
-        "forbidden_patterns": ["agent-spec"],
-        "required_output_sections": ["Target Role: agent-api-contract"]
+        "required_triggers": [
+          "openapi",
+          "api contract",
+          "webhook contract",
+          "consumer driven contract"
+        ],
+        "required_patterns": [
+          "agent-api-contract"
+        ],
+        "forbidden_patterns": [
+          "agent-spec"
+        ]
       }
     },
     {
@@ -244,10 +369,18 @@
       "target_skill": "agent-ui",
       "prompt": "Fix the semantic HTML landmarks and heading order on this form page before we restyle it.",
       "assertions": {
-        "required_triggers": ["semantic html", "landmarks", "heading order", "form"],
-        "required_patterns": ["agent-ui"],
-        "forbidden_patterns": ["agent-copy"],
-        "required_output_sections": ["Target Role: agent-ui"]
+        "required_triggers": [
+          "semantic html",
+          "landmarks",
+          "heading order",
+          "form"
+        ],
+        "required_patterns": [
+          "agent-ui"
+        ],
+        "forbidden_patterns": [
+          "agent-copy"
+        ]
       }
     },
     {
@@ -257,10 +390,18 @@
       "target_skill": "agent-telemetry",
       "prompt": "Add OpenTelemetry tracing, correlation id propagation, and SLO metrics for the share pipeline.",
       "assertions": {
-        "required_triggers": ["opentelemetry", "tracing", "correlation id", "slo"],
-        "required_patterns": ["agent-telemetry"],
-        "forbidden_patterns": ["agent-perf-opt"],
-        "required_output_sections": ["Target Role: agent-telemetry"]
+        "required_triggers": [
+          "opentelemetry",
+          "tracing",
+          "correlation id",
+          "slo"
+        ],
+        "required_patterns": [
+          "agent-telemetry"
+        ],
+        "forbidden_patterns": [
+          "agent-perf-opt"
+        ]
       }
     },
     {
@@ -270,10 +411,18 @@
       "target_skill": "agent-adr",
       "prompt": "Record an ADR using MADR for this irreversible architecture decision and why we chose object storage.",
       "assertions": {
-        "required_triggers": ["adr", "madr", "architecture decision", "irreversible"],
-        "required_patterns": ["agent-adr"],
-        "forbidden_patterns": ["agent-arch-drift"],
-        "required_output_sections": ["Target Role: agent-adr"]
+        "required_triggers": [
+          "adr",
+          "madr",
+          "architecture decision",
+          "irreversible"
+        ],
+        "required_patterns": [
+          "agent-adr"
+        ],
+        "forbidden_patterns": [
+          "agent-arch-drift"
+        ]
       }
     },
     {
@@ -283,10 +432,19 @@
       "target_skill": "agent-release",
       "prompt": "Ship the release: changelog, version bump, and prepare merge with a conventional PR title.",
       "assertions": {
-        "required_triggers": ["release", "ship", "changelog", "version bump", "prepare merge"],
-        "required_patterns": ["agent-release"],
-        "forbidden_patterns": ["agent-docs"],
-        "required_output_sections": ["Target Role: agent-release"]
+        "required_triggers": [
+          "release",
+          "ship",
+          "changelog",
+          "version bump",
+          "prepare merge"
+        ],
+        "required_patterns": [
+          "agent-release"
+        ],
+        "forbidden_patterns": [
+          "agent-docs"
+        ]
       }
     },
     {
@@ -296,10 +454,19 @@
       "target_skill": "agent-pre-commit",
       "prompt": "Run the husky pre-commit quality gate, fix lint, and format the PR title as a conventional commit.",
       "assertions": {
-        "required_triggers": ["pre-commit", "husky", "quality gate", "conventional commits", "PR title"],
-        "required_patterns": ["agent-pre-commit"],
-        "forbidden_patterns": ["agent-release"],
-        "required_output_sections": ["Target Role: agent-pre-commit"]
+        "required_triggers": [
+          "pre-commit",
+          "husky",
+          "quality gate",
+          "conventional commits",
+          "PR title"
+        ],
+        "required_patterns": [
+          "agent-pre-commit"
+        ],
+        "forbidden_patterns": [
+          "agent-release"
+        ]
       }
     },
     {
@@ -309,10 +476,16 @@
       "target_skill": "agent-tdd",
       "prompt": "Wire a thin Stripe client for the payment port interface we just greened in this TDD session.",
       "assertions": {
-        "required_triggers": ["tdd", "port interface"],
-        "required_patterns": ["agent-tdd"],
-        "forbidden_patterns": ["agent-adapter"],
-        "required_output_sections": ["Target Role: agent-tdd"]
+        "required_triggers": [
+          "tdd",
+          "port interface"
+        ],
+        "required_patterns": [
+          "agent-tdd"
+        ],
+        "forbidden_patterns": [
+          "agent-adapter"
+        ]
       }
     },
     {
@@ -322,10 +495,18 @@
       "target_skill": "agent-cloudflare-ops",
       "prompt": "Web Analytics isn't recording on our Cloudflare sites. Diagnose the RUM beacons and insights hostnames and fix drift.",
       "assertions": {
-        "required_triggers": ["web analytics", "rum", "beacon", "diagnose cloudflare"],
-        "required_patterns": ["agent-cloudflare-ops"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["Target Role: agent-cloudflare-ops"]
+        "required_triggers": [
+          "web analytics",
+          "rum",
+          "beacon",
+          "diagnose cloudflare"
+        ],
+        "required_patterns": [
+          "agent-cloudflare-ops"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     },
     {
@@ -335,10 +516,17 @@
       "target_skill": "agent-posthog",
       "prompt": "Add PostHog cookieless tracking to this site and check why events are empty. Do not run the wizard.",
       "assertions": {
-        "required_triggers": ["posthog", "cookieless", "posthog wizard"],
-        "required_patterns": ["agent-posthog"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["Target Role: agent-posthog"]
+        "required_triggers": [
+          "posthog",
+          "cookieless",
+          "posthog wizard"
+        ],
+        "required_patterns": [
+          "agent-posthog"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     },
     {
@@ -348,10 +536,18 @@
       "target_skill": "agent-user-stories",
       "prompt": "Review this product and add improvement user stories to Linear with acceptance criteria and wireframes.",
       "assertions": {
-        "required_triggers": ["linear", "user stories", "acceptance criteria", "wireframe"],
-        "required_patterns": ["agent-user-stories"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["Target Role: agent-user-stories"]
+        "required_triggers": [
+          "linear",
+          "user stories",
+          "acceptance criteria",
+          "wireframe"
+        ],
+        "required_patterns": [
+          "agent-user-stories"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     },
     {
@@ -361,10 +557,17 @@
       "target_skill": "agent-prd",
       "prompt": "Write a PRD and product bet with kill criteria and a feature-flag plan for gating the new onboarding chooser.",
       "assertions": {
-        "required_triggers": ["prd", "product bet", "kill criteria"],
-        "required_patterns": ["agent-prd"],
-        "forbidden_patterns": ["agent-tdd"],
-        "required_output_sections": ["Target Role: agent-prd"]
+        "required_triggers": [
+          "prd",
+          "product bet",
+          "kill criteria"
+        ],
+        "required_patterns": [
+          "agent-prd"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
       }
     }
   ]

@@ -26,7 +26,7 @@ interface EvalSuite {
 interface SkillMeta {
   name: string;
   triggers: string[];
-  description: string;
+  body: string;
 }
 
 function loadSkillsMeta(skillsDir: string): Map<string, SkillMeta> {
@@ -60,7 +60,7 @@ function loadSkillsMeta(skillsDir: string): Map<string, SkillMeta> {
     map.set(name, {
       name,
       triggers,
-      description: content.substring(0, 300)
+      body: content
     });
   }
   return map;
@@ -136,6 +136,31 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
             if (promptLower.includes(forbidden.toLowerCase()) && !forbidden.toLowerCase().includes('```')) {
               casePassed = false;
               failureReasons.push(`Prompt contains forbidden pattern "${forbidden}"`);
+            }
+          }
+        }
+
+        const haystack = testCase.target_skill ? skillsMap.get(testCase.target_skill)?.body : undefined;
+        const needles = [
+          ...(testCase.assertions.required_patterns ?? []),
+          ...(testCase.assertions.required_output_sections ?? [])
+        ];
+        if (needles.length > 0) {
+          if (!testCase.target_skill) {
+            casePassed = false;
+            failureReasons.push('required_patterns / required_output_sections need target_skill');
+          } else if (haystack === undefined) {
+            casePassed = false;
+            failureReasons.push(`Target skill "${testCase.target_skill}" has no SKILL.md body to check`);
+          } else {
+            const hayLower = haystack.toLowerCase();
+            for (const needle of needles) {
+              if (!hayLower.includes(needle.toLowerCase())) {
+                casePassed = false;
+                failureReasons.push(
+                  `Skill "${testCase.target_skill}" body missing required pattern "${needle}"`
+                );
+              }
             }
           }
         }

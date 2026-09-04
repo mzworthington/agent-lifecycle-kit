@@ -11,6 +11,9 @@
       "assertions": {
         "required_triggers": [
           "java"
+        ],
+        "required_patterns": [
+          "lang-java"
         ]
       }
     }

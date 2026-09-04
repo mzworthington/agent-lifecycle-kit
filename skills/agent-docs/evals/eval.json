@@ -20,6 +20,9 @@
         "required_output_sections": [
           "README",
           "Runbook"
+        ],
+        "required_patterns": [
+          "agent-docs"
         ]
       }
     },

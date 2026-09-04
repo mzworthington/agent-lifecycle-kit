@@ -10,13 +10,24 @@
       "target_skill": "lang-typescript",
       "prompt": "Write a TypeScript domain service for calculating workspace usage metrics.",
       "context": {
-        "detected_stack": ["TypeScript"]
+        "detected_stack": [
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["typescript", "node", "zod"],
-        "required_patterns": ["readonly", "interface", "export type"],
-        "forbidden_patterns": [": any", "as any", "as unknown as"],
-        "required_output_sections": ["Type Definitions", "Domain Service Implementation"]
+        "required_triggers": [
+          "typescript",
+          "node",
+          "zod"
+        ],
+        "required_patterns": [
+          "interface"
+        ],
+        "forbidden_patterns": [
+          ": any",
+          "as any",
+          "as unknown as"
+        ]
       }
     },
     {
@@ -26,13 +37,22 @@
       "target_skill": "lang-java",
       "prompt": "Implement a Java value object and domain event for tenant registration.",
       "context": {
-        "detected_stack": ["Java"]
+        "detected_stack": [
+          "Java"
+        ]
       },
       "assertions": {
-        "required_triggers": ["java", "junit", "record"],
-        "required_patterns": ["record ", "final ", "Optional<"],
-        "forbidden_patterns": ["public String name;"],
-        "required_output_sections": ["Domain Record Definitions", "Domain Event Implementation"]
+        "required_triggers": [
+          "java",
+          "junit",
+          "record"
+        ],
+        "required_patterns": [
+          "lang-java"
+        ],
+        "forbidden_patterns": [
+          "public String name;"
+        ]
       }
     },
     {
@@ -42,13 +62,22 @@
       "target_skill": "lang-csharp",
       "prompt": "Create C# domain entities and value objects for user subscription billing.",
       "context": {
-        "detected_stack": ["C#"]
+        "detected_stack": [
+          "C#"
+        ]
       },
       "assertions": {
-        "required_triggers": ["csharp", "c#", "record"],
-        "required_patterns": ["public record", "init;", "async Task"],
-        "forbidden_patterns": ["#nullable disable"],
-        "required_output_sections": ["Entity Definitions", "Value Object Contracts"]
+        "required_triggers": [
+          "csharp",
+          "c#",
+          "record"
+        ],
+        "required_patterns": [
+          "lang-csharp"
+        ],
+        "forbidden_patterns": [
+          "#nullable disable"
+        ]
       }
     },
     {
@@ -58,13 +87,26 @@
       "target_skill": "lang-hcl",
       "prompt": "Write HCL module definitions for an S3 bucket with encryption and lifecycle rules.",
       "context": {
-        "detected_stack": ["Terraform", "HCL"]
+        "detected_stack": [
+          "Terraform",
+          "HCL"
+        ]
       },
       "assertions": {
-        "required_triggers": ["hcl", "terraform hcl", ".tf"],
-        "required_patterns": ["variable \"", "resource \"", "locals {"],
-        "forbidden_patterns": ["type = any"],
-        "required_output_sections": ["Variables Definition", "Resource Configuration", "Outputs"]
+        "required_triggers": [
+          "hcl",
+          "terraform hcl",
+          ".tf"
+        ],
+        "required_patterns": [
+          "variable \""
+        ],
+        "forbidden_patterns": [
+          "type = any"
+        ],
+        "required_output_sections": [
+          "Outputs"
+        ]
       }
     },
     {
@@ -74,13 +116,23 @@
       "target_skill": "framework-next",
       "prompt": "Build a Next.js App Router page and server action for editing project metadata.",
       "context": {
-        "detected_stack": ["TypeScript", "Next.js"]
+        "detected_stack": [
+          "TypeScript",
+          "Next.js"
+        ]
       },
       "assertions": {
-        "required_triggers": ["next.js", "app router", "server action"],
-        "required_patterns": ["'use server'", "async function Page"],
-        "forbidden_patterns": ["pages/api/"],
-        "required_output_sections": ["Server Component Layout", "Server Action Handler"]
+        "required_triggers": [
+          "next.js",
+          "app router",
+          "server action"
+        ],
+        "required_patterns": [
+          "framework-next"
+        ],
+        "forbidden_patterns": [
+          "pages/api/"
+        ]
       }
     },
     {
@@ -90,13 +142,24 @@
       "target_skill": "framework-springboot",
       "prompt": "Create a Spring Boot REST controller and application service for document management.",
       "context": {
-        "detected_stack": ["Java", "Spring Boot"]
+        "detected_stack": [
+          "Java",
+          "Spring Boot"
+        ]
       },
       "assertions": {
-        "required_triggers": ["spring boot", "restcontroller", "spring data jpa"],
-        "required_patterns": ["@RestController", "@Service", "private final"],
-        "forbidden_patterns": ["@Autowired private"],
-        "required_output_sections": ["REST Controller", "Application Service"]
+        "required_triggers": [
+          "spring boot",
+          "restcontroller",
+          "spring data jpa"
+        ],
+        "required_patterns": [
+          "@RestController",
+          "@Service"
+        ],
+        "forbidden_patterns": [
+          "@Autowired private"
+        ]
       }
     },
     {
@@ -106,13 +169,26 @@
       "target_skill": "profile-iac",
       "prompt": "Define secure IAM roles and KMS encryption key policies for an AWS deployment.",
       "context": {
-        "detected_stack": ["IaC", "AWS"]
+        "detected_stack": [
+          "IaC",
+          "AWS"
+        ]
       },
       "assertions": {
-        "required_triggers": ["infrastructure as code", "least privilege", "caf"],
-        "required_patterns": ["Least Privilege", "KMS", "Policy"],
-        "forbidden_patterns": ["\"Action\": \"*\"", "\"Resource\": \"*\""],
-        "required_output_sections": ["KMS Key Policy", "IAM Role & Policy Definitions"]
+        "required_triggers": [
+          "infrastructure as code",
+          "least privilege",
+          "caf"
+        ],
+        "required_patterns": [
+          "Least Privilege",
+          "KMS",
+          "Policy"
+        ],
+        "forbidden_patterns": [
+          "\"Action\": \"*\"",
+          "\"Resource\": \"*\""
+        ]
       }
     },
     {
@@ -122,13 +198,26 @@
       "target_skill": "lang-rust",
       "prompt": "Write a Rust module for domain invariant verification with clean Result propagation.",
       "context": {
-        "detected_stack": ["Rust", "Cargo"]
+        "detected_stack": [
+          "Rust",
+          "Cargo"
+        ]
       },
       "assertions": {
-        "required_triggers": ["rust", "cargo", "ownership"],
-        "required_patterns": ["Result<", "pub struct"],
-        "forbidden_patterns": [".unwrap()"],
-        "required_output_sections": ["Domain Types", "Error Handling"]
+        "required_triggers": [
+          "rust",
+          "cargo",
+          "ownership"
+        ],
+        "required_patterns": [
+          "Result<"
+        ],
+        "forbidden_patterns": [
+          ".unwrap()"
+        ],
+        "required_output_sections": [
+          "Error Handling"
+        ]
       }
     },
     {
@@ -138,13 +227,26 @@
       "target_skill": "framework-react",
       "prompt": "Build a React 19 interactive view component with state management.",
       "context": {
-        "detected_stack": ["TypeScript", "React"]
+        "detected_stack": [
+          "TypeScript",
+          "React"
+        ]
       },
       "assertions": {
-        "required_triggers": ["react", "react component", "hooks"],
-        "required_patterns": ["export function", "useState"],
-        "forbidden_patterns": ["class extends React.Component"],
-        "required_output_sections": ["Custom Hook", "Component Definition"]
+        "required_triggers": [
+          "react",
+          "react component",
+          "hooks"
+        ],
+        "required_patterns": [
+          "framework-react"
+        ],
+        "forbidden_patterns": [
+          "class extends React.Component"
+        ],
+        "required_output_sections": [
+          "Custom Hook"
+        ]
       }
     },
     {
@@ -154,13 +256,30 @@
       "target_skill": "framework-astro",
       "prompt": "Build an Astro TypeScript static site with React islands and GitHub Pages deploy.",
       "context": {
-        "detected_stack": ["TypeScript", "Astro"]
+        "detected_stack": [
+          "TypeScript",
+          "Astro"
+        ]
       },
       "assertions": {
-        "required_triggers": ["astro", "islands", "static site", "github pages"],
-        "required_patterns": ["client:", ".astro"],
-        "forbidden_patterns": ["createRoot(", "pages/api/"],
-        "required_output_sections": ["Astro Page", "Island"]
+        "required_triggers": [
+          "astro",
+          "islands",
+          "static site",
+          "github pages"
+        ],
+        "required_patterns": [
+          "client:",
+          ".astro"
+        ],
+        "forbidden_patterns": [
+          "createRoot(",
+          "pages/api/"
+        ],
+        "required_output_sections": [
+          "Astro Page",
+          "Island"
+        ]
       }
     },
     {
@@ -170,13 +289,27 @@
       "target_skill": "framework-express",
       "prompt": "Create an Express router service with request validation middleware.",
       "context": {
-        "detected_stack": ["TypeScript", "Express"]
+        "detected_stack": [
+          "TypeScript",
+          "Express"
+        ]
       },
       "assertions": {
-        "required_triggers": ["express", "express router", "express middleware"],
-        "required_patterns": ["Router()", "next()"],
-        "forbidden_patterns": ["eval("],
-        "required_output_sections": ["Express Router", "Validation Middleware"]
+        "required_triggers": [
+          "express",
+          "express router",
+          "express middleware"
+        ],
+        "required_patterns": [
+          "framework-express"
+        ],
+        "forbidden_patterns": [
+          "eval("
+        ],
+        "required_output_sections": [
+          "Express Router",
+          "Validation Middleware"
+        ]
       }
     },
     {
@@ -186,13 +319,26 @@
       "target_skill": "profile-mcp",
       "prompt": "Build a Model Context Protocol MCP server with custom tools.",
       "context": {
-        "detected_stack": ["MCP", "TypeScript"]
+        "detected_stack": [
+          "MCP",
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["mcp", "mcp server", "mcp tool"],
-        "required_patterns": ["inputSchema", "Server"],
-        "forbidden_patterns": ["hardcoded_secret"],
-        "required_output_sections": ["Tool Schema", "Server Definition"]
+        "required_triggers": [
+          "mcp",
+          "mcp server",
+          "mcp tool"
+        ],
+        "required_patterns": [
+          "Server"
+        ],
+        "forbidden_patterns": [
+          "hardcoded_secret"
+        ],
+        "required_output_sections": [
+          "Tool Schema"
+        ]
       }
     },
     {
@@ -202,13 +348,28 @@
       "target_skill": "framework-pulumi",
       "prompt": "Create a Pulumi ComponentResource and run pulumi preview with CrossGuard and pulumi ESC secrets.",
       "context": {
-        "detected_stack": ["Pulumi", "TypeScript"]
+        "detected_stack": [
+          "Pulumi",
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["pulumi", "pulumi preview", "component resource", "crossguard", "pulumi esc"],
-        "required_patterns": ["ComponentResource"],
-        "forbidden_patterns": ["hardcoded secret"],
-        "required_output_sections": ["Component Layout", "Secrets"]
+        "required_triggers": [
+          "pulumi",
+          "pulumi preview",
+          "component resource",
+          "crossguard",
+          "pulumi esc"
+        ],
+        "required_patterns": [
+          "ComponentResource"
+        ],
+        "forbidden_patterns": [
+          "hardcoded secret"
+        ],
+        "required_output_sections": [
+          "Secrets"
+        ]
       }
     },
     {
@@ -218,13 +379,28 @@
       "target_skill": "framework-terraform",
       "prompt": "Write a Terraform module with remote state and document the tf plan / tf apply CI path for Terragrunt.",
       "context": {
-        "detected_stack": ["Terraform"]
+        "detected_stack": [
+          "Terraform"
+        ]
       },
       "assertions": {
-        "required_triggers": ["terraform", "terraform module", "remote state", "tf plan", "terragrunt"],
-        "required_patterns": ["remote state"],
-        "forbidden_patterns": ["hardcoded secret"],
-        "required_output_sections": ["Module Layout", "Remote State"]
+        "required_triggers": [
+          "terraform",
+          "terraform module",
+          "remote state",
+          "tf plan",
+          "terragrunt"
+        ],
+        "required_patterns": [
+          "remote state"
+        ],
+        "forbidden_patterns": [
+          "hardcoded secret"
+        ],
+        "required_output_sections": [
+          "Module Layout",
+          "Remote State"
+        ]
       }
     },
     {
@@ -234,13 +410,23 @@
       "target_skill": "framework-nuxt",
       "prompt": "Add a Nuxt feature that uses useFetch and a Nitro /server/api handler.",
       "context": {
-        "detected_stack": ["Nuxt", "TypeScript"]
+        "detected_stack": [
+          "Nuxt",
+          "TypeScript"
+        ]
       },
       "assertions": {
-        "required_triggers": ["nuxt", "nitro", "usefetch"],
-        "required_patterns": ["useFetch"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Feature Slice", "Nitro Route"]
+        "required_triggers": [
+          "nuxt",
+          "nitro",
+          "usefetch"
+        ],
+        "required_patterns": [
+          "useFetch"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
       }
     },
     {
@@ -250,13 +436,27 @@
       "target_skill": "framework-quarkus",
       "prompt": "Implement a Quarkus RESTEasy resource with Panache and GraalVM native image notes.",
       "context": {
-        "detected_stack": ["Quarkus", "Java"]
+        "detected_stack": [
+          "Quarkus",
+          "Java"
+        ]
       },
       "assertions": {
-        "required_triggers": ["quarkus", "resteasy", "panache", "graalvm"],
-        "required_patterns": ["resource"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Resource Adapter", "Handler"]
+        "required_triggers": [
+          "quarkus",
+          "resteasy",
+          "panache",
+          "graalvm"
+        ],
+        "required_patterns": [
+          "resource"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Handler"
+        ]
       }
     },
     {
@@ -266,13 +466,27 @@
       "target_skill": "framework-dotnet",
       "prompt": "Build an ASP.NET Core Web API with EF Core in the adapter and a MediatR handler tested via xUnit WebApplicationFactory.",
       "context": {
-        "detected_stack": [".NET"]
+        "detected_stack": [
+          ".NET"
+        ]
       },
       "assertions": {
-        "required_triggers": ["dotnet", "asp.net", "ef core", "mediatr", "xunit"],
-        "required_patterns": ["handler"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Delivery Adapter", "Handler"]
+        "required_triggers": [
+          "dotnet",
+          "asp.net",
+          "ef core",
+          "mediatr",
+          "xunit"
+        ],
+        "required_patterns": [
+          "handler"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Handler"
+        ]
       }
     },
     {
@@ -282,13 +496,25 @@
       "target_skill": "lang-python",
       "prompt": "Write a Python domain service with type hints, a Protocol port, and pytest coverage. Keep the ORM out of domain.",
       "context": {
-        "detected_stack": ["Python"]
+        "detected_stack": [
+          "Python"
+        ]
       },
       "assertions": {
-        "required_triggers": ["python", "type hints", "pytest"],
-        "required_patterns": ["Protocol", "def "],
-        "forbidden_patterns": ["SQLAlchemy"],
-        "required_output_sections": ["Type Hints", "Port Protocol"]
+        "required_triggers": [
+          "python",
+          "type hints",
+          "pytest"
+        ],
+        "required_patterns": [
+          "Protocol"
+        ],
+        "forbidden_patterns": [
+          "SQLAlchemy"
+        ],
+        "required_output_sections": [
+          "Type Hints"
+        ]
       }
     },
     {
@@ -298,13 +524,24 @@
       "target_skill": "lang-go",
       "prompt": "Implement a golang service with small interfaces at the boundary, go test table-driven cases, and context.Context cancellation.",
       "context": {
-        "detected_stack": ["Go"]
+        "detected_stack": [
+          "Go"
+        ]
       },
       "assertions": {
-        "required_triggers": ["golang", "go test"],
-        "required_patterns": ["interface", "func "],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Boundary Interface", "Domain Types"]
+        "required_triggers": [
+          "golang",
+          "go test"
+        ],
+        "required_patterns": [
+          "interface"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Domain Types"
+        ]
       }
     },
     {
@@ -314,13 +551,28 @@
       "target_skill": "framework-fastapi",
       "prompt": "Create a FastAPI APIRouter with Pydantic v2 schemas, Depends-injected ports, and async route handlers.",
       "context": {
-        "detected_stack": ["Python", "FastAPI"]
+        "detected_stack": [
+          "Python",
+          "FastAPI"
+        ]
       },
       "assertions": {
-        "required_triggers": ["fastapi", "apirouter", "pydantic"],
-        "required_patterns": ["APIRouter", "Depends"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Route Adapter", "Pydantic Models"]
+        "required_triggers": [
+          "fastapi",
+          "apirouter",
+          "pydantic"
+        ],
+        "required_patterns": [
+          "APIRouter",
+          "Depends"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Route Adapter",
+          "Pydantic Models"
+        ]
       }
     },
     {
@@ -330,13 +582,27 @@
       "target_skill": "profile-api",
       "prompt": "Design a REST API with API versioning, idempotency keys on POST, and a stable error envelope.",
       "context": {
-        "detected_stack": ["HTTP API"]
+        "detected_stack": [
+          "HTTP API"
+        ]
       },
       "assertions": {
-        "required_triggers": ["rest api", "idempotency", "api versioning"],
-        "required_patterns": ["idempotency", "envelope"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Versioning", "Error Envelope"]
+        "required_triggers": [
+          "rest api",
+          "idempotency",
+          "api versioning"
+        ],
+        "required_patterns": [
+          "idempotency",
+          "envelope"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Versioning",
+          "Error Envelope"
+        ]
       }
     },
     {
@@ -346,13 +612,28 @@
       "target_skill": "profile-observability",
       "prompt": "Apply the observability profile: OpenTelemetry tracing conventions, metrics naming, and SLO mapping for this backend.",
       "context": {
-        "detected_stack": ["OpenTelemetry"]
+        "detected_stack": [
+          "OpenTelemetry"
+        ]
       },
       "assertions": {
-        "required_triggers": ["observability profile", "metrics naming", "tracing conventions", "slo mapping", "opentelemetry"],
-        "required_patterns": ["cardinality", "SLO"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Metric Naming", "SLO Link"]
+        "required_triggers": [
+          "observability profile",
+          "metrics naming",
+          "tracing conventions",
+          "slo mapping",
+          "opentelemetry"
+        ],
+        "required_patterns": [
+          "cardinality",
+          "SLO"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "SLO Link"
+        ]
       }
     },
     {
@@ -362,13 +643,31 @@
       "target_skill": "profile-pipeline",
       "prompt": "Design a GitHub Actions CI/CD pipeline with trunk-based checks, build once, prod deploy, smoke tests, and changelog push-back.",
       "context": {
-        "detected_stack": ["GitHub Actions"]
+        "detected_stack": [
+          "GitHub Actions"
+        ]
       },
       "assertions": {
-        "required_triggers": ["ci/cd", "github actions", "pipeline", "build once", "smoke test", "changelog"],
-        "required_patterns": ["build once", "smoke", "rollback"],
-        "forbidden_patterns": ["ASCII art"],
-        "required_output_sections": ["Verify", "Deploy"]
+        "required_triggers": [
+          "ci/cd",
+          "github actions",
+          "pipeline",
+          "build once",
+          "smoke test",
+          "changelog"
+        ],
+        "required_patterns": [
+          "build once",
+          "smoke",
+          "rollback"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Verify",
+          "Deploy"
+        ]
       }
     }
   ]

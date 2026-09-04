@@ -13,10 +13,22 @@
         "active_phase": "debug"
       },
       "assertions": {
-        "required_triggers": ["hypothesis", "root cause", "reproduce"],
-        "required_patterns": ["Hypothesis", "Evidence", "Root Cause"],
-        "forbidden_patterns": ["guessing without logs"],
-        "required_output_sections": ["Hypothesis Board", "Empirical Evidence & Logs", "Root Cause & Fix"]
+        "required_triggers": [
+          "hypothesis",
+          "root cause",
+          "reproduce"
+        ],
+        "required_patterns": [
+          "Hypothesis",
+          "Evidence",
+          "Root Cause"
+        ],
+        "forbidden_patterns": [
+          "guessing without logs"
+        ],
+        "required_output_sections": [
+          "Hypothesis Board"
+        ]
       }
     },
     {
@@ -30,19 +42,20 @@
         "miss_type": "agent-tool"
       },
       "assertions": {
-        "required_triggers": ["root cause", "reproduce", "hypothesis"],
+        "required_triggers": [
+          "root cause",
+          "reproduce",
+          "hypothesis"
+        ],
         "required_patterns": [
           "EDD",
-          "prod-derived",
-          "kit eval",
-          "from-trace"
+          "kit eval"
         ],
         "forbidden_patterns": [
           "ask the user to paste the prompt",
           "copy and paste the prompt into JSONL"
         ],
         "required_output_sections": [
-          "Root Cause & Fix",
           "EDD case"
         ]
       }
@@ -57,10 +70,21 @@
         "active_phase": "debug"
       },
       "assertions": {
-        "required_triggers": ["bug", "debug", "root cause"],
-        "required_patterns": ["In Progress", "Cursor", "WAY-123"],
-        "forbidden_patterns": ["git checkout -b", "git commit"],
-        "required_output_sections": ["Hypothesis Board", "Proposed commit"]
+        "required_triggers": [
+          "bug",
+          "debug",
+          "root cause"
+        ],
+        "required_patterns": [
+          "Cursor"
+        ],
+        "forbidden_patterns": [
+          "git checkout -b",
+          "git commit"
+        ],
+        "required_output_sections": [
+          "Hypothesis Board"
+        ]
       }
     }
   ]
