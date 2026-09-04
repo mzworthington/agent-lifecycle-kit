@@ -17,6 +17,11 @@ describe('husky pre-commit', () => {
     const hook = fs.readFileSync(path.join(repoDir, '.husky/pre-commit'), 'utf8');
     assert.match(hook, /web" && pnpm test:mermaid/);
   });
+
+  it('fails the always-on context budget before push, not only in kit check CI', () => {
+    const hook = fs.readFileSync(path.join(repoDir, '.husky/pre-commit'), 'utf8');
+    assert.match(hook, /bin\/kit" measure-context/);
+  });
 });
 
 describe('husky commit-msg', () => {
