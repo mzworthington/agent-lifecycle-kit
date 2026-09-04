@@ -9,6 +9,7 @@ import {
   MCP_PROFILE_STAMP_REL,
   MCP_RESTORE_GITIGNORE_PATTERNS,
   ensureMcpRestoreGitignore,
+  gitignoreHasPattern,
   profileToRestore,
   readMcpProfileStamp,
   recordComposedProfile
@@ -54,7 +55,7 @@ describe('mcp profile stamp', () => {
     recordComposedProfile(dir, 'default');
     const gitignore = fs.readFileSync(path.join(dir, '.gitignore'), 'utf8');
     for (const pattern of MCP_RESTORE_GITIGNORE_PATTERNS) {
-      assert.match(gitignore, new RegExp(pattern.replace(/[.*]/g, '\\$&')));
+      assert.equal(gitignoreHasPattern(gitignore, pattern), true);
     }
     fs.mkdirSync(path.join(dir, '.cursor'), { recursive: true });
     fs.writeFileSync(path.join(dir, '.cursor', 'mcp.json.bak.20260102030405'), '{"token":"nope"}\n');
