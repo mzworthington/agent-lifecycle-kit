@@ -19,7 +19,6 @@ No open P0 items. R1 (rename) and R2 (host writers, not Cursor-only copy) are in
 |----|---------|-----------------|--------|
 | R5 | Role skills over ~150-line kit-review budget (`agent-prune`, `agent-orchestrator`, `agent-debug`, `agent-copy`) | Move procedure back to SOPs; keep role skills as routers | **Open** |
 | R6 | Several `lang-*` / `framework-*` skills are short checklists (~38–48 lines) | Cut unused profiles or deepen with evals + concrete anti-patterns (see `lang-typescript` direction) | **Open** |
-| R7 | Full lifecycle ceremony is heavy for day-to-day coding | Keep shortcuts (debug route, light XFN); surface “minimal path” in README onboarding | **Open** |
 
 ## Done since Aug 30 draft (do not reopen without new evidence)
 
@@ -28,7 +27,8 @@ No open P0 items. R1 (rename) and R2 (host writers, not Cursor-only copy) are in
 | D1 | Architecture stack felt non-optional / blocks adoption | Applicability & opt-out + seed ADRs (#36) |
 | D2 | EDD closed-loop entirely aspirational | Suites/depth (#23), shadow/OTel path (#28–#30), skill coverage (#31), nightly live workflow |
 | R1 | “Live trigger” language for a non-model skill-registration check | Renamed CLI help + harness banner to skill-trigger / prompt hygiene. Harness still ignores `required_patterns`. |
-| R2 | Multi-IDE peer-depth oversold | MCP/model/rules writers for Cursor, Claude, Copilot, Antigravity; Windsurf still rules-only ([docs/hosts.md](./hosts.md)). |
+| R2 | Multi-IDE peer-depth oversold | MCP/model/rules writers for Cursor, Claude, Copilot, Antigravity; Windsurf is rules-only forever ([docs/hosts.md](./hosts.md)). |
+| R7 | Full lifecycle ceremony is heavy for day-to-day coding | Minimal path on [start](./start.md), [jobs](./jobs.md), `wk help`, and [kit commands](./kit.md): debug + light XFN vs feature lifecycle. |
 
 ## How to use
 

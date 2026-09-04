@@ -16,6 +16,7 @@ describe('homepage copy', () => {
     expect(HOME_CLI_HEADING).toBe('The wk CLI');
     expect(HOME_HEADLINE).toMatch(/grill/i);
     expect(HOME_NEXT).toHaveLength(4);
+    expect(HOME_NEXT[0]?.body).toMatch(/debug vs feature/i);
     expect(HOME_NEXT[1]?.href).toBe('/docs/lifecycle');
     expect(HOME_NEXT[2]?.href).toBe('/docs/kit');
     expect(HOME_NEXT[2]?.body).toMatch(/wk /i);

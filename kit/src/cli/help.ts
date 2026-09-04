@@ -8,6 +8,12 @@ Waykit CLI (${CLI_BIN})
 Usage: ${CLI_BIN} <command> [options]
 ${aliasLine}
 
+Day-to-day:
+  Typo, bug, or failed CI   agent-debug (light XFN if UI/auth/SLO). Not grill → spec.
+  Product feature           Full lifecycle in AGENTS.md
+  Handshake / hygiene       ${CLI_BIN} align .    /  ${CLI_BIN} doctor
+  Merge bar                 ${CLI_BIN} check
+
 Commands:
   init [dir]           Bootstrap AGENTS.md, host rules, MCP configs, and git hooks
   doctor [dir]         Check community files on repos you admin (report only; --write fills gaps)

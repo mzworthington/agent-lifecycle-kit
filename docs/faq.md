@@ -4,7 +4,7 @@ Need a job, not an objection? [Jobs for today](/docs/jobs). First install: [Gett
 
 ## What is Waykit?
 
-Waykit is the software lifecycle for coding agents: grill, PRD/bet when value is unproven, spec, TDD, quality, audit, release, plus learning loops so the next session is better than the last. Eval-driven development (**alpha**) is one of those loops, when the change is a prompt or a tool contract. Feature path: [lifecycle](/docs/lifecycle). Hosts: [Cursor, Claude Code, Copilot, Antigravity](/docs/hosts).
+Waykit is the software lifecycle for coding agents: grill, PRD/bet when value is unproven, spec, TDD, quality, audit, release, plus learning loops so the next session is better than the last. Eval-driven development (**alpha**) is one of those loops, when the change is a prompt or a tool contract. Feature path: [lifecycle](/docs/lifecycle). Day-to-day typo or failed job: [Jobs for today](/docs/jobs) (`agent-debug`, not grill → spec). Hosts: [Cursor, Claude Code, Copilot, Antigravity](/docs/hosts).
 
 ## How do I install Waykit?
 

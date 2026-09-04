@@ -91,15 +91,15 @@ Browse: [Waykit map](./map.md). Authoring: [Author the Waykit map](/ontology). D
 
 ## Commands
 
-Skills and `AGENTS.md` tell the agent what to load. You operate the kit with `wk`: measure always-on context, compose one MCP profile, check community files on repos you admin, and fail the merge bar before CI does. `wk help` lists the rest.
+Day to day you operate the kit with `wk`: align for handshake, doctor for community files, check for the merge bar. Skills and `AGENTS.md` tell the agent which path to load (debug vs feature). `wk help` lists the rest.
 
 | Command | What it measures or installs |
 |---------|------------------------------|
-| `wk measure-context` | Always-on bootstrap size vs 8KB |
-| `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`) |
 | `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers) |
-| `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |
+| `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`) |
 | `wk check` | Audit, ontology, evals, EDD CI, context budget |
+| `wk measure-context` | Always-on bootstrap size vs 8KB |
+| `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |
 | `wk ontology check` | Live graph referential integrity |
 | `wk ontology generate` | Write gitignored index for kit-knowledge and the map |
 | `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |

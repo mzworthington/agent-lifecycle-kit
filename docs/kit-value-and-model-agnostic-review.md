@@ -3,7 +3,7 @@
 **Status:** refreshed 2026-09-01 (supersedes the Aug 30 draft on PR #22).  
 **Open actions:** [kit-review-backlog.md](./kit-review-backlog.md)
 
-**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline on Cursor, Claude Code, Copilot, or Antigravity. **Not** a full EDD product: the harness is alpha (scripted merge gate, OpenAI-compatible live path). Host MCP/model/rules writers now cover those four; Windsurf is still a rules pointer. Public copy should name EDD as alpha.
+**Verdict:** Still **valuable** for teams that want hexagonal + DDD + TDD/XFN discipline on Cursor, Claude Code, Copilot, or Antigravity. **Not** a full EDD product: the harness is alpha (scripted merge gate, OpenAI-compatible live path). Host MCP/model/rules writers now cover those four; Windsurf is rules-only forever. Public copy should name EDD as alpha.
 
 ---
 
@@ -40,7 +40,7 @@ Rough inventory (as of this refresh): ~45 skills, SOPs, dual eval layers (`evals
 | Closed-loop / live EDD aspirational | **Improved:** deeper EDD suites, shadow path, nightly `edd-live.yml` (still skips without `KIT_EVAL_API_KEY`) |
 | Default CI is scripted keyword driver | **Still true:** intentional merge gate; docs now say so clearly |
 | Skill-trigger evals are theater | **Still true:** `kit/src/edd/run_evals.ts` does not invoke a model or assert `required_patterns` / `required_output_sections` |
-| Multi-IDE peer-depth oversold | **Improved:** MCP/model/rules writers for Cursor, Claude, Copilot, Antigravity; Windsurf still rules-only |
+| Multi-IDE peer-depth oversold | **Improved:** MCP/model/rules writers for Cursor, Claude, Copilot, Antigravity; Windsurf is rules-only forever |
 | Skill length budget slipping | **Still true:** `agent-prune` / `agent-orchestrator` / `agent-debug` / `agent-copy` over ~150 lines |
 | Thin stack profiles | **Still true:** several `framework-*` / `lang-*` skills ~38–48 lines |
 | Process weight | **Still true:** shortcuts exist; default narrative is multi-phase |
@@ -78,7 +78,6 @@ Tracked in [kit-review-backlog.md](./kit-review-backlog.md). Top three:
 
 1. Make skill-trigger evals assert `required_patterns` / `required_output_sections` (copy already says they are registration / prompt hygiene, not a live model run).
 2. Enforce role skill line budget; cut or deepen thin stack profiles.
-3. Surface a shorter day-to-day path (debug + light XFN) without dropping the full lifecycle when the job is a product feature.
 
 ---
 

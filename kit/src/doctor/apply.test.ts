@@ -158,8 +158,10 @@ describe('printDoctorResult', () => {
       },
       (msg) => lines.push(msg)
     );
-    assert.match(lines.join('\n'), /wk align/);
-    assert.match(lines.join('\n'), /doctor PASSED/);
+    const text = lines.join('\n');
+    assert.match(text, /wk align/);
+    assert.match(text, /doctor PASSED/);
+    assert.equal(/handshake is aligned/i.test(text), false);
   });
 
   it('does not hint align for kit-only reports', () => {

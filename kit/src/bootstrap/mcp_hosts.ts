@@ -29,6 +29,11 @@ export function parseMcpHosts(raw: string | undefined): McpHostId[] {
   for (const part of parts) {
     const id = canonicalizeMcpHost(part);
     if (!id) {
+      if (part === 'windsurf') {
+        throw new Error(
+          `Unknown host '${part}'. Windsurf is rules-only forever (.windsurfrules); wk mcp does not write it. Use cursor, claude, copilot, antigravity (gemini/agy), or all.`
+        );
+      }
       throw new Error(
         `Unknown host '${part}'. Use cursor, claude, copilot, antigravity (gemini/agy), or all.`
       );

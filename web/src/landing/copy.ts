@@ -47,7 +47,7 @@ export const HOME_BADGES = [
 export const HOME_CLI_HEADING = 'The wk CLI';
 
 export const HOME_NEXT = [
-  { href: '/docs/start', title: 'Install Waykit in 10 minutes', body: 'Handshake, wk init, then the loops you need. No API key.' },
+  { href: '/docs/start', title: 'Install Waykit in 10 minutes', body: 'Handshake, wk init, then pick debug vs feature. No API key.' },
   { href: '/docs/lifecycle', title: 'Feature lifecycle', body: 'Grill, spec, TDD, XFN, audit, release. EDD (alpha) sits here when tools are the change.' },
   { href: '/docs/kit', title: 'CLI and what Waykit installs', body: 'wk check, doctor, measure-context, one MCP profile. The operator surface, not just skills on disk.' },
   { href: '/docs/map', title: 'Waykit map', body: 'Live graph of this kit: edit files, check dangling links, load one node. Not a second catalog.' }

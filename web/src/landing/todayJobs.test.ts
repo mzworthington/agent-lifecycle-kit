@@ -50,6 +50,7 @@ describe('docs/today-jobs.md', () => {
     const jobs = parseTodayJobsMarkdown(todayMd);
     expect(jobs.map((job) => job.id)).toEqual([
       'first-hour',
+      'daily',
       'feature',
       'context',
       'wrong-tool',
@@ -61,6 +62,10 @@ describe('docs/today-jobs.md', () => {
     const firstHour = jobs[0]!;
     expect(firstHour.title).toBe('I have never installed Waykit');
     expect(firstHour.blurb).toMatch(/fresh machine/i);
+    const daily = jobs.find((job) => job.id === 'daily')!;
+    expect(daily.title).toBe('Typo, bug, or failed job');
+    expect(daily.blurb).toMatch(/debug/i);
+    expect(daily.cmd).toBe('wk debug-board <project> "<symptom>"');
     const feature = jobs.find((job) => job.id === 'feature')!;
     expect(feature.title).toBe('Starting a product feature');
     expect(feature.blurb).toMatch(/lifecycle path/);

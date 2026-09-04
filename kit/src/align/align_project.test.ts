@@ -110,6 +110,56 @@ describe('alignProject', () => {
     assert.equal(fs.readFileSync(path.join(target, 'CLAUDE.md'), 'utf8'), '# project-CLAUDE.md\n');
   });
 
+  it('passes when only Copilot project MCP includes kit-knowledge', () => {
+    const target = alignedApp();
+    fs.unlinkSync(path.join(target, '.mcp.json'));
+    write(
+      target,
+      path.join('.vscode', 'mcp.json'),
+      JSON.stringify({ servers: { 'kit-knowledge': { type: 'stdio', command: 'node' } } })
+    );
+    const result = alignProject({ targetDir: target, kitRepoDir: kitWithTemplates(), write: false });
+    const mcp = result.findings.find((f) => f.id === 'mcp-kit-knowledge');
+    assert.equal(mcp?.status, 'ok');
+    assert.equal(result.ok, true);
+  });
+
+  it('passes when only Antigravity project MCP includes kit-knowledge', () => {
+    const target = alignedApp();
+    fs.unlinkSync(path.join(target, '.mcp.json'));
+    write(
+      target,
+      path.join('.agents', 'mcp_config.json'),
+      JSON.stringify({ mcpServers: { 'kit-knowledge': { command: 'node' } } })
+    );
+    const result = alignProject({ targetDir: target, kitRepoDir: kitWithTemplates(), write: false });
+    const mcp = result.findings.find((f) => f.id === 'mcp-kit-knowledge');
+    assert.equal(mcp?.status, 'ok');
+    assert.equal(result.ok, true);
+  });
+
+  it('fails and names an empty Copilot MCP file when Cursor MCP is valid', () => {
+    const target = alignedApp();
+    write(target, path.join('.cursor', 'mcp.json'), JSON.stringify({ mcpServers: { 'kit-knowledge': {} } }));
+    write(target, path.join('.vscode', 'mcp.json'), '');
+    const result = alignProject({ targetDir: target, kitRepoDir: kitWithTemplates(), write: false });
+    const mcp = result.findings.find((f) => f.id === 'mcp-kit-knowledge');
+    assert.equal(mcp?.status, 'fail');
+    assert.match(mcp?.detail ?? '', /\.vscode\/mcp\.json/);
+    assert.equal(result.ok, false);
+  });
+
+  it('fails and names an empty Antigravity MCP file when Cursor MCP is valid', () => {
+    const target = alignedApp();
+    write(target, path.join('.cursor', 'mcp.json'), JSON.stringify({ mcpServers: { 'kit-knowledge': {} } }));
+    write(target, path.join('.agents', 'mcp_config.json'), '{}\n');
+    const result = alignProject({ targetDir: target, kitRepoDir: kitWithTemplates(), write: false });
+    const mcp = result.findings.find((f) => f.id === 'mcp-kit-knowledge');
+    assert.equal(mcp?.status, 'fail');
+    assert.match(mcp?.detail ?? '', /\.agents\/mcp_config\.json/);
+    assert.equal(result.ok, false);
+  });
+
   it('seeds AGENTS.md from the kit template when --write and the file is missing', () => {
     const kit = kitWithTemplates();
     const target = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-seed-'));

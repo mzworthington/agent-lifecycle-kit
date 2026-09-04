@@ -6,13 +6,13 @@ Each heading is `id | title`. The homepage picker and this page share the same s
 
 ## first-hour | I have never installed Waykit
 
-> Fresh machine. Get `wk` on PATH, bootstrap the repo, open the lifecycle.
+> Fresh machine. Get `wk` on PATH, bootstrap the repo, then pick debug vs feature.
 
-Get Waykit on PATH, bootstrap the repo, then run the loop that matches the job.
+Get Waykit on PATH, bootstrap the repo, then run the **smallest** loop that matches the job.
 
 1. **Install** with `curl | sh` (git and Node 22+).
 2. **Init** `wk init . --mcp default --hook`.
-3. **Read the lifecycle**, then optionally prove routing with the demo eval suite.
+3. **Pick the path**: typo/debug vs product feature ([Jobs for today](/docs/jobs)). Optionally prove routing with the demo eval suite.
 
 ```
 curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.sh | sh
@@ -20,13 +20,31 @@ curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.s
 
 - [Start here in 10 minutes](/docs/start)
 - [Install commands](/docs/start#install)
-- [Feature lifecycle](/docs/lifecycle)
+- [Jobs for today](/docs/jobs)
+
+## daily | Typo, bug, or failed job
+
+> Do not open grill → spec. Debug plus light XFN is the day-to-day default.
+
+Most sessions are a typo, a failing test, or a red CI job. `agent-debug` owns that. Open the full feature lifecycle only when RCA needs a new capability.
+
+1. **Reproduce** the symptom (local command, failing job, or live URL).
+2. **Board it** with `wk debug-board <project> "<symptom>"`, then follow `agent-debug`.
+3. **Light XFN** if you touched UI, auth, or an SLO path. Skip the rest with a reason.
+
+```
+wk debug-board <project> "<symptom>"
+```
+
+- [Hypothesis-driven debug](/SOPs/hypothesis-driven-debug)
+- [Debug skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-debug/SKILL.md)
+- [Feature lifecycle](/docs/lifecycle) (only if you need a new capability)
 
 ## feature | Starting a product feature
 
 > Need the lifecycle path: grill → PRD if bet → spec → TDD short loop → XFN → ship.
 
-Feature work routes through specialist roles so the catalog and XFN rows stay honest. EDD (alpha) sits in TDD when the change is a prompt or tool schema.
+Use this when the job is a **new product capability**, not a typo or a red build. Feature work routes through specialist roles so the catalog and XFN rows stay honest. EDD (alpha) sits in TDD when the change is a prompt or tool schema.
 
 1. **Stress-test the idea** (grilling) until the decision frontier is clear.
 2. **Spec** acceptance criteria, then TDD short loop (gear 1 + gear 2). Use EDD (alpha) when the change is a prompt or tool schema.

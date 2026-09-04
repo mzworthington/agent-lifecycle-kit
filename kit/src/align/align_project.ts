@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { exportIDERules, IDE_RULE_REL_PATHS } from '../bootstrap/export_ide_rules.js';
+import { MCP_HOSTS, projectMcpPath } from '../bootstrap/mcp_hosts.js';
 import { DEFAULT_TARGET_CHARS } from '../quality/measure_context_budget.js';
 
 export type AlignStatus = 'ok' | 'fail';
@@ -44,28 +45,56 @@ function bulkLoadsPhilosophy(text: string): boolean {
     || /Read[\s\S]{0,200}CODING_PHILOSOPHY\.md[\s\S]{0,80}before/i.test(text);
 }
 
-function mcpServerNames(targetDir: string): string[] {
-  const candidates = [
-    path.join(targetDir, '.cursor', 'mcp.json'),
-    path.join(targetDir, '.mcp.json')
-  ];
+function posixRel(fromDir: string, absPath: string): string {
+  return path.relative(fromDir, absPath).split(path.sep).join('/');
+}
+
+function serverNamesFromDoc(doc: Record<string, unknown>): string[] {
   const names: string[] = [];
-  for (const filePath of candidates) {
+  for (const key of ['mcpServers', 'servers'] as const) {
+    const block = doc[key];
+    if (!block || typeof block !== 'object' || Array.isArray(block)) continue;
+    names.push(...Object.keys(block as Record<string, unknown>));
+  }
+  return names;
+}
+
+interface ProjectMcpInspection {
+  hasKitKnowledge: boolean;
+  emptyPaths: string[];
+}
+
+function inspectProjectMcp(targetDir: string): ProjectMcpInspection {
+  const emptyPaths: string[] = [];
+  let hasKitKnowledge = false;
+  for (const host of MCP_HOSTS) {
+    const filePath = projectMcpPath(host, targetDir);
+    if (!fs.existsSync(filePath)) continue;
+    const rel = posixRel(targetDir, filePath);
     const raw = readIfPresent(filePath);
-    if (raw === undefined) continue;
+    if (raw === undefined || raw.trim() === '') {
+      emptyPaths.push(rel);
+      continue;
+    }
     let parsed: unknown;
     try {
       parsed = JSON.parse(raw);
     } catch {
+      emptyPaths.push(rel);
       continue;
     }
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) continue;
-    const doc = parsed as Record<string, unknown>;
-    const servers = doc.mcpServers;
-    if (!servers || typeof servers !== 'object' || Array.isArray(servers)) continue;
-    names.push(...Object.keys(servers as Record<string, unknown>));
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      emptyPaths.push(rel);
+      continue;
+    }
+    const names = serverNamesFromDoc(parsed as Record<string, unknown>);
+    if (!names.includes('kit-knowledge')) {
+      emptyPaths.push(rel);
+      continue;
+    }
+    hasKitKnowledge = true;
   }
-  return names;
+  return { hasKitKnowledge, emptyPaths };
 }
 
 function commitMsgPresent(targetDir: string): boolean {
@@ -138,13 +167,14 @@ function evaluate(targetDir: string): AlignFinding[] {
     )
   );
 
-  const servers = mcpServerNames(targetDir);
+  const mcp = inspectProjectMcp(targetDir);
+  const mcpOk = mcp.hasKitKnowledge && mcp.emptyPaths.length === 0;
   findings.push(
     finding(
       'mcp-kit-knowledge',
       'Project MCP includes kit-knowledge',
-      servers.includes('kit-knowledge'),
-      'wk mcp default --project'
+      mcpOk,
+      mcp.emptyPaths.length > 0 ? `empty ${mcp.emptyPaths.join(', ')}` : 'wk mcp default --project'
     )
   );
 

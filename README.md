@@ -28,6 +28,7 @@ macOS / Linux; needs git and Node 22+. Already cloned this repo? Run `./install.
 | Job in front of you | Do this |
 | :--- | :--- |
 | Never installed Waykit | [Install](#install), then [start here in 10 minutes](https://waykit.dev/docs/start) |
+| Typo, bug, or failed job | `agent-debug` + light XFN if UI/auth/SLO. `wk debug-board <project> "<symptom>"`. Not grill → spec. |
 | Starting a product feature | Orchestrator lifecycle (grill → PRD if bet → stories → spec → TDD + XFN → audit → release → confirm/kill) |
 | Always-on rules are too fat | `wk measure-context` then `wk check` |
 | Owned repos missing README / license / templates | `wk doctor --owned --scan <dev-dir>` |

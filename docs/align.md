@@ -50,7 +50,7 @@ First adopter: [gpio-build-monitor](https://github.com/mzworthington/gpio-build-
 | Kit pointer | Text names `~/.agents` |
 | Host pointers | `.cursorrules`, `CLAUDE.md`, `GEMINI.md`, `.windsurfrules`, `.github/copilot-instructions.md` |
 | `commit-msg` | Husky, `.githooks`, or `.git/hooks` (enable `.githooks` with `git config core.hooksPath .githooks`) |
-| MCP | Project `.cursor/mcp.json` or `.mcp.json` includes `kit-knowledge` |
+| MCP | Present project MCP files for Cursor, Claude, Copilot, and Antigravity include `kit-knowledge` (`.cursor/mcp.json`, `.mcp.json`, `.vscode/mcp.json`, `.agents/mcp_config.json`). Missing host files are skipped. An empty present file fails and is named. Windsurf has no MCP writer. |
 | Handover home | If handover paths appear, they use this repo’s folder name, not a stale `blueprint` |
 
 ## Related

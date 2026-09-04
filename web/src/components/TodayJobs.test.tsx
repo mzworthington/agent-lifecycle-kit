@@ -18,6 +18,9 @@ describe('TodayJobs', () => {
     expect(within(panel).getByText('Start here:')).toBeTruthy();
     expect(first.compareDocumentPosition(panel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 
+    fireEvent.click(screen.getByRole('button', { name: /typo, bug, or failed job/i }));
+    expect(screen.getByRole('region', { name: /typo, bug, or failed job/i })).toBeTruthy();
+
     fireEvent.click(screen.getByRole('button', { name: /starting a product feature/i }));
 
     const feature = screen.getByRole('button', { pressed: true });

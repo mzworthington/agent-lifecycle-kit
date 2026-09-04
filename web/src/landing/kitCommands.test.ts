@@ -40,12 +40,15 @@ describe('docs/kit.md', () => {
     const { lead, rows } = parseKitCommandsMarkdown(kitMd);
     expect(lead).toMatch(/operate/i);
     expect(lead).toMatch(/`wk`/);
+    expect(lead).toMatch(/align/);
+    expect(lead).toMatch(/doctor/);
+    expect(lead).toMatch(/check/);
     expect(rows.map((row) => row.command)).toEqual([
-      'wk measure-context',
-      'wk doctor',
       'wk align',
-      'wk completion zsh',
+      'wk doctor',
       'wk check',
+      'wk measure-context',
+      'wk completion zsh',
       'wk ontology check',
       'wk ontology generate',
       'wk mcp <profile>',

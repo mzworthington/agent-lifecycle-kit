@@ -13,6 +13,10 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /align \[dir\]/);
     assert.match(KIT_HELP, /completion <shell>/);
     assert.match(KIT_HELP, /completion install/);
+    assert.match(KIT_HELP, /Day-to-day:/);
+    assert.match(KIT_HELP, /Typo, bug, or failed CI/);
+    assert.match(KIT_HELP, /wk align \./);
+    assert.match(KIT_HELP, /wk check/);
     assert.match(KIT_HELP, /Usage: wk <command>/);
     assert.match(KIT_HELP, /kit <command>/);
     assert.match(KIT_HELP, /agent-kit <command>/);

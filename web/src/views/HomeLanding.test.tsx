@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { HomeLanding } from './HomeLanding.tsx';
 
@@ -26,7 +26,10 @@ describe('HomeLanding', () => {
       'https://github.com/mzworthington/blueprint'
     );
     expect(screen.getByRole('columnheader', { name: 'Command' })).toBeTruthy();
-    expect(screen.getByText('wk check')).toBeTruthy();
+    const cliTable = screen.getByRole('table');
+    expect(within(cliTable).getByText('wk align')).toBeTruthy();
+    expect(within(cliTable).getByText('wk doctor')).toBeTruthy();
+    expect(within(cliTable).getByText('wk check')).toBeTruthy();
     expect(
       screen.getByRole('link', { name: 'Operator guide: context, MCP, check, doctor' }).getAttribute('href')
     ).toBe('/docs/kit');

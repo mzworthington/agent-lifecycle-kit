@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 import {
   canonicalizeMcpHost,
   installMcpOnHosts,
@@ -25,8 +26,22 @@ describe('parseMcpHosts', () => {
     assert.deepEqual(parseMcpHosts('claude, gemini'), ['claude', 'antigravity']);
   });
 
-  it('rejects an unknown host', () => {
-    assert.throws(() => parseMcpHosts('windsurf'), /Unknown host/);
+  it('rejects Windsurf as rules-only forever, not an MCP host', () => {
+    assert.throws(
+      () => parseMcpHosts('windsurf'),
+      /rules-only forever.*\.windsurfrules/s
+    );
+  });
+});
+
+describe('Windsurf host docs', () => {
+  it('states rules-only forever and does not promise an MCP writer', () => {
+    const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+    const hosts = fs.readFileSync(path.join(kitRoot, 'docs/hosts.md'), 'utf8');
+    assert.match(hosts, /rules-only forever/i);
+    assert.match(hosts, /\.windsurfrules/);
+    assert.match(hosts, /does not accept `--host windsurf`/);
+    assert.doesNotMatch(hosts, /MCP writer yet/i);
   });
 });
 

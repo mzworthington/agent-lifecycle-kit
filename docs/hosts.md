@@ -2,7 +2,7 @@
 
 Lifecycle rules live in `AGENTS.md`. `wk init` and `wk export-rules` write a thin pointer for each host. `wk mcp` writes MCP config in the file that host actually reads. `wk model resolve --host …` maps the same capability class to that host’s model slug.
 
-Windsurf still gets a rules pointer (`.windsurfrules`). It does not get a first-class MCP writer yet.
+Windsurf is **rules-only forever**. `wk export-rules` / `wk align` keep `.windsurfrules`. `wk mcp` does not accept `--host windsurf` and does not write a Windsurf MCP file. Cascade’s own MCP UI is outside this kit.
 
 ## What each host gets
 

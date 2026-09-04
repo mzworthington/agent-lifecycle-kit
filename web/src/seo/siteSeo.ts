@@ -57,12 +57,12 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/start': {
     headline: 'Getting started',
     description:
-      'Install Waykit in about 10 minutes: link ~/.agents, run wk init, then run the loops you need. No API key.'
+      'Install Waykit in about 10 minutes: link ~/.agents, run wk init, then pick debug vs feature. No API key.'
   },
   '/docs/jobs': {
     headline: 'Jobs for today',
     description:
-      'Pick a job for today: starting a product feature, install, fat always-on context, proving a tool call, checking the live kit graph, repo hygiene on sources you own, or consumer handshake drift.'
+      'Pick a job for today: typo/debug vs product feature, install, fat always-on context, proving a tool call, checking the live kit graph, repo hygiene on sources you own, or consumer handshake drift.'
   },
   '/docs/faq': {
     headline: 'Common questions',
@@ -77,12 +77,12 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/hosts': {
     headline: 'Hosts',
     description:
-      'Cursor, Claude Code, Copilot, and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay, and rules pointer. Windsurf still gets rules only.'
+      'Cursor, Claude Code, Copilot, and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay, and rules pointer. Windsurf is rules-only forever.'
   },
   '/docs/kit': {
     headline: 'What Waykit gives you',
     description:
-      'What Waykit installs: thin AGENTS.md handshake, feature lifecycle skills, live kit graph, one MCP profile per session, and the wk CLI (check, doctor, measure-context, eval).'
+      'What Waykit installs: thin AGENTS.md handshake, feature lifecycle skills, live kit graph, one MCP profile per session, and the wk CLI (align, doctor, check).'
   },
   '/docs/doctor': {
     headline: 'Repo doctor',
