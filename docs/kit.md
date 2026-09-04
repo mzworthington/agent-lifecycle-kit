@@ -65,6 +65,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 
 ```bash
 wk check
+wk check --json
 wk audit
 wk sync --install
 ```
@@ -81,6 +82,7 @@ Guide: [Repo doctor](./doctor.md). Consumer handshake: [Consumer align](./align.
 wk doctor
 wk doctor --owned --scan ~/Documents/dev
 wk doctor . --write
+wk doctor . --json
 ```
 
 ## Live kit graph
@@ -95,9 +97,9 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 
 | Command | What it measures or installs |
 |---------|------------------------------|
-| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers; `--owned --scan` for a worktree farm) |
-| `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`) |
-| `wk check` | Audit, ontology, evals, EDD CI, context budget |
+| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers; `--owned --scan` for a worktree farm; `--json` for findings) |
+| `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`; `--json` for findings) |
+| `wk check` | Audit, ontology, evals, EDD CI, context budget (`--json` for findings) |
 | `wk version` | Kit package/git describe and whether `~/.agents` is this clone (`--check` warns if origin is weeks ahead) |
 | `wk measure-context` | Always-on bootstrap size vs 8KB |
 | `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |

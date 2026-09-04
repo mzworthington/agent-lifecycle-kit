@@ -40,6 +40,12 @@ import {
 } from './completion.js';
 import { printKitVersion } from '../version/print_kit_version.js';
 import { errorMessage, printKitHelp } from './help.js';
+import {
+  alignOwnedResultToJson,
+  alignResultToJson,
+  doctorResultToJson,
+  printJsonReport
+} from './json_report.js';
 import type { KitCommand } from './parse.js';
 
 export interface RunKitContext {
@@ -107,7 +113,11 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         kitRepoDir: repoDir,
         github: ghGitHubPort()
       });
-      printDoctorResult(result);
+      if (command.json) {
+        printJsonReport(doctorResultToJson(result));
+      } else {
+        printDoctorResult(result);
+      }
       if (result.error) return 1;
       return status(result.ok);
     }
@@ -181,7 +191,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       return debugCiFailed(command.rest);
 
     case 'check':
-      return runKitCheck(repoDir);
+      return runKitCheck(repoDir, {}, { json: command.json });
 
     case 'align': {
       if (command.owned) {
@@ -193,7 +203,11 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
           kitRepoDir: repoDir,
           github: ghGitHubPort()
         });
-        printAlignOwnedResult(result);
+        if (command.json) {
+          printJsonReport(alignOwnedResultToJson(result));
+        } else {
+          printAlignOwnedResult(result);
+        }
         if (result.error) return 1;
         return status(result.ok);
       }
@@ -202,7 +216,11 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         kitRepoDir: repoDir,
         write: command.write
       });
-      printAlignResult(result);
+      if (command.json) {
+        printJsonReport(alignResultToJson(result));
+      } else {
+        printAlignResult(result);
+      }
       return status(result.ok);
     }
 

@@ -44,7 +44,13 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
     ]
   },
   align: {
-    flags: [{ name: '--write' }, { name: '--owned' }, { name: '--scan' }, { name: '--login' }]
+    flags: [
+      { name: '--write' },
+      { name: '--owned' },
+      { name: '--scan' },
+      { name: '--login' },
+      { name: '--json' }
+    ]
   },
   version: { flags: [{ name: '--check' }] },
   doctor: {
@@ -54,7 +60,8 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
       { name: '--scan' },
       { name: '--class', value: 'repo-classes' },
       { name: '--hook' },
-      { name: '--login' }
+      { name: '--login' },
+      { name: '--json' }
     ]
   },
   mcp: {
@@ -92,7 +99,7 @@ export const KIT_COMMAND_TREE: Readonly<Record<string, KitCommandNode>> = {
   'measure-context': {},
   'debug-board': {},
   'debug-ci': {},
-  check: {},
+  check: { flags: [{ name: '--json' }] },
   ontology: { subs: { generate: {}, check: {} } },
   memory: { subs: { lint: {} } },
   model: {

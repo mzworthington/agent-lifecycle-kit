@@ -162,4 +162,50 @@ describe('runKitCheck', () => {
     assert.equal(await runKitCheck('/kit', passingDeps({ edd: async () => 1 })), 1);
     assert.equal(await runKitCheck('/kit', passingDeps({ budget: () => ({ ...okBudget, ok: false }) })), 1);
   });
+
+  it('prints valid JSON and keeps exit 1 when a step fails with json on', async () => {
+    const lines: string[] = [];
+    const orig = console.log;
+    console.log = (msg?: unknown) => {
+      lines.push(String(msg ?? ''));
+    };
+    try {
+      const code = await runKitCheck(
+        '/kit',
+        passingDeps({
+          scan: () => {
+            console.log('=== Agent Skill Hardened Security & Supply Chain Audit ===');
+            return { ok: false, errorCount: 1, warningCount: 0 };
+          }
+        }),
+        { json: true }
+      );
+      assert.equal(code, 1);
+      assert.equal(lines.length, 1);
+      const report = JSON.parse(lines[0] ?? '') as { ok: boolean; command: string; findings: Array<{ id: string; status: string; path: string }> };
+      assert.equal(report.ok, false);
+      assert.equal(report.command, 'check');
+      assert.equal(report.findings[0]?.id, 'audit');
+      assert.equal(report.findings[0]?.status, 'fail');
+      assert.equal(report.findings[0]?.path, '/kit');
+      assert.doesNotMatch(lines[0] ?? '', /kit check/);
+    } finally {
+      console.log = orig;
+    }
+  });
+
+  it('keeps the human header when json is omitted', async () => {
+    const lines: string[] = [];
+    const orig = console.log;
+    console.log = (msg?: unknown) => {
+      lines.push(String(msg ?? ''));
+    };
+    try {
+      const code = await runKitCheck('/kit', passingDeps({ eddSuites: () => [] }));
+      assert.equal(code, 0);
+      assert.match(lines.join('\n'), /kit check/);
+    } finally {
+      console.log = orig;
+    }
+  });
 });

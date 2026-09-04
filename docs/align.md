@@ -11,6 +11,7 @@ wk align              # this checkout, report only
 wk align ../archlens
 wk align . --write    # fill missing CLAUDE.md / .cursorrules / Copilot / Gemini / Windsurf pointers
 wk align --owned --scan ~/Documents/dev   # same ownership gate as doctor; kit clones are skipped
+wk align . --json                         # machine-readable findings on stdout (exit 1 still means fail)
 ```
 
 `--owned` lists GitHub sources you admin (`gh`). `--scan` matches local worktrees. Uncloned sources are skipped, not failed as fat handshakes. The kit repo is classified and skipped so a fat kit `AGENTS.md` cannot fail the fleet. Any drifted consumer fails the command with exit code 1.

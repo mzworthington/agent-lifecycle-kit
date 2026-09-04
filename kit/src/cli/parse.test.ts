@@ -158,7 +158,8 @@ describe('parseKitArgv', () => {
       write: false,
       owned: false,
       scanDir: undefined,
-      login: undefined
+      login: undefined,
+      json: false
     });
     assert.deepEqual(parseKitArgv(['align', './app', '--write'], opts), {
       kind: 'align',
@@ -166,7 +167,8 @@ describe('parseKitArgv', () => {
       write: true,
       owned: false,
       scanDir: undefined,
-      login: undefined
+      login: undefined,
+      json: false
     });
     assert.deepEqual(parseKitArgv(['align', '--owned', '--scan', '../dev', '--login', 'mzworthington'], opts), {
       kind: 'align',
@@ -174,7 +176,17 @@ describe('parseKitArgv', () => {
       write: false,
       owned: true,
       scanDir: path.resolve('/work', '../dev'),
-      login: 'mzworthington'
+      login: 'mzworthington',
+      json: false
+    });
+    assert.deepEqual(parseKitArgv(['align', './app', '--json'], opts), {
+      kind: 'align',
+      targetDir: path.resolve('/work', './app'),
+      write: false,
+      owned: false,
+      scanDir: undefined,
+      login: undefined,
+      json: true
     });
   });
 
@@ -192,7 +204,8 @@ describe('parseKitArgv', () => {
       scanDir: undefined,
       repoClass: undefined,
       installHook: false,
-      login: undefined
+      login: undefined,
+      json: false
     });
     assert.deepEqual(
       parseKitArgv(
@@ -207,9 +220,18 @@ describe('parseKitArgv', () => {
         scanDir: path.resolve('/work', '../dev'),
         repoClass: 'product',
         installHook: true,
-        login: 'mzworthington'
+        login: 'mzworthington',
+        json: false
       }
     );
+  });
+
+  it('parses --json on check, doctor, and align', () => {
+    assert.deepEqual(parseKitArgv(['check'], opts), { kind: 'check', json: false });
+    assert.deepEqual(parseKitArgv(['check', '--json'], opts), { kind: 'check', json: true });
+    const doctor = parseKitArgv(['doctor', '--json'], opts);
+    assert.equal(doctor.kind, 'doctor');
+    if (doctor.kind === 'doctor') assert.equal(doctor.json, true);
   });
 
   it('returns usage for an unknown doctor --class', () => {

@@ -79,17 +79,21 @@ export async function runKitCheck(
   const eddSuites = deps.eddSuites ?? resolveEddCiSuites;
   const json = opts.json === true;
   const findings: JsonFinding[] = [];
+  const stdout = console.log.bind(console);
 
   const finish = (ok: boolean): number => {
-    if (json) printJsonReport({ ok, command: 'check', findings });
+    if (json) printJsonReport({ ok, command: 'check', findings }, stdout);
     return ok ? 0 : 1;
   };
 
-  if (!json) {
+  if (json) {
+    console.log = () => undefined;
+  } else {
     console.log('=== kit check ===');
     console.log('');
   }
 
+  try {
   const auditOk = scan(repoDir).ok;
   findings.push({ id: 'audit', status: auditOk ? 'ok' : 'fail', path: repoDir });
   if (!auditOk) return finish(false);
@@ -184,4 +188,7 @@ export async function runKitCheck(
     console.log('✅ kit check PASSED.');
   }
   return finish(true);
+  } finally {
+    console.log = stdout;
+  }
 }

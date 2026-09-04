@@ -16,8 +16,8 @@ Day-to-day:
 
 Commands:
   init [dir]           Bootstrap AGENTS.md, host rules, MCP configs, and git hooks
-  doctor [dir]         Check community files on repos you admin (report only; --write fills gaps)
-  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --owned --scan fleet)
+  doctor [dir]         Check community files on repos you admin (report only; --write fills gaps; --json)
+  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --owned --scan fleet; --json)
   version              Print kit version, git describe, and whether ~/.agents is this clone (--check warns if origin is weeks ahead)
   mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
   audit                Run security & supply chain audit across skills and scripts
@@ -30,7 +30,7 @@ Commands:
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board
   debug-ci             Fetch failed GitHub Actions logs
-  check                Run the local quality gate (audit, ontology, evals, EDD CI, context budget)
+  check                Run the local quality gate (audit, ontology, evals, EDD CI, context budget; --json)
   ontology generate    Dump derived ontology index to gitignored sync/ and web/public/assets/
   ontology check       Validate live-derived index (skill mcp/depends-on refs)
   memory lint          List legacy memory entities outside the ontology allowlist
@@ -47,6 +47,7 @@ Examples:
   ${CLI_BIN} doctor . --write --hook
   ${CLI_BIN} align .
   ${CLI_BIN} align . --write
+  ${CLI_BIN} align . --json
   ${CLI_BIN} align --owned --scan ~/Documents/dev
   ${CLI_BIN} version
   ${CLI_BIN} version --check
@@ -74,6 +75,7 @@ Examples:
   ${CLI_BIN} debug-board archlens "initial load overlap"
   ${CLI_BIN} completion install
   ${CLI_BIN} check
+  ${CLI_BIN} check --json
 `;
 
 export function printKitHelp(log: (msg: string) => void = console.log): void {

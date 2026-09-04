@@ -49,6 +49,9 @@ describe('completeKitLine', () => {
       '-o'
     ]);
     assert.ok(completeKitLine(['wk', 'doctor', '--'], { mcpProfiles: profiles }).includes('--write'));
+    assert.ok(completeKitLine(['wk', 'doctor', '--'], { mcpProfiles: profiles }).includes('--json'));
+    assert.ok(completeKitLine(['wk', 'align', '--'], { mcpProfiles: profiles }).includes('--json'));
+    assert.ok(completeKitLine(['wk', 'check', '--'], { mcpProfiles: profiles }).includes('--json'));
     assert.deepEqual(completeKitLine(['wk', 'doctor', '--class', ''], { mcpProfiles: profiles }), [
       'kit',
       'product',

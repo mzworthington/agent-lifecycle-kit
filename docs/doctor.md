@@ -23,6 +23,7 @@ wk doctor --owned --scan ~/Documents/dev
 wk doctor . --write           # fill missing files; never overwrite
 wk doctor . --write --hook    # also install git hooks, owned repos only
 wk doctor --class product     # skip auto class (kit | product | dns | site | template)
+wk doctor . --json            # machine-readable findings on stdout (exit 1 still means fail)
 ```
 
 `--owned` needs the GitHub CLI (`gh`). Pass `--login` if you do not want `gh api user`. Uncloned sources are checked remotely and are never written; pass `--scan` so local worktrees can receive `--write`.

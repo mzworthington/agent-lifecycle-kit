@@ -41,7 +41,7 @@ export type KitCommand =
   | { kind: 'measure-context' }
   | { kind: 'debug-board'; project: string; title: string }
   | { kind: 'debug-ci'; rest: string[] }
-  | { kind: 'check' }
+  | { kind: 'check'; json: boolean }
   | {
       kind: 'align';
       targetDir: string;
@@ -49,6 +49,7 @@ export type KitCommand =
       owned: boolean;
       scanDir: string | undefined;
       login: string | undefined;
+      json: boolean;
     }
   | { kind: 'version'; check: boolean }
   | { kind: 'ontology'; sub: 'generate' | 'check' }
@@ -72,6 +73,7 @@ export type KitCommand =
       repoClass: RepoClass | undefined;
       installHook: boolean;
       login: string | undefined;
+      json: boolean;
     }
   | { kind: 'completion'; shell: KitCompletionShell }
   | { kind: 'completion-install'; shell: KitCompletionShell | undefined }
@@ -87,11 +89,11 @@ const INIT_USAGE = cliUsage(
 );
 
 const DOCTOR_USAGE = cliUsage(
-  'doctor [dir] [--write] [--owned] [--scan <dir>] [--class kit|product|dns|site|template] [--hook] [--login <user>]'
+  'doctor [dir] [--write] [--owned] [--scan <dir>] [--class kit|product|dns|site|template] [--hook] [--login <user>] [--json]'
 );
 
 const ALIGN_USAGE = cliUsage(
-  'align [dir] [--write] [--owned] [--scan <dir>] [--login <user>]'
+  'align [dir] [--write] [--owned] [--scan <dir>] [--login <user>] [--json]'
 );
 
 const MODEL_RESOLVE_USAGE = cliUsage(
@@ -194,7 +196,7 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
       return { kind: 'debug-ci', rest };
 
     case 'check':
-      return { kind: 'check' };
+      return { kind: 'check', json: hasFlag(rest, '--json') };
 
     case 'version':
       return { kind: 'version', check: hasFlag(rest, '--check') };
@@ -215,7 +217,8 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
         write: hasFlag(rest, '--write'),
         owned: hasFlag(rest, '--owned'),
         scanDir: scan ? path.resolve(opts.cwd, scan) : undefined,
-        login
+        login,
+        json: hasFlag(rest, '--json')
       };
     }
 
@@ -261,7 +264,8 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
         scanDir: scan ? path.resolve(opts.cwd, scan) : undefined,
         repoClass: isRepoClass(repoClassRaw) ? repoClassRaw : undefined,
         installHook: hasFlag(rest, '--hook'),
-        login
+        login,
+        json: hasFlag(rest, '--json')
       };
     }
 

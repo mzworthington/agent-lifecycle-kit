@@ -116,12 +116,12 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | Command | Purpose |
 | :--- | :--- |
 | `wk init [dir]` | Bootstrap `AGENTS.md`, IDE rules, MCP, pre-commit |
-| `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps) |
-| `wk align [dir]` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds; `--owned --scan` for a worktree farm) |
+| `wk doctor [dir]` | Community-file check on repos you admin (`--owned`, `--write` fills gaps; `--json` for findings) |
+| `wk align [dir]` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds; `--owned --scan` for a worktree farm; `--json` for findings) |
 | `wk version` | Package/git describe and whether `~/.agents` is this clone (`--check` warns if stale) |
 | `wk completion install` | Write a live tab-completion stub (zsh + bash); verbs follow the current `wk` |
 | `wk mcp <profile>` | Compose a named profile into Cursor, Claude, Copilot, and Antigravity (`--install` / `--project`) |
-| `wk check` | Local quality gate (audit, evals, EDD CI, context budget) |
+| `wk check` | Local quality gate (audit, evals, EDD CI, context budget; `--json` for findings) |
 | `wk eval run\|watch\|report\|ci` | Eval harness for agent tool routing and schemas |
 | `wk eval` | Skill-trigger harness (which specialist activates) |
 | `wk audit` | Security and supply-chain audit |
