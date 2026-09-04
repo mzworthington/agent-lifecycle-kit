@@ -4,6 +4,7 @@ import os from 'os';
 import path from 'path';
 import { parseExternalLockFile } from './parse_external_lock.js';
 import { ghSkillPinArgs } from './skill_pin.js';
+import { installHostSubagents } from './host_subagents.js';
 
 export function cursorUserSkillsDir(): string {
   return path.join(os.homedir(), '.cursor', 'skills');
@@ -16,6 +17,8 @@ export interface CommandRunner {
   userSkillsDir?: () => string;
   /** Extra Agent Skills dirs (Claude, Antigravity). Tests omit this so we never write the real home. */
   mirrorSkillDirs?: () => string[];
+  /** Home for kit subagent stubs. Tests set this so we never write the real ~/.cursor/agents. */
+  homedir?: () => string;
 }
 
 export function defaultMirrorSkillDirs(homedir: string = os.homedir()): string[] {
@@ -53,7 +56,8 @@ export const defaultCommandRunner: CommandRunner = {
     return { status: result.status ?? 1 };
   },
   userSkillsDir: cursorUserSkillsDir,
-  mirrorSkillDirs: () => defaultMirrorSkillDirs()
+  mirrorSkillDirs: () => defaultMirrorSkillDirs(),
+  homedir: () => os.homedir()
 };
 
 function resolveUserSkillsDir(runner: CommandRunner): string {
@@ -111,7 +115,9 @@ function usage(): void {
 
 Skills install to Cursor user scope (~/.cursor/skills), then Waykit symlinks
 each skill into ~/.claude/skills and ~/.gemini/skills so Claude Code and
-Antigravity see the same lockfile set. \`wk sync --update\` only refreshes
+Antigravity see the same lockfile set. Allowlisted kit subagents install to
+~/.cursor/agents and ~/.claude/agents (user scope). Copilot and Antigravity
+stay handshake plus skills. \`wk sync --update\` only refreshes
 lockfile ids in the Cursor dir, then re-mirrors.
 Lockfile pins are git version tags or \`latest\` (tagged release, then HEAD),
 not commit SHAs. Upgrade path: edit the lockfile, re-run --install, or
@@ -139,6 +145,12 @@ export function syncExternalSkills(
     usage();
     return 0;
   }
+
+  installHostSubagents({
+    kitRepoDir: repoDir,
+    homedir: runner.homedir?.() ?? os.homedir(),
+    dryRun: parsed.dryRun
+  });
 
   if (!runner.exists('gh')) {
     console.error('ERROR: gh CLI is required (https://cli.github.com/)');

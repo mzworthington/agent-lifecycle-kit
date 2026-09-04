@@ -5,6 +5,7 @@ import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { alignNextSteps, alignProject, printAlignResult } from './align_project.js';
+import { userSubagentDir } from '../skills/host_subagents.js';
 
 const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
@@ -186,7 +187,8 @@ describe('alignProject', () => {
       kitRepoDir: kitRoot,
       write: false,
       composeMcp: true,
-      mcpHosts: ['claude']
+      mcpHosts: ['claude'],
+      homedir: fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-home-'))
     });
     assert.equal(result.ok, true);
     const body = JSON.parse(fs.readFileSync(path.join(target, '.mcp.json'), 'utf8')) as {
@@ -207,10 +209,30 @@ describe('alignProject', () => {
       kitRepoDir: kitRoot,
       write: true,
       composeMcp: false,
-      mcpHosts: ['claude']
+      mcpHosts: ['claude'],
+      homedir: fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-home-'))
     });
     assert.equal(fs.readFileSync(path.join(target, '.mcp.json'), 'utf8'), ops);
     assert.equal(result.written.includes('mcp default'), false);
+  });
+
+  it('installs kit subagents to user scope and does not require them in the clone', () => {
+    const target = alignedApp();
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-home-'));
+    const result = alignProject({
+      targetDir: target,
+      kitRepoDir: kitRoot,
+      write: false,
+      homedir: home
+    });
+    assert.equal(result.ok, true);
+    assert.equal(fs.existsSync(path.join(target, '.cursor', 'agents')), false);
+    assert.equal(fs.existsSync(path.join(target, '.claude', 'agents')), false);
+    assert.equal(fs.existsSync(path.join(home, '.copilot', 'agents')), false);
+    assert.equal(fs.existsSync(path.join(home, '.gemini', 'agents')), false);
+    assert.ok(fs.existsSync(path.join(userSubagentDir('cursor', home), 'agent-tdd.md')));
+    assert.ok(fs.existsSync(path.join(userSubagentDir('claude', home), 'agent-tdd.md')));
+    assert.equal((result.written ?? []).some((item) => item.includes('agents')), false);
   });
 });
 
@@ -234,6 +256,27 @@ describe('printAlignResult', () => {
     assert.match(lines.join('\n'), /align FAILED/);
     assert.match(lines.join('\n'), /next:/);
     assert.match(lines.join('\n'), /wk align \. --write/);
+  });
+
+  it('reports user-scope kit subagents without listing them as clone writes', () => {
+    const lines: string[] = [];
+    printAlignResult(
+      {
+        ok: true,
+        targetDir: '/tmp/app',
+        findings: [{ id: 'agents', label: 'AGENTS.md present', status: 'ok', detail: '' }],
+        written: [],
+        hostAgents: {
+          written: ['/home/me/.cursor/agents/agent-tdd.md'],
+          refreshed: [],
+          skipped: []
+        }
+      },
+      (msg) => lines.push(msg)
+    );
+    assert.match(lines.join('\n'), /user subagents/);
+    assert.match(lines.join('\n'), /~\/\.cursor\/agents/);
+    assert.doesNotMatch(lines.join('\n'), /wrote:/);
   });
 
   it('groups next commands from failed finding ids', () => {

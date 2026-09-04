@@ -19,6 +19,7 @@ export interface InitProjectOptions {
   /** Override for tests; default is `<target>/.git/hooks`. */
   hooksDir?: string;
   hosts?: readonly McpHostId[];
+  homedir?: string;
 }
 
 export function installGitHooks(options: {
@@ -86,7 +87,7 @@ export function initProject(options: InitProjectOptions): void {
   // 2. Export Multi-IDE Rules
   if (installIDE) {
     console.log(`Exporting Multi-IDE rule entry points...`);
-    exportIDERules(targetDir, false, kitRepoDir);
+    exportIDERules(targetDir, false, kitRepoDir, options.homedir);
   }
 
   if (installMCP) {

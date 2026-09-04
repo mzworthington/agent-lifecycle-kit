@@ -1,6 +1,8 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { resolveRepoDir } from '../shared/paths.js';
+import { installHostSubagents } from '../skills/host_subagents.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
@@ -49,7 +51,8 @@ const IDE_TARGETS: IDETarget[] = [
 export function exportIDERules(
   targetDir: string = defaultRepoDir,
   checkOnly: boolean = false,
-  kitRepoDir: string = defaultRepoDir
+  kitRepoDir: string = defaultRepoDir,
+  homedir: string = os.homedir()
 ): boolean {
   let allValid = true;
 
@@ -77,6 +80,10 @@ export function exportIDERules(
       fs.writeFileSync(destPath, contentToUse, 'utf8');
       console.log(`Exported ${target.filename}`);
     }
+  }
+
+  if (!checkOnly) {
+    installHostSubagents({ kitRepoDir, homedir });
   }
 
   return allValid;

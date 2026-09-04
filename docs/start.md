@@ -2,7 +2,7 @@
 
 Four steps to Waykit on a repo. macOS and Linux; needs git and Node 22+. No API key.
 
-1. **Install Waykit (~2 min)** — Links `~/.agents` and puts `wk` on your PATH via `~/.local/bin` (`kit` remains an alias).
+1. **Install Waykit (~2 min)** — Links `~/.agents`, puts `wk` on your PATH via `~/.local/bin` (`kit` remains an alias), and installs kit subagents under `~/.cursor/agents` and `~/.claude/agents`.
 2. **Bootstrap this checkout (~2 min)** — `wk init . --mcp default --hook` writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? `./install.sh` is enough.
 3. **Pick the path (~1 min)** — Typo, bug, or failed CI: `agent-debug` plus light XFN if you touched UI, auth, or an SLO. New product capability: the [feature lifecycle](/docs/lifecycle). Day-to-day CLI: `wk align .`, `wk doctor`, `wk check` ([operator guide](/docs/kit)). Cards: [Jobs for today](/docs/jobs).
 4. **Optional: prove a tool call (~3 min, EDD alpha)** — `wk eval run --suite evals/edd/demo.yaml --model scripted`, then `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`.

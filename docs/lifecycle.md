@@ -47,4 +47,4 @@ sequenceDiagram
 7. **Telemetry and release:** Map SLOs (`agent-telemetry`) and the bet’s leading indicator in PostHog (`agent-posthog`). Ship with a conventional PR title, record flag expiry and rollback.
 8. **Close the loop:** After the timebox, measure that leading indicator in PostHog (`wk mcp posthog --install`). Then confirm (default on, prune flag) or kill (flag off, prune slice) via `agent-user-stories` and `agent-prune`. Do not add a separate product-insights role.
 
-[Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md) · [Coding philosophy](https://github.com/mzworthington/waykit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide (alpha)](/docs/edd) · [Hosts](/docs/hosts)
+[Orchestrator skill](https://github.com/mzworthington/waykit/blob/main/skills/agent-orchestrator/SKILL.md) · [Subagent allowlist](/docs/subagents) · [Coding philosophy](https://github.com/mzworthington/waykit/blob/main/CODING_PHILOSOPHY.md) · [EDD guide (alpha)](/docs/edd) · [Hosts](/docs/hosts)

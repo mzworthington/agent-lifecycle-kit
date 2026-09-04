@@ -34,7 +34,7 @@ Report-only by default. `--write` fills missing files and never overwrites READM
 
 ## How do I check that an app repo still follows Waykit?
 
-Use `wk align`. It is the consumer counterpart to doctor: handshake size, host pointers, kit-knowledge MCP, and `commit-msg`. `--write` fills missing IDE pointers and never overwrites `AGENTS.md`. `--mcp` composes kit default project MCP when you ask.
+Use `wk align`. It is the consumer counterpart to doctor: handshake size, host pointers, kit-knowledge MCP, and `commit-msg`. `--write` fills missing IDE pointers and never overwrites `AGENTS.md`. `--mcp` composes kit default project MCP when you ask. Align also installs kit subagents under `~/.cursor/agents` and `~/.claude/agents`; you do not commit those files in the app repo.
 
 ```bash
 wk align .

@@ -17,6 +17,34 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 
 **Roles vs profiles:** Roles define *who you are* and *what phase output* to produce. Profiles define *how to write code* for a stack. The orchestrator (`agent-orchestrator`) routes between roles; stack detection activates profiles.
 
+## Subagent allowlist
+
+Source of truth: [subagents.yaml](./subagents.yaml). Human copy: [docs/subagents.md](../docs/subagents.md). Decision: [ADR 0008](../docs/ADRs/0008-subagent-allowlist.md).
+
+Cursor: use subagents for isolation, parallelism, and independent verification; keep skills for one-shot playbooks. `wk align` / `wk sync` / install write allowlisted stubs to `~/.cursor/agents` and `~/.claude/agents`. Copilot and Antigravity stay handshake plus skills. Orchestrator launch behaviour does not change here.
+
+| Band | Disposition | Skills |
+|------|-------------|--------|
+| Pilot isolation | generate-agent | `agent-debug`, `agent-xfn` |
+| Readonly audit | generate-agent | `agent-review`, `agent-security`, `agent-arch-drift` |
+| Sequential specialists | generate-agent | `agent-spec`, `agent-tdd` |
+| Orchestrator | parent only | `agent-orchestrator` |
+
+`lang-*`, `framework-*`, and `profile-*` are stay-skill, not generate-agent. Unlisted `agent-*` roles stay `SKILL.md`.
+
+**TDD:** Gear 1 and gear 2 stay one agent (`agent-tdd`). `agent-adapter` stays the escape hatch, not generate-agent.
+
+**Kill:** If someone proposes adding a generate-agent role past this pilot set, freeze if auto-delegation is worse than today's skill picker.
+
+```mermaid
+flowchart TB
+  roles[kind role skills]
+  roles --> yes{Isolation, audit, or multi-step phase?}
+  yes -->|yes| agent[Allowlist for subagent stub]
+  yes -->|no| skill[Stay SKILL.md]
+  profiles[kind profile] --> skill
+```
+
 ## Lifecycle roles (`agent-*`)
 
 | Skill | Phase | Loads when |
@@ -53,7 +81,7 @@ Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [co
 
 ### TDD short loop (important)
 
-`agent-tdd` owns **gear 1** (domain + mocked ports) and **gear 2** (thin adapter + integration test) in the **same session**. Do not insert a handover between inventing a port and wiring its first adapter. `agent-adapter` is an escape hatch for large integrations only. XFN remains the intentional slow outer loop.
+`agent-tdd` owns **gear 1** (domain + mocked ports) and **gear 2** (thin adapter + integration test) in the **same session**. Do not insert a handover between inventing a port and wiring its first adapter. `agent-adapter` is an escape hatch for large integrations only. XFN remains the intentional slow outer loop. Subagent stubs follow the same contract: gears stay one agent; adapter stays-skill.
 
 ## Stack profiles
 

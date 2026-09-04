@@ -11,6 +11,7 @@ function skillTree(names: string[]): string {
   fs.mkdirSync(skills);
   fs.writeFileSync(path.join(skills, 'README.md'), '# skills\n');
   fs.writeFileSync(path.join(skills, 'external.lock.json'), '{}\n');
+  fs.writeFileSync(path.join(skills, 'subagents.yaml'), 'version: 1\n');
   for (const name of names) {
     fs.mkdirSync(path.join(skills, name));
   }

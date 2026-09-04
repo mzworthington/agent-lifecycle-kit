@@ -4,6 +4,8 @@
 
 It also does not score hexagonal imports or XFN matrices. Those remain `agent-arch-drift` / catalog handovers.
 
+`wk align` also installs allowlisted kit subagents under `~/.cursor/agents/` and `~/.claude/agents/` (user scope). That is machine state, not a file you commit in the app repo. Copilot and Antigravity stay handshake plus skills.
+
 ## Commands
 
 ```bash

@@ -24,12 +24,13 @@ export interface AlignOwnedOptions {
   targetDir: string;
   write: boolean;
   composeMcp?: boolean;
-  scanDir: string | undefined;
-  login: string | undefined;
-  kitRepoDir: string;
-  github: GitHubPort;
-  resolveOrigin?: (dir: string) => string | undefined;
-  listWorktrees?: (scanDir: string) => string[];
+    scanDir: string | undefined;
+    login: string | undefined;
+    kitRepoDir: string;
+    github: GitHubPort;
+    resolveOrigin?: (dir: string) => string | undefined;
+    listWorktrees?: (scanDir: string) => string[];
+    homedir?: string;
 }
 
 export interface AlignOwnedResult {
@@ -91,7 +92,8 @@ export function runAlignOwned(opts: AlignOwnedOptions): AlignOwnedResult {
       targetDir: clone,
       kitRepoDir: opts.kitRepoDir,
       write: opts.write,
-      composeMcp: opts.composeMcp
+      composeMcp: opts.composeMcp,
+      homedir: opts.homedir
     });
     reports.push({
       label: view.nameWithOwner,

@@ -17,7 +17,7 @@ Day-to-day:
 Commands:
   init [dir]           Bootstrap AGENTS.md, host rules, MCP configs, and git hooks
   doctor [dir]         Check community files on repos you admin (report only; --write fills gaps; --json)
-  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --mcp composes kit default; --owned --scan fleet; --json)
+  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --mcp composes kit default; also installs user-scope Cursor/Claude subagents; --owned --scan fleet; --json)
   version              Print kit version, git describe, and whether ~/.agents is this clone (--check warns if origin is weeks ahead)
   mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
   mcp restore          Recompose the previous project profile (or kit default if none)
@@ -26,8 +26,8 @@ Commands:
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset)
   export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
   metrics              Display telemetry analytics summary for subagent phase handovers
-  verify               Verify skills layout and role SKILL.md line budget
-  sync                 Sync official external skills (Cloudflare, Vercel)
+  verify               Verify skills layout, role SKILL.md line budget, and subagent allowlist
+  sync                 Sync official external skills (Cloudflare, Vercel) and install kit subagents for Cursor and Claude
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board
   debug-ci             Fetch failed GitHub Actions logs

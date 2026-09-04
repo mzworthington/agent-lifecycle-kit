@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
 import path from 'node:path';
 import { describe, it } from 'node:test';
@@ -35,5 +36,12 @@ describe('install.sh', () => {
     const result = runInstaller('bash', ['--help']);
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /\| sh/);
+  });
+
+  it('installs kit subagents to user-scope Cursor and Claude dirs', () => {
+    const src = fs.readFileSync(installer, 'utf8');
+    assert.match(src, /~\/\.cursor\/agents/);
+    assert.match(src, /~\/\.claude\/agents/);
+    assert.match(src, /kit subagents/);
   });
 });

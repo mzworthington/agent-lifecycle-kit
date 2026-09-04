@@ -1,0 +1,43 @@
+# Subagent allowlist — iteration 0
+#
+# Source of truth for host installers (wk align / wk sync / install).
+# Do not widen generate-agent from this file.
+# Do not change orchestrator launch behaviour from this file.
+#
+# Cursor: use subagents for isolation, parallelism, and independent verification.
+# Keep skills for one-shot playbooks.
+
+version: 1
+iteration: 0
+
+kill:
+  # Named freeze when someone proposes a generate-agent role past the pilot set.
+  freezeIf: freeze if auto-delegation is worse than today's skill picker
+
+bands:
+  - id: pilot-isolation
+    disposition: generate-agent
+    skills: [agent-debug, agent-xfn]
+  - id: readonly-audit
+    disposition: generate-agent
+    skills: [agent-review, agent-security, agent-arch-drift]
+  - id: sequential-specialists
+    disposition: generate-agent
+    skills: [agent-spec, agent-tdd]
+  - id: parent-only
+    disposition: parent-only
+    skills: [agent-orchestrator]
+
+# lang-*, framework-*, and profile-* never generate-agent.
+staySkill:
+  prefixes: [lang-, framework-, profile-]
+
+# Gear 1 and gear 2 stay one agent. agent-adapter is the escape hatch, not a stub.
+tdd:
+  skill: agent-tdd
+  gears: [1, 2]
+  sameAgent: true
+  escapeHatch: agent-adapter
+
+# Roles not listed under generate-agent or parent-only stay SKILL.md (stay-skill).
+unlistedRoles: stay-skill
