@@ -31,6 +31,10 @@ skills/*
 # Antigravity workspace MCP (written by wk mcp --project / wk init)
 .agents/mcp_config.json
 
+# Session MCP restore (profile names only; blob backups may contain local edits)
+.agents/mcp-profile.stamp
+*.json.bak.*
+
 # Environment & secrets
 .env
 .env.*

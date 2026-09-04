@@ -50,7 +50,7 @@ function filterPrefix(candidates: readonly string[], prefix: string): string[] {
 function resolveValues(kind: CompletionValueKind, ctx: CompleteContext): string[] {
   switch (kind) {
     case 'mcp-profiles':
-      return [...ctx.mcpProfiles];
+      return [...ctx.mcpProfiles, 'restore'];
     case 'mcp-hosts':
       return [...MCP_HOSTS, 'all'];
     case 'repo-classes':

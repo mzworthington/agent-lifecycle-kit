@@ -43,6 +43,7 @@ describe('completeKitLine', () => {
     assert.deepEqual(completeKitLine(['wk', 'mcp', ''], { mcpProfiles: profiles }), [
       'default',
       'collab',
+      'restore',
       '--install',
       '--project',
       '--host',

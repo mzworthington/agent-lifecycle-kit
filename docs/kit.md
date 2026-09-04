@@ -46,6 +46,7 @@ wk mcp default --project
 wk mcp collab --install
 wk mcp ops --install
 wk mcp cloudflare-ops --install
+wk mcp restore --project
 wk mcp warp --install
 wk mcp posthog --install
 ```

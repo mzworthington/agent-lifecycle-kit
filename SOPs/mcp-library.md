@@ -119,6 +119,7 @@ kit mcp posthog --install
 # Project config
 wk mcp project-example --project
 wk mcp cloudflare-ops --install          # RUM / Worker diagnosis
+wk mcp restore --project                 # previous project profile, or kit default
 wk mcp default --install --host claude   # user-scope Claude Code only
 ```
 

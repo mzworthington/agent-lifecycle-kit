@@ -22,6 +22,8 @@ wk align .
 wk mcp default --install
 wk mcp default --install --host claude
 wk mcp default --project
+wk mcp cloudflare-ops --project
+wk mcp restore --project
 wk model resolve --skill agent-tdd --spec-complete --host claude
 wk model resolve --skill agent-tdd --spec-complete --host copilot
 wk model resolve --skill agent-tdd --spec-complete --host antigravity

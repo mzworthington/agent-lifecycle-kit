@@ -149,6 +149,22 @@ describe('parseKitArgv', () => {
       outputFile: undefined,
       hosts: ['copilot', 'antigravity']
     });
+    assert.deepEqual(parseKitArgv(['mcp', 'restore'], opts), {
+      kind: 'mcp',
+      profile: 'restore',
+      install: false,
+      project: true,
+      outputFile: undefined,
+      hosts: ['cursor', 'claude', 'copilot', 'antigravity']
+    });
+    assert.deepEqual(parseKitArgv(['mcp', 'restore', '--install'], opts), {
+      kind: 'mcp',
+      profile: 'restore',
+      install: true,
+      project: false,
+      outputFile: undefined,
+      hosts: ['cursor', 'claude', 'copilot', 'antigravity']
+    });
   });
 
   it('parses align directory, --write, and --owned --scan', () => {

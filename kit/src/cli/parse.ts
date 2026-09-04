@@ -1,5 +1,6 @@
 import path from 'path';
 import { parseMcpHosts, type McpHostId } from '../bootstrap/mcp_hosts.js';
+import { MCP_RESTORE_PROFILE } from '../bootstrap/mcp_profile_stamp.js';
 import { isCompletionShell, type KitCompletionShell } from './completion.js';
 import { isRepoClass, type RepoClass } from '../doctor/hygiene.js';
 import { firstPositional, flagValue, hasFlag } from './flags.js';
@@ -82,7 +83,7 @@ export type KitCommand =
 const COMPLETION_USAGE = cliUsage('completion <zsh|bash|install>');
 
 const MCP_USAGE = cliUsage(
-  'mcp [profile] [--install] [--project] [--host cursor|claude|copilot|antigravity|all] [-o <file>]'
+  'mcp [profile|restore] [--install] [--project] [--host cursor|claude|copilot|antigravity|all] [-o <file>]'
 );
 const INIT_USAGE = cliUsage(
   'init [dir] [--mcp <profile>] [--host cursor|claude|copilot|antigravity|all] [--hook] [--skip-mcp] [--skip-ide]'
@@ -135,13 +136,16 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
 
     case 'mcp': {
       const profile = rest[0] && !rest[0].startsWith('-') ? rest[0] : 'default';
+      const install = hasFlag(rest, '--install');
+      const outputFile = flagValue(rest, '-o');
+      const restore = profile === MCP_RESTORE_PROFILE;
       try {
         return {
           kind: 'mcp',
           profile,
-          install: hasFlag(rest, '--install'),
-          project: hasFlag(rest, '--project'),
-          outputFile: flagValue(rest, '-o'),
+          install,
+          project: hasFlag(rest, '--project') || (restore && !install && outputFile === undefined),
+          outputFile,
           hosts: parseMcpHosts(flagValue(rest, '--host'))
         };
       } catch (err: unknown) {

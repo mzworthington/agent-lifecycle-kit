@@ -51,7 +51,7 @@ Upstream Cloudflare platform skills (`cloudflare`, `wrangler`) win on vendor API
 
 ## Profile
 
-One MCP profile: `kit mcp cloudflare-ops --install`. If Cloudflare tools are missing, stop and tell the user to install that profile and complete OAuth - do not invent site lists.
+One MCP profile: `kit mcp cloudflare-ops --install`. If Cloudflare tools are missing, stop and tell the user to install that profile and complete OAuth - do not invent site lists. Restore `wk mcp restore --project` (or `wk mcp default --project`) when the session ends.
 
 ## Mandatory loop
 
