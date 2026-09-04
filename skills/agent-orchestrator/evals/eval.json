@@ -1,7 +1,7 @@
 {
   "suite": "agent-orchestrator-co-located",
   "description": "Co-located evaluation benchmark for agent-orchestrator skill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-ORCH-COLOCATED-001",
@@ -54,6 +54,62 @@
         ],
         "required_output_sections": [
           "Linear ticket"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-003",
+      "name": "PostHog intake then file-from-handover",
+      "description": "Orchestrator keeps PostHog intake on a findings handover (no Linear while posthog is the only profile), then restores default and files via user-stories and PRD when the row is a bet or larger than one sitting. No insights skill.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Orchestrate pulling PostHog suggestions into tickets, then file the handover as Linear work.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "handover",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "agent-posthog",
+          "findings handover",
+          "do not create Linear issues",
+          "wk mcp default",
+          "agent-user-stories",
+          "agent-prd",
+          "do not invent an insights skill"
+        ],
+        "forbidden_patterns": [
+          "agent-insights",
+          "ASCII art"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-004",
+      "name": "Error cluster and empty events skip the lifecycle",
+      "description": "An error cluster or empty events prompt routes to agent-debug or the empty-events checklist, not grill/PRD/stories/spec.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "PostHog shows an error cluster and empty events. Orchestrate the right route.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "agent-debug",
+          "error cluster",
+          "empty-events checklist",
+          "full feature lifecycle"
+        ],
+        "forbidden_patterns": [
+          "agent-insights",
+          "ASCII art"
         ]
       }
     }
