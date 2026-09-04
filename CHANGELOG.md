@@ -14,6 +14,7 @@
 - *(mcp)* Restore the previous project profile after a session (MZW-28)
 - *(align)* Compose kit default MCP when asked (MZW-23)
 - *(subagents)* Add support for host subagent stubs and update related documentation
+- *(subagents)* Introduce skills-only mode and update related documentation
 
 ### 🐛 Bug Fixes
 
