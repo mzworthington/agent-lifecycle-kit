@@ -48,6 +48,17 @@ describe('mcp profile stamp', () => {
     assert.equal(readMcpProfileStamp(dir), undefined);
   });
 
+  it('does not toggle back to the vendor profile after restore', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-stamp-stay-'));
+    recordComposedProfile(dir, 'default');
+    recordComposedProfile(dir, 'cloudflare-ops');
+    const afterNamedRestore = recordComposedProfile(dir, 'default');
+    assert.deepEqual(afterNamedRestore, { previous: 'default', current: 'default' });
+    assert.equal(profileToRestore(dir), 'default');
+    const afterSecond = recordComposedProfile(dir, profileToRestore(dir));
+    assert.deepEqual(afterSecond, { previous: 'default', current: 'default' });
+  });
+
   it('gitignores the stamp and json bak sidecars so commits cannot pick up secrets', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-mcp-stamp-gi-'));
     execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });

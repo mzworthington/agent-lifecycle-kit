@@ -64,10 +64,10 @@ export function ensureMcpRestoreGitignore(projectDir: string): string {
 
 export function recordComposedProfile(projectDir: string, profileName: string): McpProfileStamp {
   const prior = readMcpProfileStamp(projectDir);
-  const stamp: McpProfileStamp = {
-    previous: prior?.current,
-    current: profileName
-  };
+  const restoring = prior?.previous === profileName;
+  const stamp: McpProfileStamp = restoring
+    ? { previous: profileName, current: profileName }
+    : { previous: prior?.current, current: profileName };
   writeMcpProfileStamp(projectDir, stamp);
   ensureMcpRestoreGitignore(projectDir);
   return stamp;
