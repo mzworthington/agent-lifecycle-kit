@@ -49,6 +49,8 @@ You fix **broken behavior** with a short, evidence-first loop. Do **not** open t
 
 If this session plays a Linear issue, claim it before changing code ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)). Stay on main, uncommitted. Output a conventional commit subject with the issue id; do not `git commit` unless asked.
 
+Run as a **subagent**. The parent keeps the hypothesis summary plus `handover_debug.md`, not the full log scrape, DOM dump, or CI artifact. Built-in explore/bash/browser stay for noisy primitives; this role owns DoD and handover ([SOPs/context-budget.md](../../SOPs/context-budget.md)). When Cloudflare or PostHog live tools apply here, `wk mcp <profile> --project` then restore; do not stack vendor MCP onto default.
+
 Procedure: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md).
 Board template: [templates/debug-board.md](../../templates/debug-board.md).
 Tooling: `kit debug-board`, `kit debug-ci`.

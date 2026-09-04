@@ -111,13 +111,85 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       };
     }
     if (
+      (prompt.includes('cloudflare') || prompt.includes('beacon')) &&
+      (prompt.includes('mcp') || prompt.includes('profile') || prompt.includes('restore'))
+    ) {
+      return {
+        content: 'Launching agent-debug with cloudflare-ops MCP, then restore default.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-debug',
+              mcpProfile: 'cloudflare-ops',
+              restoreProfile: 'default',
+              handoverPaths: 'handover_debug.md'
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('posthog') &&
+      (prompt.includes('mcp') || prompt.includes('profile') || prompt.includes('restore'))
+    ) {
+      return {
+        content: 'Launching agent-debug with posthog MCP, then restore default.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-debug',
+              mcpProfile: 'posthog',
+              restoreProfile: 'default',
+              handoverPaths: 'handover_debug.md'
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('playwright') ||
+      prompt.includes('browser e2e') ||
+      prompt.includes('load apply') ||
+      prompt.includes('agent-xfn') ||
+      (prompt.includes('k6') && prompt.includes('window'))
+    ) {
+      return {
+        content: 'Launching agent-xfn as a separate child so browser/load noise stays out of TDD and the parent.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: { specialist: 'agent-xfn', handoverPaths: 'handover_xfn.md' }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
       prompt.includes('ci failed') ||
       prompt.includes('failed github actions') ||
       prompt.includes('failed job')
     ) {
       return {
-        content: 'Launching agent-debug so CI noise stays out of the parent chat.',
-        tool_calls: [{ name: 'launch_specialist', arguments: { specialist: 'agent-debug' } }],
+        content: 'Launching agent-debug so the parent keeps the hypothesis summary and handover_debug.md, not the full log scrape.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: { specialist: 'agent-debug', handoverPaths: 'handover_debug.md' }
+          }
+        ],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
         consecutiveToolFailures: 0,
         haltedAutonomousExecution: false,
@@ -363,6 +435,22 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
           }
         ],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
+      prompt.includes('parent chat') ||
+      prompt.includes('debug noise') ||
+      prompt.includes('xfn noise') ||
+      prompt.includes('runtime isolation') ||
+      prompt.includes('context budget')
+    ) {
+      return {
+        content: 'Opening the context-budget SOP for parent-chat isolation.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'context-budget' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
         consecutiveToolFailures: 0,
         haltedAutonomousExecution: false,
         routingConfidence: 0.91

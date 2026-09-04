@@ -64,6 +64,12 @@ describe("kit-knowledge", () => {
     }
     const hits = searchKit(kitRoot, "context budget always-on tokens", 8);
     assert.ok(hits.some((h) => h.id.includes("context-budget") || h.excerpt.includes("always-on")));
+    const isolationHits = searchKit(kitRoot, "parent chat debug noise xfn isolation", 8);
+    assert.ok(
+      isolationHits.some(
+        (h) => h.id.includes("context-budget") || h.excerpt.toLowerCase().includes("handover_debug")
+      )
+    );
   });
 
   it("resolveKitRoot prefers KIT_ROOT env", () => {

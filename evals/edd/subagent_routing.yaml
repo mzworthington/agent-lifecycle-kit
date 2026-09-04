@@ -16,6 +16,8 @@ ontology:
     - skill:agent-review
     - skill:agent-debug
     - skill:agent-tdd
+    - skill:agent-xfn
+    - sop:context-budget
 mocks:
   - tool: "launch_specialist"
     response:

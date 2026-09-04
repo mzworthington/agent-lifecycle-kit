@@ -70,7 +70,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
-**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary.
+**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md), [SOPs/context-budget.md](../../SOPs/context-budget.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary. `agent-debug` returns a hypothesis summary plus `handover_debug.md`, not the full log scrape. `agent-xfn` is a **separate child** from `agent-tdd` for browser E2E / load apply rows; TDD does not own those suites (`handover_xfn.md`). Tiny typos stay in the parent. When `agent-cloudflare-ops` or `agent-posthog` apply, the child runs `wk mcp …` then restore (`wk mcp restore --project` / `wk mcp default --install`) and must not stack vendor MCP onto default permanently. Built-in explore/bash/browser stay for primitives.
 
 ## Specialist roles
 
@@ -121,11 +121,11 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Request type | Route |
 |--------------|-------|
 | Prompt, MCP tool schema, or agent routing change | **EDD default:** [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md) (`kit eval run\|ci`) before merge |
-| Bug, failed job, live-site / fetch symptom, flake | **`agent-debug`** → `agent-pre-commit` (hypothesis board + repro + proof). Light XFN when UI/auth/SLO touched. |
+| Bug, failed job, live-site / fetch symptom, flake | Launch **`agent-debug`** as a subagent → `agent-pre-commit`. Parent keeps the hypothesis summary plus `handover_debug.md`. Light XFN when UI/auth/SLO touched. |
 | Production incident / page | **`agent-incident`** → `agent-debug` (+ Slack/Notion when configured) |
-| Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`kit mcp cloudflare-ops --install`) → IaC fix in owner repo |
-| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --install`) → adapter + privacy; not the Cursor wizard |
-| Tiny typo / obvious one-liner with clear repro | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
+| Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`wk mcp cloudflare-ops --project`, then restore) → IaC fix in owner repo. Do not stack onto default. |
+| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --install`, then restore) → adapter + privacy; not the Cursor wizard. Do not stack onto default. |
+| Tiny typo / obvious one-liner with clear repro | Implement directly in the **parent** - no debug/XFN isolation, no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
 | Extends existing behavior in one module | Design light: functional impact align → light or full XFN matrix → **`agent-tdd` short loop** (gear 1+2) |
 | Schema migration | `agent-migration` → `agent-pre-commit` (with light XFN / security as needed) |
 | OpenAPI / contract change | `agent-api-contract` (+ `agent-tdd` when behavior changes) |
@@ -155,7 +155,7 @@ When in doubt, prefer the smaller route and ask.
 
 Tests are the source of truth for intended behavior above documentation. Before coding non-trivial work, Design must discuss **which functional and cross-functional cases** will be kept, extended, rewritten, retired, or added. Re-confirm during execution if implementation impacts cases outside that plan. See [agent-tdd](../agent-tdd/SKILL.md), [agent-xfn](../agent-xfn/SKILL.md).
 
-Browser E2E and other XFN suites are **never** owned by `agent-tdd` - route them to `agent-xfn`.
+Browser E2E and other XFN suites are **never** owned by `agent-tdd` - launch `agent-xfn` as a **separate child**.
 
 ## Orchestration flow
 
@@ -200,7 +200,7 @@ sequenceDiagram
 2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
 3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
 4. **Short loop (execution)** - Route back to **`agent-tdd`**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.
-5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
+5. **XFN green** - Launch `agent-xfn` as a **separate child** (not inside the TDD window) to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status. Parent reads `handover_xfn.md`.
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
 8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. For a bet’s leading indicator (product usage), route to `agent-posthog` (`wk mcp posthog --install`). Do not invent extra dashboards.

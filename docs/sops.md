@@ -7,7 +7,7 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [Eval-driven development (alpha)](/SOPs/eval-driven-development) | Writing or gating agent evals |
 | [EDD production telemetry](/SOPs/edd-production-telemetry) | Turning live misses into cases |
 | [Behavior catalog and XFN](/SOPs/behavior-catalog-and-xfn) | Inventorying tests before a change |
-| [Context budget](/SOPs/context-budget) | Always-on files are too large |
+| [Context budget](/SOPs/context-budget) | Always-on files are too large; keep debug/XFN noise in child windows |
 | [MCP library](/SOPs/mcp-library) | Composing one MCP profile |
 | [Hypothesis-driven development](/SOPs/hypothesis-driven-development) | Product bets, experiments, feature flags, kill criteria |
 | [Hypothesis-driven debug](/SOPs/hypothesis-driven-debug) | A failure needs RCA, not more logging |

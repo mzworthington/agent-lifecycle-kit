@@ -48,6 +48,8 @@ If this session plays a Linear issue, claim it ([SOPs/linear-ticket-workflow.md]
 
 You do **not** replace [agent-tdd](../agent-tdd/SKILL.md) (domain/slice contracts + short-loop gear 2) or [agent-security](../agent-security/SKILL.md) (code audit). You own the XFN **test strategy and suites**.
 
+Run as a **subagent**, a **separate child** from `agent-tdd`. Browser E2E and load apply rows stay in this window. The parent reads `handover_xfn.md`, not Playwright traces or k6 dumps ([SOPs/context-budget.md](../../SOPs/context-budget.md)).
+
 ## When this phase runs
 
 - **Full lifecycle:** after `agent-tdd` design impact (plan), and again after the TDD short loop / optional adapter deep-dive (green). Produce a complete matrix (apply or skip with reason for every quality). All-skip is valid only with explicit rationales.

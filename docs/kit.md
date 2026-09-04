@@ -21,7 +21,7 @@ wk measure-context
 
 Prints a character/token estimate per file and **FAIL** if always-on exceeds 8KB. Re-run after editing `AGENTS.md` or the handshake template. `wk check` runs this gate last.
 
-Agent checklist: [SOPs/context-budget.md](../SOPs/context-budget.md).
+Agent checklist: [SOPs/context-budget.md](../SOPs/context-budget.md). Debug, XFN browser/load, and live Cloudflare/PostHog work run as children; the parent keeps the handover, not the log scrape. Tiny typos stay in the parent.
 
 ```mermaid
 flowchart LR
@@ -50,7 +50,7 @@ wk mcp warp --install
 wk mcp posthog --install
 ```
 
-Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + devtools + ops into one global `mcp.json`. Catalog: [mcps/README.md](../mcps/README.md). Procedure: [SOPs/mcp-library.md](../SOPs/mcp-library.md).
+Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + devtools + ops into one global `mcp.json`. After `cloudflare-ops` or `posthog`, restore default (`wk mcp restore --project`). Catalog: [mcps/README.md](../mcps/README.md). Procedure: [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 
 ## Quality gate
 

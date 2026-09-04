@@ -15,6 +15,7 @@ export interface RenderSubagentStubInput {
   description: string;
   readonly: boolean;
   sameSessionTdd: boolean;
+  isolationKeep?: 'debug' | 'xfn';
 }
 
 function countLines(text: string): number {
@@ -46,6 +47,18 @@ export function renderSubagentStub(input: RenderSubagentStubInput): string {
         'Gear 1 (domain + mocked ports) and gear 2 (thin adapter) stay in this **same session**. Do not split gear 1 and gear 2. `agent-adapter` is an escape hatch only when gear 2 is too large.'
       ]
     : [];
+  const isolation =
+    input.isolationKeep === 'debug'
+      ? [
+          '',
+          'Return a hypothesis summary only. The parent reads `handover_debug.md`, not the full log scrape. If this child needs cloudflare-ops or posthog MCP, `wk mcp <profile> --project` then `wk mcp restore --project`. Do not stack vendor MCP onto default.'
+        ]
+      : input.isolationKeep === 'xfn'
+        ? [
+            '',
+            'Browser E2E and load stay in this child — a **separate child** from `agent-tdd`. TDD does not own those suites. The parent reads `handover_xfn.md`.'
+          ]
+        : [];
   const body = [
     `You are the Waykit \`${input.name}\` specialist in an isolated host subagent.`,
     '',
@@ -55,6 +68,7 @@ export function renderSubagentStub(input: RenderSubagentStubInput): string {
     '',
     'The parent must pass: Linear id if any, relevant handover paths, Definition of Done, and Next agent. Write COMPLETE or BLOCKED to the handover. Return a short summary only.',
     ...tdd,
+    ...isolation,
     ''
   ].join('\n');
   return [
@@ -89,7 +103,8 @@ export function expectedSubagentStubs(repoDir: string, catalog?: SubagentAllowli
         name,
         description: parseSkillDescription(skillMd),
         readonly: entry?.readonly === true,
-        sameSessionTdd: name === loaded.tdd.skill
+        sameSessionTdd: name === loaded.tdd.skill,
+        isolationKeep: name === 'agent-debug' ? 'debug' : name === 'agent-xfn' ? 'xfn' : undefined
       })
     );
   }

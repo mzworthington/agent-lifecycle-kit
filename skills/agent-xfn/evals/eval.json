@@ -28,6 +28,31 @@
           "ASCII art"
         ]
       }
+    },
+    {
+      "id": "EVAL-XFN-COLOCATED-002",
+      "name": "XFN is a separate child from TDD",
+      "description": "Browser E2E and load apply rows run in an agent-xfn subagent; parent reads handover_xfn.md.",
+      "target_skill": "agent-xfn",
+      "prompt": "Green Playwright and load apply rows for the sharing modal without keeping that work on TDD.",
+      "context": {
+        "active_phase": "xfn"
+      },
+      "assertions": {
+        "required_triggers": [
+          "xfn",
+          "playwright",
+          "browser e2e"
+        ],
+        "required_patterns": [
+          "subagent",
+          "separate child",
+          "handover_xfn.md"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
+      }
     }
   ]
 }

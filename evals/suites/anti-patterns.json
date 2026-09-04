@@ -1,7 +1,7 @@
 {
   "suite": "anti-patterns",
   "description": "Evaluation benchmarks testing strict enforcement of negative guardrails and architectural anti-patterns",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "test_cases": [
     {
       "id": "EVAL-ANTI-001",
@@ -159,6 +159,26 @@
         "forbidden_patterns": [
           "docs: update",
           "docs: add"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ANTI-008",
+      "name": "XFN Apply Is A Separate Child From TDD",
+      "description": "Verifies TDD hands browser E2E and load apply rows to agent-xfn as a separate child.",
+      "target_skill": "agent-tdd",
+      "prompt": "The domain slice is green. Who owns Playwright browser E2E and load apply rows?",
+      "assertions": {
+        "required_triggers": [
+          "tdd",
+          "implementation"
+        ],
+        "required_patterns": [
+          "separate child",
+          "agent-xfn"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
         ]
       }
     }

@@ -1,7 +1,7 @@
 {
   "suite": "agent-orchestrator-co-located",
   "description": "Co-located evaluation benchmark for agent-orchestrator skill",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "test_cases": [
     {
       "id": "EVAL-ORCH-COLOCATED-001",
@@ -54,6 +54,32 @@
         ],
         "required_output_sections": [
           "Linear ticket"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-003",
+      "name": "Isolate debug and XFN from the parent",
+      "description": "Debug and XFN browser/load work launch as subagents; parent keeps handovers not log scrapes; tiny typos stay in the parent; Cloudflare/PostHog MCP restores default.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "The CI job failed and we also need Playwright apply rows greened, without dumping logs into this chat.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "handover_debug.md",
+          "handover_xfn.md",
+          "separate child",
+          "hypothesis summary",
+          "wk mcp restore"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
         ]
       }
     }

@@ -41,16 +41,18 @@ The child writes `COMPLETE` or `BLOCKED` to the handover and returns a short sum
 |-----------|--------|
 | Spec after grilling/stories | `agent-spec` |
 | Spec handover `COMPLETE`, implement the slice | `agent-tdd` (gear 1 **and** gear 2 in **one** child) |
-| XFN apply rows / browser noise | `agent-xfn` (own window) |
-| Failed CI, live symptom, RCA | `agent-debug` (own window). Do not open the full lifecycle. |
-| Independent PR / OWASP / hex drift check | `agent-review`, `agent-security`, or `agent-arch-drift` with `readonly: true`. Handover and diff only. `BLOCKED` goes back to tdd or xfn. |
+| XFN apply rows / browser or load noise | `agent-xfn` as a **separate child** from `agent-tdd`. TDD does not own browser E2E. Parent reads `handover_xfn.md`. |
+| Failed CI, live symptom, RCA | `agent-debug` (own window). Do not open the full lifecycle. Parent keeps the hypothesis summary plus `handover_debug.md`, not the full log scrape. |
+| Independent PR / OWASP / hex drift check | `agent-review`, `agent-security`, or `agent-arch-drift` with `readonly: true`. Handover and diff only. `BLOCKED` goes back to tdd or xfn. Sibling of isolation — not this ticket’s generate list. |
 | Tiny typo / one-liner | Stay in the parent. |
 
 Do not generate or launch `lang-*` / `framework-*` / `profile-*` as agents. Load those skills inside the specialist.
 
 Do not split TDD across two agents. `agent-adapter` stays a skill when gear 2 is too large.
 
-Keep **one** MCP profile. If a specialist needs a named profile, `wk mcp <profile> --project`, then restore `wk mcp default --project`.
+Do not replace Cursor’s built-in explore / bash / browser subagents. Those stay for noisy primitives; kit specialists own DoD and handover.
+
+Keep **one** MCP profile. If `agent-cloudflare-ops` or `agent-posthog` apply (usually inside the debug child), `wk mcp <profile> --project`, then `wk mcp restore --project` or `wk mcp default --install`. The child must not stack vendor MCP onto the default profile permanently.
 
 ## Kill
 

@@ -14,7 +14,7 @@
       },
       "assertions": {
         "required_triggers": ["posthog", "cookieless", "phc_", "posthog wizard"],
-        "required_patterns": ["cookieless", "POSTHOG_TOKEN", "privacy", "mcp.posthog.com"],
+        "required_patterns": ["cookieless", "POSTHOG_TOKEN", "privacy", "mcp.posthog.com", "wk mcp restore"],
         "forbidden_patterns": ["self-driving", "siteToken in memory", "yarn add"],
         "required_output_sections": ["Stack", "SDK options", "Privacy", "CI", "MCP proof"]
       }

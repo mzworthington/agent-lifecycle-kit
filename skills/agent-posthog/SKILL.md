@@ -49,7 +49,7 @@ You add or repair **PostHog** in the repo’s real stack, then prove events with
 
 ## Profile
 
-One MCP profile: `wk mcp posthog --install` (or `--project`). Official server: `https://mcp.posthog.com/mcp` (OAuth; no API key in `mcp.json`). If PostHog tools are missing, stop and tell the user to install that profile — do not stack it onto `default`. Restore `wk mcp default --install` when done.
+One MCP profile in this session (often a debug **subagent**): `wk mcp posthog --install` (or `--project`). Official server: `https://mcp.posthog.com/mcp` (OAuth; no API key in `mcp.json`). If PostHog tools are missing, stop and tell the user to install that profile. Do **not** stack vendor MCP onto the default profile permanently. Before returning to the parent, `wk mcp restore --project` or `wk mcp default --install`.
 
 ## Mandatory loop
 

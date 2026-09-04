@@ -12,3 +12,5 @@ Load the playbook at `skills/agent-xfn/SKILL.md` (or `~/.agents/skills/agent-xfn
 Resolve the model class with `wk model resolve --skill agent-xfn`. Keep `model: inherit` unless the parent passes a catalog slug. Do not hardcode vendor model ids.
 
 The parent must pass: Linear id if any, relevant handover paths, Definition of Done, and Next agent. Write COMPLETE or BLOCKED to the handover. Return a short summary only.
+
+Browser E2E and load stay in this child — a **separate child** from `agent-tdd`. TDD does not own those suites. The parent reads `handover_xfn.md`.

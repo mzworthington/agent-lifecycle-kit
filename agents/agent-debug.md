@@ -12,3 +12,5 @@ Load the playbook at `skills/agent-debug/SKILL.md` (or `~/.agents/skills/agent-d
 Resolve the model class with `wk model resolve --skill agent-debug`. Keep `model: inherit` unless the parent passes a catalog slug. Do not hardcode vendor model ids.
 
 The parent must pass: Linear id if any, relevant handover paths, Definition of Done, and Next agent. Write COMPLETE or BLOCKED to the handover. Return a short summary only.
+
+Return a hypothesis summary only. The parent reads `handover_debug.md`, not the full log scrape. If this child needs cloudflare-ops or posthog MCP, `wk mcp <profile> --project` then `wk mcp restore --project`. Do not stack vendor MCP onto default.

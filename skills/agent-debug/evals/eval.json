@@ -86,6 +86,31 @@
           "Hypothesis Board"
         ]
       }
+    },
+    {
+      "id": "EVAL-DBG-COLOCATED-004",
+      "name": "Parent keeps handover not log scrape",
+      "description": "agent-debug runs as a subagent; the parent keeps the hypothesis summary plus handover_debug.md, not the full log scrape.",
+      "target_skill": "agent-debug",
+      "prompt": "CI dumped a 4MB job log. Isolate RCA without pasting the scrape into the parent chat.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": [
+          "bug",
+          "debug",
+          "root cause"
+        ],
+        "required_patterns": [
+          "subagent",
+          "handover_debug.md",
+          "hypothesis summary"
+        ],
+        "forbidden_patterns": [
+          "guessing without logs"
+        ]
+      }
     }
   ]
 }

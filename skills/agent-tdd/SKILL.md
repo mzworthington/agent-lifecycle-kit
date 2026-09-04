@@ -44,7 +44,7 @@ You own the **short feedback loop** for a vertical slice: red → green → next
 
 If this session plays a Linear issue, claim it first ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)): `In Progress`, assign/delegate the host agent (`Cursor`), stay on main, leave files uncommitted, and output a conventional commit subject that includes the issue id.
 
-Unit and slice tests are the **functional** half of the **behavior catalog**. Cross-functional suites (browser E2E, accessibility, security, load) belong to [agent-xfn](../agent-xfn/SKILL.md) - do not author or rewrite them here. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
+Unit and slice tests are the **functional** half of the **behavior catalog**. Cross-functional suites (browser E2E, accessibility, security, load) belong to [agent-xfn](../agent-xfn/SKILL.md) as a **separate child** - do not author, rewrite, or green those suites in this TDD window. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
 
 ## Two gears (same session)
 
@@ -127,7 +127,7 @@ When specs describe format conversion (diagram → schema, file import):
 
 ## XFN fixtures
 
-While in gear 2 (or after), note routes, seed data, and env docs that **apply** browser/load/security suites need. Do not author those suites here.
+While in gear 2 (or after), note routes, seed data, and env docs that **apply** browser/load/security suites need. Do not author those suites here. Hand browser E2E and load apply rows to `agent-xfn` as a **separate child**.
 
 Before handover, run [agent-pre-commit](../agent-pre-commit/SKILL.md) when tests are green. That means the repo hook (or every command it names for the changed paths), not a filtered package test. Do not mark COMPLETE after a path-filtered vitest run.
 

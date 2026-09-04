@@ -1,6 +1,6 @@
 {
   "name": "launch_specialist",
-  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
+  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. For debug, pass handover_debug.md so the parent keeps the hypothesis summary, not the full log scrape. For XFN browser/load apply rows, launch agent-xfn as a separate child from agent-tdd (handover_xfn.md). When the child needs Cloudflare or PostHog MCP, pass mcpProfile and restoreProfile default — do not stack vendor MCP onto default permanently. Do not launch stack profiles. Do not split TDD gear 1 and gear 2. Stay in the parent for tiny typos.",
   "inputSchema": {
     "type": "object",
     "required": ["specialist"],
@@ -24,9 +24,18 @@
         "description": "Optional capability class from models/catalog.yaml"
       },
       "handoverPaths": {
-        "type": "array",
-        "items": { "type": "string" },
-        "description": "Handover files the child must read or write"
+        "type": "string",
+        "description": "Handover file the parent keeps (handover_debug.md or handover_xfn.md). Not the full log scrape."
+      },
+      "mcpProfile": {
+        "type": "string",
+        "enum": ["cloudflare-ops", "posthog"],
+        "description": "Named MCP profile the child installs for live vendor work"
+      },
+      "restoreProfile": {
+        "type": "string",
+        "enum": ["default"],
+        "description": "Profile to restore before returning to the parent. Required when mcpProfile is set."
       }
     },
     "additionalProperties": false

@@ -432,6 +432,7 @@ metrics:
     assert.ok(report.results.some((r) => r.id === 'kit-sop-cf-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-model-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-debug-ci-no-pkg-01'));
+    assert.ok(report.results.some((r) => r.id === 'kit-sop-context-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-02'));
   });
@@ -453,6 +454,23 @@ metrics:
     assert.ok(report.results.some((r) => r.id === 'cf-rum-01'));
     assert.ok(report.results.some((r) => r.id === 'cf-obs-01'));
     assert.ok(!report.results.some((r) => r.id === 'cf-live-01'));
+  });
+
+  it('passes subagent-routing suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/subagent_routing.yaml'));
+    assert.equal(
+      report.failed,
+      0,
+      report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | ')
+    );
+    assert.ok(report.results.some((r) => r.id === 'subagent-debug-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-xfn-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-cf-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-ph-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-parent-01'));
+    assert.ok(!report.results.some((r) => r.id === 'subagent-live-01'));
+    assert.ok(!report.results.some((r) => r.id === 'subagent-live-02'));
   });
 
   it('loads a prod-derived circuit-breaker case', async () => {

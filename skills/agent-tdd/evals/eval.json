@@ -54,6 +54,29 @@
           "PASS (targeted)"
         ]
       }
+    },
+    {
+      "id": "EVAL-TDD-COLOCATED-003",
+      "name": "Browser E2E is a separate XFN child",
+      "description": "TDD does not own Playwright or load suites; those go to agent-xfn as a separate child.",
+      "target_skill": "agent-tdd",
+      "prompt": "The slice is green. Who owns the Playwright browser E2E apply rows?",
+      "context": {
+        "active_phase": "tdd"
+      },
+      "assertions": {
+        "required_triggers": [
+          "tdd",
+          "implementation"
+        ],
+        "required_patterns": [
+          "separate child",
+          "agent-xfn"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ]
+      }
     }
   ]
 }

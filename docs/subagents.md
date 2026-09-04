@@ -38,7 +38,7 @@ Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, st
 
 | Bucket | Skills | Why a subagent |
 |--------|--------|----------------|
-| Isolation | `agent-debug`, `agent-xfn` | Logs, DOM, and suite output must not fill the parent chat |
+| Isolation | `agent-debug`, `agent-xfn` | Logs, DOM, and suite output must not fill the parent chat. Debug returns a hypothesis summary plus `handover_debug.md`. XFN is a separate child from TDD (`handover_xfn.md`). Built-in explore/bash/browser stay for primitives. |
 | Readonly audit | `agent-review`, `agent-security`, `agent-arch-drift` | Independent check; `readonly: true` |
 | Sequential specialists | `agent-spec`, `agent-tdd` | Multi-step phase with a handover contract |
 

@@ -145,8 +145,8 @@ Prefer learning the prior RCA over rediscovering it.
 
 | Request | Route |
 |---------|-------|
-| Bug, failed job, live symptom | `agent-debug` → `agent-pre-commit` |
-| UI/auth/SLO touched | + light XFN floor ([agent-orchestrator](../skills/agent-orchestrator/SKILL.md)) |
+| Bug, failed job, live symptom | Launch `agent-debug` as a subagent → `agent-pre-commit`. Parent keeps the hypothesis summary plus `handover_debug.md`, not the full log scrape. |
+| UI/auth/SLO touched | + light XFN floor ([agent-orchestrator](../skills/agent-orchestrator/SKILL.md)); browser/load apply is a **separate** `agent-xfn` child |
 | RCA needs new capability | `agent-debug` (COMPLETE with RCA) → `agent-orchestrator` |
 | Complexity-only cleanup | `agent-arch-drift` → `agent-prune` (not debug) |
 

@@ -94,6 +94,29 @@ describe('renderSubagentStub', () => {
     assert.ok(stub.split('\n').length <= SUBAGENT_STUB_LINE_BUDGET);
   });
 
+  it('keeps isolation notes on debug and xfn stubs', () => {
+    const debug = renderSubagentStub({
+      name: 'agent-debug',
+      description: 'Hypothesis-driven RCA.',
+      readonly: false,
+      sameSessionTdd: false,
+      isolationKeep: 'debug'
+    });
+    assert.match(debug, /handover_debug\.md/);
+    assert.match(debug, /hypothesis summary/);
+    assert.match(debug, /wk mcp restore --project/);
+    const xfn = renderSubagentStub({
+      name: 'agent-xfn',
+      description: 'XFN suites.',
+      readonly: false,
+      sameSessionTdd: false,
+      isolationKeep: 'xfn'
+    });
+    assert.match(xfn, /handover_xfn\.md/);
+    assert.match(xfn, /separate child/);
+    assert.match(xfn, /agent-tdd/);
+  });
+
   it('forbids splitting TDD gears in the tdd stub', () => {
     const stub = renderSubagentStub({
       name: 'agent-tdd',
@@ -151,5 +174,9 @@ describe('generateSubagentStubs and verifySubagentStubs', () => {
     }
     const tdd = fs.readFileSync(path.join(kitRoot, AGENTS_DIR_REL, 'agent-tdd.md'), 'utf8');
     assert.match(tdd, /Do not split gear 1 and gear 2/);
+    const debug = fs.readFileSync(path.join(kitRoot, AGENTS_DIR_REL, 'agent-debug.md'), 'utf8');
+    assert.match(debug, /handover_debug\.md/);
+    const xfn = fs.readFileSync(path.join(kitRoot, AGENTS_DIR_REL, 'agent-xfn.md'), 'utf8');
+    assert.match(xfn, /handover_xfn\.md/);
   });
 });
