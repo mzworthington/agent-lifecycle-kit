@@ -33,6 +33,7 @@
 - Clarify Windsurf's status as rules-only and update related documentation
 - Update SKILL.md to clarify trunk-based pipeline requirements and GitHub PR behavior
 - *(handshake)* Point operators at host-subagent launch (MZW-57)
+- *(sops)* Treat wrap-up as confirming recommended intake rows (MZW-66)
 
 ### 🧪 Testing
 
