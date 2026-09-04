@@ -5,6 +5,8 @@ import path from 'node:path';
 import { describe, it } from 'node:test';
 import {
   EDD_CI_SUITES,
+  SUBAGENT_ROUTING_SKILLS_ONLY_SUITE,
+  SUBAGENT_ROUTING_SUITE,
   resolveEddCiSuites,
   runKitCheck,
   type KitCheckDeps
@@ -69,7 +71,8 @@ describe('EDD_CI_SUITES', () => {
     assert.ok(EDD_CI_SUITES.includes('evals/edd/cloudflare_ops.yaml'));
     assert.ok(EDD_CI_SUITES.includes('evals/edd/kit_knowledge.yaml'));
     assert.ok(EDD_CI_SUITES.includes('evals/edd/model_routing.yaml'));
-    assert.ok(EDD_CI_SUITES.includes('evals/edd/subagent_routing.yaml'));
+    assert.ok((EDD_CI_SUITES as readonly string[]).includes(SUBAGENT_ROUTING_SUITE));
+    assert.ok(!(EDD_CI_SUITES as readonly string[]).includes(SUBAGENT_ROUTING_SKILLS_ONLY_SUITE));
     assert.ok(!EDD_CI_SUITES.some((s) => s.includes('/goldens/')));
   });
 });
@@ -87,6 +90,26 @@ describe('resolveEddCiSuites', () => {
         'evals/edd/safety.yaml'
       ]);
       assert.ok(!resolved.includes('evals/edd/cloudflare_ops.yaml'));
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it('swaps host-subagent routing for the parent-skill suite when KIT_SKILLS_ONLY is on', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-edd-suites-'));
+    try {
+      fs.mkdirSync(path.join(tmp, 'evals', 'edd'), { recursive: true });
+      fs.writeFileSync(path.join(tmp, SUBAGENT_ROUTING_SUITE), 'name: launch\n');
+      fs.writeFileSync(path.join(tmp, SUBAGENT_ROUTING_SKILLS_ONLY_SUITE), 'name: parent\n');
+      assert.deepEqual(resolveEddCiSuites(tmp, [SUBAGENT_ROUTING_SUITE], {}), [
+        SUBAGENT_ROUTING_SUITE
+      ]);
+      assert.deepEqual(resolveEddCiSuites(tmp, [SUBAGENT_ROUTING_SUITE], { KIT_SKILLS_ONLY: '1' }), [
+        SUBAGENT_ROUTING_SKILLS_ONLY_SUITE
+      ]);
+      assert.deepEqual(resolveEddCiSuites(tmp, [SUBAGENT_ROUTING_SUITE], { KIT_SKILLS_ONLY: '0' }), [
+        SUBAGENT_ROUTING_SUITE
+      ]);
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });
     }

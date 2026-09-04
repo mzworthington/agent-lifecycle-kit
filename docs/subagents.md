@@ -34,6 +34,12 @@ sequenceDiagram
 
 Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, stubs are `subagent:*` nodes with an `adapts` edge to their skill ([Waykit map](./map.md)).
 
+## Skills-only (`KIT_SKILLS_ONLY`)
+
+Default remains launch. When host subagents cost too much, set `KIT_SKILLS_ONLY=1`. The orchestrator still picks the same allowlisted specialist (spec, tdd, debug, xfn, audit) but loads that role `SKILL.md` in the parent chat. Handover on disk is unchanged. Unset or `0`/`off` returns to launching.
+
+This is not an allowlist freeze and does not delete kit stubs. Eval: `wk eval ci` uses `evals/edd/subagent_routing.yaml` when the switch is off, and the parent-skill replacement `evals/edd/subagent_routing_skills_only.yaml` when it is on.
+
 ## Generate list
 
 | Bucket | Skills | Why a subagent |

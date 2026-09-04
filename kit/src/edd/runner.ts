@@ -7,6 +7,12 @@ import { judgeBackendForStyle, resolveEvalRun, type EvalStyle } from './eval-sty
 import { buildFailureTrace } from './failure-trace.js';
 import { runCaseAssertions } from './run-assertions.js';
 import { EvalConfigSchema, type EvalConfig } from './schema.js';
+import { isSkillsOnlyMode } from '../skills/skills_only_mode.js';
+import {
+  applySkillsOnlyCases,
+  rewriteSubagentSuiteForSkillsOnly,
+  shouldRemapSubagentExpects
+} from './subagent-route.js';
 import {
   buildSuiteReport,
   generateReport,
@@ -82,16 +88,21 @@ export class EvalRunner {
     console.log(`Starting eval suite: ${yamlPath}`);
     const absoluteYaml = path.resolve(yamlPath);
     const fileContent = fs.readFileSync(absoluteYaml, 'utf8');
-    const config: EvalConfig = EvalConfigSchema.parse(parseYaml(fileContent));
+    const parsed: EvalConfig = EvalConfigSchema.parse(parseYaml(fileContent));
+    const skillsOnly = isSkillsOnlyMode();
+    const config = skillsOnly ? rewriteSubagentSuiteForSkillsOnly(parsed) : parsed;
     const datasetPath = resolvePath(absoluteYaml, config.dataset);
     const skipLive = this.style === 'local';
     const loaded = await loadDataset(datasetPath, this.tags);
     const skippedLive = skipLive
       ? loaded.filter((c) => (c.tags ?? []).includes('requires-live'))
       : [];
-    const dataset = skipLive
+    const routed = skipLive
       ? loaded.filter((c) => !(c.tags ?? []).includes('requires-live'))
       : loaded;
+    const dataset = shouldRemapSubagentExpects(skillsOnly, config.mcp_tools)
+      ? applySkillsOnlyCases(routed)
+      : routed;
     if (skippedLive.length) {
       console.log(`Skipping ${skippedLive.length} requires-live case(s) (local style).`);
     }

@@ -60,7 +60,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 2. `wk validate` / `wk verify`: eval schemas, skills layout, and role line budget
 3. `wk ontology check`: live-derived graph refs (`depends-on`, `mcp`, subagent stubs)
 4. IDE rules match `AGENTS.md`
-5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `wk eval ci` (scripted, 95% routing)
+5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `wk eval ci` (scripted, 95% routing; `KIT_SKILLS_ONLY=1` uses the parent-skill subagent suite)
 6. Context budget
 
 ```bash

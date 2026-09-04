@@ -1,5 +1,6 @@
 # Source of truth for which role skills become host subagents (MZW-59).
 # Playbooks stay in SKILL.md. This file only classifies runtime.
+# Operator cost switch is KIT_SKILLS_ONLY (SOPs/subagent-launch.md). Default remains launch.
 version: 1
 expandKill: >-
   Freeze this generate list if auto-delegation picks the wrong agent more often

@@ -25,7 +25,7 @@ Public guides for Waykit: the software lifecycle for coding agents, the learning
 | [Author the Waykit map](../ontology/README.md) | What becomes a node, how to regenerate, what it is not |
 | [EDD guide (alpha)](./edd.md) | Anyone proving agent tool routing in CI |
 | [Hosts](./hosts.md) | Cursor, Claude Code, Copilot, Antigravity files |
-| [Host subagents](./subagents.md) | Which SDLC roles become isolated agents vs stay skills |
+| [Host subagents](./subagents.md) | Which SDLC roles launch as isolated agents vs stay skills (`KIT_SKILLS_ONLY`) |
 
 ## Reference
 

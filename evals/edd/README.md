@@ -22,6 +22,7 @@ evals/edd/
 ├── kit_knowledge.yaml|.jsonl
 ├── model_routing.yaml|.jsonl
 ├── subagent_routing.yaml|.jsonl
+├── subagent_routing_skills_only.yaml  ← parent-skill path when KIT_SKILLS_ONLY=1
 ├── cloudflare_ops.yaml|.jsonl
 ├── safety.yaml|.jsonl
 └── tools/*.json
@@ -62,6 +63,7 @@ wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
 wk eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/model_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/subagent_routing.yaml --threshold-routing 95 --model scripted --out out/reports
+KIT_SKILLS_ONLY=1 wk eval ci --suite evals/edd/subagent_routing_skills_only.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 wk eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports
@@ -135,6 +137,8 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, terminal-fallback, and host-subagent routing via `EDD_CI_SUITES`.
 
 Subagent routing misses from production go through the same closed loop as other suites (`wk eval dataset from-trace`). Do not skip adding a golden when the orchestrator stays in the parent instead of launching the specialist.
+
+**Skills-only:** `KIT_SKILLS_ONLY=1` remaps the host-subagent suite to the parent-skill route (`load_skill`). `wk check` swaps `evals/edd/subagent_routing.yaml` for `evals/edd/subagent_routing_skills_only.yaml`. Unset the env to return to `launch_specialist`. Protocol: [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md).
 
 ## Dataset hygiene
 

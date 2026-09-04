@@ -4,7 +4,7 @@ Four steps to Waykit on a repo. macOS and Linux; needs git and Node 22+. No API 
 
 1. **Install Waykit (~2 min)** — Links `~/.agents` and puts `wk` on your PATH via `~/.local/bin` (`kit` remains an alias).
 2. **Bootstrap this checkout (~2 min)** — `wk init . --mcp default --hook` writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? `./install.sh` is enough.
-3. **Pick the path (~1 min)** — Typo, bug, or failed CI: launch `agent-debug` (host subagent when logs are noisy) plus light XFN if you touched UI, auth, or an SLO. New product capability: the [feature lifecycle](/docs/lifecycle) (orchestrator parent launches allowlisted specialists). Day-to-day CLI: `wk align .`, `wk doctor`, `wk check` ([operator guide](/docs/kit)). Cards: [Jobs for today](/docs/jobs).
+3. **Pick the path (~1 min)** — Typo, bug, or failed CI: launch `agent-debug` (host subagent when logs are noisy; `KIT_SKILLS_ONLY` loads the skill in the parent) plus light XFN if you touched UI, auth, or an SLO. New product capability: the [feature lifecycle](/docs/lifecycle) (orchestrator parent launches allowlisted specialists unless skills-only is on). Day-to-day CLI: `wk align .`, `wk doctor`, `wk check` ([operator guide](/docs/kit)). Cards: [Jobs for today](/docs/jobs).
 4. **Optional: prove a tool call (~3 min, EDD alpha)** — `wk eval run --suite evals/edd/demo.yaml --model scripted`, then `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`.
 
 ## Install Waykit

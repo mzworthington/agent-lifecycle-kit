@@ -246,7 +246,15 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     errors.push(`Missing ${SUBAGENT_DOCS_REL}`);
   } else {
     const docs = fs.readFileSync(docsPath, 'utf8');
-    for (const needle of ['isolation', 'audit', 'sequential', 'parent', 'skill picker']) {
+    for (const needle of [
+      'isolation',
+      'audit',
+      'sequential',
+      'parent',
+      'skill picker',
+      'skills-only',
+      'kit_skills_only'
+    ]) {
       if (!docs.toLowerCase().includes(needle)) {
         errors.push(`${SUBAGENT_DOCS_REL} must mention ${needle}`);
       }

@@ -32,6 +32,10 @@ import {
 } from './measure_context_budget.js';
 import { printJsonReport, type JsonFinding } from '../cli/json_report.js';
 import { checkOntology, type OntologyCheckResult } from '../ontology/index.js';
+import { isSkillsOnlyMode } from '../skills/skills_only_mode.js';
+
+export const SUBAGENT_ROUTING_SUITE = 'evals/edd/subagent_routing.yaml';
+export const SUBAGENT_ROUTING_SKILLS_ONLY_SUITE = 'evals/edd/subagent_routing_skills_only.yaml';
 
 /** Default EDD suites for this kit. Forks may delete vendor-specific suites; missing files are skipped. */
 export const EDD_CI_SUITES = [
@@ -49,9 +53,16 @@ export const EDD_CI_SUITES = [
 /** Suites that exist on disk (so forks can drop vendor suites without breaking `kit check`). */
 export function resolveEddCiSuites(
   repoDir: string,
-  candidates: readonly string[] = EDD_CI_SUITES
+  candidates: readonly string[] = EDD_CI_SUITES,
+  env: NodeJS.ProcessEnv = process.env
 ): string[] {
-  return candidates.filter((rel) => fs.existsSync(path.join(repoDir, rel)));
+  const present = candidates.filter((rel) => fs.existsSync(path.join(repoDir, rel)));
+  if (!isSkillsOnlyMode(env)) return present;
+  return present.map((rel) => {
+    if (rel !== SUBAGENT_ROUTING_SUITE) return rel;
+    const replacement = path.join(repoDir, SUBAGENT_ROUTING_SKILLS_ONLY_SUITE);
+    return fs.existsSync(replacement) ? SUBAGENT_ROUTING_SKILLS_ONLY_SUITE : rel;
+  });
 }
 
 export interface KitCheckDeps {

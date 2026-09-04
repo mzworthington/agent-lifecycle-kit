@@ -36,7 +36,7 @@ Cursor’s in-product skill picker and Task `model` slugs are the deepest. Claud
 
 Kit-authored `skills/agent-*` stay in the Waykit clone (`~/.agents/skills`). Hosts that do not walk that tree still need the handshake: read `~/.agents/AGENTS.md`, then load the skill file.
 
-Which roles may become Cursor/Claude **subagents** (fresh window) vs stay skills: [subagent allowlist](./subagents.md). Profiles never become agents.
+Which roles may become Cursor/Claude **subagents** (fresh window) vs stay skills: [subagent allowlist](./subagents.md). Profiles never become agents. `KIT_SKILLS_ONLY=1` keeps those roles as parent skills.
 
 ```bash
 wk agents generate

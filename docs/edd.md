@@ -118,6 +118,8 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 
 PR Verify and `wk check` stay `--style local` (no key). When you run a live model, prefer **http** for the nightly job; **cli** is for local iteration (`cursor-agent`, `claude`, or `agy`). CLI runs hit subscription rate limits and have weaker structured-output guarantees.
 
+Host-subagent routing (`evals/edd/subagent_routing.yaml`) expects `launch_specialist` unless `KIT_SKILLS_ONLY` is on, in which case `wk check` uses `evals/edd/subagent_routing_skills_only.yaml` and cases expect `load_skill`.
+
 Optional: `KIT_EVAL_MODEL`. Rough USD uses `$0.003` per 1k tokens unless `KIT_EVAL_TOKEN_USD_PER_1K` is set (`0` disables). Local OpenAI-compatible servers also work via `KIT_EVAL_BASE_URL`.
 
 ## Metrics and suites

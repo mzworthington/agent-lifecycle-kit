@@ -1,8 +1,8 @@
-name: "Routing: Host subagent launch"
+name: "Routing: Parent skill (skills-only)"
 dataset: "subagent_routing.jsonl"
-system_prompt: "subagent_routing_prompt.md"
+system_prompt: "subagent_routing_skills_only_prompt.md"
 mcp_tools:
-  - "tools/launch_specialist.json"
+  - "tools/load_skill.json"
 metrics:
   - type: "tool_selection"
   - type: "schema_match"
@@ -20,7 +20,7 @@ ontology:
     - skill:agent-security
     - skill:agent-spec
 mocks:
-  - tool: "launch_specialist"
+  - tool: "load_skill"
     response:
-      launched: true
-      note: "Parent reads COMPLETE/BLOCKED from the handover, not the chat summary"
+      loaded: true
+      note: "Parent loads SKILL.md in this chat and writes COMPLETE/BLOCKED to the handover"

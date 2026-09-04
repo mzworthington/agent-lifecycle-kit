@@ -103,6 +103,7 @@ export const EvalCaseSchema = z.object({
 });
 
 export type EvalCase = z.infer<typeof EvalCaseSchema>;
+export type CaseExpect = z.infer<typeof CaseExpectSchema>;
 export type HistoryTurn = z.infer<typeof HistoryTurnSchema>;
 
 export const AgentToolCallSchema = z.object({

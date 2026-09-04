@@ -74,7 +74,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/framework-react/SKILL.md': '---\nkind: profile\n---\n',
       'skills/profile-api/SKILL.md': '---\nkind: profile\n---\n',
       'docs/subagents.md':
-        '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\n'
+        '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\nSkills-only: KIT_SKILLS_ONLY loads SKILL.md in the parent.\n'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, true, result.errors.join('\n'));
@@ -107,7 +107,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-adapter/SKILL.md': 'x',
       'skills/lang-go/SKILL.md': 'x',
       'docs/subagents.md':
-        'skill picker isolation audit sequential parent. Gear 1. agent-adapter.'
+        'skill picker isolation audit sequential parent. Gear 1. agent-adapter. Skills-only KIT_SKILLS_ONLY.'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -125,7 +125,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-tdd/SKILL.md': 'x',
       'skills/agent-adapter/SKILL.md': 'x',
       'docs/subagents.md':
-        'skill picker isolation audit sequential parent. Gear 1. agent-adapter.'
+        'skill picker isolation audit sequential parent. Gear 1. agent-adapter. Skills-only KIT_SKILLS_ONLY.'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -141,7 +141,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/agent-spec/SKILL.md': 'x',
       'skills/agent-tdd/SKILL.md': 'x',
       'skills/agent-adapter/SKILL.md': 'x',
-      'docs/subagents.md': 'isolation audit sequential parent'
+      'docs/subagents.md': 'isolation audit sequential parent skills-only KIT_SKILLS_ONLY'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, false);
@@ -172,5 +172,7 @@ describe('verifySubagentAllowlist', () => {
     assert.match(docs, /skill picker/i);
     assert.match(docs, /gear 1/i);
     assert.match(docs, /agent-adapter/);
+    assert.match(docs, /skills-only/i);
+    assert.match(docs, /KIT_SKILLS_ONLY/);
   });
 });

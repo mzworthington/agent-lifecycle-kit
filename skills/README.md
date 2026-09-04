@@ -17,7 +17,7 @@ We keep **one `skills/` tree** for playbooks. Cursor still discovers skills from
 
 **Roles vs profiles:** Roles define *who you are* and *what phase output* to produce. Profiles define *how to write code* for a stack. The orchestrator (`agent-orchestrator`) routes between roles; stack detection activates profiles.
 
-**Host subagents:** Do not generate a Cursor/Claude agent for every role. Allowlist: [docs/subagents.md](../docs/subagents.md), machine-readable [subagents.yaml](./subagents.yaml). Isolation (`agent-debug`, `agent-xfn`), readonly audit (`agent-review`, `agent-security`, `agent-arch-drift`), sequential (`agent-spec`, `agent-tdd`). Orchestrator stays the parent. `lang-*` / `framework-*` / `profile-*` stay skills. TDD gear 1 and gear 2 stay one `agent-tdd` session; `agent-adapter` is the escape hatch, not a second TDD agent. Freeze the list if auto-delegation is worse than today’s skill picker.
+**Host subagents:** Do not generate a Cursor/Claude agent for every role. Allowlist: [docs/subagents.md](../docs/subagents.md), machine-readable [subagents.yaml](./subagents.yaml). Isolation (`agent-debug`, `agent-xfn`), readonly audit (`agent-review`, `agent-security`, `agent-arch-drift`), sequential (`agent-spec`, `agent-tdd`). Orchestrator stays the parent. `lang-*` / `framework-*` / `profile-*` stay skills. TDD gear 1 and gear 2 stay one `agent-tdd` session; `agent-adapter` is the escape hatch, not a second TDD agent. Freeze the list if auto-delegation is worse than today’s skill picker. `KIT_SKILLS_ONLY=1` loads those role `SKILL.md` files in the parent instead of launching.
 
 ## Lifecycle roles (`agent-*`)
 

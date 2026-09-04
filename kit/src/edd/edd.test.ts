@@ -436,6 +436,45 @@ metrics:
     assert.ok(!report.results.some((r) => r.id === 'kit-live-02'));
   });
 
+  it('passes host-subagent routing suite with scripted model', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(path.join(repoDir, 'evals/edd/subagent_routing.yaml'));
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.ok(report.results.some((r) => r.id === 'subagent-review-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-spec-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-debug-01'));
+    assert.ok(report.results.some((r) => r.id === 'subagent-parent-01'));
+    const review = report.results.find((r) => r.id === 'subagent-review-01');
+    assert.equal(review?.trajectory?.[0]?.toolName, 'launch_specialist');
+    assert.ok(!report.results.some((r) => r.id === 'subagent-live-01'));
+  });
+
+  it('passes the parent-skill replacement suite without the env switch', async () => {
+    const runner = new EvalRunner({ model: 'scripted' });
+    const report = await runner.runSuite(
+      path.join(repoDir, 'evals/edd/subagent_routing_skills_only.yaml')
+    );
+    assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+    assert.equal(report.results.find((r) => r.id === 'subagent-review-01')?.trajectory?.[0]?.toolName, 'load_skill');
+    assert.equal(report.results.find((r) => r.id === 'subagent-spec-01')?.trajectory?.[0]?.toolName, 'load_skill');
+    assert.equal(report.results.find((r) => r.id === 'subagent-parent-01')?.trajectory?.[0]?.toolName, undefined);
+  });
+
+  it('remaps the host-subagent suite to load_skill when KIT_SKILLS_ONLY is on', async () => {
+    const prev = process.env.KIT_SKILLS_ONLY;
+    process.env.KIT_SKILLS_ONLY = '1';
+    try {
+      const runner = new EvalRunner({ model: 'scripted' });
+      const report = await runner.runSuite(path.join(repoDir, 'evals/edd/subagent_routing.yaml'));
+      assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
+      assert.equal(report.results.find((r) => r.id === 'subagent-review-01')?.trajectory?.[0]?.toolName, 'load_skill');
+      assert.equal(report.results.find((r) => r.id === 'subagent-debug-01')?.trajectory?.[0]?.toolName, 'load_skill');
+    } finally {
+      if (prev === undefined) delete process.env.KIT_SKILLS_ONLY;
+      else process.env.KIT_SKILLS_ONLY = prev;
+    }
+  });
+
   it('passes model-routing suite with scripted model', async () => {
     const runner = new EvalRunner({ model: 'scripted' });
     const report = await runner.runSuite(path.join(repoDir, 'evals/edd/model_routing.yaml'));

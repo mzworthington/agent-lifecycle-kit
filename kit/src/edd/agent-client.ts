@@ -1,6 +1,13 @@
 import { resolveEvalRun } from './eval-style.js';
 import { ProviderHttpError, withProviderRetry } from './provider-retry.js';
 import type { AgentResponse, AgentToolCall, AgentUsage, EvalMock, HistoryTurn } from './schema.js';
+import { isSkillsOnlyMode } from '../skills/skills_only_mode.js';
+import {
+  LAUNCH_SPECIALIST,
+  LOAD_SKILL,
+  matchHostSpecialist,
+  specialistToolName
+} from './subagent-route.js';
 
 export interface ToolContract {
   name: string;
@@ -80,121 +87,56 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     names.has('get_entity') ||
     names.has('get_related');
   const hasArch = names.has('read_architecture_yaml');
-  const hasLaunchSpecialist = names.has('launch_specialist');
+  const hasLaunchSpecialist = names.has(LAUNCH_SPECIALIST);
+  const hasLoadSkill = names.has(LOAD_SKILL);
   const hasModelClass = names.has('select_model_class');
-  const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass && !hasLaunchSpecialist;
+  const hasMemoryOnly =
+    names.has('create_entities') &&
+    !hasKit &&
+    !hasArch &&
+    !hasModelClass &&
+    !hasLaunchSpecialist &&
+    !hasLoadSkill;
 
-  if (hasLaunchSpecialist && !hasArch) {
+  if ((hasLaunchSpecialist || hasLoadSkill) && !hasArch) {
+    const skillsOnly = hasLoadSkill && (!hasLaunchSpecialist || isSkillsOnlyMode());
+    const tool = specialistToolName(skillsOnly);
     if (
       prompt.includes('weather') ||
       prompt.includes('brew coffee') ||
       prompt.includes('make tea')
     ) {
-      return scriptedNoTool('That is outside subagent routing. I can launch an allowlisted specialist if you describe the job.');
+      return scriptedNoTool(
+        skillsOnly
+          ? 'That is outside parent-skill routing. I can load an allowlisted role SKILL.md if you describe the job.'
+          : 'That is outside subagent routing. I can launch an allowlisted specialist if you describe the job.'
+      );
     }
     if (prompt.includes('typo')) {
       return scriptedNoTool('Staying in the parent for a tiny typo.');
     }
-    if (prompt.includes('owasp') || prompt.includes('security audit')) {
+    const match = matchHostSpecialist(prompt);
+    if (match) {
+      const arguments_: Record<string, unknown> = { specialist: match.specialist };
+      if (match.class) arguments_.class = match.class;
+      if (match.handoverPaths) arguments_.handoverPaths = match.handoverPaths;
       return {
-        content: 'Launching agent-security as a readonly audit subagent.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-security',
-              class: 'review',
-              handoverPaths: ['handover/demo/handover_tdd.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.92
-      };
-    }
-    if (
-      prompt.includes('pr') &&
-      (prompt.includes('review') || prompt.includes('audit') || prompt.includes('independent'))
-    ) {
-      return {
-        content: 'Launching agent-review as a readonly audit subagent.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-review',
-              class: 'review',
-              handoverPaths: ['handover/demo/handover_tdd.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.92
-      };
-    }
-    if (
-      prompt.includes('ci failed') ||
-      prompt.includes('failed github actions') ||
-      prompt.includes('failed job')
-    ) {
-      return {
-        content: 'Launching agent-debug so CI noise stays out of the parent chat.',
-        tool_calls: [{ name: 'launch_specialist', arguments: { specialist: 'agent-debug' } }],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.92
-      };
-    }
-    if (
-      prompt.includes('browser e2e') ||
-      prompt.includes('xfn apply') ||
-      prompt.includes('green the browser')
-    ) {
-      return {
-        content: 'Launching agent-xfn so browser noise stays out of the parent chat.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-xfn',
-              handoverPaths: ['handover/demo/handover_xfn.md']
-            }
-          }
-        ],
+        content: skillsOnly
+          ? `Loading ${match.specialist} SKILL.md in the parent chat.`
+          : `Launching ${match.specialist} as a host subagent.`,
+        tool_calls: [{ name: tool, arguments: arguments_ }],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
         consecutiveToolFailures: 0,
         haltedAutonomousExecution: false,
         routingConfidence: 0.91
       };
     }
-    if (
-      (prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
-      (prompt.includes('tdd') || prompt.includes('short loop'))
-    ) {
-      return {
-        content: 'Launching agent-tdd for gear 1 and gear 2 in one session.',
-        tool_calls: [
-          {
-            name: 'launch_specialist',
-            arguments: {
-              specialist: 'agent-tdd',
-              class: 'implement',
-              handoverPaths: ['handover/demo/handover_spec.md']
-            }
-          }
-        ],
-        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
-        consecutiveToolFailures: 0,
-        haltedAutonomousExecution: false,
-        routingConfidence: 0.91
-      };
-    }
-    return scriptedNoTool('Stay in the parent unless the job matches the host-subagent allowlist.', 0.4);
+    return scriptedNoTool(
+      skillsOnly
+        ? 'Stay in the parent unless the job matches an allowlisted role skill.'
+        : 'Stay in the parent unless the job matches the host-subagent allowlist.',
+      0.4
+    );
   }
 
   if (hasModelClass && !hasArch) {
