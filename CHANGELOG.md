@@ -15,6 +15,7 @@
 ### 🐛 Bug Fixes
 
 - *(evals)* Reject self-forbidden skill-trigger prompts before CI
+- *(debug-ci)* Classify nested pnpm NO_PKG_MANIFEST as config-drift
 
 ### ⚙️ Refactoring & Performance
 
