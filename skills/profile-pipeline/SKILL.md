@@ -36,7 +36,7 @@ House stack: **GitHub Actions** + **Environments** + **OIDC**. Implementation no
 ## Invariants
 
 1. **One pipeline** - One reusable verify graph. PRs and `main` call it. Deploy/publish are extra jobs on `main`, not a second CI definition.
-2. **Trunk-based** - Short-lived PRs, squash to `main`. Required checks on the PR **and** the same checks on `main`.
+2. **Trunk-based** - Short-lived PRs, squash to `main`. Required checks on the PR **and** the same checks on `main`. New repos: GitHub deletes the PR head after merge (`gh repo create|edit … --delete-branch-on-merge`).
 3. **Build once** - Canonical artifact is produced on `main`. Promote that artifact; do not rebuild per environment. Config and secrets at **runtime**, never `ENV=prod` at compile time.
 4. **Promote up only** - Lower environments never read higher secrets, state, or data. Artifacts move up; secrets do not copy up.
 5. **Readable** - Named jobs, obvious `needs`. If the Actions graph is unclear, the YAML is too clever.
