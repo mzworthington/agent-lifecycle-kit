@@ -1,7 +1,7 @@
 {
   "suite": "agent-copy-evals",
   "description": "Co-located evaluation tests for Copy & Messaging Specialist trigger resolution and human-centric voice routing",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "test_cases": [
     {
       "id": "EVAL-COPY-COLOCATED-001",
@@ -56,6 +56,35 @@
         ],
         "required_patterns": [
           "agent-copy"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-004",
+      "name": "Oxford Comma And Practitioner Voice",
+      "description": "Voice pass for technical peers must drop default Oxford commas, slogan stacks, persona lists and method-name stuffing.",
+      "target_skill": "agent-copy",
+      "prompt": "The homepage and docs are obviously AI-generated, including incorrect Oxford comma usage. Rewrite for a technical peer. Product first. Do not lean on C4 or YAML in every sentence or list job titles.",
+      "assertions": {
+        "required_triggers": [
+          "sounds AI",
+          "AI-generated copy",
+          "Oxford comma"
+        ],
+        "required_patterns": [
+          "serial comma",
+          "Oxford",
+          "CTO",
+          "tricolon",
+          "brand headline",
+          "persona",
+          "C4",
+          "YAML",
+          "chatbot",
+          "product names"
+        ],
+        "forbidden_patterns": [
+          "Why it matters"
         ]
       }
     }
