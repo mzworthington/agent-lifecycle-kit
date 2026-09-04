@@ -60,7 +60,7 @@
     {
       "id": "EVAL-ORCH-COLOCATED-003",
       "name": "Isolate debug and XFN from the parent",
-      "description": "Debug and XFN browser/load work launch as subagents; parent keeps handovers not log scrapes; tiny typos stay in the parent; Cloudflare/PostHog MCP restores default.",
+      "description": "Debug and XFN browser/load work launch as subagents; parent keeps handovers not log scrapes; tiny typos stay in the parent; Cloudflare/PostHog MCP restores with wk mcp restore --project.",
       "target_skill": "agent-orchestrator",
       "prompt": "The CI job failed and we also need Playwright apply rows greened, without dumping logs into this chat.",
       "context": {
@@ -76,7 +76,7 @@
           "handover_xfn.md",
           "separate child",
           "hypothesis summary",
-          "wk mcp restore"
+          "wk mcp restore --project"
         ],
         "forbidden_patterns": [
           "ASCII art"

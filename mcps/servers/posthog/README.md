@@ -25,7 +25,7 @@ If your host cannot use remote HTTP MCP, bridge with:
 - Creating or toggling feature flags from a product-bet / telemetry session
 - Inspecting error tracking or session replay context next to a local change
 
-Use with [agent-posthog](../../../skills/agent-posthog/SKILL.md). Install the `posthog` profile (`wk mcp posthog --install` or `wk mcp posthog --project`). Do not stack it onto `default`. Restore `wk mcp default --install` (or `--project`) when the analytics session ends.
+Use with [agent-posthog](../../../skills/agent-posthog/SKILL.md). Isolation children in a repo: `wk mcp posthog --project`, then `wk mcp restore --project`. User-scope: `wk mcp posthog --install`, then `wk mcp default --install`. Do not stack it onto `default`. Do not mix scopes.
 
 ## Risks
 

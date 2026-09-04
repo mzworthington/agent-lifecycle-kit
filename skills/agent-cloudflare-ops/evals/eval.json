@@ -14,7 +14,7 @@
       },
       "assertions": {
         "required_triggers": ["web analytics", "rum", "beacon", "diagnose cloudflare"],
-        "required_patterns": ["Inventory", "execute", "owning", "wk mcp restore"],
+        "required_patterns": ["Inventory", "execute", "owning", "wk mcp restore --project"],
         "forbidden_patterns": ["siteToken in memory", "codemode=false"],
         "required_output_sections": ["Fleet inventory", "Root Cause", "Remediations"]
       }

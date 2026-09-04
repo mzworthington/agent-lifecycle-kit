@@ -16,7 +16,7 @@ tools:
 
 Use with [agent-cloudflare-ops](../skills/agent-cloudflare-ops/SKILL.md) and the `cloudflare-ops` MCP profile. Do **not** guess live account state.
 
-Install once per session: `kit mcp cloudflare-ops --install` (OAuth on first Cloudflare tool use). One profile only - do not stack `cloud` + `ops`.
+Isolation children in a repo: `wk mcp cloudflare-ops --project`, then `wk mcp restore --project` only. User-scope: `wk mcp cloudflare-ops --install`, then `wk mcp default --install`. One profile only — do not stack `cloud` + `ops`. Do not mix scopes.
 
 ## Architecture (two modes)
 

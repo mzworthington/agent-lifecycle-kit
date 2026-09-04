@@ -52,7 +52,7 @@ Do not split TDD across two agents. `agent-adapter` stays a skill when gear 2 is
 
 Do not replace Cursor’s built-in explore / bash / browser subagents. Those stay for noisy primitives; kit specialists own DoD and handover.
 
-Keep **one** MCP profile. If `agent-cloudflare-ops` or `agent-posthog` apply (usually inside the debug child), `wk mcp <profile> --project`, then `wk mcp restore --project` or `wk mcp default --install`. The child must not stack vendor MCP onto the default profile permanently.
+Keep **one** MCP profile. Isolation children in a repo: `wk mcp <profile> --project`, then `wk mcp restore --project` only. Do not restore with `wk mcp default --install` after `--project` (`--install` is user-scope and does not recompose project `mcp.json`). User-scope `--install` restores with `wk mcp default --install`. The child must not stack vendor MCP onto the default profile permanently.
 
 ## Kill
 

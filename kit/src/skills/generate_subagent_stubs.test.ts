@@ -117,6 +117,23 @@ describe('renderSubagentStub', () => {
     assert.match(xfn, /agent-tdd/);
   });
 
+  it('does not treat default --install as a restore after --project', () => {
+    const mixup = /restore --project[`\s).,]*(?:\/|or)\s*`?wk mcp default --install/;
+    const files = [
+      'SOPs/context-budget.md',
+      'SOPs/subagent-launch.md',
+      'SOPs/mcp-library.md',
+      'skills/agent-orchestrator/SKILL.md',
+      'skills/agent-cloudflare-ops/SKILL.md',
+      'skills/agent-posthog/SKILL.md'
+    ];
+    for (const rel of files) {
+      const text = fs.readFileSync(path.join(kitRoot, rel), 'utf8');
+      assert.match(text, /wk mcp restore --project/, rel);
+      assert.doesNotMatch(text, mixup, rel);
+    }
+  });
+
   it('forbids splitting TDD gears in the tdd stub', () => {
     const stub = renderSubagentStub({
       name: 'agent-tdd',

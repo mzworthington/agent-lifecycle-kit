@@ -51,7 +51,7 @@ Upstream Cloudflare platform skills (`cloudflare`, `wrangler`) win on vendor API
 
 ## Profile
 
-One MCP profile in this session (often a debug **subagent**): `wk mcp cloudflare-ops --install` (or `--project`). If Cloudflare tools are missing, stop and tell the user to install that profile and complete OAuth - do not invent site lists. Do **not** stack vendor MCP onto the default profile permanently. Before returning to the parent, `wk mcp restore --project` (project scope) or `wk mcp default --install` (user scope).
+In a repo (isolation children): `wk mcp cloudflare-ops --project`, then `wk mcp restore --project` only. Do not restore with `wk mcp default --install` after `--project` (`--install` is user-scope and does not recompose project `mcp.json`). User-scope: `wk mcp cloudflare-ops --install`, then `wk mcp default --install`. If Cloudflare tools are missing, stop and tell the user to install that profile and complete OAuth - do not invent site lists. Do **not** stack vendor MCP onto the default profile permanently.
 
 ## Mandatory loop
 

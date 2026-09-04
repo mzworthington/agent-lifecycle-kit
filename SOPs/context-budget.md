@@ -63,7 +63,7 @@ flowchart TB
 |------|-------|----------------|
 | Bug, failed job, live symptom | `agent-debug` subagent | Hypothesis summary + `handover_debug.md`, not the full log scrape |
 | XFN apply rows (browser E2E, load) | `agent-xfn` as a **separate child** from `agent-tdd` | `handover_xfn.md`. TDD does not own browser E2E. |
-| Cloudflare-ops or PostHog live work | Skill still applies (often inside the debug child) | Child runs `wk mcp <profile> --project` then `wk mcp restore --project` / `wk mcp default --install`. Do not stack vendor MCP onto default permanently. |
+| Cloudflare-ops or PostHog live work | Skill still applies (often inside the debug child) | Child runs `wk mcp <profile> --project` then `wk mcp restore --project` only. Do not restore with `wk mcp default --install` after `--project`. Do not stack vendor MCP onto default permanently. |
 | Tiny typo / obvious one-liner | (none) | Parent may still implement directly |
 
 Launch mechanics: [SOPs/subagent-launch.md](./subagent-launch.md).

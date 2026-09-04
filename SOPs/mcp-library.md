@@ -124,6 +124,8 @@ wk mcp cloudflare-ops --install          # RUM / Worker diagnosis (user-scope)
 wk mcp default --install --host claude   # user-scope Claude Code only
 ```
 
+Do not mix scopes. `--project` compose restores with `wk mcp restore --project` only. User-scope `--install` restores with `wk mcp default --install`. Isolation children in a repo use `--project` then `restore --project`.
+
 The installer (`curl | sh` in [Getting started](../docs/start.md), or `./install.sh` from a checkout) runs the **default** profile install for every supported host. Opt into `collab`, `ops`, `security`, `personal`, `devtools`, `cloud`, `cloudflare-ops`, `warp`, and `posthog` explicitly.
 
 ## 4. Verify in the host

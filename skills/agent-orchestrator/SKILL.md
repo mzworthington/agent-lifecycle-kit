@@ -70,7 +70,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
-**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md), [SOPs/context-budget.md](../../SOPs/context-budget.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary. `agent-debug` returns a hypothesis summary plus `handover_debug.md`, not the full log scrape. `agent-xfn` is a **separate child** from `agent-tdd` for browser E2E / load apply rows; TDD does not own those suites (`handover_xfn.md`). Tiny typos stay in the parent. When `agent-cloudflare-ops` or `agent-posthog` apply, the child runs `wk mcp …` then restore (`wk mcp restore --project` / `wk mcp default --install`) and must not stack vendor MCP onto default permanently. Built-in explore/bash/browser stay for primitives.
+**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md), [SOPs/context-budget.md](../../SOPs/context-budget.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary. `agent-debug` returns a hypothesis summary plus `handover_debug.md`, not the full log scrape. `agent-xfn` is a **separate child** from `agent-tdd` for browser E2E / load apply rows; TDD does not own those suites (`handover_xfn.md`). Tiny typos stay in the parent. When `agent-cloudflare-ops` or `agent-posthog` apply, the child runs `wk mcp <profile> --project` then `wk mcp restore --project` only (do not restore with `wk mcp default --install` after `--project`) and must not stack vendor MCP onto default permanently. Built-in explore/bash/browser stay for primitives.
 
 ## Specialist roles
 
@@ -123,8 +123,8 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Prompt, MCP tool schema, or agent routing change | **EDD default:** [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md) (`kit eval run\|ci`) before merge |
 | Bug, failed job, live-site / fetch symptom, flake | Launch **`agent-debug`** as a subagent → `agent-pre-commit`. Parent keeps the hypothesis summary plus `handover_debug.md`. Light XFN when UI/auth/SLO touched. |
 | Production incident / page | **`agent-incident`** → `agent-debug` (+ Slack/Notion when configured) |
-| Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`wk mcp cloudflare-ops --project`, then restore) → IaC fix in owner repo. Do not stack onto default. |
-| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --install`, then restore) → adapter + privacy; not the Cursor wizard. Do not stack onto default. |
+| Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`wk mcp cloudflare-ops --project`, then `wk mcp restore --project`) → IaC fix in owner repo. Do not stack onto default. |
+| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --project`, then `wk mcp restore --project`) → adapter + privacy; not the Cursor wizard. Do not stack onto default. |
 | Tiny typo / obvious one-liner with clear repro | Implement directly in the **parent** - no debug/XFN isolation, no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
 | Extends existing behavior in one module | Design light: functional impact align → light or full XFN matrix → **`agent-tdd` short loop** (gear 1+2) |
 | Schema migration | `agent-migration` → `agent-pre-commit` (with light XFN / security as needed) |
@@ -136,7 +136,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
 | New feature, new bounded context, new external integration | Full lifecycle (grill → PRD if bet → stories → spec → …) |
 | Product bet / PRD / experiment / kill criteria | **`agent-prd`** (grill first if unsettled) → `agent-user-stories` → `agent-spec` |
-| Timebox elapsed on a flagged bet | Measure the leading indicator in PostHog (`agent-posthog`, `wk mcp posthog --install`) → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
+| Timebox elapsed on a flagged bet | Measure the leading indicator in PostHog (`agent-posthog`, `wk mcp posthog --project`, then `wk mcp restore --project`) → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
 
 When in doubt, prefer the smaller route and ask.
 
@@ -203,6 +203,6 @@ sequenceDiagram
 5. **XFN green** - Launch `agent-xfn` as a **separate child** (not inside the TDD window) to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status. Parent reads `handover_xfn.md`.
 6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
-8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. For a bet’s leading indicator (product usage), route to `agent-posthog` (`wk mcp posthog --install`). Do not invent extra dashboards.
+8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. For a bet’s leading indicator (product usage), route to `agent-posthog` (`wk mcp posthog --project`, then `wk mcp restore --project`). Do not invent extra dashboards.
 9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title, flag expiry, and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.
 10. **Close the bet** - After the timebox: query the leading indicator in PostHog (`agent-posthog`), then confirm or kill via `agent-user-stories`, then `agent-prune` for the flag or slice. Do not add a product-insights skill or auto-file tickets from usage. **Retro** (optional) - If catalog impact was skipped, XFN matrix omitted, or the user corrected the approach, append a lesson under `~/.agents/lessons/<project>/` using [templates/lesson.md](../../templates/lesson.md). See [lessons/README.md](../../lessons/README.md). Agent/tool/prompt misses also need an EDD case ([SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md) §11) - do not leave them as prose-only lessons.
