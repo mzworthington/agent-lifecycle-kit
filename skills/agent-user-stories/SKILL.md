@@ -69,7 +69,7 @@ Do not invent a customer for ops. Do not clone an open issue. Do not rewrite a t
 3. **Title** is the user-visible capability (verb + object). Not a filename, `wk` flag, or “investigate X”.
 4. **INVEST.** Small = one sitting. Parent stays an epic; playable work is children.
 5. **Body** from the matching template. Never ASCII/box-drawing art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
-6. **Patch Linear.** Preserve ids. **Create children with no `id`** (only `parentId`); passing the parent identifier as `id` overwrites the parent. Labels: `Feature` / `Improvement`. Priority 1–4 (never leave 0 on a playable story). `relatedTo` / `blockedBy` for siblings. Do not change status unless asked, except cancel vendor onboarding.
+6. **Patch Linear.** Preserve ids. **Create children with no `id`** (only `parentId`); passing the parent identifier as `id` overwrites the parent. Labels: `Feature` / `Improvement`. Priority 1–4 (never leave 0 on a playable story). `relatedTo` / `blockedBy` for siblings. Do not bulk-move a review to In Progress. When **this session is executing one issue**, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)): In Progress + host agent (`Cursor`). Cancel vendor onboarding as before.
 7. Return issue URLs. Do not implement in this role.
 
 ## Ticket template (Linear Markdown)

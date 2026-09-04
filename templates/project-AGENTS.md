@@ -18,7 +18,8 @@ Start from `~/.agents/AGENTS.md` (thin index). **Do not** bulk-read philosophy, 
 | Which model / host slug | `SOPs/model-routing.md` (`wk model resolve --skill … --host cursor\|claude\|copilot\|antigravity`) |
 | Landing / marketing / AI-sounding copy | `skills/agent-copy` (+ `skills/agent-ui` if layout) |
 | Docs narrative rewrite | `skills/agent-docs` **and** `skills/agent-copy` |
-| Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`); `commit-msg` git hook |
+| Committing / opening a PR | `SOPs/conventional-commits.md` (skills/SOPs are `feat`/`fix`, not `docs`); output the message; stay on main, uncommitted unless asked; include Linear id when playing a ticket |
+| Playing a Linear ticket | `SOPs/linear-ticket-workflow.md` (In Progress + assign/delegate host agent, usually Cursor) |
 | SOP / handover lookup | kit-knowledge MCP when installed |
 | Durable project facts | memory MCP (glossary, SLOs, prefs - never secrets) |
 | Linear backlog / user stories | `skills/agent-user-stories` (INVEST + AC; mermaid wireframes on UI; operator stories skip wireframe; hypothesis + flag notes on bets; linear MCP on `default`) |

@@ -14,7 +14,7 @@ tools:
 ---
 # Standard Operating Procedure: Conventional Commits & PR Titles
 
-Repos squash-and-merge. The **PR title becomes the commit on the default branch**. A conventional commit on a branch tip is not enough if the PR title drifts into a free-form sentence.
+Default: stay on **main**, leave the tree **uncommitted**, and **output** a conventional subject for the user to commit. Do not create a branch or run `git commit` unless asked. If the user does open a PR, keep that title conventional too.
 
 Align with [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8 (Interaction Mandate).
 
@@ -26,8 +26,11 @@ Align with [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8 (Interaction Mand
 
 - **type** (required): one of `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
 - **scope** (optional): short area (`cli`, `canvas`, `skills`, `sops`, `mcp`, …)
-- **description**: imperative, lowercase start, no trailing period, ≤ ~72 chars for the subject line
+- **description**: imperative, lowercase start, no trailing period, ≤ ~72 chars for the subject line (hard cap 100 including a ticket suffix)
 - Breaking change: `!` after type/scope (`feat(api)!: …`) and/or a `BREAKING CHANGE:` footer in the body
+- **Linear ticket:** when the session played an issue, put `(WAY-123)` at the end of the subject when it fits, and repeat the identifier on its own line in the body. Procedure: [linear-ticket-workflow.md](./linear-ticket-workflow.md)
+
+Work stays on **main** and **uncommitted** unless the user asks to commit. The message is an **output** of the work, not a reason to create a branch or run `git commit`.
 
 Examples:
 
@@ -38,6 +41,7 @@ Examples:
 | `fix(cli): retry transient R2 errors` | `Fixed the R2 issue` |
 | `docs: prefer Mermaid over ASCII diagrams` | `Prefer Mermaid diagrams over ASCII art` |
 | `chore: update .gitignore for env files` | `Update gitignore` |
+| `feat(skills): claim linear tickets (WAY-123)` | `feat: claim tickets` (ticket missing when one was in play) |
 
 ## Type (not file extension)
 

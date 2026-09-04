@@ -57,7 +57,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 `wk check` is the local merge bar:
 
 1. `wk audit`: prompt injection, secrets, entropy, lockfile pins
-2. `wk validate` / `wk verify`: eval schemas and skills layout
+2. `wk validate` / `wk verify`: eval schemas, skills layout, and role line budget
 3. `wk ontology check`: live-derived graph refs (`depends-on`, `mcp`)
 4. IDE rules match `AGENTS.md`
 5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `wk eval ci` (scripted, 95% routing)
@@ -95,9 +95,10 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 
 | Command | What it measures or installs |
 |---------|------------------------------|
-| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers) |
+| `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers; `--owned --scan` for a worktree farm) |
 | `wk doctor` | Community files on owned GitHub sources (`--owned`, `--write`) |
 | `wk check` | Audit, ontology, evals, EDD CI, context budget |
+| `wk version` | Kit package/git describe and whether `~/.agents` is this clone (`--check` warns if origin is weeks ahead) |
 | `wk measure-context` | Always-on bootstrap size vs 8KB |
 | `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |
 | `wk ontology check` | Live graph referential integrity |

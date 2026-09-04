@@ -10,7 +10,11 @@ It also does not score hexagonal imports or XFN matrices. Those remain `agent-ar
 wk align              # this checkout, report only
 wk align ../archlens
 wk align . --write    # fill missing CLAUDE.md / .cursorrules / Copilot / Gemini / Windsurf pointers
+wk align --owned --scan ~/Documents/dev   # same ownership gate as doctor; kit clones are skipped
 ```
+
+`--owned` lists GitHub sources you admin (`gh`). `--scan` matches local worktrees. Uncloned sources are skipped, not failed as fat handshakes. The kit repo is classified and skipped so a fat kit `AGENTS.md` cannot fail the fleet. Any drifted consumer fails the command with exit code 1.
+
 
 `--write` seeds `AGENTS.md` from `templates/project-AGENTS.md` when it is missing, and fills host pointers. It never overwrites `AGENTS.md`. It does not compose MCP. After a miss on kit-knowledge:
 

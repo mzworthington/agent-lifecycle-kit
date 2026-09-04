@@ -5,6 +5,7 @@ import { exportIDERules } from '../bootstrap/export_ide_rules.js';
 import { initProject } from '../bootstrap/init_project.js';
 import { ghGitHubPort } from '../doctor/github.js';
 import { alignProject, printAlignResult } from '../align/align_project.js';
+import { printAlignOwnedResult, runAlignOwned } from '../align/align_owned.js';
 import { printDoctorResult, runDoctor } from '../doctor/run.js';
 import { evaluateOwnership, shouldInstallInitHooks } from '../doctor/ownership.js';
 import { composeMCP } from '../bootstrap/compose_mcp.js';
@@ -24,6 +25,10 @@ import { renderAnalyticsSummary } from '../quality/telemetry_analytics.js';
 import { assemblePagesSite, defaultPagesSiteDest } from '../site/assemble.js';
 import { scanSkillSecurity } from '../skills/scan_skill_security.js';
 import { syncExternalSkills } from '../skills/sync_external_skills.js';
+import {
+  printRoleSkillLineBudgetResult,
+  verifyRoleSkillLineBudget
+} from '../skills/verify_role_skill_line_budget.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
@@ -33,6 +38,7 @@ import {
   listMcpProfileNames,
   renderCompletion
 } from './completion.js';
+import { printKitVersion } from '../version/print_kit_version.js';
 import { errorMessage, printKitHelp } from './help.js';
 import type { KitCommand } from './parse.js';
 
@@ -140,9 +146,11 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       return 0;
 
     case 'verify': {
-      const result = verifySkillsLayout(repoDir);
-      printSkillsLayoutResult(result);
-      return status(result.ok);
+      const layout = verifySkillsLayout(repoDir);
+      printSkillsLayoutResult(layout);
+      const budget = verifyRoleSkillLineBudget(repoDir);
+      printRoleSkillLineBudgetResult(budget);
+      return status(layout.ok && budget.ok);
     }
 
     case 'sync':
@@ -176,6 +184,19 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       return runKitCheck(repoDir);
 
     case 'align': {
+      if (command.owned) {
+        const result = runAlignOwned({
+          targetDir: command.targetDir,
+          write: command.write,
+          scanDir: command.scanDir,
+          login: command.login,
+          kitRepoDir: repoDir,
+          github: ghGitHubPort()
+        });
+        printAlignOwnedResult(result);
+        if (result.error) return 1;
+        return status(result.ok);
+      }
       const result = alignProject({
         targetDir: command.targetDir,
         kitRepoDir: repoDir,
@@ -184,6 +205,14 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       printAlignResult(result);
       return status(result.ok);
     }
+
+    case 'version':
+      printKitVersion({
+        kitRepoDir: repoDir,
+        homedir: ctx.homedir,
+        check: command.check
+      });
+      return 0;
 
     case 'complete': {
       const replies = completeKitLine(command.words, { mcpProfiles: listMcpProfileNames(repoDir) });

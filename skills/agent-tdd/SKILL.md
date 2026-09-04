@@ -31,6 +31,7 @@ mcp:
   - context7
   - postgres
   - stripe
+  - linear
 tools:
   - read
   - write
@@ -40,6 +41,8 @@ disable-model-invocation: false
 # Role: TDD Implementation Specialist (short loop)
 
 You own the **short feedback loop** for a vertical slice: red → green → next case, in minutes - not multi-phase handovers between domain and adapters.
+
+If this session plays a Linear issue, claim it first ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)): `In Progress`, assign/delegate the host agent (`Cursor`), stay on main, leave files uncommitted, and output a conventional commit subject that includes the issue id.
 
 Unit and slice tests are the **functional** half of the **behavior catalog**. Cross-functional suites (browser E2E, accessibility, security, load) belong to [agent-xfn](../agent-xfn/SKILL.md) - do not author or rewrite them here. Follow [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md).
 

@@ -49,7 +49,7 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | [agent-perf-opt](./agent-perf-opt/SKILL.md) | maintenance | Profiling memory leaks, CPU bottlenecks, SQL EXPLAIN ANALYZE |
 | [agent-pre-commit](./agent-pre-commit/SKILL.md) | quality | Pre-commit hook discovery, run checks, fix failures |
 
-Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven development](../SOPs/hypothesis-driven-development.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits & PR titles](../SOPs/conventional-commits.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md), [Cloudflare analytics ops](../SOPs/cloudflare-analytics-ops.md), [PostHog product analytics](../SOPs/posthog-product-analytics.md), [model routing](../SOPs/model-routing.md).
+Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [complexity hotspots](../SOPs/complexity-hotspots.md), [hypothesis-driven development](../SOPs/hypothesis-driven-development.md), [hypothesis-driven debug](../SOPs/hypothesis-driven-debug.md), [conventional commits](../SOPs/conventional-commits.md), [Linear ticket execution](../SOPs/linear-ticket-workflow.md), [API contracts](../SOPs/api-contracts.md), [release](../SOPs/release.md), [db migration](../SOPs/db-migration.md), [Cloudflare analytics ops](../SOPs/cloudflare-analytics-ops.md), [PostHog product analytics](../SOPs/posthog-product-analytics.md), [model routing](../SOPs/model-routing.md).
 
 ### TDD short loop (important)
 
@@ -90,7 +90,7 @@ tools: []                     # optional CLI/tool hints for the agent
 ---
 ```
 
-**Skill length budget:** Prefer role `SKILL.md` bodies under ~150 lines; put long procedures in [SOPs/](../SOPs/). Enforce during [kit-review](../tasks/kit-review.md).
+**Skill length budget:** Role `SKILL.md` bodies must stay under 150 lines (`wk verify` fails otherwise). Known R5 overages are allowlisted and printed as `ALLOWED`, not skipped. Put long procedures in [SOPs/](../SOPs/).
 
 **Context budget:** Always-on bootstrap stays thin ([AGENTS.md](../AGENTS.md)); load SOPs/philosophy via file read or **kit-knowledge** MCP. See [SOPs/context-budget.md](../SOPs/context-budget.md). Match installed MCP profile to skill `mcp:` frontmatter - one profile per session.
 

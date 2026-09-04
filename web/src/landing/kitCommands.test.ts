@@ -47,6 +47,7 @@ describe('docs/kit.md', () => {
       'wk align',
       'wk doctor',
       'wk check',
+      'wk version',
       'wk measure-context',
       'wk completion zsh',
       'wk ontology check',

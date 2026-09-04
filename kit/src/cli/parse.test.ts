@@ -151,17 +151,36 @@ describe('parseKitArgv', () => {
     });
   });
 
-  it('parses align directory and --write', () => {
+  it('parses align directory, --write, and --owned --scan', () => {
     assert.deepEqual(parseKitArgv(['align'], opts), {
       kind: 'align',
       targetDir: path.resolve('/work', '.'),
-      write: false
+      write: false,
+      owned: false,
+      scanDir: undefined,
+      login: undefined
     });
     assert.deepEqual(parseKitArgv(['align', './app', '--write'], opts), {
       kind: 'align',
       targetDir: path.resolve('/work', './app'),
-      write: true
+      write: true,
+      owned: false,
+      scanDir: undefined,
+      login: undefined
     });
+    assert.deepEqual(parseKitArgv(['align', '--owned', '--scan', '../dev', '--login', 'mzworthington'], opts), {
+      kind: 'align',
+      targetDir: path.resolve('/work', '.'),
+      write: false,
+      owned: true,
+      scanDir: path.resolve('/work', '../dev'),
+      login: 'mzworthington'
+    });
+  });
+
+  it('parses version and --check', () => {
+    assert.deepEqual(parseKitArgv(['version'], opts), { kind: 'version', check: false });
+    assert.deepEqual(parseKitArgv(['version', '--check'], opts), { kind: 'version', check: true });
   });
 
   it('parses doctor check-first flags and defaults cwd', () => {
