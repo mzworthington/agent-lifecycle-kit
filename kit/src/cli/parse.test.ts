@@ -90,6 +90,7 @@ describe('parseKitArgv', () => {
 
   it('returns usage for incomplete nested verbs', () => {
     assert.equal(parseKitArgv(['ontology'], opts).kind, 'usage');
+    assert.equal(parseKitArgv(['agents'], opts).kind, 'usage');
     assert.equal(parseKitArgv(['memory'], opts).kind, 'usage');
     assert.equal(parseKitArgv(['site'], opts).kind, 'usage');
     assert.equal(parseKitArgv(['debug-board'], opts).kind, 'usage');
@@ -97,6 +98,8 @@ describe('parseKitArgv', () => {
 
   it('parses ontology, memory, and scan alias', () => {
     assert.deepEqual(parseKitArgv(['ontology', 'generate'], opts), { kind: 'ontology', sub: 'generate' });
+    assert.deepEqual(parseKitArgv(['agents', 'generate'], opts), { kind: 'agents-generate' });
+    assert.deepEqual(parseKitArgv(['agents', 'install'], opts), { kind: 'agents-install' });
     assert.deepEqual(parseKitArgv(['ontology', 'check'], opts), { kind: 'ontology', sub: 'check' });
     assert.deepEqual(parseKitArgv(['memory', 'lint'], opts), { kind: 'memory-lint' });
     assert.deepEqual(parseKitArgv(['scan'], opts), { kind: 'audit' });

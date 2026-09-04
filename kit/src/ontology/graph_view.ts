@@ -33,6 +33,7 @@ export interface HomepageTypeFilter {
 export const HOMEPAGE_TYPE_FILTERS: readonly HomepageTypeFilter[] = [
   { type: 'Phase', label: 'Phase', defaultOn: true },
   { type: 'Skill', label: 'Skill', defaultOn: true },
+  { type: 'Subagent', label: 'Subagent', defaultOn: true },
   { type: 'SOP', label: 'SOP', defaultOn: false },
   { type: 'McpServer', label: 'MCP', defaultOn: false },
   { type: 'PhilosophySection', label: 'Philosophy', defaultOn: true },
@@ -47,6 +48,7 @@ export const DEFAULT_ONTOLOGY_TYPES: readonly HomepageEntityType[] = HOMEPAGE_TY
 export const TYPE_COLOR: Record<KitEntityType, string> = {
   Phase: '#d4a017',
   Skill: '#2a9d8f',
+  Subagent: '#e07a5f',
   SOP: '#4db6a9',
   McpServer: '#38bdf8',
   EvalSuite: '#c9843a',
@@ -63,7 +65,8 @@ export const REL_COLOR: Record<RelationName, string> = {
   implements: '#b8956c',
   references: '#9aa7b8',
   for: '#4db6a9',
-  orders: '#e8edf4'
+  orders: '#e8edf4',
+  adapts: '#e07a5f'
 };
 
 const GITHUB_BLOB_BASE = 'https://github.com/mzworthington/waykit/blob/main';
@@ -122,7 +125,7 @@ export function entityMatchesQuery(entity: OntologyEntity, query: string): boole
   if (!q) return true;
   const attrs = entity.attrs;
   const extra = attrs
-    ? `${String(attrs.kind ?? '')} ${String(attrs.phase ?? '')} ${String(attrs.title ?? '')} ${String(attrs.section ?? '')} ${(Array.isArray(attrs.triggers) ? attrs.triggers.join(' ') : '')}`
+    ? `${String(attrs.kind ?? '')} ${String(attrs.phase ?? '')} ${String(attrs.title ?? '')} ${String(attrs.section ?? '')} ${String(attrs.skill ?? '')} ${String(attrs.readonly ?? '')} ${(Array.isArray(attrs.triggers) ? attrs.triggers.join(' ') : '')}`
     : '';
   return `${entity.id} ${entity.name} ${entityLabel(entity)} ${entity.type} ${entity.path ?? ''} ${extra}`
     .toLowerCase()
@@ -243,6 +246,7 @@ export function typeRadius(type: KitEntityType, degree: number): number {
   const base: Record<KitEntityType, number> = {
     Phase: 18,
     Skill: 11,
+    Subagent: 12,
     SOP: 10,
     McpServer: 10,
     PhilosophySection: 11,
@@ -367,6 +371,11 @@ export function layoutTargets(nodes: LayoutNode[], width: number, height: number
     targets.set(node.id, polar(cx, cy, base + jitter, 230 + (slot % 3) * 22));
   });
   if (bands.agent.length) captions.push({ label: 'Lifecycle skills', ...polar(cx, cy, Math.PI * 0.22, 230) });
+
+  placeArc(byType.get('Subagent') ?? [], cx, cy, 185, -0.55, 1.4).forEach((t) => targets.set(t.id, t));
+  if ((byType.get('Subagent') ?? []).length) {
+    captions.push({ label: 'Host subagents', ...polar(cx, cy, -0.2, 185) });
+  }
 
   placeArc(bands.lang, cx, cy, 340, -0.35, 0.9).forEach((t) => targets.set(t.id, t));
   if (bands.lang.length) captions.push({ label: 'Languages', ...polar(cx, cy, 0.1, 390) });

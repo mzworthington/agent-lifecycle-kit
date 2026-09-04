@@ -1,6 +1,6 @@
 # Author the Waykit map
 
-The [Waykit map](/docs/map) is a live graph of **this kit**: skills, SOPs, MCP servers, eval suites, philosophy sections, and public docs. You do not maintain a second catalog. Add or edit the files agents already load; `wk ontology check` fails dangling links; regenerate; the map and kit-knowledge catch up.
+The [Waykit map](/docs/map) is a live graph of **this kit**: skills, host subagent stubs, SOPs, MCP servers, eval suites, philosophy sections, and public docs. You do not maintain a second catalog. Add or edit the files agents already load; `wk ontology check` fails dangling links; regenerate; the map and kit-knowledge catch up.
 
 This page is how to author that graph. Open the [interactive map](/docs/map) to browse it.
 
@@ -24,6 +24,7 @@ The metamodel is [`schema.yaml`](./schema.yaml). Instances come from the live tr
 |------|--------|------------|
 | Phase | `schema.yaml` → `phaseOrder` | `phase:tdd` |
 | Skill | `skills/<name>/SKILL.md` | `skill:agent-tdd` |
+| Subagent | `agents/<name>.md` (not `README.md`) | `subagent:agent-tdd` |
 | SOP | `SOPs/<name>.md` | `sop:context-budget` |
 | McpServer | `mcps/catalog.json` → `servers[].id` | `mcp:memory` |
 | EvalSuite | `evals/edd/*.yaml`, `evals/edd/goldens/*.yaml`, and `skills/<name>/evals/eval.json` | `eval:demo` |
@@ -42,7 +43,8 @@ Most links are already in files you edit:
 | `depends-on` | Skill frontmatter `depends-on:` |
 | `uses` | Skill frontmatter `mcp:` (must match a catalog id) |
 | `loads` | Markdown link from a skill to `SOPs/…` |
-| `references` | Markdown link from a skill or SOP to `docs/…` |
+| `references` | Markdown link from a skill, SOP, or subagent stub to `docs/…` |
+| `adapts` | Host subagent stub `agents/<name>.md` → matching `skill:<name>` |
 | `implements` | SOP body mentions `§N` that exists in philosophy |
 | `orders` | Consecutive names in `phaseOrder` |
 | `gates` | Suite YAML `ontology.gates`, or a skill-local `evals/eval.json` |
@@ -55,11 +57,11 @@ ontology:
   gates: [mcp:memory, skill:agent-tdd]
 ```
 
-Ids must already exist (`mcp:…`, `skill:…`). `kit ontology check` fails dangling `depends-on` and `mcp` refs.
+Ids must already exist (`mcp:…`, `skill:…`, `subagent:…`). `kit ontology check` fails dangling `depends-on`, `mcp`, and subagent→skill refs.
 
 ## Add something to the graph
 
-1. Put the file where the table above expects it (new skill folder, SOP, catalog server, eval YAML, or top-level doc).
+1. Put the file where the table above expects it (new skill folder, `agents/*.md` stub, SOP, catalog server, eval YAML, or top-level doc).
 2. Fill skill frontmatter so edges are real: `phase`, `depends-on`, `mcp`, plus SOP/doc links in the body.
 3. From a kit checkout:
 

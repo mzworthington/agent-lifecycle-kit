@@ -7,6 +7,7 @@ export interface OntologyCheckResult {
   missingEndpoints: Array<{ from: string; relation: string; to: string }>;
   unknownSkillMcp: Array<{ skill: string; mcp: string }>;
   unknownDependsOn: Array<{ skill: string; dep: string }>;
+  unknownSubagentSkill: Array<{ subagent: string; skill: string }>;
   messages: string[];
 }
 
@@ -26,6 +27,7 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
       missingEndpoints: [],
       unknownSkillMcp: [],
       unknownDependsOn: [],
+      unknownSubagentSkill: [],
       messages: [err instanceof Error ? err.message : String(err)]
     };
   }
@@ -40,7 +42,15 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
 
   const unknownSkillMcp: OntologyCheckResult['unknownSkillMcp'] = [];
   const unknownDependsOn: OntologyCheckResult['unknownDependsOn'] = [];
+  const unknownSubagentSkill: OntologyCheckResult['unknownSubagentSkill'] = [];
   for (const ent of index.entities) {
+    if (ent.type === 'Subagent') {
+      const skill = typeof ent.attrs?.skill === 'string' ? ent.attrs.skill : ent.name;
+      if (!ids.has(`skill:${skill}`)) {
+        unknownSubagentSkill.push({ subagent: ent.name, skill });
+      }
+      continue;
+    }
     if (ent.type !== 'Skill') continue;
     const mcp = Array.isArray(ent.attrs?.mcp) ? (ent.attrs!.mcp as string[]) : [];
     for (const m of mcp) {
@@ -65,17 +75,22 @@ export function checkOntology(kitRoot: string): OntologyCheckResult {
   for (const m of unknownDependsOn) {
     messages.push(`Skill ${m.skill} depends-on unknown skill:${m.dep}`);
   }
+  for (const m of unknownSubagentSkill) {
+    messages.push(`Subagent ${m.subagent} adapts unknown skill:${m.skill}`);
+  }
 
   const ok =
     missingEndpoints.length === 0 &&
     unknownSkillMcp.length === 0 &&
-    unknownDependsOn.length === 0;
+    unknownDependsOn.length === 0 &&
+    unknownSubagentSkill.length === 0;
 
   return {
     ok,
     missingEndpoints,
     unknownSkillMcp,
     unknownDependsOn,
+    unknownSubagentSkill,
     messages
   };
 }

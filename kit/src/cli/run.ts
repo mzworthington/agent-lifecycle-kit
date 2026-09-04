@@ -31,6 +31,16 @@ import {
   verifyRoleSkillLineBudget
 } from '../skills/verify_role_skill_line_budget.js';
 import { printSkillsLayoutResult, verifySkillsLayout } from '../skills/verify_skills_layout.js';
+import {
+  printSubagentAllowlistResult,
+  verifySubagentAllowlist
+} from '../skills/verify_subagent_allowlist.js';
+import {
+  generateSubagentStubs,
+  printSubagentStubResult,
+  verifySubagentStubs
+} from '../skills/generate_subagent_stubs.js';
+import { installUserSubagentStubs } from '../skills/install_subagent_stubs.js';
 import { resolveModel } from '../models/catalog.js';
 import { validateConventionalCommit } from '../commits/conventional.js';
 import {
@@ -171,7 +181,11 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       printSkillsLayoutResult(layout);
       const budget = verifyRoleSkillLineBudget(repoDir);
       printRoleSkillLineBudgetResult(budget);
-      return status(layout.ok && budget.ok);
+      const subagents = verifySubagentAllowlist(repoDir);
+      printSubagentAllowlistResult(subagents);
+      const stubs = verifySubagentStubs(repoDir);
+      printSubagentStubResult(stubs);
+      return status(layout.ok && budget.ok && subagents.ok && stubs.ok);
     }
 
     case 'sync':
@@ -229,6 +243,12 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         write: command.write,
         composeMcp: command.composeMcp
       });
+      if (command.write) {
+        installUserSubagentStubs({
+          kitRepoDir: repoDir,
+          homedir: ctx.homedir ?? os.homedir()
+        });
+      }
       if (command.json) {
         printJsonReport(alignResultToJson(result));
       } else {
@@ -262,6 +282,23 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       });
       for (const file of result.files) console.log(`Wrote ${file}`);
       console.log(result.snippet);
+      return 0;
+    }
+
+    case 'agents-generate': {
+      const files = generateSubagentStubs(repoDir);
+      console.log(`Wrote ${files.length} agent stub(s) under agents/`);
+      return 0;
+    }
+
+    case 'agents-install': {
+      const result = installUserSubagentStubs({
+        kitRepoDir: repoDir,
+        homedir: ctx.homedir ?? os.homedir()
+      });
+      console.log(
+        `Installed ${result.written.length} kit subagent file(s) into ~/.cursor/agents and ~/.claude/agents`
+      );
       return 0;
     }
 

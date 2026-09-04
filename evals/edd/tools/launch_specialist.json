@@ -1,0 +1,34 @@
+{
+  "name": "launch_specialist",
+  "description": "Launch an allowlisted Waykit specialist as a host subagent. Pass specialist id, capability class, and handover paths. Do not launch stack profiles. Do not split TDD gear 1 and gear 2.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["specialist"],
+    "properties": {
+      "specialist": {
+        "type": "string",
+        "enum": [
+          "agent-debug",
+          "agent-xfn",
+          "agent-review",
+          "agent-security",
+          "agent-arch-drift",
+          "agent-spec",
+          "agent-tdd"
+        ],
+        "description": "Allowlisted specialist stub name"
+      },
+      "class": {
+        "type": "string",
+        "enum": ["plan", "review", "implement", "cheap"],
+        "description": "Optional capability class from models/catalog.yaml"
+      },
+      "handoverPaths": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Handover files the child must read or write"
+      }
+    },
+    "additionalProperties": false
+  }
+}

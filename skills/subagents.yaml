@@ -1,0 +1,96 @@
+# Source of truth for which role skills become host subagents (MZW-59).
+# Playbooks stay in SKILL.md. This file only classifies runtime.
+version: 1
+expandKill: >-
+  Freeze this generate list if auto-delegation picks the wrong agent more often
+  than today's skill picker. Fix thin handovers before adding roles.
+staySkillPrefixes:
+  - lang-
+  - framework-
+  - profile-
+tdd:
+  skill: agent-tdd
+  gears: same-session
+  escapeHatch: agent-adapter
+pilot:
+  isolation:
+    - agent-debug
+    - agent-xfn
+  audit:
+    - agent-review
+    - agent-security
+    - agent-arch-drift
+  sequential:
+    - agent-spec
+    - agent-tdd
+  parent:
+    - agent-orchestrator
+roles:
+  agent-orchestrator:
+    runtime: parent
+  agent-debug:
+    runtime: subagent
+    bucket: isolation
+    readonly: false
+  agent-xfn:
+    runtime: subagent
+    bucket: isolation
+    readonly: false
+  agent-review:
+    runtime: subagent
+    bucket: audit
+    readonly: true
+  agent-security:
+    runtime: subagent
+    bucket: audit
+    readonly: true
+  agent-arch-drift:
+    runtime: subagent
+    bucket: audit
+    readonly: true
+  agent-spec:
+    runtime: subagent
+    bucket: sequential
+    readonly: false
+  agent-tdd:
+    runtime: subagent
+    bucket: sequential
+    readonly: false
+  agent-adapter:
+    runtime: skill
+  agent-grilling:
+    runtime: skill
+  agent-grill-me:
+    runtime: skill
+  agent-prd:
+    runtime: skill
+  agent-user-stories:
+    runtime: skill
+  agent-api-contract:
+    runtime: skill
+  agent-adr:
+    runtime: skill
+  agent-incident:
+    runtime: skill
+  agent-ui:
+    runtime: skill
+  agent-copy:
+    runtime: skill
+  agent-migration:
+    runtime: skill
+  agent-docs:
+    runtime: skill
+  agent-prune:
+    runtime: skill
+  agent-telemetry:
+    runtime: skill
+  agent-cloudflare-ops:
+    runtime: skill
+  agent-posthog:
+    runtime: skill
+  agent-perf-opt:
+    runtime: skill
+  agent-pre-commit:
+    runtime: skill
+  agent-release:
+    runtime: skill

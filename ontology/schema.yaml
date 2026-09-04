@@ -8,6 +8,7 @@ types:
   - McpServer
   - PhilosophySection
   - Doc
+  - Subagent
 memoryEntityTypes:
   - GlossaryTerm
   - Slo
@@ -15,7 +16,7 @@ memoryEntityTypes:
   - ProjectFact
 relations:
   - name: loads
-    from: Skill
+    from: [Skill, Subagent]
     to: SOP
   - name: uses
     from: Skill
@@ -36,8 +37,11 @@ relations:
     from: SOP
     to: PhilosophySection
   - name: references
-    from: [Skill, SOP]
+    from: [Skill, SOP, Subagent]
     to: Doc
+  - name: adapts
+    from: Subagent
+    to: Skill
 phaseOrder:
   - grilling
   - spec

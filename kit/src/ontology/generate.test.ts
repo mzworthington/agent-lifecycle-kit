@@ -25,6 +25,7 @@ function seedKit(root: string): void {
   );
   fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
   fs.writeFileSync(path.join(root, 'docs', 'edd.md'), '# EDD\n');
+  fs.writeFileSync(path.join(root, 'docs', 'subagents.md'), '# Subagents\n');
   fs.mkdirSync(path.join(root, 'SOPs'), { recursive: true });
   fs.writeFileSync(
     path.join(root, 'SOPs', 'eval-driven-development.md'),
@@ -64,6 +65,20 @@ ontology:
   fs.mkdirSync(path.join(root, 'handover', 'archlens'), { recursive: true });
   fs.writeFileSync(path.join(root, 'handover', 'archlens', 'handover_tdd.md'), '# tdd\n');
   fs.writeFileSync(path.join(root, 'handover', 'archlens', 'README.md'), 'not a handover\n');
+  fs.mkdirSync(path.join(root, 'agents'), { recursive: true });
+  fs.writeFileSync(
+    path.join(root, 'agents', 'agent-demo.md'),
+    `---
+name: agent-demo
+description: "Demo specialist"
+model: inherit
+readonly: true
+---
+
+Load the playbook. See [subagents](../docs/subagents.md).
+`
+  );
+  fs.writeFileSync(path.join(root, 'agents', 'README.md'), '# agents\n');
 }
 
 function withKit(run: (root: string, index: OntologyIndex) => void): void {
@@ -137,6 +152,18 @@ describe('generateOntologyIndex', () => {
         index.entities.some((e) => e.path?.endsWith('README.md')),
         false
       );
+    });
+  });
+
+  it('indexes host subagent stubs as adapters over skills and skips agents/README.md', () => {
+    withKit((_root, index) => {
+      const stub = getEntity(index, 'subagent:agent-demo');
+      assert.ok(stub);
+      assert.equal(stub?.attrs?.readonly, true);
+      assert.equal(stub?.path, 'agents/agent-demo.md');
+      assert.ok(getRelated(index, 'subagent:agent-demo', 'adapts').some((e) => e.to === 'skill:agent-demo'));
+      assert.ok(getRelated(index, 'subagent:agent-demo', 'references').some((e) => e.to === 'doc:subagents'));
+      assert.equal(getEntity(index, 'subagent:README'), null);
     });
   });
 

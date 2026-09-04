@@ -8,7 +8,8 @@ export const KIT_ENTITY_TYPES = [
   'EvalSuite',
   'McpServer',
   'PhilosophySection',
-  'Doc'
+  'Doc',
+  'Subagent'
 ] as const;
 
 export type KitEntityType = (typeof KIT_ENTITY_TYPES)[number];
@@ -30,7 +31,8 @@ export const RELATION_NAMES = [
   'for',
   'gates',
   'implements',
-  'references'
+  'references',
+  'adapts'
 ] as const;
 
 export type RelationName = (typeof RELATION_NAMES)[number];
@@ -77,7 +79,8 @@ export function entityId(type: KitEntityType, name: string): string {
     EvalSuite: 'eval',
     McpServer: 'mcp',
     PhilosophySection: 'philosophy',
-    Doc: 'doc'
+    Doc: 'doc',
+    Subagent: 'subagent'
   };
   return `${prefix[type]}:${name}`;
 }

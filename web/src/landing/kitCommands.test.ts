@@ -51,6 +51,8 @@ describe('docs/kit.md', () => {
       'wk measure-context',
       'wk completion zsh',
       'wk ontology check',
+      'wk agents generate',
+      'wk agents install',
       'wk ontology generate',
       'wk mcp <profile>',
       'wk audit',

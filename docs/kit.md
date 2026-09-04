@@ -58,7 +58,7 @@ Match the profile to the skill’s `mcp:` frontmatter. Do not merge collab + dev
 
 1. `wk audit`: prompt injection, secrets, entropy, lockfile pins
 2. `wk validate` / `wk verify`: eval schemas, skills layout, and role line budget
-3. `wk ontology check`: live-derived graph refs (`depends-on`, `mcp`)
+3. `wk ontology check`: live-derived graph refs (`depends-on`, `mcp`, subagent stubs)
 4. IDE rules match `AGENTS.md`
 5. Skill-trigger evals (registration / prompt hygiene; not a model run) and EDD `wk eval ci` (scripted, 95% routing)
 6. Context budget
@@ -87,7 +87,7 @@ wk doctor . --json
 
 ## Live kit graph
 
-Skills, SOPs, MCP servers, evals, and docs are one graph derived from the files agents already edit. You do not maintain a second catalog. `wk ontology check` fails dangling `depends-on` and `mcp:` refs. `wk ontology generate` writes a gitignored index for kit-knowledge and the public map.
+Skills, host subagent stubs, SOPs, MCP servers, evals, and docs are one graph derived from the files agents already edit. You do not maintain a second catalog. `wk ontology check` fails dangling `depends-on`, `mcp:`, and subagent→skill refs. `wk ontology generate` writes a gitignored index for kit-knowledge and the public map.
 
 Browse: [Waykit map](./map.md). Authoring: [Author the Waykit map](/ontology). Decision: [ADR 0005](./ADRs/0005-live-derived-ontology-memory-allowlist.md).
 
@@ -104,6 +104,8 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 | `wk measure-context` | Always-on bootstrap size vs 8KB |
 | `wk completion zsh` | Print a live tab-completion stub (`wk completion install` writes it once) |
 | `wk ontology check` | Live graph referential integrity |
+| `wk agents generate` | Thin host stubs under `agents/` from the allowlist |
+| `wk agents install` | Copy stubs into `~/.cursor/agents` and `~/.claude/agents` (user scope) |
 | `wk ontology generate` | Write gitignored index for kit-knowledge and the map |
 | `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |
 | `wk audit` | Skills and scripts supply-chain scan |

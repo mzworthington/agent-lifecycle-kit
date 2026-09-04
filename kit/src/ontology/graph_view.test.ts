@@ -60,8 +60,13 @@ describe('entitySourceUrl', () => {
 });
 
 describe('HOMEPAGE_TYPE_FILTERS', () => {
-  it('defaults to phase, skill, and philosophy; never offers handover', () => {
-    assert.deepEqual([...DEFAULT_ONTOLOGY_TYPES].sort(), ['Phase', 'PhilosophySection', 'Skill']);
+  it('defaults to phase, skill, subagent, and philosophy; never offers handover', () => {
+    assert.deepEqual([...DEFAULT_ONTOLOGY_TYPES].sort(), [
+      'Phase',
+      'PhilosophySection',
+      'Skill',
+      'Subagent'
+    ]);
     const offered = new Set<string>(HOMEPAGE_TYPE_FILTERS.map((f) => f.type));
     assert.equal(offered.has('Handover'), false);
   });
@@ -173,6 +178,11 @@ describe('layoutTargets', () => {
         entity: { id: 'skill:agent-tdd', type: 'Skill', name: 'agent-tdd', attrs: { phase: 'tdd' } }
       },
       {
+        id: 'subagent:agent-tdd',
+        type: 'Subagent',
+        entity: { id: 'subagent:agent-tdd', type: 'Subagent', name: 'agent-tdd' }
+      },
+      {
         id: 'skill:lang-go',
         type: 'Skill',
         entity: { id: 'skill:lang-go', type: 'Skill', name: 'lang-go' }
@@ -194,12 +204,16 @@ describe('layoutTargets', () => {
     const dist = (id: string): number => {
       const p = targets.get(id);
       assert.ok(p);
-      return Math.hypot(p.x - cx, p.y - cy);
+      const dx = p.x - cx;
+      const dy = (p.y - cy) / 0.78;
+      return Math.hypot(dx, dy);
     };
-    assert.ok(dist('phase:tdd') < dist('skill:agent-tdd'));
+    assert.ok(dist('phase:tdd') < dist('subagent:agent-tdd'));
+    assert.ok(dist('subagent:agent-tdd') < dist('skill:agent-tdd'));
     assert.ok(dist('skill:agent-tdd') < dist('skill:lang-go'));
     assert.ok(dist('philosophy:8') > dist('phase:spec'));
     assert.ok(captions.some((c) => c.label === 'Phases'));
+    assert.ok(captions.some((c) => c.label === 'Host subagents'));
     assert.ok(captions.some((c) => c.label === 'Lifecycle skills'));
     assert.ok(captions.some((c) => c.label === 'Philosophy'));
     const spec = targets.get('phase:spec');
@@ -283,8 +297,9 @@ describe('skillBand / shortLabel / typeRadius', () => {
     assert.equal(shortLabel('abcdefghijklmnopqrstuvwxyz012345'), 'abcdefghijklmnopqrstuvwxyz…');
   });
 
-  it('sizes phases larger than evals', () => {
+  it('sizes phases larger than evals and host subagents larger than docs', () => {
     assert.ok(typeRadius('Phase', 0) > typeRadius('EvalSuite', 0));
+    assert.ok(typeRadius('Subagent', 0) > typeRadius('Doc', 0));
   });
 });
 
@@ -294,6 +309,7 @@ describe('live kit graph defaults', () => {
     const index = generateOntologyIndex(kitRoot);
     const view = filterOntologyGraph(index, { types: DEFAULT_ONTOLOGY_TYPES });
     assert.ok(view.entities.some((e) => e.id === 'skill:agent-tdd'));
+    assert.ok(view.entities.some((e) => e.id === 'subagent:agent-tdd'));
     assert.equal(
       view.entities.some((e) => e.type === 'Handover'),
       false

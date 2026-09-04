@@ -56,3 +56,6 @@ mocks:
         - from: "sop:eval-driven-development"
           relation: "references"
           to: "doc:edd"
+        - from: "subagent:agent-tdd"
+          relation: "adapts"
+          to: "skill:agent-tdd"

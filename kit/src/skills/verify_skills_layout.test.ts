@@ -20,6 +20,7 @@ function skillTree(names: string[]): string {
 describe('verifySkillsLayout', () => {
   it('accepts kit-authored prefixes and known files', () => {
     const root = skillTree(['agent-tdd', 'profile-mcp', 'lang-go', 'framework-react']);
+    fs.writeFileSync(path.join(root, 'skills', 'subagents.yaml'), 'version: 1\n');
     const result = verifySkillsLayout(root);
     assert.equal(result.ok, true);
     assert.deepEqual(result.invalid, []);

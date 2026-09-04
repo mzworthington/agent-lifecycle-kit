@@ -36,6 +36,15 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
     printLayout: () => undefined,
     verifyRoleBudget: () => ({ ok: true, budget: 150, violations: [], allowed: [] }),
     printRoleBudget: () => undefined,
+    verifySubagents: () => ({
+      ok: true,
+      errors: [],
+      catalog: null,
+      runtimeFor: () => null
+    }),
+    printSubagents: () => undefined,
+    verifyStubs: () => ({ ok: true, errors: [] }),
+    printStubs: () => undefined,
     exportRules: () => true,
     evals: () => true,
     edd: async () => 0,
@@ -46,6 +55,7 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
       missingEndpoints: [],
       unknownSkillMcp: [],
       unknownDependsOn: [],
+      unknownSubagentSkill: [],
       messages: []
     }),
     // Default test: pretend all catalogued suites exist
@@ -59,6 +69,7 @@ describe('EDD_CI_SUITES', () => {
     assert.ok(EDD_CI_SUITES.includes('evals/edd/cloudflare_ops.yaml'));
     assert.ok(EDD_CI_SUITES.includes('evals/edd/kit_knowledge.yaml'));
     assert.ok(EDD_CI_SUITES.includes('evals/edd/model_routing.yaml'));
+    assert.ok(EDD_CI_SUITES.includes('evals/edd/subagent_routing.yaml'));
     assert.ok(!EDD_CI_SUITES.some((s) => s.includes('/goldens/')));
   });
 });
@@ -146,11 +157,35 @@ describe('runKitCheck', () => {
       await runKitCheck(
         '/kit',
         passingDeps({
+          verifySubagents: () => ({
+            ok: false,
+            errors: ['bad allowlist'],
+            catalog: null,
+            runtimeFor: () => null
+          })
+        })
+      ),
+      1
+    );
+    assert.equal(
+      await runKitCheck(
+        '/kit',
+        passingDeps({
+          verifyStubs: () => ({ ok: false, errors: ['stale stub'] })
+        })
+      ),
+      1
+    );
+    assert.equal(
+      await runKitCheck(
+        '/kit',
+        passingDeps({
           ontologyCheck: () => ({
             ok: false,
             missingEndpoints: [],
             unknownSkillMcp: [],
             unknownDependsOn: [],
+            unknownSubagentSkill: [],
             messages: ['boom']
           })
         })

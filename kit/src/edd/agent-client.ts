@@ -80,8 +80,67 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     names.has('get_entity') ||
     names.has('get_related');
   const hasArch = names.has('read_architecture_yaml');
+  const hasLaunchSpecialist = names.has('launch_specialist');
   const hasModelClass = names.has('select_model_class');
-  const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass;
+  const hasMemoryOnly = names.has('create_entities') && !hasKit && !hasArch && !hasModelClass && !hasLaunchSpecialist;
+
+  if (hasLaunchSpecialist && !hasArch) {
+    if (
+      prompt.includes('weather') ||
+      prompt.includes('brew coffee') ||
+      prompt.includes('make tea')
+    ) {
+      return scriptedNoTool('That is outside subagent routing. I can launch an allowlisted specialist if you describe the job.');
+    }
+    if (prompt.includes('typo')) {
+      return scriptedNoTool('Staying in the parent for a tiny typo.');
+    }
+    if (
+      prompt.includes('pr') &&
+      (prompt.includes('review') || prompt.includes('audit') || prompt.includes('independent'))
+    ) {
+      return {
+        content: 'Launching agent-review as a readonly audit subagent.',
+        tool_calls: [
+          { name: 'launch_specialist', arguments: { specialist: 'agent-review', class: 'review' } }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      prompt.includes('ci failed') ||
+      prompt.includes('failed github actions') ||
+      prompt.includes('failed job')
+    ) {
+      return {
+        content: 'Launching agent-debug so CI noise stays out of the parent chat.',
+        tool_calls: [{ name: 'launch_specialist', arguments: { specialist: 'agent-debug' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
+    if (
+      (prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
+      (prompt.includes('tdd') || prompt.includes('short loop'))
+    ) {
+      return {
+        content: 'Launching agent-tdd for gear 1 and gear 2 in one session.',
+        tool_calls: [
+          { name: 'launch_specialist', arguments: { specialist: 'agent-tdd', class: 'implement' } }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    return scriptedNoTool('Stay in the parent unless the job matches the host-subagent allowlist.', 0.4);
+  }
 
   if (hasModelClass && !hasArch) {
     if (
@@ -226,6 +285,28 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     ) {
       return scriptedNoTool('That is outside the kit. I can search SOPs or philosophy if you ask about those.');
     }
+    if (prompt.includes('subagent:agent-tdd') && (prompt.includes('adapt') || prompt.includes('adapts'))) {
+      return {
+        content: 'Looking up ontology adapts edges for subagent:agent-tdd.',
+        tool_calls: [
+          { name: 'get_related', arguments: { id: 'subagent:agent-tdd', relation: 'adapts' } }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (prompt.includes('subagent:agent-tdd') && prompt.includes('look up')) {
+      return {
+        content: 'Fetching ontology entity subagent:agent-tdd.',
+        tool_calls: [{ name: 'get_entity', arguments: { id: 'subagent:agent-tdd' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
     if (prompt.includes('ontology entity') || (prompt.includes('skill:agent-tdd') && prompt.includes('look up'))) {
       return {
         content: 'Fetching ontology entity skill:agent-tdd.',
@@ -324,6 +405,16 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       return {
         content: 'Opening the linear-ticket-workflow SOP.',
         tool_calls: [{ name: 'get_sop', arguments: { name: 'linear-ticket-workflow' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (prompt.includes('host subagent') || prompt.includes('launching a host')) {
+      return {
+        content: 'Opening the subagent-launch SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'subagent-launch' } }],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
         consecutiveToolFailures: 0,
         haltedAutonomousExecution: false,

@@ -200,6 +200,47 @@ export function generateOntologyIndex(
     }
   }
 
+  // Host subagent stubs (thin adapters over role skills)
+  const agentsDir = path.join(kitRoot, 'agents');
+  if (fs.existsSync(agentsDir)) {
+    for (const file of fs.readdirSync(agentsDir).sort()) {
+      if (!file.endsWith('.md') || file.toLowerCase() === 'readme.md') continue;
+      const rel = path.join('agents', file);
+      if (skipIgnored(rel)) continue;
+      const body = safeRead(path.join(agentsDir, file));
+      if (!body) continue;
+      const fm = parseFrontmatter(body) ?? {};
+      const name =
+        typeof fm.name === 'string' && fm.name.trim() ? fm.name.trim() : file.replace(/\.md$/i, '');
+      const readonly = fm.readonly === true;
+      pushEntity({
+        id: entityId('Subagent', name),
+        type: 'Subagent',
+        name,
+        path: rel,
+        attrs: { readonly, skill: name }
+      });
+      addEdge(edges, seenEdges, entityId('Subagent', name), 'adapts', entityId('Skill', name));
+      addEdge(edges, seenEdges, entityId('Subagent', name), 'references', entityId('Doc', 'subagents'));
+      for (const target of collectMarkdownTargets(body)) {
+        const sopMatch = target.match(/SOPs\/([^/#]+?)(?:\.md)?(?:#|$)/);
+        if (sopMatch) {
+          addEdge(edges, seenEdges, entityId('Subagent', name), 'loads', entityId('SOP', sopMatch[1]));
+        }
+        const docsMatch = target.match(/(?:^|\/)docs\/([^/#]+?)(?:\.md)?(?:#|$)/);
+        if (docsMatch) {
+          addEdge(
+            edges,
+            seenEdges,
+            entityId('Subagent', name),
+            'references',
+            entityId('Doc', docsMatch[1])
+          );
+        }
+      }
+    }
+  }
+
   // MCP servers from catalog
   const catalogPath = path.join(kitRoot, 'mcps', 'catalog.json');
   const catalogRaw = safeRead(catalogPath);
@@ -443,6 +484,7 @@ function latestOntologySourceMtime(kitRoot: string): number {
     path.join(kitRoot, 'ontology', 'schema.yaml'),
     path.join(kitRoot, 'CODING_PHILOSOPHY.md'),
     path.join(kitRoot, 'skills'),
+    path.join(kitRoot, 'agents'),
     path.join(kitRoot, 'SOPs'),
     path.join(kitRoot, 'docs'),
     path.join(kitRoot, 'mcps', 'catalog.json'),

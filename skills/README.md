@@ -4,7 +4,7 @@ All invocable instructions live here as [Cursor Agent Skills](https://cursor.com
 
 The kit enforces **hexagonal architecture**, **domain-driven design**, **vertical slices**, and **clean code** - see [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md).
 
-We use **one `skills/` tree** rather than separate `agents/` and `skills/` folders, because Cursor discovers skills from this path. Taxonomy is expressed via frontmatter (`kind`, `phase`, `triggers`) and naming prefixes.
+We keep **one `skills/` tree** for playbooks. Cursor still discovers skills from that path. Thin **host subagent stubs** are generated into [agents/](../agents/) and installed to the user home (`wk agents install`); they are not a second playbook tree. Taxonomy is expressed via frontmatter (`kind`, `phase`, `triggers`) and naming prefixes.
 
 ## Naming convention
 
@@ -16,6 +16,8 @@ We use **one `skills/` tree** rather than separate `agents/` and `skills/` folde
 | `framework-*` | `profile` | Framework-specific delivery rules (Next.js, FastAPI, Spring, Terraform, …) |
 
 **Roles vs profiles:** Roles define *who you are* and *what phase output* to produce. Profiles define *how to write code* for a stack. The orchestrator (`agent-orchestrator`) routes between roles; stack detection activates profiles.
+
+**Host subagents (pilot):** Do not generate a Cursor/Claude agent for every role. Allowlist: [docs/subagents.md](../docs/subagents.md), machine-readable [subagents.yaml](./subagents.yaml). Isolation (`agent-debug`, `agent-xfn`), readonly audit (`agent-review`, `agent-security`, `agent-arch-drift`), sequential (`agent-spec`, `agent-tdd`). Orchestrator stays the parent. `lang-*` / `framework-*` / `profile-*` stay skills. TDD gear 1 and gear 2 stay one `agent-tdd` session; `agent-adapter` is the escape hatch, not a second TDD agent. Freeze the list if auto-delegation is worse than today’s skill picker.
 
 ## Lifecycle roles (`agent-*`)
 
@@ -103,6 +105,7 @@ tools: []                     # optional CLI/tool hints for the agent
 - Keep role skills focused on behavior and output schema; keep stack detail in profiles.
 - Prefer **Mermaid** for architecture/flow diagrams in skill docs and outputs; do not add ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8).
 - Co-locate skill unit evals under `skills/<skill-name>/evals/eval.json` (see [evals/README.md](../evals/README.md) for the hybrid evals model).
+- Thin host subagent stubs: [agents/](../agents/) from [subagents.yaml](./subagents.yaml) (`wk agents generate`).
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).
 - Capture session lessons locally under `lessons/<project>/`; promote approved rules via [tasks/kit-review.md](../tasks/kit-review.md).
 - Routing regressions: [tasks/kit-eval-harness.md](../tasks/kit-eval-harness.md).

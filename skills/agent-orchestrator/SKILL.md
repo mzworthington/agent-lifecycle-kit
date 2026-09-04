@@ -70,6 +70,8 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
+**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary.
+
 ## Specialist roles
 
 | Phase | Skill |

@@ -21,6 +21,7 @@ evals/edd/
 ├── architecture_terminal.yaml|.jsonl
 ├── kit_knowledge.yaml|.jsonl
 ├── model_routing.yaml|.jsonl
+├── subagent_routing.yaml|.jsonl
 ├── cloudflare_ops.yaml|.jsonl
 ├── safety.yaml|.jsonl
 └── tools/*.json
@@ -60,6 +61,7 @@ Full regression / CI suites:
 wk eval run --suite evals/edd/architecture_routing.yaml --model scripted
 wk eval ci --suite evals/edd/kit_knowledge.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/model_routing.yaml --threshold-routing 95 --model scripted --out out/reports
+wk eval ci --suite evals/edd/subagent_routing.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/cloudflare_ops.yaml --threshold-routing 95 --model scripted --out out/reports
 wk eval ci --suite evals/edd/architecture_routing.yaml --threshold-routing 95 --out out/reports
 wk eval ci --suite evals/edd/safety.yaml --threshold-routing 95 --model scripted --out out/reports

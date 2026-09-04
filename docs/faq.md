@@ -51,7 +51,7 @@ Agents pay for every byte in the bootstrap. Always-on files (`AGENTS.md` and the
 
 ## How does the agent find the right SOP?
 
-The kit is a live graph: skills, SOPs, MCP servers, evals, and docs. You edit those files; `wk ontology check` fails dangling `depends-on` and `mcp:` links. Agents stay on the thin handshake, then kit-knowledge walks neighbors (`get_entity`, `get_related`) instead of dumping the tree. Browse it: [Waykit map](/docs/map). How to add a node: [Author the Waykit map](/ontology).
+The kit is a live graph: skills, host subagent stubs, SOPs, MCP servers, evals, and docs. You edit those files; `wk ontology check` fails dangling `depends-on`, `mcp:`, and subagent→skill links. Agents stay on the thin handshake, then kit-knowledge walks neighbors (`get_entity`, `get_related`) instead of dumping the tree. Browse it: [Waykit map](/docs/map). How to add a node: [Author the Waykit map](/ontology). Launch flow: [Host subagents](/docs/subagents).
 
 ## Where does EDD fit?
 
@@ -59,4 +59,4 @@ Inside TDD, when the change is a prompt or a tool contract. **EDD is alpha:** yo
 
 ## Is the Waykit map my product architecture?
 
-No. The [Waykit map](/docs/map) is **this kit**: skills, SOPs, MCP servers, evals, and docs. It does not draw your system. Add a skill or SOP in the kit checkout, then `wk ontology check` and `wk ontology generate`. Step-by-step: [Author the Waykit map](/ontology).
+No. The [Waykit map](/docs/map) is **this kit**: skills, host subagents, SOPs, MCP servers, evals, and docs. It does not draw your system. Add a skill, stub, or SOP in the kit checkout, then `wk ontology check` and `wk ontology generate`. Step-by-step: [Author the Waykit map](/ontology).

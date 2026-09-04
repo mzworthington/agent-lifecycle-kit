@@ -24,6 +24,7 @@ Cursor, Claude Code, Copilot, and Antigravity share `AGENTS.md`. MCP and model o
 - [Common questions](https://waykit.dev/docs/faq) ([markdown](https://waykit.dev/docs/faq.md))
 - [Docs overview](https://waykit.dev/docs) ([markdown](https://waykit.dev/docs/README.md))
 - [Feature lifecycle](https://waykit.dev/docs/lifecycle) ([markdown](https://waykit.dev/docs/lifecycle.md))
+- [Host subagents (pilot)](https://waykit.dev/docs/subagents) ([markdown](https://waykit.dev/docs/subagents.md))
 - [EDD guide (alpha)](https://waykit.dev/docs/edd) ([markdown](https://waykit.dev/docs/edd.md))
 - [Hosts](https://waykit.dev/docs/hosts) ([markdown](https://waykit.dev/docs/hosts.md))
 - [Operator guide](https://waykit.dev/docs/kit) ([markdown](https://waykit.dev/docs/kit.md))

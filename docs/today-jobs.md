@@ -116,9 +116,9 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 
 > You edited the kit tree. Check dangling links, then open the live map.
 
-Skills, SOPs, and MCPs are a live graph. You edit the files; `wk ontology check` fails dangling `depends-on` and `mcp:` refs; kit-knowledge walks neighbors. You do not maintain a second catalog.
+Skills, host subagent stubs, SOPs, and MCPs are a live graph. You edit the files; `wk ontology check` fails dangling `depends-on`, `mcp:`, and subagent→skill refs; kit-knowledge walks neighbors. You do not maintain a second catalog.
 
-1. **Put the file** where the kit expects it (skill folder, SOP, catalog server, or eval YAML).
+1. **Put the file** where the kit expects it (skill folder, `agents/*.md` stub, SOP, catalog server, or eval YAML).
 2. **Check** with `wk ontology check` (`wk check` already runs this gate).
 3. **Generate** if you need the public map JSON, then open the map.
 

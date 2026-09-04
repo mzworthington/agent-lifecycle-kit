@@ -16,6 +16,16 @@ import {
   type SkillsLayoutResult
 } from '../skills/verify_skills_layout.js';
 import {
+  printSubagentAllowlistResult,
+  verifySubagentAllowlist,
+  type SubagentAllowlistResult
+} from '../skills/verify_subagent_allowlist.js';
+import {
+  printSubagentStubResult,
+  verifySubagentStubs,
+  type SubagentStubVerifyResult
+} from '../skills/generate_subagent_stubs.js';
+import {
   measureContextBudget,
   printContextBudget,
   type ContextBudgetResult
@@ -27,6 +37,7 @@ import { checkOntology, type OntologyCheckResult } from '../ontology/index.js';
 export const EDD_CI_SUITES = [
   'evals/edd/architecture_routing.yaml',
   'evals/edd/model_routing.yaml',
+  'evals/edd/subagent_routing.yaml',
   'evals/edd/kit_knowledge.yaml',
   'evals/edd/memory_ontology.yaml',
   'evals/edd/cloudflare_ops.yaml',
@@ -50,6 +61,10 @@ export interface KitCheckDeps {
   printLayout?: (result: SkillsLayoutResult) => void;
   verifyRoleBudget?: (repoDir: string) => RoleSkillLineBudgetResult;
   printRoleBudget?: (result: RoleSkillLineBudgetResult) => void;
+  verifySubagents?: (repoDir: string) => SubagentAllowlistResult;
+  printSubagents?: (result: SubagentAllowlistResult) => void;
+  verifyStubs?: (repoDir: string) => SubagentStubVerifyResult;
+  printStubs?: (result: SubagentStubVerifyResult) => void;
   exportRules?: (targetDir: string, checkOnly: boolean) => boolean;
   evals?: (repoDir: string) => boolean;
   edd?: (options: EddCliOptions) => Promise<number | null>;
@@ -70,6 +85,10 @@ export async function runKitCheck(
   const printLayout = deps.printLayout ?? printSkillsLayoutResult;
   const verifyRoleBudget = deps.verifyRoleBudget ?? verifyRoleSkillLineBudget;
   const printRoleBudget = deps.printRoleBudget ?? printRoleSkillLineBudgetResult;
+  const verifySubagents = deps.verifySubagents ?? verifySubagentAllowlist;
+  const printSubagents = deps.printSubagents ?? printSubagentAllowlistResult;
+  const verifyStubs = deps.verifyStubs ?? verifySubagentStubs;
+  const printStubs = deps.printStubs ?? printSubagentStubResult;
   const exportRules = deps.exportRules ?? exportIDERules;
   const evals = deps.evals ?? runEvals;
   const edd = deps.edd ?? handleEddEvalCli;
@@ -120,6 +139,26 @@ export async function runKitCheck(
     path: repoDir
   });
   if (!roleBudget.ok) return finish(false);
+
+  const subagents = verifySubagents(repoDir);
+  if (!json) printSubagents(subagents);
+  findings.push({
+    id: 'subagent-allowlist',
+    status: subagents.ok ? 'ok' : 'fail',
+    path: repoDir,
+    detail: subagents.errors.length ? subagents.errors.join('; ') : undefined
+  });
+  if (!subagents.ok) return finish(false);
+
+  const stubs = verifyStubs(repoDir);
+  if (!json) printStubs(stubs);
+  findings.push({
+    id: 'subagent-stubs',
+    status: stubs.ok ? 'ok' : 'fail',
+    path: repoDir,
+    detail: stubs.errors.length ? stubs.errors.join('; ') : undefined
+  });
+  if (!stubs.ok) return finish(false);
 
   const ontology = ontologyCheck(repoDir);
   findings.push({ id: 'ontology', status: ontology.ok ? 'ok' : 'fail', path: repoDir });

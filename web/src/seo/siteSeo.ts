@@ -104,10 +104,15 @@ const PAGE_SEO: Record<string, SeoOverride> = {
     description:
       'Route product work through grill, stories, spec, TDD, XFN, telemetry, and release. After a bet’s timebox, measure the leading indicator in PostHog, then confirm or kill.'
   },
+  '/docs/subagents': {
+    headline: 'Host subagent allowlist',
+    description:
+      'Pilot list of Waykit roles that become Cursor or Claude subagents, plus the parent→child launch flow. Stack profiles stay skills. TDD gear 1 and gear 2 stay one agent.'
+  },
   '/docs/map': {
     headline: 'Waykit map',
     description:
-      'Live graph of this kit: skills, SOPs, MCPs, and evals derived from the tree, feeding kit-knowledge so you load one node instead of the whole kit.'
+      'Live graph of this kit: skills, host subagents, SOPs, MCPs, and evals derived from the tree, feeding kit-knowledge so you load one node instead of the whole kit.'
   },
   '/docs/sops': {
     headline: 'SOPs',

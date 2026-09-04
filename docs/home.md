@@ -6,7 +6,7 @@ Waykit is the software lifecycle for coding agents: grill, PRD/bet when value is
 
 The homepage CLI table is the [Commands](./kit.md#commands) list from the operator guide: `wk align`, `wk doctor`, `wk check` first, then measure context, ontology, one MCP profile, audit, eval CI, sync.
 
-Skills, SOPs, and MCPs are a live graph: you edit the files, `wk ontology check` fails dangling links, kit-knowledge loads one node. Browse it on the [Waykit map](./map.md).
+Skills, SOPs, and MCPs are a live graph: you edit the files, `wk ontology check` fails dangling links, kit-knowledge loads one node. Browse it on the [Waykit map](./map.md). Host subagent launch: [subagents](./subagents.md).
 
 - [Jobs for today](./jobs.md)
 - [Getting started](./start.md)

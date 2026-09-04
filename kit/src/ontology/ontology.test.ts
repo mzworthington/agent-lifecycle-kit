@@ -61,6 +61,7 @@ describe('generateOntologyIndex', () => {
     assert.equal(p8?.attrs?.section, '8');
     assert.ok(getEntity(index, 'doc:edd'));
     assert.ok(getEntity(index, 'phase:tdd'));
+    assert.ok(getEntity(index, 'subagent:agent-tdd'));
   });
 
   it('emits depends-on and uses edges from skill frontmatter', () => {
@@ -69,6 +70,14 @@ describe('generateOntologyIndex', () => {
     assert.ok(deps.some((e) => e.to === 'skill:agent-spec'));
     const uses = getRelated(index, 'skill:agent-tdd', 'uses');
     assert.ok(uses.some((e) => e.to === 'mcp:context7'));
+  });
+
+  it('emits adapts edges from host subagent stubs to their playbook skills', () => {
+    const index = generateOntologyIndex(kitRoot);
+    const adapts = getRelated(index, 'subagent:agent-review', 'adapts');
+    assert.ok(adapts.some((e) => e.to === 'skill:agent-review'));
+    const review = getEntity(index, 'subagent:agent-review');
+    assert.equal(review?.attrs?.readonly, true);
   });
 
   it('emits loads edges from skill SOP markdown links', () => {

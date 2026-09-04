@@ -37,6 +37,8 @@ export type KitCommand =
   | { kind: 'export-rules'; dir: string; check: boolean }
   | { kind: 'metrics' }
   | { kind: 'verify' }
+  | { kind: 'agents-generate' }
+  | { kind: 'agents-install' }
   | { kind: 'sync'; rest: string[] }
   | { kind: 'measure-context' }
   | { kind: 'debug-board'; project: string; title: string }
@@ -174,6 +176,16 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
 
     case 'verify':
       return { kind: 'verify' };
+
+    case 'agents': {
+      if (rest[0] === 'generate') {
+        return { kind: 'agents-generate' };
+      }
+      if (rest[0] === 'install') {
+        return { kind: 'agents-install' };
+      }
+      return { kind: 'usage', message: cliUsage('agents generate|install') };
+    }
 
     case 'sync':
       return { kind: 'sync', rest };
