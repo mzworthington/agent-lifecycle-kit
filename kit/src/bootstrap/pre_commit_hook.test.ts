@@ -22,6 +22,11 @@ describe('husky pre-commit', () => {
     const hook = fs.readFileSync(path.join(repoDir, '.husky/pre-commit'), 'utf8');
     assert.match(hook, /bin\/kit" measure-context/);
   });
+
+  it('runs skill-trigger evals so self-contradictory forbidden_patterns fail before CI', () => {
+    const hook = fs.readFileSync(path.join(repoDir, '.husky/pre-commit'), 'utf8');
+    assert.match(hook, /bin\/kit" eval$/m);
+  });
 });
 
 describe('husky commit-msg', () => {

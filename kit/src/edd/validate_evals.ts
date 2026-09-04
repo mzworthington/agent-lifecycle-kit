@@ -227,6 +227,18 @@ export function validateEvals(repoDir: string): ValidateEvalsResult {
           }
         }
       }
+
+      const promptLower = test.prompt.toLowerCase();
+      const forbidden = test.assertions?.forbidden_patterns ?? [];
+      for (const pattern of forbidden) {
+        if (pattern.toLowerCase().includes('```')) continue;
+        if (promptLower.includes(pattern.toLowerCase())) {
+          console.error(
+            `  ❌ Test ${test.id}: prompt contains forbidden pattern "${pattern}" (skill-trigger evals would fail)`
+          );
+          errors++;
+        }
+      }
     }
 
     console.log(`  ✓ ${fileInfo.relPath} passed structure check (${data.test_cases.length} test cases)`);

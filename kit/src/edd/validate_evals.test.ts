@@ -107,6 +107,35 @@ describe('validateEvals', () => {
     assert.equal(result.ok, true);
   });
 
+  it('fails when a case prompt contains its own forbidden_patterns', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-val-'));
+    fs.mkdirSync(path.join(root, 'evals'), { recursive: true });
+    fs.writeFileSync(path.join(root, 'evals', 'schema.json'), JSON.stringify(MIN_SCHEMA), 'utf8');
+    writeSkill(root, 'agent-pre-commit', ['pre-commit']);
+    fs.mkdirSync(path.join(root, 'evals', 'suites'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'evals', 'suites', 'self-forbid.json'),
+      JSON.stringify({
+        suite: 'self-forbid',
+        description: 'd',
+        version: '1.0.0',
+        test_cases: [
+          {
+            id: 'EVAL-PRE-001',
+            name: 'subset',
+            target_skill: 'agent-pre-commit',
+            prompt: 'Mark COMPLETE. Pre-commit status PASS (targeted); full hook not run.',
+            assertions: { forbidden_patterns: ['PASS (targeted)', 'full hook not run'] }
+          }
+        ]
+      }),
+      'utf8'
+    );
+    const result = validateEvals(root);
+    assert.equal(result.ok, false);
+    assert.ok(result.errors >= 1);
+  });
+
   it('treats a missing required trigger as a warning, not an error', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-val-'));
     fs.mkdirSync(path.join(root, 'evals'), { recursive: true });
