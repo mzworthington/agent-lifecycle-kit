@@ -17,7 +17,13 @@ wk align . --json                         # machine-readable findings on stdout 
 `--owned` lists GitHub sources you admin (`gh`). `--scan` matches local worktrees. Uncloned sources are skipped, not failed as fat handshakes. The kit repo is classified and skipped so a fat kit `AGENTS.md` cannot fail the fleet. Any drifted consumer fails the command with exit code 1.
 
 
-`--write` seeds `AGENTS.md` from `templates/project-AGENTS.md` when it is missing, and fills host pointers. It never overwrites `AGENTS.md`. It does not compose MCP. After a miss on kit-knowledge:
+`--write` seeds `AGENTS.md` from `templates/project-AGENTS.md` when it is missing, and fills host pointers. It never overwrites `AGENTS.md`. It does not compose MCP unless you also pass `--mcp`.
+
+```bash
+wk align . --write --mcp
+```
+
+`--mcp` composes kit `default` into the project MCP files (never `cloudflare-ops`). Omit the flag and align leaves MCP unchanged. You can still compose by hand:
 
 ```bash
 wk mcp default --project

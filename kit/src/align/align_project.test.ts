@@ -3,7 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { alignNextSteps, alignProject, printAlignResult } from './align_project.js';
+
+const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 function write(root: string, rel: string, contents: string): void {
   const full = path.join(root, rel);
@@ -170,6 +173,45 @@ describe('alignProject', () => {
     assert.ok(result.written.includes('AGENTS.md'));
     assert.match(fs.readFileSync(path.join(target, 'AGENTS.md'), 'utf8'), /~\/\.agents/);
   });
+
+  it('composes kit default MCP when --mcp is set and never writes cloudflare-ops', () => {
+    const target = alignedApp();
+    write(
+      target,
+      '.mcp.json',
+      JSON.stringify({ mcpServers: { cloudflare: { url: 'https://mcp.cloudflare.com/mcp' } } })
+    );
+    const result = alignProject({
+      targetDir: target,
+      kitRepoDir: kitRoot,
+      write: false,
+      composeMcp: true,
+      mcpHosts: ['claude']
+    });
+    assert.equal(result.ok, true);
+    const body = JSON.parse(fs.readFileSync(path.join(target, '.mcp.json'), 'utf8')) as {
+      mcpServers: Record<string, unknown>;
+    };
+    assert.ok(body.mcpServers['kit-knowledge']);
+    assert.ok(body.mcpServers.linear);
+    assert.equal(body.mcpServers.cloudflare, undefined);
+    assert.ok(result.written.includes('mcp default'));
+  });
+
+  it('leaves project MCP unchanged when --mcp is omitted', () => {
+    const target = alignedApp();
+    const ops = JSON.stringify({ mcpServers: { cloudflare: { url: 'https://mcp.cloudflare.com/mcp' } } });
+    write(target, '.mcp.json', ops);
+    const result = alignProject({
+      targetDir: target,
+      kitRepoDir: kitRoot,
+      write: true,
+      composeMcp: false,
+      mcpHosts: ['claude']
+    });
+    assert.equal(fs.readFileSync(path.join(target, '.mcp.json'), 'utf8'), ops);
+    assert.equal(result.written.includes('mcp default'), false);
+  });
 });
 
 describe('printAlignResult', () => {
@@ -203,6 +245,6 @@ describe('printAlignResult', () => {
     ]);
     assert.equal(steps.length, 2);
     assert.match(steps[0] ?? '', /--write/);
-    assert.match(steps[1] ?? '', /mcp default --project/);
+    assert.match(steps[1] ?? '', /align \. --mcp|mcp default --project/);
   });
 });

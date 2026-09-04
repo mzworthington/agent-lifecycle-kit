@@ -164,6 +164,7 @@ describe('parseKitArgv', () => {
       kind: 'align',
       targetDir: path.resolve('/work', '.'),
       write: false,
+      composeMcp: false,
       owned: false,
       scanDir: undefined,
       login: undefined,
@@ -173,6 +174,7 @@ describe('parseKitArgv', () => {
       kind: 'align',
       targetDir: path.resolve('/work', './app'),
       write: true,
+      composeMcp: false,
       owned: false,
       scanDir: undefined,
       login: undefined,
@@ -182,6 +184,7 @@ describe('parseKitArgv', () => {
       kind: 'align',
       targetDir: path.resolve('/work', '.'),
       write: false,
+      composeMcp: false,
       owned: true,
       scanDir: path.resolve('/work', '../dev'),
       login: 'mzworthington',
@@ -191,10 +194,21 @@ describe('parseKitArgv', () => {
       kind: 'align',
       targetDir: path.resolve('/work', './app'),
       write: false,
+      composeMcp: false,
       owned: false,
       scanDir: undefined,
       login: undefined,
       json: true
+    });
+    assert.deepEqual(parseKitArgv(['align', '.', '--write', '--mcp'], opts), {
+      kind: 'align',
+      targetDir: path.resolve('/work', '.'),
+      write: true,
+      composeMcp: true,
+      owned: false,
+      scanDir: undefined,
+      login: undefined,
+      json: false
     });
   });
 

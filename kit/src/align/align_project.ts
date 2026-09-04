@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { exportIDERules, IDE_RULE_REL_PATHS } from '../bootstrap/export_ide_rules.js';
-import { MCP_HOSTS, projectMcpPath } from '../bootstrap/mcp_hosts.js';
+import { composeMCP } from '../bootstrap/compose_mcp.js';
+import { MCP_HOSTS, projectMcpPath, type McpHostId } from '../bootstrap/mcp_hosts.js';
 import { DEFAULT_TARGET_CHARS } from '../quality/measure_context_budget.js';
 
 export type AlignStatus = 'ok' | 'fail';
@@ -24,6 +25,10 @@ export interface AlignProjectOptions {
   targetDir: string;
   kitRepoDir: string;
   write: boolean;
+  /** When true, compose kit `default` into project MCP files. Never cloudflare-ops. */
+  composeMcp?: boolean;
+  mcpHosts?: readonly McpHostId[];
+  cursorDir?: string;
 }
 
 function readIfPresent(filePath: string): string | undefined {
@@ -220,7 +225,7 @@ export function alignNextSteps(findings: AlignFinding[]): string[] {
     steps.push('Add .githooks/commit-msg then git config core.hooksPath .githooks  (or wk init --hook)');
   }
   if (failed.has('mcp-kit-knowledge')) {
-    steps.push('wk mcp default --project');
+    steps.push('wk align . --mcp   # or wk mcp default --project');
   }
   return steps;
 }
@@ -237,12 +242,23 @@ export function alignProject(options: AlignProjectOptions): AlignResult {
     exportIDERules(targetDir, false, options.kitRepoDir);
   }
 
+  if (options.composeMcp) {
+    composeMCP('default', undefined, false, {
+      repoDir: options.kitRepoDir,
+      installProject: true,
+      projectDir: targetDir,
+      hosts: options.mcpHosts ?? [...MCP_HOSTS],
+      cursorDir: options.cursorDir
+    });
+    written.push('mcp default');
+  }
+
   const findings = evaluate(targetDir);
   return {
     ok: findings.every((f) => f.status === 'ok'),
     targetDir,
     findings,
-    written: options.write ? written : []
+    written: options.write || options.composeMcp ? written : []
   };
 }
 

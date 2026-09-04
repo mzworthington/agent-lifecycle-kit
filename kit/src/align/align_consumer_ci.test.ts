@@ -16,6 +16,7 @@ describe('reusable consumer align workflow', () => {
     assert.match(yml, /INSTALL_MCP:\s*['"]?0['"]?/);
     assert.match(yml, /wk align/);
     assert.doesNotMatch(yml, /wk align[^\n]*--write/);
+    assert.doesNotMatch(yml, /wk align[^\n]*--mcp/);
     assert.doesNotMatch(yml, /wk doctor/);
     assert.doesNotMatch(yml, /wk check/);
     assert.doesNotMatch(yml, /KIT_EVAL_API_KEY/);
