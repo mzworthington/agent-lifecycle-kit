@@ -17,6 +17,8 @@
 - *(subagents)* Introduce skills-only mode and update related documentation
 - *(subagents)* Status, launch-prompt, and honest eval adapter
 - *(evals)* Compare specialist vs skill-picker miss rates (MZW-73)
+- *(cli)* Print ok/warn/fail on report commands
+- *(cli)* Enhance report command output with color support and ANSI stripping
 
 ### 🐛 Bug Fixes
 
