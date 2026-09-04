@@ -6,6 +6,7 @@ import { describe, it } from 'node:test';
 import { applyDoctorPlan } from './apply.js';
 import { planRepoDoctor } from './hygiene.js';
 import { evaluateOwnership } from './ownership.js';
+import { stripAnsi } from '../cli/outcome.js';
 import { printDoctorResult, runDoctor } from './run.js';
 import type { GitHubPort } from './github.js';
 import type { RepoView } from './ownership.js';
@@ -158,7 +159,7 @@ describe('printDoctorResult', () => {
       },
       (msg) => lines.push(msg)
     );
-    const text = lines.join('\n');
+    const text = stripAnsi(lines.join('\n'));
     assert.match(text, /wk align/);
     assert.match(text, /ok    doctor/);
     assert.equal(/handshake is aligned/i.test(text), false);

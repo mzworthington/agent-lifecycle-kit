@@ -59,13 +59,13 @@ export function subagentStatus(opts: {
   };
 }
 
-export function formatSubagentStatus(status: SubagentStatus): string {
+export function formatSubagentStatus(status: SubagentStatus, opts?: { color?: boolean }): string {
   const mode = status.skillsOnly ? 'skills-only' : 'launch';
   const envLine = status.envRaw === null ? 'unset (follow catalog)' : status.envRaw;
   const miss = missRateOutcome(status.missRate);
   const summary = `${mode}, ${miss.summary}`;
   return [
-    formatCliOutcome(miss.outcome, 'agents status', summary),
+    formatCliOutcome(miss.outcome, 'agents status', summary, { color: opts?.color }),
     `mode: ${mode}`,
     `catalog.skillsOnly: ${status.catalogSkillsOnly}`,
     `WK_SUBAGENTS: ${envLine}`,

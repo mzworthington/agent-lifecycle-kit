@@ -63,7 +63,7 @@ import {
   doctorResultToJson,
   printJsonReport
 } from './json_report.js';
-import { cliOutcomeExit, cliOutcomeFromOk, printCliOutcome } from './outcome.js';
+import { cliOutcomeExit, cliOutcomeFromOk, cliOutcomeShouldColor, printCliOutcome } from './outcome.js';
 import type { KitCommand } from './parse.js';
 
 export interface RunKitContext {
@@ -351,7 +351,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         console.log(JSON.stringify(status));
         return 0;
       }
-      console.log(formatSubagentStatus(status));
+      console.log(formatSubagentStatus(status, { color: cliOutcomeShouldColor() }));
       return cliOutcomeExit(status.missRate.verdict === 'freeze' || status.missRate.verdict === 'not-enough' ? 'warn' : 'ok');
     }
 

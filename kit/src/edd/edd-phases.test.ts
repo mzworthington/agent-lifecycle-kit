@@ -10,6 +10,7 @@ import { evaluateMcpUse } from './mcp-use.js';
 import { evaluatePlanAdherence, evaluateStepEfficiency } from './plan-metrics.js';
 import { buildTrajectory } from './trajectory.js';
 import { dedupeCases, lintCases, casesFromTraceFile } from './dataset-hygiene.js';
+import { stripAnsi } from '../cli/outcome.js';
 import { handleEddEvalCli } from './edd_cli.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -250,7 +251,7 @@ metrics:
     } finally {
       console.log = orig;
     }
-    assert.match(logs.join('\n'), /warn  eval miss-rate/);
+    assert.match(stripAnsi(logs.join('\n')), /warn  eval miss-rate/);
     assert.match(logs.join('\n'), /verdict: not-enough/);
   });
 

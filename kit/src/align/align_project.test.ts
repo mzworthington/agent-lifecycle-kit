@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { stripAnsi } from '../cli/outcome.js';
 import { alignNextSteps, alignProject, printAlignResult } from './align_project.js';
 
 const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -231,7 +232,7 @@ describe('printAlignResult', () => {
     );
     assert.match(lines.join('\n'), /ok\s+AGENTS.md present/);
     assert.match(lines.join('\n'), /fail\s+Host pointers/);
-    assert.match(lines.join('\n'), /fail  align/);
+    assert.match(stripAnsi(lines.join('\n')), /fail  align/);
     assert.match(lines.join('\n'), /next:/);
     assert.match(lines.join('\n'), /wk align \. --write/);
   });

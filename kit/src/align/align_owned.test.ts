@@ -5,6 +5,7 @@ import path from 'node:path';
 import { describe, it } from 'node:test';
 import type { GitHubPort } from '../doctor/github.js';
 import type { RepoView } from '../doctor/ownership.js';
+import { stripAnsi } from '../cli/outcome.js';
 import { printAlignOwnedResult, runAlignOwned } from './align_owned.js';
 
 function write(root: string, rel: string, contents: string): void {
@@ -196,6 +197,6 @@ describe('printAlignOwnedResult', () => {
     assert.match(text, /skip \(kit\)/);
     assert.match(text, /me\/site/);
     assert.match(text, /fail\s+AGENTS.md present/);
-    assert.match(errors.join('\n'), /fail  align/);
+    assert.match(stripAnsi(errors.join('\n')), /fail  align/);
   });
 });

@@ -33,14 +33,14 @@ export function missRateOutcome(cmp: MissRateCompare): { outcome: CliOutcome; su
   return { outcome: 'ok', summary: 'hold (specialist not worse than picker)' };
 }
 
-export function formatMissRateCompare(cmp: MissRateCompare): string {
+export function formatMissRateCompare(cmp: MissRateCompare, opts?: { color?: boolean }): string {
   const { outcome, summary } = missRateOutcome(cmp);
   const side = (s: MissRateSide) =>
     s.enough
       ? `${(s.rate! * 100).toFixed(1)}% (${s.prodDerived}/${s.total} prod-derived in ${s.relPath})`
       : `not-enough (0 prod-derived in ${s.relPath}${s.total ? `, ${s.total} cases` : ''})`;
   return [
-    formatCliOutcome(outcome, 'eval miss-rate', summary),
+    formatCliOutcome(outcome, 'eval miss-rate', summary, { color: opts?.color }),
     `specialist: ${side(cmp.specialist)}`,
     `skill-picker: ${side(cmp.picker)}`,
     `verdict: ${cmp.verdict}`

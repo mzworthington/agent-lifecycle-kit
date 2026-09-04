@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { formatCliOutcome, type CliOutcome } from '../cli/outcome.js';
+import { cliOutcomeShouldColor, formatCliOutcome, type CliOutcome } from '../cli/outcome.js';
 import {
   formatKitVersion,
   isOriginWeeksAhead,
@@ -82,7 +82,7 @@ export function printKitVersion(opts: {
   const snap = readKitVersionSnapshot(opts.kitRepoDir, opts.homedir ?? os.homedir());
   const stale = opts.check ? isOriginWeeksAhead(readStaleCheck(opts.kitRepoDir)) : false;
   const { outcome, summary } = kitVersionOutcome(snap, stale);
-  log(formatCliOutcome(outcome, 'version', summary));
+  log(formatCliOutcome(outcome, 'version', summary, { color: cliOutcomeShouldColor() }));
   log(formatKitVersion(snap, { stale }).trimEnd());
   return outcome;
 }

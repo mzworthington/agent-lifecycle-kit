@@ -6,6 +6,7 @@ describe('KIT_HELP', () => {
   it('lists EDD shadow, profile directory, and site assemble build prerequisite', () => {
     assert.match(KIT_HELP, /run\|watch\|report\|ci\|shadow\|dataset\|miss-rate/);
     assert.match(KIT_HELP, /ok \/ warn \/ fail/);
+    assert.match(KIT_HELP, /NO_COLOR/);
     assert.match(KIT_HELP, /mcps\/profiles\//);
     assert.match(KIT_HELP, /site assemble[\s\S]*web build first/);
     assert.match(KIT_HELP, /commit-msg/);

@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
+import { stripAnsi } from '../cli/outcome.js';
 import { runEvals } from './run_evals.js';
 
 function writeSkill(root: string, name: string, triggers: string[]): void {
@@ -165,7 +166,7 @@ describe('runEvals', () => {
       console.log = log;
       console.error = error;
     }
-    const text = lines.join('\n');
+    const text = stripAnsi(lines.join('\n'));
     assert.match(text, /Skill-trigger harness \(registration \/ prompt hygiene\)/);
     assert.match(text, /ok    eval/);
     assert.doesNotMatch(text, /live trigger/i);

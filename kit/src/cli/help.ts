@@ -49,6 +49,7 @@ Commands:
 
 Outcomes:
   Report commands print a first line of ok / warn / fail (aligned columns).
+  On a TTY, ok is green, warn is orange, fail is red. NO_COLOR (or a pipe) stays plain.
   Exit 1 only on fail. warn is visible and still exit 0 (e.g. miss-rate not-enough).
 
 Examples:
