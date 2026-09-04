@@ -9,6 +9,7 @@
 - Prefer uncommitted work on main for ticket execution
 - Land fleet align, wk version, and role skill line budget
 - Enhance pre-commit hook with context measurement and update contributing guidelines
+- *(cli)* Emit stable JSON findings for align, doctor, and check (MZW-26)
 
 ### ⚙️ Refactoring & Performance
 
