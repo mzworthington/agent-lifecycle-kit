@@ -46,7 +46,7 @@ flowchart TD
 
 ## Human gate
 
-The operator marks which rows to file. Unconfirmed rows stay skip. No agent creates Linear work from usage, a timer, or an unconfirmed table.
+The operator marks which rows to file. Unconfirmed rows stay skip. No agent creates Linear work from usage, a timer, or an unconfirmed table. If the operator asks to wrap up or finish intake without filling the Operator column, treat the Session notes recommended file/skip as confirmed. Blank rows that were not recommended stay skip.
 
 ## Session B — `wk mcp default`
 
