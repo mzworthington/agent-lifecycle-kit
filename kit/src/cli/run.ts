@@ -209,6 +209,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         const result = runAlignOwned({
           targetDir: command.targetDir,
           write: command.write,
+          mcp: command.mcp,
           scanDir: command.scanDir,
           login: command.login,
           kitRepoDir: repoDir,
@@ -225,7 +226,8 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       const result = alignProject({
         targetDir: command.targetDir,
         kitRepoDir: repoDir,
-        write: command.write
+        write: command.write,
+        mcp: command.mcp
       });
       if (command.json) {
         printJsonReport(alignResultToJson(result));

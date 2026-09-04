@@ -34,12 +34,12 @@ Report-only by default. `--write` fills missing files and never overwrites READM
 
 ## How do I check that an app repo still follows Waykit?
 
-Use `wk align`. It is the consumer counterpart to doctor: handshake size, host pointers, kit-knowledge MCP, and `commit-msg`. `--write` fills missing IDE pointers and never overwrites `AGENTS.md`.
+Use `wk align`. It is the consumer counterpart to doctor: handshake size, host pointers, kit-knowledge MCP, and `commit-msg`. `--write` fills missing IDE pointers and never overwrites `AGENTS.md`. `--mcp` composes kit default MCP.
 
 ```bash
 wk align .
 wk align . --write
-wk mcp default --project
+wk align . --mcp
 ```
 
 ## How do I tab-complete wk commands?

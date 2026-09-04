@@ -10,6 +10,8 @@ It also does not score hexagonal imports or XFN matrices. Those remain `agent-ar
 wk align              # this checkout, report only
 wk align ../archlens
 wk align . --write    # fill missing CLAUDE.md / .cursorrules / Copilot / Gemini / Windsurf pointers
+wk align . --mcp      # compose kit default MCP into the project (never cloudflare-ops)
+wk align . --write --mcp
 wk align --owned --scan ~/Documents/dev   # same ownership gate as doctor; kit clones are skipped
 wk align . --json                         # machine-readable findings on stdout (exit 1 still means fail)
 ```
@@ -17,7 +19,9 @@ wk align . --json                         # machine-readable findings on stdout 
 `--owned` lists GitHub sources you admin (`gh`). `--scan` matches local worktrees. Uncloned sources are skipped, not failed as fat handshakes. The kit repo is classified and skipped so a fat kit `AGENTS.md` cannot fail the fleet. Any drifted consumer fails the command with exit code 1.
 
 
-`--write` seeds `AGENTS.md` from `templates/project-AGENTS.md` when it is missing, and fills host pointers. It never overwrites `AGENTS.md`. It does not compose MCP. After a miss on kit-knowledge:
+`--write` seeds `AGENTS.md` from `templates/project-AGENTS.md` when it is missing, and fills host pointers. It never overwrites `AGENTS.md`. It does not compose MCP unless you also pass `--mcp`.
+
+`--mcp` (alone or with `--write`) composes kit `default` into the project MCP files. It never writes `cloudflare-ops`. Omit the flag and align leaves MCP unchanged. You can still run the equivalent by hand:
 
 ```bash
 wk mcp default --project

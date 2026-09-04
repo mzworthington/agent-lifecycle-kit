@@ -23,6 +23,7 @@ export interface AlignOwnedReport {
 export interface AlignOwnedOptions {
   targetDir: string;
   write: boolean;
+  mcp?: boolean;
   scanDir: string | undefined;
   login: string | undefined;
   kitRepoDir: string;
@@ -89,7 +90,8 @@ export function runAlignOwned(opts: AlignOwnedOptions): AlignOwnedResult {
     const align = alignProject({
       targetDir: clone,
       kitRepoDir: opts.kitRepoDir,
-      write: opts.write
+      write: opts.write,
+      mcp: opts.mcp
     });
     reports.push({
       label: view.nameWithOwner,

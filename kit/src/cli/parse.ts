@@ -46,6 +46,7 @@ export type KitCommand =
       kind: 'align';
       targetDir: string;
       write: boolean;
+      mcp: boolean;
       owned: boolean;
       scanDir: string | undefined;
       login: string | undefined;
@@ -93,7 +94,7 @@ const DOCTOR_USAGE = cliUsage(
 );
 
 const ALIGN_USAGE = cliUsage(
-  'align [dir] [--write] [--owned] [--scan <dir>] [--login <user>] [--json]'
+  'align [dir] [--write] [--mcp] [--owned] [--scan <dir>] [--login <user>] [--json]'
 );
 
 const MODEL_RESOLVE_USAGE = cliUsage(
@@ -215,6 +216,7 @@ export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitComm
         kind: 'align',
         targetDir: path.resolve(opts.cwd, positional ?? '.'),
         write: hasFlag(rest, '--write'),
+        mcp: hasFlag(rest, '--mcp'),
         owned: hasFlag(rest, '--owned'),
         scanDir: scan ? path.resolve(opts.cwd, scan) : undefined,
         login,

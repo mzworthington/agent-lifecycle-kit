@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { composeMCP } from '../bootstrap/compose_mcp.js';
 import { exportIDERules, IDE_RULE_REL_PATHS } from '../bootstrap/export_ide_rules.js';
 import { MCP_HOSTS, projectMcpPath } from '../bootstrap/mcp_hosts.js';
 import { DEFAULT_TARGET_CHARS } from '../quality/measure_context_budget.js';
@@ -24,6 +25,8 @@ export interface AlignProjectOptions {
   targetDir: string;
   kitRepoDir: string;
   write: boolean;
+  /** Compose kit `default` MCP into the project. Never cloudflare-ops. */
+  mcp?: boolean;
 }
 
 function readIfPresent(filePath: string): string | undefined {
@@ -174,7 +177,7 @@ function evaluate(targetDir: string): AlignFinding[] {
       'mcp-kit-knowledge',
       'Project MCP includes kit-knowledge',
       mcpOk,
-      mcp.emptyPaths.length > 0 ? `empty ${mcp.emptyPaths.join(', ')}` : 'wk mcp default --project'
+      mcp.emptyPaths.length > 0 ? `empty ${mcp.emptyPaths.join(', ')}` : 'wk align . --mcp'
     )
   );
 
@@ -220,7 +223,7 @@ export function alignNextSteps(findings: AlignFinding[]): string[] {
     steps.push('Add .githooks/commit-msg then git config core.hooksPath .githooks  (or wk init --hook)');
   }
   if (failed.has('mcp-kit-knowledge')) {
-    steps.push('wk mcp default --project');
+    steps.push('wk align . --mcp   # compose kit default MCP');
   }
   return steps;
 }
@@ -237,12 +240,23 @@ export function alignProject(options: AlignProjectOptions): AlignResult {
     exportIDERules(targetDir, false, options.kitRepoDir);
   }
 
+  if (options.mcp) {
+    composeMCP('default', undefined, false, {
+      repoDir: options.kitRepoDir,
+      installProject: true,
+      projectDir: targetDir
+    });
+    for (const host of MCP_HOSTS) {
+      written.push(posixRel(targetDir, projectMcpPath(host, targetDir)));
+    }
+  }
+
   const findings = evaluate(targetDir);
   return {
     ok: findings.every((f) => f.status === 'ok'),
     targetDir,
     findings,
-    written: options.write ? written : []
+    written: options.write || options.mcp ? written : []
   };
 }
 

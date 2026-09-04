@@ -3,7 +3,26 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
+import { kitRootFrom } from '../shared/paths.js';
 import { alignNextSteps, alignProject, printAlignResult } from './align_project.js';
+
+const kitRoot = kitRootFrom(import.meta.url);
+
+const CLOUDFLARE_OPS_MCP = JSON.stringify({
+  mcpServers: {
+    'kit-knowledge': { command: 'node' },
+    cloudflare: { url: 'https://mcp.cloudflare.com/mcp' },
+    'cloudflare-observability': { url: 'https://observability.mcp.cloudflare.com/mcp' }
+  }
+});
+
+function projectMcpServers(target: string, rel: string): string[] {
+  const raw = JSON.parse(fs.readFileSync(path.join(target, rel), 'utf8')) as {
+    mcpServers?: Record<string, unknown>;
+    servers?: Record<string, unknown>;
+  };
+  return Object.keys(raw.mcpServers ?? raw.servers ?? {});
+}
 
 function write(root: string, rel: string, contents: string): void {
   const full = path.join(root, rel);
@@ -170,6 +189,47 @@ describe('alignProject', () => {
     assert.ok(result.written.includes('AGENTS.md'));
     assert.match(fs.readFileSync(path.join(target, 'AGENTS.md'), 'utf8'), /~\/\.agents/);
   });
+
+  it('composes kit default MCP when --mcp is set and leaves no cloudflare-ops servers', () => {
+    const target = alignedApp();
+    write(target, path.join('.mcp.json'), CLOUDFLARE_OPS_MCP);
+    write(target, path.join('.cursor', 'mcp.json'), CLOUDFLARE_OPS_MCP);
+    const result = alignProject({ targetDir: target, kitRepoDir: kitRoot, write: false, mcp: true });
+    assert.equal(result.ok, true);
+    for (const rel of ['.mcp.json', path.join('.cursor', 'mcp.json')]) {
+      const names = projectMcpServers(target, rel);
+      assert.ok(names.includes('kit-knowledge'));
+      assert.ok(names.includes('linear'));
+      assert.ok(names.includes('context7'));
+      assert.equal(names.includes('cloudflare'), false);
+      assert.equal(names.includes('cloudflare-observability'), false);
+    }
+  });
+
+  it('composes kit default MCP when --write --mcp is set', () => {
+    const target = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-align-write-mcp-'));
+    write(target, 'AGENTS.md', THIN_HANDSHAKE);
+    write(target, path.join('.husky', 'commit-msg'), 'ok\n');
+    write(target, path.join('.mcp.json'), CLOUDFLARE_OPS_MCP);
+    const result = alignProject({ targetDir: target, kitRepoDir: kitRoot, write: true, mcp: true });
+    assert.equal(result.ok, true);
+    assert.ok(result.written.includes('CLAUDE.md'));
+    const names = projectMcpServers(target, '.mcp.json');
+    assert.ok(names.includes('kit-knowledge'));
+    assert.ok(names.includes('linear'));
+    assert.equal(names.includes('cloudflare'), false);
+    assert.equal(names.includes('cloudflare-observability'), false);
+  });
+
+  it('leaves project MCP unchanged when --mcp is omitted', () => {
+    const target = alignedApp();
+    write(target, path.join('.mcp.json'), CLOUDFLARE_OPS_MCP);
+    const before = fs.readFileSync(path.join(target, '.mcp.json'), 'utf8');
+    const result = alignProject({ targetDir: target, kitRepoDir: kitRoot, write: true, mcp: false });
+    assert.equal(result.ok, true);
+    assert.equal(fs.readFileSync(path.join(target, '.mcp.json'), 'utf8'), before);
+    assert.equal(projectMcpServers(target, '.mcp.json').includes('cloudflare'), true);
+  });
 });
 
 describe('printAlignResult', () => {
@@ -203,6 +263,6 @@ describe('printAlignResult', () => {
     ]);
     assert.equal(steps.length, 2);
     assert.match(steps[0] ?? '', /--write/);
-    assert.match(steps[1] ?? '', /mcp default --project/);
+    assert.match(steps[1] ?? '', /--mcp/);
   });
 });

@@ -17,7 +17,7 @@ Day-to-day:
 Commands:
   init [dir]           Bootstrap AGENTS.md, host rules, MCP configs, and git hooks
   doctor [dir]         Check community files on repos you admin (report only; --write fills gaps; --json)
-  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --owned --scan fleet; --json)
+  align [dir]          Check consumer handshake, host pointers, kit MCP, and commit-msg (report; --write seeds; --mcp composes kit default; --owned --scan fleet; --json)
   version              Print kit version, git describe, and whether ~/.agents is this clone (--check warns if origin is weeks ahead)
   mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
   mcp restore          Recompose the previous project profile (or kit default if none)
@@ -48,6 +48,8 @@ Examples:
   ${CLI_BIN} doctor . --write --hook
   ${CLI_BIN} align .
   ${CLI_BIN} align . --write
+  ${CLI_BIN} align . --mcp
+  ${CLI_BIN} align . --write --mcp
   ${CLI_BIN} align . --json
   ${CLI_BIN} align --owned --scan ~/Documents/dev
   ${CLI_BIN} version
