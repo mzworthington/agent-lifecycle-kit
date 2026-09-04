@@ -26,7 +26,7 @@ curl -fsSL https://raw.githubusercontent.com/mzworthington/waykit/main/install.s
 
 > Do not open grill → spec. Debug plus light XFN is the day-to-day default.
 
-Most sessions are a typo, a failing test, or a red CI job. `agent-debug` owns that. Open the full feature lifecycle only when RCA needs a new capability.
+Most sessions are a typo, a failing test, or a red CI job. `agent-debug` owns that (launch it as a host subagent when logs would fill the parent). Open the full feature lifecycle only when RCA needs a new capability.
 
 1. **Reproduce** the symptom (local command, failing job, or live URL).
 2. **Board it** with `wk debug-board <project> "<symptom>"`, then follow `agent-debug`.
@@ -44,7 +44,7 @@ wk debug-board <project> "<symptom>"
 
 > Need the lifecycle path: grill → PRD if bet → spec → TDD short loop → XFN → ship.
 
-Use this when the job is a **new product capability**, not a typo or a red build. Feature work routes through specialist roles so the catalog and XFN rows stay honest. EDD (alpha) sits in TDD when the change is a prompt or tool schema.
+Use this when the job is a **new product capability**, not a typo or a red build. Feature work routes through specialist roles so the catalog and XFN rows stay honest. The orchestrator stays in the parent and launches allowlisted specialists ([host subagents](/docs/subagents)). EDD (alpha) sits in TDD when the change is a prompt or tool schema.
 
 1. **Stress-test the idea** (grilling) until the decision frontier is clear.
 2. **Spec** acceptance criteria, then TDD short loop (gear 1 + gear 2). Use EDD (alpha) when the change is a prompt or tool schema.

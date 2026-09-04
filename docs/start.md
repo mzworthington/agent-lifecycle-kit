@@ -4,7 +4,7 @@ Four steps to Waykit on a repo. macOS and Linux; needs git and Node 22+. No API 
 
 1. **Install Waykit (~2 min)** — Links `~/.agents` and puts `wk` on your PATH via `~/.local/bin` (`kit` remains an alias).
 2. **Bootstrap this checkout (~2 min)** — `wk init . --mcp default --hook` writes the thin handshake, IDE pointers, and a default MCP profile. Already in this repo? `./install.sh` is enough.
-3. **Pick the path (~1 min)** — Typo, bug, or failed CI: `agent-debug` plus light XFN if you touched UI, auth, or an SLO. New product capability: the [feature lifecycle](/docs/lifecycle). Day-to-day CLI: `wk align .`, `wk doctor`, `wk check` ([operator guide](/docs/kit)). Cards: [Jobs for today](/docs/jobs).
+3. **Pick the path (~1 min)** — Typo, bug, or failed CI: launch `agent-debug` (host subagent when logs are noisy) plus light XFN if you touched UI, auth, or an SLO. New product capability: the [feature lifecycle](/docs/lifecycle) (orchestrator parent launches allowlisted specialists). Day-to-day CLI: `wk align .`, `wk doctor`, `wk check` ([operator guide](/docs/kit)). Cards: [Jobs for today](/docs/jobs).
 4. **Optional: prove a tool call (~3 min, EDD alpha)** — `wk eval run --suite evals/edd/demo.yaml --model scripted`, then `wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports`.
 
 ## Install Waykit
@@ -49,6 +49,7 @@ If you skip install, `source <(wk completion zsh)` still works: that printout is
 
 - [Jobs for today](/docs/jobs) — typo/debug vs product feature, plus the other cards
 - [Feature lifecycle](/docs/lifecycle) only when the job is a new product capability
+- [Host subagents](/docs/subagents) for which roles launch in a fresh window
 - [EDD guide (alpha)](/docs/edd) for suites, CI, and production misses
 - [Hosts](/docs/hosts) for Cursor, Claude Code, Copilot, and Antigravity files
 - [What Waykit gives you](/docs/kit) for context budget, the live kit graph, and MCP profiles
