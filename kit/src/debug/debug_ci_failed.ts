@@ -1,4 +1,5 @@
 import { spawnSync } from 'child_process';
+import { classifyCiLog, formatCiClassification } from './classify_ci_log.js';
 
 export interface DebugCiOptions {
   runId: string;
@@ -54,10 +55,10 @@ function gh(repo: string, args: string[]): { status: number; stdout: string } {
   return { status: result.status ?? 1, stdout: result.stdout ?? '' };
 }
 
-function ghCapture(repo: string, args: string[]): { status: number; stdout: string } {
+function ghCapture(repo: string, args: string[]): { status: number; stdout: string; stderr: string } {
   const full = repo ? ['--repo', repo, ...args] : args;
   const result = spawnSync('gh', full, { encoding: 'utf8' });
-  return { status: result.status ?? 1, stdout: result.stdout ?? '' };
+  return { status: result.status ?? 1, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
 }
 
 export function debugCiFailed(args: string[]): number {
@@ -120,18 +121,19 @@ Usage:
 
   console.log('');
   console.log('== Failed job logs ==');
-  const failed = spawnSync(
-    'gh',
-    opts.repo ? ['--repo', opts.repo, 'run', 'view', runId, '--log-failed'] : ['run', 'view', runId, '--log-failed'],
-    { stdio: 'inherit' }
-  );
+  const failed = ghCapture(opts.repo, ['run', 'view', runId, '--log-failed']);
+  let logText = failed.stdout;
   if (failed.status !== 0) {
     console.error('(--log-failed unavailable; showing full log)');
-    gh(opts.repo, ['run', 'view', runId, '--log']);
+    const full = ghCapture(opts.repo, ['run', 'view', runId, '--log']);
+    logText = full.stdout;
+    if (full.stderr) process.stderr.write(full.stderr);
   }
+  if (failed.stderr) process.stderr.write(failed.stderr);
+  if (logText) process.stdout.write(logText);
 
   console.log('');
-  console.log('Tip: classify as flake | config-drift | tool-missing | auth | product-bug before editing code.');
+  console.log(formatCiClassification(classifyCiLog(logText)));
   console.log('See: ~/.agents/SOPs/hypothesis-driven-debug.md');
   return 0;
 }

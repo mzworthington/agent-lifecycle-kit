@@ -113,6 +113,8 @@ kit debug-ci
 kit debug-ci --run <run-id>
 ```
 
+`kit debug-ci` prints a **class** (`flake` | `config-drift` | `tool-missing` | `auth` | `product-bug`). Classify from the failing **step log**, not the commit subject. `ERR_PNPM_NO_PKG_MANIFEST` is config-drift (nested workspace / missing `working-directory` on `pnpm/setup`). An npm **504 while downloading the pnpm binary** is flake. Wrapping every setup failure in sleep+retry is an agent miss: it doubles a deterministic error.
+
 Prove against the **named verify workflow** (`ci.yml` / “CI & Deployment”), not a green sibling (CodeQL, Dependabot, Lighthouse). Filter with `gh run list --workflow ci.yml`. Local tests plus a green sibling are not the CI prove gate. Do not mark a Linear issue done until that workflow is green (or BLOCKED with a documented gap).
 
 When Actions cannot be dispatched (403):

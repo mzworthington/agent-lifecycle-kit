@@ -291,7 +291,8 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       prompt.includes('hypothesis-driven debug') ||
       prompt.includes('hypothesis driven debug') ||
       prompt.includes('failed job') ||
-      prompt.includes('github actions')
+      prompt.includes('github actions') ||
+      prompt.includes('err_pnpm_no_pkg_manifest')
     ) {
       return {
         content: 'Opening the hypothesis-driven-debug SOP.',

@@ -431,6 +431,7 @@ metrics:
     assert.ok(report.results.some((r) => r.id === 'kit-handover-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-cf-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-model-01'));
+    assert.ok(report.results.some((r) => r.id === 'kit-sop-debug-ci-no-pkg-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-02'));
   });

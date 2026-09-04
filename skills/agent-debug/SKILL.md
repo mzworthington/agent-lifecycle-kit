@@ -89,7 +89,7 @@ Classify before deep code walks:
 |-------|------------|
 | **UI / layout / empty canvas** | Label user screenshots (before/after); load same diagram; visual repro |
 | **Live catalog / published data** | Fetch live revision artifacts; count nodes in the **named** entity |
-| **CI / workflow / docs-media** | `kit debug-ci` → classify flake vs config drift vs tool/auth |
+| **CI / workflow / docs-media** | `kit debug-ci` → use the printed class (`flake` vs `config-drift` vs tool/auth). Do not retry 504 wrappers until the log matches a registry timeout on the package-manager **binary**, not `ERR_PNPM_NO_PKG_MANIFEST`. |
 | **Fetch / network** | One failing URL + status vs `TypeError`; recent diff on that path |
 | **Already shipped?** | `git log` / PR search for the capability before implementing |
 
@@ -173,6 +173,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Trusting the user’s entity name when a peer system is the empty one
 - Declaring done from unit tests while live/UI still broken
 - Treating a green CodeQL or other sibling workflow as the CI prove gate
+- Treating every red `pnpm/setup` as an npm 504 and retrying without reading the failing step (`ERR_PNPM_NO_PKG_MANIFEST` is nested-workspace config, not flake)
 - Conflating resilience patch, UX redesign, and CI redirect fixes in one PR
 - Abandoning a cheap config-parity hypothesis for long product forensics
 - Shipping workflow/release policy changes the user did not ask for
