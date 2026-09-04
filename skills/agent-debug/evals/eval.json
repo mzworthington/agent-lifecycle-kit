@@ -86,6 +86,32 @@
           "Hypothesis Board"
         ]
       }
+    },
+    {
+      "id": "EVAL-DBG-COLOCATED-004",
+      "name": "PostHog error cluster stays on debug",
+      "description": "A PostHog error cluster is debug (product-signal-intake kind bug), not grill through spec.",
+      "target_skill": "agent-debug",
+      "prompt": "PostHog error cluster on the live site. Debug the root cause; do not open the feature lifecycle.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": [
+          "bug",
+          "debug",
+          "root cause"
+        ],
+        "required_patterns": [
+          "product-signal-intake"
+        ],
+        "forbidden_patterns": [
+          "guessing without logs"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
     }
   ]
 }

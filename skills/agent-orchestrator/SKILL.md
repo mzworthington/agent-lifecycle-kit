@@ -125,6 +125,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Production incident / page | **`agent-incident`** skill → launch **`agent-debug` subagent** (+ Slack/Notion when configured) |
 | Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`wk mcp cloudflare-ops --project`, then restore default) → IaC fix in owner repo |
 | PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --project`, then restore default) → adapter + privacy; not the Cursor wizard |
+| PostHog → backlog / pull suggestions into tickets | [product-signal-intake](../../SOPs/product-signal-intake.md): Session A `agent-posthog` findings, human gate, Session B `agent-user-stories` / `agent-prd`. Do not auto-file. Do not add a product-insights skill. |
 | Tiny typo / obvious one-liner with clear repro | Stay in the **parent**. Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
 | Extends existing behavior in one module | Design light → launch **`agent-tdd` subagent** (gear 1+2 same child). XFN apply rows launch **`agent-xfn`**, not TDD. |
 | Schema migration | `agent-migration` → `agent-pre-commit` (with light XFN / security as needed) |

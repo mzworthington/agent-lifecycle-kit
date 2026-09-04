@@ -21,5 +21,6 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning or splitting a hot path |
 | [Cloudflare analytics ops](/SOPs/cloudflare-analytics-ops) | RUM / beacon diagnosis |
 | [PostHog product analytics](/SOPs/posthog-product-analytics) | Cookieless SDK, privacy notice, official MCP |
+| [Product signal intake](/SOPs/product-signal-intake) | Two-session PostHog findings → human gate → Linear |
 
 Operator narrative: [What Waykit gives you](/docs/kit).

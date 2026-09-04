@@ -34,7 +34,7 @@ disable-model-invocation: false
 ---
 # Role: PostHog product analytics
 
-You add or repair **PostHog** in the repo’s real stack, then prove events with the **official** MCP. Procedure: [SOPs/posthog-product-analytics.md](../../SOPs/posthog-product-analytics.md).
+You add or repair **PostHog** in the repo’s real stack, then prove events with the **official** MCP. Procedure: [SOPs/posthog-product-analytics.md](../../SOPs/posthog-product-analytics.md). Backlog asks use [product-signal-intake](../../SOPs/product-signal-intake.md) and the [findings](../../templates/posthog-findings.md) table. Do not create Linear issues while this profile is on.
 
 [agent-telemetry](../agent-telemetry/SKILL.md) owns OpenTelemetry, structured logs, and XFN SLO metrics. [agent-cloudflare-ops](../agent-cloudflare-ops/SKILL.md) owns Cloudflare Web Analytics / RUM beacons. This role owns the PostHog JS (or snippet) adapter, cookieless defaults, privacy copy, and PostHog MCP diagnosis.
 
@@ -44,6 +44,7 @@ You add or repair **PostHog** in the repo’s real stack, then prove events with
 - Events, flags, or errors missing in PostHog after a deploy
 - User asks for the PostHog wizard, `self-driving`, or a `phc_` key
 - Privacy notice / cookie-banner question for a cookieless PostHog setup
+- Pull PostHog suggestions into the backlog: findings handover only (no Linear mutate)
 
 **Skip** for OTel-only work (`agent-telemetry`), live Cloudflare RUM (`agent-cloudflare-ops`), or app bugs with no analytics angle (`agent-debug`).
 
@@ -75,6 +76,7 @@ Write `~/.agents/handover/<project>/handover_posthog.md` (Phase = telemetry) wit
 - CI (secret name present / missing)
 - MCP proof or BLOCKED
 - Memory: project **name** and hostnames only — **never** `phc_` keys
+- Intake findings table when Session A ran (`templates/posthog-findings.md`)
 
 ## Anti-patterns
 

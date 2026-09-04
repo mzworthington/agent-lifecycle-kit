@@ -430,6 +430,7 @@ metrics:
     assert.equal(report.failed, 0, report.results.filter((r) => !r.passed).map((r) => `${r.id}: ${r.failures.join(',')}`).join(' | '));
     assert.ok(report.results.some((r) => r.id === 'kit-handover-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-cf-01'));
+    assert.ok(report.results.some((r) => r.id === 'kit-sop-intake-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-model-01'));
     assert.ok(report.results.some((r) => r.id === 'kit-sop-debug-ci-no-pkg-01'));
     assert.ok(!report.results.some((r) => r.id === 'kit-live-01'));

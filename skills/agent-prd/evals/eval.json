@@ -18,6 +18,22 @@
         "forbidden_patterns": ["```typescript", "ASCII art", "I want a feature flag"],
         "required_output_sections": ["Problem", "Belief", "Leading indicator", "Kill criteria", "Experiment", "Feature flag", "Out of scope"]
       }
+    },
+    {
+      "id": "EVAL-PRD-COLOCATED-002",
+      "name": "PostHog bet row files through PRD",
+      "description": "Ensures a PostHog handover row that is a bet or larger than one sitting points at product-signal-intake and a PRD, not a new specialist skill.",
+      "target_skill": "agent-prd",
+      "prompt": "This PostHog handover row is a product bet larger than one sitting. Write a PRD with kill criteria after restoring default.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": ["prd", "product bet", "kill criteria"],
+        "required_patterns": ["product-signal-intake"],
+        "forbidden_patterns": ["```typescript", "ASCII art"],
+        "required_output_sections": ["product-signal-intake"]
+      }
     }
   ]
 }

@@ -56,6 +56,33 @@
           "Linear ticket"
         ]
       }
+    },
+    {
+      "id": "EVAL-ORCH-COLOCATED-003",
+      "name": "PostHog intake uses existing roles",
+      "description": "When turning PostHog signals into confirmed Linear work, orchestrator points at product-signal-intake and existing stories/PRD roles instead of a product-insights skill.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Orchestrate filing PostHog backlog asks as Linear work through the lifecycle. Do not invent a specialist.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "product-signal-intake",
+          "agent-user-stories",
+          "agent-prd"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
     }
   ]
 }

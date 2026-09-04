@@ -18,6 +18,22 @@
         "forbidden_patterns": ["self-driving", "siteToken in memory", "yarn add"],
         "required_output_sections": ["Stack", "SDK options", "Privacy", "CI", "MCP proof"]
       }
+    },
+    {
+      "id": "EVAL-POSTHOG-COLOCATED-002",
+      "name": "Intake findings handover forbids Linear create",
+      "description": "Ensures a prompt to pull PostHog suggestions into tickets stays on product-signal-intake with a findings handover and does not create Linear issues while PostHog is the only profile.",
+      "target_skill": "agent-posthog",
+      "prompt": "Pull PostHog suggestions from funnel drop-offs into tickets this session.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": ["posthog", "product analytics"],
+        "required_patterns": ["product-signal-intake", "findings"],
+        "forbidden_patterns": ["self-driving", "yarn add"],
+        "required_output_sections": ["product-signal-intake"]
+      }
     }
   ]
 }

@@ -77,6 +77,35 @@
           "Out of scope"
         ]
       }
+    },
+    {
+      "id": "EVAL-USERSTORIES-COLOCATED-003",
+      "name": "File PostHog handover after restore default",
+      "description": "Ensures filing a PostHog findings handover as Linear work uses product-signal-intake and existing story/PRD routing after restoring default, not a new specialist skill.",
+      "target_skill": "agent-user-stories",
+      "prompt": "File this PostHog handover as Linear user stories with acceptance criteria after restoring default MCP.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "linear",
+          "user stories",
+          "acceptance criteria"
+        ],
+        "required_patterns": [
+          "product-signal-intake",
+          "wk mcp default"
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art",
+          "box-drawing"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
     }
   ]
 }

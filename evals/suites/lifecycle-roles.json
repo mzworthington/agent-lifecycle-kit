@@ -1,7 +1,7 @@
 {
   "suite": "lifecycle-roles",
   "description": "Evaluation benchmarks for agent-* specialist lifecycle roles",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "test_cases": [
     {
       "id": "EVAL-SPEC-001",
@@ -698,6 +698,32 @@
       }
     },
     {
+      "id": "EVAL-POSTHOG-002",
+      "name": "PostHog intake findings without Linear create",
+      "description": "Verifies pulling PostHog suggestions into tickets stays on agent-posthog product-signal-intake with a findings handover, and does not create Linear issues in that session.",
+      "target_skill": "agent-posthog",
+      "prompt": "Pull PostHog suggestions from empty events and flag exposure into tickets this session. Use the official MCP.",
+      "context": {
+        "active_phase": "telemetry"
+      },
+      "assertions": {
+        "required_triggers": [
+          "posthog"
+        ],
+        "required_patterns": [
+          "product-signal-intake",
+          "findings"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "self-driving"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
+    },
+    {
       "id": "EVAL-USERSTORIES-001",
       "name": "Linear INVEST User Stories",
       "description": "Verifies Linear tickets use persona/want/outcome, Given/When/Then criteria, and Mermaid wireframes without implementation code.",
@@ -805,6 +831,113 @@
           "Experiment",
           "Feature flag",
           "Out of scope"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-003",
+      "name": "File PostHog handover as INVEST stories",
+      "description": "Verifies filing a confirmed PostHog findings handover uses agent-user-stories after restoring default, pointing at product-signal-intake, not a new specialist skill.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Restore default MCP, then file this PostHog handover as Linear user stories with acceptance criteria. One sitting row is a contract.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "linear",
+          "user stories",
+          "acceptance criteria"
+        ],
+        "required_patterns": [
+          "product-signal-intake",
+          "wk mcp default"
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-PRD-002",
+      "name": "File PostHog bet row as PRD",
+      "description": "Verifies a PostHog handover row that is a bet or larger than one sitting routes to agent-prd after restore default, via product-signal-intake.",
+      "target_skill": "agent-prd",
+      "prompt": "This PostHog handover row is a product bet larger than one sitting. Write a PRD with kill criteria after restoring default MCP.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "prd",
+          "product bet",
+          "kill criteria"
+        ],
+        "required_patterns": [
+          "product-signal-intake"
+        ],
+        "forbidden_patterns": [
+          "```typescript",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-DEBUG-002",
+      "name": "PostHog error cluster is debug not lifecycle",
+      "description": "Verifies a PostHog error cluster or empty-events crash routes to agent-debug (or empty-events via posthog skill), not grill through spec.",
+      "target_skill": "agent-debug",
+      "prompt": "PostHog shows an error cluster on the live site. Debug the root cause; do not open the feature lifecycle.",
+      "context": {
+        "active_phase": "debug"
+      },
+      "assertions": {
+        "required_triggers": [
+          "debug",
+          "root cause",
+          "hypothesis"
+        ],
+        "required_patterns": [
+          "product-signal-intake"
+        ],
+        "forbidden_patterns": [
+          "guessing without logs"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ORCH-002",
+      "name": "PostHog backlog stays on existing roles",
+      "description": "Verifies orchestrating PostHog signals into Linear work points at product-signal-intake and existing stories/PRD roles, not a product-insights skill.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Orchestrate the lifecycle for these PostHog backlog asks. File confirmed rows as stories, not a new insights specialist.",
+      "context": {
+        "active_phase": "orchestration"
+      },
+      "assertions": {
+        "required_triggers": [
+          "lifecycle",
+          "orchestrate"
+        ],
+        "required_patterns": [
+          "product-signal-intake",
+          "agent-user-stories"
+        ],
+        "forbidden_patterns": [
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "product-signal-intake"
         ]
       }
     }

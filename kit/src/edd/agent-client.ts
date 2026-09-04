@@ -468,6 +468,20 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
         routingConfidence: 0.91
       };
     }
+    if (
+      prompt.includes('product-signal-intake') ||
+      prompt.includes('product signal intake') ||
+      (prompt.includes('posthog') && prompt.includes('two-session'))
+    ) {
+      return {
+        content: 'Opening the product-signal-intake SOP.',
+        tool_calls: [{ name: 'get_sop', arguments: { name: 'product-signal-intake' } }],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 85 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
     return scriptedNoTool('I am not sure which kit tool to use. Could you name an SOP or topic?', 0.4);
   }
 

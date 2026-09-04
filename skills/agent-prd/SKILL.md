@@ -45,6 +45,8 @@ Linear INVEST tickets are [agent-user-stories](../agent-user-stories/SKILL.md). 
 
 Skip for typos, one-module contracts with no uncertainty, and known defects.
 
+A [product-signal-intake](../../SOPs/product-signal-intake.md) handover row that is a bet or larger than one sitting files here after `wk mcp default` is restored — not a new specialist skill.
+
 ## Guardrails
 
 0. **Grill if unsettled.** Unresolved trade-offs → [agent-grilling](../agent-grilling/SKILL.md) before the card.

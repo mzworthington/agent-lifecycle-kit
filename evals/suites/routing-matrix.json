@@ -1,7 +1,7 @@
 {
   "suite": "routing-matrix",
   "description": "Evaluation benchmarks for cross-skill routing accuracy and specialist role activation",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "test_cases": [
     {
       "id": "EVAL-ROUTE-001",
@@ -564,6 +564,86 @@
         ],
         "required_patterns": [
           "agent-prd"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-029",
+      "name": "PostHog intake does not file Linear",
+      "description": "Verifies a prompt to pull PostHog suggestions into tickets routes to agent-posthog intake (product-signal-intake findings handover), not Linear create in the PostHog session.",
+      "target_skill": "agent-posthog",
+      "prompt": "Pull PostHog suggestions from errors and funnel drop-offs into tickets this session.",
+      "assertions": {
+        "required_triggers": [
+          "posthog"
+        ],
+        "required_patterns": [
+          "agent-posthog",
+          "product-signal-intake"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-030",
+      "name": "File PostHog handover via user stories",
+      "description": "Verifies filing a PostHog findings handover as Linear work routes to agent-user-stories (PRD when the row is a bet) after restoring default, not a new specialist skill.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Restore default MCP, then file this PostHog handover as Linear user stories. One row is a product bet larger than one sitting.",
+      "assertions": {
+        "required_triggers": [
+          "linear",
+          "user stories",
+          "product bet"
+        ],
+        "required_patterns": [
+          "agent-user-stories",
+          "product-signal-intake"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-031",
+      "name": "PostHog error cluster to debug",
+      "description": "Verifies a PostHog error cluster or crash prompt routes to agent-debug, not the full feature lifecycle.",
+      "target_skill": "agent-debug",
+      "prompt": "PostHog error cluster is spiking on the live site. Debug the crash; do not start a new feature.",
+      "assertions": {
+        "required_triggers": [
+          "debug",
+          "root cause"
+        ],
+        "required_patterns": [
+          "agent-debug",
+          "product-signal-intake"
+        ],
+        "forbidden_patterns": [
+          "agent-tdd"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-032",
+      "name": "Orchestrator PostHog backlog uses existing roles",
+      "description": "Verifies turning PostHog backlog asks into confirmed Linear work stays on agent-orchestrator plus existing roles, not a product-insights specialist.",
+      "target_skill": "agent-orchestrator",
+      "prompt": "Orchestrate turning these PostHog backlog asks into confirmed Linear work. Do not invent a specialist.",
+      "assertions": {
+        "required_triggers": [
+          "orchestrate",
+          "lifecycle"
+        ],
+        "required_patterns": [
+          "agent-orchestrator",
+          "product-signal-intake"
         ],
         "forbidden_patterns": [
           "agent-tdd"
