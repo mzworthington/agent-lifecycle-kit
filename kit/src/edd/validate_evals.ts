@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import AjvModule, { type ValidateFunction } from 'ajv';
+import { printCliOutcome } from '../cli/outcome.js';
 
 const Ajv = AjvModule.default ?? AjvModule;
 
@@ -250,9 +251,9 @@ export function validateEvals(repoDir: string): ValidateEvalsResult {
   console.log(`Validation Complete: ${totalSuites} suite(s), ${totalTests} test case(s) checked.`);
 
   if (errors > 0) {
-    console.error(`❌ Validation failed with ${errors} error(s).`);
+    printCliOutcome('fail', 'validate', `${errors} error(s)`);
   } else {
-    console.log('✅ All eval suites passed validation successfully.');
+    printCliOutcome('ok', 'validate', `${totalSuites} suite(s), ${totalTests} test case(s)`);
   }
 
   return { ok: errors === 0, errors, totalSuites, totalTests };

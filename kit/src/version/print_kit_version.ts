@@ -2,7 +2,14 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { formatKitVersion, isOriginWeeksAhead, type KitVersionSnapshot, type StaleCheck } from './kit_version.js';
+import { formatCliOutcome, type CliOutcome } from '../cli/outcome.js';
+import {
+  formatKitVersion,
+  isOriginWeeksAhead,
+  kitVersionOutcome,
+  type KitVersionSnapshot,
+  type StaleCheck
+} from './kit_version.js';
 
 function git(repoDir: string, args: string[]): string | undefined {
   const result = spawnSync('git', args, { encoding: 'utf8', cwd: repoDir });
@@ -70,9 +77,12 @@ export function printKitVersion(opts: {
   homedir?: string;
   check: boolean;
   log?: (msg: string) => void;
-}): void {
+}): CliOutcome {
   const log = opts.log ?? console.log;
   const snap = readKitVersionSnapshot(opts.kitRepoDir, opts.homedir ?? os.homedir());
   const stale = opts.check ? isOriginWeeksAhead(readStaleCheck(opts.kitRepoDir)) : false;
+  const { outcome, summary } = kitVersionOutcome(snap, stale);
+  log(formatCliOutcome(outcome, 'version', summary));
   log(formatKitVersion(snap, { stale }).trimEnd());
+  return outcome;
 }

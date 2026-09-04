@@ -4,6 +4,7 @@ import { exportIDERules, IDE_RULE_REL_PATHS } from '../bootstrap/export_ide_rule
 import { composeMCP } from '../bootstrap/compose_mcp.js';
 import { MCP_HOSTS, projectMcpPath, type McpHostId } from '../bootstrap/mcp_hosts.js';
 import { DEFAULT_TARGET_CHARS } from '../quality/measure_context_budget.js';
+import { cliOutcomeFromOk, printCliOutcome } from '../cli/outcome.js';
 
 export type AlignStatus = 'ok' | 'fail';
 
@@ -272,9 +273,10 @@ export function printAlignResult(result: AlignResult, log: (msg: string) => void
   if (result.written.length > 0) {
     log(`wrote: ${result.written.join(', ')}`);
   }
-  if (result.ok) log('✅ align PASSED.');
+  if (result.ok) printCliOutcome('ok', 'align', 'handshake, MCP, host pointers', { log });
   else {
-    log('align FAILED (consumer handshake/MCP/hooks). Doctor still owns README/license/templates.');
+    printCliOutcome('fail', 'align', 'consumer handshake/MCP/hooks', { log, error: log });
+    log('Doctor still owns README/license/templates.');
     const steps = alignNextSteps(result.findings);
     if (steps.length > 0) {
       log('next:');

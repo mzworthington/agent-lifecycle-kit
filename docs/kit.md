@@ -95,6 +95,8 @@ Browse: [Waykit map](./map.md). Authoring: [Author the Waykit map](/ontology). D
 
 Day to day you operate the kit with `wk`: align for handshake, doctor for community files, check for the merge bar. Skills and `AGENTS.md` tell the agent which path to load (debug vs feature). `wk help` lists the rest.
 
+Every **report** command starts with `ok`, `warn`, or `fail` in a fixed column (`fail` is exit 1; `warn` stays exit 0). Details follow that line.
+
 | Command | What it measures or installs |
 |---------|------------------------------|
 | `wk align` | Consumer handshake, host pointers, kit MCP, commit-msg (`--write` seeds missing AGENTS.md and pointers; `--owned --scan` for a worktree farm; `--json` for findings) |

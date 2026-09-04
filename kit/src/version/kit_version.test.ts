@@ -4,6 +4,7 @@ import {
   STALE_AFTER_SECONDS,
   formatKitVersion,
   isOriginWeeksAhead,
+  kitVersionOutcome,
   type KitVersionSnapshot
 } from './kit_version.js';
 
@@ -75,5 +76,19 @@ describe('formatKitVersion', () => {
     assert.match(text, /origin is weeks ahead/);
     assert.match(text, /git -C ~\/\.agents pull --ff-only/);
     assert.doesNotMatch(text, /auto-pull/i);
+  });
+});
+
+describe('kitVersionOutcome', () => {
+  it('fails when ~/.agents is not this clone', () => {
+    assert.equal(
+      kitVersionOutcome({ ...base, agentsIsSymlink: false, agentsResolvesToKit: false }, false).outcome,
+      'fail'
+    );
+  });
+
+  it('warns when origin is stale and ok when the symlink matches', () => {
+    assert.equal(kitVersionOutcome(base, true).outcome, 'warn');
+    assert.equal(kitVersionOutcome(base, false).outcome, 'ok');
   });
 });

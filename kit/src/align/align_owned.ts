@@ -7,6 +7,7 @@ import {
 } from '../doctor/fs.js';
 import type { GitHubPort } from '../doctor/github.js';
 import { evaluateOwnership, type OwnershipReason } from '../doctor/ownership.js';
+import { printCliOutcome } from '../cli/outcome.js';
 
 export type AlignOwnedSkipReason = OwnershipReason | 'kit' | 'not-cloned';
 export type AlignOwnedReportKind = 'aligned' | 'skip';
@@ -125,6 +126,6 @@ export function printAlignOwnedResult(
     }
     if (report.align) printAlignResult(report.align, log);
   }
-  if (result.ok) log('✅ align PASSED.');
-  else error('align FAILED (consumer handshake/MCP/hooks on an owned clone).');
+  if (result.ok) printCliOutcome('ok', 'align', 'owned clones', { log });
+  else printCliOutcome('fail', 'align', 'consumer handshake/MCP/hooks on an owned clone', { log, error });
 }

@@ -2,7 +2,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { resolveModel } from '../models/catalog.js';
 import { userSubagentInstallDirs } from './install_subagent_stubs.js';
-import { compareMissRates, freezeExpandKillLine, type MissRateCompare } from '../edd/miss_rate.js';
+import { formatCliOutcome } from '../cli/outcome.js';
+import {
+  compareMissRates,
+  freezeExpandKillLine,
+  missRateOutcome,
+  type MissRateCompare
+} from '../edd/miss_rate.js';
 import {
   listGenerateSubagents,
   loadSubagentAllowlist,
@@ -56,7 +62,10 @@ export function subagentStatus(opts: {
 export function formatSubagentStatus(status: SubagentStatus): string {
   const mode = status.skillsOnly ? 'skills-only' : 'launch';
   const envLine = status.envRaw === null ? 'unset (follow catalog)' : status.envRaw;
+  const miss = missRateOutcome(status.missRate);
+  const summary = `${mode}, ${miss.summary}`;
   return [
+    formatCliOutcome(miss.outcome, 'agents status', summary),
     `mode: ${mode}`,
     `catalog.skillsOnly: ${status.catalogSkillsOnly}`,
     `WK_SUBAGENTS: ${envLine}`,

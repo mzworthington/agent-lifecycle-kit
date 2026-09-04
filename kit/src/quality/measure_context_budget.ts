@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { cliOutcomeFromOk, printCliOutcome } from '../cli/outcome.js';
 
 export const DEFAULT_TARGET_CHARS = 8000;
 
@@ -104,12 +105,12 @@ export function printContextBudget(result: ContextBudgetResult): void {
   console.log(`Always-on estimate        ${alwaysOnChars} chars (~${estimateTokens(alwaysOnChars)} tokens)`);
   console.log(`Target                    < ${targetChars} chars (~${targetTokens} tokens)`);
   console.log('A session loads AGENTS.md plus one host pointer, not every host file at once.');
-  if (!ok) {
-    console.log('');
-    console.log('FAIL: always-on surface exceeds target. Thin AGENTS.md / handshake; keep philosophy on-demand.');
-    return;
+  printCliOutcome(
+    cliOutcomeFromOk(ok),
+    'measure-context',
+    ok ? 'always-on surface within 8KB' : 'always-on surface exceeds target'
+  );
+  if (ok) {
+    console.log('Tip: zero full SOP/philosophy reads on typo/debug routes; use kit-knowledge MCP.');
   }
-  console.log('');
-  console.log('PASS: always-on surface within target.');
-  console.log('Tip: zero full SOP/philosophy reads on typo/debug routes; use kit-knowledge MCP.');
 }

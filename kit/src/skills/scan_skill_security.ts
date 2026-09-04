@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { KIT_SKILL_DIR_PREFIX } from './verify_skills_layout.js';
+import { printCliOutcome } from '../cli/outcome.js';
 
 interface SecurityViolation {
   file: string;
@@ -294,9 +295,7 @@ export function scanSkillSecurity(repoDir: string): ScanSkillSecurityResult {
   scanExternalLock(violations, lockFilePath);
 
   if (violations.length === 0) {
-    console.log(
-      '✅ Hardened Security audit PASSED: No prompt injections, secret leaks, schema violations, or unpinned supply-chain dependencies detected.'
-    );
+    printCliOutcome('ok', 'audit', 'no prompt injection, secrets, or unpinned lockfile issues');
     return { ok: true, errorCount: 0, warningCount: 0 };
   }
 
@@ -326,10 +325,10 @@ export function scanSkillSecurity(repoDir: string): ScanSkillSecurityResult {
         console.error(`     Snippet: "${v.snippet.substring(0, 100)}"`);
       }
     });
-    console.error('\nHardened Security audit FAILED.');
+    printCliOutcome('fail', 'audit', `${errors.length} violation(s)`);
     return { ok: false, errorCount: errors.length, warningCount: warnings.length };
   }
 
-  console.log(`✅ Hardened Security audit PASSED (${warnings.length} advisory warning(s)).`);
+  printCliOutcome('warn', 'audit', `${warnings.length} advisory warning(s)`);
   return { ok: true, errorCount: 0, warningCount: warnings.length };
 }

@@ -196,6 +196,6 @@ describe('printAlignOwnedResult', () => {
     assert.match(text, /skip \(kit\)/);
     assert.match(text, /me\/site/);
     assert.match(text, /fail\s+AGENTS.md present/);
-    assert.match(errors.join('\n'), /align FAILED/);
+    assert.match(errors.join('\n'), /fail  align/);
   });
 });

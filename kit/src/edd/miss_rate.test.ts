@@ -35,6 +35,7 @@ describe('compareMissRates', () => {
     assert.equal(cmp.specialist.rate, null);
     assert.equal(cmp.picker.enough, false);
     assert.match(formatMissRateCompare(cmp), /not-enough/);
+    assert.match(formatMissRateCompare(cmp), /^warn  eval miss-rate/);
     assert.doesNotMatch(formatMissRateCompare(cmp), /0\.0%/);
   });
 
@@ -55,6 +56,7 @@ describe('compareMissRates', () => {
     assert.equal(cmp.picker.prodDerived, 1);
     assert.equal(cmp.picker.total, 3);
     assert.equal(cmp.verdict, 'freeze');
+    assert.match(formatMissRateCompare(cmp), /^warn  eval miss-rate/);
     assert.match(freezeExpandKillLine(cmp, 'catalog line'), /Do not add a role/);
   });
 

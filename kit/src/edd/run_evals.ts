@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { resolveRepoDir } from '../shared/paths.js';
+import { printCliOutcome } from '../cli/outcome.js';
 
 const defaultRepoDir: string = resolveRepoDir(import.meta.url);
 
@@ -187,10 +188,10 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
   console.log(`Passed: ${passedCases} | Failed: ${failedCases} | Accuracy: ${accuracy}%\n`);
 
   if (failedCases > 0) {
-    console.error('Skill-trigger evaluation FAILED.');
+    printCliOutcome('fail', 'eval', `${failedCases} skill-trigger case(s) failed`);
     return false;
   }
 
-  console.log('✅ All skill-trigger evals passed successfully.');
+  printCliOutcome('ok', 'eval', 'skill-trigger harness');
   return true;
 }

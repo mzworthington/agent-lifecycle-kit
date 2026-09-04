@@ -9,6 +9,7 @@ import {
 import type { GitHubPort } from './github.js';
 import { communityRelPaths, planRepoDoctor, type DoctorPlan, type RepoClass } from './hygiene.js';
 import { evaluateOwnership, type RepoView } from './ownership.js';
+import { printCliOutcome } from '../cli/outcome.js';
 
 export interface DoctorRunOptions {
   targetDir: string;
@@ -187,6 +188,6 @@ export function printDoctorResult(
   if (hintAlign) {
     log('Handshake (thin AGENTS, MCP, host pointers) is wk align ., not doctor.');
   }
-  if (result.ok) log('✅ doctor PASSED.');
-  else error('doctor FAILED (missing community files on an owned repo).');
+  if (result.ok) printCliOutcome('ok', 'doctor', 'community files on owned sources', { log });
+  else printCliOutcome('fail', 'doctor', 'missing community files on an owned repo', { log, error });
 }

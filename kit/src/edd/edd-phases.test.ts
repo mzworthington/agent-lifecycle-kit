@@ -250,6 +250,7 @@ metrics:
     } finally {
       console.log = orig;
     }
+    assert.match(logs.join('\n'), /warn  eval miss-rate/);
     assert.match(logs.join('\n'), /verdict: not-enough/);
   });
 

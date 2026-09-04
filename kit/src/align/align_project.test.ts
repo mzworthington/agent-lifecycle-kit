@@ -231,7 +231,7 @@ describe('printAlignResult', () => {
     );
     assert.match(lines.join('\n'), /ok\s+AGENTS.md present/);
     assert.match(lines.join('\n'), /fail\s+Host pointers/);
-    assert.match(lines.join('\n'), /align FAILED/);
+    assert.match(lines.join('\n'), /fail  align/);
     assert.match(lines.join('\n'), /next:/);
     assert.match(lines.join('\n'), /wk align \. --write/);
   });

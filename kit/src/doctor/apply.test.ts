@@ -160,7 +160,7 @@ describe('printDoctorResult', () => {
     );
     const text = lines.join('\n');
     assert.match(text, /wk align/);
-    assert.match(text, /doctor PASSED/);
+    assert.match(text, /ok    doctor/);
     assert.equal(/handshake is aligned/i.test(text), false);
   });
 

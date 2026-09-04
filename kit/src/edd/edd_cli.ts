@@ -18,7 +18,8 @@ import {
 import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
 import type { EvalCase } from './schema.js';
 import { flagValue, hasFlag } from '../cli/flags.js';
-import { compareMissRates, formatMissRateCompare } from './miss_rate.js';
+import { cliOutcomeExit } from '../cli/outcome.js';
+import { compareMissRates, formatMissRateCompare, missRateOutcome } from './miss_rate.js';
 import { resolveCliAgentDriver } from './cli-agent.js';
 import { judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
 import { resolveJudgeApiKey, resolveJudgeCompletion } from './judge-provider.js';
@@ -489,7 +490,7 @@ export async function handleEddEvalCli(options: EddCliOptions): Promise<number |
     case 'miss-rate': {
       const cmp = compareMissRates(repoDir);
       console.log(formatMissRateCompare(cmp));
-      return 0;
+      return cliOutcomeExit(missRateOutcome(cmp).outcome);
     }
     default:
       if (sub.endsWith('.yaml') || sub.endsWith('.yml') || sub === 'all') {

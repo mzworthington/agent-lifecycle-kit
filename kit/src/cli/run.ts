@@ -63,6 +63,7 @@ import {
   doctorResultToJson,
   printJsonReport
 } from './json_report.js';
+import { cliOutcomeExit, cliOutcomeFromOk, printCliOutcome } from './outcome.js';
 import type { KitCommand } from './parse.js';
 
 export interface RunKitContext {
@@ -94,8 +95,10 @@ function maybeInstallUserSubagentStubsAfterSync(
   }
   if (parsed.help || parsed.dryRun) return;
   const result = installUserSubagentStubs({ kitRepoDir: repoDir, homedir });
-  console.log(
-    `Installed ${result.written.length} kit subagent file(s) into ~/.cursor/agents and ~/.claude/agents`
+  printCliOutcome(
+    'ok',
+    'agents install',
+    `${result.written.length} file(s) in ~/.cursor/agents and ~/.claude/agents`
   );
 }
 
@@ -190,8 +193,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
     case 'export-rules': {
       const ok = exportIDERules(command.dir, command.check);
       if (command.check) {
-        if (ok) console.log('✅ Multi-IDE rule check PASSED.');
-        else console.error('Multi-IDE rule check FAILED.');
+        printCliOutcome(cliOutcomeFromOk(ok), 'export-rules', ok ? 'host pointers present' : 'missing host pointer');
       }
       return status(ok);
     }
@@ -209,7 +211,13 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       printSubagentAllowlistResult(subagents);
       const stubs = verifySubagentStubs(repoDir);
       printSubagentStubResult(stubs);
-      return status(layout.ok && budget.ok && subagents.ok && stubs.ok);
+      const ok = layout.ok && budget.ok && subagents.ok && stubs.ok;
+      printCliOutcome(
+        cliOutcomeFromOk(ok),
+        'verify',
+        ok ? 'layout, line budget, allowlist, stubs' : 'see errors above'
+      );
+      return status(ok);
     }
 
     case 'sync': {
@@ -285,13 +293,14 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       return status(result.ok);
     }
 
-    case 'version':
-      printKitVersion({
+    case 'version': {
+      const outcome = printKitVersion({
         kitRepoDir: repoDir,
         homedir: ctx.homedir,
         check: command.check
       });
-      return 0;
+      return cliOutcomeExit(outcome);
+    }
 
     case 'complete': {
       const replies = completeKitLine(command.words, { mcpProfiles: listMcpProfileNames(repoDir) });
@@ -315,7 +324,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
 
     case 'agents-generate': {
       const files = generateSubagentStubs(repoDir);
-      console.log(`Wrote ${files.length} agent stub(s) under agents/`);
+      printCliOutcome('ok', 'agents generate', `${files.length} stub(s) under agents/`);
       return 0;
     }
 
@@ -324,8 +333,10 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
         kitRepoDir: repoDir,
         homedir: ctx.homedir ?? os.homedir()
       });
-      console.log(
-        `Installed ${result.written.length} kit subagent file(s) into ~/.cursor/agents and ~/.claude/agents`
+      printCliOutcome(
+        'ok',
+        'agents install',
+        `${result.written.length} file(s) in ~/.cursor/agents and ~/.claude/agents`
       );
       return 0;
     }
@@ -338,10 +349,10 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       });
       if (command.json) {
         console.log(JSON.stringify(status));
-      } else {
-        console.log(formatSubagentStatus(status));
+        return 0;
       }
-      return 0;
+      console.log(formatSubagentStatus(status));
+      return cliOutcomeExit(status.missRate.verdict === 'freeze' || status.missRate.verdict === 'not-enough' ? 'warn' : 'ok');
     }
 
     case 'agents-launch-prompt': {
@@ -366,15 +377,19 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
     case 'ontology':
       if (command.sub === 'generate') {
         const result = regenerateOntologyIndex(repoDir);
-        console.log(`Wrote derived ontology cache (gitignored): ${result.path}`);
-        console.log(`Wrote homepage index (gitignored): ${result.sitePath}`);
+        printCliOutcome('ok', 'ontology generate', 'wrote gitignored cache and homepage index');
+        console.log(result.path);
+        console.log(result.sitePath);
         return 0;
       }
       {
         const result = checkOntology(repoDir);
         for (const msg of result.messages) console.error(msg);
-        if (result.ok) console.log('✅ ontology check PASSED (live-derived).');
-        else console.error('ontology check FAILED.');
+        printCliOutcome(
+          cliOutcomeFromOk(result.ok),
+          'ontology check',
+          result.ok ? 'live-derived index' : 'broken refs or stale cache (see above)'
+        );
         return status(result.ok);
       }
 
@@ -397,11 +412,19 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
 
     case 'memory-lint': {
       const result = lintMemoryGraph(repoDir, memoryGraphPath(ctx));
+      const outcome = result.legacyUnknown.length > 0 ? 'warn' : 'ok';
+      printCliOutcome(
+        outcome,
+        'memory lint',
+        result.legacyUnknown.length > 0
+          ? `${result.legacyUnknown.length} legacy entit(y/ies) outside allowlist`
+          : 'entity types within allowlist'
+      );
       for (const msg of result.messages) console.log(msg);
       for (const e of result.legacyUnknown) {
         console.log(`- ${e.name} (${e.entityType})`);
       }
-      return 0;
+      return cliOutcomeExit(outcome);
     }
 
     case 'commit-msg': {
@@ -421,9 +444,10 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       }
       const result = validateConventionalCommit(raw);
       if (!result.ok) {
-        console.error(result.error);
+        printCliOutcome('fail', 'commit-msg', result.error ?? 'not conventional');
         return 1;
       }
+      printCliOutcome('ok', 'commit-msg', 'conventional subject');
       return 0;
     }
 
@@ -431,7 +455,7 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       const dest = command.dest ?? defaultPagesSiteDest(repoDir);
       try {
         const result = assemblePagesSite({ kitRoot: repoDir, dest });
-        console.log(`Wrote Pages tree: ${result.dest} (${result.fileCount} files)`);
+        printCliOutcome('ok', 'site assemble', `${result.fileCount} files -> ${result.dest}`);
         return 0;
       } catch (err: unknown) {
         console.error(`ERROR: ${errorMessage(err)}`);

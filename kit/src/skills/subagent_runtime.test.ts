@@ -27,6 +27,7 @@ describe('subagent_runtime', () => {
     assert.ok(status.generate.includes('agent-tdd'));
     assert.match(status.expandKillIndicator, /from-trace/);
     assert.match(formatSubagentStatus(status), /mode: launch/);
+    assert.match(formatSubagentStatus(status), /^warn  agents status/);
     assert.match(formatSubagentStatus(status), /miss-rate: not-enough/);
   });
 

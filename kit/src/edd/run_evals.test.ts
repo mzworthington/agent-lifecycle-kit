@@ -167,7 +167,7 @@ describe('runEvals', () => {
     }
     const text = lines.join('\n');
     assert.match(text, /Skill-trigger harness \(registration \/ prompt hygiene\)/);
-    assert.match(text, /All skill-trigger evals passed successfully/);
+    assert.match(text, /ok    eval/);
     assert.doesNotMatch(text, /live trigger/i);
   });
 });

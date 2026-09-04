@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { formatCliOutcome, type CliOutcome } from '../cli/outcome.js';
 
 export const SPECIALIST_MISS_DATASET = 'evals/edd/subagent_routing.jsonl';
 export const PICKER_MISS_DATASET = 'evals/suites/routing-matrix.json';
@@ -22,12 +23,24 @@ export type MissRateCompare = {
   verdict: 'freeze' | 'hold' | 'not-enough';
 };
 
+export function missRateOutcome(cmp: MissRateCompare): { outcome: CliOutcome; summary: string } {
+  if (cmp.verdict === 'not-enough') {
+    return { outcome: 'warn', summary: 'not-enough (no prod-derived traces)' };
+  }
+  if (cmp.verdict === 'freeze') {
+    return { outcome: 'warn', summary: 'freeze generate list (specialist worse than picker)' };
+  }
+  return { outcome: 'ok', summary: 'hold (specialist not worse than picker)' };
+}
+
 export function formatMissRateCompare(cmp: MissRateCompare): string {
+  const { outcome, summary } = missRateOutcome(cmp);
   const side = (s: MissRateSide) =>
     s.enough
       ? `${(s.rate! * 100).toFixed(1)}% (${s.prodDerived}/${s.total} prod-derived in ${s.relPath})`
       : `not-enough (0 prod-derived in ${s.relPath}${s.total ? `, ${s.total} cases` : ''})`;
   return [
+    formatCliOutcome(outcome, 'eval miss-rate', summary),
     `specialist: ${side(cmp.specialist)}`,
     `skill-picker: ${side(cmp.picker)}`,
     `verdict: ${cmp.verdict}`

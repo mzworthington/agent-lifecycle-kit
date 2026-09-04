@@ -47,6 +47,10 @@ Commands:
   completion install   Write the stub once; verbs stay in sync with this wk
   help                 Display this help menu
 
+Outcomes:
+  Report commands print a first line of ok / warn / fail (aligned columns).
+  Exit 1 only on fail. warn is visible and still exit 0 (e.g. miss-rate not-enough).
+
 Examples:
   ${CLI_BIN} init ./my-app --mcp collab --hook
   ${CLI_BIN} doctor --owned --scan ~/Documents/dev

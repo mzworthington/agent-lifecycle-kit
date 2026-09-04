@@ -31,6 +31,7 @@ import {
   type ContextBudgetResult
 } from './measure_context_budget.js';
 import { printJsonReport, type JsonFinding } from '../cli/json_report.js';
+import { cliOutcomeFromOk, printCliOutcome } from '../cli/outcome.js';
 import { checkOntology, type OntologyCheckResult } from '../ontology/index.js';
 
 /** Default EDD suites for this kit. Forks may delete vendor-specific suites; missing files are skipped. */
@@ -103,6 +104,13 @@ export async function runKitCheck(
 
   const finish = (ok: boolean): number => {
     if (json) printJsonReport({ ok, command: 'check', findings }, stdout);
+    else {
+      printCliOutcome(
+        cliOutcomeFromOk(ok),
+        'check',
+        ok ? 'audit, ontology, evals, EDD, context budget' : 'a gate failed (see above)'
+      );
+    }
     return ok ? 0 : 1;
   };
 
@@ -166,19 +174,15 @@ export async function runKitCheck(
   if (!ontology.ok) {
     if (!json) {
       for (const msg of ontology.messages) console.error(msg);
-      console.error('Ontology check FAILED.');
     }
     return finish(false);
   }
-  if (!json) console.log('✅ Ontology check PASSED (derived index, no committed snapshot).');
+  if (!json) printCliOutcome('ok', 'ontology check', 'live-derived index');
 
   const rulesOk = exportRules(repoDir, true);
   findings.push({ id: 'ide-rules', status: rulesOk ? 'ok' : 'fail', path: repoDir });
-  if (!rulesOk) {
-    if (!json) console.error('Multi-IDE rule check FAILED.');
-    return finish(false);
-  }
-  if (!json) console.log('✅ Multi-IDE rule check PASSED.');
+  if (!rulesOk) return finish(false);
+  if (!json) printCliOutcome('ok', 'export-rules', 'host pointers present');
 
   const evalsOk = evals(repoDir);
   findings.push({ id: 'skill-trigger-evals', status: evalsOk ? 'ok' : 'fail', path: repoDir });
@@ -223,10 +227,6 @@ export async function runKitCheck(
   });
   if (!budgetResult.ok) return finish(false);
 
-  if (!json) {
-    console.log('');
-    console.log('✅ kit check PASSED.');
-  }
   return finish(true);
   } finally {
     console.log = stdout;

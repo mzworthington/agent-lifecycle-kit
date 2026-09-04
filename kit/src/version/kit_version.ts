@@ -21,6 +21,19 @@ export function isOriginWeeksAhead(check: StaleCheck): boolean {
   return check.originTipUnix - check.localTipUnix >= STALE_AFTER_SECONDS;
 }
 
+export function kitVersionOutcome(
+  snap: KitVersionSnapshot,
+  stale: boolean
+): { outcome: 'ok' | 'warn' | 'fail'; summary: string } {
+  if (!snap.agentsIsSymlink || !snap.agentsResolvesToKit) {
+    return { outcome: 'fail', summary: '~/.agents is not a symlink to this clone' };
+  }
+  if (stale) {
+    return { outcome: 'warn', summary: 'origin is weeks ahead of this clone' };
+  }
+  return { outcome: 'ok', summary: '~/.agents points at this clone' };
+}
+
 export function formatKitVersion(snap: KitVersionSnapshot, opts?: { stale?: boolean }): string {
   const lines = [`waykit ${snap.packageVersion}`];
   if (snap.gitDescribe) lines.push(`git: ${snap.gitDescribe}`);
