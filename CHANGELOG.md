@@ -36,6 +36,7 @@
 ### 🧪 Testing
 
 - *(edd)* Route failed Actions jobs to debug SOP
+- *(evals)* Fail PostHog intake until skill pointers exist (MZW-62)
 
 ## 2026-09-03
 
