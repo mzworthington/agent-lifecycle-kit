@@ -52,7 +52,7 @@ export const START_ITEMS: DocsNavItem[] = [
 
 export const PRACTICE_ITEMS: DocsNavItem[] = [
   { label: 'Feature lifecycle', path: '/docs/lifecycle' },
-  { label: 'Host subagents (pilot)', path: '/docs/subagents' },
+  { label: 'Host subagents', path: '/docs/subagents' },
   { label: 'What Waykit gives you', path: '/docs/kit' },
   { label: 'Repo doctor', path: '/docs/doctor' },
   { label: 'Consumer align', path: '/docs/align' },

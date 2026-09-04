@@ -29,7 +29,7 @@ Commands:
   verify               Verify skills layout, role SKILL.md line budget, subagent allowlist, and thin agent stubs
   agents generate      Write thin Cursor/Claude agent stubs under agents/ from skills/subagents.yaml
   agents install       Copy those stubs into ~/.cursor/agents and ~/.claude/agents (user scope; not the app repo)
-  sync                 Sync official external skills (Cloudflare, Vercel)
+  sync                 Sync official external skills (Cloudflare, Vercel); also refreshes user kit subagent stubs
   measure-context      Report always-on context budget
   debug-board <proj>   Scaffold a hypothesis-driven debug board
   debug-ci             Fetch failed GitHub Actions logs

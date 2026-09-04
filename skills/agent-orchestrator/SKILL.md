@@ -70,7 +70,7 @@ Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavio
 
 **Kit-knowledge MCP:** Prefer `search_kit` / `get_sop` / `get_philosophy_section` / `get_handover` over bulk-reading SOPs or philosophy. Keep one MCP profile installed; do not stack collab+devtools+ops globally.
 
-**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)). Read `COMPLETE`/`BLOCKED` from the handover, not the chat summary.
+**Isolated specialists:** Stay the parent. Launch allowlisted roles as host subagents ([docs/subagents.md](../../docs/subagents.md), [SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)): Cursor Task at `~/.cursor/agents/<name>.md`, prompt with Linear id, handover paths, DoD, and Next agent, model from `wk model resolve --skill <id>`. Read `COMPLETE`/`BLOCKED` from disk, not the chat summary.
 
 ## Specialist roles
 
@@ -121,20 +121,20 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Request type | Route |
 |--------------|-------|
 | Prompt, MCP tool schema, or agent routing change | **EDD default:** [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md) (`kit eval run\|ci`) before merge |
-| Bug, failed job, live-site / fetch symptom, flake | **`agent-debug`** → `agent-pre-commit` (hypothesis board + repro + proof). Light XFN when UI/auth/SLO touched. |
-| Production incident / page | **`agent-incident`** → `agent-debug` (+ Slack/Notion when configured) |
-| Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`kit mcp cloudflare-ops --install`) → IaC fix in owner repo |
-| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --install`) → adapter + privacy; not the Cursor wizard |
-| Tiny typo / obvious one-liner with clear repro | Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
-| Extends existing behavior in one module | Design light: functional impact align → light or full XFN matrix → **`agent-tdd` short loop** (gear 1+2) |
+| Bug, failed job, live-site / fetch symptom, flake | Launch **`agent-debug` subagent** (parent keeps hypothesis + handover, not logs) → `agent-pre-commit`. Light XFN when UI/auth/SLO touched. |
+| Production incident / page | **`agent-incident`** skill → launch **`agent-debug` subagent** (+ Slack/Notion when configured) |
+| Live Cloudflare Web Analytics / RUM / beacon / insights host | **`agent-cloudflare-ops`** (`wk mcp cloudflare-ops --project`, then restore default) → IaC fix in owner repo |
+| PostHog SDK, cookieless events, wizard, empty PostHog project | **`agent-posthog`** (`wk mcp posthog --project`, then restore default) → adapter + privacy; not the Cursor wizard |
+| Tiny typo / obvious one-liner with clear repro | Stay in the **parent**. Implement directly - no spec handover. Note functional test impact. Always run **light XFN** (floor below). |
+| Extends existing behavior in one module | Design light → launch **`agent-tdd` subagent** (gear 1+2 same child). XFN apply rows launch **`agent-xfn`**, not TDD. |
 | Schema migration | `agent-migration` → `agent-pre-commit` (with light XFN / security as needed) |
 | OpenAPI / contract change | `agent-api-contract` (+ `agent-tdd` when behavior changes) |
 | Dead-code cleanup, post-migration prune | `agent-prune` → `agent-pre-commit` |
-| Complexity hotspot cleanup | `agent-arch-drift` → `agent-prune` → `agent-pre-commit` |
-| PR / diff review request | `agent-review` |
+| Complexity hotspot cleanup | Launch **readonly `agent-arch-drift` subagent** → `agent-prune` → `agent-pre-commit` |
+| PR / diff review request | Launch **readonly `agent-review` subagent** (handover/diff only, not the implementer transcript) |
 | Landing / marketing / AI-sounding copy, microcopy, errors | `agent-copy` (+ `agent-ui` if layout/chrome) |
 | Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
-| New feature, new bounded context, new external integration | Full lifecycle (grill → PRD if bet → stories → spec → …) |
+| New feature, new bounded context, new external integration | Full lifecycle: grill/PRD/stories as skills, then **launch** spec/tdd/xfn/audit subagents ([SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)) |
 | Product bet / PRD / experiment / kill criteria | **`agent-prd`** (grill first if unsettled) → `agent-user-stories` → `agent-spec` |
 | Timebox elapsed on a flagged bet | Measure the leading indicator in PostHog (`agent-posthog`, `wk mcp posthog --install`) → confirm/kill story (`agent-user-stories`) → `agent-prune` for flag/slice |
 
@@ -155,7 +155,7 @@ When in doubt, prefer the smaller route and ask.
 
 Tests are the source of truth for intended behavior above documentation. Before coding non-trivial work, Design must discuss **which functional and cross-functional cases** will be kept, extended, rewritten, retired, or added. Re-confirm during execution if implementation impacts cases outside that plan. See [agent-tdd](../agent-tdd/SKILL.md), [agent-xfn](../agent-xfn/SKILL.md).
 
-Browser E2E and other XFN suites are **never** owned by `agent-tdd` - route them to `agent-xfn`.
+Browser E2E and other XFN suites are **never** owned by `agent-tdd` - launch `agent-xfn` as a separate child.
 
 ## Orchestration flow
 
@@ -163,7 +163,7 @@ Applies when the scope gate selects **full lifecycle** (adapt with light XFN on 
 
 ```mermaid
 sequenceDiagram
-  participant O as Orchestrator
+  participant O as Orchestrator parent
   participant G as agent-grilling
   participant P as agent-prd
   participant U as agent-user-stories
@@ -171,21 +171,25 @@ sequenceDiagram
   participant T as agent-tdd
   participant X as agent-xfn
   participant A as agent-adapter
+  participant Rev as agent-review
+  participant Sec as agent-security
+  participant Arch as agent-arch-drift
   participant R as agent-release
   O->>G: Stress-test idea, contract vs bet
   opt Bet
     O->>P: PRD / bet card
   end
   O->>U: INVEST stories (hypothesis + flag notes)
-  O->>S: Spec Gherkin (off / on / kill when flagged)
-  O->>T: Functional impact map
-  O->>X: XFN plan matrix
-  O->>T: Short loop gear1+gear2
+  O->>S: Launch spec subagent
+  O->>T: Launch tdd subagent, gear1+gear2
+  O->>X: Launch xfn subagent
   opt Large adapter
-    O->>A: Deep-dive only
+    O->>A: Deep-dive skill only
   end
   O->>X: XFN green apply rows
-  O->>O: Audit security + arch-drift
+  O->>Rev: Launch readonly review
+  O->>Sec: Launch readonly security
+  O->>Arch: Launch readonly arch-drift
   O->>O: Pre-commit
   O->>O: Telemetry (SLO + leading indicator)
   O->>R: Release (flag expiry / rollback)
@@ -197,11 +201,11 @@ sequenceDiagram
 ```
 
 1. **Intake** - Read the user request. If a Linear identifier is in play, claim it ([SOPs/linear-ticket-workflow.md](../../SOPs/linear-ticket-workflow.md)) before routing. Grill if unsettled. Route **bets** to `agent-prd`, then `agent-user-stories`, then `agent-spec` (Gherkin including flag off/on/kill and the leading-indicator event). Tiny contracts may skip PRD.
-2. **Design (functional)** - Route to `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
-3. **Design (XFN plan)** - Route to `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
-4. **Short loop (execution)** - Route back to **`agent-tdd`**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, route to **`agent-adapter`** deep-dive, then return.
-5. **XFN green** - Return to `agent-xfn` to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
-6. **Audit** - Run `agent-security` and `agent-arch-drift`. Both enforce catalog/XFN completeness. On failure, return to `agent-tdd` / `agent-adapter` or `agent-xfn`. If a hard-to-reverse or off-norm design choice lacks a record, route to `agent-adr`. Optionally `agent-review` on the PR diff.
+2. **Design (functional)** - Launch `agent-tdd`: inventory functional catalog, align impact (both flag states when flagged), first failing unit/slice tests and ports as needed for design clarity. Next agent is `agent-xfn` (plan).
+3. **Design (XFN plan)** - Launch `agent-xfn`: complete apply/skip matrix, impact, thresholds, suite stubs/paths. All-skip only with reasons. Plan may complete before browser/load are green.
+4. **Short loop (execution)** - Launch **`agent-tdd` again in one child**: gear 1 green (domain/handlers, mocked ports) and gear 2 (thin adapters + integration tests) **in the same session** when ports are new/changed. Re-confirm if impact maps expand. Provide fixtures/routes XFN suites need. Only if gear 2 is too large, load **`agent-adapter`** as a skill, then return.
+5. **XFN green** - Launch `agent-xfn` (own window, not TDD) to green every **apply** row (or BLOCKED with owner). Do not proceed to Release while apply suites are missing or red without BLOCKED status.
+6. **Audit** - Launch readonly `agent-review` / `agent-security` / `agent-arch-drift` (handover and diff only). Catalog or XFN honesty failures are `BLOCKED` with Next agent tdd or xfn, not a silent pass. If a hard-to-reverse choice lacks a record, load `agent-adr`.
 7. **Pre-commit** - Run [agent-pre-commit](../agent-pre-commit/SKILL.md): discover hook, run checks, fix failures until green.
 8. **Telemetry** - Route to `agent-telemetry` with load/performance SLOs from `handover_xfn.md`. For a bet’s leading indicator (product usage), route to `agent-posthog` (`wk mcp posthog --install`). Do not invent extra dashboards.
 9. **Docs / Release** - `agent-docs` when public surfaces changed; **load `agent-copy` for any narrative** (README lead, landing, changelog blurbs) so voice stays human-centric. Then `agent-release` for version/changelog/conventional PR title, flag expiry, and [SOPs/release.md](../../SOPs/release.md). Report catalog cases changed and XFN matrix summary.

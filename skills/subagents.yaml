@@ -12,7 +12,7 @@ tdd:
   skill: agent-tdd
   gears: same-session
   escapeHatch: agent-adapter
-pilot:
+generate:
   isolation:
     - agent-debug
     - agent-xfn

@@ -127,7 +127,7 @@ wk eval ci --suite evals/edd/demo.yaml --threshold-routing 95 --out out/reports
 | `wk audit` | Security and supply-chain audit |
 | `wk validate` / `wk verify` | Eval schema + skills layout and role line budget |
 | `wk export-rules` | Sync `AGENTS.md` → IDE entry points |
-| `wk sync` | Install upstream skills from the lockfile |
+| `wk sync` | Install upstream skills from the lockfile, then refresh user kit subagent stubs |
 | `wk measure-context` | Always-on context budget |
 | `wk model resolve` | Capability class + host slug (`models/catalog.yaml`) |
 | `wk site assemble` | Copy `web/dist` plus public Markdown into `site/` (after `pnpm --dir web build`) |

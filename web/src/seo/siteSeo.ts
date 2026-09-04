@@ -107,7 +107,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/subagents': {
     headline: 'Host subagent allowlist',
     description:
-      'Pilot list of Waykit roles that become Cursor or Claude subagents, plus the parent→child launch flow. Stack profiles stay skills. TDD gear 1 and gear 2 stay one agent.'
+      'Which Waykit roles become Cursor or Claude subagents, plus the parent→child launch flow. Stack profiles stay skills. TDD gear 1 and gear 2 stay one agent.'
   },
   '/docs/map': {
     headline: 'Waykit map',

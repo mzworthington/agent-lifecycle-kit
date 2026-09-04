@@ -35,6 +35,14 @@ sequenceDiagram
 
 The child writes `COMPLETE` or `BLOCKED` to the handover and returns a short summary only.
 
+## Cursor Task invocation
+
+After `wk agents install`, launch `~/.cursor/agents/<name>.md` as a Cursor **Task** (host subagent). The child does not inherit parent chat. Put Linear id, handover paths, DoD, and Next agent in the Task prompt. Resolve the slug with `wk model resolve --skill <id>`. Do not paste `SKILL.md` into the prompt. When the Task returns, read `COMPLETE` or `BLOCKED` from `~/.agents/handover/<project>/`.
+
+Claude Code: same contract with `~/.claude/agents/<name>.md`.
+
+Keep **one** MCP profile. If the specialist needs Cloudflare or PostHog, `wk mcp <profile> --project`, then restore `wk mcp default --project`. Do not stack vendor MCP onto the default profile.
+
 ## Routing rules
 
 | Situation | Launch |
@@ -49,8 +57,6 @@ The child writes `COMPLETE` or `BLOCKED` to the handover and returns a short sum
 Do not generate or launch `lang-*` / `framework-*` / `profile-*` as agents. Load those skills inside the specialist.
 
 Do not split TDD across two agents. `agent-adapter` stays a skill when gear 2 is too large.
-
-Keep **one** MCP profile. If a specialist needs a named profile, `wk mcp <profile> --project`, then restore `wk mcp default --project`.
 
 ## Kill
 

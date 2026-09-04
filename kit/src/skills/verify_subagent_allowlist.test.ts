@@ -32,7 +32,7 @@ tdd:
   skill: agent-tdd
   gears: same-session
   escapeHatch: agent-adapter
-pilot:
+generate:
   isolation: [agent-debug]
   audit: [agent-review]
   sequential: [agent-spec, agent-tdd]
@@ -74,7 +74,7 @@ describe('verifySubagentAllowlist', () => {
       'skills/framework-react/SKILL.md': '---\nkind: profile\n---\n',
       'skills/profile-api/SKILL.md': '---\nkind: profile\n---\n',
       'docs/subagents.md':
-        '# Subagents\n\nPilot isolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\n'
+        '# Subagents\n\nIsolation, readonly audit, sequential specialists, parent only.\nGear 1 and gear 2 stay one agent. Escape hatch: agent-adapter. Freeze if worse than the skill picker.\n'
     });
     const result = verifySubagentAllowlist(root);
     assert.equal(result.ok, true, result.errors.join('\n'));
@@ -148,7 +148,7 @@ describe('verifySubagentAllowlist', () => {
     assert.match(result.errors.join('\n'), /skill picker/i);
   });
 
-  it('classifies the Waykit tree: pilot subagents, profiles stay skills, TDD unsplit', () => {
+  it('classifies the Waykit tree: generate list, profiles stay skills, TDD unsplit', () => {
     const result = verifySubagentAllowlist(kitRoot);
     assert.equal(result.ok, true, result.errors.join('\n'));
     assert.deepEqual(STAY_SKILL_PREFIXES, ['lang-', 'framework-', 'profile-']);

@@ -25,7 +25,7 @@ tdd:
   skill: agent-tdd
   gears: same-session
   escapeHatch: agent-adapter
-pilot:
+generate:
   isolation: []
   audit: [agent-review]
   sequential: [agent-tdd]

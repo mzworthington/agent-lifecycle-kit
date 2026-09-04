@@ -117,7 +117,7 @@ Lockfile pins are git version tags or \`latest\` (tagged release, then HEAD),
 not commit SHAs. Upgrade path: edit the lockfile, re-run --install, or
 run --update to pull upstream changes.
 
-Requires: gh CLI v2.90+ with \`gh skill\` (preview).`);
+Requires: gh CLI v2.90+ with \`gh skill\` (preview). After a successful install or update (not --dry-run), \`wk\` also refreshes kit subagent stubs in ~/.cursor/agents and ~/.claude/agents.`);
 }
 
 export function syncExternalSkills(

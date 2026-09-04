@@ -110,6 +110,6 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 | `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |
 | `wk audit` | Skills and scripts supply-chain scan |
 | `wk eval ci` | Routing accuracy gate (EDD) |
-| `wk sync` | Upstream skills from the lockfile |
+| `wk sync` | Upstream skills from the lockfile, then refresh user kit subagent stubs |
 
 EDD loop (alpha), keys, and CI: [edd.md](./edd.md). Host files: [hosts.md](./hosts.md).

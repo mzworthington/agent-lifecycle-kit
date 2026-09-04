@@ -51,8 +51,8 @@ function assertObjectArgs(
     return failures;
   }
   for (const [key, value] of Object.entries(parsed)) {
-    if (Array.isArray(value)) {
-      failures.push(`${label} expected ${key} to be a string, got array ${JSON.stringify(value)}`);
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      failures.push(`${label} expected ${key} to be a JSON primitive or array, got object`);
     }
   }
   return failures;

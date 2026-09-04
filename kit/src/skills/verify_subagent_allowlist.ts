@@ -20,7 +20,7 @@ export interface SubagentAllowlistCatalog {
   expandKill: string;
   staySkillPrefixes: string[];
   tdd: { skill: string; gears: 'same-session'; escapeHatch: string };
-  pilot: {
+  generate: {
     isolation: string[];
     audit: string[];
     sequential: string[];
@@ -36,7 +36,7 @@ export interface SubagentAllowlistResult {
   runtimeFor: (skill: string) => SubagentRuntime | null;
 }
 
-const PILOT_BUCKETS = ['isolation', 'audit', 'sequential'] as const;
+const GENERATE_BUCKETS = ['isolation', 'audit', 'sequential'] as const;
 
 function listSkillDirs(repoDir: string): string[] {
   const skillsDir = path.join(repoDir, 'skills');
@@ -83,16 +83,16 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
   if (tdd.gears !== 'same-session') {
     throw new Error('tdd.gears must be same-session');
   }
-  const pilotRaw = doc.pilot;
-  if (!pilotRaw || typeof pilotRaw !== 'object') {
-    throw new Error('pilot must be a mapping');
+  const generateRaw = doc.generate;
+  if (!generateRaw || typeof generateRaw !== 'object') {
+    throw new Error('generate must be a mapping');
   }
-  const pilotIn = pilotRaw as Record<string, unknown>;
-  const pilot = {
-    isolation: asStringArray(pilotIn.isolation, 'pilot.isolation'),
-    audit: asStringArray(pilotIn.audit, 'pilot.audit'),
-    sequential: asStringArray(pilotIn.sequential, 'pilot.sequential'),
-    parent: asStringArray(pilotIn.parent, 'pilot.parent')
+  const generateIn = generateRaw as Record<string, unknown>;
+  const generate = {
+    isolation: asStringArray(generateIn.isolation, 'generate.isolation'),
+    audit: asStringArray(generateIn.audit, 'generate.audit'),
+    sequential: asStringArray(generateIn.sequential, 'generate.sequential'),
+    parent: asStringArray(generateIn.parent, 'generate.parent')
   };
   const rolesRaw = doc.roles;
   if (!rolesRaw || typeof rolesRaw !== 'object') {
@@ -109,7 +109,7 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
     }
     const parsed: SubagentRoleEntry = { runtime: entry.runtime };
     if (entry.bucket !== undefined) {
-      if (!PILOT_BUCKETS.includes(entry.bucket as (typeof PILOT_BUCKETS)[number])) {
+      if (!GENERATE_BUCKETS.includes(entry.bucket as (typeof GENERATE_BUCKETS)[number])) {
         throw new Error(`roles.${name}.bucket must be isolation, audit, or sequential`);
       }
       parsed.bucket = entry.bucket as SubagentBucket;
@@ -130,7 +130,7 @@ function parseCatalog(raw: unknown): SubagentAllowlistCatalog {
       gears: 'same-session',
       escapeHatch: tdd.escapeHatch
     },
-    pilot,
+    generate,
     roles
   };
 }
@@ -205,34 +205,38 @@ export function verifySubagentAllowlist(repoDir: string): SubagentAllowlistResul
     errors.push(`${catalog.tdd.escapeHatch} must stay a skill (TDD escape hatch, not a second TDD agent)`);
   }
 
-  const expectedSub = [...catalog.pilot.isolation, ...catalog.pilot.audit, ...catalog.pilot.sequential].sort();
+  const expectedSub = [
+    ...catalog.generate.isolation,
+    ...catalog.generate.audit,
+    ...catalog.generate.sequential
+  ].sort();
   const actualSub = listGenerateSubagents(catalog).sort();
   if (expectedSub.join(',') !== actualSub.join(',')) {
     errors.push(
-      `pilot isolation+audit+sequential must match roles with runtime subagent (expected ${expectedSub.join(', ')})`
+      `generate isolation+audit+sequential must match roles with runtime subagent (expected ${expectedSub.join(', ')})`
     );
   }
 
-  for (const name of catalog.pilot.isolation) {
+  for (const name of catalog.generate.isolation) {
     const entry = catalog.roles[name];
     if (entry?.runtime !== 'subagent' || entry.bucket !== 'isolation') {
       errors.push(`${name} must be isolation subagent`);
     }
   }
-  for (const name of catalog.pilot.audit) {
+  for (const name of catalog.generate.audit) {
     const entry = catalog.roles[name];
     if (entry?.runtime !== 'subagent' || entry.bucket !== 'audit' || entry.readonly !== true) {
       errors.push(`${name} must be a readonly audit subagent`);
     }
   }
-  for (const name of catalog.pilot.sequential) {
+  for (const name of catalog.generate.sequential) {
     const entry = catalog.roles[name];
     if (entry?.runtime !== 'subagent' || entry.bucket !== 'sequential') {
       errors.push(`${name} must be a sequential subagent`);
     }
   }
-  if (catalog.pilot.parent.join(',') !== 'agent-orchestrator') {
-    errors.push('pilot.parent must be agent-orchestrator only');
+  if (catalog.generate.parent.join(',') !== 'agent-orchestrator') {
+    errors.push('generate.parent must be agent-orchestrator only');
   }
   if (catalog.roles['agent-orchestrator']?.runtime !== 'parent') {
     errors.push('agent-orchestrator must be runtime parent, not a generated specialist');

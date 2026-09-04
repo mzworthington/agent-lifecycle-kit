@@ -1,6 +1,6 @@
-# Host subagent allowlist (pilot)
+# Host subagent allowlist
 
-Skills stay the playbook (`SKILL.md`). Subagents are a **process boundary**: a fresh Cursor or Claude window, optional `readonly`, optional model class at launch. This page is the published allowlist. The machine-readable copy is [skills/subagents.yaml](../skills/subagents.yaml). Thin host stubs live in [agents/](../agents/) (`wk agents generate`). Install them for the logged-in user with `wk agents install` (also runs on `wk align . --write`). `wk verify` and `wk check` fail if the allowlist, docs, and stubs drift.
+Skills stay the playbook (`SKILL.md`). Subagents are a **process boundary**: a fresh Cursor or Claude window, optional `readonly`, optional model class at launch. This page is the published allowlist. The machine-readable copy is [skills/subagents.yaml](../skills/subagents.yaml). Thin host stubs live in [agents/](../agents/) (`wk agents generate`). Install them for the logged-in user with `wk agents install` (also runs on `wk align . --write` and after a successful `wk sync --install`). `wk verify` and `wk check` fail if the allowlist, docs, and stubs drift.
 
 Waykit does **not** turn every `agent-*` role into a host agent. Cursor auto-delegation gets worse when descriptions overlap. Stack profiles never become agents.
 
@@ -8,7 +8,7 @@ Waykit does **not** turn every `agent-*` role into a host agent. Cursor auto-del
 flowchart TB
   roles[kind role skills]
   roles --> yes{Isolation, audit, or multi-step phase?}
-  yes -->|yes and on the pilot list| agent[Generate a thin subagent stub]
+  yes -->|yes and on the generate list| agent[Generate a thin subagent stub]
   yes -->|no| skill[Stay SKILL.md]
   profiles[lang / framework / profile] --> skill
   orch[agent-orchestrator] --> parent[Stay the parent router]
@@ -34,7 +34,7 @@ sequenceDiagram
 
 Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, stubs are `subagent:*` nodes with an `adapts` edge to their skill ([Waykit map](./map.md)).
 
-## Pilot generate list
+## Generate list
 
 | Bucket | Skills | Why a subagent |
 |--------|--------|----------------|
@@ -51,12 +51,12 @@ Procedure: [SOPs/subagent-launch.md](../SOPs/subagent-launch.md). On the map, st
 | Kind | Runtime |
 |------|---------|
 | `lang-*`, `framework-*`, `profile-*` | Skill. How to write this stack. Loaded by the specialist. |
-| Other `agent-*` roles not in the table above | Skill for this pilot (copy, docs, pre-commit, grill-me, …) |
+| Other `agent-*` roles not in the table above | Skill (copy, docs, pre-commit, grill-me, …) |
 | SOPs | On demand via kit-knowledge, never copied into agent files |
 
 ## Adding a role
 
-Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. If specialists re-explore the repo, fix the handover prompt (iteration 3) before generating more stubs.
+Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. If specialists re-explore the repo, fix the handover before generating more stubs.
 
 Out of this page’s scope: Copilot/Antigravity agent directories. Stubs themselves are generated into [agents/](../agents/). `wk agents install` writes only `~/.cursor/agents` and `~/.claude/agents`.
 

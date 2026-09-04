@@ -132,7 +132,9 @@ noglob wk eval run --suite evals/edd/architecture_routing.yaml \
 
 ## Safety suite
 
-Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, and terminal-fallback via `EDD_CI_SUITES`.
+Gateable injection / no-tool suite: `evals/edd/safety.yaml`. `kit check` runs it plus architecture routing, model routing, kit-knowledge, Cloudflare ops, self-correction, terminal-fallback, and host-subagent routing via `EDD_CI_SUITES`.
+
+Subagent routing misses from production go through the same closed loop as other suites (`wk eval dataset from-trace`). Do not skip adding a golden when the orchestrator stays in the parent instead of launching the specialist.
 
 ## Dataset hygiene
 

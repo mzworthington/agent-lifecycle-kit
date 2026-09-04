@@ -25,7 +25,7 @@ import { runKitCheck } from '../quality/quality_gate.js';
 import { renderAnalyticsSummary } from '../quality/telemetry_analytics.js';
 import { assemblePagesSite, defaultPagesSiteDest } from '../site/assemble.js';
 import { scanSkillSecurity } from '../skills/scan_skill_security.js';
-import { syncExternalSkills } from '../skills/sync_external_skills.js';
+import { parseSyncArgs, syncExternalSkills } from '../skills/sync_external_skills.js';
 import {
   printRoleSkillLineBudgetResult,
   verifyRoleSkillLineBudget
@@ -73,6 +73,24 @@ function memoryGraphPath(ctx: RunKitContext): string {
   const env = ctx.env ?? process.env;
   const home = ctx.homedir ?? os.homedir();
   return env.MEMORY_FILE_PATH?.trim() || path.join(home, '.agents', 'sync', 'mcp-memory.jsonl');
+}
+
+function maybeInstallUserSubagentStubsAfterSync(
+  repoDir: string,
+  args: string[],
+  homedir: string
+): void {
+  let parsed;
+  try {
+    parsed = parseSyncArgs(args);
+  } catch {
+    return;
+  }
+  if (parsed.help || parsed.dryRun) return;
+  const result = installUserSubagentStubs({ kitRepoDir: repoDir, homedir });
+  console.log(
+    `Installed ${result.written.length} kit subagent file(s) into ~/.cursor/agents and ~/.claude/agents`
+  );
 }
 
 export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Promise<number> {
@@ -188,8 +206,12 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
       return status(layout.ok && budget.ok && subagents.ok && stubs.ok);
     }
 
-    case 'sync':
-      return syncExternalSkills(repoDir, command.rest);
+    case 'sync': {
+      const code = syncExternalSkills(repoDir, command.rest);
+      if (code !== 0) return code;
+      maybeInstallUserSubagentStubsAfterSync(repoDir, command.rest, ctx.homedir ?? os.homedir());
+      return 0;
+    }
 
     case 'measure-context': {
       const result = measureContextBudget(repoDir);

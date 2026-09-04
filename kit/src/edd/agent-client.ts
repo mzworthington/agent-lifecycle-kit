@@ -95,6 +95,25 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
     if (prompt.includes('typo')) {
       return scriptedNoTool('Staying in the parent for a tiny typo.');
     }
+    if (prompt.includes('owasp') || prompt.includes('security audit')) {
+      return {
+        content: 'Launching agent-security as a readonly audit subagent.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-security',
+              class: 'review',
+              handoverPaths: ['handover/demo/handover_tdd.md']
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.92
+      };
+    }
     if (
       prompt.includes('pr') &&
       (prompt.includes('review') || prompt.includes('audit') || prompt.includes('independent'))
@@ -102,7 +121,14 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       return {
         content: 'Launching agent-review as a readonly audit subagent.',
         tool_calls: [
-          { name: 'launch_specialist', arguments: { specialist: 'agent-review', class: 'review' } }
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-review',
+              class: 'review',
+              handoverPaths: ['handover/demo/handover_tdd.md']
+            }
+          }
         ],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
         consecutiveToolFailures: 0,
@@ -125,13 +151,42 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools }) =>
       };
     }
     if (
+      prompt.includes('browser e2e') ||
+      prompt.includes('xfn apply') ||
+      prompt.includes('green the browser')
+    ) {
+      return {
+        content: 'Launching agent-xfn so browser noise stays out of the parent chat.',
+        tool_calls: [
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-xfn',
+              handoverPaths: ['handover/demo/handover_xfn.md']
+            }
+          }
+        ],
+        usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+        consecutiveToolFailures: 0,
+        haltedAutonomousExecution: false,
+        routingConfidence: 0.91
+      };
+    }
+    if (
       (prompt.includes('spec handover is complete') || prompt.includes('spec is complete')) &&
       (prompt.includes('tdd') || prompt.includes('short loop'))
     ) {
       return {
         content: 'Launching agent-tdd for gear 1 and gear 2 in one session.',
         tool_calls: [
-          { name: 'launch_specialist', arguments: { specialist: 'agent-tdd', class: 'implement' } }
+          {
+            name: 'launch_specialist',
+            arguments: {
+              specialist: 'agent-tdd',
+              class: 'implement',
+              handoverPaths: ['handover/demo/handover_spec.md']
+            }
+          }
         ],
         usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
         consecutiveToolFailures: 0,
