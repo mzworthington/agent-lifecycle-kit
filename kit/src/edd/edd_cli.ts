@@ -18,6 +18,8 @@ import {
 import { normalizeProdTurn, shadowEvalTurns } from './shadow.js';
 import type { EvalCase } from './schema.js';
 import { flagValue, hasFlag } from '../cli/flags.js';
+import { compareMissRatesFromRepo, formatCompareMissRates } from './compare_miss_rates.js';
+import { loadSubagentAllowlist } from '../skills/verify_subagent_allowlist.js';
 import { resolveCliAgentDriver } from './cli-agent.js';
 import { judgeBackendForStyle, resolveEvalRun } from './eval-style.js';
 import { resolveJudgeApiKey, resolveJudgeCompletion } from './judge-provider.js';
@@ -42,6 +44,7 @@ Subcommands:
   ci       --suite <path> [--threshold-routing <pct>] [--model <name>] [--out <dir>]
   shadow   --infile <jsonl> [--sample <rate>] [--out <jsonl>] [--seed <n>]
   dataset  lint|dedupe|synthesize|from-trace [options]
+  compare  [--json]   Specialist-launch vs skill-picker miss rates (freeze)
 
 Agent / judge options (run / watch / report / ci):
   --style <name>       local | http | cli  (default: infer; CI uses local)
@@ -73,6 +76,7 @@ Notes:
   - A pause after "agent"/"judges" with --style cli means the CLI is still running. --cli-stdout (or KIT_EVAL_CLI_STDOUT=1) prints stdout live.
   - --github-summary (or GITHUB_ACTIONS=true) publishes the Markdown report to $GITHUB_STEP_SUMMARY.
   - Bare "kit eval" (no subcommand) still runs the skill trigger harness.
+  - compare reports not-enough (not 0%) when from-trace goldens are empty.
 `);
 }
 
@@ -452,6 +456,22 @@ async function cmdDataset(_repoDir: string, args: string[]): Promise<number> {
   }
 }
 
+function cmdCompare(repoDir: string, args: string[]): number {
+  let expandKill = '';
+  try {
+    expandKill = loadSubagentAllowlist(repoDir).expandKill;
+  } catch {
+    // Fixtures without an allowlist still get a compare from the datasets.
+  }
+  const result = compareMissRatesFromRepo(repoDir, expandKill);
+  if (hasEddFlag(args, '--json')) {
+    console.log(JSON.stringify(result));
+  } else {
+    console.log(formatCompareMissRates(result));
+  }
+  return 0;
+}
+
 /**
  * Handle `kit eval …` when a subcommand is present.
  * Returns null when the caller should fall back to the legacy trigger harness.
@@ -483,6 +503,8 @@ export async function handleEddEvalCli(options: EddCliOptions): Promise<number |
       return cmdDataset(repoDir, rest);
     case 'shadow':
       return cmdShadow(repoDir, rest);
+    case 'compare':
+      return cmdCompare(repoDir, rest);
     default:
       if (sub.endsWith('.yaml') || sub.endsWith('.yml') || sub === 'all') {
         return null;

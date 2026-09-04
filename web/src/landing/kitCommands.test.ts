@@ -59,6 +59,7 @@ describe('docs/kit.md', () => {
       'wk mcp <profile>',
       'wk audit',
       'wk eval ci',
+      'wk eval compare',
       'wk sync'
     ]);
     expect(rows.every((row) => row.purpose.length > 8)).toBe(true);

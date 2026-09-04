@@ -34,6 +34,7 @@ tools:
 | `wk eval ci --threshold-routing 95 --out out/reports` | Headless gate; fail if routing accuracy &lt; threshold |
 | `wk eval run --suite evals/edd/goldens/architecture_routing.yaml --style cli --cli cursor-agent --model …` | Live golden (not CI) |
 | `wk eval dataset lint\|dedupe\|synthesize\|from-trace` | Dataset hygiene (schema lint, dedupe, paraphrases, prod promote) |
+| `wk eval compare` | Specialist-launch vs skill-picker miss rates (freeze the generate list) |
 
 `kit` and `agent-kit` are aliases of `wk`.
 

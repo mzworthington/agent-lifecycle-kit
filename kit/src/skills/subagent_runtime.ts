@@ -3,6 +3,11 @@ import path from 'node:path';
 import { resolveModel } from '../models/catalog.js';
 import { userSubagentInstallDirs } from './install_subagent_stubs.js';
 import {
+  compareMissRatesFromRepo,
+  formatMissRate,
+  type CompareMissRatesResult
+} from '../edd/compare_miss_rates.js';
+import {
   listGenerateSubagents,
   loadSubagentAllowlist,
   resolveSkillsOnlyMode
@@ -16,6 +21,7 @@ export interface SubagentStatus {
   installDirs: string[];
   expandKill: string;
   expandKillIndicator: string;
+  compare: CompareMissRatesResult;
 }
 
 export interface LaunchPromptInput {
@@ -38,14 +44,16 @@ export function subagentStatus(opts: {
   const catalog = loadSubagentAllowlist(opts.repoDir);
   const env = opts.env ?? process.env;
   const raw = env.WK_SUBAGENTS?.trim() || null;
+  const compare = compareMissRatesFromRepo(opts.repoDir, catalog.expandKill);
   return {
     catalogSkillsOnly: catalog.skillsOnly,
     skillsOnly: resolveSkillsOnlyMode({ catalogSkillsOnly: catalog.skillsOnly, env }),
     envRaw: raw,
     generate: listGenerateSubagents(catalog).sort(),
     installDirs: userSubagentInstallDirs(opts.homedir ?? os.homedir()),
-    expandKill: catalog.expandKill.trim(),
-    expandKillIndicator: catalog.expandKillIndicator.trim()
+    expandKill: compare.expandKillLine,
+    expandKillIndicator: catalog.expandKillIndicator.trim(),
+    compare
   };
 }
 
@@ -58,8 +66,12 @@ export function formatSubagentStatus(status: SubagentStatus): string {
     `WK_SUBAGENTS: ${envLine}`,
     `generate: ${status.generate.join(', ')}`,
     `install: ${status.installDirs.join(', ')}`,
+    `compare: ${status.compare.decision}`,
+    `specialist-launch: ${formatMissRate(status.compare.specialist)}`,
+    `skill-picker: ${formatMissRate(status.compare.skillPicker)}`,
     `expand-kill: ${status.expandKill}`,
     `expand-kill-indicator: ${status.expandKillIndicator}`,
+    'compare-cmd: wk eval compare',
     'prompt: wk agents launch-prompt --skill <id> --project <name>'
   ].join('\n');
 }

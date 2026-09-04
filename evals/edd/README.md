@@ -162,7 +162,10 @@ Promote production misses into the suite with the same `kit.*` fields as eval ca
 ```bash
 wk eval shadow --infile evals/edd/examples/prod-turns.jsonl --sample 1 --seed 1 --out out/shadow-fails.jsonl
 wk eval dataset from-trace --trace evals/edd/examples/prod-trace.json --out out/prod.jsonl
+wk eval compare
 ```
+
+`wk eval compare` prints specialist-launch miss rate (prod-derived rows in `subagent_routing.jsonl`) next to the skill-picker miss rate from `evals/suites/routing-matrix.json`. No from-trace goldens → `not-enough`, not a 0% win. `wk agents status` shows the same numbers and the expand-kill line. `wk verify` fails if you add a specialist while freeze is indicated.
 
 Fixtures: [examples/otel-agent-loop.json](./examples/otel-agent-loop.json), [examples/prod-turns.jsonl](./examples/prod-turns.jsonl), [examples/prod-trace.json](./examples/prod-trace.json). Procedure: [SOPs/edd-production-telemetry.md](../../SOPs/edd-production-telemetry.md).
 

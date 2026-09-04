@@ -17,7 +17,7 @@ const PLAYBOOK = 'UNIQUE_PLAYBOOK_SENTENCE_DO_NOT_COPY_INTO_THE_STUB_FILE_PLEASE
 
 const allowlistYaml = `version: 1
 expandKill: Freeze this generate list if auto-delegation is worse than today's skill picker.
-expandKillIndicator: Promote misses with wk eval dataset from-trace into evals/edd/subagent_routing.jsonl.
+expandKillIndicator: Promote misses with wk eval dataset from-trace into evals/edd/subagent_routing.jsonl versus evals/suites/routing-matrix.json.
 staySkillPrefixes:
   - lang-
   - framework-

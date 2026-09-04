@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 import {
   defaultEddSuite,
   eddWatchTargets,
@@ -119,6 +120,25 @@ describe('handleEddEvalCli', () => {
   it('prints help and rejects unknown subcommands', async () => {
     assert.equal(await handleEddEvalCli({ repoDir: '/kit', args: ['help'] }), 0);
     assert.equal(await handleEddEvalCli({ repoDir: '/kit', args: ['nope'] }), 1);
+  });
+
+  it('compares specialist-launch vs skill-picker miss rates without a fake 0% win', async () => {
+    const lines: string[] = [];
+    const original = console.log;
+    console.log = (...args: unknown[]) => {
+      lines.push(args.map(String).join(' '));
+    };
+    try {
+      const kitRoot = fileURLToPath(new URL('../../..', import.meta.url));
+      assert.equal(await handleEddEvalCli({ repoDir: kitRoot, args: ['compare'] }), 0);
+    } finally {
+      console.log = original;
+    }
+    const text = lines.join('\n');
+    assert.match(text, /decision: not-enough/);
+    assert.match(text, /specialist-launch: not-enough/);
+    assert.match(text, /skill-picker:/);
+    assert.doesNotMatch(text, /specialist-launch: 0\.0%/);
   });
 
   it('rejects removed split agent/judge flags', async () => {

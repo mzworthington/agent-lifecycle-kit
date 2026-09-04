@@ -53,7 +53,19 @@ Eval coverage: `evals/edd/subagent_routing.yaml` (launch) and `evals/edd/subagen
 
 ## Adding a role
 
-Do not grow the generate list because a role “sounds like an agent.” Freeze this list if auto-delegation picks the wrong specialist **more often than today’s skill picker**. Measure that with `wk eval dataset from-trace` into `evals/edd/subagent_routing.jsonl` versus skill-picker misses in `evals/suites/routing-matrix.json` (`expandKillIndicator` in the YAML). If specialists re-explore the repo, fix the handover before generating more stubs.
+Do not grow the generate list because a role “sounds like an agent.” Compare the numbers:
+
+```bash
+wk eval dataset from-trace --trace path/to/miss.json --out evals/edd/subagent_routing.jsonl
+wk eval compare
+wk agents status
+```
+
+`wk eval compare` scores specialist-launch misses on **from-trace** (`prod-derived`) rows in `evals/edd/subagent_routing.jsonl` next to the skill picker miss rate from `evals/suites/routing-matrix.json`. Empty from-trace goldens report `not-enough`, not a 0% specialist win.
+
+When the specialist miss rate is higher, the expand-kill line is **Freeze** — it does not tell you to add a role. **CI sitting:** `wk verify` (and `wk check`) fail if the generate list grows past the published seven while freeze is indicated. We do not rely on a stale docs badge.
+
+If specialists re-explore the repo, fix the handover before generating more stubs.
 
 Out of this page’s scope: Copilot/Antigravity agent directories. Stubs themselves are generated into [agents/](../agents/). `wk agents install` writes only `~/.cursor/agents` and `~/.claude/agents`.
 

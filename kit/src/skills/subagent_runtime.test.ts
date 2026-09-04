@@ -26,8 +26,13 @@ describe('subagent_runtime', () => {
     assert.equal(status.catalogSkillsOnly, false);
     assert.ok(status.generate.includes('agent-tdd'));
     assert.match(status.expandKillIndicator, /from-trace/);
+    assert.equal(status.compare.decision, 'not-enough');
+    assert.equal(status.compare.specialist.rate, null);
     assert.match(formatSubagentStatus(status), /mode: launch/);
     assert.match(formatSubagentStatus(status), /launch-prompt/);
+    assert.match(formatSubagentStatus(status), /compare: not-enough/);
+    assert.match(formatSubagentStatus(status), /wk eval compare/);
+    assert.doesNotMatch(formatSubagentStatus(status), /specialist-launch: 0\.0%/);
   });
 
   it('honors WK_SUBAGENTS=0 in status', () => {

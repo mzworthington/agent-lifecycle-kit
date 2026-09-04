@@ -41,7 +41,7 @@ flowchart LR
 | **Closed-loop telemetry** | Production misses become `.jsonl` cases (`wk eval dataset from-trace`); `wk eval shadow` samples live turns into the suite. |
 | **Dataset hygiene** | `wk eval dataset lint\|dedupe\|synthesize\|from-trace` keeps suites valid and scalable. |
 
-Bare `wk eval` still validates which Kit skill activates. `wk eval run|watch|report|ci` validates how an agent calls tools. Use EDD whenever you change prompts, tool schemas, or routing.
+Bare `wk eval` still validates which Kit skill activates. `wk eval run|watch|report|ci` validates how an agent calls tools. `wk eval compare` scores specialist-launch misses (from-trace) against the skill-picker routing matrix. Use EDD whenever you change prompts, tool schemas, or routing.
 
 ## Quick start
 

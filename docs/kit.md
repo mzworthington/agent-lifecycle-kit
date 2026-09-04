@@ -106,12 +106,13 @@ Day to day you operate the kit with `wk`: align for handshake, doctor for commun
 | `wk ontology check` | Live graph referential integrity |
 | `wk agents generate` | Thin host stubs under `agents/` from the allowlist |
 | `wk agents install` | Copy stubs into `~/.cursor/agents` and `~/.claude/agents` (user scope) |
-| `wk agents status` | Launch vs skills-only (`WK_SUBAGENTS`) and the expand-kill indicator |
+| `wk agents status` | Launch vs skills-only (`WK_SUBAGENTS`), miss-rate compare, and the expand-kill line |
 | `wk agents launch-prompt` | Parent Task prompt for one allowlisted specialist |
 | `wk ontology generate` | Write gitignored index for kit-knowledge and the map |
 | `wk mcp <profile>` | One MCP profile into Cursor, Claude, Copilot, and Antigravity |
 | `wk audit` | Skills and scripts supply-chain scan |
 | `wk eval ci` | Routing accuracy gate (EDD) |
+| `wk eval compare` | Specialist-launch vs skill-picker miss rates (freeze the generate list) |
 | `wk sync` | Upstream skills from the lockfile, then refresh user kit subagent stubs |
 
 EDD loop (alpha), keys, and CI: [edd.md](./edd.md). Host files: [hosts.md](./hosts.md).
