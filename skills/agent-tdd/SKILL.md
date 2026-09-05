@@ -90,7 +90,7 @@ When sketching slice boundaries or request flows in docs, use Mermaid - not ASCI
 2. **Green (gear 1)** - Minimal implementation to pass tests. Ports are interfaces only; mock them in slice tests.
 3. **Green (gear 2)** - If a new/changed outbound port is required, implement one thin adapter + integration test in the **same session**. Prefer extending an existing adapter.
 4. **Refactor** - Apply clean-code rules only when tests for the current gear are green.
-5. **Vertical slice** - Co-locate handler, request/response types, and slice tests in one feature folder.
+5. **Vertical slice** - Co-locate handler, request/response types, and slice tests in one feature folder. Extracts stay in that folder (`index.ts`), not as prefixed files in the parent.
 6. **Deep-dive escape hatch** - If gear 2 grows beyond one thin adapter (new payment gateway, multi-step migration, complex DI graph), route to [agent-adapter](../agent-adapter/SKILL.md) without abandoning the port contract already greened in gear 1.
 7. Use stack tooling from matching `lang-*` / `framework-*` profiles. Prefer catalogued MCPs in frontmatter when schema/docs/billing apply.
 8. **No `any`** - Production and tests must not introduce TypeScript `any` / `as any`. Mock ports with typed fakes or `Partial<T>`. Vitest `expect.any(...)` matchers are allowed. Follow [lang-typescript](../lang-typescript/SKILL.md).

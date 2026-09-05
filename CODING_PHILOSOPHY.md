@@ -70,6 +70,8 @@ Organize work by **feature / use case**, not only by technical layer. A vertical
 
 - **Slice = one capability:** e.g. `SubmitOrder`, `ImportDiagram`, `ListHotspots` - each slice owns its request/response types, handler/use case, and tests.
 - **Co-locate slice artifacts:** Keep handler, DTOs, validator, and slice tests together (`features/submit-order/` or `orders/submit-order/`). Shared domain primitives stay in `domain/` or `core/`.
+- **Capability folder, not dump directory:** When a capability needs a third module (or a extract from a hotspot), put those files in a folder named after the capability (`rules/mermaidImport/`, `cli/help/`). Do not drop `mermaidC4.ts` / `mermaidFlowchart.ts` next to unrelated siblings in the parent.
+- **Never `name.ts` beside `name/`:** A file and a directory that share a stem collide on case-insensitive volumes and confuse imports. Replace `foo.ts` with `foo/index.ts` in the same change.
 - **Avoid shotgun surgery:** Adding a feature should touch one slice folder plus shared domain code - not every file in `controllers/`, `services/`, and `repositories/` globally.
 - **Hexagonal inside each slice:** The slice's handler is the application entry; it calls domain logic and ports. Adapters remain thin at the HTTP/UI edge.
 - **Slice-first TDD:** Write failing tests per slice (acceptance or handler-level unit tests) before wiring delivery adapters.

@@ -68,7 +68,7 @@ When a lasting design choice is **hard to reverse** or **deliberately differs fr
 
 ### Vertical slices
 
-6. **Slice cohesion** - A feature's handler, tests, and DTOs live together; flag changes that require editing unrelated slices.
+6. **Slice cohesion** - A feature's handler, tests, and DTOs live together. Flag dump directories (prefixed siblings in a parent) and `name.ts` beside `name/`. Extracts belong in a capability folder with `index.ts` (e.g. `rules/mermaidImport/`), not prefixed files beside the original module ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §3).
 7. **Shotgun surgery** - Reject designs where one user story touches many horizontal layers globally.
 
 ### Clean code

@@ -28,7 +28,7 @@ Apply these rules strictly when writing TypeScript or Node.js code:
 - **Strict typing** - Enable `strict`. Never use `any`, `as any`, or `as unknown as`. Reach for `unknown` plus a type guard/Zod parse, explicit generics, or `satisfies T`. Tests use typed fakes, `Partial<T>`, and `vi.fn<typeof impl>` - not `as any`. Vitest `expect.any(Number)` is a matcher, not a type `any`. Turn on `typescript/no-explicit-any` (oxlint or ESLint) as an error so this cannot regress.
 - **Ports & adapters** - Driving ports as interfaces (e.g. `CreateOrderUseCase`). Driven ports as interfaces; use DI tokens or functional injection for implementations.
 - **Domain purity (DDD)** - Aggregates and value objects in `domain/` with no TypeORM, Prisma, or class-validator decorators.
-- **Vertical slices** - Co-locate `*Handler`, request/response types, and slice tests under `features/<capability>/`.
+- **Vertical slices** - Co-locate `*Handler`, request/response types, and slice tests under `features/<capability>/`. Extra modules for that capability go in the same folder (`index.ts` barrel). Never add prefixed siblings in the parent (`fooBar.ts` next to `foo.ts`); never leave `foo.ts` beside a `foo/` directory.
 - **Validation** - Zero-trust parsing at infrastructure boundaries with `Zod` or `ArkType` before data reaches handlers.
 - **No narrative comments** - Names and tests document why ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4). Do not add JSDoc that restates the identifier.
 

@@ -1,7 +1,7 @@
 {
   "suite": "anti-patterns",
   "description": "Evaluation benchmarks testing strict enforcement of negative guardrails and architectural anti-patterns",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "test_cases": [
     {
       "id": "EVAL-ANTI-001",
@@ -138,6 +138,27 @@
           ": any",
           "as any",
           "as unknown as"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ANTI-008",
+      "name": "Capability Folder Not Prefixed Dump",
+      "description": "Verifies that extracting a multi-file capability nests under a folder with index.ts and does not leave name.ts beside name/ or prefixed siblings in the parent.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "The mermaid parser was split into mermaidC4.ts, mermaidFlowchart.ts, and mermaidImportShared.ts beside mermaidImport.ts in rules/. Fix the layout so the capability is easy to navigate.",
+      "assertions": {
+        "required_triggers": [
+          "vertical slice",
+          "architecture"
+        ],
+        "required_patterns": [
+          "mermaidImport/",
+          "index.ts"
+        ],
+        "forbidden_patterns": [
+          "mermaidC4.ts next to",
+          "keep them in rules/"
         ]
       }
     },

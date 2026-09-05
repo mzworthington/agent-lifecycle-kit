@@ -87,6 +87,8 @@ Route execution to `agent-prune` when rows are `ready`.
 - Rewrites that change behavior without catalog/test alignment.
 - New abstractions with a single call site (inline instead).
 - Splitting files without moving toward vertical-slice cohesion.
+- Prefixed dump files in a parent (`mermaidC4.ts` beside `mermaidImport.ts`); nest `mermaidImport/` with `index.ts` instead ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §3).
+- Leaving `name.ts` beside a `name/` directory.
 
 ## 5. Tooling (use what the repo already has)
 

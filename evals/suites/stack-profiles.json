@@ -1,7 +1,7 @@
 {
   "suite": "stack-profiles",
   "description": "Evaluation benchmarks for lang-* and framework-* stack profiles",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "test_cases": [
     {
       "id": "EVAL-LANG-TS-001",
@@ -27,6 +27,31 @@
           ": any",
           "as any",
           "as unknown as"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-LANG-TS-002",
+      "name": "TypeScript Capability Folder Not Prefixed Dump",
+      "description": "Verifies TypeScript extracts nest under a capability folder with index.ts and never leave name.ts beside name/.",
+      "target_skill": "lang-typescript",
+      "prompt": "Split a 500-line TypeScript mermaidImport.ts into C4, flowchart, and markdown parsers. Where do the new files go?",
+      "context": {
+        "detected_stack": [
+          "TypeScript"
+        ]
+      },
+      "assertions": {
+        "required_triggers": [
+          "typescript",
+          "node"
+        ],
+        "required_patterns": [
+          "index.ts"
+        ],
+        "forbidden_patterns": [
+          ": any",
+          "as any"
         ]
       }
     },

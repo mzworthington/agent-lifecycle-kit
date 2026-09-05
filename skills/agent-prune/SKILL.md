@@ -154,7 +154,7 @@ See [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
 
 One hotspot cluster per batch (one function family or one slice folder):
 
-1. **Behavior-preserving only** - no catalog/test changes without alignment.
+1. **Behavior-preserving only** - no catalog/test changes without alignment. New modules from an extract go in a **capability folder** with `index.ts`; do not add prefixed siblings to the parent dump directory ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §3).
 2. Re-run slice/unit tests for touched modules.
 3. Re-check metrics when the repo has a complexity command (note before/after in handover).
 4. Run [agent-pre-commit](../agent-pre-commit/SKILL.md) until green.
