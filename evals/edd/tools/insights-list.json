@@ -1,0 +1,14 @@
+{
+  "name": "insights-list",
+  "description": "List saved PostHog insights (product analytics). Use in Session A intake to gather signals. Do not create Linear issues from this list.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "search": {
+        "type": "string",
+        "description": "Optional search string (drop-off, funnel, empty events)"
+      }
+    },
+    "additionalProperties": false
+  }
+}

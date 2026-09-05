@@ -1,0 +1,23 @@
+{
+  "name": "save_issue",
+  "description": "Create or update a Linear issue. Available on the default MCP profile only. Forbidden during PostHog intake (Session A). Use after the operator confirms rows and wk mcp default is restored.",
+  "inputSchema": {
+    "type": "object",
+    "required": ["title"],
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Issue title (INVEST capability, not a filename)"
+      },
+      "description": {
+        "type": "string",
+        "description": "Story body with acceptance criteria"
+      },
+      "team": {
+        "type": "string",
+        "description": "Linear team key"
+      }
+    },
+    "additionalProperties": false
+  }
+}

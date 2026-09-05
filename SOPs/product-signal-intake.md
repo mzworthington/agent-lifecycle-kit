@@ -19,7 +19,7 @@ Two sessions. One MCP profile each. A human gate before any Linear create.
 
 This is the contract text for `product-signal-intake`. Skills that should load it later (pointer story, not this file): [agent-posthog](../skills/agent-posthog/SKILL.md) (Session A), [agent-user-stories](../skills/agent-user-stories/SKILL.md) and [agent-prd](../skills/agent-prd/SKILL.md) (Session B), [agent-orchestrator](../skills/agent-orchestrator/SKILL.md) (route, do not invent a product-insights skill), [agent-debug](../skills/agent-debug/SKILL.md) when the row is a bug.
 
-SDK wiring and empty-events proof stay on [posthog-product-analytics](./posthog-product-analytics.md). Filing tickets stays on [linear-ticket-workflow](./linear-ticket-workflow.md) in Session B only.
+SDK wiring and empty-events proof stay on [posthog-product-analytics](./posthog-product-analytics.md). Filing tickets stays on [linear-ticket-workflow](./linear-ticket-workflow.md) in Session B only. Routing evals: [evals/edd/posthog_intake.yaml](../evals/edd/posthog_intake.yaml) — intake must not call Linear `save_issue`; file-from-handover uses stories/PRD after restore default.
 
 ```mermaid
 flowchart TD
@@ -95,3 +95,5 @@ Session B: wk mcp default --install. File only operator-confirmed rows from the 
 ```text
 Play one confirmed Linear issue from the filed rows. Claim it In Progress, stay on main, leave the tree uncommitted.
 ```
+
+Format fixture (not live MCP proof): [evals/edd/examples/posthog-findings-dry-run.md](../evals/edd/examples/posthog-findings-dry-run.md) — waykit.dev, three classified rows, Operator = skip until Session A evidence exists.
