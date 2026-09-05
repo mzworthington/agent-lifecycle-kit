@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-05
+
+### 🚀 Features
+
+- Improved CLI UX
+
 ## 2026-09-04
 
 ### 🚀 Features
