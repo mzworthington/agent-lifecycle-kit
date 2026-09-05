@@ -8,6 +8,7 @@
 - *(ci)* Add 'Repo doctor' step to CI workflow and enhance documentation for first-party adopters
 - Enhance accessibility and UI components across the application
 - Compelxity skills
+- Update coding philosophy and complexity SOPs to enforce capability folder
 
 ## 2026-09-04
 
