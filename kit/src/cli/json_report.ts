@@ -101,9 +101,11 @@ export function doctorResultToJson(result: DoctorRunResult): JsonCommandReport {
       continue;
     }
     for (const item of report.plan.findings) {
-      const filePath = report.targetDir ? path.join(report.targetDir, item.relPath) : item.relPath;
+      const filePath = report.targetDir
+        ? path.join(report.targetDir, item.relPath)
+        : `${report.label}/${item.relPath}`;
       findings.push({
-        id: item.relPath,
+        id: `${report.label}:${item.relPath}`,
         status: item.status === 'ok' ? 'ok' : 'fail',
         path: posixPath(filePath)
       });

@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 import { classifyRepo, communityRelPaths, planRepoDoctor } from './hygiene.js';
 import { evaluateOwnership } from './ownership.js';
@@ -101,5 +104,46 @@ describe('planRepoDoctor', () => {
       installHook: true
     });
     assert.equal(writeHooks.installHooks, true);
+  });
+
+  it('scores missing files on a local not-admin checkout and still skips them in fleet mode', () => {
+    const notAdmin = evaluateOwnership({
+      nameWithOwner: 'acme/app',
+      ownerLogin: 'acme',
+      isFork: false,
+      isArchived: false,
+      viewerPermission: 'WRITE'
+    });
+    const local = planRepoDoctor({
+      repoClass: 'product',
+      ownership: notAdmin,
+      existingRelPaths: new Set(['README.md']),
+      write: true,
+      installHook: true,
+      mode: 'local'
+    });
+    assert.equal(local.skippedReason, undefined);
+    assert.equal(local.writeBlocked, true);
+    assert.ok(local.findings.some((f) => f.relPath === 'CONTRIBUTING.md' && f.status === 'missing'));
+
+    const fleet = planRepoDoctor({
+      repoClass: 'product',
+      ownership: notAdmin,
+      existingRelPaths: new Set(['README.md']),
+      write: true,
+      installHook: true,
+      mode: 'fleet'
+    });
+    assert.equal(fleet.skippedReason, 'not-admin');
+    assert.equal(fleet.findings.length, 0);
+  });
+});
+
+describe('kit checkout community files', () => {
+  it('has every kit-class community path on disk', () => {
+    const kitRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+    for (const rel of communityRelPaths('kit')) {
+      assert.ok(fs.existsSync(path.join(kitRoot, rel)), rel);
+    }
   });
 });

@@ -91,11 +91,42 @@ describe('doctorResultToJson', () => {
     const report = doctorResultToJson(result);
     assert.equal(report.command, 'doctor');
     assert.equal(report.ok, false);
-    assert.equal(report.findings[0]?.id, 'README.md');
+    assert.equal(report.findings[0]?.id, 'acme/app:README.md');
     assert.equal(report.findings[0]?.status, 'ok');
     assert.equal(report.findings[0]?.path, '/app/README.md');
-    assert.equal(report.findings[1]?.id, 'LICENSE');
+    assert.equal(report.findings[1]?.id, 'acme/app:LICENSE');
     assert.equal(report.findings[1]?.status, 'fail');
     assert.equal(report.findings[1]?.path, '/app/LICENSE');
+  });
+
+  it('prefixes remote-only findings with owner/repo when there is no clone path', () => {
+    const result: DoctorRunResult = {
+      ok: false,
+      error: undefined,
+      reports: [
+        {
+          label: 'acme/old',
+          targetDir: undefined,
+          written: [],
+          remoteOnly: true,
+          plan: {
+            repoClass: 'product',
+            ownership: { inScope: true, reason: 'owned', nameWithOwner: 'acme/old' },
+            ok: false,
+            writeBlocked: true,
+            skippedReason: undefined,
+            findings: [{ relPath: 'CONTRIBUTING.md', status: 'missing' }],
+            writes: [],
+            installHooks: false
+          }
+        }
+      ]
+    };
+    const report = doctorResultToJson(result);
+    assert.deepEqual(report.findings[0], {
+      id: 'acme/old:CONTRIBUTING.md',
+      status: 'fail',
+      path: 'acme/old/CONTRIBUTING.md'
+    });
   });
 });

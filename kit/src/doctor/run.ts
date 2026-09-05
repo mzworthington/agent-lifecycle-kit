@@ -64,7 +64,8 @@ function remotePlan(view: RepoView, repoClass: RepoClass, github: GitHubPort, wr
     ownership: evaluateOwnership(view),
     existingRelPaths: existing,
     write,
-    installHook
+    installHook,
+    mode: 'fleet'
   });
 }
 
@@ -94,7 +95,8 @@ export function runDoctor(opts: DoctorRunOptions): DoctorRunResult {
           ownership,
           existingRelPaths: existingCommunityPaths(clone, repoClass),
           write: opts.write,
-          installHook: opts.installHook
+          installHook: opts.installHook,
+          mode: 'fleet'
         });
         const applied = applyDoctorPlan(plan, {
           targetDir: clone,
@@ -131,7 +133,8 @@ export function runDoctor(opts: DoctorRunOptions): DoctorRunResult {
     ownership,
     existingRelPaths: existingCommunityPaths(opts.targetDir, repoClass),
     write: opts.write,
-    installHook: opts.installHook
+    installHook: opts.installHook,
+    mode: 'local'
   });
   const label = ownership.nameWithOwner ?? path.basename(opts.targetDir);
   const applied = applyDoctorPlan(plan, {

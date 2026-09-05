@@ -19,6 +19,8 @@ Cloudflare stays on a named profile. For live Worker or Pages work: `wk mcp clou
 | Personal site | [mzworthington/mzworthington](https://github.com/mzworthington/mzworthington) | Jekyll + `infra/cloudflare`. Commit-msg lives in `.githooks/`. |
 | edge-dns | [mzworthington/edge-dns](https://github.com/mzworthington/edge-dns) | Zones, GitHub Pages origin DNS, shared Cloudflare CI. |
 
-These are maintainer repos, not a customer logo wall. If a handshake drifts, `wk align` fails the same way `wk doctor` fails missing community files. gpio-build-monitor also runs that check on PRs via the reusable [align-consumer](./align.md#consumer-ci) workflow.
+These are maintainer repos, not a customer logo wall. If a handshake drifts, `wk align` fails the same way `wk doctor` fails missing community files. First-party product PRs run that check via the reusable [align-consumer](./align.md#consumer-ci) workflow (ArchLens, SteerLens, the Cloudflare template, gpio-build-monitor, the personal site, and edge-dns).
+
+Fleet `--owned --scan` matches GitHub `nameWithOwner` to `origin`. ArchLens lives in a folder named `archlens` but origin is still `mzworthington/blueprint`, so a GitHub repo named `archlens` (if any) shows as not-cloned. Align the clone path directly: `wk align ~/Documents/dev/archlens`.
 
 Related: [Consumer align](./align.md), [Repo doctor](./doctor.md), [Hosts](./hosts.md).

@@ -68,12 +68,16 @@ export interface PlanRepoDoctorOptions {
   existingRelPaths: Set<string>;
   write: boolean;
   installHook: boolean;
+  mode?: 'local' | 'fleet';
 }
 
 export function planRepoDoctor(opts: PlanRepoDoctorOptions): DoctorPlan {
   const { repoClass, ownership, existingRelPaths, write, installHook } = opts;
+  const mode = opts.mode ?? 'local';
   const skipWholeRepo =
-    ownership.reason === 'fork' || ownership.reason === 'archived' || ownership.reason === 'not-admin';
+    ownership.reason === 'fork' ||
+    ownership.reason === 'archived' ||
+    (mode === 'fleet' && ownership.reason === 'not-admin');
 
   if (skipWholeRepo) {
     return {
