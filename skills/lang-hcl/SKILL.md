@@ -62,13 +62,13 @@ variable "environment" {
 - No hardcoded API keys, passwords, or private keys in `.tf` / `.tfvars` committed to git.
 - Use `aws_iam_policy_document` / cloud equivalents to build least-privilege JSON - avoid hand-written policy JSON strings.
 - Prefer `lifecycle { prevent_destroy = true }` on prod stateful resources (KMS, RDS, log buckets).
-- `ignore_changes` only with comment explaining drift source (e.g. autoscaling tags).
+- `ignore_changes` only with a ticket or ADR id on the lifecycle block (scanner annotation), not a paragraph restating the resource.
 
 ## Expressions
 
 - Use explicit comparisons; avoid clever one-liners that obscure intent.
 - Handle `null` and empty collections safely - no unguarded `tolist` on optional attributes.
-- Document non-obvious `depends_on` when implicit graph edges are insufficient.
+- Prefer explicit references so `depends_on` is rare; if required, cover the graph constraint in a `terraform test` rather than a comment.
 
 ## Testing defaults
 

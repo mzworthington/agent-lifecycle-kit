@@ -649,6 +649,28 @@
           "agent-tdd"
         ]
       }
+    },
+    {
+      "id": "EVAL-ROUTE-033",
+      "name": "Route Write Copy Hero And CTA",
+      "description": "Verifies write-copy / generic / less-corporate landing requests route to agent-copy.",
+      "target_skill": "agent-copy",
+      "prompt": "Write copy for the landing hero section. This copy feels generic, so make this sound less corporate.",
+      "assertions": {
+        "required_triggers": [
+          "write copy",
+          "hero section",
+          "feels generic",
+          "less corporate"
+        ],
+        "required_patterns": [
+          "agent-copy",
+          "Never invent"
+        ],
+        "forbidden_patterns": [
+          "agent-security"
+        ]
+      }
     }
   ]
 }

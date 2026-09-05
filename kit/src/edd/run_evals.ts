@@ -119,7 +119,6 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
         const failureReasons: string[] = [];
         const promptLower = testCase.prompt.toLowerCase();
 
-        // 1. Target Skill Resolution & Trigger Verification
         if (testCase.target_skill) {
           const skillMeta = skillsMap.get(testCase.target_skill);
           if (!skillMeta) {
@@ -131,7 +130,6 @@ export function runEvals(rootDir: string = defaultRepoDir): boolean {
           }
         }
 
-        // 2. Forbidden Patterns in Prompt Check
         if (testCase.assertions.forbidden_patterns) {
           for (const forbidden of testCase.assertions.forbidden_patterns) {
             if (promptLower.includes(forbidden.toLowerCase()) && !forbidden.toLowerCase().includes('```')) {

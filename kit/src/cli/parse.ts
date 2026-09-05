@@ -3,6 +3,7 @@ import { parseMcpHosts, type McpHostId } from '../bootstrap/mcp_hosts.js';
 import { isCompletionShell, type KitCompletionShell } from './completion.js';
 import { isRepoClass, type RepoClass } from '../doctor/hygiene.js';
 import { firstPositional, flagValue, hasFlag, collectFlagValues } from './flags.js';
+import { isKitHelpTopic, type KitHelpTopic } from './help.js';
 import { cliUsage } from './name.js';
 
 export interface ParseKitArgvOptions {
@@ -11,7 +12,8 @@ export interface ParseKitArgvOptions {
 }
 
 export type KitCommand =
-  | { kind: 'help' }
+  | { kind: 'menu' }
+  | { kind: 'help'; topic: KitHelpTopic }
   | { kind: 'unknown'; command: string }
   | { kind: 'usage'; message: string }
   | {
@@ -120,16 +122,31 @@ const SUBAGENTS_USAGE = cliUsage('subagents status [--json]');
 const SITE_ASSEMBLE_USAGE = cliUsage('site assemble [--out <dir>]');
 const COMMIT_MSG_USAGE = cliUsage('commit-msg [--message <subject>] [file]');
 
+function helpTopicFromArgv(argv: string[]): KitHelpTopic | undefined {
+  const flagged = argv.includes('--help') || argv.includes('-h');
+  const head = argv[0];
+  const headIsHelp = head === 'help' || head === '--help' || head === '-h';
+  if (!flagged && !headIsHelp) return undefined;
+  if (headIsHelp) {
+    const next = argv[1];
+    if (next && !next.startsWith('-') && isKitHelpTopic(next)) return next;
+    return 'overview';
+  }
+  if (head && !head.startsWith('-') && isKitHelpTopic(head)) return head;
+  return 'overview';
+}
+
 export function parseKitArgv(argv: string[], opts: ParseKitArgvOptions): KitCommand {
   const command = argv[0];
   const rest = argv.slice(1);
+  const helpTopic = helpTopicFromArgv(argv);
+  if (helpTopic !== undefined) {
+    return { kind: 'help', topic: helpTopic };
+  }
 
   switch (command) {
     case undefined:
-    case 'help':
-    case '--help':
-    case '-h':
-      return { kind: 'help' };
+      return { kind: 'menu' };
 
     case 'init': {
       const targetFlag = flagValue(rest, '--target');

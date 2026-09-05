@@ -4,7 +4,7 @@ export function HomeProof() {
       <h2 id="proof-heading">One loop: a miss becomes a failing eval</h2>
       <p className="proof-lead">
         Same user prompt. Without a case file you get a confident guess. With an eval you get a
-        failing assert, a report, and a merge gate. That loop is EDD alpha: useful for routing
+        failing assert, a report and a merge gate. That loop is EDD alpha: useful for routing
         contracts, not a full eval platform.
       </p>
       <p className="proof-prompt">“What is the database for the payment system?”</p>

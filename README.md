@@ -2,7 +2,7 @@
 
 **Grill, spec, TDD, ship, then learn.**
 
-Coding agents skip steps a team would not. Waykit is the software lifecycle they actually run: grilling, spec, TDD, cross-functional quality, audit, telemetry, and release, plus the learning loops that feed the next session. Eval-driven development (**alpha**) is one of those loops, when the change is a prompt or a tool contract.
+Coding agents skip spec, test impact and a release bar. Waykit is that lifecycle plus the loops that feed the next session: grilling, spec, TDD, cross-functional quality, audit, telemetry and release. Eval-driven development (**alpha**) is one of those loops, when the change is a prompt or a tool contract.
 
 [![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=github-actions)](./.github/workflows/ci.yml)
 [![Lifecycle](https://img.shields.io/badge/Lifecycle-SDLC-blueviolet?style=for-the-badge&logo=git)](./docs/lifecycle.md)
@@ -44,9 +44,9 @@ Teaching suite: [evals/edd/demo.yaml](./evals/edd/demo.yaml) ([before-after writ
 
 ---
 
-## The value: a full SDLC with learning loops
+## The value: lifecycle plus learning loops
 
-Waykit standardizes coding-agent workflow across **Cursor, Claude Code, GitHub Copilot, and Antigravity** (Gemini CLI / `agy`). Same `AGENTS.md`, same skills, MCP composed into each host’s config file. [Hosts](./docs/hosts.md).
+Waykit standardizes coding-agent workflow across **Cursor, Claude Code, GitHub Copilot and Antigravity** (Gemini CLI / `agy`). Same `AGENTS.md`, same skills, MCP composed into each host’s config file. [Hosts](./docs/hosts.md).
 
 | Pillar | Outcome |
 | :--- | :--- |
@@ -54,7 +54,7 @@ Waykit standardizes coding-agent workflow across **Cursor, Claude Code, GitHub C
 | **Architecture** | Hexagonal + DDD + vertical slices + clean code ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md); applicability/opt-out included) |
 | **Learning loops** | Behavior catalog, XFN gates, evals for tool calls, prod misses back into the suite |
 | **One rules file** | `AGENTS.md` syncs to IDE entry points (`wk export-rules`) |
-| **MCP catalog** | One profile composed into Cursor, Claude, Copilot, and Antigravity config files ([mcps/](./mcps/), [docs/hosts.md](./docs/hosts.md)) |
+| **MCP catalog** | One profile composed into Cursor, Claude, Copilot and Antigravity config files ([mcps/](./mcps/), [docs/hosts.md](./docs/hosts.md)) |
 | **Context budget** | Always-on bootstrap under ~8KB; `wk measure-context` / `wk check` ([docs/kit.md](./docs/kit.md)) |
 | **Security audit** | Prompt injection, secrets, entropy, unpinned skills (`wk audit`) |
 

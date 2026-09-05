@@ -548,7 +548,6 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
     .reverse()
     .find((m) => m.role === 'tool' && (m.content ?? '').toLowerCase().includes('notfound'));
 
-  // Negative / conversational - no tool
   if (
     prompt.includes('what does c4 stand for') ||
     prompt.includes('explain c4') ||
@@ -565,7 +564,6 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
     };
   }
 
-  // Error recovery: prior NotFound hint → correct componentId
   if (priorToolError || prompt.includes('try that again') || prompt.includes('try again')) {
     const toolName = 'read_architecture_yaml';
     const call: AgentToolCall = {
@@ -582,7 +580,6 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
     };
   }
 
-  // Terminal fallback: repeated timeouts in history
   const timeoutCount = messages.filter(
     (m) => m.role === 'tool' && /timeout|timed out|network/i.test(m.content ?? '')
   ).length;
@@ -598,7 +595,6 @@ export const scriptedDriver: AgentDriver = async ({ messages, mocks, tools, syst
     };
   }
 
-  // Happy-path architecture routing
   if (
     prompt.includes('architecture') ||
     prompt.includes('c4') ||

@@ -9,9 +9,9 @@ Do not commit or push unless the user explicitly asks.
 ## Invariants (always on)
 
 1. **Hexagonal** - dependencies point inward; domain stays pure.
-2. **Mermaid** for diagrams; no ASCII/box-drawing architecture art ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) §8 when writing diagrams).
+2. **Mermaid** for architecture diagrams in docs. **ASCII/box-drawing** for TTY CLI chrome ([CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) §8).
 3. **Commits / tickets** - conventional subjects ([SOPs/conventional-commits.md](./SOPs/conventional-commits.md)); type follows **behavior**. Linear playbook: [SOPs/linear-ticket-workflow.md](./SOPs/linear-ticket-workflow.md) (main, uncommitted unless asked).
-4. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding.
+4. **Tests are the behavior catalog** - align functional + XFN impact before non-trivial coding. Prefer self-documenting names; do not comment intent. When why is not obvious, encode it in a test.
 5. **One MCP profile per session** - prefer skill frontmatter `mcp:` ids; more tools cost tokens ([mcps/README.md](./mcps/README.md)).
 
 ## Load on demand

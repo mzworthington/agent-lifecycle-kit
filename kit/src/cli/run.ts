@@ -57,6 +57,9 @@ import {
 } from './completion.js';
 import { printKitVersion } from '../version/print_kit_version.js';
 import { errorMessage, printKitHelp } from './help.js';
+import { shouldShowInteractiveMenu } from './interactiveMenu.js';
+import { promptInteractiveMenu } from './runInteractiveMenu.js';
+import { formatUnknownCommand } from './suggest.js';
 import {
   alignOwnedResultToJson,
   alignResultToJson,
@@ -70,6 +73,9 @@ export interface RunKitContext {
   repoDir: string;
   env?: NodeJS.ProcessEnv;
   homedir?: string;
+  cwd?: string;
+  stdoutIsTTY?: boolean;
+  promptMenu?: (input: { cwd: string; repoDir: string }) => Promise<KitCommand>;
 }
 
 function status(ok: boolean): number {
@@ -106,13 +112,26 @@ export async function runKitCommand(command: KitCommand, ctx: RunKitContext): Pr
   const { repoDir } = ctx;
 
   switch (command.kind) {
+    case 'menu': {
+      const env = ctx.env ?? process.env;
+      const stdoutIsTTY = ctx.stdoutIsTTY ?? process.stdout.isTTY === true;
+      if (!shouldShowInteractiveMenu({ stdoutIsTTY, env })) {
+        printKitHelp();
+        return 0;
+      }
+      const cwd = ctx.cwd ?? process.cwd();
+      const next = ctx.promptMenu
+        ? await ctx.promptMenu({ cwd, repoDir })
+        : await promptInteractiveMenu({ cwd, repoDir });
+      return runKitCommand(next, ctx);
+    }
+
     case 'help':
-      printKitHelp();
+      printKitHelp(console.log, command.topic);
       return 0;
 
     case 'unknown':
-      console.error(`Unknown command: ${command.command}`);
-      printKitHelp();
+      console.error(formatUnknownCommand(command.command));
       return 1;
 
     case 'usage':

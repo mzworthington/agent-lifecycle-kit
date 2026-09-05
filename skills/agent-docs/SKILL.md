@@ -33,8 +33,8 @@ Docs follow tests - not the other way around ([CODING_PHILOSOPHY.md](../../CODIN
 ## Rules
 
 1. Update only what the change touched (README sections, `.env.example`, runbooks, OpenAPI narrative, public landing copy).
-2. **Load [agent-copy](../agent-copy/SKILL.md) before writing or rewriting narrative** (README lead, landing, blog, onboarding, changelog blurbs). Apply the human-centric rewrite loop and anti-AI-copy tells. Accuracy still comes from the behavior catalog; voice comes from `agent-copy`.
-3. Prefer Mermaid for architecture/flow diagrams; no ASCII art diagrams.
+2. **Load [agent-copy](../agent-copy/SKILL.md) before writing or rewriting narrative** (README lead, landing, blog, onboarding, changelog blurbs). Use the audit track (diagnose, then tweak), never invent metrics and do not default to Oxford commas. Accuracy still comes from the behavior catalog; voice comes from `agent-copy`.
+3. Prefer Mermaid for architecture/flow diagrams; no ASCII art diagrams in docs. TTY CLI chrome may use box-drawing.
 4. Link to suite paths / how-to-run from XFN handovers when documenting quality gates.
 5. Do not invent behavior absent from the catalog; flag doc/test drift.
 6. Keep secrets out of docs; document env var *names* only.

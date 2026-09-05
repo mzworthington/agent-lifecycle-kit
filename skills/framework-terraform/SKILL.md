@@ -84,7 +84,7 @@ infra/
 
 ## 7. Policy as code
 
-- **Checkov** or **tfsec** in CI - fail on CRITICAL/HIGH unless `checkov:skip` / exception with ticket ID in comment.
+- **Checkov** or **tfsec** in CI - fail on CRITICAL/HIGH unless `checkov:skip` includes a ticket id (required annotation, not a narrative comment).
 - Optional: **Sentinel** (Terraform Cloud) or **OPA** for org-wide guardrails (region allow-list, tag enforcement).
 - Rego/ Sentinel policies for: required tags, no `AdministratorAccess`, no unencrypted volumes.
 

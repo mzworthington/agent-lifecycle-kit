@@ -1,12 +1,36 @@
+import pc from 'picocolors';
+import { formatCliBanner } from './cliBanner.js';
 import { CLI_ALIASES, CLI_BIN } from './name.js';
+import { formatUnknownCommand } from './suggest.js';
 
 const aliasLine = CLI_ALIASES.map((name) => `       ${name} <command> [options]`).join('\n');
 
+export const KIT_HELP_TOPICS = [
+  'overview',
+  'init',
+  'align',
+  'doctor',
+  'mcp',
+  'check',
+  'eval',
+  'agents'
+] as const;
+
+export type KitHelpTopic = (typeof KIT_HELP_TOPICS)[number];
+
+export function isKitHelpTopic(value: string | undefined): value is KitHelpTopic {
+  return value !== undefined && (KIT_HELP_TOPICS as readonly string[]).includes(value);
+}
+
+/** Catalog body used by overview help and completion coverage tests. */
 export const KIT_HELP = `
 Waykit CLI (${CLI_BIN})
 
 Usage: ${CLI_BIN} <command> [options]
 ${aliasLine}
+
+  Run with no arguments in a terminal for the guided menu.
+  Use ${CLI_BIN} help <command> for one topic (init, mcp, eval, agents, …).
 
 Day-to-day:
   Typo, bug, or failed CI   agent-debug (light XFN if UI/auth/SLO). Not grill → spec.
@@ -22,6 +46,7 @@ Commands:
   mcp <profile>        Compose a named MCP profile from mcps/profiles/ for Cursor, Claude, Copilot, and Antigravity
   mcp restore          Recompose the previous project profile (or kit default if none)
   audit                Run security & supply chain audit across skills and scripts
+  scan                 Alias of audit
   validate             Validate evals structure against JSON schemas
   eval                 Run skill-trigger evals, or EDD subcommands (run|watch|report|ci|shadow|dataset|miss-rate)
   export-rules [dir]   Sync AGENTS.md into Cursor, Claude, Copilot, Gemini/Antigravity, and Windsurf pointers
@@ -95,8 +120,105 @@ Examples:
   ${CLI_BIN} check --json
 `;
 
-export function printKitHelp(log: (msg: string) => void = console.log): void {
-  log(KIT_HELP);
+function topicHelp(topic: KitHelpTopic): string {
+  switch (topic) {
+    case 'init':
+      return `
+${CLI_BIN} init [dir]
+
+  Write the thin handshake, host pointers, MCP profile, and optional git hooks.
+
+  --mcp <profile>   Profile from mcps/profiles/ (default: default)
+  --host <ids>      cursor, claude, copilot, antigravity, or all
+  --hook            Install pre-commit and commit-msg on repos you admin
+  --skip-mcp        Skip MCP compose
+  --skip-ide        Skip host pointer files
+
+  TTY with no args: ${CLI_BIN} opens a menu. This command stays scriptable.
+`;
+    case 'align':
+      return `
+${CLI_BIN} align [dir]
+
+  Report consumer handshake, host pointers, kit MCP, and commit-msg.
+
+  --write           Seed missing files (never overwrite)
+  --mcp             Compose kit default into project MCP files
+  --owned --scan    Fleet mode over worktrees you admin
+  --json            Machine-readable findings
+`;
+    case 'doctor':
+      return `
+${CLI_BIN} doctor [dir]
+
+  Community files on GitHub sources you admin. Report only unless --write.
+
+  --write --hook    Fill gaps; install hooks on owned repos only
+  --owned --scan    Match local worktrees to gh repo list --source
+  --class           kit | product | dns | site | template
+  --json            Machine-readable findings
+`;
+    case 'mcp':
+      return `
+${CLI_BIN} mcp [profile|restore]
+
+  One MCP profile per session. Do not stack collab + ops globally.
+
+  --install         Write user-scope host files
+  --project         Write this checkout's host files
+  --host            cursor, claude, copilot, antigravity, or all
+  -o <file>         Print composed JSON to a file
+
+  ${CLI_BIN} mcp restore --project
+`;
+    case 'check':
+      return `
+${CLI_BIN} check
+
+  Local merge bar: audit, ontology, evals, EDD CI, context budget.
+
+  --json            Findings on stdout
+`;
+    case 'eval':
+      return `
+${CLI_BIN} eval [run|watch|report|ci|shadow|dataset|miss-rate]
+
+  Skill-trigger evals, or EDD subcommands (alpha).
+
+  ${CLI_BIN} eval
+  ${CLI_BIN} eval run --suite evals/edd/architecture_routing.yaml --model scripted
+  ${CLI_BIN} eval ci --threshold-routing 95 --out out/reports
+`;
+    case 'agents':
+      return `
+${CLI_BIN} agents generate|install|status|launch-prompt
+
+  Thin host stubs and launch vs skills-only.
+
+  ${CLI_BIN} agents status
+  ${CLI_BIN} agents launch-prompt --skill agent-tdd --project demo
+  ${CLI_BIN} subagents status   (alias)
+`;
+    default:
+      return KIT_HELP;
+  }
+}
+
+export function printKitHelp(
+  log: (msg: string) => void = console.log,
+  topic: KitHelpTopic = 'overview'
+): void {
+  if (topic === 'overview') {
+    log(formatCliBanner());
+    log(
+      `${pc.cyan('  ◇')}  ${pc.dim('TTY:')} ${pc.white(CLI_BIN)} ${pc.dim('opens the menu · scripts keep the same verbs')}`
+    );
+    log(KIT_HELP);
+    return;
+  }
+  log('');
+  log(`${pc.bold(pc.cyan('◆'))} ${pc.bold('WAYKIT')} ${pc.dim('-')} ${pc.dim(topic)}`);
+  log(topicHelp(topic));
 }
 
 export function errorMessage(err: unknown): string {
@@ -106,3 +228,5 @@ export function errorMessage(err: unknown): string {
 export function stackMessage(err: unknown): string {
   return err instanceof Error ? (err.stack ?? err.message) : String(err);
 }
+
+export { formatUnknownCommand };

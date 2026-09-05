@@ -46,7 +46,7 @@ Align with **Well-Architected** pillars: security and reliability first; operati
 - **Identity** - Workload identities (OIDC federated roles, managed identities, workload service accounts). No long-lived access keys in IaC or state.
 - **IAM policies** - Explicit `Allow` on required actions only. Prefer resource-scoped ARNs, prefix conditions, and ABAC tags. Avoid `Action: "*"` and `Resource: "*"` except in break-glass roles with extra conditions and audit.
 - **Separation** - Distinct roles per environment, per workload, and per pipeline stage (plan vs apply). Break-glass is rare, monitored, and time-bound.
-- **Network** - Default deny. No `0.0.0.0/0` ingress on admin ports. Public endpoints only behind WAF/CDN with explicit rationale in comments or ADR.
+- **Network** - Default deny. No `0.0.0.0/0` ingress on admin ports. Public endpoints only behind WAF/CDN with explicit rationale in an ADR.
 - **Data** - Encryption at rest (CMK/customer-managed keys when compliance requires). TLS for all service-to-service traffic. Block public data stores.
 
 ## Secure IaC hygiene

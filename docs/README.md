@@ -1,6 +1,6 @@
 # Docs overview
 
-Public guides for Waykit: the software lifecycle for coding agents, the learning loops around it, the live kit graph, and the operator surfaces. Markdown in this directory (plus `SOPs/`, eval write-ups, and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on client JavaScript.
+Public guides for Waykit: the software lifecycle for coding agents, the learning loops around it, the live kit graph and the operator surfaces. Markdown in this directory (plus `SOPs/`, eval write-ups and MCP/ontology READMEs) is the site. Raw `.md` URLs stay next to the HTML so agents and `llms.txt` do not depend on client JavaScript.
 
 `pnpm site:dev` runs the docs app. `pnpm --dir web build` then `wk site assemble` writes `site/`.
 

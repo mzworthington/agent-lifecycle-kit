@@ -31,6 +31,7 @@ Apply these rules strictly when writing Python:
 - **Domain purity (DDD)** - Aggregates and value objects in `domain/` / `core/` without framework decorators.
 - **Vertical slices** - Co-locate handler, request/response models, and tests under `features/<capability>/`.
 - **Validation** - Pydantic (or msgspec) at infrastructure boundaries before data reaches handlers.
+- **No narrative comments** - Names and tests document why ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4). Do not add docstrings that restate the function name.
 
 ## Testing defaults
 

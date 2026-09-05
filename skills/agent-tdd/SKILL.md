@@ -82,7 +82,7 @@ If discovery later shows cases outside this map, stop and re-confirm with the us
 
 When the spec names a **feature flag**, the functional impact map must include **flag-off** and **flag-on** cases (and kill-switch if specified). Do not green only the on-path. Procedure: [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md).
 
-When sketching slice boundaries or request flows, use Mermaid - not ASCII art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+When sketching slice boundaries or request flows in docs, use Mermaid - not ASCII diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). CLI delivery adapters should use ASCII/box-drawing for TTY chrome.
 
 ## Guardrails
 
@@ -102,6 +102,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change).
 - Touch the fewest files possible; prefer extending an existing module over a new file.
 - Do not introduce port interfaces unless a second adapter is in scope now or in the approved spec.
 - Do not add tests unless they protect non-obvious behavior or regressions - or they were agreed in the impact map.
+- **Self-documenting** - Do not add JSDoc, docstrings, or inline comments that restate a name or type. Encode non-obvious intent in a test name or case ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
 - Do not "fix" broken suite noise by weakening assertions or deleting catalog cases without alignment.
 - No "while I'm here" refactors or speculative APIs during green.
 - **Never** import ORM/framework types into `domain/` / `core/` during gear 2.

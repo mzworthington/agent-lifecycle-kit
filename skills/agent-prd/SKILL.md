@@ -54,7 +54,7 @@ A [product-signal-intake](../../SOPs/product-signal-intake.md) handover row that
 2. **One leading indicator.** Extra metrics go in Out of scope or Notes, not as a dashboard of success.
 3. **Kill criteria are required** on bets. “See how it feels” is not a kill criterion.
 4. **Flag is a port.** If Needed = yes: name, default off (unless kill-switch-only), audience, owner, expiry. Never make the want “add a flag”.
-5. No implementation code, HTTP verbs, or class names. Mermaid only if a journey sketch helps; no ASCII art ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+5. No implementation code, HTTP verbs, or class names. Mermaid only if a journey sketch helps; no ASCII diagrams in the PRD ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 6. Voice: [agent-copy](../agent-copy/SKILL.md) — stakeholder language, active voice.
 
 ## Where to write

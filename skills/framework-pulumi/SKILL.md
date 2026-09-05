@@ -77,7 +77,7 @@ if (!["dev", "staging", "prod"].includes(environment)) {
 
 - Constructor registers all child resources with `super(type, name, args, opts)`.
 - Inputs as interface/typed args; outputs as class properties for stack consumers.
-- Default secure options inside component (encryption on, public access blocked) - opt-out requires explicit arg + comment.
+- Default secure options inside component (encryption on, public access blocked) - opt-out requires an explicit arg; cover the exception in a component test or ADR, not a comment.
 
 ```typescript
 export class SecureBucket extends pulumi.ComponentResource {

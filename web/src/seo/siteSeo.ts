@@ -8,7 +8,7 @@ export const SITE_SOCIAL_IMAGE = `${SITE_ORIGIN}/assets/og.jpg`;
 export const SITE_SOCIAL_IMAGE_WIDTH = 1200;
 export const SITE_SOCIAL_IMAGE_HEIGHT = 630;
 export const SITE_SOCIAL_IMAGE_ALT =
-  'Waykit: software lifecycle for coding agents. Grill, spec, TDD, quality, release, and learning loops including eval-driven development.';
+  'Waykit: software lifecycle for coding agents. Grill, spec, TDD, quality, release and learning loops including eval-driven development.';
 export const SITE_GITHUB = 'https://github.com/mzworthington/waykit';
 
 export type PageSeo = {
@@ -52,7 +52,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs': {
     headline: 'Product guide',
     description:
-      'Start, practice, and reference for Waykit: install, feature lifecycle, live kit graph, learning loops, SOPs, ADRs, and the skill map.'
+      'Start, practice and reference for Waykit: install, feature lifecycle, live kit graph, learning loops, SOPs, ADRs and the skill map.'
   },
   '/docs/start': {
     headline: 'Getting started',
@@ -67,7 +67,7 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/faq': {
     headline: 'Common questions',
     description:
-      'Waykit FAQ: install, API keys, why AGENTS.md stays small, hosts (Cursor, Claude, Copilot, Antigravity), how agents find the right SOP, where EDD alpha fits, repo doctor, and what the map is not.'
+      'Waykit FAQ: install, API keys, why AGENTS.md stays small, hosts (Cursor, Claude, Copilot, Antigravity), how agents find the right SOP, where EDD alpha fits, repo doctor and what the map is not.'
   },
   '/docs/edd': {
     headline: 'EDD guide (alpha)',
@@ -77,32 +77,32 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/hosts': {
     headline: 'Hosts',
     description:
-      'Cursor, Claude Code, Copilot, and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay, and rules pointer. Windsurf is rules-only forever.'
+      'Cursor, Claude Code, Copilot and Antigravity share AGENTS.md. Waykit writes each host’s MCP file, model overlay and rules pointer. Windsurf is rules-only forever.'
   },
   '/docs/kit': {
     headline: 'What Waykit gives you',
     description:
-      'What Waykit installs: thin AGENTS.md handshake, feature lifecycle skills, live kit graph, one MCP profile per session, and the wk CLI (align, doctor, check).'
+      'What Waykit installs: thin AGENTS.md handshake, feature lifecycle skills, live kit graph, one MCP profile per session and the wk CLI (align, doctor, check).'
   },
   '/docs/doctor': {
     headline: 'Repo doctor',
     description:
-      'wk doctor checks README, license, contributing, and GitHub templates on sources you admin. Report-only by default; --write fills gaps and never overwrites.'
+      'wk doctor checks README, license, contributing and GitHub templates on sources you admin. Report-only by default; --write fills gaps and never overwrites.'
   },
   '/docs/align': {
     headline: 'Consumer align',
     description:
-      'wk align checks an app repo for a thin handshake, host rule pointers, kit-knowledge MCP, and commit-msg. --write seeds missing AGENTS.md and IDE pointers; --owned --scan reports a worktree farm.'
+      'wk align checks an app repo for a thin handshake, host rule pointers, kit-knowledge MCP and commit-msg. --write seeds missing AGENTS.md and IDE pointers; --owned --scan reports a worktree farm.'
   },
   '/docs/used-in': {
     headline: 'Used on our own product repos',
     description:
-      'ArchLens, SteerLens, the React Cloudflare template, and GPIO build monitor run Waykit. Open those GitHub checkouts to see a thin handshake in the wild.'
+      'ArchLens, SteerLens, the React Cloudflare template and GPIO build monitor run Waykit. Open those GitHub checkouts to see a thin handshake in the wild.'
   },
   '/docs/lifecycle': {
     headline: 'Feature lifecycle',
     description:
-      'Route product work through grill, stories, spec, TDD, XFN, telemetry, and release. After a bet’s timebox, measure the leading indicator in PostHog, then confirm or kill.'
+      'Route product work through grill, stories, spec, TDD, XFN, telemetry and release. After a bet’s timebox, measure the leading indicator in PostHog, then confirm or kill.'
   },
   '/docs/subagents': {
     headline: 'Host subagent allowlist',
@@ -112,37 +112,37 @@ const PAGE_SEO: Record<string, SeoOverride> = {
   '/docs/map': {
     headline: 'Waykit map',
     description:
-      'Live graph of this kit: skills, host subagents, SOPs, MCPs, and evals derived from the tree, feeding kit-knowledge so you load one node instead of the whole kit.'
+      'Live graph of this kit: skills, host subagents, SOPs, MCPs and evals derived from the tree, feeding kit-knowledge so you load one node instead of the whole kit.'
   },
   '/docs/sops': {
     headline: 'SOPs',
     description:
-      'Operator procedures for Waykit: behavior catalog, context budget, conventional commits, evals, Cloudflare analytics ops, and PostHog product analytics.'
+      'Operator procedures for Waykit: behavior catalog, context budget, conventional commits, evals, Cloudflare analytics ops and PostHog product analytics.'
   },
   '/docs/ADRs': {
     headline: 'Architecture Decision Records',
     description:
-      'Sparse MADRs for Waykit: hexagonal defaults, Unlicense, EDD contracts, thin bootstrap, ontology memory, and the Astro docs site.'
+      'Sparse MADRs for Waykit: hexagonal defaults, Unlicense, EDD contracts, thin bootstrap, ontology memory and the Astro docs site.'
   },
   '/evals/edd': {
     headline: 'Eval suites',
     description:
-      'Offline and live eval suites for Waykit: routing, schemas, Cloudflare ops, and the teaching demo you can paste into a PR.'
+      'Offline and live eval suites for Waykit: routing, schemas, Cloudflare ops and the teaching demo you can paste into a PR.'
   },
   '/mcps': {
     headline: 'MCP library',
     description:
-      'Named MCP profiles for Waykit sessions: default, cloud, cloudflare-ops, and how to install one profile without stacking tools.'
+      'Named MCP profiles for Waykit sessions: default, cloud, cloudflare-ops and how to install one profile without stacking tools.'
   },
   '/ontology': {
     headline: 'Author the Waykit map',
     description:
-      'How to add skills, SOPs, and evals to the Waykit map: which files become nodes, how to regenerate the index, and why this is not a product architecture diagram.'
+      'How to add skills, SOPs and evals to the Waykit map: which files become nodes, how to regenerate the index and why this is not a product architecture diagram.'
   },
   '/privacy': {
     headline: 'Privacy policy',
     description:
-      'What waykit.dev does with information: cookieless PostHog on Cloud EU, Cloudflare hosting, no PostHog cookie banner, and how to ask for deletion.'
+      'What waykit.dev does with information: cookieless PostHog on Cloud EU, Cloudflare hosting, no PostHog cookie banner and how to ask for deletion.'
   }
 };
 

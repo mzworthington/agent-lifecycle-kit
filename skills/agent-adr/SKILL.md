@@ -4,7 +4,7 @@ description: >-
   Writes sparse Markdown Architectural Decision Records (MADR) under docs/ADRs
   when a choice is hard to reverse or deliberately differs from kit norms.
   Builds on agent-arch-drift for hexagonal/DDD/slice fit; includes a simple
-  Mermaid diagram of the chosen shape (never ASCII art). Use when recording
+  Mermaid diagram of the chosen shape (never ASCII diagrams in the ADR). Use when recording
   architecture decisions, ADR, MADR, trade-offs, or irreversible design choices
   - not for routine implementation details.
 kind: role

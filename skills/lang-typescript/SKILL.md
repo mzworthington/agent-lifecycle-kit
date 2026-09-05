@@ -30,6 +30,7 @@ Apply these rules strictly when writing TypeScript or Node.js code:
 - **Domain purity (DDD)** - Aggregates and value objects in `domain/` with no TypeORM, Prisma, or class-validator decorators.
 - **Vertical slices** - Co-locate `*Handler`, request/response types, and slice tests under `features/<capability>/`.
 - **Validation** - Zero-trust parsing at infrastructure boundaries with `Zod` or `ArkType` before data reaches handlers.
+- **No narrative comments** - Names and tests document why ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4). Do not add JSDoc that restates the identifier.
 
 ## Testing defaults
 

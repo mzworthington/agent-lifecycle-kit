@@ -179,7 +179,7 @@ Write `~/.agents/handover/<project>/handover_debug.md` using [templates/handover
 - Abandoning a cheap config-parity hypothesis for long product forensics
 - Shipping workflow/release policy changes the user did not ask for
 - Leaving the user to ask for a commit message - output a conventional subject (plus ticket id) unprompted; do not branch or commit unless asked
-- Drawing RCA or system-flow sketches as ASCII/box-drawing art - use Mermaid ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8)
+- Drawing RCA or system-flow sketches as ASCII/box-drawing **diagrams** in docs - use Mermaid ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). CLI TTY chrome may use ASCII.
 - Opening a feature branch or committing unprompted - work stays on main, uncommitted; the commit message is the deliverable
 
 ## After debug

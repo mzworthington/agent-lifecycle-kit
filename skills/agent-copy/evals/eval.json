@@ -1,7 +1,7 @@
 {
   "suite": "agent-copy-evals",
-  "description": "Co-located evaluation tests for Copy & Messaging Specialist trigger resolution and human-centric voice routing",
-  "version": "1.1.0",
+  "description": "Co-located evaluation tests for Copy & Messaging Specialist trigger resolution, two-track workflow, no invented metrics and list punctuation",
+  "version": "1.3.0",
   "test_cases": [
     {
       "id": "EVAL-COPY-COLOCATED-001",
@@ -56,6 +56,75 @@
         ],
         "required_patterns": [
           "agent-copy"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-004",
+      "name": "Write Copy For Hero And CTA",
+      "description": "Net-new landing write requests route to agent-copy.",
+      "target_skill": "agent-copy",
+      "prompt": "Write copy for the landing hero section and the primary CTA.",
+      "assertions": {
+        "required_triggers": [
+          "write copy",
+          "hero section",
+          "CTA"
+        ],
+        "required_patterns": [
+          "Net-new marketing",
+          "Voice calibration"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-005",
+      "name": "Generic Corporate Copy Review",
+      "description": "Feels-generic / less-corporate reviews activate agent-copy.",
+      "target_skill": "agent-copy",
+      "prompt": "This copy feels generic. Make this sound less corporate without a redesign.",
+      "assertions": {
+        "required_triggers": [
+          "feels generic",
+          "less corporate"
+        ],
+        "required_patterns": [
+          "Audit / tweak",
+          "Never invent"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-006",
+      "name": "Do Not Invent Metrics",
+      "description": "Skill body forbids invented numbers and requires explicit placeholders.",
+      "target_skill": "agent-copy",
+      "prompt": "Rewrite copy for the feature description. We do not have a deploy-time metric yet.",
+      "assertions": {
+        "required_triggers": [
+          "rewrite copy"
+        ],
+        "required_patterns": [
+          "Never invent",
+          "[METRIC:"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-COPY-COLOCATED-007",
+      "name": "Oxford Comma Default Off",
+      "description": "Requests to cut serial/Oxford commas route to agent-copy and the skill forbids bulk , and replace.",
+      "target_skill": "agent-copy",
+      "prompt": "The docs overuse the Oxford comma. Tighten the landing page copy and drop habitual serial commas.",
+      "assertions": {
+        "required_triggers": [
+          "oxford comma",
+          "serial comma",
+          "landing page copy"
+        ],
+        "required_patterns": [
+          "Oxford",
+          "serial"
         ]
       }
     }

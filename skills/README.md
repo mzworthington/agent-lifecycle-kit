@@ -33,7 +33,7 @@ We keep **one `skills/` tree** for playbooks. Cursor still discovers skills from
 | [agent-xfn](./agent-xfn/SKILL.md) | xfn | XFN matrix (plan then post-wiring green); browser E2E, a11y, security, load |
 | [agent-adapter](./agent-adapter/SKILL.md) | impl | **Optional deep-dive** when gear 2 is too large; else prefer `agent-tdd` |
 | [agent-ui](./agent-ui/SKILL.md) | impl | Thin UI/delivery adapters; semantic HTML; a11y-first |
-| [agent-copy](./agent-copy/SKILL.md) | impl | Product/landing copy, microcopy, human-centric voice; strips AI-template slogans |
+| [agent-copy](./agent-copy/SKILL.md) | impl | Product/landing copy, microcopy, human-centric voice; audit vs net-new tracks; on-demand `references/` |
 | [agent-migration](./agent-migration/SKILL.md) | maintenance | Expand/contract schema migrations |
 | [agent-api-contract](./agent-api-contract/SKILL.md) | spec | OpenAPI/AsyncAPI contract evolution |
 | [agent-review](./agent-review/SKILL.md) | audit | PR/diff review vs boundaries + catalog/XFN |
@@ -55,7 +55,7 @@ Related SOPs: [behavior catalog & XFN](../SOPs/behavior-catalog-and-xfn.md), [co
 
 ### TDD short loop (important)
 
-`agent-tdd` owns **gear 1** (domain + mocked ports) and **gear 2** (thin adapter + integration test) in the **same session**. Do not insert a handover between inventing a port and wiring its first adapter. `agent-adapter` is an escape hatch for large integrations only. XFN remains the intentional slow outer loop.
+`agent-tdd` owns **gear 1** (domain + mocked ports) and **gear 2** (thin adapter + integration test) in the **same session**. Do not insert a handover between inventing a port and wiring its first adapter. `agent-adapter` is an escape hatch for large integrations only. XFN remains the intentional slow outer loop. Production comments that restate names are out of scope; tests carry intent.
 
 ## Stack profiles
 
@@ -92,7 +92,7 @@ tools: []                     # optional CLI/tool hints for the agent
 ---
 ```
 
-**Skill length budget:** Role `SKILL.md` bodies must stay under 150 lines (`wk verify` fails otherwise). Known R5 overages are allowlisted and printed as `ALLOWED`, not skipped. Put long procedures in [SOPs/](../SOPs/).
+**Skill length budget:** Role `SKILL.md` bodies must stay under 150 lines (`wk verify` fails otherwise). Known R5 overages are allowlisted and printed as `ALLOWED`, not skipped. Put long procedures in [SOPs/](../SOPs/) or a skill-local `references/` folder (see [agent-copy](./agent-copy/SKILL.md)).
 
 **Context budget:** Always-on bootstrap stays thin ([AGENTS.md](../AGENTS.md)); load SOPs/philosophy via file read or **kit-knowledge** MCP. See [SOPs/context-budget.md](../SOPs/context-budget.md). Match installed MCP profile to skill `mcp:` frontmatter - one profile per session.
 
@@ -103,7 +103,7 @@ tools: []                     # optional CLI/tool hints for the agent
 - Add project-specific rules in **your app repo** (`.cursor/skills/` or a local overlay), not here.
 - Add new languages/frameworks by copying a profile skill and adjusting frontmatter.
 - Keep role skills focused on behavior and output schema; keep stack detail in profiles.
-- Prefer **Mermaid** for architecture/flow diagrams in skill docs and outputs; do not add ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8).
+- Prefer **Mermaid** for architecture/flow diagrams in skill docs and outputs. Do not add ASCII/box-drawing **diagrams** ([CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §8). TTY CLI chrome (banners, prompt frames) is ASCII on purpose.
 - Co-locate skill unit evals under `skills/<skill-name>/evals/eval.json` (see [evals/README.md](../evals/README.md) for the hybrid evals model).
 - Thin host subagent stubs: [agents/](../agents/) from [subagents.yaml](./subagents.yaml) (`wk agents generate`).
 - Shared MCP servers live in [mcps/](../mcps/) (not under `skills/`); see [SOPs/mcp-library.md](../SOPs/mcp-library.md).

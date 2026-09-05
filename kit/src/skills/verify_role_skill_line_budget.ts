@@ -3,12 +3,10 @@ import path from 'path';
 
 export const ROLE_SKILL_BODY_LINE_BUDGET = 150;
 
-/** R5 overages: fail new role skills, report these as allowed until they are thinned. */
 export const ROLE_SKILL_LINE_BUDGET_ALLOWLIST = [
   'agent-prune',
   'agent-orchestrator',
-  'agent-debug',
-  'agent-copy'
+  'agent-debug'
 ] as const;
 
 export interface RoleSkillLineCount {

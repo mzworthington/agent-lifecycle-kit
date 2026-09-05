@@ -14,6 +14,7 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /--mcp composes kit default/);
     assert.match(KIT_HELP, /completion <shell>/);
     assert.match(KIT_HELP, /completion install/);
+    assert.match(KIT_HELP, /guided menu/);
     assert.match(KIT_HELP, /Day-to-day:/);
     assert.match(KIT_HELP, /Typo, bug, or failed CI/);
     assert.match(KIT_HELP, /wk align \./);
@@ -34,5 +35,20 @@ describe('KIT_HELP', () => {
     assert.match(KIT_HELP, /agent-kit <command>/);
     assert.doesNotMatch(KIT_HELP, /default, collab, ops/);
     assert.doesNotMatch(KIT_HELP, /live trigger/i);
+  });
+});
+
+describe('printKitHelp topics', () => {
+  it('prints an ASCII banner on overview and a focused topic for mcp', async () => {
+    const { printKitHelp } = await import('./help.js');
+    const lines: string[] = [];
+    printKitHelp((msg) => lines.push(msg), 'overview');
+    const overview = lines.join('\n');
+    assert.match(overview, /╭/);
+    assert.match(overview, /WAY/);
+    assert.match(overview, /KIT/);
+    lines.length = 0;
+    printKitHelp((msg) => lines.push(msg), 'mcp');
+    assert.match(lines.join('\n'), /One MCP profile/);
   });
 });

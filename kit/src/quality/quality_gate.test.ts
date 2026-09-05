@@ -58,7 +58,6 @@ function passingDeps(overrides: KitCheckDeps = {}): KitCheckDeps {
       unknownSubagentSkill: [],
       messages: []
     }),
-    // Default test: pretend all catalogued suites exist
     eddSuites: () => [...EDD_CI_SUITES],
     ...overrides
   };

@@ -41,7 +41,7 @@ This profile defines strict quality, memory safety, and architectural standards 
 
 4. **Code Structure & Architecture**:
    - Organize domain entities, value objects, and ports inside domain modules (`src/domain/`).
-   - Keep unsafe code (`unsafe { ... }`) strictly isolated, minimal, and fully documented with `# Safety` contracts.
+   - Keep unsafe code (`unsafe { ... }`) strictly isolated and minimal. `# Safety` on `unsafe` is required; do not add other comments that restate names ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
 
 5. **Linting & Tooling**:
    - Zero Clippy warnings (`cargo clippy -- -D warnings`).

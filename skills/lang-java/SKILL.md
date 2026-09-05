@@ -28,6 +28,7 @@ Apply these rules strictly when writing Java code:
 - **Value objects** - Use `record` for value objects, DTOs at boundaries, and domain events.
 - **Vertical slices** - Package by feature (`orders.submit`, `import.diagram`) not only by layer (`service`, `repository`).
 - **Dependency injection** - Constructor injection only. No `@Autowired` on fields.
+- **No narrative comments** - Names and tests document why ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4). Do not add Javadoc that restates the signature.
 
 ## Testing defaults
 

@@ -60,7 +60,7 @@ You are the master coordinator responsible for guiding feature development throu
 
 Catalog and XFN procedure: [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). **Product bets / flags / iterative design:** [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md). **EDD (default for agent prompts/tools/routing):** [docs/edd.md](../../docs/edd.md), [SOPs/eval-driven-development.md](../../SOPs/eval-driven-development.md). Complexity hotspots: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md). Bugs and failed jobs: [SOPs/hypothesis-driven-debug.md](../../SOPs/hypothesis-driven-debug.md). Commits and PRs: [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). API contracts: [SOPs/api-contracts.md](../../SOPs/api-contracts.md). Releases: [SOPs/release.md](../../SOPs/release.md).
 
-**Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art diagrams ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
+**Diagrams:** Prefer Mermaid in handovers, plans, and docs. Do not create ASCII/box-drawing art **diagrams** there ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). TTY CLI banners and prompt frames use ASCII.
 
 **Commits:** [SOPs/conventional-commits.md](../../SOPs/conventional-commits.md). Stay on **main**, leave work **uncommitted**, and output the subject (include the Linear id when playing a ticket). Do not create a branch or `git commit` unless asked.
 
@@ -133,7 +133,7 @@ See [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4 (minimal change). Cla
 | Dead-code cleanup, post-migration prune | `agent-prune` → `agent-pre-commit` |
 | Complexity hotspot cleanup | Launch **readonly `agent-arch-drift` subagent** → `agent-prune` → `agent-pre-commit` |
 | PR / diff review request | Launch **readonly `agent-review` subagent** (handover/diff only, not the implementer transcript) |
-| Landing / marketing / AI-sounding copy, microcopy, errors | `agent-copy` (+ `agent-ui` if layout/chrome) |
+| Landing / marketing / write-copy / generic CTA, microcopy, errors | `agent-copy` (+ `agent-ui` if layout/chrome) |
 | Docs narrative rewrite (README lead, blog, public pages) | `agent-docs` **and** `agent-copy` |
 | New feature, new bounded context, new external integration | Full lifecycle: grill/PRD/stories as skills, then **launch** spec/tdd/xfn/audit subagents ([SOPs/subagent-launch.md](../../SOPs/subagent-launch.md)) |
 | Product bet / PRD / experiment / kill criteria | **`agent-prd`** (grill first if unsettled) → `agent-user-stories` → `agent-spec` |

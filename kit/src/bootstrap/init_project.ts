@@ -60,14 +60,12 @@ export function initProject(options: InitProjectOptions): void {
   const { targetDir, mcpProfile, installMCP, installIDE, installHook } = options;
   const kitRepoDir = options.kitRepoDir ?? defaultKitRepoDir;
 
-  console.log(`=== Waykit - Project Bootstrapper ===`);
-  console.log(`Target directory: ${targetDir}`);
+  console.log(`Bootstrap ${targetDir}`);
 
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  // 1. Setup AGENTS.md
   const agentsPath = path.join(targetDir, 'AGENTS.md');
   if (fs.existsSync(agentsPath)) {
     console.log(`✓ AGENTS.md already exists in ${targetDir}`);
@@ -83,7 +81,6 @@ export function initProject(options: InitProjectOptions): void {
     }
   }
 
-  // 2. Export Multi-IDE Rules
   if (installIDE) {
     console.log(`Exporting Multi-IDE rule entry points...`);
     exportIDERules(targetDir, false, kitRepoDir);
@@ -109,5 +106,5 @@ export function initProject(options: InitProjectOptions): void {
     installGitHooks({ targetDir, kitRepoDir, hooksDir: options.hooksDir });
   }
 
-  console.log(`\n🎉 Project bootstrapping complete!`);
+  console.log(`Project bootstrap complete.`);
 }

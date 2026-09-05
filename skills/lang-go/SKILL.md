@@ -26,6 +26,7 @@ Apply these rules strictly when writing Go:
 - **Vertical slices** - Feature packages own handlers and tests; shared domain types stay thin.
 - **Errors** - Wrap with context (`fmt.Errorf("…: %w", err)`); map to transport errors only in adapters.
 - **Concurrency** - Prefer clarity over clever channel graphs; cancel via `context.Context`.
+- **No narrative comments** - Names and tests document why ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4). Do not add comments that restate the identifier.
 
 ## Testing defaults
 

@@ -1,15 +1,23 @@
 ---
 name: agent-copy
 description: >-
-  Crafts, audits, and refines product copy, UI microcopy, error messages, landing and
-  marketing narrative, and documentation voice. Enforces a human-centric practitioner tone,
-  strips AI-template slogans, and keeps terminology consistent. Use when copy sounds AI-written,
-  needs humanizing, or when landing, onboarding, error, or brand messaging changes.
+  Crafts, audits and rewrites product copy: UI microcopy, errors, landing and
+  marketing narrative, CTAs, feature descriptions, release-note blurbs and docs
+  voice. Enforces a practitioner tone, strips AI-template slogans, never invents
+  metrics or testimonials and keeps terminology consistent. Use when the user
+  asks to write, rewrite or review copy; when landing, onboarding, error or
+  brand messaging changes; or for phrases like "write copy for", "this copy feels
+  generic", "make this sound less corporate", "humanize", "sounds AI", hero
+  sections or CTAs. Also audits AI-generated copy, cuts habitual Oxford commas
+  and voice-matches writing samples.
 kind: role
 phase: impl
 triggers:
   - copy
   - copywriting
+  - write copy
+  - rewrite copy
+  - review copy
   - tone of voice
   - ux copy
   - microcopy
@@ -22,6 +30,12 @@ triggers:
   - AI-generated copy
   - landing page copy
   - marketing copy
+  - CTA
+  - feels generic
+  - less corporate
+  - hero section
+  - oxford comma
+  - serial comma
 depends-on:
   - agent-spec
   - agent-ui
@@ -34,120 +48,72 @@ disable-model-invocation: false
 ---
 # Role: Copy & Messaging Specialist
 
-Copy is a core user interface element. Clear, intentional text reduces cognitive friction, guides action, and aligns product behavior with user expectations ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md)).
+Copy is a core user interface element. Write like a sharp teammate explaining the product to another practitioner, not like a launch deck or a chatbot ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8).
 
-Default stance: write like a sharp teammate explaining the product to another practitioner - not like a launch deck, not like a chatbot.
+This skill owns the words. [agent-ui](../agent-ui/SKILL.md) owns layout and chrome. [agent-docs](../agent-docs/SKILL.md) owns catalog accuracy and must load this skill before rewriting README leads, landing, blog, or changelog blurbs.
 
-## When to load this skill
+Prefer **tweaks over rewrites** when structure is mostly good. Preserve meaning; change voice, specificity, and telltale phrasing first.
 
-- Landing, marketing, or docs narrative feels generic, slogan-heavy, or "AI-written"
-- UI microcopy, errors, empty states, or onboarding need a voice pass
-- Brand or product naming must stay hero-level while headlines stay secondary
-- User asks to humanize, de-AI, or tighten wording without a full redesign
-- **Docs / release narrative** - [agent-docs](../agent-docs/SKILL.md) must load this skill before rewriting README leads, landing, blog, or changelog blurbs
+## Editorial principles
 
-Prefer **tweaks over rewrites** when the structure is mostly good. Preserve meaning and information density; change voice, specificity, and telltale phrasing first.
+These apply in every format. They are not optional.
 
-### How activation is guaranteed
+1. **Specificity beats claims.** "Fast", "powerful", "seamless" are dead words. Replace with a fact, number, or mechanism. If the user has not given specifics, ask or flag `[METRIC: avg deploy time]`. **Never invent** numbers, customer names, or testimonials.
+2. **Translate complexity; do not dumb it down.** Reduce cognitive load, not intelligence. Jargon is fine when the audience uses it. At most one analogy per piece. Never call software "magic".
+3. **Proof over promises.** Backup within reading distance, or soften/cut the claim.
+4. **The reader is skipping.** Front-load the payoff. If the first sentence can be deleted without losing meaning, delete it.
+5. **Practitioner, not pitch deck.** Name the concrete job or failure. Wit is welcome; jokes that hide the point are not.
 
-| Mechanism | What it does |
-|-----------|--------------|
-| Frontmatter `triggers` | Cursor routes prompts that mention copy, humanize, landing, marketing, tone, etc. |
-| `AGENTS.md` phase table | UI/copy and docs/release rows point here for voice |
-| Orchestrator scope gate | Landing/marketing → `agent-copy`; docs narrative → `agent-docs` **and** `agent-copy` |
-| `agent-docs` / `agent-ui` `depends-on` | Docs and UI hand narrative/chrome voice work here |
-| Co-located + routing evals | `wk eval` / CI fail if triggers drift off the skill |
+## Voice Pillars
 
-Coordinate visual chrome (emoji labels, neon status pills, gradient slogans) with [agent-ui](../agent-ui/SKILL.md). This skill owns the words; UI owns layout and styling.
+Customize to the brand. Defaults: clear and direct; practitioner not pitch; empathetic on errors (never blame the user; give a recovery step); consistent glossary; verb-first CTAs ("Run `wk eval ci`", not "Learn more" unless that is the only honest label).
 
-## Voice & Tone Framework
+| Context | Tone | Example |
+|---------|------|---------|
+| Landing / marketing | Confident, concrete | *"Test the tools your agents call"* |
+| Success / onboarding | Warm, next-step | *"Workspace created. Invite teammates."* |
+| Error / recovery | Calm, what / why / next | *"Unable to save. Check the network and try again."* |
+| UI / microcopy | Verb-first, sentence case | *"Save changes"* |
+| Technical / API docs | Exact names | *"Returns HTTP 409 if the slug exists."* |
 
-Customize pillars and the tone matrix to the brand. When unset, use the practitioner defaults below.
+## Choose a track
 
-### Voice Pillars
+**Audit / tweak (default for existing copy).** Diagnose the 2–3 highest-impact problems first (buried lede, no proof, generic claims). Then the Human-centric rewrite loop: inventory the first viewport; flag Anti-patterns (read `references/ai-tells.md`); rewrite for a peer; keep structure unless asked to redesign; read aloud; sentence-case chrome (no ALL-CAPS "MESH ONLINE"). Show a compact before/after for the biggest change. Preserve brand terms.
 
-1. **Clear & Direct:** Front-load the point. Cut passive voice and corporate fluff.
-2. **Practitioner, not pitch deck:** Name the concrete failure or job. Prefer "wrong tool, made-up args" over "Ship AI agents you can prove."
-3. **Empathetic & Solution-Focused:** Frame feedback around user goals. Never blame the user for errors; give a recovery step.
-4. **Precise & Consistent:** Reuse domain terms across UI, tooltips, and docs. Do not invent parallel slogans for the same idea.
-5. **Action-Oriented:** CTAs start with a specific verb ("Run `wk eval ci`", "Read the guide") - not "Learn more" or "Get started" unless that is the only honest label.
+**Net-new marketing** (hero, email, announcement, longer than a social post):
 
-### Contextual Tone Matrix
+0. **Voice calibration.** If it publishes under a brand or person, ask for 2–3 writing samples, or load standing prefs from memory MCP. Skip for throwaway drafts.
+1. **Context.** Product, audience (`references/audiences.md` if not obvious), format (`references/formats.md`), single desired action. If 3+ are missing, one compact question. Do not interrogate.
+2. **Angles.** Offer 2–3 strategic angles with one-line tradeoffs, unless they said "just write it".
+3. **Draft.** Short copy: 2–3 variants labeled by what they optimize. Long copy: one strong draft plus one alternative opening.
+4. **Why this works.** 2–4 bullets on angle, structure, and word choices.
+5. **Audit pass.** Sweep `references/ai-tells.md`. Hollow claims: fix or flag. If several structural tells, rewrite rather than patch. After de-AI, check it still matches the voice sample.
 
-| Context | Target Tone | Key Characteristics | Example |
-|---------|-------------|---------------------|---------|
-| **Landing / marketing** | Confident, concrete, human | One problem, one promise, no slogan stack | *"Test the tools your agents call"* |
-| **Success / Onboarding** | Encouraging, warm, clear | Brief celebration, clear next steps | *"Workspace created. Invite team members to collaborate."* |
-| **Error / Recovery** | Calm, direct, actionable | What happened, why if useful, what next | *"Unable to save changes. Check your network connection and try again."* |
-| **UI Action / Microcopy** | Concise, unambiguous, verb-first | 1–4 words, sentence-case | *"Save changes"*, *"Export CSV"* |
-| **Technical / API Docs** | Precise, objective, complete | Exact names, predictable schemas | *"Returns HTTP 409 if workspace slug already exists."* |
+Read `references/examples.md` when the brief is vague or the register is unclear.
 
-## Human-centric rewrite loop
+## Product rules
 
-Use this when auditing existing copy (especially AI-drafted or slogan-heavy surfaces):
+Sentence case for headings, buttons, menus and modal titles unless the design system says otherwise. On branded marketing, the product name is the hero; headlines must not overpower it. Errors answer what happened, why if useful, what next. Glossary over parallel slogans. Do not leak internals. Numerals for counts. Kit-owned prose: commas, colons, periods or spaced hyphens, not em dashes; no serial (Oxford) comma unless the list is ambiguous ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). No passive voice, no error-code-only messages, no dead-end "Are you sure?" confirms. Do not bulk-delete every `, and`: that search matches clause joins, changelogs and code.
 
-1. **Inventory** the first viewport / section: brand, headline, support line, CTAs, labels.
-2. **Flag tells** against the anti-patterns below (slogans, fake urgency, cyber chrome labels, emoji-as-heading).
-3. **Rewrite for a peer:** say what breaks, what the product does about it, and what to do next.
-4. **Keep structure** unless the user asked for a redesign - swap phrases, not the information architecture.
-5. **Read aloud:** if it sounds like a press release or a motivational poster, cut again.
-6. **Align chrome:** sentence-case filters and status labels; no ALL-CAPS "MESH ONLINE" theater.
+## Module router
 
-### Anti-patterns (AI / template tells)
+Read only what the task needs:
 
-Reject or rewrite these patterns unless the project explicitly uses them as brand:
+| File | Read when |
+|------|-----------|
+| [references/formats.md](./references/formats.md) | Landing, release notes, email, social, docs lead, UI chrome |
+| [references/audiences.md](./references/audiences.md) | Practitioner vs technical vs economic buyer |
+| [references/examples.md](./references/examples.md) | Calibration; before/after pairs |
+| [references/ai-tells.md](./references/ai-tells.md) | Audit pass, or cleaning AI-generated copy |
 
-| Tell | Prefer |
-|------|--------|
-| Slogan stacks (*"Ship X you can prove"*, *"sensible default"*, *"unlock/empower/transform"*) | One concrete job or failure mode |
-| Buzz padding (*"seamless"*, *"robust"*, *"cutting-edge"*, *"revolutionary"*, *"leverage"*) | Plain verbs and nouns |
-| Fake systems chrome (*"KIT MESH · ONLINE"*, "SYSTEM READY") | Human labels (*"Kit map"*) |
-| ALL-CAPS filter / pill spam | Sentence case |
-| Emoji as section titles | Short text labels (*"Evals"*, *"Architecture"*) or none |
-| Gradient-speak headlines that could fit any SaaS | Product-specific wording that fails the brand test if the name is removed |
-| Repeating the same tagline in title, H1, body, and footer | Say it once; elsewhere add new information |
-| "Vibes" as a crutch in every paragraph | Use sparingly, or name the real gap (no asserts, no CI gate) |
+## What this skill does not do
 
-### Practitioner rewrite examples
+- Invent metrics, customers, testimonials, or legal/compliance claims (placeholders only, clearly marked)
+- Clickbait the product cannot back up
+- SEO keyword stuffing (write for humans; note SEO separately if asked)
+- Restyle layout or chrome (`agent-ui`)
+- Invent product behavior (`agent-docs` / the behavior catalog)
 
-| Draft / template | Human-centric | Why |
-|------------------|---------------|-----|
-| *"Ship AI agents you can prove"* | *"Test the tools your agents call"* | Names the job, not a billboard |
-| *"Eval-Driven Development · sensible default"* | *"Eval-Driven Development"* | Drops empty authority phrasing |
-| *"EDD is the sensible default for tool-using agents"* | *"If an agent can call tools, guessing isn't a test plan."* | Speaks to a peer's worry |
-| *"When agents call tools, vibes are not a test strategy."* | Same idea, then explain the loop in plain steps | Keep heat; add how |
-| *"KIT MESH · ONLINE"* | *"Kit map"* | Removes cosplay ops chrome |
-| *"EDD harness"* + lab-coat emoji | *"A harness you can run in CI"* | Outcome over badge |
-| *"Why EDD?"* / *"Explore EDD →"* | *"How EDD works"* / *"Read the EDD guide →"* | Specific verb |
+## Handover
 
-## Rules & Standards
-
-1. **Sentence Case Standard:** Headings, buttons, menu items, and modal titles use sentence case (*"Account settings"* not *"Account Settings"*), unless the design system mandates otherwise.
-2. **Brand before headline:** On branded marketing surfaces, the product name is the hero signal. Supporting headlines must not overpower the brand.
-3. **Actionable Errors:** Every error answers: what happened, why if helpful, what to do next.
-4. **Terminology Guardrails:** Keep a glossary. Do not leak internals (*"Server issue"* not *"Uncaught NullPointerException in Pod 4"*).
-5. **Formatting:**
-   - Bold key terms or field names in step-by-step instructions only when it aids scanning.
-   - Use numerals for counts (*"Select 3 items"*).
-   - Prefer commas, colons, periods, or spaced hyphens over em dashes in kit-owned prose ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Product UI may follow the project's established punctuation.
-6. **General anti-patterns:**
-   - No passive voice (*"The file was uploaded by you"* → *"You uploaded the file"*).
-   - No generic error codes as the only message.
-   - No dead-end confirms (*"Are you sure?"* → *"Delete workspace? This cannot be undone."*).
-
-## Copy Transformation Examples (UI / errors)
-
-| Draft / Raw Text | Refactored Copy | Rationale |
-|------------------|-----------------|-----------|
-| *"An error occurred while attempting to parse the payload."* | *"We couldn't process your request. Check your input formatting and try again."* | Plain language + action |
-| *"Click here to confirm subscription parameters."* | *"Confirm subscription"* | Verb-first CTA |
-| *"Failure: User account creation failed due to duplicate email address entry."* | *"An account with this email already exists. Sign in or reset your password."* | Recovery path |
-
-## Output Artifact & Handover
-
-Write `~/.agents/handover/<project>/handover_copy.md` when executing as a lifecycle step, summarizing:
-
-1. Surfaces touched (components, screens, landing, error catalogs, docs).
-2. Key messaging refactors and rationale (include before → after for slogan removals).
-3. Remaining AI/template tells deferred (and why).
-4. Updated terminology matrix or tone exceptions.
+When used as a lifecycle step, write `~/.agents/handover/<project>/handover_copy.md`: surfaces touched; before → after for slogan removals; deferred tells; glossary or tone exceptions; unanswered `[METRIC: …]` / `[PROOF: …]` placeholders.

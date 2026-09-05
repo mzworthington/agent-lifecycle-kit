@@ -112,7 +112,6 @@ export function generateOntologyIndex(
     entities.push(entity);
   };
 
-  // Phases
   for (let i = 0; i < schema.phaseOrder.length; i++) {
     const name = schema.phaseOrder[i];
     pushEntity({
@@ -143,7 +142,6 @@ export function generateOntologyIndex(
     });
   }
 
-  // Docs
   const docsDir = path.join(kitRoot, 'docs');
   if (fs.existsSync(docsDir)) {
     for (const f of fs.readdirSync(docsDir).sort()) {
@@ -158,7 +156,6 @@ export function generateOntologyIndex(
     }
   }
 
-  // SOPs
   const sopsDir = path.join(kitRoot, 'SOPs');
   if (fs.existsSync(sopsDir)) {
     for (const f of fs.readdirSync(sopsDir).sort()) {
@@ -257,11 +254,9 @@ export function generateOntologyIndex(
         });
       }
     } catch {
-      // ignore malformed catalog
     }
   }
 
-  // Skills
   const skillsDir = path.join(kitRoot, 'skills');
   if (fs.existsSync(skillsDir)) {
     for (const name of fs.readdirSync(skillsDir).sort()) {
@@ -357,7 +352,6 @@ export function generateOntologyIndex(
         addEdge(edges, seenEdges, entityId('EvalSuite', stem), 'gates', targetId);
       }
     } catch {
-      // ignore malformed suite YAML for ontology purposes
     }
   }
 
@@ -487,7 +481,6 @@ export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolea
         }
       }
     } catch {
-      // fall through to regenerate
     }
   }
   const index = generateOntologyIndex(kitRoot);
@@ -496,7 +489,6 @@ export function resolveOntologyIndex(kitRoot: string, opts?: { useCache?: boolea
       fs.mkdirSync(path.dirname(cachePath), { recursive: true });
       fs.writeFileSync(cachePath, serializeOntologyIndex(index), 'utf8');
     } catch {
-      // cache is best-effort
     }
   }
   return index;
@@ -531,7 +523,6 @@ function latestOntologySourceMtime(kitRoot: string): number {
         }
       }
     } catch {
-      // ignore
     }
   };
   for (const r of roots) visit(r);

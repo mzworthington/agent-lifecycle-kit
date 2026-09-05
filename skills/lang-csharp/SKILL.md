@@ -28,6 +28,7 @@ Apply these rules strictly when writing C# code:
 - **Vertical slices** - Package by feature (`Orders.Submit`, `Import.Diagram`) not only by layer (`Services`, `Repositories`).
 - **Dependency injection** - Constructor injection only. No service locator or field injection.
 - **Null safety** - `#nullable enable` globally; treat nullability warnings as errors.
+- **No narrative comments** - Names and tests document why ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4). Do not add XML docs that restate the signature.
 
 ## Testing defaults
 

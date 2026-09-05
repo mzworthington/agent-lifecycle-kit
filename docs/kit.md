@@ -93,7 +93,7 @@ Browse: [Waykit map](./map.md). Authoring: [Author the Waykit map](/ontology). D
 
 ## Commands
 
-Day to day you operate the kit with `wk`: align for handshake, doctor for community files, check for the merge bar. Skills and `AGENTS.md` tell the agent which path to load (debug vs feature). `wk help` lists the rest.
+Day to day you operate the kit with `wk`. On a TTY, `wk` with no arguments opens a guided menu. Scripts keep the same verbs: align for handshake, doctor for community files, check for the merge bar. Skills and `AGENTS.md` tell the agent which path to load (debug vs feature). `wk help` lists the rest.
 
 Every **report** command starts with `ok`, `warn`, or `fail` in a fixed column (`fail` is exit 1; `warn` stays exit 0). On a TTY those tokens are green / orange / red; `NO_COLOR` or a pipe stays plain. Details follow that line.
 

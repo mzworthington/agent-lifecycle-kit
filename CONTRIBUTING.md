@@ -21,7 +21,7 @@ If this clone has lint wired: `pnpm lint`.
 
 1. Work on **main**. Do not create a feature branch.
 2. Leave changes **uncommitted** unless asked to commit. Output a conventional commit subject (include the Linear id when playing a ticket).
-3. Prefer the smallest change that matches [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) (and its **Applicability & opt-out** section).
+3. Prefer the smallest change that matches [CODING_PHILOSOPHY.md](./CODING_PHILOSOPHY.md) (and its **Applicability & opt-out** section). Names and tests document intent; skip comments that restate the code.
 4. For prompt / MCP schema / agent-routing changes, follow **EDD (alpha)**: add or extend evals first, then implement ([docs/edd.md](./docs/edd.md)).
 
 ## Commit and PR titles
@@ -45,7 +45,7 @@ Husky `.husky/commit-msg` (and `wk commit-msg`) reject a non-conventional **comm
 ## Docs and ADRs
 
 * Narrative docs: prefer clear, human voice ([agent-docs](./skills/agent-docs/SKILL.md) / [agent-copy](./skills/agent-copy/SKILL.md) when rewriting README/site copy).
-* Diagrams: **Mermaid only** (no ASCII architecture art).
+* Diagrams in docs/ADRs: **Mermaid only** (no ASCII architecture diagrams). TTY CLI chrome may use box-drawing.
 * Hard-to-reverse kit decisions: sparse ADRs under [docs/ADRs/](./docs/ADRs/README.md).
 
 ## Security

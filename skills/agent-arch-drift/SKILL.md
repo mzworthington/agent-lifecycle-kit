@@ -65,7 +65,7 @@ When a lasting design choice is **hard to reverse** or **deliberately differs fr
 ### Clean code
 
 8. **SOLID** - Flag SRP violations (e.g. service mixing business logic and SQL parsing). Flag TypeScript `any` / `as any` / `as unknown as` as clean-code drift ([lang-typescript](../lang-typescript/SKILL.md)).
-9. **Dead code** - Flag unused abstractions and over-engineering.
+9. **Dead code** - Flag unused abstractions and over-engineering. Flag **narrative comments** (JSDoc/inline) that restate names; intent belongs in tests ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
 10. **Complexity hotspots** - Flag functions/modules exceeding project complexity limits, deep nesting, god files, or duplicate logic clusters. See [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
 
 ### Code volume
@@ -88,7 +88,7 @@ See [SOPs/behavior-catalog-and-xfn.md](../../SOPs/behavior-catalog-and-xfn.md). 
 
 ### Documentation diagrams
 
-19. **Mermaid over ASCII** - Architecture, sequence, flow, and context-map diagrams in docs/ADRs/READMEs must be Mermaid. Flag new or edited ASCII/box-drawing art diagrams as drift; remediate by converting to Mermaid (see [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Simple indented directory listings are exempt.
+19. **Mermaid over ASCII in docs** - Architecture, sequence, flow, and context-map diagrams in docs/ADRs/READMEs must be Mermaid. Flag new or edited ASCII/box-drawing **diagrams** as drift; remediate by converting to Mermaid (see [CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §8). Simple indented directory listings are exempt. TTY CLI banners, panels, and prompt frames are allowed and expected.
 
 ### ADR completeness (sparse)
 

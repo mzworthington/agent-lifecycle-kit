@@ -22,11 +22,13 @@ describe('flag helpers', () => {
 });
 
 describe('parseKitArgv', () => {
-  it('treats missing args, help, -h, and --help as help', () => {
-    assert.deepEqual(parseKitArgv([], opts), { kind: 'help' });
-    assert.deepEqual(parseKitArgv(['help'], opts), { kind: 'help' });
-    assert.deepEqual(parseKitArgv(['-h'], opts), { kind: 'help' });
-    assert.deepEqual(parseKitArgv(['--help'], opts), { kind: 'help' });
+  it('treats missing args as the TTY menu and help flags as help', () => {
+    assert.deepEqual(parseKitArgv([], opts), { kind: 'menu' });
+    assert.deepEqual(parseKitArgv(['help'], opts), { kind: 'help', topic: 'overview' });
+    assert.deepEqual(parseKitArgv(['-h'], opts), { kind: 'help', topic: 'overview' });
+    assert.deepEqual(parseKitArgv(['--help'], opts), { kind: 'help', topic: 'overview' });
+    assert.deepEqual(parseKitArgv(['help', 'mcp'], opts), { kind: 'help', topic: 'mcp' });
+    assert.deepEqual(parseKitArgv(['init', '--help'], opts), { kind: 'help', topic: 'init' });
   });
 
   it('returns unknown for an unrecognized command', () => {
