@@ -45,6 +45,7 @@ Do not auto-run during feature work. Invoke only when the user requests pruning/
 - User asks to prune, remove dead code, simplify hotspots, or clean up after a migration
 - Post-migration cleanup when `agent-arch-drift` flagged unused exports or complexity
 - User says "run agent-prune on ready rows" in `dead-code-backlog.md` or `complexity-backlog.md`
+- Confirmed crime-scene Linear **children** (claim the id, then reduce that cluster)
 - **Expired or closed feature flags** after a bet is confirmed (default on, remove flag) or killed (flag off, remove slice) — [SOPs/hypothesis-driven-development.md](../../SOPs/hypothesis-driven-development.md)
 - Standalone maintenance - not part of the default feature lifecycle
 

@@ -13,6 +13,7 @@ handover/
     ├── handover_impl.md
     ├── dead-code-backlog.md   # maintenance queue for agent-prune (dead-code track)
     ├── complexity-backlog.md  # maintenance queue for agent-prune (complexity track)
+    ├── handover_crime_scene.md  # git crime-scene findings; Linear only after human gate
     ├── handover_debug.md      # agent-debug phase artifact
     ├── debug-board-*.md       # hypothesis boards (`kit debug-board`)
     └── ...

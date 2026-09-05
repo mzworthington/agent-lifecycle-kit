@@ -30,7 +30,9 @@
         "forbidden_patterns": [
           "```typescript",
           "ASCII art",
-          "box-drawing"
+          "box-drawing",
+          "I want a feature flag",
+          "I want an API"
         ],
         "required_output_sections": [
           "Story",
@@ -104,6 +106,83 @@
         ],
         "required_output_sections": [
           "product-signal-intake"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-COLOCATED-004",
+      "name": "Recast API and flag wants as capability",
+      "description": "Ensures an implementation ask becomes an INVEST capability story: flag and HTTP stay out of the want, observables in AC, flag details in Notes.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Write a Linear user story to add a POST /maps endpoint behind a feature flag so people can save scans.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "linear",
+          "user story",
+          "INVEST",
+          "acceptance criteria"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "Given ",
+          "When ",
+          "Then ",
+          "Notes"
+        ],
+        "forbidden_patterns": [
+          "I want a POST",
+          "I want a feature flag",
+          "```typescript",
+          "ASCII art",
+          "box-drawing"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Out of scope",
+          "Notes"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-COLOCATED-005",
+      "name": "File crime-scene findings as epic and children",
+      "description": "Ensures confirmed crime-scene rows file as operator stories under one epic, one child per sitting, without a fake customer.",
+      "target_skill": "agent-user-stories",
+      "prompt": "File the confirmed crime scene findings as Linear operator story user stories from the complexity backlog. One epic plus children.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "crime scene",
+          "operator story",
+          "linear",
+          "user stories",
+          "complexity backlog"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "parentId",
+          "complexity-hotspots"
+        ],
+        "forbidden_patterns": [
+          "As a customer",
+          "```typescript",
+          "ASCII art",
+          "box-drawing"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Children",
+          "Out of scope"
         ]
       }
     }

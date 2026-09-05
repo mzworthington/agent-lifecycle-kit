@@ -18,7 +18,7 @@ Agent-facing procedures. Do not duplicate them in `/docs`; link here when a guid
 | [Linear ticket execution](/SOPs/linear-ticket-workflow) | Claim In Progress, assign host agent, commit message with id |
 | [Host subagent launch](/SOPs/subagent-launch) | Parent uses `wk agents launch-prompt`; handover is the contract |
 | [External skills](/SOPs/external-skills) | Pinning upstream skills |
-| [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning or splitting a hot path |
+| [Complexity hotspots](/SOPs/complexity-hotspots) | Pruning a hot path, or a git crime-scene report → Linear after a human gate |
 | [Cloudflare analytics ops](/SOPs/cloudflare-analytics-ops) | RUM / beacon diagnosis |
 | [PostHog product analytics](/SOPs/posthog-product-analytics) | Cookieless SDK, privacy notice, official MCP |
 | [Product signal intake](/SOPs/product-signal-intake) | Two-session PostHog findings → human gate → Linear |

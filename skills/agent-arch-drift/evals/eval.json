@@ -27,6 +27,33 @@
           "ASCII art"
         ]
       }
+    },
+    {
+      "id": "EVAL-ARCH-COLOCATED-002",
+      "name": "Crime-scene git quality report",
+      "description": "Ensures a crime-scene code quality report uses git-only signals and stops at the findings handover without Linear create.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "Run a crime scene code quality report: git hotspots, temporal coupling, and bus factor. Do not create Linear tickets.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": [
+          "crime scene",
+          "temporal coupling",
+          "bus factor",
+          "code quality report"
+        ],
+        "required_patterns": [
+          "handover_crime_scene",
+          "temporal coupling"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "agent-crime-scene",
+          "save_issue"
+        ]
+      }
     }
   ]
 }

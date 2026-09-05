@@ -164,6 +164,34 @@
       }
     },
     {
+      "id": "EVAL-ARCH-002",
+      "name": "Crime-scene git quality report",
+      "description": "Verifies a whole-repo crime-scene / code quality report uses git-only ranking (churn, temporal coupling, knowledge), writes a findings handover, and does not create Linear issues or a new specialist skill.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "Run a crime scene code quality report: git hotspots, temporal coupling, and bus factor. Do not create Linear tickets.",
+      "context": {
+        "active_phase": "audit"
+      },
+      "assertions": {
+        "required_triggers": [
+          "crime scene",
+          "temporal coupling",
+          "bus factor",
+          "code quality report"
+        ],
+        "required_patterns": [
+          "handover_crime_scene",
+          "temporal coupling",
+          "agent-user-stories"
+        ],
+        "forbidden_patterns": [
+          "ASCII art",
+          "agent-crime-scene",
+          "save_issue"
+        ]
+      }
+    },
+    {
       "id": "EVAL-ADR-001",
       "name": "MADR Architecture Decision Record Creation",
       "description": "Verifies that off-norm or hard-to-reverse architectural decisions produce sparse MADR ADRs under docs/ADRs/.",
@@ -755,7 +783,9 @@
         ],
         "forbidden_patterns": [
           "```typescript",
-          "ASCII art"
+          "ASCII art",
+          "I want a feature flag",
+          "I want an API"
         ],
         "required_output_sections": [
           "Story",
@@ -864,6 +894,80 @@
         ],
         "required_output_sections": [
           "product-signal-intake"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-004",
+      "name": "Recast API and flag wants as capability",
+      "description": "Verifies an implementation ask is rewritten as an INVEST capability: HTTP and feature flags are not the want.",
+      "target_skill": "agent-user-stories",
+      "prompt": "Write a Linear user story to add a POST /maps endpoint behind a feature flag so people can save scans.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "linear",
+          "user story",
+          "INVEST",
+          "acceptance criteria"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "Given ",
+          "When ",
+          "Then "
+        ],
+        "forbidden_patterns": [
+          "I want a POST",
+          "I want a feature flag",
+          "```typescript",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Acceptance criteria",
+          "Out of scope",
+          "Notes"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-USERSTORIES-005",
+      "name": "File crime-scene findings as epic and children",
+      "description": "Verifies confirmed crime-scene rows become operator INVEST stories: one epic plus one child per file row, no customer persona, no UI wireframe required.",
+      "target_skill": "agent-user-stories",
+      "prompt": "File the confirmed crime scene findings as Linear operator story user stories from the complexity backlog. One epic plus children.",
+      "context": {
+        "active_phase": "spec"
+      },
+      "assertions": {
+        "required_triggers": [
+          "crime scene",
+          "operator story",
+          "linear",
+          "user stories",
+          "complexity backlog"
+        ],
+        "required_patterns": [
+          "As a",
+          "I want",
+          "so that",
+          "parentId",
+          "complexity-hotspots"
+        ],
+        "forbidden_patterns": [
+          "As a customer",
+          "```typescript",
+          "ASCII art"
+        ],
+        "required_output_sections": [
+          "Story",
+          "Children",
+          "Out of scope"
         ]
       }
     },

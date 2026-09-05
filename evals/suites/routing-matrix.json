@@ -671,6 +671,51 @@
           "agent-security"
         ]
       }
+    },
+    {
+      "id": "EVAL-ROUTE-034",
+      "name": "Route crime-scene report to arch-drift",
+      "description": "Verifies a Your Code as a Crime Scene / git quality report routes to agent-arch-drift, not a new specialist, and not Linear create in the scan session.",
+      "target_skill": "agent-arch-drift",
+      "prompt": "Run a crime scene code quality report: git hotspots, temporal coupling, and bus factor. Do not create Linear tickets.",
+      "assertions": {
+        "required_triggers": [
+          "crime scene",
+          "temporal coupling",
+          "bus factor",
+          "code quality report"
+        ],
+        "required_patterns": [
+          "agent-arch-drift",
+          "complexity-hotspots"
+        ],
+        "forbidden_patterns": [
+          "agent-crime-scene"
+        ]
+      }
+    },
+    {
+      "id": "EVAL-ROUTE-035",
+      "name": "Route confirmed crime-scene findings to user stories",
+      "description": "Verifies filing a gated crime-scene handover as Linear work routes to agent-user-stories (epic plus children), not a new specialist.",
+      "target_skill": "agent-user-stories",
+      "prompt": "File the confirmed crime scene findings as Linear operator story user stories from the complexity backlog. One epic plus children.",
+      "assertions": {
+        "required_triggers": [
+          "crime scene",
+          "operator story",
+          "linear",
+          "user stories",
+          "complexity backlog"
+        ],
+        "required_patterns": [
+          "agent-user-stories",
+          "complexity-hotspots"
+        ],
+        "forbidden_patterns": [
+          "agent-crime-scene"
+        ]
+      }
     }
   ]
 }

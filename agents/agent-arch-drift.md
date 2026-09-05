@@ -1,6 +1,6 @@
 ---
 name: agent-arch-drift
-description: "Detects hexagonal boundary violations, DDD modeling issues (anemic domain, aggregate leaks), vertical-slice coupling, SOLID violations, dead code, unnecessary abstractions, and behavior-catalog / XFN completeness gaps (missing apply suites, silent test rewrites). Use when reviewing architecture, refactoring modules, auditing imports between layers, or when the user wants less code or a smaller diff."
+description: "Detects hexagonal boundary violations, DDD modeling issues (anemic domain, aggregate leaks), vertical-slice coupling, SOLID violations, dead code, unnecessary abstractions, and behavior-catalog / XFN completeness gaps (missing apply suites, silent test rewrites). Also runs the git-only crime-scene pass (churn × size, temporal coupling, knowledge) into a findings handover. Use when reviewing architecture, refactoring modules, auditing imports between layers, ranking hotspots from git history, or when the user wants less code or a smaller diff. Not for Linear create (agent-user-stories after the human gate)."
 model: inherit
 readonly: true
 ---

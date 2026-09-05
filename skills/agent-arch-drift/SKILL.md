@@ -4,9 +4,12 @@ description: >-
   Detects hexagonal boundary violations, DDD modeling issues (anemic domain,
   aggregate leaks), vertical-slice coupling, SOLID violations, dead code,
   unnecessary abstractions, and behavior-catalog / XFN completeness gaps
-  (missing apply suites, silent test rewrites). Use when reviewing architecture,
-  refactoring modules, auditing imports between layers, or when the user wants
-  less code or a smaller diff.
+  (missing apply suites, silent test rewrites). Also runs the git-only
+  crime-scene pass (churn × size, temporal coupling, knowledge) into a
+  findings handover. Use when reviewing architecture, refactoring modules,
+  auditing imports between layers, ranking hotspots from git history, or
+  when the user wants less code or a smaller diff. Not for Linear create
+  (agent-user-stories after the human gate).
 kind: role
 phase: audit
 triggers:
@@ -29,13 +32,19 @@ triggers:
   - hotspot
   - cognitive complexity
   - simplify
+  - crime scene
+  - temporal coupling
+  - bus factor
+  - code quality report
 depends-on:
   - agent-tdd
   - agent-xfn
   - agent-adr
+  - agent-user-stories
 tools:
   - read
   - grep
+  - shell
 disable-model-invocation: false
 ---
 # Role: Architecture Conformance Guardian
@@ -66,7 +75,7 @@ When a lasting design choice is **hard to reverse** or **deliberately differs fr
 
 8. **SOLID** - Flag SRP violations (e.g. service mixing business logic and SQL parsing). Flag TypeScript `any` / `as any` / `as unknown as` as clean-code drift ([lang-typescript](../lang-typescript/SKILL.md)).
 9. **Dead code** - Flag unused abstractions and over-engineering. Flag **narrative comments** (JSDoc/inline) that restate names; intent belongs in tests ([CODING_PHILOSOPHY.md](../../CODING_PHILOSOPHY.md) §4).
-10. **Complexity hotspots** - Flag functions/modules exceeding project complexity limits, deep nesting, god files, or duplicate logic clusters. See [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
+10. **Complexity hotspots** - Flag functions/modules exceeding project complexity limits, deep nesting, god files, or duplicate logic clusters. **Crime-scene report:** run [complexity-hotspots](../../SOPs/complexity-hotspots.md) §8 (`git` only: churn × size, temporal coupling, knowledge). Write `handover_crime_scene.md` from [templates/crime-scene-findings.md](../../templates/crime-scene-findings.md). Do not create Linear issues.
 
 ### Code volume
 
@@ -103,4 +112,4 @@ When drift is detected, report:
 
 Write findings to `~/.agents/handover/<project>/handover_audit.md` (or a dedicated arch section therein).
 
-For **dead code** and **deletion over addition** findings, add a row to `~/.agents/handover/<project>/dead-code-backlog.md` instead of deleting during an audit. For **complexity hotspots**, add a row to `~/.agents/handover/<project>/complexity-backlog.md`. Execution for both backlogs is [agent-prune](../agent-prune/SKILL.md). Procedure: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).
+For **dead code** and **deletion over addition** findings, add a row to `~/.agents/handover/<project>/dead-code-backlog.md` instead of deleting during an audit. For **complexity hotspots**, add a row to `~/.agents/handover/<project>/complexity-backlog.md`. For a **crime-scene report**, write `handover_crime_scene.md` and stop. Next agent is [agent-user-stories](../agent-user-stories/SKILL.md) after the Operator column is `file`. Execution for backlogs and confirmed Linear children is [agent-prune](../agent-prune/SKILL.md). Procedure: [SOPs/complexity-hotspots.md](../../SOPs/complexity-hotspots.md).

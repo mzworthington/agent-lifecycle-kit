@@ -10,6 +10,10 @@ triggers:
   - long function
   - simplify
   - refactor complexity
+  - crime scene
+  - temporal coupling
+  - bus factor
+  - code quality report
 tools:
   - read
   - write
@@ -18,7 +22,7 @@ tools:
 ---
 # Standard Operating Procedure: Complexity Hotspots
 
-Reduce structural complexity in **small, test-backed batches**. Detection belongs to [agent-arch-drift](../skills/agent-arch-drift/SKILL.md); execution belongs to [agent-prune](../skills/agent-prune/SKILL.md) (complexity track). Align with [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §4 (minimal change): simplify before adding layers.
+Reduce structural complexity in **small, test-backed batches**. Detection belongs to [agent-arch-drift](../skills/agent-arch-drift/SKILL.md); execution belongs to [agent-prune](../skills/agent-prune/SKILL.md) (complexity track). Whole-repo **crime-scene** ranking (churn × size, temporal coupling, knowledge) is the same detection role, then a human gate, then Linear via [agent-user-stories](../skills/agent-user-stories/SKILL.md). Align with [CODING_PHILOSOPHY.md](../CODING_PHILOSOPHY.md) §4 (minimal change): simplify before adding layers. Do not add an `agent-crime-scene` skill.
 
 ## 1. What counts as a hotspot
 
@@ -100,7 +104,8 @@ Do not add new analysis tools without user alignment. Document the command used 
 | Request | Route |
 |---------|-------|
 | "Simplify X" / complexity cleanup | `agent-arch-drift` (scan) → backlog → `agent-prune` → `agent-pre-commit` |
-| Post-audit remediation | Rows already in backlog → `agent-prune` |
+| Crime-scene / code quality report / git hotspots | Session A: `agent-arch-drift` §8 → findings handover. Human gate. Session B: `agent-user-stories` (epic + children). Play with `agent-prune`. Do not auto-file. |
+| Post-audit remediation | Rows already in backlog or Linear children → `agent-prune` |
 | Feature work touching a known hotspot | Note backlog ID in handover; optional small extract-only fix in scope |
 
 Not part of the default feature lifecycle unless the user requests it or audit rows are `ready`.
@@ -113,3 +118,41 @@ Complexity work uses phase `maintenance` in `handover_prune.md` (same artifact a
 - Metrics before/after when available
 - Tests run
 - Rows left `blocked` or `defer` with reason
+
+## 8. Crime-scene pass (git only)
+
+Use when the user asks for a **code quality / crime-scene report** (Tornhill: hotspots where complexity meets change). This is ranking by **change friction**, not a linter dump.
+
+**Tools:** `git` only. Do not add CodeScene, Sonar, ESLint complexity plugins, or a kit binary. Document every command in the handover.
+
+Default window: last **6 months** (`--since='6 months ago'`). Skip lockfiles, vendor, generated, `dist/`, `node_modules/`. Cap pairing to the **top 20** churn paths.
+
+### Three signals
+
+| Signal | Git recipe | Treat as hotspot when |
+|--------|------------|------------------------|
+| **Hotspot** | Churn = commit count per path (`git log --since --pretty=format: --name-only`). Size = current LOC (`git show HEAD:path \| wc -l`). Score = churn × LOC. | High score vs the rest of the window (report the top cluster, not every file) |
+| **Temporal coupling** | Among top-churn paths, count how often two paths appear in the same commit (`git log --name-only --pretty=format:%H`). | A pair co-changes often but does not belong in one slice (shotgun / hidden coupling) |
+| **Knowledge** | `git shortlog -sn -- path` (commit authors). | **Island:** one author ≳ 70% of commits. **Fragment:** no author ≳ 40% and many names. Either is a risk note, not a rewrite by itself |
+
+Static smells without churn stay on the §1 / §2 complexity table. They are not crime-scene rows.
+
+### Session A — report
+
+1. Run the three signals. Write `~/.agents/handover/<project>/handover_crime_scene.md` from [templates/crime-scene-findings.md](../templates/crime-scene-findings.md).
+2. Also add matching `candidate` rows to `complexity-backlog.md` when the cluster is a shape problem (not only a knowledge note).
+3. **Do not** create Linear issues. **Do not** refactor.
+4. Stop. Next agent is `agent-user-stories` only after the Operator column is filled.
+
+### Human gate
+
+The operator marks `file` or `skip` per row. Unconfirmed rows stay skip. No agent files from an unconfirmed table. If the operator says to wrap up without filling the column, treat Session-notes recommended `file` rows as confirmed; the rest stay skip.
+
+### Session B — Linear
+
+[agent-user-stories](../skills/agent-user-stories/SKILL.md) on the `default` profile:
+
+1. Deduplicate: reuse an open **complexity** epic for the project if one exists.
+2. Otherwise one **epic** for this scan (`Story` + **Children**; no fake AC).
+3. One **child** per `file` row: operator INVEST, one sitting, no UI wireframe. Want is lower change friction, not “run git log”. Observables: tests still pass; the named cluster is smaller or split.
+4. Labels `Improvement`. Play children later with `agent-prune` (claim the Linear id first).

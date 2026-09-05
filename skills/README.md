@@ -41,7 +41,7 @@ We keep **one `skills/` tree** for playbooks. Cursor still discovers skills from
 | [agent-release](./agent-release/SKILL.md) | release | Ship checklist, conventional PR title, catalog summary |
 | [agent-incident](./agent-incident/SKILL.md) | debug | Production incident coordination → `agent-debug` |
 | [agent-security](./agent-security/SKILL.md) | audit | OWASP, validation, secrets; verify XFN security suites |
-| [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID, catalog/XFN completeness |
+| [agent-arch-drift](./agent-arch-drift/SKILL.md) | audit | Hexagonal boundaries, SOLID, catalog/XFN completeness, git crime-scene ranking |
 | [agent-adr](./agent-adr/SKILL.md) | audit | Sparse MADR ADRs in `docs/ADRs/` (hard to reverse / off-norm only) |
 | [agent-prune](./agent-prune/SKILL.md) | maintenance | Dead-code removal and complexity hotspot reduction in safe batches |
 | [agent-debug](./agent-debug/SKILL.md) | debug | Hypothesis-driven RCA for bugs, CI failures, live-site symptoms |
