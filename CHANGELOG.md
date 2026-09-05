@@ -5,6 +5,8 @@
 ### 🚀 Features
 
 - Improved CLI UX
+- *(ci)* Add 'Repo doctor' step to CI workflow and enhance documentation for first-party adopters
+- Enhance accessibility and UI components across the application
 
 ## 2026-09-04
 
